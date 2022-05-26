@@ -15,6 +15,7 @@ let
   user_brew_formulae = [
     "ansible"
     "aerc"
+    "argocd"
     "aria2"
     "aws-iam-authenticator"
     "awscli"

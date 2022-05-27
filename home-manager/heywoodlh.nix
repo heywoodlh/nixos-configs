@@ -7,14 +7,18 @@ let
     pkgs.aerc
     pkgs.ansible
     pkgs.awscli2
+    pkgs.blueman
+    pkgs.brave
     pkgs.chrome-gnome-shell
     pkgs.coreutils
     pkgs.dos2unix
+    pkgs.feh
     pkgs.ffmpeg
     pkgs.fzf
     pkgs.gcc
     pkgs.git
     pkgs.github-cli
+    pkgs.glib
     pkgs.gnomeExtensions.caffeine
     pkgs.gomuks
     pkgs.gnome.gnome-tweaks
@@ -31,14 +35,17 @@ let
     pkgs.neofetch
     pkgs.nordic
     pkgs.openssh
+    pkgs.pa_applet
     pkgs.pass
-    pkgs.pinentry
-    pkgs.pinentry-curses
+    pkgs.pinentry-gnome
     pkgs.pwgen
     pkgs.python39
     pkgs.python39Packages.pip
+    pkgs.rofi
+    pkgs.rofi-pass
     pkgs.scdoc
     pkgs.screen
+    pkgs.slack
     pkgs.tcpdump
     pkgs.inetutils
     pkgs.tmux
@@ -50,6 +57,7 @@ let
     pkgs.weechat
     pkgs.wireguard-tools
     pkgs.xclip
+    pkgs.zoom-us
   ];
 in {
   home.username = "${username}";

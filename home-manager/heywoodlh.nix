@@ -6,6 +6,7 @@ let
   user_packages = [
     pkgs.aerc
     pkgs.ansible
+    pkgs.appimage-run
     pkgs.awscli2
     pkgs.blueman
     pkgs.brave
@@ -19,9 +20,7 @@ let
     pkgs.git
     pkgs.github-cli
     pkgs.glib
-    pkgs.gnomeExtensions.caffeine
     pkgs.gomuks
-    pkgs.gnome.gnome-tweaks
     pkgs.gnupg
     pkgs.go
     pkgs.helm
@@ -71,7 +70,4 @@ in {
 
   # Enable syncthing
   #services.syncthing.enable = true;
-
-  # Enable gnome extensions in Firefox
-  programs.firefox.enableGnomeExtensions = true;
 }

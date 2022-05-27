@@ -3,3 +3,4 @@ hardware-configuration.nix
 hosts.nix
 *.conf
 *wireguard*
+custom.nix

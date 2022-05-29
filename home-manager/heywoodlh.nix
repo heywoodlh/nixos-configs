@@ -20,7 +20,6 @@ let
     pkgs.git
     pkgs.github-cli
     pkgs.glib
-    pkgs.gomuks
     pkgs.gnupg
     pkgs.go
     pkgs.helm

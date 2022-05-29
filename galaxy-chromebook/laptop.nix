@@ -5,7 +5,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    vim git gnupg firefox kitty guake python39 nodejs yarn rofi jq bitwarden-cli keyutils pass (pass.withExtensions (ext: with ext; [ pass-otp ])) xclip syncthing bitwarden gnome.gnome-tweaks gnome.dconf-editor wireguard-tools busybox unzip go mosh bind gcc gnumake chrome-gnome-shell ansible python39Packages.setuptools file patchelf nix-index autoPatchelfHook python39Packages.pip maim sxhkd desktop-file-utils libnotify neofetch gnomeExtensions.dash-to-dock qemu-utils keynav xdotool home-manager peru pinentry-curses coreutils nodePackages.typescript lefthook kitty i3lock-fancy sof-firmware
+    vim git gnupg firefox kitty guake python39 nodejs yarn rofi jq bitwarden-cli keyutils pass (pass.withExtensions (ext: with ext; [ pass-otp ])) xclip syncthing bitwarden gnome.gnome-tweaks gnome.dconf-editor wireguard-tools busybox unzip go mosh bind gcc gnumake chrome-gnome-shell ansible python39Packages.setuptools file patchelf nix-index autoPatchelfHook python39Packages.pip maim sxhkd desktop-file-utils libnotify neofetch gnomeExtensions.dash-to-dock qemu-utils keynav xdotool home-manager peru pinentry-curses coreutils nodePackages.typescript lefthook kitty i3lock-fancy sof-firmware olm 
   ];
 
   
@@ -48,6 +48,11 @@
     blueman = {
       enable = true;
     };
+    picom = {
+      enable = true;
+      backend = "glx";
+      refreshRate = 60;
+    };
   };
 
   programs.adb.enable = true;  
@@ -79,4 +84,9 @@
   networking.firewall.enable = true;
   networking.networkmanager.enable = true;
   programs.nm-applet.enable = true;
+  programs.light.enable = true;
+
+  security.sudo.extraRules = [
+    { groups = [ "wheel" ]; commands = [ { command = "/run/current-system/sw/bin/light"; options = [ "NOPASSWD" ]; } ]; }
+  ];
 }

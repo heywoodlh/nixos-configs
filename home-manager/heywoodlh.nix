@@ -65,6 +65,7 @@ let
     pkgs.weechatScripts.wee-slack
     pkgs.wireguard-tools
     pkgs.xclip
+    pkgs.xfce4-panel
     pkgs.zoom-us
   ];
 in {

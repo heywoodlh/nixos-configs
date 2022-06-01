@@ -41,7 +41,7 @@ let
     [
       pip
       setuptools
-      websockets
+      websocket-client
     ]))
     pkgs.rofi
     pkgs.rofi-pass

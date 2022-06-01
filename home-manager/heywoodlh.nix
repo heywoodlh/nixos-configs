@@ -37,13 +37,18 @@ let
     pkgs.pass
     pkgs.pinentry-gnome
     pkgs.pwgen
-    pkgs.python39
-    pkgs.python39Packages.pip
+    (pkgs.python310.withPackages (p: with p;
+    [
+      pip
+      setuptools
+      websockets
+    ]))
     pkgs.rofi
     pkgs.rofi-pass
     pkgs.scdoc
     pkgs.screen
     pkgs.slack
+    pkgs.teams
     pkgs.tcpdump
     pkgs.inetutils
     pkgs.tmux

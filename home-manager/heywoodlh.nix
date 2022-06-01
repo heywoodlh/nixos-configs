@@ -10,8 +10,10 @@ let
     pkgs.awscli2
     pkgs.blueman
     pkgs.brave
+    pkgs.caffeine-ng
     pkgs.chrome-gnome-shell
     pkgs.coreutils
+    pkgs.dante
     pkgs.dos2unix
     pkgs.feh
     pkgs.ffmpeg
@@ -37,13 +39,7 @@ let
     pkgs.pass
     pkgs.pinentry-gnome
     pkgs.pwgen
-    (pkgs.python310.withPackages (p: with p;
-    [
-      pip
-      setuptools
-      websocket-client
-    ]))
-    (pkgs.python39.withPackages (p: with p;
+    (pkgs.python310.withPackages (ps: with ps;
     [
       pip
       setuptools
@@ -63,7 +59,9 @@ let
     pkgs.ventoy-bin
     pkgs.vim
     pkgs.vultr-cli
+    pkgs.w3m
     pkgs.weechat
+    pkgs.weechatScripts.wee-slack
     pkgs.wireguard-tools
     pkgs.xclip
     pkgs.zoom-us

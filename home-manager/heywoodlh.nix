@@ -38,6 +38,7 @@ let
     pkgs.pa_applet
     pkgs.pass
     pkgs.pinentry-gnome
+    pkgs.playerctl
     pkgs.pwgen
     (pkgs.python310.withPackages (ps: with ps;
     [

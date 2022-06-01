@@ -140,6 +140,8 @@
     { groups = [ "wheel" ]; commands = [ { command = "/run/current-system/sw/bin/light"; options = [ "NOPASSWD" ]; } ]; }
   ];
 
+  hardware.bluetooth.enable = true;
+
   nix.extraOptions = '' 
     extra-experimental-features = nix-command flakes
   '';

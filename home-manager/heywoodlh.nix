@@ -43,6 +43,12 @@ let
       setuptools
       websocket-client
     ]))
+    (pkgs.python39.withPackages (p: with p;
+    [
+      pip
+      setuptools
+      websocket-client
+    ]))
     pkgs.rofi
     pkgs.rofi-pass
     pkgs.scdoc

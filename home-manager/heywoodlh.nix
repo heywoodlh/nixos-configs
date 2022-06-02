@@ -46,6 +46,7 @@ let
       setuptools
       websocket-client
     ]))
+    pkgs.realvnc-vnc-viewer
     pkgs.rofi
     pkgs.rofi-pass
     pkgs.scdoc
@@ -65,8 +66,6 @@ let
     pkgs.weechatScripts.wee-slack
     pkgs.wireguard-tools
     pkgs.xclip
-    pkgs.xfce.xfce4-panel
-    pkgs.xfce.xfce4-panel-profiles
     pkgs.zoom-us
   ];
 in {

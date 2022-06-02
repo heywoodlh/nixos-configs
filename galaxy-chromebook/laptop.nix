@@ -102,6 +102,11 @@
       enable = true;
       backend = "glx";
       refreshRate = 60;
+      vSync = "opengl-swc";
+    };
+    logind = {
+      lidSwitch = "hibernate";
+      lidSwitchDocked = "ignore";
     };
   };
 

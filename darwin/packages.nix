@@ -112,6 +112,7 @@ let
     "caffeine"
     "cursorcerer"
     "discord"
+    "element"
     "docker"
     "firefox"
     "font-iosevka"

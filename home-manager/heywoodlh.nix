@@ -14,6 +14,7 @@ let
     pkgs.chrome-gnome-shell
     pkgs.coreutils
     pkgs.dante
+    pkgs.doctl
     pkgs.dos2unix
     pkgs.feh
     pkgs.ffmpeg
@@ -28,6 +29,7 @@ let
     pkgs.htop
     pkgs.iosevka
     pkgs.jq
+    pkgs.kompose
     pkgs.kubectl
     pkgs.lefthook
     pkgs.lima
@@ -49,6 +51,7 @@ let
     pkgs.realvnc-vnc-viewer
     pkgs.rofi
     pkgs.rofi-pass
+    pkgs.rpi-imager
     pkgs.scdoc
     pkgs.screen
     pkgs.slack
@@ -80,4 +83,6 @@ in {
 
   # Enable syncthing
   #services.syncthing.enable = true;
+
+  programs.firefox.enableGnomeExtensions = true;
 }

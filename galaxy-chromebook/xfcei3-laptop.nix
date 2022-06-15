@@ -58,10 +58,6 @@
     polybar
     gptfdisk
     glib.dev
-    gnomeExtensions.caffeine
-    gnomeExtensions.gsconnect
-    gnome.gnome-tweaks
-    coreboot-utils
   ];
 
   # Enable sound.
@@ -73,18 +69,25 @@
     enable = true;
     displayManager = {
       gdm.enable = true;
-      gdm.wayland = false;
+      defaultSession = "xfce+i3";
     };
     desktopManager = {
-      gnome.enable = true;
+      xterm.enable = false;
+      xfce = {
+        enable = true;
+        noDesktop = true;
+        enableXfwm = false;
+      };
+    };
+    windowManager.i3 = {
+       enable = true;
+       package = pkgs.i3-gaps;
     };
   };
 
   virtualisation = {
-    podman = {
+    docker = {
       enable = true;
-      dockerCompat = true;
-      dockerSocket.enable = true;
     };
   };
   
@@ -103,7 +106,7 @@
       vSync = "opengl-swc";
     };
     logind = {
-      lidSwitch = "suspend";
+      lidSwitch = "hibernate";
       lidSwitchDocked = "ignore";
     };
   };
@@ -132,12 +135,16 @@
       dataDir = "/home/heywoodlh/Sync";
       configDir = "/home/heywoodlh/.config/syncthing";
     };
-    gnome.chrome-gnome-shell.enable = true;
   };
 
   networking.firewall.enable = true;
   networking.networkmanager.enable = true;
   programs.nm-applet.enable = true;
+  programs.light.enable = true;
+
+  security.sudo.extraRules = [
+    { groups = [ "wheel" ]; commands = [ { command = "/run/current-system/sw/bin/light"; options = [ "NOPASSWD" ]; } ]; }
+  ];
 
   hardware.bluetooth.enable = true;
 

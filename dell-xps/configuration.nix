@@ -114,6 +114,7 @@
       bind
       bitwarden
       bitwarden-cli
+      cider
       coreutils
       curl
       file
@@ -127,6 +128,7 @@
       gnomeExtensions.myhiddentopbar
       gnomeExtensions.pop-shell
       gnumake
+      gnupg
       guake
       jq
       keyutils

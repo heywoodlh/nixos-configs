@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./custom.nix
+      <home-manager/nixos> 
     ];
 
   # Bootloader.
@@ -44,38 +45,6 @@
   services.xserver.displayManager.gdm.wayland = false;
   services.xserver.desktopManager.gnome = {
     enable = true;
-    extraGSettingsOverridePackages = with pkgs; [ gnome3.gnome-settings-daemon ];
-    extraGSettingsOverrides = ''
-    [org.gnome.settings-daemon.plugins.media-keys]
-    custom-keybindings=[
-      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/'
-      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/'
-      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/'
-      '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/'
-    ]
-
-
-    [org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0]
-    binding='<Ctrl><Alt>t'
-    command='kitty -e tmux'
-    name='kitty ctrl+alt'
-
-    [org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom1]
-    binding='<Super><Enter>'
-    command='kitty -e tmux'
-    name='kitty super'
-
-    [org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2]
-    binding='<Super><Space>'
-    command='rofi -theme nord -show run -display-run "run: "'
-    name='rofi launcher'
-
-    [org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom3]
-    binding='<Ctrl><Super>s'
-    command='rofi-rbw'
-    name='rofi-rbw'
-
-  '';
   };
 
   # Configure keymap in X11
@@ -131,7 +100,9 @@
       gnupg
       guake
       jq
+      k9s
       keyutils
+      kubectl
       pass 
       (pass.withExtensions (ext: with ext; 
       [ 
@@ -140,6 +111,7 @@
       kitty
       lefthook
       mosh
+      nordic
       peru
       pinentry-gnome
       powershell
@@ -199,4 +171,65 @@
 
   networking.firewall.enable = true;
   system.stateVersion = "22.05";
+
+
+  ## This is a home-manager setting
+  home-manager.users.heywoodlh = {
+    # Define custom keyboard shortcuts in GNOME 40
+    dconf.settings =
+      let
+        inherit (builtins) length head tail listToAttrs genList;
+        range = a: b: if a < b then [a] ++ range (a+1) b else [];
+        globalPath = "org/gnome/settings-daemon/plugins/media-keys";
+        path = "${globalPath}/custom-keybindings";
+        mkPath = id: "${globalPath}/custom${toString id}";
+        isEmpty = list: length list == 0;
+        mkSettings = settings:
+          let
+            checkSettings = { name, command, binding }@this: this;
+            aux = i: list:
+              if isEmpty list then [] else
+                let
+                  hd = head list;
+                  tl = tail list;
+                  name = mkPath i;
+                in
+                  aux (i+1) tl ++ [ {
+                    name = mkPath i;
+                    value = checkSettings hd;
+                  } ];
+            settingsList = (aux 0 settings);
+          in
+            listToAttrs (settingsList ++ [
+              {
+                name = globalPath;
+                value = {
+                  custom-keybindings = genList (i: "/${mkPath i}/") (length settingsList);
+                };
+              }
+            ]);
+      in
+        mkSettings [
+          {
+            name = "rofi launcher";
+            command = "rofi -theme nord -show run -display-run 'run: '";
+            binding = "<Super>space";
+          }
+          {
+            name = "kitty super";
+            command = "kitty -e tmux";
+            binding = "<Super>Enter";
+          }
+          {
+            name = "kitty super";
+            command = "kitty -e tmux";
+            binding = "<Ctrl><Alt>t";
+          }
+          {
+            name = "rofi-rbw";
+            command = "rofi-rbw";
+            binding = "<Ctrl><Super>s";
+          }
+        ];
+  };
 }

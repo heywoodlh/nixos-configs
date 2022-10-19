@@ -93,6 +93,7 @@
       git
       gitleaks
       glib.dev
+      gnome.gnome-tweaks
       gnomeExtensions.caffeine
       gnomeExtensions.myhiddentopbar
       gnomeExtensions.pop-shell
@@ -111,12 +112,14 @@
       kitty
       lefthook
       mosh
+      neofetch
       nordic
       peru
       pinentry-gnome
       powershell
       qemu-utils
       rbw
+      realvnc-vnc-viewer
       rofi
       rofi-rbw
       slack
@@ -227,7 +230,7 @@
           }
           {
             name = "rofi-rbw";
-            command = "rofi-rbw";
+            command = "/home/heywoodlh/bin/bwmenu";
             binding = "<Ctrl><Super>s";
           }
         ];

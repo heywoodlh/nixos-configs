@@ -100,10 +100,14 @@
       gnumake
       gnupg
       guake
+      inotify-tools
       jq
       k9s
       keyutils
       kubectl
+      libnotify
+      lima
+      matrix-commander
       pass 
       (pass.withExtensions (ext: with ext; 
       [ 
@@ -122,6 +126,8 @@
       realvnc-vnc-viewer
       rofi
       rofi-rbw
+      scrot
+      signal-desktop
       slack
       teams
       thunderbird
@@ -229,9 +235,14 @@
             binding = "<Ctrl><Alt>t";
           }
           {
-            name = "rofi-rbw";
+            name = "bwmenu";
             command = "/home/heywoodlh/bin/bwmenu";
             binding = "<Ctrl><Super>s";
+          }
+          {
+            name = "screenshot";
+            command = "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'";
+            binding = "<Ctrl><Shift>s";
           }
         ];
   };

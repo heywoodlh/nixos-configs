@@ -86,6 +86,10 @@
       cider
       coreutils
       curl
+      gnome.dconf-editor
+      evolution
+      evolution-data-server
+      evolution-ews
       file
       firefox
       fzf
@@ -181,69 +185,82 @@
   networking.firewall.enable = true;
   system.stateVersion = "22.05";
 
-
-  ## This is a home-manager setting
+  # Home-manager settings
   home-manager.users.heywoodlh = {
-    # Define custom keyboard shortcuts in GNOME 40
-    dconf.settings =
-      let
-        inherit (builtins) length head tail listToAttrs genList;
-        range = a: b: if a < b then [a] ++ range (a+1) b else [];
-        globalPath = "org/gnome/settings-daemon/plugins/media-keys";
-        path = "${globalPath}/custom-keybindings";
-        mkPath = id: "${globalPath}/custom${toString id}";
-        isEmpty = list: length list == 0;
-        mkSettings = settings:
-          let
-            checkSettings = { name, command, binding }@this: this;
-            aux = i: list:
-              if isEmpty list then [] else
-                let
-                  hd = head list;
-                  tl = tail list;
-                  name = mkPath i;
-                in
-                  aux (i+1) tl ++ [ {
-                    name = mkPath i;
-                    value = checkSettings hd;
-                  } ];
-            settingsList = (aux 0 settings);
-          in
-            listToAttrs (settingsList ++ [
-              {
-                name = globalPath;
-                value = {
-                  custom-keybindings = genList (i: "/${mkPath i}/") (length settingsList);
-                };
-              }
-            ]);
-      in
-        mkSettings [
-          {
-            name = "rofi launcher";
-            command = "rofi -theme nord -show run -display-run 'run: '";
-            binding = "<Super>space";
-          }
-          {
-            name = "kitty super";
-            command = "kitty -e tmux";
-            binding = "<Super>Enter";
-          }
-          {
-            name = "kitty super";
-            command = "kitty -e tmux";
-            binding = "<Ctrl><Alt>t";
-          }
-          {
-            name = "bwmenu";
-            command = "/home/heywoodlh/bin/bwmenu";
-            binding = "<Ctrl><Super>s";
-          }
-          {
-            name = "screenshot";
-            command = "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'";
-            binding = "<Ctrl><Shift>s";
-          }
+    dconf.settings = {
+      "org/gnome/desktop/interface" = {
+        clock-show-seconds = true;
+        clock-show-weekday = true;
+        color-scheme = "prefer-dark";
+        enable-hot-corners = false;
+        font-antialiasing = "grayscale";
+        font-hinting = "slight";
+        gtk-theme = "Nordic";
+        toolkit-accessibility = true;
+      };
+      "org/gnome/desktop/wm/keybindings" = {
+        activate-window-menu = "@as []";
+        close = "['<Super>q', '<Alt>F4']";
+        maximize = "@as []";
+        minimize = "['<Super>comma']";
+        move-to-monitor-down = "@as []";
+        move-to-monitor-left = "@as []";
+        move-to-monitor-right = "@as []";
+        move-to-monitor-up = "@as []";
+        move-to-workspace-down = "@as []";
+        move-to-workspace-up = "@as []";
+        switch-input-source = "@as []";
+        switch-input-source-backward = "@as []";
+        switch-to-workspace-down = "['<Primary><Super>Down', '<Primary><Super>j']";
+        switch-to-workspace-left = "['<Super>bracketleft']";
+        switch-to-workspace-right = "['<Super>bracketright']";
+        switch-to-workspace-up = "['<Primary><Super>Up', '<Primary><Super>k']";
+        toggle-maximized = "['<Super>m']";
+        unmaximize = "@as []";
+      };
+      "org/gnome/desktop/wm/preferences" = {
+        button-layout = "close,minimize,maximize:appmenu";
+        num-workspaces = 10;
+      };
+      "org/gnome/shell/extensions/pop-shell" = {
+        focus-right = "@as []";
+        tile-by-default = true;
+        tile-enter = "@as []";
+      };
+      "org/gnome/settings-daemon/plugins/media-keys" = {
+        custom-keybindings = [
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
         ];
+      };
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+        name = "kitty super";
+        command = "kitty -e tmux";
+        binding = "<Super>Return";
+      };
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+        name = "kitty ctrl_alt";
+        command = "kitty -e tmux";
+        binding = "<Ctrl><Alt>t";
+      };
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+        name = "bwmenu";
+        command = "/home/heywoodlh/bin/bwmenu";
+        binding = "<Ctrl><Super>s";
+      };
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
+        name = "rofi launcher";
+        command = "rofi -theme nord -show run -display-run 'run: '";
+        binding = "<Super>space";
+      };
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
+        binding = "<Ctrl><Shift>s";
+        command = "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'";
+        name = "screenshot";
+      };
+    };
   };
 }

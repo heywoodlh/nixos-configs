@@ -88,6 +88,7 @@
       cider
       coreutils
       curl
+      docker-compose
       gnome.dconf-editor
       evolution
       evolution-data-server
@@ -101,7 +102,7 @@
       glib.dev
       gnome.gnome-tweaks
       gnomeExtensions.caffeine
-      gnomeExtensions.myhiddentopbar
+      gnomeExtensions.gsconnect
       gnomeExtensions.pop-shell
       gnumake
       gnupg
@@ -135,6 +136,7 @@
       scrot
       signal-desktop
       slack
+      tcpdump
       teams
       thunderbird
       tmux
@@ -184,7 +186,36 @@
     extra-experimental-features = nix-command flakes
   '';
 
-  networking.firewall.enable = true;
+  networking.firewall = {
+    enable = true;
+    ## Allow GSConnect over Tailscale
+    interfaces."tailscale0" = {
+      allowedTCPPortRanges = [
+        { from = 1714; to = 1764; }
+      ];
+      allowedUDPPortRanges = [
+        { from = 1714; to = 1764; }
+      ];
+    };
+    ## Allow GSConnect over Wireguard
+    interfaces."shadow-internal" = {
+      allowedTCPPortRanges = [
+        { from = 1714; to = 1764; }
+      ];
+      allowedUDPPortRanges = [
+        { from = 1714; to = 1764; }
+      ];
+    };
+    ## Allow GSConnect over Wireguard
+    interfaces."shadow-external" = {
+      allowedTCPPortRanges = [
+        { from = 1714; to = 1764; }
+      ];
+      allowedUDPPortRanges = [
+        { from = 1714; to = 1764; }
+      ];
+    };
+  };
   system.stateVersion = "22.05";
 
   # Home-manager settings
@@ -211,12 +242,6 @@
         move-to-monitor-up = "@as []";
         move-to-workspace-down = "@as []";
         move-to-workspace-up = "@as []";
-        switch-input-source = "@as []";
-        switch-input-source-backward = "@as []";
-        switch-to-workspace-down = "['<Primary><Super>Down', '<Primary><Super>j']";
-        switch-to-workspace-left = "['<Super>bracketleft']";
-        switch-to-workspace-right = "['<Super>bracketright']";
-        switch-to-workspace-up = "['<Primary><Super>Up', '<Primary><Super>k']";
         toggle-maximized = "['<Super>m']";
         unmaximize = "@as []";
       };
@@ -228,6 +253,10 @@
         focus-right = "@as []";
         tile-by-default = true;
         tile-enter = "@as []";
+      };
+      "org/gnome/desktop/peripherals/touchpad" = {
+        tap-to-click = true;
+        two-finger-scrolling-enabled = true;
       };
       "org/gnome/settings-daemon/plugins/media-keys" = {
         custom-keybindings = [

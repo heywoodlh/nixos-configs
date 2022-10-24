@@ -88,6 +88,7 @@
       cider
       coreutils
       curl
+      dante
       docker-compose
       gnome.dconf-editor
       evolution
@@ -106,31 +107,35 @@
       gnomeExtensions.pop-shell
       gnumake
       gnupg
+      gotify-cli
       guake
       inotify-tools
       jq
       k9s
       keyutils
+      kitty
       kubectl
       libnotify
       lima
       matrix-commander
+      moonlight-qt
+      lefthook
+      mosh
+      neofetch
+      nerdfonts
+      nordic
       pass 
       (pass.withExtensions (ext: with ext; 
       [ 
         pass-otp 
       ])) 
-      kitty
-      lefthook
-      mosh
-      neofetch
-      nordic
       peru
       pinentry-gnome
       powershell
       qemu-utils
       rbw
       realvnc-vnc-viewer
+      remmina
       rofi
       rofi-rbw
       scrot
@@ -188,6 +193,7 @@
 
   networking.firewall = {
     enable = true;
+    checkReversePath = "loose";
     ## Allow GSConnect over Tailscale
     interfaces."tailscale0" = {
       allowedTCPPortRanges = [

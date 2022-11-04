@@ -47,6 +47,7 @@
     enable = true;
   };
 
+  # Enable Tailscale
   services.tailscale.enable = true;
 
   # Configure keymap in X11
@@ -70,14 +71,18 @@
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
   };
+  
+  # Android debugging
+  programs.adb.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.heywoodlh = {
     isNormalUser = true;
     description = "Spencer Heywood";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     shell = pkgs.powershell;
     packages = with pkgs; [
+      appimage-run
       aerc
       ansible
       automake
@@ -99,6 +104,7 @@
       fzf
       gcc
       git
+      github-cli
       gitleaks
       glib.dev
       gnome.gnome-tweaks
@@ -113,16 +119,20 @@
       jq
       k9s
       keyutils
+      kind
       kitty
       kubectl
+      kubernetes-helm
       libnotify
       lima
       matrix-commander
       moonlight-qt
+      nodejs
       lefthook
       mosh
       neofetch
       nerdfonts
+      nim
       nordic
       pass 
       (pass.withExtensions (ext: with ext; 
@@ -132,6 +142,8 @@
       peru
       pinentry-gnome
       powershell
+      pwgen
+      python310
       qemu-utils
       rbw
       realvnc-vnc-viewer
@@ -146,14 +158,23 @@
       thunderbird
       tmux
       vim
+      volatility3
+      w3m
       wireguard-tools
       xclip
       xdotool
       zoom-us
+
     ];
   };
 
+  environment.homeBinInPath = true;
+  environment.shells = [ pkgs.bashInteractive pkgs.powershell "/etc/profiles/per-user/heywoodlh/bin/tmux" ];
+
   services = {
+    logind = {
+      extraConfig = "RuntimeDirectorySize=10G";
+    };
     syncthing = {
       enable = true;
       user = "heywoodlh";
@@ -182,8 +203,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    #vim
   ];
 
   # So that `nix search` works
@@ -285,7 +305,7 @@
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
         name = "bwmenu";
-        command = "/home/heywoodlh/bin/bwmenu";
+        command = "/home/heywoodlh/bin/bwmenu --auto-lock 14400";
         binding = "<Ctrl><Super>s";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
@@ -295,7 +315,7 @@
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
         binding = "<Ctrl><Shift>s";
-        command = "scrot -s -e 'xclip -selection clipboard -t image/png -i $f'";
+        command = "scrot '/tmp/scrot-+%Y-%m-%d_%H_%M_%S.png' -s -e 'xclip -selection clipboard -t image/png -i $f'";
         name = "screenshot";
       };
     };

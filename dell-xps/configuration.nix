@@ -4,7 +4,9 @@
 
 { config, pkgs, ... }:
 
-{
+let
+  unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -82,6 +84,7 @@
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     shell = pkgs.powershell;
     packages = with pkgs; [
+      abootimg
       appimage-run
       aerc
       ansible
@@ -115,6 +118,7 @@
       gnupg
       gotify-cli
       guake
+      htop
       inotify-tools
       jq
       k9s
@@ -124,6 +128,7 @@
       kubectl
       kubernetes-helm
       libnotify
+      libreoffice
       lima
       matrix-commander
       moonlight-qt
@@ -141,30 +146,30 @@
       ])) 
       peru
       pinentry-gnome
-      powershell
+      unstable.powershell
       pwgen
       python310
       qemu-utils
-      rbw
+      unstable.rbw
       realvnc-vnc-viewer
       remmina
       rofi
-      rofi-rbw
+      unstable.rofi-rbw
       scrot
       signal-desktop
       slack
       tcpdump
       teams
+      terraform
       thunderbird
       tmux
       vim
-      volatility3
+      vultr-cli
       w3m
       wireguard-tools
       xclip
       xdotool
       zoom-us
-
     ];
   };
 
@@ -304,8 +309,8 @@
         binding = "<Ctrl><Alt>t";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
-        name = "bwmenu";
-        command = "/home/heywoodlh/bin/bwmenu --auto-lock 14400";
+        name = "rofi-rbw";
+        command = "rofi-rbw --action copy";
         binding = "<Ctrl><Super>s";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {

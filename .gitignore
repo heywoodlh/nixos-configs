@@ -1,5 +1,6 @@
 device-configuration.nix
 hardware-configuration.nix
+configuration.nix
 hosts.nix
 *.conf
 *wireguard*

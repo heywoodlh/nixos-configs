@@ -121,7 +121,9 @@ in {
       gnome.gnome-tweaks
       gnomeExtensions.caffeine
       gnomeExtensions.gsconnect
+      gnomeExtensions.hide-top-bar
       gnomeExtensions.pop-shell
+      gnomeExtensions.tray-icons-reloaded
       gnumake
       gnupg
       gotify-cli

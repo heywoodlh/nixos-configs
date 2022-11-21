@@ -3,6 +3,9 @@
 let
   unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
 in {
+  # Enable NetworkManager
+  networking.networkmanager.enable = true;
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -187,6 +190,24 @@ in {
   # Home-manager settings
   home-manager.users.heywoodlh = {
     dconf.settings = {
+      "org/gnome/shell" = {
+        disable-user-extensions = false;
+        disabled-extensions = "@as []";
+        enabled-extensions = [
+          "native-window-placement@gnome-shell-extensions.gcampax.github.com"
+          "pop-shell@system76.com"
+          "caffeine@patapon.info"
+          "hidetopbar@mathieu.bidon.ca"
+          "gsconnect@andyholmes.github.io"
+        ];
+        favorite-apps = ["firefox.desktop" "kitty.desktop"];
+        had-bluetooth-devices-setup = true;
+        remember-mount-password = false;
+        welcome-dialog-last-shown-version = "42.4";
+      };
+      "org/gnome/shell/extensions/hidetopbar" = {
+
+      };
       "org/gnome/desktop/interface" = {
         clock-show-seconds = true;
         clock-show-weekday = true;

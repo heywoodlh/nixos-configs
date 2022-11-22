@@ -44,6 +44,9 @@ in {
   # Android debugging
   programs.adb.enable = true;
 
+  # Seahorse (Gnome Keyring)
+  programs.seahorse.enable = true;
+
   services = {
     logind = {
       extraConfig = "RuntimeDirectorySize=10G";
@@ -86,6 +89,7 @@ in {
 
   networking.firewall = {
     enable = true;
+    checkReversePath = "loose";
   };
  
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -121,6 +125,7 @@ in {
       github-cli
       gitleaks
       glib.dev
+      gnome.gnome-boxes
       gnome.gnome-tweaks
       gnomeExtensions.caffeine
       gnomeExtensions.gsconnect
@@ -208,7 +213,8 @@ in {
         welcome-dialog-last-shown-version = "42.4";
       };
       "org/gnome/shell/extensions/hidetopbar" = {
-
+        enable-active-window = false;
+        enable-intellihide = false; 
       };
       "org/gnome/desktop/interface" = {
         clock-show-seconds = true;

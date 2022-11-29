@@ -6,6 +6,12 @@ in {
   # Enable NetworkManager
   networking.networkmanager.enable = true;
 
+  # Set DNS
+  networking.nameservers = [ "10.50.50.1" ];
+  environment.etc = {
+    "resolv.conf".text = "nameserver 10.50.50.1\n";
+  }; 
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -134,6 +140,7 @@ in {
       gnomeExtensions.tray-icons-reloaded
       gnumake
       gnupg
+      go
       gotify-cli
       guake
       htop
@@ -157,11 +164,13 @@ in {
       nerdfonts
       nim
       nordic
+      openssl
       pass 
       (pass.withExtensions (ext: with ext; 
       [ 
         pass-otp 
       ])) 
+      pciutils
       peru
       pinentry-gnome
       unstable.powershell

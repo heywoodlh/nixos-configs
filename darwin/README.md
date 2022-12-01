@@ -12,12 +12,12 @@ Setup:
 ```bash
 rm -rf ~/.nixpkgs
 mkdir -p ~/opt &&\
-	git clone https://github.com/heywoodlh/nixos-builds ~/opt/nixos-builds
-	ln -s ~/opt/nixos-builds/darwin ~/.nixpkgs
+	git clone https://github.com/heywoodlh/nixos-configs ~/opt/nixos-configs
+	ln -s ~/opt/nixos-configs/darwin ~/.nixpkgs
 ```
 
 4. Install:
 
 ```bash
-darwin-rebuild switch -I "darwin-config=$HOME/opt/nixos-builds/darwin/darwin-configuration.nix"
+darwin-rebuild switch -I "darwin-config=$HOME/opt/nixos-configs/darwin/darwin-configuration.nix"
 ```

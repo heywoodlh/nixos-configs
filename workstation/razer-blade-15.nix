@@ -7,47 +7,26 @@
 
   services.xserver = {
     videoDrivers = [ "nvidia" ];
-    config = 
-    ''
-      Section "ServerLayout"
-          Identifier "layout"
-          Screen 0 "intel"
-          Inactive "nvidia"
-          Option "AllowNVIDIAGPUScreens"
-      EndSection
-      
-      Section "Device"
-          Identifier "nvidia"
-          Driver "nvidia"
-      EndSection
-      
-      Section "Screen"
-          Identifier "nvidia"
-          Device "nvidia"
-      EndSection
-      
-      Section "Device"
-          Identifier "intel"
-          Driver "modesetting"
-          BusID "PCI:0:2:0"
-      EndSection
-      
-      Section "Screen"
-          Identifier "intel"
-          Device "intel"
-      EndSection
-    '';
   };
   hardware.opengl.enable = true;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
 
-  #hardware.nvidia = {
-  #  powerManagement.enable = true;
-  #  modesetting.enable = true;
-  #  prime = {
-  #    sync.enable = true;
-  #    nvidiaBusId = "PCI:1:0:0";
-  #    intelBusId = "PCI:0:2:0";
-  #  };
-  #};
+  disabledModules = [ "hardware/video/nvidia.nix" ];
+
+  imports =
+    [ # sudo nix-channel --add https://github.com/GoogleBot42/nixpkgs/archive/refs/heads/master.tar.gz nvidia-reverse-prime 
+      <nvidia-reverse-prime/nixos/modules/hardware/video/nvidia.nix>
+    ];
+
+  hardware.nvidia = {
+    powerManagement.enable = true;
+    modesetting.enable = true;
+    prime = {
+      offload.enable = true;
+      offload.enableOffloadCmd = true;
+      reverse_sync.enable = true;
+      nvidiaBusId = "PCI:1:0:0";
+      intelBusId = "PCI:0:2:0";
+    };
+  };
 }

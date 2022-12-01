@@ -3,6 +3,9 @@
 let
   unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
 in {
+
+  boot.kernelParams = [ "quiet" "splash" ];
+
   # Enable NetworkManager
   networking.networkmanager.enable = true;
 
@@ -263,6 +266,9 @@ in {
         two-finger-scrolling-enabled = true;
       };
       "org/gnome/settings-daemon/plugins/media-keys" = {
+        next = [ "<Shift><Control>n" ];
+        previous = [ "<Shift><Control>p" ];
+        play = [ "<Shift><Control>space" ];
         custom-keybindings = [
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"

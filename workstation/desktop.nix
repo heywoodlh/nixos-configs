@@ -65,7 +65,7 @@ in {
       timeout = 10;
     };
     gnome = {
-      chrome-gnome-shell.enable = true;
+      gnome-browser-connector.enable = true;
       evolution-data-server.enable = true;
     };
     syncthing = {

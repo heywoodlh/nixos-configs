@@ -208,6 +208,7 @@ in {
 
   # Home-manager settings
   home-manager.users.heywoodlh = {
+    home.stateVersion = "22.11";
     dconf.settings = {
       "org/gnome/shell" = {
         disable-user-extensions = false;

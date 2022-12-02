@@ -206,6 +206,12 @@ in {
   environment.homeBinInPath = true;
   environment.shells = [ pkgs.bashInteractive pkgs.powershell "/etc/profiles/per-user/heywoodlh/bin/tmux" ];
 
+  # Bluetooth settings
+  hardware.bluetooth.settings = {
+    # Necessary for Airpods
+    General = { ControllerMode = "dual"; } ;
+  };
+
   # Home-manager settings
   home-manager.users.heywoodlh = {
     home.stateVersion = "22.11";

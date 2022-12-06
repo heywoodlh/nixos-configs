@@ -148,12 +148,15 @@ in {
       bitwarden
       bitwarden-cli
       calcurse
+      cargo
       cider
+      cmake
       coreutils
       curl
       dante
       docker-compose
       gnome.dconf-editor
+      go
       evolution
       evolution-data-server
       evolution-ews

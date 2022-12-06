@@ -147,6 +147,7 @@ in {
       bind
       bitwarden
       bitwarden-cli
+      calcurse
       cider
       coreutils
       curl
@@ -156,6 +157,7 @@ in {
       evolution
       evolution-data-server
       evolution-ews
+      fetchmail
       file
       firefox
       fzf
@@ -206,6 +208,8 @@ in {
       pciutils
       peru
       pinentry-gnome
+      plex-media-player
+      procmail
       unstable.powershell
       pwgen
       python310

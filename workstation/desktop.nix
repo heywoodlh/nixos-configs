@@ -162,6 +162,7 @@ in {
       evolution-data-server
       evolution-ews
       fetchmail
+      ffmpeg
       file
       firefox
       fzf

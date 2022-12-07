@@ -204,6 +204,7 @@ in {
       nim
       nordic
       openssl
+      pandoc
       pass 
       (pass.withExtensions (ext: with ext; 
       [ 

@@ -139,6 +139,7 @@ in {
     shell = pkgs.powershell;
     packages = with pkgs; [
       abootimg
+      alacritty
       appimage-run
       aerc
       ansible

@@ -194,6 +194,7 @@ in {
       libnotify
       libreoffice
       lima
+      losslesscut-bin
       matrix-commander
       moonlight-qt
       nodejs

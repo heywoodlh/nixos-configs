@@ -216,7 +216,9 @@ in {
       procmail
       unstable.powershell
       pwgen
-      python310Full
+      python310
+      python310Packages.keyboard
+      python310Packages.pip
       qemu-utils
       unstable.rbw
       realvnc-vnc-viewer
@@ -235,6 +237,7 @@ in {
       vultr-cli
       w3m
       wireguard-tools
+      xautomation
       xclip
       xdotool
       zoom-us
@@ -350,7 +353,7 @@ in {
         name = "screenshot";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
-        binding = "<Super>v";
+        binding = "<Shift><Control>e";
         command = "/home/heywoodlh/bin/vim-ime.py --cmd 'alacritty -o window.dimensions.columns=60 window.dimensions.lines=8 -e vim' --outfile '/home/heywoodlh/tmp/vim-ime.txt'";
         name = "vim-ime";
       };

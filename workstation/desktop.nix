@@ -148,15 +148,20 @@ in {
       bind
       bitwarden
       bitwarden-cli
+      calcurse
+      cargo
       cider
+      cmake
       coreutils
       curl
       dante
       docker-compose
       gnome.dconf-editor
+      go
       evolution
       evolution-data-server
       evolution-ews
+      fetchmail
       file
       firefox
       fzf
@@ -207,6 +212,8 @@ in {
       pciutils
       peru
       pinentry-gnome
+      plex-media-player
+      procmail
       unstable.powershell
       pwgen
       python310

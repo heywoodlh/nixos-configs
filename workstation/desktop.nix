@@ -216,7 +216,7 @@ in {
       procmail
       unstable.powershell
       pwgen
-      python310
+      python310Full
       qemu-utils
       unstable.rbw
       realvnc-vnc-viewer
@@ -285,6 +285,7 @@ in {
       };
       "org/gnome/desktop/wm/keybindings" = {
         activate-window-menu = "@as []";
+        toggle-message-tray = "@as []";
         close = "['<Super>q', '<Alt>F4']";
         maximize = "@as []";
         minimize = "['<Super>comma']";
@@ -320,6 +321,7 @@ in {
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
         ];
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -346,6 +348,11 @@ in {
         binding = "<Ctrl><Shift>s";
         command = "scrot '/tmp/scrot-+%Y-%m-%d_%H_%M_%S.png' -s -e 'xclip -selection clipboard -t image/png -i $f'";
         name = "screenshot";
+      };
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
+        binding = "<Super>v";
+        command = "/home/heywoodlh/bin/vim-ime.py --cmd 'alacritty -o window.dimensions.columns=60 window.dimensions.lines=8 -e vim' --outfile '/home/heywoodlh/tmp/vim-ime.txt'";
+        name = "vim-ime";
       };
     };
   };

@@ -219,9 +219,7 @@ in {
       procmail
       unstable.powershell
       pwgen
-      python310
-      python310Packages.keyboard
-      python310Packages.pip
+      python310Full
       qemu-utils
       unstable.rbw
       realvnc-vnc-viewer

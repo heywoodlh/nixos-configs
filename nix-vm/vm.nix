@@ -105,6 +105,7 @@ in {
       tmux
       vim
       vultr-cli
+      w3m
       weechat
       weechatScripts.weechat-matrix
       wireguard-tools

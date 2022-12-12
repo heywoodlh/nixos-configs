@@ -221,7 +221,6 @@ in {
       unstable.powershell
       pwgen
       python310Full
-      python310Packages.digitalocean
       qemu-utils
       unstable.rbw
       realvnc-vnc-viewer

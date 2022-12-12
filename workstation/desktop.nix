@@ -171,6 +171,7 @@ in {
       github-cli
       gitleaks
       glib.dev
+      glow
       gnome.gnome-boxes
       gnome.gnome-tweaks
       gnomeExtensions.caffeine
@@ -220,6 +221,7 @@ in {
       unstable.powershell
       pwgen
       python310Full
+      python310Packages.digitalocean
       qemu-utils
       unstable.rbw
       realvnc-vnc-viewer

@@ -232,9 +232,9 @@ in {
       slack
       tcpdump
       teams
-      terraform
       thunderbird
       tmux
+      tree
       vim
       vultr-cli
       w3m

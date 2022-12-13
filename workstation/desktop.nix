@@ -235,6 +235,7 @@ in {
       thunderbird
       tmux
       tree
+      unzip
       vim
       vultr-cli
       w3m

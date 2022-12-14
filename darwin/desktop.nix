@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
- 
-{
+
+let
+  user_name = "heywoodlh";
+  user_full_name = "Spencer Heywood";
+  user_description = "Spencer Heywood";
+in {
   #packages.nix
   nix.package = pkgs.nix;
   nixpkgs.config.allowUnfree = true;

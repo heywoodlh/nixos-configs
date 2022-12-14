@@ -1,9 +1,6 @@
 { config, pkgs, darwin, ... }:
 
 let
-  user_name = "sheywood";
-  user_full_name = "Spencer Heywood";
-  user_description = "Spencer Heywood";
   hostname = "changeme";
 in {
   imports = [

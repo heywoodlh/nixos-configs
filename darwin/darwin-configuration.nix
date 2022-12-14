@@ -4,6 +4,7 @@ let
   hostname = "changeme";
 in {
   imports = [
+    ./modules/security/pam.nix
     ./desktop.nix
   ];
 

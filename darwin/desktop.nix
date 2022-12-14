@@ -35,6 +35,7 @@ in {
       "findutils"
       "fzf"
       "gcc"
+      "gitleaks"
       "glib"
       "gnupg"
       "gnu-sed"
@@ -136,6 +137,7 @@ in {
       "oversight"
       "plex"
       "plex-media-player"
+      "powershell"
       "ransomwhere"
       "raycast"
       "reikey"
@@ -167,7 +169,7 @@ in {
     description = "${user_description}";
     home = "/Users/${user_name}";
     name = "${user_full_name}";
-    shell = "${pkgs.powershell}/bin/pwsh";
+    shell = "/usr/local/bin/pwsh";
     packages = [
       pkgs.gcc
       pkgs.git

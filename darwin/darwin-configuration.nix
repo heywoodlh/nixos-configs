@@ -1,14 +1,13 @@
 { config, pkgs, darwin, ... }:
 
-{
+let {
+  user_name = "heywoodlh";
+  user_full_name = "Spencer Heywood";
+  user_description = "Spencer Heywood";
+  hostname = "changeme";
+in {
   imports = [
-    ./system-defaults.nix
-    ./modules/security/pam.nix
-    ./network.nix
-    ./wm.nix
-    ./mac-config.nix
-    ./packages.nix
-    ./users.nix
+    ./desktop.nix
   ];
 
   nixpkgs.overlays = [
@@ -23,6 +22,14 @@
     extra-platforms = aarch64-darwin x86_64-darwin
     experimental-features = nix-command flakes
   '';
+
+  # Networking stuff specific to each machine
+  networking = {
+    knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
+    hostName = "${hostname}";
+    computerName = "${hostname}";
+    localHostName = "${hostname}";
+  };
 
   system.stateVersion = 4;
 }

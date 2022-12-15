@@ -11,8 +11,9 @@ in {
 
   homebrew = {
     enable = true;
-    autoUpdate = true;
-    cleanup = "zap";
+    onActivation.autoUpdate = true;
+    onActivation.upgrade = true;
+    onActivation.cleanup = "zap";
     brews = [
       "ansible"
       "aerc"
@@ -24,6 +25,7 @@ in {
       "bash"
       "buildkit"
       "browserpass"
+      "bitwarden-cli"
       "choose-gui"
       "clamav"
       "cliclick"
@@ -248,7 +250,7 @@ in {
   };
   
   #users.nix
-  nix.trustedUsers = [
+  nix.settings.trusted-users = [
     "@admin"
   ];
 

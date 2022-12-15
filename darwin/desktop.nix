@@ -154,7 +154,6 @@ in {
       "unity"
       "unity-hub"
       "utm"
-      "vimac"
       "vnc-viewer"
       "zoom"
     ];

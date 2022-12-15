@@ -6,7 +6,7 @@ self: super: {
     }.${super.pkgs.stdenv.system};
   in super.yabai.overrideAttrs(
     o: rec {
-      version = "4.0.0";
+      version = "5.0.1";
       src = super.fetchFromGitHub {
         owner = "koekeishiya";
         repo = "yabai";

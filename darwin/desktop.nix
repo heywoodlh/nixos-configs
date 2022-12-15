@@ -186,8 +186,6 @@ in {
   services.nix-daemon.enable = true;
   programs.nix-index.enable = true;
 
-  security.pam.enableSudoTouchIdAuth = true;
-
   environment.shells = with pkgs; [
     bashInteractive
     zsh

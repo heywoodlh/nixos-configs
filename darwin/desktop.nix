@@ -39,6 +39,7 @@ in {
       "gcc"
       "gitleaks"
       "glib"
+      "glow"
       "gnupg"
       "gnu-sed"
       "gh"

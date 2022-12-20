@@ -251,6 +251,7 @@ in {
       xclip
       xdotool
       zoom-us
+      zsh
     ];
   };
 

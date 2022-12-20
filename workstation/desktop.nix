@@ -200,6 +200,7 @@ in {
       losslesscut-bin
       matrix-commander
       moonlight-qt
+      nixos-generators
       nixos-install-tools
       nodejs
       lefthook

@@ -110,7 +110,11 @@ in {
     docker.rootless = {
       enable = true;
     };
+    virtualbox.host.enable = true;
   };
+
+  # Virtualbox
+  users.extraGroups.vboxusers.members = [ "heywoodlh" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

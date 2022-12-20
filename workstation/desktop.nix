@@ -148,6 +148,7 @@ in {
       bind
       bitwarden
       bitwarden-cli
+      brave
       calcurse
       cargo
       cider

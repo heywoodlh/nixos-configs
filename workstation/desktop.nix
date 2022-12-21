@@ -115,6 +115,7 @@ in {
 
   # Virtualbox
   users.extraGroups.vboxusers.members = [ "heywoodlh" ];
+  users.extraGroups.disk.members = [ "heywoodlh" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

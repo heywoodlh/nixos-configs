@@ -245,6 +245,7 @@ in {
       tree
       unzip
       vim
+      virt-manager
       vultr-cli
       w3m
       wireguard-tools

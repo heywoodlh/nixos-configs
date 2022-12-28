@@ -199,6 +199,7 @@ in {
       kitty
       kubectl
       kubernetes-helm
+      libarchive
       libnotify
       libreoffice
       lima
@@ -235,6 +236,8 @@ in {
       remmina
       rofi
       unstable.rofi-rbw
+      rpi-imager
+      rustdesk
       scrot
       signal-desktop
       slack

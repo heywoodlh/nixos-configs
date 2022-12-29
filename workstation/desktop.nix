@@ -86,6 +86,9 @@ in {
   # Seahorse (Gnome Keyring)
   programs.seahorse.enable = true;
 
+  # Enable steam
+  programs.steam.enable = true;
+  
   services = {
     logind = {
       extraConfig = "RuntimeDirectorySize=10G";
@@ -192,6 +195,7 @@ in {
       gotify-cli
       gotify-desktop
       guake
+      nixos.gvim
       htop
       inotify-tools
       jq

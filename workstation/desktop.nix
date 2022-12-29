@@ -190,6 +190,7 @@ in {
       gnupg
       go
       gotify-cli
+      gotify-desktop
       guake
       htop
       inotify-tools
@@ -247,6 +248,7 @@ in {
       thunderbird
       tmux
       tree
+      unityhub
       unzip
       vim
       virt-manager

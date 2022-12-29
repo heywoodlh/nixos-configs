@@ -162,6 +162,7 @@ in {
       curl
       dante
       docker-compose
+      dotnet-sdk
       gnome.dconf-editor
       go
       evolution

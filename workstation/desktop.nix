@@ -195,7 +195,6 @@ in {
       gotify-cli
       gotify-desktop
       guake
-      nixos.gvim
       htop
       inotify-tools
       jq
@@ -252,7 +251,6 @@ in {
       thunderbird
       tmux
       tree
-      unityhub
       unzip
       vim
       virt-manager

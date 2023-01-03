@@ -253,7 +253,7 @@ in {
       rofi
       unstable.rofi-rbw
       rpi-imager
-      rustdesk
+      unstable.rustdesk
       scrot
       signal-desktop
       slack

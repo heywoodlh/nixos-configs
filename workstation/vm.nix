@@ -1,4 +1,4 @@
-# Config for a graphical/CLI dev environment
+# Config for a graphical/CLI dev environment running in a VM
 { config, pkgs, ... }:
 
 {

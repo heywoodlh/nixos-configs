@@ -3,11 +3,10 @@
 { config, pkgs, ... }:
 
 let
-  jovian-nixos-repo = "https://github.com/Jovian-Experiments/Jovian-NixOS";
-  jovian-nixos-modules = import (builtins.fetchGit {
-    url = jovian-nixos-repo;
+  jovian-nixos-modules = import (fetchGit {
+    url = "https://github.com/Jovian-Experiments/Jovian-NixOS";
     ref = "development";
-  }) "modules";
+  });
 in {
   imports = [ jovian-nixos-modules ];
   jovian.devices.steamdeck.enable = true;

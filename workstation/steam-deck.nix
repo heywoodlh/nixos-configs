@@ -7,6 +7,7 @@
   jovian.devices.steamdeck.enable = true;
   jovian.steam.enable = true;
 
+  services.xserver.displayManager.gdm.wayland = true;
   services.xserver.displayManager.defaultSession = "steam-wayland";
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "heywoodlh";

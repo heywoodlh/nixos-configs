@@ -23,7 +23,6 @@ in {
   environment.systemPackages = with pkgs; [
     steamdeck-firmware
     jupiter-dock-updater-bin
-    gnome.gnome-session
   ];
 
   services.xserver.displayManager.gdm.wayland = lib.mkForce true; # lib.mkForce is only required on my setup because I'm using some other NixOS configs that conflict with this value

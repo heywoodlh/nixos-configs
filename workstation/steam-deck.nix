@@ -1,33 +1,92 @@
-## NixOS configs specific to SteamDeck
-
 { config, pkgs, lib, ... }:
 
-{
-  imports = [ ./jovian-nixos/modules ];
+let
+  myUsername = "heywoodlh";
+  myUserdescription = "Spencer Heywood";
+
+  # Fetch the "development" branch of the Jovian-NixOS repository
+  jovian-nixos = builtins.fetchGit {
+    url = "https://github.com/Jovian-Experiments/Jovian-NixOS";
+    ref = "development";
+  };
+in {
+  # Import jovian modules
+  imports = [ "${jovian-nixos}/modules" ]; 
+
   jovian.devices.steamdeck.enable = true;
   jovian.steam.enable = true;
 
-  services.xserver.displayManager.gdm.wayland = lib.mkForce true;
+  services.xserver.displayManager.gdm.wayland = lib.mkForce true; # lib.mkForce is only required on my setup because I'm using some other NixOS configs that conflict with this value
   services.xserver.displayManager.defaultSession = "steam-wayland";
   services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "heywoodlh";
+  services.xserver.displayManager.autoLogin.user = myUsername;
 
-  users.users.heywoodlh = {
-    openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC1aOhZI4Uo8jpPnmJe2aalB/HT2n42bo270IVxyRLURrmNrro8y/MEDD55GU9AVieVu2P+W4xBlWYaDJjSngWAh+zV6hrEhCSeGXiRnIZ+dpOBU5gcOFJxOpvSVawmqJFTjFUAdkHSLYuf9dtbasDkbxyyb/8Hh9jFjT0bisSRKi/SEmkh5m4nU7ySa1ltb6htUgQ/Y71Fi09BJWhktiT9HrtL4Gs0wzch9biaH/AFGbRNEnAZgQMAL/zS08IfevR7sYoHyjwVSwWVmA4TOhsm+auu9zPV4WgrnY2BNy+H9tF74AP6s+sf19uQG/2qVS3xcrvw2VhQCwPGHpv0o0tGLaCQBwjmqhbrBzVO4Hy1d/vskxe7Zr6IEEbQTLXTsYo6/yiEXOTzOvN7/V/zzdZkeUdRFGxqIu3EABH5wxNYOMwXNlOjnsxsE5VTovkMeIb+No1itaj1xGXuKBKJzRzKJ9pPLxtiaOimXxG4LYg3Ef50V6JzwT7UxY4DiS3JBUxQSxQ5CxifKRN/pCzUMlsdm+yIoXhy57r6JjFtnzet2Ytz12Vp8vRx6ZNH7upMxMBxmWH0sG7hf7fLjmVuurcL7pIB5U7a5rwUhfTjLUAJSg+DDvaOHyhBUsZp7wRxwoJuctvfxoxSkQtNlimWOwuPQgmNIfjjPQUKwM3j95RZiw== tyranny" "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPjnAIPI3ypyi8qn8QNlh8jlVxtaZYKRxXjJ1CDWj+Luuv3cbdsmM8V2SeRToeJHCV/qROa8nEnrnFrUqQ3+9qE= chg-mac@secretive.C02GC0NYMD6R.local" ];
-  };
-
-  networking.firewall = {
+  # Enable GNOME
+  sound.enable = true;
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
     enable = true;
-    allowedTCPPorts = [ 22 ];
-    allowedUDPPorts = [ 51820 ];
-    # For Mosh
-    allowedUDPPortRanges = [
-      { from = 60000; to = 61000; }
-    ];
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+  services.xserver.desktopManager.gnome = {
+    enable = true;
   };
 
-  services.openssh.enable = true;
-  services.openssh.sftpServerExecutable = "internal-sftp";
+  # Create user
+  users.users.myUsername = {
+    isNormalUser = true;
+    description = myUserdescription;
+  };
 
-  system.stateVersion = "22.11";
+  systemd.services.gamescope-switcher = {
+    wantedBy = [ "graphical.target" ];
+    serviceConfig = {
+      User = 1000;
+      PAMName = "login";
+      WorkingDirectory = "~";
+
+      TTYPath = "/dev/tty7";
+      TTYReset = "yes";
+      TTYVHangup = "yes";
+      TTYVTDisallocate = "yes";
+
+      StandardInput = "tty-fail";
+      StandardOutput = "journal";
+      StandardError = "journal";
+
+      UtmpIdentifier = "tty7";
+      UtmpMode = "user";
+
+      Restart = "always";
+    };
+
+    script = ''
+      set-session () {
+        mkdir -p ~/.local/state
+        >~/.local/state/steamos-session-select echo "$1"
+      }
+      consume-session () {
+        if [[ -e ~/.local/state/steamos-session-select ]]; then
+          cat ~/.local/state/steamos-session-select
+          rm ~/.local/state/steamos-session-select
+        else
+          echo "gamescope"
+        fi
+      }
+      while :; do
+        session=$(consume-session)
+        case "$session" in
+          plasma)
+            gnome-session
+            ;;
+          gamescope)
+            steam-session
+            ;;
+        esac
+      done
+    '';
+  };
 }

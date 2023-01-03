@@ -9,14 +9,6 @@ in {
 
   boot.kernelParams = [ "quiet" "splash" ];
 
-  nixpkgs.config = {
-    packageOverrides = pkgs: {
-      unstable = import unstableTarball {
-        config = config.nixpkgs.config;
-      };
-    };
-  };
-
   # Enable NetworkManager
   networking.networkmanager.enable = true;
 

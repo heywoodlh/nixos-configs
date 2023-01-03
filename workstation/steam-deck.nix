@@ -13,8 +13,18 @@ in {
   # Import jovian modules
   imports = [ "${jovian-nixos}/modules" ]; 
 
-  jovian.devices.steamdeck.enable = true;
-  jovian.steam.enable = true;
+  jovian = {
+    steam.enable = true;
+    devices.steamdeck = {
+      enable = true;
+    };
+  };
+
+  environment.systemPackages = with pkgs; [
+    steamdeck-firmware
+    jupiter-dock-updater-bin
+  ];
+
 
   services.xserver.displayManager.gdm.wayland = lib.mkForce true; # lib.mkForce is only required on my setup because I'm using some other NixOS configs that conflict with this value
   services.xserver.displayManager.defaultSession = "steam-wayland";
@@ -23,14 +33,6 @@ in {
 
   # Enable GNOME
   sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
   services.xserver.desktopManager.gnome = {
     enable = true;
   };
@@ -79,8 +81,8 @@ in {
       while :; do
         session=$(consume-session)
         case "$session" in
-          plasma)
-            gnome-session
+          gnome-shell)
+            gnome-shell
             ;;
           gamescope)
             steam-session

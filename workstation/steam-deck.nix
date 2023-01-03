@@ -23,8 +23,8 @@ in {
   environment.systemPackages = with pkgs; [
     steamdeck-firmware
     jupiter-dock-updater-bin
+    gnome.gnome-session
   ];
-
 
   services.xserver.displayManager.gdm.wayland = lib.mkForce true; # lib.mkForce is only required on my setup because I'm using some other NixOS configs that conflict with this value
   services.xserver.displayManager.defaultSession = "steam-wayland";
@@ -81,8 +81,8 @@ in {
       while :; do
         session=$(consume-session)
         case "$session" in
-          gnome-shell)
-            gnome-shell
+          plasma)
+            dbus-run-session -- gnome-shell --display-server --wayland
             ;;
           gamescope)
             steam-session

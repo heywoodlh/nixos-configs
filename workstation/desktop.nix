@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  unstableTarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
+  unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz";
 in {
 

@@ -2,13 +2,8 @@
 
 { config, pkgs, ... }:
 
-let
-  jovian-nixos-modules = import (fetchGit {
-    url = "https://github.com/Jovian-Experiments/Jovian-NixOS";
-    ref = "development";
-  });
-in {
-  imports = [ jovian-nixos-modules ];
+{
+  imports = [ ./jovian-nixos/modules ];
   jovian.devices.steamdeck.enable = true;
   jovian.steam.enable = true;
 

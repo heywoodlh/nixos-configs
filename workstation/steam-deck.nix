@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, makeDesktopItem, ... }:
 
 let
   myUsername = "heywoodlh";
@@ -9,6 +9,16 @@ let
     url = "https://github.com/Jovian-Experiments/Jovian-NixOS";
     ref = "development";
   };
+
+  switch-steam = makeDesktopItem {
+    name = "Switch to Steam";
+    desktopName = "switch-steam";
+    exec = "pkill -9 gnome-shell";
+    comment = "Switch back to Steam from GNOME";
+    icon = "gnome-terminal";
+    categories = "Utility";
+  };
+
 in {
   # Import jovian modules
   imports = [ "${jovian-nixos}/modules" ]; 
@@ -19,11 +29,6 @@ in {
       enable = true;
     };
   };
-
-  environment.systemPackages = with pkgs; [
-    steamdeck-firmware
-    jupiter-dock-updater-bin
-  ];
 
   services.xserver.displayManager.gdm.wayland = lib.mkForce true; # lib.mkForce is only required on my setup because I'm using some other NixOS configs that conflict with this value
   services.xserver.displayManager.defaultSession = "steam-wayland";
@@ -90,4 +95,14 @@ in {
       done
     '';
   };
+
+  postInstall = ''
+    ln -s ${switch-steam}/share $out/share
+  '';
+
+  environment.systemPackages = with pkgs; [
+    gnome.gnome-terminal
+    jupiter-dock-updater-bin
+    steamdeck-firmware
+  ];
 }

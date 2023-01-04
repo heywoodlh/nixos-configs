@@ -1,4 +1,4 @@
-{ config, pkgs, lib, makeDesktopItem, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   myUsername = "heywoodlh";
@@ -8,15 +8,6 @@ let
   jovian-nixos = builtins.fetchGit {
     url = "https://github.com/Jovian-Experiments/Jovian-NixOS";
     ref = "development";
-  };
-
-  switch-steam = makeDesktopItem {
-    name = "Switch to Steam";
-    desktopName = "switch-steam";
-    exec = "pkill -9 gnome-shell";
-    comment = "Switch back to Steam from GNOME";
-    icon = "gnome-terminal";
-    categories = "Utility";
   };
 
 in {
@@ -95,10 +86,6 @@ in {
       done
     '';
   };
-
-  postInstall = ''
-    ln -s ${switch-steam}/share $out/share
-  '';
 
   environment.systemPackages = with pkgs; [
     gnome.gnome-terminal

@@ -178,6 +178,7 @@ in {
       ffmpeg
       file
       firefox
+      freshfetch
       fzf
       gcc
       git
@@ -219,7 +220,6 @@ in {
       nodejs
       lefthook
       mosh
-      neofetch
       nerdfonts
       nim
       nordic

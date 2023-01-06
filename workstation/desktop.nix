@@ -157,6 +157,7 @@ in {
       appimage-run
       aerc
       ansible
+      argocd
       automake
       awscli2
       bind
@@ -377,7 +378,7 @@ in {
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
         binding = "<Ctrl><Shift>s";
-        command = "scrot '/tmp/scrot-+%Y-%m-%d_%H_%M_%S.png' -s -e 'xclip -selection clipboard -t image/png -i $f'";
+        command = "scrot /home/heywoodlh/Documents/screenshots/scrot-+%Y-%m-%d_%H_%M_%S.png -s -e 'xclip -selection clipboard -t image/png -i $f'";
         name = "screenshot";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {

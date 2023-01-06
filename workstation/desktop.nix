@@ -9,6 +9,9 @@ in {
 
   boot.kernelParams = [ "quiet" "splash" ];
 
+  # Enable sandbox
+  nix.settings.sandbox = true;
+
   # Enable NetworkManager
   networking.networkmanager.enable = true;
 

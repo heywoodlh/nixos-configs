@@ -223,6 +223,7 @@ in {
       nodejs
       lefthook
       mosh
+      neovim
       nerdfonts
       nim
       nordic

@@ -361,10 +361,6 @@ in {
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/"
         ];
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -398,51 +394,31 @@ in {
         name = "vim-ime";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6" = {
-        binding = "<Control>h";
-        command = "xdotool mousemove_relative -- -15 0";
+        binding = "<Shift><Control>h";
+        command = "xdotool mousemove_relative -- -20 0";
         name = "move mouse left";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7" = {
-        binding = "<Control>l";
-        command = "xdotool mousemove_relative -- 15 0";
+        binding = "<Shift><Control>l";
+        command = "xdotool mousemove_relative -- 20 0";
         name = "move mouse right";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8" = {
-        binding = "<Control>j";
-        command = "xdotool mousemove_relative -- 0 15";
+        binding = "<Shift><Control>j";
+        command = "xdotool mousemove_relative -- 0 20";
         name = "move mouse down";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9" = {
-        binding = "<Control>k";
-        command = "xdotool mousemove_relative -- 0 -15";
+        binding = "<Shift><Control>k";
+        command = "xdotool mousemove_relative -- 0 -20";
         name = "move mouse up";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10" = {
-        binding = "<Shift><Control>h";
-        command = "xdotool mousemove_relative -- -30 0";
-        name = "move mouse fast left";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11" = {
-        binding = "<Shift><Control>l";
-        command = "xdotool mousemove_relative -- 30 0";
-        name = "move mouse fast right";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12" = {
-        binding = "<Shift><Control>j";
-        command = "xdotool mousemove_relative -- 0 30";
-        name = "move mouse fast down";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13" = {
-        binding = "<Shift><Control>k";
-        command = "xdotool mousemove_relative -- 0 -30";
-        name = "move mouse fast up";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14" = {
         binding = "<Control>bracketleft";
         command = "xdotool click --clearmodifiers 1";
         name = "left click";
       };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15" = {
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11" = {
         binding = "<Control>bracketright";
         command = "xdotool click --clearmodifiers 3";
         name = "right click";

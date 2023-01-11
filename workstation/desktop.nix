@@ -7,7 +7,12 @@ in {
 
   imports = [ <home-manager/nixos> ];
 
-  boot.kernelParams = [ "quiet" "splash" ];
+  boot = {
+    kernelParams = [ "quiet" "splash" ];
+    plymouth.enable = true;
+    consoleLogLevel = 0;
+    initrd.verbose = false;
+  };
 
   # Enable sandbox
   nix.settings.sandbox = true;

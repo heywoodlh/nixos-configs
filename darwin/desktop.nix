@@ -9,6 +9,11 @@ in {
   nix.package = pkgs.nix;
   nixpkgs.config.allowUnfree = true;
 
+    # So that `nix search` works
+  nix.extraOptions = ''
+    extra-experimental-features = nix-command flakes
+  '';
+
   homebrew = {
     enable = true;
     onActivation.autoUpdate = true;

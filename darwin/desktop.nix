@@ -30,6 +30,7 @@ in {
       "clamav"
       "cliclick"
       "coreutils"
+      "croc"
       "curl"
       "dante"
       "dos2unix"
@@ -135,8 +136,6 @@ in {
       "obs"
       "obsidian"
       "oversight"
-      "powershell"
-      "ransomwhere"
       "raycast"
       "reikey"
       "rustdesk"
@@ -165,11 +164,12 @@ in {
     description = "${user_description}";
     home = "/Users/${user_name}";
     name = "${user_full_name}";
-    shell = "/usr/local/bin/pwsh";
+    shell = "/etc/profiles/per-user/${user_name}/bin/pwsh";
     packages = [
       pkgs.gcc
       pkgs.git
       pkgs.gnupg
+      pkgs.powershell
       pkgs.skhd
       pkgs.wireguard-tools
       pkgs.yabai
@@ -185,8 +185,7 @@ in {
   environment.shells = with pkgs; [
     bashInteractive
     zsh
-    "/usr/local/bin/zsh"
-    "/usr/local/bin/pwsh"
+    powershell
   ];
 
   #system-defaults.nix
@@ -241,6 +240,7 @@ in {
       NSNavPanelExpandedStateForSaveMode2 = true;
       _HIHideMenuBar = true;
     };
+    screencapture.location = "~/Documents/screenshots";
   };
   
   #users.nix

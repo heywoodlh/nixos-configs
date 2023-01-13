@@ -98,6 +98,14 @@ else
   echo "xcode cli tools are installed"
 fi
 
+# Update /etc/synthetic.conf
+if ! grep -q run /etc/synthetic.conf
+then
+    echo 'updating synthetic.conf' to work with nix-darwin
+    printf 'run\tprivate/var/run\n' | sudo tee -a /etc/synthetic.conf
+    /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t
+fi
+
 # Run the remaining commands as $username
 sudo -i -u ${username} bash << EOF
     cd /Users/${username}

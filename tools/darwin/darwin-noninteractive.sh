@@ -76,6 +76,7 @@ if ! test -e ${homebrew_bin_path} > /dev/null
 then
     echo 'homebrew not installed, installing now'
     mkdir ${homebrew_dir} && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${homebrew_dir}
+    chown -R ${username}:staff ${homebrew_dir}
 fi
 
 # Run the remaining commands as $username

@@ -2,7 +2,7 @@
 
 # Check if $1 is set (it should be a username)
 if [ -z "$1" ]; then
-    echo "Usage: $0 <username>"
+    echo "Usage: ./darwin-noninteractive.sh <username>"
     exit 1
 else
     username="$1"
@@ -51,7 +51,7 @@ then
     dscl . create /Users/${username} PrimaryGroupID 80
     dscl . create /Users/${username} NFSHomeDirectory /Users/${username}
     chown -R ${username}:staff /Users/${username}
-    createhomedir -c > /dev/null
+    createhomedir -c -u ${username} > /dev/null
 else
     echo "user ${username} already exists"
 fi
@@ -92,8 +92,8 @@ sudo -u ${username} bash << EOF
         exit 1
     fi
 
-    # Source /etc/static/bashrc
-    source /etc/static/bashrc
+    # Source /etc/bashrc (to add nix to PATH)
+    source /etc/bashrc
 
     # Ensure that nix is in $PATH, otherwise exit
     if ! command which nix > /dev/null

@@ -1,13 +1,14 @@
 { config, pkgs, ... }:
 
 let
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz";
   unstableTarball =
     fetchTarball
       https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
 in {
 
-  imports = [ <home-manager/nixos> ];
+  imports = [ 
+    (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz}/nixos")
+  ];
 
   nixpkgs.config = {
     packageOverrides = pkgs: {

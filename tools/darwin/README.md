@@ -3,5 +3,5 @@
 As root, run the following command:
 
 ```
-sh <(curl -L https://raw.githubusercontent.com/heywoodlh/nixos-configs/master/tools/darwin/darwin-noninteractive.sh) $username
+bash <(curl -L https://raw.githubusercontent.com/heywoodlh/nixos-configs/master/tools/darwin/darwin-noninteractive.sh) $username
 ```

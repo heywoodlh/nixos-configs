@@ -37,7 +37,7 @@ fi
 if ! test -e /etc/nix/nix.conf > /dev/null
 then
     echo 'nix not installed, installing now'
-    sh <(curl -L https://nixos.org/nix/install) --yes --daemon
+    bash <(curl -L https://nixos.org/nix/install) --yes --daemon
 fi
 
 # Check if $username does not exist, if not, create it

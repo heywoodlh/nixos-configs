@@ -106,6 +106,12 @@ then
     /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t
 fi
 
+# Setup symlinks for variables not passing through
+mkdir -p /Users/${username}/.nix-profile
+ln -s /Users/${username}/.nix-profile /var/root/.nix-profile
+ln -s /Users/${username}/.nix-channels /var/root/.nix-channels
+ln -s /Users/${username}/.nix-defexpr /var/root/.nix-defexpr
+
 # Run the remaining commands as $username
 sudo -i -u ${username} bash << EOF
     export HOME=/Users/${username}

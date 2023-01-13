@@ -87,7 +87,7 @@ echo "checking if xcode cli tools are installed"
 # Only run if the tools are not installed yet
 xcode-select -p &> /dev/null
 if [ $? -ne 0 ]; then
-  echo "xcode cli tools not found, installing"
+  echo "xcode cli tools not found, installing now"
   touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
   PROD=$(softwareupdate -l |
     grep "\*.*Command Line" |

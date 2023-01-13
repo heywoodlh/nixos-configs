@@ -82,6 +82,23 @@ chown -R ${username}:staff ${homebrew_dir}
 # Create /tmp/shellenv.sh file
 ${homebrew_bin_path} shellenv > /tmp/shellenv.sh
 
+# Install xcode command-line-tools
+echo "checking xcode cli tools"
+# Only run if the tools are not installed yet
+xcode-select -p &> /dev/null
+if [ $? -ne 0 ]; then
+  echo "xcode cli tools not found"
+  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
+  PROD=$(softwareupdate -l |
+    grep "\*.*Command Line" |
+    head -n 1 | awk -F"*" '{print $2}' |
+    sed -e 's/^ *//' |
+    tr -d '\n')
+  softwareupdate -i "$PROD" -v;
+else
+  echo "Xcode CLI tools OK"
+fi
+
 # Run the remaining commands as $username
 sudo -i -u ${username} bash << EOF
     cd /Users/${username}

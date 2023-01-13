@@ -79,6 +79,9 @@ then
 fi
 chown -R ${username}:staff ${homebrew_dir}
 
+# Create /tmp/shellenv.sh file
+${homebrew_bin_path} shellenv > /tmp/shellenv.sh
+
 # Run the remaining commands as $username
 sudo -i -u ${username} bash << EOF
     cd /Users/${username}
@@ -86,7 +89,7 @@ sudo -i -u ${username} bash << EOF
     if test -e ${homebrew_bin_path} > /dev/null
     then
         echo 'evaluating homebrew shellenv'
-        eval "$(${homebrew_bin_path} shellenv)"
+        source /tmp/shellenv.sh
     else
         echo 'homebrew not installed -- fix this and then re-run this script -- exiting'
         exit 1

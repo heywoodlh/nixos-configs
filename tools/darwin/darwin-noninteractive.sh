@@ -80,8 +80,7 @@ then
 fi
 
 # Run the remaining commands as $username
-sudo -u ${username} bash << EOF
-    export HOME=/Users/${username}
+sudo -i -u ${username} bash << EOF
     cd /Users/${username}
     # If homebrew is installed, make sure that shellenv is evaluated
     if test -e ${homebrew_bin_path} > /dev/null
@@ -96,7 +95,7 @@ sudo -u ${username} bash << EOF
     # Source /etc/bashrc (to add nix to PATH)
     source /etc/bashrc
 
-    # Ensure that nix is in $PATH, otherwise exit
+    # Ensure that nix is in PATH, otherwise exit
     if ! command which nix > /dev/null
     then
         echo 'nix not installed -- fix this and then re-run this script -- exiting'

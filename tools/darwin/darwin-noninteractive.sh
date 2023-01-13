@@ -63,7 +63,7 @@ then
 fi
 
 # Allow user to run sudo commands without password
-if ! -q grep "${username} ALL=(ALL) NOPASSWD:ALL" /etc/sudoers
+if ! grep -q "${username}" /etc/sudoers
 then
     echo "enabling user to run sudo commands without password"
     echo "${username} ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers

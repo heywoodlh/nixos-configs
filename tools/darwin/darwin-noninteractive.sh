@@ -44,6 +44,7 @@ fi
 if ! dscl . list /Users | grep -q "${username}"
 then
     echo "user ${username} does not exist, creating now"
+    dscl . -create /Users/${username}
     dscl . create /Users/${username} UserShell /bin/bash
     dscl . create /Users/${username} RealName "${username}"
     dscl . create /Users/${username} UniqueID 1000

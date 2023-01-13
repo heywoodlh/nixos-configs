@@ -108,6 +108,7 @@ fi
 
 # Run the remaining commands as $username
 sudo -i -u ${username} bash << EOF
+    export HOME=/Users/${username}
     cd /Users/${username}
     # If homebrew is installed, make sure that shellenv is evaluated
     if test -e ${homebrew_bin_path} > /dev/null

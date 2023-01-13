@@ -146,6 +146,7 @@ in {
       "rustdesk"
       "screens"
       "secretive"
+      "session"
       "signal"
       "slack"
       "syncthing"
@@ -171,7 +172,6 @@ in {
     name = "${user_full_name}";
     shell = "/etc/profiles/per-user/${user_name}/bin/pwsh";
     packages = [
-      pkgs.freshfetch
       pkgs.gcc
       pkgs.git
       pkgs.gnupg
@@ -190,6 +190,7 @@ in {
 
   environment.shells = with pkgs; [
     bashInteractive
+    freshfetch
     zsh
     powershell
   ];

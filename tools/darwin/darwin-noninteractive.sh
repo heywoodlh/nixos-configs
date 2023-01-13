@@ -50,8 +50,8 @@ then
     dscl . create /Users/${username} UniqueID 1000
     dscl . create /Users/${username} PrimaryGroupID 80
     dscl . create /Users/${username} NFSHomeDirectory /Users/${username}
-    chown -R ${username}:staff /Users/${username}
     createhomedir -c -u ${username} > /dev/null
+    chown -R ${username}:staff /Users/${username}
 else
     echo "user ${username} already exists"
 fi

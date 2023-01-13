@@ -56,7 +56,7 @@ else
 fi
 
 # Allow user to install applications without requiring a password
-if ! -q grep "auth sufficient pam_permit.so user=${username}" /etc/pam.d/authorization
+if ! grep -q "user=${username}" /etc/pam.d/authorization
 then
     echo "enabling user to install applications in /Applications without password"
     echo "auth sufficient pam_permit.so user=${username}" | tee -a /etc/pam.d/authorization

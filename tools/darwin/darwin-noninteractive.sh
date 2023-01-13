@@ -111,13 +111,13 @@ sudo -i -u ${username} bash << EOF
     brew install git
 
     # Clone heywoodlh/nixos-configs repo
-    mkdir -p ~/opt
-    git clone https://github.com/heywoodlh/nixos-configs ~/opt/nixos-configs
+    mkdir -p /Users/${username}/opt
+    git clone https://github.com/heywoodlh/nixos-configs /Users/${username}/opt/nixos-configs
 
-    # Remove default nix-darwin ~/.nixpkgs, replaced with nixos-configs/darwin
-    rm -rf ~/.nixpkgs
-    ln -s ~/opt/nixos-configs/darwin ~/.nixpkgs
+    # Remove default nix-darwin /Users/${username}/.nixpkgs, replaced with nixos-configs/darwin
+    rm -rf /Users/${username}/.nixpkgs
+    ln -s /Users/${username}/opt/nixos-configs/darwin /Users/${username}/.nixpkgs
 
     # Install nix-darwin config
-    darwin-rebuild switch -I "darwin-config=$HOME/opt/nixos-configs/darwin/darwin-configuration.nix"
+    darwin-rebuild switch -I "darwin-config=/Users/${username}/opt/nixos-configs/darwin/darwin-configuration.nix"
 EOF

@@ -28,9 +28,11 @@ if [[ $(arch) == 'arm64' ]]
 then
     # Actions for M1/M2 Macs
     homebrew_bin_path='/opt/homebrew/bin/brew'
+    homebrew_dir='/opt/homebrew'
 else
     # Actions for non-M1/M2 Macs
     homebrew_bin_path='/usr/local/bin/brew'
+    homebrew_dir='/opt/homebrew'
 fi
 
 # Install Nix noninteractively if not installed 
@@ -69,19 +71,16 @@ then
     echo "${username} ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers
 fi
 
+# Install Homebrew manually if not installed
+if ! test -e ${homebrew_bin_path} > /dev/null
+then
+    echo 'homebrew not installed, installing now'
+    mkdir ${homebrew_dir} && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${homebrew_dir}
+fi
+
 # Run the remaining commands as $username
 sudo -u ${username} bash << EOF
     cd /Users/${username}
-    # Install Homebrew noninteractively if not installed
-    if ! test -e ${homebrew_bin_path} > /dev/null
-    then
-        echo 'brew not installed, installing now'
-        export NONINTERACTIVE=1
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    else
-        echo 'brew is already installed'
-    fi
-
     # If homebrew is installed, make sure that shellenv is evaluated
     if test -e ${homebrew_bin_path} > /dev/null
     then

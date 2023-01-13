@@ -3,5 +3,5 @@
 As root, run the following command:
 
 ```
-bash <(curl -L https://raw.githubusercontent.com/heywoodlh/nixos-configs/master/tools/darwin/darwin-noninteractive.sh) $username
+bash <(curl -L -H 'Cache-Control: no-cache, no-store' https://raw.githubusercontent.com/heywoodlh/nixos-configs/master/tools/darwin/darwin-noninteractive.sh) $username
 ```

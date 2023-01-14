@@ -1,0 +1,16 @@
+name: nix-on-darwin-config-test
+
+on:
+  workflow_dispatch:
+  push:
+    - 'darwin/**'
+
+jobs:
+  docker:
+    runs-on: macos-12
+    steps:
+      -
+        name: run darwin-noninteractive.sh
+        shell: bash
+        run: bash <(curl -L -H 'Cache-Control: no-cache, no-store' https://raw.githubusercontent.com/heywoodlh/nixos-configs/master/tools/darwin/darwin-noninteractive.sh) heywoodlh
+

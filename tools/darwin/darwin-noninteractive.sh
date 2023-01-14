@@ -147,5 +147,5 @@ sudo -i -u ${username} bash << EOF
     ln -s /Users/${username}/opt/nixos-configs/darwin /Users/${username}/.nixpkgs
 
     # Install nix-darwin config
-    darwin-rebuild switch -I "darwin-config=/Users/${username}/opt/nixos-configs/darwin/darwin-configuration.nix"
+    /run/current-system/sw/bin/darwin-rebuild switch -I "darwin-config=/Users/${username}/opt/nixos-configs/darwin/darwin-configuration.nix"
 EOF

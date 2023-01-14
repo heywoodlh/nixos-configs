@@ -9,7 +9,8 @@ on:
     - cron: "30 0 * * Thu"
   workflow_dispatch:
 
-  build-macos-env:
+jobs:
+  build-nixos-env:
     name: Build Nix env
     runs-on: ubuntu-latest
 

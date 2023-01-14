@@ -129,16 +129,10 @@ sudo -i -u ${username} bash << EOF
     # Source /etc/bashrc (to add nix to PATH)
     source /etc/bashrc
 
-    # Ensure that nix is in PATH, otherwise exit
-    if ! command which nix > /dev/null
-    then
-        echo 'nix not installed -- fix this and then re-run this script -- exiting'
-        exit 1
-    fi
 
     # Install nix-darwin
     cd /tmp
-    nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
+    /nix/var/nix/profiles/default/bin/nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
     ./result/bin/darwin-installer
 
     # Install git with brew

@@ -108,6 +108,7 @@ in {
         enabled-extensions = [
           "dash-to-dock@micxgx.gmail.com"
         ];
+        favorite-apps = ["steam.desktop"];
       };
       # Dash to Dock settings for a better touch screen experience
       "org/gnome/shell/extensions/dash-to-dock" = {

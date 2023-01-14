@@ -17,6 +17,10 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        name: heywoodlh/nixos-configs
+        repository: heywoodlh/nixos-configs
+        path: ./nixos-configs
 
     - name: Install Nix
       uses: cachix/install-nix-action@v18

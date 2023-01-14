@@ -13,5 +13,5 @@ jobs:
       -
         name: run darwin-noninteractive.sh
         shell: bash
-        run: sudo bash -c "bash <(curl -L -H 'Cache-Control: no-cache, no-store' https://raw.githubusercontent.com/heywoodlh/nixos-configs/master/tools/darwin/darwin-noninteractive.sh) heywoodlh"
+        run: 'sudo bash -c "bash <(curl -L https://raw.githubusercontent.com/heywoodlh/nixos-configs/master/tools/darwin/darwin-noninteractive.sh) heywoodlh"'
 

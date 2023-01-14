@@ -3,7 +3,8 @@ name: nix-on-darwin
 on:
   workflow_dispatch:
   push:
-    - 'darwin/**'
+    paths: 
+      - 'darwin/**'
 
 jobs:
   docker:

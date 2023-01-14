@@ -1,4 +1,4 @@
-name: nix-on-darwin-config-test
+name: nix-on-darwin
 
 on:
   workflow_dispatch:
@@ -12,5 +12,5 @@ jobs:
       -
         name: run darwin-noninteractive.sh
         shell: bash
-        run: bash <(curl -L -H 'Cache-Control: no-cache, no-store' https://raw.githubusercontent.com/heywoodlh/nixos-configs/master/tools/darwin/darwin-noninteractive.sh) heywoodlh
+        run: "bash <(curl -L -H 'Cache-Control: no-cache, no-store' https://raw.githubusercontent.com/heywoodlh/nixos-configs/master/tools/darwin/darwin-noninteractive.sh) heywoodlh"
 

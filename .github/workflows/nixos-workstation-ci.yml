@@ -1,0 +1,32 @@
+name: nixos-workstation-ci
+
+on:
+  push:
+    paths:
+    - './workstation/**'
+    - '!./workstation/**.md'
+  schedule:
+    - cron: "30 0 * * Thu"
+  workflow_dispatch:
+
+  build-macos-env:
+    name: Build Nix env
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Nix
+      uses: cachix/install-nix-action@v18
+      with:
+        extra_nix_config: "system-features = nixos-test benchmark big-parallel kvm"
+
+    - name: run test build
+      run: |
+        # Create boilerplate configuration.nix with NixOS version 22.11 -- building against all .nix files
+        ./nixos-configs/tools/nixos/workstation-boilerplate.sh ./nixos-configs/workstation "22.11"
+        # Run nixos-rebuild test 
+        nixos-rebuild test -I nixos-config=./nixos-configs/workstation/configuration.nix
+
+      

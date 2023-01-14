@@ -32,7 +32,7 @@ then
 else
     # Actions for non-M1/M2 Macs
     homebrew_bin_path='/usr/local/bin/brew'
-    homebrew_dir='/opt/homebrew'
+    homebrew_dir='/usr/local'
 fi
 
 # Install Nix noninteractively if not installed 

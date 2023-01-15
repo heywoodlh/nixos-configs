@@ -182,7 +182,7 @@ in {
       brave
       calcurse
       cargo
-      cider
+      unstable.cider
       cmake
       coreutils
       curl

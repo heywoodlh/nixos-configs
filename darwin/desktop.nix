@@ -247,7 +247,6 @@ in {
       NSNavPanelExpandedStateForSaveMode2 = true;
       _HIHideMenuBar = true;
     };
-    screencapture.location = "~/Documents/screenshots";
   };
   
   #users.nix

@@ -33,11 +33,14 @@ nix_files=$(find "$target_dir" -maxdepth 1 -type f -name "*.nix" -printf "./%f "
 
 # Create a basic configuration.nix file
 cat > "$target_dir/configuration.nix" << EOF
-{ config, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 {
   imports = [ $nix_files ];
 
   system.stateVersion = "$nixos_version";
+
+  boot = lib.mkForce { };
+  environment.systemPackages = lib.mkForce [ ];
 }
 EOF

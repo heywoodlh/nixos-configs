@@ -31,7 +31,7 @@ jobs:
       run: |
         # Create boilerplate configuration.nix with NixOS version 22.11 -- building against all .nix files
         ./nixos-configs/tools/nixos/workstation-boilerplate.sh ./nixos-configs/workstation "22.11"
+        # Install nixos attributes
+        nix-env --install --attr nixpkgs.nixos-rebuild nixpkgs.man
         # Run nixos-rebuild test 
-        nixos-rebuild test -I nixos-config=./nixos-configs/workstation/configuration.nix
-
-      
+        nix-build '<nixpkgs/nixos>' -I nixos-config=./nixos-configs/workstation/configuration.nix

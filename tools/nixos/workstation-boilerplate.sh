@@ -8,7 +8,7 @@
 
 # Make sure $1 is set and is a directory
 if [ -z "$1" ] || [ ! -d "$1" ]; then
-    echo "Usage: workstation-boilerplate.sh /path/to/target/directory"
+    echo "Usage: workstation-boilerplate.sh /path/to/target/directory <nixos-version>"
     exit 1
 else
     target_dir="$1"

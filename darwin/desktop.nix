@@ -136,6 +136,7 @@ in {
       "knockknock"
       "lastpass"
       "lulu"
+      "microsoft-remote-desktop"
       "microsoft-teams"
       "moonlight"
       "obs"

@@ -251,6 +251,7 @@ in {
       [ 
         pass-otp 
       ])) 
+      patchelf
       pciutils
       peru
       pinentry-gnome

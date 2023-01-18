@@ -69,6 +69,7 @@ in {
       "mas"
       "mosh"
       "neofetch"
+      "neovim"
       "node"
       "openssl@3"
       "pandoc"

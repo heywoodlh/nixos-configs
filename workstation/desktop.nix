@@ -325,10 +325,6 @@ in {
         remember-mount-password = false;
         welcome-dialog-last-shown-version = "42.4";
       };
-      "org/gnome/desktop/remote-desktop/rdp" = {
-        view-only = true;
-        screen-share-mode = "extend";
-      };
       "org/gnome/shell/extensions/hidetopbar" = {
         enable-active-window = false;
         enable-intellihide = false; 

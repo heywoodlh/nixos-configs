@@ -49,7 +49,7 @@ in {
 
   # Enable Tailscale
   services.tailscale.enable = true;
-  
+
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -159,8 +159,14 @@ in {
   networking.firewall = {
     enable = true;
     checkReversePath = "loose";
+    interfaces.shadow-internal.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131; } ];
+    interfaces.shadow-external.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
+    interfaces.tailscale0.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
+    interfaces.shadow-internal.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
+    interfaces.shadow-external.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
+    interfaces.tailscale0.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
   };
- 
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.heywoodlh = {
     isNormalUser = true;
@@ -318,6 +324,10 @@ in {
         had-bluetooth-devices-setup = true;
         remember-mount-password = false;
         welcome-dialog-last-shown-version = "42.4";
+      };
+      "org/gnome/desktop/remote-desktop/rdp" = {
+        view-only = true;
+        screen-share-mode = "extend";
       };
       "org/gnome/shell/extensions/hidetopbar" = {
         enable-active-window = false;

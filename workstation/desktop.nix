@@ -47,6 +47,11 @@ in {
     enable = true;
   };
 
+  # Exclude root from displayManager
+  services.xserver.displayManager.hiddenUsers = [
+    "root"
+  ];
+
   # Enable Tailscale
   services.tailscale.enable = true;
 
@@ -194,13 +199,11 @@ in {
       curl
       dante
       docker-compose
-      dotnet-sdk
       gnome.dconf-editor
       go
       evolution
       evolution-data-server
       evolution-ews
-      fetchmail
       ffmpeg
       file
       firefox
@@ -238,7 +241,6 @@ in {
       libnotify
       libreoffice
       lima
-      losslesscut-bin
       matrix-commander
       moonlight-qt
       nixos-generators
@@ -257,7 +259,6 @@ in {
       [ 
         pass-otp 
       ])) 
-      patchelf
       pciutils
       peru
       pinentry-gnome
@@ -268,6 +269,7 @@ in {
       python310Full
       qemu-utils
       unstable.rbw
+      rambox
       realvnc-vnc-viewer
       remmina
       rofi
@@ -312,7 +314,7 @@ in {
     dconf.settings = {
       "org/gnome/shell" = {
         disable-user-extensions = false;
-        disabled-extensions = "@as []";
+        disabled-extensions = ["disabled"];
         enabled-extensions = [
           "native-window-placement@gnome-shell-extensions.gcampax.github.com"
           "pop-shell@system76.com"
@@ -324,6 +326,9 @@ in {
         had-bluetooth-devices-setup = true;
         remember-mount-password = false;
         welcome-dialog-last-shown-version = "42.4";
+      };
+      "org/gnome/mutter" = {
+        dynamic-workspaces = false;
       };
       "org/gnome/shell/extensions/hidetopbar" = {
         enable-active-window = false;
@@ -340,28 +345,32 @@ in {
         toolkit-accessibility = true;
       };
       "org/gnome/desktop/wm/keybindings" = {
-        activate-window-menu = "@as []";
-        toggle-message-tray = "@as []";
+        activate-window-menu = ["disabled"];
+        toggle-message-tray = ["disabled"];
         close = "['<Super>q', '<Alt>F4']";
-        maximize = "@as []";
+        maximize = ["disabled"];
         minimize = "['<Super>comma']";
-        move-to-monitor-down = "@as []";
-        move-to-monitor-left = "@as []";
-        move-to-monitor-right = "@as []";
-        move-to-monitor-up = "@as []";
-        move-to-workspace-down = "@as []";
-        move-to-workspace-up = "@as []";
+        move-to-monitor-down = ["disabled"];
+        move-to-monitor-left = ["disabled"];
+        move-to-monitor-right = ["disabled"];
+        move-to-monitor-up = ["disabled"];
+        move-to-workspace-down = ["disabled"];
+        move-to-workspace-up = ["disabled"];
+        switch-to-workspace-left = ["<Super>bracketleft"];
+        switch-to-workspace-right = ["<Super>bracketright"];
+        switch-input-source = ["disabled"];
+        switch-input-source-backward = ["disabled"];
         toggle-maximized = "['<Super>m']";
-        unmaximize = "@as []";
+        unmaximize = ["disabled"];
       };
       "org/gnome/desktop/wm/preferences" = {
         button-layout = "close,minimize,maximize:appmenu";
         num-workspaces = 10;
       };
       "org/gnome/shell/extensions/pop-shell" = {
-        focus-right = "@as []";
+        focus-right = ["disabled"];
         tile-by-default = true;
-        tile-enter = "@as []";
+        tile-enter = ["disabled"];
       };
       "org/gnome/desktop/peripherals/touchpad" = {
         tap-to-click = true;

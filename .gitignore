@@ -6,3 +6,4 @@ hosts.nix
 *.conf
 *wireguard*
 custom.nix
+m1-support

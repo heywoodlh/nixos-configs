@@ -11,6 +11,12 @@
     options hid_apple iso_layout=0
   '';
 
+  # Better trackpad config changes
+  services.xserver.libinput.enable = true;
+  services.xserver.libinput.touchpad.additionalOptions = ''
+    Option "DisableWhileTyping" "true"
+  '';
+
   users.users.heywoodlh.packages = lib.mkForce [
     pkgs.abootimg
     pkgs.alacritty
@@ -25,6 +31,7 @@
     pkgs.bitwarden-cli
     pkgs.calcurse
     pkgs.cargo
+    pkgs.chromium
     pkgs.cmake
     pkgs.coreutils
     pkgs.curl
@@ -109,7 +116,6 @@
     pkgs.thunderbird
     pkgs.tmux
     pkgs.tree
-    pkgs.ungoogled-chromium
     pkgs.unzip
     pkgs.uxplay
     pkgs.vim

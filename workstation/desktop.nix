@@ -139,6 +139,7 @@ in {
   virtualisation = {
     docker.rootless = {
       enable = true;
+      setSocketVariable = true;
     };
     virtualbox.host.enable = true;
   };
@@ -269,7 +270,6 @@ in {
       python310Full
       qemu-utils
       unstable.rbw
-      rambox
       realvnc-vnc-viewer
       remmina
       rofi

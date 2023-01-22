@@ -151,12 +151,6 @@ in {
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    #vim
-  ];
-
   # So that `nix search` works
   nix.extraOptions = '' 
     extra-experimental-features = nix-command flakes
@@ -242,6 +236,7 @@ in {
       libnotify
       libreoffice
       lima
+      lutris
       matrix-commander
       moonlight-qt
       nixos-generators

@@ -274,6 +274,7 @@ in {
       scrot
       signal-desktop
       slack
+      steamtinkerlaunch
       tcpdump
       teams
       thunderbird

@@ -137,9 +137,9 @@ in {
   };
 
   virtualisation = {
-    docker.rootless = {
+    podman = {
       enable = true;
-      setSocketVariable = true;
+      dockerCompat = true;
     };
     virtualbox.host.enable = true;
   };
@@ -177,7 +177,7 @@ in {
       abootimg
       alacritty
       appimage-run
-      aerc
+      unstable.aerc
       ansible
       argocd
       automake

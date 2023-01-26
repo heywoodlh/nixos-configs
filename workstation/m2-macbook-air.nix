@@ -11,16 +11,6 @@
     options hid_apple iso_layout=0
   '';
 
-  # Replace docker rootless with podman (due to lack of network connectivity)
-  virtualisation = {
-    docker.rootless.enable = lib.mkForce false;
-    podman = {
-      enable = true;
-      dockerCompat = true;
-      defaultNetwork.settings.dns_enabled = true;
-    };
-  };
-
   # Better trackpad config changes
   services.xserver.libinput.enable = true;
   services.xserver.libinput.touchpad.additionalOptions = ''

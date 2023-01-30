@@ -4,7 +4,22 @@ let
   user_name = "heywoodlh";
   user_full_name = "Spencer Heywood";
   user_description = "Spencer Heywood";
+  unstableTarball =
+    fetchTarball
+      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
 in {
+  imports = [ 
+    (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.05.tar.gz}/nix-darwin")
+  ];
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
+
   #packages.nix
   nix.package = pkgs.nix;
   nixpkgs.config.allowUnfree = true;
@@ -177,7 +192,6 @@ in {
       pkgs.gcc
       pkgs.git
       pkgs.gnupg
-      pkgs.powershell
       pkgs.skhd
       pkgs.wireguard-tools
       pkgs.yabai
@@ -194,7 +208,7 @@ in {
     bashInteractive
     freshfetch
     zsh
-    powershell
+    unstable.powershell
   ];
 
   #system-defaults.nix
@@ -252,9 +266,9 @@ in {
   };
   
   #users.nix
-  nix.settings.trusted-users = [
-    "@admin"
-  ];
+#  nix.settings.trusted-users = [
+#    "@admin"
+#  ];
 
   #wm.nix
   services.yabai.enable = true;

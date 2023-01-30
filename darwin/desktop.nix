@@ -9,7 +9,7 @@ let
       https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
 in {
   imports = [ 
-    (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.05.tar.gz}/nix-darwin")
+    (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz}/nix-darwin")
   ];
 
   nixpkgs.config = {

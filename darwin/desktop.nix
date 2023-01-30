@@ -158,6 +158,7 @@ in {
       "obs"
       "obsidian"
       "oversight"
+      "powershell"
       "raycast"
       "reikey"
       "rustdesk"

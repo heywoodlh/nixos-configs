@@ -49,7 +49,11 @@
     ## Create startwm.sh for XRDP
     home.file."startwm.sh".text = ''
       #!/usr/bin/env bash
-      gnome-session
+      export DESKTOP_SESSION="gnome"
+      export GDMSESSION="gnome"
+      export XDG_CURRENT_DESKTOP="GNOME"
+      export XDG_SESSION_DESKTOP="gnome"
+      dbus-run-session -- gnome-shell
     '';
     home.file."startwm.sh".executable = true;
   };

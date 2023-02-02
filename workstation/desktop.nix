@@ -249,6 +249,7 @@ in {
       nerdfonts
       nim
       nordic
+      olm
       openssl
       pandoc
       pass 

@@ -220,6 +220,7 @@ in {
       gnumake
       gnupg
       go
+      gomuks
       gotify-cli
       gotify-desktop
       guake

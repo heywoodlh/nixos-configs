@@ -66,6 +66,7 @@ in {
       "gh"
       "git"
       "go"
+      "gomuks"
       "harfbuzz"
       "hashcat"
       "helm"

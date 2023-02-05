@@ -259,6 +259,7 @@ in {
       ])) 
       pciutils
       peru
+      pinentry-curses
       pinentry-gnome
       plex-media-player
       procmail

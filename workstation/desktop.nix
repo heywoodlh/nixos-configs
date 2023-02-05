@@ -196,6 +196,7 @@ in {
       docker-compose
       gnome.dconf-editor
       go
+      gomuks
       evolution
       evolution-data-server
       evolution-ews

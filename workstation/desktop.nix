@@ -281,6 +281,7 @@ in {
       tcpdump
       teams
       terraform-docs
+      texlive.combined.scheme-full
       thunderbird
       tmux
       tree

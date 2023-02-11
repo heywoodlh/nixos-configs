@@ -262,6 +262,7 @@ in {
       pinentry-curses
       pinentry-gnome
       plex-media-player
+      podman-compose
       procmail
       unstable.powershell
       pwgen
@@ -279,6 +280,7 @@ in {
       slack
       tcpdump
       teams
+      terraform-docs
       thunderbird
       tmux
       tree

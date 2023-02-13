@@ -133,6 +133,7 @@ in {
       "colindean/fonts-nonfree"
       "kidonng/malt"
       "mike-engel/jwt-cli"
+      "aaronraimist/homebrew-tap"
     ];
     casks = [
       "android-platform-tools"
@@ -189,14 +190,15 @@ in {
     description = "${user_description}";
     home = "/Users/${user_name}";
     name = "${user_full_name}";
-    shell = "/etc/profiles/per-user/${user_name}/bin/pwsh";
+    shell = pkgs.powershell;
     packages = [
       pkgs.gcc
       pkgs.git
       pkgs.gnupg
+      pkgs.powershell
       pkgs.skhd
+      pkgs.tmux
       pkgs.wireguard-tools
-      pkgs.yabai
     ];
   };
 
@@ -210,7 +212,7 @@ in {
     bashInteractive
     freshfetch
     zsh
-    unstable.powershell
+    powershell
   ];
 
   #system-defaults.nix
@@ -274,7 +276,6 @@ in {
 
   #wm.nix
   services.yabai.enable = true;
-  services.yabai.package = pkgs.yabai;
   services.yabai.enableScriptingAddition = false;
   services.yabai.extraConfig = ''
     yabai -m config status_bar                   off

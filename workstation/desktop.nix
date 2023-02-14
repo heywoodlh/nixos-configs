@@ -172,7 +172,7 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = pkgs.powershell;
+    shell = pkgs.unstable.powershell;
     packages = with pkgs; [
       abootimg
       alacritty
@@ -263,6 +263,7 @@ in {
       pinentry-gnome
       plex-media-player
       podman-compose
+      unstable.powershell
       procmail
       unstable.powershell
       pwgen
@@ -295,6 +296,7 @@ in {
       xautomation
       xclip
       xdotool
+      zip
       zoom-us
       zsh
     ];

@@ -167,6 +167,10 @@ in {
     interfaces.tailscale0.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
   };
 
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" ]; })
+  ];
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.heywoodlh = {
     isNormalUser = true;

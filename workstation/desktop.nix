@@ -188,7 +188,7 @@ in {
       awscli2
       bind
       bitwarden
-      bitwarden-cli
+      unstable.bitwarden-cli
       brave
       calcurse
       cargo

@@ -215,6 +215,11 @@ in {
     powershell
   ];
 
+  # add nerd fonts
+  fonts.fonts = with pkgs; [
+    (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" ]; })
+  ];
+
   #system-defaults.nix
   system.keyboard = {
     enableKeyMapping = true;
@@ -276,6 +281,7 @@ in {
 
   #wm.nix
   services.yabai.enable = true;
+  services.yabai.package = pkgs.unstable.yabai;
   services.yabai.enableScriptingAddition = false;
   services.yabai.extraConfig = ''
     yabai -m config status_bar                   off

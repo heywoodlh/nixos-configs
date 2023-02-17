@@ -190,12 +190,12 @@ in {
     description = "${user_description}";
     home = "/Users/${user_name}";
     name = "${user_full_name}";
-    shell = pkgs.powershell;
+    shell = pkgs.unstable.powershell;
     packages = [
       pkgs.gcc
       pkgs.git
       pkgs.gnupg
-      pkgs.powershell
+      pkgs.unstable.powershell
       pkgs.skhd
       pkgs.tmux
       pkgs.wireguard-tools

@@ -147,7 +147,9 @@ in {
       "element"
       "docker"
       "firefox"
-      "font-iosevka"
+      "font-droid-sans-mono-for-powerline"
+      "font-iosevka-nerd-font"
+      "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"
       "hiddenbar"
       "iterm2"
@@ -170,6 +172,7 @@ in {
       "signal"
       "slack"
       "syncthing"
+      "tageditor"
       "tor-browser"
       "tunnelblick"
       "ubersicht"
@@ -497,17 +500,17 @@ in {
     #ctrl - 0x29 : bash -c "~/Applications/keynav.app/Contents/MacOS/XEasyMotion"
     
     ## Control mouse with keyboard
-    ctrl - k : cliclick "m:+0,-15" #up
-    ctrl - j : cliclick "m:+0,+15" #down
-    ctrl - l : cliclick "m:+15,+0" #right
-    ctrl - h : cliclick "m:-15,+0" #left
+    #ctrl - k : cliclick "m:+0,-15" #up
+    #ctrl - j : cliclick "m:+0,+15" #down
+    #ctrl - l : cliclick "m:+15,+0" #right
+    #ctrl - h : cliclick "m:-15,+0" #left
     
-    ctrl + shift - k : cliclick "m:+0,-80" #up
-    ctrl + shift - j : cliclick "m:+0,+80" #down
-    ctrl + shift - l : cliclick "m:+80,+0" #right
-    ctrl + shift - h : cliclick "m:-80,+0" #left
+    #ctrl + shift - k : cliclick "m:+0,-80" #up
+    #ctrl + shift - j : cliclick "m:+0,+80" #down
+    #ctrl + shift - l : cliclick "m:+80,+0" #right
+    #ctrl + shift - h : cliclick "m:-80,+0" #left
     
-    ctrl - 0x21 : cliclick ku:ctrl c:. # click
-    ctrl - 0x1E : cliclick ku:ctrl rc:.  # right click
+    #ctrl - 0x21 : cliclick ku:ctrl c:. # click
+    #ctrl - 0x1E : cliclick ku:ctrl rc:.  # right click
   '';
 }

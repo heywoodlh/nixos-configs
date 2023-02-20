@@ -75,6 +75,7 @@ in {
       "jq"
       "jwt-cli"
       "k9s"
+      "kdash"
       "kind"
       "kompose"
       "kubectl"
@@ -134,6 +135,7 @@ in {
       "kidonng/malt"
       "mike-engel/jwt-cli"
       "aaronraimist/homebrew-tap"
+      "kdash-rs/kdash"
     ];
     casks = [
       "android-platform-tools"

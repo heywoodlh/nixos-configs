@@ -232,6 +232,7 @@ in {
       inotify-tools
       jq
       k9s
+      kdash
       keyutils
       kind
       kitty
@@ -264,7 +265,7 @@ in {
       pciutils
       peru
       pinentry-curses
-      pinentry-gnome
+      pinentry-rofi
       plex-media-player
       podman-compose
       unstable.powershell
@@ -318,6 +319,7 @@ in {
   # Home-manager settings
   home-manager.users.heywoodlh = {
     home.stateVersion = "22.11";
+    programs.rbw.settings.pinentry = pkgs.pinentry-rofi;
     dconf.settings = {
       "org/gnome/shell" = {
         disable-user-extensions = false;

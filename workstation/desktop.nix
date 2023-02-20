@@ -268,9 +268,9 @@ in {
       pinentry-rofi
       plex-media-player
       podman-compose
-      unstable.powershell
       procmail
       unstable.powershell
+      pulumi 
       pwgen
       python310Full
       qemu-utils

@@ -96,6 +96,7 @@ in {
       "popeye"
       "pre-commit"
       "proxychains-ng"
+      "pulumi"
       "pwgen"
       "python"
       "ripgrep"

@@ -1,12 +1,10 @@
 { config, pkgs, ... }:
 
 let
-  user_name = "heywoodlh";
-  user_full_name = "Spencer Heywood";
-  user_description = "Spencer Heywood";
   unstableTarball =
     fetchTarball
       https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+  system = builtins.currentSystem;
 in {
   imports = [ 
     (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz}/nix-darwin")
@@ -24,10 +22,17 @@ in {
   nix.package = pkgs.nix;
   nixpkgs.config.allowUnfree = true;
 
-    # So that `nix search` works
-  nix.extraOptions = ''
-    extra-experimental-features = nix-command flakes
-  '';
+  # If system is aarch64-darwin, add extra-platforms
+  nix.extraOptions = if system == "aarch64-darwin" then
+     ''
+      extra-platforms = aarch64-darwin x86_64-darwin
+      experimental-features = nix-command flakes
+    ''
+  else
+    ''
+      experimental-features = nix-command flakes
+    ''
+  ;
 
   homebrew = {
     enable = true;
@@ -192,23 +197,6 @@ in {
     };
   };
  
-  users.users.${user_name} = {
-    description = "${user_description}";
-    home = "/Users/${user_name}";
-    name = "${user_full_name}";
-    shell = pkgs.unstable.powershell;
-    packages = [
-      pkgs.gcc
-      pkgs.git
-      pkgs.gnupg
-      pkgs.unstable.powershell
-      pkgs.skhd
-      pkgs.tmux
-      pkgs.wireguard-tools
-    ];
-  };
-
-
   #mac-config.nix 
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
@@ -280,11 +268,6 @@ in {
     };
   };
   
-  #users.nix
-#  nix.settings.trusted-users = [
-#    "@admin"
-#  ];
-
   #wm.nix
   services.yabai.enable = true;
   services.yabai.package = pkgs.unstable.yabai;
@@ -516,4 +499,6 @@ in {
     #ctrl - 0x21 : cliclick ku:ctrl c:. # click
     #ctrl - 0x1E : cliclick ku:ctrl rc:.  # right click
   '';
+
+  system.stateVersion = 4;
 }

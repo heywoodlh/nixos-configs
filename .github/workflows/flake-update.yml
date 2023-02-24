@@ -3,11 +3,11 @@ name: flake-update
 on:
 #  push:
 #    paths:
-#    - './darwin/**'
-#    - './flake.nix'
-#    - './.github/workflows/macos-ci.yml'
-#    - './flake.lock'
-#    - '!./darwin/**.md'
+#    - darwin/**
+#    - flake.nix
+#    - .github/workflows/macos-ci.yml
+#    - flake.lock
+#    - '!darwin/**.md'
   workflow_dispatch:
 
 jobs:

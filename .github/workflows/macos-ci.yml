@@ -28,4 +28,4 @@ jobs:
         echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
         /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
         # Build macos-desktop output
-        darwin-rebuild switch --flake .#darwinConfigurations."macos-desktop-intel".system
+        nix build .#darwinConfigurations.macos-desktop-intel.system

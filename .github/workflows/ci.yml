@@ -1,13 +1,18 @@
-name: macos-ci
+name: build-envs
 
 on:
   push:
     paths:
     - darwin/**
+    - workstation/**
     - flake.nix
-    - .github/workflows/macos-ci.yml
+    - .github/workflows/ci.yml
     - flake.lock
     - '!darwin/**.md'
+    - '!workstation/**.md' 
+    - '!**.md'
+  schedule:
+  - cron: '0 0 * * Thu'
   workflow_dispatch:
 
 jobs:
@@ -21,6 +26,11 @@ jobs:
   
     - name: Install Nix
       uses: cachix/install-nix-action@v18
+
+    - name: If scheduled or manually triggered, update inputs
+      if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+      run: |
+        nix flake update
   
     - name: Build macos-desktop output 
       run: |
@@ -29,3 +39,11 @@ jobs:
         /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
         # Build macos-desktop output
         nix build .#darwinConfigurations.macos-desktop-intel.system
+   
+    - name: If scheduled or manually triggered, add updated flake.lock, commit and push
+      if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: 'flake.lock'
+        author_name: 'github-actions'
+        author_email: 'github-actions@github.com' 

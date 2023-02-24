@@ -7,7 +7,7 @@ on:
     - flake.nix
     - .github/workflows/macos-ci.yml
     - flake.lock
-    - !darwin/**.md
+    - '!darwin/**.md'
   workflow_dispatch:
 
 jobs:

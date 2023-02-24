@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, system, ... }:
 
 
 let
@@ -15,12 +15,12 @@ in {
     description = "${user_description}";
     home = "/Users/${user_name}";
     name = "${user_full_name}";
-    shell = pkgs.unstable.powershell;
+    shell = pkgs.powershell;
     packages = [
       pkgs.gcc
       pkgs.git
       pkgs.gnupg
-      pkgs.unstable.powershell
+      pkgs.powershell
       pkgs.skhd
       pkgs.tmux
       pkgs.wireguard-tools

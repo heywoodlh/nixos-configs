@@ -1,13 +1,13 @@
 name: nixos-workstation-ci
 
 on:
-  push:
-    paths:
-    - './workstation/**'
-    - '!./workstation/**.md'
-  schedule:
-    - cron: "30 0 * * Thu"
   workflow_dispatch:
+#  push:
+#    paths:
+#    - './workstation/**'
+#    - '!./workstation/**.md'
+#  schedule:
+#    - cron: "30 0 * * Thu"
 
 jobs:
   build-nixos-env:

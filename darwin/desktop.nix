@@ -1,39 +1,11 @@
 { config, pkgs, ... }:
 
-let
-  unstableTarball =
-    fetchTarball
-      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
-  system = builtins.currentSystem;
-in {
-  imports = [ 
-    (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz}/nix-darwin")
-  ];
-
-  nixpkgs.config = {
-    packageOverrides = pkgs: {
-      unstable = import unstableTarball {
-        config = config.nixpkgs.config;
-      };
-    };
-  };
-
-  #packages.nix
+{
+  #package config
   nix.package = pkgs.nix;
   nixpkgs.config.allowUnfree = true;
 
-  # If system is aarch64-darwin, add extra-platforms
-  nix.extraOptions = if system == "aarch64-darwin" then
-     ''
-      extra-platforms = aarch64-darwin x86_64-darwin
-      experimental-features = nix-command flakes
-    ''
-  else
-    ''
-      experimental-features = nix-command flakes
-    ''
-  ;
-
+  #homebrew packages
   homebrew = {
     enable = true;
     onActivation.autoUpdate = true;
@@ -270,7 +242,7 @@ in {
   
   #wm.nix
   services.yabai.enable = true;
-  services.yabai.package = pkgs.unstable.yabai;
+  services.yabai.package = pkgs.yabai;
   services.yabai.enableScriptingAddition = false;
   services.yabai.extraConfig = ''
     yabai -m config status_bar                   off
@@ -498,6 +470,11 @@ in {
     
     #ctrl - 0x21 : cliclick ku:ctrl c:. # click
     #ctrl - 0x1E : cliclick ku:ctrl rc:.  # right click
+  '';
+
+  # Add flake support 
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
   '';
 
   system.stateVersion = 4;

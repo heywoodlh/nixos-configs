@@ -15,12 +15,12 @@ in {
     description = "${user_description}";
     home = "/Users/${user_name}";
     name = "${user_full_name}";
-    shell = pkgs.unstable.powershell;
+    shell = pkgs.powershell;
     packages = [
       pkgs.gcc
       pkgs.git
       pkgs.gnupg
-      pkgs.unstable.powershell
+      pkgs.powershell
       pkgs.skhd
       pkgs.tmux
       pkgs.wireguard-tools
@@ -37,4 +37,9 @@ in {
   
   # Always show menu bar on M2 Macbook Air 
   system.defaults.NSGlobalDomain._HIHideMenuBar = lib.mkForce false;
+
+  # Include extra architecture 
+  nix.extraOptions = ''
+    extra-platforms = aarch64-darwin x86_64-darwin
+  ''
 }

@@ -1,13 +1,13 @@
-name: macos-ci
+name: flake-update
 
 on:
-  push:
-    paths:
-    - './darwin/**'
-    - './flake.nix'
-    - './.github/workflows/macos-ci.yml'
-    - './flake.lock'
-    - '!./darwin/**.md'
+#  push:
+#    paths:
+#    - './darwin/**'
+#    - './flake.nix'
+#    - './.github/workflows/macos-ci.yml'
+#    - './flake.lock'
+#    - '!./darwin/**.md'
   workflow_dispatch:
 
 jobs:
@@ -22,10 +22,10 @@ jobs:
     - name: Install Nix
       uses: cachix/install-nix-action@v18
   
-    - name: Build macos-desktop output 
+    - name: Build and nix-darwin 
       run: |
         # Create /run directory
         echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
         /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
         # Build macos-desktop output
-        nix build .#darwinConfigurations."macos-desktop-intel".system
+        nix build .#darwinConfigurations."macos-desktop".system --impure

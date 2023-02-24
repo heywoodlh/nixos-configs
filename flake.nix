@@ -7,25 +7,26 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, ... }:
-  let 
-      system = builtins.currentSystem;
-      pkgs = import nixpkgs { inherit system; };
-  in {
+  outputs = inputs@{ self, nixpkgs, darwin, ... }: {
     darwinConfigurations = {
       # nix-macbook-air target 
       "nix-macbook-air" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [ ./darwin/nix-macbook-air.nix ];
       };
-      # generic config for CI
-      "chg-macbook-pro" = darwin.lib.darwinSystem {
+      # chg-macbook-pro for CI
+      "nix-mac-chg" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [ ./darwin/chg-macbook-pro.nix ];
       };
-      # generic config for CI
-      "macos-desktop" = darwin.lib.darwinSystem {
+      # generic darwin intel config
+      "macos-desktop-intel" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
+        modules = [ ./darwin/desktop.nix ];
+      };
+      # generic darwin m1/m2 config
+      "macos-desktop-m1" = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
         modules = [ ./darwin/desktop.nix ];
       };
     };

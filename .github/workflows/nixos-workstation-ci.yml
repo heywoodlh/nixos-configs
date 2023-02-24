@@ -4,8 +4,10 @@ on:
   workflow_dispatch:
 #  push:
 #    paths:
-#    - './workstation/**'
-#    - '!./workstation/**.md'
+#    - flake.nix
+#    - .github/workflows/nixos-workstation-ci.yml
+#    - workstation/**
+#    - !workstation/**.md
 #  schedule:
 #    - cron: "30 0 * * Thu"
 

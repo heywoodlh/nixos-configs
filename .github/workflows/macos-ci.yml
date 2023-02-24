@@ -27,6 +27,5 @@ jobs:
         # Create /run directory
         echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
         /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
-        cd nixos-configs
         # Build macos-desktop output
         nix build .#darwinConfigurations."macos-desktop".system 

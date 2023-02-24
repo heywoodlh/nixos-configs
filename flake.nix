@@ -12,20 +12,25 @@
       system = builtins.currentSystem;
       pkgs = import nixpkgs { inherit system; };
   in {
-    # nix-macbook-air target 
     darwinConfigurations = {
+      # nix-macbook-air target 
       "nix-macbook-air" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [ ./darwin/nix-macbook-air.nix ];
       };
+      # generic config for CI
+      "macos-desktop" = darwin.lib.darwinSystem {
+        system = "x86_64-darwin";
+        modules = [ ./darwin/desktop.nix ];
+      };
     };
 
     # nixos target
-    nixosConfigurations = {
-      desktop = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [ ./workstation/desktop.nix ];
-      };
-    };
+    #nixosConfigurations = {
+    #  desktop = nixpkgs.lib.nixosSystem {
+    #    system = "x86_64-linux";
+    #    modules = [ ./workstation/desktop.nix ];
+    #  };
+    #};
   };
 }

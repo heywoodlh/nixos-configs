@@ -1,0 +1,27 @@
+name: macos-ci
+
+on:
+  push:
+    paths:
+    - './darwin/**'
+    - '!./darwin/**.md'
+
+  build-macos-env:
+    name: Build/cache macOS Nix env
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Nix
+      uses: cachix/install-nix-action@v18
+
+    - name: Build and nix-darwin 
+      run: |
+        # Create /run directory
+        echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
+        /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
+        cd nixos-configs
+        # Build macos-desktop output
+        nix build .#darwinConfigurations."macos-desktop".system 

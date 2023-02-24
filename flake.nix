@@ -19,6 +19,11 @@
         modules = [ ./darwin/nix-macbook-air.nix ];
       };
       # generic config for CI
+      "chg-macbook-pro" = darwin.lib.darwinSystem {
+        system = "x86_64-darwin";
+        modules = [ ./darwin/chg-macbook-pro.nix ];
+      };
+      # generic config for CI
       "macos-desktop" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         modules = [ ./darwin/desktop.nix ];

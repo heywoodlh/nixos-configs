@@ -45,7 +45,7 @@
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/desktop.nix ];
+        modules = [ ./nixos/hosts/generic-intel/generic.nix ];
       };
     };
   };

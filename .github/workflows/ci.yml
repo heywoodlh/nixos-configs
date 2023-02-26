@@ -16,38 +16,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-macos-env:
-    name: Build macOS Nix env
-    runs-on: macos-latest
-  
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-  
-    - name: Install Nix
-      uses: cachix/install-nix-action@v18
-
-    - name: If scheduled or manually triggered, update inputs
-      if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
-      run: |
-        nix flake update
-  
-    - name: Build macos-desktop output 
-      run: |
-        # Create /run directory
-        echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
-        /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
-        # Build macos-desktop output
-        nix build .#darwinConfigurations.macos-desktop-intel.system
-   
-    - name: If scheduled or manually triggered, add updated flake.lock, commit and push
-      if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
-      uses: EndBug/add-and-commit@v9
-      with:
-        add: 'flake.lock'
-        author_name: 'github-actions'
-        author_email: 'github-actions@github.com' 
-  
   build-nixos-env:
     name: Build NixOS env
     runs-on: ubuntu-latest
@@ -76,3 +44,23 @@ jobs:
         add: 'flake.lock'
         author_name: 'github-actions'
         author_email: 'github-actions@github.com' 
+
+  build-macos-env:
+    name: Build macOS Nix env
+    runs-on: macos-latest
+    needs: build-nixos-env # since build-nixos-env updates the flake.lock
+  
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+  
+    - name: Install Nix
+      uses: cachix/install-nix-action@v18
+
+    - name: Build macos-desktop output 
+      run: |
+        # Create /run directory
+        echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
+        /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
+        # Build macos-desktop output
+        nix build .#darwinConfigurations.macos-desktop-intel.system

@@ -17,7 +17,7 @@ on:
 
 jobs:
   build-macos-env:
-    name: Build/cache macOS Nix env
+    name: Build macOS Nix env
     runs-on: macos-latest
   
     steps:
@@ -41,6 +41,35 @@ jobs:
         nix build .#darwinConfigurations.macos-desktop-intel.system
    
     - name: If scheduled or manually triggered, add updated flake.lock, commit and push
+      if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: 'flake.lock'
+        author_name: 'github-actions'
+        author_email: 'github-actions@github.com' 
+  
+  build-nixos-env:
+    name: Build NixOS env
+    runs-on: ubuntu-latest
+  
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+  
+    - name: Install Nix
+      uses: cachix/install-nix-action@v18
+
+    - name: If scheduled or manually triggered, update inputs again
+      if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+      run: |
+        nix flake update
+  
+    - name: Build nixos-desktop output 
+      run: |
+        # Build linux-desktop output
+        nix build .#nixosConfigurations.nixos-desktop-intel.config.system.build.toplevel
+   
+    - name: If scheduled or manually triggered, add updated flake.lock if changed, commit and push
       if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
       uses: EndBug/add-and-commit@v9
       with:

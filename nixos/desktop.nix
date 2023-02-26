@@ -1,22 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, home-manager, ... }:
 
-let
-  unstableTarball =
-    fetchTarball
-      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
-in {
-
-  imports = [ 
-    (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz}/nixos")
-  ];
-
-  nixpkgs.config = {
-    packageOverrides = pkgs: {
-      unstable = import unstableTarball {
-        config = config.nixpkgs.config;
-      };
-    };
-  };
+{
+  imports = [ home-manager.nixosModule ];
 
   boot = {
     kernelParams = [ "quiet" "splash" ];
@@ -30,12 +15,6 @@ in {
 
   # Enable NetworkManager
   networking.networkmanager.enable = true;
-
-  # Set DNS
-  networking.nameservers = [ "10.50.50.1" ];
-  environment.etc = {
-    "resolv.conf".text = "nameserver 10.50.50.1\n";
-  }; 
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -176,23 +155,23 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = pkgs.unstable.powershell;
+    shell = pkgs.powershell;
     packages = with pkgs; [
       abootimg
       alacritty
       appimage-run
-      unstable.aerc
+      aerc
       ansible
       argocd
       automake
       awscli2
       bind
       bitwarden
-      unstable.bitwarden-cli
+      bitwarden-cli
       brave
       calcurse
       cargo
-      unstable.cider
+      cider
       cmake
       coreutils
       curl
@@ -269,18 +248,18 @@ in {
       plex-media-player
       podman-compose
       procmail
-      unstable.powershell
+      powershell
       pulumi 
       pwgen
       python310Full
       qemu-utils
-      unstable.rbw
+      rbw
       realvnc-vnc-viewer
       remmina
       rofi
-      unstable.rofi-rbw
+      rofi-rbw
       rpi-imager
-      unstable.rustdesk
+      rustdesk
       scrot
       signal-desktop
       slack

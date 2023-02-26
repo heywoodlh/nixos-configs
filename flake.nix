@@ -5,9 +5,13 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, ... }: {
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, ... }: {
     darwinConfigurations = {
       # nix-macbook-air target 
       "nix-macbook-air" = darwin.lib.darwinSystem {
@@ -32,11 +36,17 @@
     };
 
     # nixos target
-    #nixosConfigurations = {
-    #  desktop = nixpkgs.lib.nixosSystem {
-    #    system = "x86_64-linux";
-    #    modules = [ ./workstation/desktop.nix ];
-    #  };
-    #};
+    nixosConfigurations = {
+      nix-vm = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/nix-vm/vm.nix ];
+      };
+      nixos-desktop-intel = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/desktop.nix ];
+      };
+    };
   };
 }

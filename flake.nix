@@ -52,6 +52,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/steam-deck/configuration.nix ];
       };
+      nix-razer = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/razer-blade-15/configuration.nix ];
+      };
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

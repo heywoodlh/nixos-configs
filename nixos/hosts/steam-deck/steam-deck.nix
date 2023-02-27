@@ -1,20 +1,16 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, jovian-nixos, home-manager, ... }:
 
-let
-  myUsername = "heywoodlh";
-  myUserdescription = "Spencer Heywood";
-
-  # Fetch the "development" branch of the Jovian-NixOS repository
-  jovian-nixos = builtins.fetchGit {
-    url = "https://github.com/Jovian-Experiments/Jovian-NixOS";
-    ref = "development";
-  };
-in {
+{
   # Import jovian modules and home-manager
-  imports = [ 
-    "${jovian-nixos}/modules" 
-    (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz}/nixos")
-  ]; 
+  #imports = [ 
+  #  "${jovian-nixos}/modules" 
+  #  (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz}/nixos")
+  #];
+
+  imports = [
+    jovian-nixos
+    home-manager.nixosModule
+  ];
 
   jovian = {
     steam.enable = true;
@@ -26,7 +22,7 @@ in {
   services.xserver.displayManager.gdm.wayland = lib.mkForce true; # lib.mkForce is only required on my setup because I'm using some other NixOS configs that conflict with this value
   services.xserver.displayManager.defaultSession = "steam-wayland";
   services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = myUsername;
+  services.xserver.displayManager.autoLogin.user = "heywoodlh"; 
 
   # Enable GNOME
   sound.enable = true;
@@ -35,9 +31,9 @@ in {
   };
 
   # Create user
-  users.users.myUsername = {
+  users.users.heywoodlh = {
     isNormalUser = true;
-    description = myUserdescription;
+    description = "Spencer Heywood";
   };
 
   systemd.services.gamescope-switcher = {
@@ -97,7 +93,7 @@ in {
   ];
 
   # GNOME settings through home-manager
-  home-manager.users.${myUsername} = {
+  home-manager.users.heywoodlh = {
     home.stateVersion = "22.11";
     dconf.settings = {
       # Enable on-screen keyboard

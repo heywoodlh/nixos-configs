@@ -42,6 +42,23 @@
         "type": "github"
       }
     },
+    "jovian-nixos": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1675702486,
+        "narHash": "sha256-kcuoEWwle+omzu+Wg8WE3I1Gp4P9lniN/nFojxCGjtU=",
+        "ref": "development",
+        "rev": "6ddab1dd6e8de29a53ca8418ce95d7ee7755f6fe",
+        "revCount": 160,
+        "type": "git",
+        "url": "https://github.com/Jovian-Experiments/Jovian-NixOS"
+      },
+      "original": {
+        "ref": "development",
+        "type": "git",
+        "url": "https://github.com/Jovian-Experiments/Jovian-NixOS"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1677383253,
@@ -62,6 +79,7 @@
       "inputs": {
         "darwin": "darwin",
         "home-manager": "home-manager",
+        "jovian-nixos": "jovian-nixos",
         "nixpkgs": "nixpkgs"
       }
     },

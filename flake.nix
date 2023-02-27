@@ -9,9 +9,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
+    jovian-nixos = {
+      url = "git+https://github.com/Jovian-Experiments/Jovian-NixOS?ref=development";
+      flake = false;
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, ... }: {
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, ... }: {
     darwinConfigurations = {
       # nix-macbook-air target 
       "nix-macbook-air" = darwin.lib.darwinSystem {
@@ -40,12 +45,17 @@
       nix-vm = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-vm/vm.nix ];
+        modules = [ ./nixos/hosts/nix-vm/configuration.nix ];
+      };
+      nix-steam-deck = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/steam-deck/configuration.nix ];
       };
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/generic-intel/generic.nix ];
+        modules = [ ./nixos/hosts/generic-intel/configuration.nix ];
       };
     };
   };

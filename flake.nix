@@ -57,6 +57,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/razer-blade-15/configuration.nix ];
       };
+      nix-xps = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/xps-13/configuration.nix ];
+      };
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

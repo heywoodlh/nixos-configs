@@ -8,7 +8,7 @@
   #];
 
   imports = [
-    jovian-nixos
+    (jovian-nixos + "/modules")
     home-manager.nixosModule
   ];
 

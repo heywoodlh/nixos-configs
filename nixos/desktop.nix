@@ -115,13 +115,13 @@
     };
   };
 
-  virtualisation = {
-    podman = {
-      enable = true;
-      dockerCompat = true;
-    };
-    virtualbox.host.enable = true;
-  };
+  #virtualisation = {
+  #  podman = {
+  #    enable = true;
+  #    dockerCompat = true;
+  #  };
+  #  virtualbox.host.enable = true;
+  #};
 
   # Virtualbox
   users.extraGroups.vboxusers.members = [ "heywoodlh" ];

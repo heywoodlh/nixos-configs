@@ -7,6 +7,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../desktop.nix
+      ../../overlays/rancher-desktop/default.nix
     ];
 
   # Bootloader.

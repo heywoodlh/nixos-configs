@@ -1,7 +1,10 @@
 { config, pkgs, home-manager, ... }:
 
 {
-  imports = [ home-manager.nixosModule ];
+  imports = [ 
+    home-manager.nixosModule 
+    ../roles/linux-dotfiles.nix
+  ];
 
   boot = {
     kernelParams = [ "quiet" "splash" ];

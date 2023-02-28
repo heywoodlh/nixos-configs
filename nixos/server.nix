@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../roles/linux-dotfiles.nix
     ../roles/sshd.nix
   ];
   
@@ -48,4 +49,7 @@
     extraGroups = [ "wheel" ];
     shell = pkgs.powershell;
   };
+
+  # Allow heywoodlh to run sudo commands without password
+  security.sudo.wheelNeedsPassword = false;
 }

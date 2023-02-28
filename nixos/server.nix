@@ -8,6 +8,11 @@
   # Allow non-free applications to be installed
   nixpkgs.config.allowUnfree = true;
 
+  # So that `nix search` works
+  nix.extraOptions = '' 
+    extra-experimental-features = nix-command flakes
+  '';
+
   # Packages to install on entire system  
   environment.systemPackages = with pkgs; [
     autoPatchelfHook

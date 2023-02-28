@@ -62,6 +62,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/xps-13/configuration.nix ];
       };
+      nix-tools = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/nix-tools/configuration.nix ];
+      };
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

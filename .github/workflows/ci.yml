@@ -29,6 +29,11 @@ jobs:
     - name: Install Nix
       uses: cachix/install-nix-action@v18
 
+    - name: Freeing up more disk space
+      run: |
+        sudo rm -rf /usr/local/lib/android # will release about 10 GB if you don't need Android
+        sudo rm -rf /usr/share/dotnet # will release about 20GB if you don't need .NET
+
     - name: If scheduled or manually triggered, update inputs again
       if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
       run: |
@@ -38,6 +43,9 @@ jobs:
       run: |
         # Build linux-desktop output
         nix build .#nixosConfigurations.nixos-desktop-intel.config.system.build.toplevel
+        rm -rf ./result
+        nix build .#nixosConfigurations.nixos-server-intel.config.system.build.toplevel
+        rm -rf ./result
    
     - name: If scheduled or manually triggered, add updated flake.lock if changed, commit and push
       if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}

@@ -72,6 +72,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/generic-intel/configuration.nix ];
       };
+      nixos-server-intel = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/generic-intel-server/configuration.nix ];
+      };
     };
   };
 }

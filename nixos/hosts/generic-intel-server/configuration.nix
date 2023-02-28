@@ -1,16 +1,16 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../desktop.nix
+    ../../server.nix
   ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
-
+  
   system.stateVersion = "22.11";
 }

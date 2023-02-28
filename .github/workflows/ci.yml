@@ -8,8 +8,8 @@ on:
     - darwin/**
     - workstation/**
     - flake.nix
-    - .github/workflows/ci.yml
     - flake.lock
+    - .github/workflows/ci.yml
     - '!darwin/**.md'
     - '!workstation/**.md' 
     - '!**.md'

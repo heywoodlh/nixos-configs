@@ -21,7 +21,7 @@ For some reason, the `darwinConfigurations` outputs aren't shown properly, so yo
 To install a NixOS configuration, let's assume the `nixos-desktop-intel` output, do the following:
 
 ```
-sudo nixos-install switch --flake github:heywoodlh/nixos-configs#nixos-desktop-intel
+sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-desktop-intel
 ```
 
 ### MacOS:
@@ -31,6 +31,6 @@ Note: currently there is a bug with how `darwin-rebuild` is parsing URIs, so thi
 To install a MacOS configuration, let's assume the `macos-desktop-intel` output, do the following:
 
 ```
-sudo nixos-install switch --flake github:heywoodlh/nixos-configs#macos-desktop-intel
+darwin-rebuild switch --flake github:heywoodlh/nixos-configs#macos-desktop-intel
 ```
 

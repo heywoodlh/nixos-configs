@@ -41,9 +41,13 @@ jobs:
   
     - name: Build nixos-desktop output 
       run: |
-        # Build linux-desktop output
+        # Build nixos-desktop output
         nix build .#nixosConfigurations.nixos-desktop-intel.config.system.build.toplevel
         rm -rf ./result
+
+    - name: Build nixos-server output 
+      run: |
+        # Build nixos-server output
         nix build .#nixosConfigurations.nixos-server-intel.config.system.build.toplevel
         rm -rf ./result
    

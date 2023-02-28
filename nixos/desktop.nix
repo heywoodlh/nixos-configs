@@ -115,14 +115,6 @@
     };
   };
 
-  #virtualisation = {
-  #  podman = {
-  #    enable = true;
-  #    dockerCompat = true;
-  #  };
-  #  virtualbox.host.enable = true;
-  #};
-
   # Virtualbox
   users.extraGroups.vboxusers.members = [ "heywoodlh" ];
   users.extraGroups.disk.members = [ "heywoodlh" ];
@@ -176,6 +168,7 @@
       coreutils
       curl
       dante
+      docker-client
       docker-compose
       gnome.dconf-editor
       go
@@ -246,7 +239,6 @@
       pinentry-curses
       pinentry-rofi
       plex-media-player
-      podman-compose
       procmail
       powershell
       pulumi 

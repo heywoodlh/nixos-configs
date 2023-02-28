@@ -26,7 +26,7 @@ sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-desktop-i
 
 ### MacOS:
 
-Note: currently there is a bug with how `darwin-rebuild` is parsing URIs, so this command will not work until that is fixed: https://github.com/LnL7/nix-darwin/pull/600
+> Note: currently there is a bug with how `darwin-rebuild` is parsing URIs, so this command will not work until that is fixed: https://github.com/LnL7/nix-darwin/pull/600
 
 To install a MacOS configuration, let's assume the `macos-desktop-intel` output, do the following:
 

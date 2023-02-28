@@ -2,6 +2,8 @@ name: build-envs
 
 on:
   push:
+    branches:
+    - 'master'
     paths:
     - darwin/**
     - workstation/**

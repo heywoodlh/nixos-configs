@@ -10,6 +10,7 @@ on:
     - flake.nix
     - flake.lock
     - .github/workflows/ci.yml
+    - roles/**
     - '!darwin/**.md'
     - '!workstation/**.md' 
     - '!**.md'

@@ -47,6 +47,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-vm/configuration.nix ];
       };
+      nix-vostro = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/nix-vostro/configuration.nix ];
+      };
       nix-steam-deck = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

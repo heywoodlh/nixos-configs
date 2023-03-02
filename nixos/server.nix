@@ -4,6 +4,7 @@
   imports = [
     ../roles/linux-dotfiles.nix
     ../roles/sshd.nix
+    ../roles/sshd-monitor.nix
   ];
   
   # Allow non-free applications to be installed

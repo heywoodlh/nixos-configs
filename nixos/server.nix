@@ -2,11 +2,17 @@
 
 {
   imports = [
+    ../roles/linux-dotfiles.nix
     ../roles/sshd.nix
   ];
   
   # Allow non-free applications to be installed
   nixpkgs.config.allowUnfree = true;
+
+  # So that `nix search` works
+  nix.extraOptions = '' 
+    extra-experimental-features = nix-command flakes
+  '';
 
   # Packages to install on entire system  
   environment.systemPackages = with pkgs; [
@@ -43,4 +49,7 @@
     extraGroups = [ "wheel" ];
     shell = pkgs.powershell;
   };
+
+  # Allow heywoodlh to run sudo commands without password
+  security.sudo.wheelNeedsPassword = false;
 }

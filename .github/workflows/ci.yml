@@ -2,12 +2,15 @@ name: build-envs
 
 on:
   push:
+    branches:
+    - 'master'
     paths:
     - darwin/**
     - workstation/**
     - flake.nix
-    - .github/workflows/ci.yml
     - flake.lock
+    - .github/workflows/ci.yml
+    - roles/**
     - '!darwin/**.md'
     - '!workstation/**.md' 
     - '!**.md'
@@ -33,7 +36,7 @@ jobs:
   
     - name: Install Nix
       uses: cachix/install-nix-action@v18
-
+    
     - name: If scheduled or manually triggered, update inputs again
       if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
       run: |
@@ -41,8 +44,15 @@ jobs:
   
     - name: Build nixos-desktop output 
       run: |
-        # Build linux-desktop output
-        nix build .#nixosConfigurations.nixos-desktop-intel.config.system.build.toplevel
+        # Build nixos-desktop output
+        nix build --no-build-output .#nixosConfigurations.nixos-desktop-intel.config.system.build.toplevel
+        rm -rf ./result
+
+    - name: Build nixos-server output 
+      run: |
+        # Build nixos-server output
+        nix build --no-build-output .#nixosConfigurations.nixos-server-intel.config.system.build.toplevel
+        rm -rf ./result
    
     - name: If scheduled or manually triggered, add updated flake.lock if changed, commit and push
       if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
@@ -70,4 +80,4 @@ jobs:
         echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
         /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
         # Build macos-desktop output
-        nix build .#darwinConfigurations.macos-desktop-intel.system
+        nix build --no-build-output .#darwinConfigurations.macos-desktop-intel.system

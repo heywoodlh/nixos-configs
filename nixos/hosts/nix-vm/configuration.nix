@@ -6,6 +6,7 @@
     ./hardware-configuration.nix
     ../../desktop.nix
     ../../../roles/sshd.nix
+    ../../../roles/sshd-monitor.nix
     ../../../roles/xrdp.nix
   ];
 

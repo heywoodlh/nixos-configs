@@ -152,21 +152,15 @@
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     shell = pkgs.powershell;
     packages = with pkgs; [
-      abootimg
-      alacritty
       appimage-run
       aerc
       ansible
-      argocd
       automake
       awscli2
       bind
-      bitwarden
       bitwarden-cli
-      brave
       calcurse
       cargo
-      cider
       cmake
       coreutils
       curl
@@ -175,14 +169,9 @@
       docker-compose
       gnome.dconf-editor
       go
-      gomuks
-      evolution
-      evolution-data-server
-      evolution-ews
       ffmpeg
       file
       firefox
-      freshfetch
       fzf
       gcc
       git
@@ -190,7 +179,6 @@
       gitleaks
       glib.dev
       glow
-      gnome.gnome-boxes
       gnome.gnome-tweaks
       gnomeExtensions.caffeine
       gnomeExtensions.gsconnect
@@ -207,7 +195,6 @@
       inotify-tools
       jq
       k9s
-      kdash
       keyutils
       kind
       kitty
@@ -215,18 +202,14 @@
       kubernetes-helm
       libarchive
       libnotify
-      libreoffice
       lima
-      lutris
       matrix-commander
-      moonlight-qt
       nixos-generators
       nixos-install-tools
       nodejs
       lefthook
       mosh
       neovim
-      nerdfonts
       nim
       nordic
       olm
@@ -241,28 +224,18 @@
       peru
       pinentry-curses
       pinentry-rofi
-      plex-media-player
       procmail
       powershell
-      pulumi 
       pwgen
-      python310Full
+      python310
       qemu-utils
       rbw
-      realvnc-vnc-viewer
-      remmina
       rofi
       rofi-rbw
-      rpi-imager
-      rustdesk
       scrot
-      signal-desktop
-      slack
       tcpdump
-      teams
       terraform-docs
       texlive.combined.scheme-full
-      thunderbird
       tmux
       tree
       unzip
@@ -276,7 +249,6 @@
       xclip
       xdotool
       zip
-      zoom-us
       zsh
     ];
   };

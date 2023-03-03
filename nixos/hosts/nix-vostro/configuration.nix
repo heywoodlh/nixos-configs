@@ -4,10 +4,9 @@
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../desktop.nix
+    ../../server.nix
     ../../../roles/sshd.nix
     ../../../roles/sshd-monitor.nix
-    ../../../roles/xrdp.nix
   ];
 
   # Enable Grub

@@ -383,6 +383,9 @@
         tile-by-default = true;
         tile-enter = ["disabled"];
       };
+      "org/gnome/desktop/notifications" = {
+        show-in-lock-screen = false;
+      };
       "org/gnome/desktop/peripherals/touchpad" = {
         tap-to-click = true;
         two-finger-scrolling-enabled = true;

@@ -18,11 +18,12 @@
   # Packages to install on entire system  
   environment.systemPackages = with pkgs; [
     autoPatchelfHook
-    git
     bind
     busybox
+    croc
     file
     gcc
+    git
     gnumake
     gnupg 
     jq 

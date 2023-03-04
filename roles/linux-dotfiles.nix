@@ -12,15 +12,15 @@ in {
   ];
 
   system.activationScripts.postActivate = ''
-    /run/wrappers/bin/su ${username} -c "bash -c '
+    ${pkgs.su}/bin/su ${username} -c "${pkgs.bash}/bin/bash -c '
       PATH=${pkgs.peru}/bin:${pkgs.git}/bin:${pkgs.powershell}/bin:${pkgs.bash}/bin:${pkgs.coreutils}/bin:$PATH
       # Check if the clone directory exists, otherwise clone the repository
-      [[ -d ${cloneDir} ]] || git clone https://github.com/${username}/conf ${cloneDir}
+      [[ -d ${cloneDir} ]] || ${pkgs.git}/bin/git clone https://github.com/${username}/conf ${cloneDir}
 
       # Change directory to the clone directory and run the appropriate commands
       cd ${cloneDir} \
-      && peru sync \
-      && pwsh -executionpolicy bypass -file ./setup.ps1
+      && ${pkgs.peru}/bin/peru sync \
+      && ${pkgs.powershell}/bin/pwsh -executionpolicy bypass -file ./setup.ps1
     '"
   '';
 }

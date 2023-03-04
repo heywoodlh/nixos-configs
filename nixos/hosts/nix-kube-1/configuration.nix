@@ -5,7 +5,7 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
-    ../../minikube.nix
+    ../../../roles/minikube.nix
   ];
 
   # Bootloader.

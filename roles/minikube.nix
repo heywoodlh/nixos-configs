@@ -1,6 +1,4 @@
-{ config, pkgs, ... }:
-
-{
+{ pkgs ? import <nixpkgs> {} }:
   pkgs.mkShell {
     buildInputs = with pkgs; [
       minikube

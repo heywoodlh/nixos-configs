@@ -62,7 +62,10 @@ in {
   ];
 
   # allow kubernetes port
-  networking.firewall.allowedTCPPorts = [ kubeMasterAPIServerPort ];	
+  networking.firewall.allowedTCPPorts = [
+    kubeMasterAPIServerPort 
+    8888 # For cfssl/certmgr
+  ];	
 
   services.kubernetes = {
     roles = ["master" "node"];

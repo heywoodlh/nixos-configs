@@ -1,10 +1,6 @@
 { config, pkgs, ... }:
 
-let
-  kubeMasterIP = "10.0.50.41";
-  kubeMasterHostname = "nix-kube-1.kube";
-  kubeMasterAPIServerPort = 6443;
-in {
+{
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -50,39 +46,5 @@ in {
     "resolv.conf".text = "nameserver 10.50.50.1\n";
   };
 
-  # Kubernetes master
-  # resolve master hostname
-  networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostname}";
-
-  # packages for administration tasks
-  environment.systemPackages = with pkgs; [
-    kompose
-    kubectl
-    kubernetes
-  ];
-
-  # allow kubernetes port
-  networking.firewall.allowedTCPPorts = [
-    kubeMasterAPIServerPort 
-    8888 # For cfssl/certmgr
-  ];	
-
-  services.kubernetes = {
-    roles = ["master" "node"];
-    masterAddress = kubeMasterHostname;
-    apiserverAddress = "https://${kubeMasterHostname}:${toString kubeMasterAPIServerPort}";
-    easyCerts = true;
-    apiserver = {
-      securePort = kubeMasterAPIServerPort;
-      advertiseAddress = kubeMasterIP;
-    };
-
-    # use coredns
-    addons.dns.enable = true;
-
-    # needed if you use swap
-    #kubelet.extraOpts = "--fail-swap-on=false";
-  };
-  
   system.stateVersion = "22.11";
 }

@@ -72,20 +72,10 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-tools/configuration.nix ];
       };
-      nix-kube-1 = nixpkgs.lib.nixosSystem {
+      nix-kube = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-kube-1/configuration.nix ];
-      };
-      nix-kube-2 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-kube-2/configuration.nix ];
-      };
-      nix-kube-3 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-kube-3/configuration.nix ];
+        modules = [ ./nixos/hosts/nix-kube/configuration.nix ];
       };
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

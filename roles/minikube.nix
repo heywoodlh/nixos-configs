@@ -22,7 +22,7 @@ let
   ];
 
   systemd.services.minikube-start = {
-    description = "Monitor SSH daemon";
+    description = "Start Minikube";
     path = [ 
       pkgs.bash
       pkgs.docker

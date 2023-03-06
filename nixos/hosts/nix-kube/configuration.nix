@@ -5,6 +5,7 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
+    ../../../roles/minikube.nix
   ];
 
   # Bootloader.
@@ -14,12 +15,12 @@
   
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.hostName = "nix-kube-3"; # Define your hostname
+  networking.hostName = "nix-kube"; # Define your hostname
 
   # Enable wireguard
   networking.wg-quick.interfaces = {
     shadow = {
-      address = [ "10.50.50.43/24" ];
+      address = [ "10.50.50.41/24" ];
       privateKeyFile = "/root/wgkey";
       listenPort = 51820;
 

@@ -14,9 +14,10 @@
       url = "git+https://github.com/Jovian-Experiments/Jovian-NixOS?ref=development";
       flake = false;
     };
+    nur.url = "github:nix-community/NUR";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, ... }: {
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, ... }: {
     darwinConfigurations = {
       # nix-macbook-air target 
       "nix-macbook-air" = darwin.lib.darwinSystem {

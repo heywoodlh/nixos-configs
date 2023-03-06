@@ -1,12 +1,6 @@
 { config, pkgs, lib, jovian-nixos, home-manager, ... }:
 
 {
-  # Import jovian modules and home-manager
-  #imports = [ 
-  #  "${jovian-nixos}/modules" 
-  #  (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz}/nixos")
-  #];
-
   imports = [
     (jovian-nixos + "/modules")
     home-manager.nixosModule

@@ -1,9 +1,14 @@
-{ config, pkgs, home-manager, ... }:
+{ config, pkgs, home-manager, nur, ... }:
 
 {
   imports = [ 
-    home-manager.nixosModule 
+    home-manager.nixosModule
     ../roles/linux-dotfiles.nix
+  ];
+
+  # Import nur as nixpkgs.overlays
+  nixpkgs.overlays = [ 
+    nur.overlay 
   ];
 
   boot = {
@@ -152,6 +157,7 @@
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     shell = pkgs.powershell;
     packages = with pkgs; [
+      alacritty
       appimage-run
       aerc
       ansible
@@ -262,10 +268,12 @@
     General = { ControllerMode = "dual"; } ;
   };
 
-  # Home-manager settings
+  # Home-manager settings specific for Linux
   home-manager.users.heywoodlh = {
     home.stateVersion = "22.11";
     programs.rbw.settings.pinentry = pkgs.pinentry-rofi;
+
+    # Dconf/GNOME settings
     dconf.settings = {
       "apps/guake/general" = {
         abbreviate-tab-names = false;
@@ -470,5 +478,93 @@
         name = "right click";
       };
     };
+
+    # Firefox config
+    programs.firefox = {
+      enable = true;
+      package = pkgs.firefox.override {
+        cfg = {
+          enableGnomeExtensions = true;
+        };
+      };
+      profiles.default = {
+        search.force = true; # This is required so the build won't fail each time
+        # View extensions here: https://github.com/nix-community/nur-combined/blob/master/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          bitwarden
+          darkreader
+          firenvim
+          gnome-shell-integration
+          new-tab-override
+          okta-browser-plugin
+          privacy-badger
+          private-relay
+          redirector
+          ublock-origin
+          vimium
+        ]; 
+        userChrome = ''
+          .titlebar-min {
+            appearance: auto !important;
+            -moz-default-appearance: -moz-window-button-minimize !important;
+          }
+          
+          .titlebar-max {
+            appearance: auto !important;
+            -moz-default-appearance: -moz-window-button-maximize !important;  
+          }
+          
+          .titlebar-restore {
+            appearance: auto !important;
+            -moz-default-appearance: -moz-window-button-restore !important;
+          }
+          
+          .titlebar-close {
+            appearance: auto !important;
+            -moz-default-appearance: -moz-window-button-close !important;
+          }
+          
+          .titlebar-button{
+            list-style-image: none !important;
+          } 
+        '';
+        isDefault = true;
+        name = "default";
+        search.default = "DuckDuckGo";
+        settings = {
+          "app.shield.optoutstudies.enabled" = false;
+          "browser.bookmarks.restore_default_bookmarks" = false;
+          "browser.bookmarks.showMobileBookmarks" = false;
+          "browser.compactmode.show" = true;
+          "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
+          "browser.newtabpage.activity-stream.feeds.topsites" = false;
+          "browser.newtabpage.activity-stream.improvesearch.topSiteSearchShortcuts.havePinned" = "duckduckgo";
+          "browser.newtabpage.activity-stream.showSponsored" = false;
+          "browser.newtabpage.pinned" = [{
+            title = "home";
+            url = "https://home.heywoodlh.tech";
+          }];
+          "browser.search.isUS" = true;
+          "browser.search.suggest.enabled" = false;
+          "browser.startup.homepage" = "https://home.heywoodlh.tech";
+          "browser.urlbar.suggest.engines" = false;
+          "browser.urlbar.quicksuggest.scenario" = "offline";
+          "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
+          "browser.urlbar.suggest.quicksuggest.sponsored" = false;
+          "browser.urlbar.suggest.topsites" = false;
+          "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+          "network.proxy.no_proxies_on" = "localhost,127.0.0.1,.lan,.wireguard,.kube,.heywoodlh.tech,google.com,.okta.com,okta.com,.amazon.com,amazon.com,.mychg.com,mychg.com,chghealthcare.com,office.com,.office.com,microsoft.com,.microsoft.com,.atlassian.com,atlassian.com,jira.com,.jira.com,amazonaws.com,.amazonaws.com,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,paypal.com,.paypal.com,unity.com,awsapps.com,.awsapps.com,.wired,chat.openai.com,heywoodlh.tech";
+          "network.proxy.socks" = "10.64.0.1";
+          "network.proxy.socks_port" = 1080;
+          "network.proxy.type" = 1;
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          "browser.tabs.drawInTitlebar" = true;
+          "startup.homepage_override_url" = "https://home.heywoodlh.tech";
+          "svg.context-properties.content.enabled" = true;
+        };
+      };
+    }; 
+    # End Firefox config
   };
+  # End home-manager config
 }

@@ -7,7 +7,7 @@ let
     ## Start minikube, allowing for remote connections
     minikube start --listen-address=0.0.0.0 --memory=max --cpus=max --driver docker
   '';
-{  
+in {  
   # Minikube package
   environment.systemPackages = with pkgs; [
     minikube

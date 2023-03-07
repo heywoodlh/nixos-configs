@@ -13,13 +13,14 @@ let
         --cpus=max \
         --driver docker \
         --nodes 3 \
-        --apiserver-ips=0.0.0.0 \
+        --apiserver-ips=''${ip_address} \
         --apiserver-port=8443 \
         --addons=istio,metallb,dashboard
   '';
 in {  
   # Minikube package
   environment.systemPackages = with pkgs; [
+    kubectl
     minikube
   ];
 

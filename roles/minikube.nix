@@ -28,9 +28,10 @@ in {
     path = [ 
       pkgs.bash
       pkgs.docker
+      pkgs.iptables
+      pkgs.libnetfilter_conntrack
       pkgs.minikube 
       pkgs.systemd 
-      pkgs.iptables
     ];
     serviceConfig = {
       Type = "simple";

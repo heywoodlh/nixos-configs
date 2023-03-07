@@ -30,6 +30,7 @@ in {
       pkgs.docker
       pkgs.minikube 
       pkgs.systemd 
+      pkgs.system-path
     ];
     serviceConfig = {
       Type = "simple";
@@ -39,5 +40,4 @@ in {
     };
     wantedBy = [ "multi-user.target" ];
   };
-
 }

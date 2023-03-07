@@ -5,7 +5,7 @@ let
     #!/usr/bin/env bash
 
     ## Start minikube, allowing for remote connections
-    minikube start --listen-address=0.0.0.0 --memory=max --cpus=max --driver docker --force
+    minikube start --listen-address=0.0.0.0 --memory=max --cpus=max --driver docker
   '';
 in {  
   # Minikube package
@@ -34,7 +34,7 @@ in {
       Type = "simple";
       ExecStart = "${minikube-start}";
       Restart = "on-failure";
-      User = "root";
+      User = "heywoodlh";
     };
     wantedBy = [ "multi-user.target" ];
   };

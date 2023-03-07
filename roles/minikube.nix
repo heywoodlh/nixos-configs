@@ -14,6 +14,7 @@ let
 in {  
   # Minikube package
   environment.systemPackages = with pkgs; [
+    conntrack
     kubectl
     minikube
   ];
@@ -29,7 +30,7 @@ in {
       pkgs.bash
       pkgs.docker
       pkgs.iptables
-      pkgs.libnetfilter_conntrack
+      pkgs.conntrack
       pkgs.minikube 
       pkgs.systemd 
     ];

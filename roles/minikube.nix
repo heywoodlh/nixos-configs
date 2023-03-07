@@ -4,6 +4,9 @@ let
   minikube-start = pkgs.writeScript "minikube-start" ''
     #!/usr/bin/env bash
 
+    ## Assumes that an IP in 10.50.50.0/24 exists on host
+    ip_address="$(ip addr | grep 10.50.50 | awk '{print $2}' | cut -d'/' -f1)"
+
     ## Start minikube, allowing for remote connections
     minikube start --listen-address=0.0.0.0 \
         --memory=max \

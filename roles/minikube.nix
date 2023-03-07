@@ -14,7 +14,7 @@ let
 in {  
   # Minikube package
   environment.systemPackages = with pkgs; [
-    conntrack
+    conntrack-tools
     kubectl
     minikube
   ];
@@ -30,7 +30,7 @@ in {
       pkgs.bash
       pkgs.docker
       pkgs.iptables
-      pkgs.conntrack
+      pkgs.conntrack-tools
       pkgs.minikube 
       pkgs.systemd 
     ];

@@ -5,7 +5,7 @@ let
     #!/usr/bin/env bash
 
     ## Start minikube, allowing for remote connections
-    minikube start --listen-address=0.0.0.0 --memory=max --cpus=max --driver docker --apiserver-ips=["0.0.0.0"]
+    minikube start --listen-address=0.0.0.0 --memory=max --cpus=max --driver docker --apiserver-ips=0.0.0.0
   '';
 in {  
   # Minikube package

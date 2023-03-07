@@ -4,19 +4,11 @@ let
   minikube-start = pkgs.writeScript "minikube-start" ''
     #!/usr/bin/env bash
 
-    ## Assumes that an IP in 10.50.50.0/24 exists on host
-    ip_address="$(ip addr | grep 10.50.50 | awk '{print $2}' | cut -d'/' -f1)"
-
     ## Start minikube, allowing for remote connections
     minikube start --listen-address=0.0.0.0 \
-        --memory=max \
-        --cpus=max \
-        --driver docker \
+        --driver=none \
         --nodes 3 \
-        --apiserver-ips=''${ip_address} \
-        --apiserver-port=8443 \
-        --addons=istio,metallb,dashboard \
-        --ports=8443:8443
+        --addons=istio,metallb,dashboard
   '';
 in {  
   # Minikube package
@@ -24,10 +16,6 @@ in {
     kubectl
     minikube
   ];
-
-  # Enable Docker
-  virtualisation.docker.enable = true;
-  users.users.heywoodlh.extraGroups = [ "docker" ];
 
   # Allow remote connections
   networking.firewall.allowedTCPPorts = [
@@ -46,7 +34,7 @@ in {
       Type = "simple";
       ExecStart = "${minikube-start}";
       Restart = "on-failure";
-      User = "heywoodlh";
+      User = "root";
     };
     wantedBy = [ "multi-user.target" ];
   };

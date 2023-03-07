@@ -503,6 +503,44 @@
           vimium
         ]; 
         userChrome = ''
+          /* * Do not remove the @namespace line -- it's required for correct functioning */
+          /* set default namespace to XUL */
+          @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+          /* Remove Back button when there's nothing to go Back to */
+          #back-button[disabled="true"] { display: none; }
+
+          /* Remove Forward button when there's nothing to go Forward to */
+          #forward-button[disabled="true"] { display: none; }
+
+          /* Remove Home button (never use it) */
+          #home-button { display: none; }
+
+          .titlebar-spacer {
+	    display: none !important;
+          }
+        
+          /* Remove import bookmarks button */ 
+          #import-button {
+            display: none;
+          } 
+          
+          /* Remove bookmark toolbar */
+          toolbarbutton.bookmark-item:not(.subviewbutton) {
+            display: none;
+          }
+
+          /* Remove whitespace in toolbar */
+          #nav-bar toolbarpaletteitem[id^="wrapper-customizableui-special-spring"], #nav-bar toolbarspring {
+            display: none;
+          }
+
+          /* Hide dumb Firefox View button */
+          #firefox-view-button {
+            visibility: hidden;
+          }
+
+          /* Linux stuff to keep GNOME system theme */
           .titlebar-min {
             appearance: auto !important;
             -moz-default-appearance: -moz-window-button-minimize !important;
@@ -541,18 +579,22 @@
           "browser.newtabpage.activity-stream.showSponsored" = false;
           "browser.search.isUS" = true;
           "browser.search.suggest.enabled" = false;
+          "browser.tabs.drawInTitlebar" = true;
           "browser.urlbar.suggest.engines" = false;
           "browser.urlbar.quicksuggest.scenario" = "offline";
           "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
           "browser.urlbar.suggest.quicksuggest.sponsored" = false;
           "browser.urlbar.suggest.topsites" = false;
           "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
+          "extensions.pocket.enabled" = false;
+          "extensions.pocket.showHome" = false;
           "network.proxy.no_proxies_on" = "localhost,127.0.0.1,.lan,.wireguard,.kube,.heywoodlh.tech,google.com,.okta.com,okta.com,.amazon.com,amazon.com,.mychg.com,mychg.com,chghealthcare.com,office.com,.office.com,microsoft.com,.microsoft.com,.atlassian.com,atlassian.com,jira.com,.jira.com,amazonaws.com,.amazonaws.com,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,paypal.com,.paypal.com,unity.com,awsapps.com,.awsapps.com,.wired,chat.openai.com,heywoodlh.tech";
           "network.proxy.socks" = "10.64.0.1";
           "network.proxy.socks_port" = 1080;
           "network.proxy.type" = 1;
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-          "browser.tabs.drawInTitlebar" = true;
+          "signon.rememberSignons" = false;
+          "signon.rememberSignons.visibilityToggle" = false;
           "svg.context-properties.content.enabled" = true;
         };
       };

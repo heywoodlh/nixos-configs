@@ -14,7 +14,10 @@ in {
   ];
 
   # Enable Docker
-  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
 
   # Allow remote connections
   networking.firewall.allowedTCPPorts = [
@@ -33,7 +36,7 @@ in {
       Type = "simple";
       ExecStart = "${minikube-start}";
       Restart = "on-failure";
-      User = "root";
+      User = "heywoodlh";
     };
     wantedBy = [ "multi-user.target" ];
   };

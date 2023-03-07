@@ -30,7 +30,7 @@ in {
       pkgs.docker
       pkgs.minikube 
       pkgs.systemd 
-      pkgs.system-path
+      pkgs.iptables
     ];
     serviceConfig = {
       Type = "simple";

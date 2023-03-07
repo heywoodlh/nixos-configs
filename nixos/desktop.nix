@@ -495,7 +495,6 @@
           darkreader
           firenvim
           gnome-shell-integration
-          new-tab-override
           okta-browser-plugin
           privacy-badger
           private-relay

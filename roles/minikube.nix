@@ -8,7 +8,8 @@ let
     minikube start --listen-address=0.0.0.0 \
         --driver=none \
         --nodes 3 \
-        --addons=istio,metallb,dashboard
+        --addons=istio,metallb,dashboard \
+        --force
   '';
 in {  
   # Minikube package

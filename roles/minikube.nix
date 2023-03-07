@@ -5,7 +5,14 @@ let
     #!/usr/bin/env bash
 
     ## Start minikube, allowing for remote connections
-    minikube start --listen-address=0.0.0.0 --memory=max --cpus=max --driver docker --apiserver-ips=0.0.0.0
+    minikube start --listen-address=0.0.0.0 \
+        --memory=max \
+        --cpus=max \
+        --driver docker \
+        --nodes 3 \
+        --apiserver-ips=0.0.0.0 \
+        --apiserver-port=8443 \
+        --addons=istio,metallb,dashboard
   '';
 in {  
   # Minikube package

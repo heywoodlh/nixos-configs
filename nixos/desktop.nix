@@ -539,13 +539,8 @@
           "browser.newtabpage.activity-stream.feeds.topsites" = false;
           "browser.newtabpage.activity-stream.improvesearch.topSiteSearchShortcuts.havePinned" = "duckduckgo";
           "browser.newtabpage.activity-stream.showSponsored" = false;
-          "browser.newtabpage.pinned" = [{
-            title = "home";
-            url = "https://home.heywoodlh.tech";
-          }];
           "browser.search.isUS" = true;
           "browser.search.suggest.enabled" = false;
-          "browser.startup.homepage" = "https://home.heywoodlh.tech";
           "browser.urlbar.suggest.engines" = false;
           "browser.urlbar.quicksuggest.scenario" = "offline";
           "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
@@ -558,7 +553,6 @@
           "network.proxy.type" = 1;
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
           "browser.tabs.drawInTitlebar" = true;
-          "startup.homepage_override_url" = "https://home.heywoodlh.tech";
           "svg.context-properties.content.enabled" = true;
         };
       };

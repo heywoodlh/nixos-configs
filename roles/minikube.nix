@@ -5,7 +5,7 @@ let
     #!/usr/bin/env bash
 
     ## Start minikube, allowing for remote connections
-    minikube start --listen-address=0.0.0.0 --memory=max --cpus=max --driver docker
+    minikube start --listen-address=0.0.0.0 --memory=max --cpus=max --driver docker --force
   '';
 in {  
   # Minikube package
@@ -14,10 +14,8 @@ in {
   ];
 
   # Enable Docker
-  virtualisation.docker.rootless = {
-    enable = true;
-    setSocketVariable = true;
-  };
+  virtualisation.docker.enable = true;
+  users.users.heywoodlh.extraGroups = [ "docker" ];
 
   # Allow remote connections
   networking.firewall.allowedTCPPorts = [
@@ -36,7 +34,7 @@ in {
       Type = "simple";
       ExecStart = "${minikube-start}";
       Restart = "on-failure";
-      User = "heywoodlh";
+      User = "root";
     };
     wantedBy = [ "multi-user.target" ];
   };

@@ -15,7 +15,8 @@ let
         --nodes 3 \
         --apiserver-ips=''${ip_address} \
         --apiserver-port=8443 \
-        --addons=istio,metallb,dashboard
+        --addons=istio,metallb,dashboard \
+        --ports=8443:8443
   '';
 in {  
   # Minikube package

@@ -4,7 +4,32 @@ let
   kind-start = pkgs.writeScript "kind-start" ''
     #!/usr/bin/env bash
     ## Create cluster
-    kind create cluster --name nix-kind
+cat <<EOF | kind create cluster --name=nix-kind --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+  - containerPort: 8443
+    hostPort: 8443
+    protocol: TCP
+  extraMounts:
+  - hostPath: /dev
+    containerPath: /dev
+  - hostPath: /var/run/docker.sock
+    containerPath: /var/run/docker.sock
   '';
 in {  
   # Kubernetes packages

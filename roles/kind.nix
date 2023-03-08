@@ -2,8 +2,10 @@
 
 let
   kind-start = pkgs.writeScript "kind-start" ''
-    #!/usr/bin/env bash
-    ## Create cluster
+#!/usr/bin/env bash
+
+## Create cluster
+if ! kind get clusters | grep -q nix-kind; then
 cat <<EOF | kind create cluster --name=nix-kind --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -30,6 +32,10 @@ nodes:
     containerPath: /dev
   - hostPath: /var/run/docker.sock
     containerPath: /var/run/docker.sock
+else
+  echo "Cluster already exists."
+fi
+
   '';
 in {  
   # Kubernetes packages

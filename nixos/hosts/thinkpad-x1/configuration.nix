@@ -65,6 +65,13 @@
     };
   };
 
+  # Enable fprint
+  environment.systemPackages = [
+    pkgs.fprintd
+  ];
+  services.fprintd.enable = true;
+  services.fprintd.tod.enable = true; 
+
   # Set version of NixOS to target 
   system.stateVersion = "22.11";
 }

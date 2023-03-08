@@ -68,6 +68,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/xps-13/configuration.nix ];
       };
+      nix-thinkpad = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/thinkpad-x1/configuration.nix ];
+      };
       nix-tools = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

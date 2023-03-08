@@ -32,6 +32,7 @@ nodes:
     containerPath: /dev
   - hostPath: /var/run/docker.sock
     containerPath: /var/run/docker.sock
+EOF
 else
   echo "Cluster already exists."
 fi

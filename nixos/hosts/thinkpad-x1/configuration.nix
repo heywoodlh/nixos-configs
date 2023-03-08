@@ -19,11 +19,7 @@
     "/crypto_keyfile.bin" = null;
   };
 
-  # Enable swap on luks
-  boot.initrd.luks.devices."luks-a600cf6f-b6a7-4e9c-a20b-d370b524f907".device = "/dev/disk/by-uuid/a600cf6f-b6a7-4e9c-a20b-d370b524f907";
-  boot.initrd.luks.devices."luks-a600cf6f-b6a7-4e9c-a20b-d370b524f907".keyFile = "/crypto_keyfile.bin";
-
-  networking.hostName = "nix-xps"; # Define your hostname.
+  networking.hostName = "nix-thinkpad"; # Define your hostname.
 
   # Enable networking
   networking.networkmanager.enable = true;

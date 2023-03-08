@@ -5,6 +5,9 @@ let
 #!/usr/bin/env bash
 
 ## Create cluster
+# If nix-kind cluster does not exist, then create it
+if ! kind get clusters | grep -q nix-kind; then
+  echo "Creating nix-kind cluster"
 cat <<EOF | kind create cluster --name=nix-kind --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -32,7 +35,9 @@ nodes:
   - hostPath: /var/run/docker.sock
     containerPath: /var/run/docker.sock
 EOF
-
+else 
+  echo "nix-kind cluster already exists"
+fi
   '';
 in {  
   # Kubernetes packages

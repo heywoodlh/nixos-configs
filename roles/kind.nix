@@ -24,7 +24,7 @@ nodes:
   - containerPort: 443
     hostPort: 443
     protocol: TCP
-  - containerPort: 8443
+  - containerPort: 6443
     hostPort: 8443
     protocol: TCP
   extraMounts:

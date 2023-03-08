@@ -229,6 +229,7 @@
       pciutils
       peru
       pinentry-curses
+      pinentry-gnome
       pinentry-rofi
       procmail
       powershell
@@ -271,7 +272,10 @@
   # Home-manager settings specific for Linux
   home-manager.users.heywoodlh = {
     home.stateVersion = "22.11";
-    programs.rbw.settings.pinentry = pkgs.pinentry-rofi;
+    programs.rbw.settings = {
+      email = "l.spencer.heywood@protonmail.com";
+      pinentry = "pinentry-gnome3";
+    };
 
     # Dconf/GNOME settings
     dconf.settings = {

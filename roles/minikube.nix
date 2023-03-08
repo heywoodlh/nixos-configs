@@ -15,6 +15,7 @@ in {
   # Minikube package
   environment.systemPackages = with pkgs; [
     conntrack-tools
+    cri-tools
     kubectl
     minikube
   ];
@@ -31,6 +32,7 @@ in {
       pkgs.docker
       pkgs.iptables
       pkgs.conntrack-tools
+      pkgs.cri-tools
       pkgs.minikube 
       pkgs.systemd 
     ];

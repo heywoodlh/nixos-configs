@@ -70,7 +70,8 @@
     pkgs.fprintd
   ];
   services.fprintd.enable = true;
-  services.fprintd.tod.enable = true; 
+  services.fprintd.tod.enable = true;
+  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
 
   # Set version of NixOS to target 
   system.stateVersion = "22.11";

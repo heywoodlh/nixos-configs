@@ -191,6 +191,7 @@
       gnomeExtensions.hide-top-bar
       gnomeExtensions.pop-shell
       gnomeExtensions.tray-icons-reloaded
+      gnomeExtensions.zilence
       gnumake
       gnupg
       go
@@ -240,6 +241,7 @@
       rofi
       rofi-rbw
       scrot
+      slack
       tcpdump
       terraform-docs
       texlive.combined.scheme-full
@@ -256,6 +258,7 @@
       xclip
       xdotool
       zip
+      zoom-us
       zsh
     ];
   };

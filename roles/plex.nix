@@ -9,17 +9,17 @@
     6789
   ];
 
-  fileSystems."/media/services/" = {
+  fileSystems."/media/services" = {
     device = "10.0.50.50:/media/disk2/services/media";
     fsType = "nfs";
   };
 
-  fileSystems."/media/services/movies" = {
+  fileSystems."/media/services/movies-1" = {
     device = "10.0.50.50:/media/disk1/movies";
     fsType = "nfs";
   };
 
-  fileSystems."/media/services/tv" = {
+  fileSystems."/media/services/tv-1" = {
     device = "10.0.50.50:/media/disk1/tv";
     fsType = "nfs";
   };

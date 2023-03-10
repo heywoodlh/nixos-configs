@@ -27,6 +27,8 @@
   services.nzbget = {
     enable = true;
     openFirewall = true;
-    dataDir = "/media/services/nzbget";
+    settings = {
+      MainDir = "/media/services/nzbget";
+    };
   };
 }

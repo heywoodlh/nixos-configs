@@ -6,6 +6,7 @@
   ];
 
   users.users.media = {
+    group = "media";
     isSystemUser = true;
   };
 

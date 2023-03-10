@@ -10,12 +10,12 @@
     fsType = "nfs";
   };
 
-  fileSystems."/media/services/movies-1" = {
+  fileSystems."/media/movies-1" = {
     device = "10.0.50.50:/media/disk1/movies";
     fsType = "nfs";
   };
 
-  fileSystems."/media/services/tv-1" = {
+  fileSystems."/media/tv-1" = {
     device = "10.0.50.50:/media/disk1/tv";
     fsType = "nfs";
   };

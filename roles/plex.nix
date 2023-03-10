@@ -5,6 +5,10 @@
     /opt/nzbget/secrets.nix
   ];
 
+  networking.firewall.allowedTCPPorts = [
+    6789
+  ];
+
   fileSystems."/media/services/" = {
     device = "10.0.50.50:/media/disk2/services/media";
     fsType = "nfs";
@@ -40,7 +44,6 @@
 
   services.nzbget = {
     enable = true;
-    openFirewall = true;
     settings = {
       MainDir = "/media/services/nzbget/downloads";
       DestDir = "/media/services/nzbget/downloads/completed";

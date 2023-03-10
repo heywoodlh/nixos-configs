@@ -48,6 +48,8 @@ in {
 
   # Allow remote connections
   networking.firewall.allowedTCPPorts = [
+    80
+    443
     8443
   ];
 

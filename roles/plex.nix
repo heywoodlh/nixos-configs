@@ -2,7 +2,7 @@
 
 {
   imports = [
-    /opt/nzbget/secrets.nix;
+    /opt/nzbget/secrets.nix
   ];
 
   fileSystems."/media/services/" = {

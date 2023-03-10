@@ -83,6 +83,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-kube/configuration.nix ];
       };
+      nix-media = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/nix-media/configuration.nix ];
+      };
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

@@ -2,7 +2,7 @@
 
 {
   networking.firewall.allowedTCPPorts = [
-    80
+    8080
   ];
 
   users.users.media = {
@@ -16,12 +16,13 @@
     fsType = "nfs";
   };
 
-  services.freshrss = {
-    enable = true;
-    dataDir = "/media/services/freshrss";
-    user = "media";
-    defaultUser = "heywoodlh";
-    baseUrl = "http://10.50.50.42";
-    passwordFile = "/run/secrets/freshrss";
-  };
+  config.virtualisation.oci-containers.containers = {
+    freshrss = {
+      image = "docker.io/linuxserver/freshrss:1.21.0";
+      ports = ["10.50.50.42:8080:80"];
+      volumes = [
+        "/media/services/freshrss:/config"
+      ];
+    };
+  }; 
 }

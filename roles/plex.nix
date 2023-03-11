@@ -3,6 +3,7 @@
 {
   networking.firewall.allowedTCPPorts = [
     6789
+    8181
   ];
 
   users.users.media = {
@@ -50,5 +51,19 @@
   services.nzbget = {
     enable = true;
     user = "media";
+  };
+
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      tautulli = {
+        image = "docker.io/linuxserver/tautulli:2.11.1";
+        ports = ["10.50.50.42:8181:8181"];
+        volumes = [
+          "/media/services/tautulli/config:/config"
+          "/media/services/tautulli/scripts:/scripts"
+        ];
+      };
+    };
   };
 }

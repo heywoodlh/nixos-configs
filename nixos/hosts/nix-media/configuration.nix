@@ -7,6 +7,7 @@
     ../../server.nix
     ../../../roles/kind.nix
     ../../../roles/plex.nix
+    ../../../roles/freshrss.nix
   ];
 
   # Bootloader.

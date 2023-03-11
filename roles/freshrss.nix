@@ -20,5 +20,6 @@
     enable = true;
     dataDir = "/media/services/freshrss";
     user = "media";
+    baseUrl = "http://10.50.50.42";
   };
 }

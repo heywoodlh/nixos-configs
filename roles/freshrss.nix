@@ -16,7 +16,7 @@
     fsType = "nfs";
   };
 
-  config.virtualisation.oci-containers.containers = {
+  virtualisation.oci-containers.containers = {
     freshrss = {
       image = "docker.io/linuxserver/freshrss:1.21.0";
       ports = ["10.50.50.42:8080:80"];

@@ -20,6 +20,8 @@
     enable = true;
     dataDir = "/media/services/freshrss";
     user = "media";
+    defaultUser = "heywoodlh";
     baseUrl = "http://10.50.50.42";
+    passwordFile = "/run/secrets/freshrss";
   };
 }

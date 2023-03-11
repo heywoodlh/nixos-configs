@@ -5,6 +5,7 @@
     ../roles/linux-dotfiles.nix
     ../roles/sshd.nix
     ../roles/sshd-monitor.nix
+    ../roles/squid-client.nix
   ];
   
   # Allow non-free applications to be installed

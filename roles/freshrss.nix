@@ -16,13 +16,16 @@
     fsType = "nfs";
   };
 
-  virtualisation.oci-containers.containers = {
-    freshrss = {
-      image = "docker.io/linuxserver/freshrss:1.21.0";
-      ports = ["10.50.50.42:8080:80"];
-      volumes = [
-        "/media/services/freshrss:/config"
-      ];
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      freshrss = {
+        image = "docker.io/linuxserver/freshrss:1.21.0";
+        ports = ["10.50.50.42:8080:80"];
+        volumes = [
+          "/media/services/freshrss:/config"
+        ];
+      };
     };
   }; 
 }

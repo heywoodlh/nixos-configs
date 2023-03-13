@@ -10,6 +10,7 @@ in {
   imports = [ 
     home-manager.nixosModule
     ../roles/linux-dotfiles.nix
+    ../roles/cerebro.nix
   ];
 
   # Import nur as nixpkgs.overlays

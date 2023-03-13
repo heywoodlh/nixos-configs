@@ -421,7 +421,7 @@ in {
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
+          #"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/"
@@ -447,11 +447,11 @@ in {
         command = "rofi-rbw --action copy";
         binding = "<Ctrl><Super>s";
       };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
-        name = "rofi launcher";
-        command = "rofi -theme nord -show run -display-run 'run: '";
-        binding = "<Super>space";
-      };
+      #"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
+      #  name = "rofi launcher";
+      #  command = "rofi -theme nord -show run -display-run 'run: '";
+      #  binding = "<Super>space";
+      #};
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
         binding = "<Ctrl><Shift>s";
         command = "scrot /home/heywoodlh/Documents/screenshots/scrot-+%Y-%m-%d_%H_%M_%S.png -s -e 'xclip -selection clipboard -t image/png -i $f'";

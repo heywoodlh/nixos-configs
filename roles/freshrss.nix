@@ -5,12 +5,6 @@
     8080
   ];
 
-  users.users.media = {
-    group = "media";
-    isSystemUser = true;
-    uid = 995;
-  };
-
   fileSystems."/media/services" = {
     device = "10.0.50.50:/media/disk2/services/media";
     fsType = "nfs";
@@ -25,7 +19,6 @@
         volumes = [
           "/media/services/freshrss:/config"
         ];
-        user = "995:nogroup";
       };
     };
   }; 

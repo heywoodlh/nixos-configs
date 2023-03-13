@@ -8,6 +8,7 @@
   fileSystems."/media/services" = {
     device = "10.0.50.50:/media/disk2/services/media";
     fsType = "nfs";
+    options = [ "rw" "bg" "hard" "rsize=1048576" "wsize=1048576" "tcp" "timeo=600" ];
   };
 
   virtualisation.oci-containers = {

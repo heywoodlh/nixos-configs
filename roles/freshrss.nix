@@ -25,8 +25,8 @@
         volumes = [
           "/media/services/freshrss:/config"
         ];
+        user = "media:nogroup";
       };
-      user = "media:nogroup";
     };
   }; 
 }

@@ -26,6 +26,7 @@
           "/media/services/freshrss:/config"
         ];
       };
+      user = "media:nogroup";
     };
   }; 
 }

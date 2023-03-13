@@ -8,7 +8,7 @@
   users.users.media = {
     group = "media";
     isSystemUser = true;
-    uid = 1050;
+    uid = 995;
   };
 
   fileSystems."/media/services" = {

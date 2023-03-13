@@ -290,6 +290,9 @@ in {
 
     # Dconf/GNOME settings
     dconf.settings = {
+      "org/gnome/desktop/input-sources" = {
+        xkb-options = ["caps:ctrl_modifier"];
+      };
       "apps/guake/general" = {
         abbreviate-tab-names = false;
         compat-delete = "delete-sequence";
@@ -390,8 +393,8 @@ in {
         move-to-monitor-up = ["disabled"];
         move-to-workspace-down = ["disabled"];
         move-to-workspace-up = ["disabled"];
-        switch-to-workspace-left = ["<Super>bracketleft"];
-        switch-to-workspace-right = ["<Super>bracketright"];
+        switch-to-workspace-left = ["<Ctrl>bracketleft"];
+        switch-to-workspace-right = ["<Ctrl>bracketright"];
         switch-input-source = ["disabled"];
         switch-input-source-backward = ["disabled"];
         toggle-maximized = "['<Super>m']";
@@ -424,12 +427,6 @@ in {
           #"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/"
         ];
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -461,36 +458,6 @@ in {
         binding = "<Shift><Control>e";
         command = "/home/heywoodlh/bin/vim-ime.py --cmd 'alacritty -o window.dimensions.columns=60 window.dimensions.lines=8 -e vim' --outfile '/home/heywoodlh/tmp/vim-ime.txt'";
         name = "vim-ime";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6" = {
-        binding = "<Shift><Control>h";
-        command = "xdotool mousemove_relative -- -20 0";
-        name = "move mouse left";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7" = {
-        binding = "<Shift><Control>l";
-        command = "xdotool mousemove_relative -- 20 0";
-        name = "move mouse right";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8" = {
-        binding = "<Shift><Control>j";
-        command = "xdotool mousemove_relative -- 0 20";
-        name = "move mouse down";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9" = {
-        binding = "<Shift><Control>k";
-        command = "xdotool mousemove_relative -- 0 -20";
-        name = "move mouse up";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10" = {
-        binding = "<Control>bracketleft";
-        command = "xdotool click --clearmodifiers 1";
-        name = "left click";
-      };
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11" = {
-        binding = "<Control>bracketright";
-        command = "xdotool click --clearmodifiers 3";
-        name = "right click";
       };
     };
 

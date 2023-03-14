@@ -432,12 +432,12 @@ in {
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
         name = "kitty super";
-        command = "kitty -e tmux";
+        command = "kitty";
         binding = "<Super>Return";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
         name = "kitty ctrl_alt";
-        command = "kitty -e tmux";
+        command = "kitty";
         binding = "<Ctrl><Alt>t";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {

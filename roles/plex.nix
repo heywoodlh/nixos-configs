@@ -2,7 +2,7 @@
 
 {
   networking.firewall.allowedTCPPorts = [
-    6789
+    8081
     8181
   ];
 
@@ -51,9 +51,10 @@
     user = "media";
   };
 
-  services.nzbget = {
+  services.sabnzbd = {
     enable = true;
-    user = "media";
+    user = "media"; 
+    configFile = "/media/services/sabnzbd/config.ini";
   };
 
   virtualisation.oci-containers = {

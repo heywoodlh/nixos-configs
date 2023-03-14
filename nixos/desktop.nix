@@ -163,6 +163,7 @@ in {
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     shell = pkgs.powershell;
     packages = with pkgs; [
+      acpi
       alacritty
       appimage-run
       aerc

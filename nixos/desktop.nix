@@ -218,9 +218,11 @@ in {
       libnotify
       lima
       matrix-commander
+      nixfmt
       nixos-generators
       nixos-install-tools
       nodejs
+      nodePackages.cspell
       lefthook
       mosh
       neovim

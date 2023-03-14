@@ -33,7 +33,7 @@
   services.plex = {
     enable = true;
     openFirewall = true;
-    dataDir = "/media/services/plex";
+    dataDir = "/opt/plex";
     user = "media";
   };
 

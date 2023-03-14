@@ -10,7 +10,6 @@ in {
   imports = [ 
     home-manager.nixosModule
     ../roles/linux-dotfiles.nix
-    ../roles/cerebro.nix
   ];
 
   # Import nur as nixpkgs.overlays
@@ -291,7 +290,7 @@ in {
     # Dconf/GNOME settings
     dconf.settings = {
       "org/gnome/desktop/input-sources" = {
-        xkb-options = ["caps:ctrl_modifier"];
+        xkb-options = ["caps:super"];
       };
       "apps/guake/general" = {
         abbreviate-tab-names = false;
@@ -393,8 +392,8 @@ in {
         move-to-monitor-up = ["disabled"];
         move-to-workspace-down = ["disabled"];
         move-to-workspace-up = ["disabled"];
-        switch-to-workspace-left = ["<Ctrl>bracketleft"];
-        switch-to-workspace-right = ["<Ctrl>bracketright"];
+        switch-to-workspace-left = ["<Super>bracketleft"];
+        switch-to-workspace-right = ["<Super>bracketright"];
         switch-input-source = ["disabled"];
         switch-input-source-backward = ["disabled"];
         toggle-maximized = "['<Super>m']";
@@ -424,7 +423,7 @@ in {
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
-          #"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
         ];
@@ -444,11 +443,11 @@ in {
         command = "rofi-rbw --action copy";
         binding = "<Ctrl><Super>s";
       };
-      #"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
-      #  name = "rofi launcher";
-      #  command = "rofi -theme nord -show run -display-run 'run: '";
-      #  binding = "<Super>space";
-      #};
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
+        name = "rofi launcher";
+        command = "rofi -theme nord -show run -display-run 'run: '";
+        binding = "<Super>space";
+      };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
         binding = "<Ctrl><Shift>s";
         command = "scrot /home/heywoodlh/Documents/screenshots/scrot-+%Y-%m-%d_%H_%M_%S.png -s -e 'xclip -selection clipboard -t image/png -i $f'";

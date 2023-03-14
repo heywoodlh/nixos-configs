@@ -2,7 +2,7 @@
 
 {
   networking.firewall.allowedTCPPorts = [
-    6789
+    8081
     8181
   ];
 

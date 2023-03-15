@@ -29,11 +29,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1678464939,
-        "narHash": "sha256-pRMlwOUkO1OwSi7qF6XR/zcocWy/ZYxXgbYWvnZQO9k=",
+        "lastModified": 1678831854,
+        "narHash": "sha256-7HBmLFNVD2KjovSzypIN9NfyzpWelMe8sNbUVZIRsS0=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "7224d7c54c5fc74cdf60b208af6148ed3295aa32",
+        "rev": "cae54dc45c0d61c99c1dc8b04bc42f36c76f9771",
         "type": "github"
       },
       "original": {
@@ -61,11 +61,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1678418513,
-        "narHash": "sha256-HLLR2Fmkn3TgD0F+u5gMcTKx5YzAU1rbS4cLfm6ugiU=",
+        "lastModified": 1678724065,
+        "narHash": "sha256-MjeRjunqfGTBGU401nxIjs7PC9PZZ1FBCZp/bRB3C2M=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "5496585eb876f2ce97654bc8f96838c6f8642563",
+        "rev": "b8afc8489dc96f29f69bec50fdc51e27883f89c1",
         "type": "github"
       },
       "original": {
@@ -75,13 +75,29 @@
         "type": "github"
       }
     },
+    "nixpkgs-cerebro": {
+      "locked": {
+        "lastModified": 1678838015,
+        "narHash": "sha256-rWF7Mc6uM8VZRlPbqa6E/Gnsao1XNuQCeoJqYeQmyvU=",
+        "owner": "kylesferrazza",
+        "repo": "nixpkgs",
+        "rev": "450c179354189aa9f25fe28205d6934a08b84dd1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kylesferrazza",
+        "ref": "init-cerebro",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nur": {
       "locked": {
-        "lastModified": 1678481086,
-        "narHash": "sha256-YiJPAiOQJjFfQwUWbJv4NyPtFWtOIOO669lB54QPB0w=",
+        "lastModified": 1678832470,
+        "narHash": "sha256-j7M3YqRIwXrONWSpfJpIqvijfWMiKGx3XUqfVCeSfBU=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "45b5d4f27def51908527191ed5dcae537de97a75",
+        "rev": "3318ac1f94e1675ffdcf640d5c2a4c8987f31093",
         "type": "github"
       },
       "original": {
@@ -96,6 +112,7 @@
         "home-manager": "home-manager",
         "jovian-nixos": "jovian-nixos",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-cerebro": "nixpkgs-cerebro",
         "nur": "nur"
       }
     },

@@ -179,6 +179,7 @@ in {
       calcurse
       cargo
       cerebroPkgs.cerebro
+      nodePackages.cerebro-duck-duck-go
       cmake
       coreutils
       curl

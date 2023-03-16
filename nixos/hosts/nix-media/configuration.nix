@@ -5,6 +5,7 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
+    ../../../roles/media-nfs.nix
     ../../../roles/plex.nix
     ../../../roles/freshrss.nix
   ];

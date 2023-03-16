@@ -40,14 +40,14 @@
   services.radarr = {
     enable = true;
     openFirewall = true;
-    dataDir = "/media/services/radarr";
+    dataDir = "/opt/radarr";
     user = "media";
   };
 
   services.sonarr = {
     enable = true;
     openFirewall = true;
-    dataDir = "/media/services/sonarr";
+    dataDir = "/opt/sonarr";
     user = "media";
   };
 
@@ -64,8 +64,8 @@
         image = "docker.io/linuxserver/tautulli:2.11.1";
         ports = ["10.50.50.42:8181:8181"];
         volumes = [
-          "/media/services/tautulli/config:/config"
-          "/media/services/tautulli/scripts:/scripts"
+          "/opt/tautulli/config:/config"
+          "/opt/tautulli/scripts:/scripts"
         ];
       };
     };

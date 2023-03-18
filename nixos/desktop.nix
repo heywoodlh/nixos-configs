@@ -433,6 +433,7 @@ in {
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
           "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/"
         ];
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -464,6 +465,11 @@ in {
         binding = "<Shift><Control>e";
         command = "/home/heywoodlh/bin/vim-ime.py --cmd 'alacritty -o window.dimensions.columns=60 window.dimensions.lines=8 -e vim' --outfile '/home/heywoodlh/tmp/vim-ime.txt'";
         name = "vim-ime";
+      };
+      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6" = {
+        binding = "<Shift><Control>b";
+        command = "bash -c 'notify-send $(acpi -b | grep -Eo [0-9]+%)'";
+        name = "battpop";
       };
     };
 

@@ -20,6 +20,9 @@
     "/crypto_keyfile.bin" = null;
   };
 
+  # Deep sleep
+  boot.kernelParams = [ "mem_sleep_default=deep" ];
+
   networking.hostName = "nix-thinkpad"; # Define your hostname.
 
   # Enable networking

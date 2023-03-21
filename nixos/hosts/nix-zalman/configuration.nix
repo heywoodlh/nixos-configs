@@ -8,6 +8,7 @@
     ../../../roles/sshd.nix
     ../../../roles/sshd-monitor.nix
     ../../../roles/xrdp.nix
+    ../../../roles/sunshine.nix
   ];
 
   # Bootloader.
@@ -17,7 +18,7 @@
   
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.hostName = "nix-vm"; # Define your hostname
+  networking.hostName = "nix-zalman"; # Define your hostname
 
   # Allow Syncthing over Wireguard
   networking.firewall.interfaces.shadow = {
@@ -29,15 +30,15 @@
   # Enable wireguard
   networking.wg-quick.interfaces = {
     shadow = {
-      address = [ "10.50.50.24/24" ];
+      address = [ "10.51.51.2/24" ];
       privateKeyFile = "/root/wgkey";
-      listenPort = 51820;
+      listenPort = 51821;
 
       peers = [
         {
-          publicKey = "3oM6JqkTEG34mDB6moDPRrhiRUtW3EqYGQXvb3/gzXc=";
+          publicKey = "iXvsTj8+YvzRwpbTF45/oXC1P8W9f9ns3XMth7ACIAU=";
           allowedIPs = [ "10.50.50.0/24" "10.51.51.0/24" ];
-          endpoint = "10.0.50.50:51820";
+          endpoint = "10.0.50.50:51821";
           persistentKeepalive = 25;
         }
       ];
@@ -62,11 +63,16 @@
     "resolv.conf".text = "nameserver 10.50.50.1\n";
   };
 
-  users.users.heywoodlh = {
-    packages = with pkgs; [
-      weechat 
-    ];
-  };
+  # Enable Nvidia driver 
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.opengl.enable = true;
 
-  system.stateVersion = "22.11";
+  # Enable automatic login for the user.
+  services.xserver.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "heywoodlh";
+  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@tty1".enable = false;
+
+  system.stateVersion = "23.05";
 }

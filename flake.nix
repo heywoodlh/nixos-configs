@@ -44,10 +44,10 @@
 
     # nixos target
     nixosConfigurations = {
-      nix-vm = nixpkgs.lib.nixosSystem {
+      nix-zalman = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-vm/configuration.nix ];
+        modules = [ ./nixos/hosts/nix-zalman/configuration.nix ];
       };
       nix-vostro = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

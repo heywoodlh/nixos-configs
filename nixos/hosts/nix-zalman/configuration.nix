@@ -15,6 +15,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.kernelParams = [
+    "nvidia-drm.modeset=1"
+  ];
   
   # Enable networking
   networking.networkmanager.enable = true;

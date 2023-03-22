@@ -22,19 +22,16 @@
     sunshine
   ];
   # Define and start Sunshine service
-  systemd.services.sunshine = {
+  systemd.user.services.sunshine = {
     description = "Sunshine Gamestreaming Server";
-    path = [
-      pkgs.bash
-      pkgs.sunshine
-      pkgs.systemd
-    ];
+    environment = {
+      DISPLAY = ":0";
+    };
     serviceConfig = {
       Type = "simple";
-      ExecStart = "${pkgs.sunshine}/bin/sunshine";
+      ExecStart = "/run/current-system/sw/bin/sunshine";
       Restart = "on-failure";
-      User = "heywoodlh";
     };
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "default.target" ];
   };
 }

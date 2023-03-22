@@ -80,5 +80,25 @@
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
+  # Install exfat package
+  environment.systemPackages = with pkgs; [
+    exfat
+    exfatprogs
+  ];
+
+  # Mount wd-black
+  fileSystems."/home/heywoodlh/mnt/wd-black" = { 
+    device = "/dev/disk/by-uuid/423E-F6AF";
+    fsType = "exfat"; 
+    options = [ "rw" "uid=heywoodlh"];
+  };
+
+  # Mount games-ssd
+  fileSystems."/home/heywoodlh/mnt/games-ssd" = { 
+    device = "/dev/disk/by-uuid/3EA82C17A82BCC69";
+    fsType = "ntfs3"; 
+    options = [ "rw" "uid=heywoodlh"];
+  };
+
   system.stateVersion = "23.05";
 }

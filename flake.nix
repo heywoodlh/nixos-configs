@@ -15,10 +15,9 @@
       flake = false;
     };
     nur.url = "github:nix-community/NUR";
-    nixpkgs-cerebro.url = "github:kylesferrazza/nixpkgs/init-cerebro";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, nixpkgs-cerebro, ... }: {
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, ... }: {
     darwinConfigurations = {
       # nix-macbook-air target 
       "nix-macbook-air" = darwin.lib.darwinSystem {

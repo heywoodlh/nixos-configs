@@ -84,18 +84,19 @@
   environment.systemPackages = with pkgs; [
     exfat
     exfatprogs
+    ntfs3g
   ];
 
   # Mount wd-black
   fileSystems."/home/heywoodlh/mnt/wd-black" = { 
-    device = "/dev/disk/by-uuid/423E-F6AF";
-    fsType = "exfat"; 
+    device = "/dev/disk/by-uuid/5495BAED7E1DAF00";
+    fsType = "ntfs3"; 
     options = [ "rw" "uid=heywoodlh"];
   };
 
-  # Mount games-ssd
+  ## Mount games-ssd
   fileSystems."/home/heywoodlh/mnt/games-ssd" = { 
-    device = "/dev/disk/by-uuid/3EA82C17A82BCC69";
+    device = "/dev/disk/by-uuid/03836E0D64D771E4";
     fsType = "ntfs3"; 
     options = [ "rw" "uid=heywoodlh"];
   };

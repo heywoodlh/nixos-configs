@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, nixpkgs-cerebro, ... }:
+{ config, pkgs, home-manager, nur, ... }:
 
 let
   bookmarks = pkgs.writeScriptBin "bookmarks" ''
@@ -6,9 +6,6 @@ let
     ## This script opens my bookmarks 
     xdg-open ~/opt/bookmarks/index.html
   '';
-  cerebroPkgs = import nixpkgs-cerebro {
-    system = "x86_64-linux";
-  };
 in {
   imports = [ 
     home-manager.nixosModule
@@ -178,7 +175,6 @@ in {
       bookmarks
       calcurse
       cargo
-      cerebroPkgs.cerebro
       cmake
       coreutils
       curl

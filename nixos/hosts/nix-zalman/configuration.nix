@@ -23,9 +23,12 @@
   networking.networkmanager.enable = true;
   networking.hostName = "nix-zalman"; # Define your hostname
 
-  # Allow Syncthing over Wireguard
+  # Allow specific ports over Wireguard
   networking.firewall.interfaces.shadow = {
-    allowedTCPPorts = [ 8384 ];
+    allowedTCPPorts = [
+      8384 # syncthing
+      47990 # sunshine
+    ];
   };
   
   # Allow syncthing on all interfaces

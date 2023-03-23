@@ -15,6 +15,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
   ];
@@ -26,6 +27,7 @@
   # Allow specific ports over Wireguard
   networking.firewall.interfaces.shadow = {
     allowedTCPPorts = [
+      6942 # cider
       8384 # syncthing
       47990 # sunshine
     ];
@@ -82,23 +84,23 @@
 
   # Install exfat package
   environment.systemPackages = with pkgs; [
-    btrfs-progs
     gnomeExtensions.no-overview
+    ntfs3g
   ];
 
   # Mount wd-black
-  #fileSystems."/home/heywoodlh/mnt/wd-black" = { 
-  #  device = "/dev/disk/by-uuid/f5dacd21-9a46-40c3-9f96-09fe1161f63b";
-  #  fsType = "btrfs"; 
-  #  options = [ "rw" "relatime" "x-systemd" "mount-timeout=1min" "uid=heywoodlh" ];
-  #};
+  fileSystems."/home/heywoodlh/mnt/wd-black" = { 
+    device = "/dev/disk/by-uuid/18AB699E4AAEA95F";
+    fsType = "ntfs3"; 
+    options = [ "rw" "uid=heywoodlh" ];
+  };
 
-  ## Mount games-ssd
-  #fileSystems."/home/heywoodlh/mnt/games-ssd" = { 
-  #  device = "/dev/disk/by-uuid/656c682b-8746-4b81-8bdc-3449513c4683";
-  #  fsType = "btrfs"; 
-  #  options = [ "rw" "relatime" "x-systemd" "mount-timeout=1min" "uid=heywoodlh" ];
-  #};
+  # Mount games-ssd
+  fileSystems."/home/heywoodlh/mnt/games-ssd" = { 
+    device = "/dev/disk/by-uuid/29A41880637FC63C";
+    fsType = "ntfs3"; 
+    options = [ "rw" "uid=heywoodlh" ];
+  };
 
   system.stateVersion = "23.05";
 }

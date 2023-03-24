@@ -1,20 +1,20 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, system, ... }:
 
 
 let
-  hostname = "nix-macbook-air";
-  user_name = "heywoodlh";
+  hostname = "nix-mac-chg";
+  user_name = "sheywood";
   user_full_name = "Spencer Heywood";
   user_description = "Spencer Heywood";
 in {
   imports = [
-    ./desktop.nix
+    ../desktop.nix
   ];
 
-  users.users.${user_name} = {
-    description = "${user_description}";
-    home = "/Users/${user_name}";
-    name = "${user_full_name}";
+  users.users."${user.name}" = {
+    description = "${user.description}";
+    home = "/Users/${user.name}";
+    name = "${user.full_name}";
     shell = pkgs.powershell;
     packages = [
       pkgs.gcc
@@ -34,12 +34,4 @@ in {
     computerName = "${hostname}";
     localHostName = "${hostname}";
   };
-  
-  # Always show menu bar on M2 Macbook Air 
-  system.defaults.NSGlobalDomain._HIHideMenuBar = lib.mkForce false;
-
-  # Include extra architecture 
-  nix.extraOptions = ''
-    extra-platforms = aarch64-darwin x86_64-darwin
-  '';
 }

@@ -72,6 +72,7 @@
       "pulumi"
       "pwgen"
       "python"
+      "rbw"
       "ripgrep"
       "screen"
       "speedtest-cli"

@@ -1,39 +1,24 @@
-{ config, pkgs, lib, system, ... }:
-
+# Remember that this is used for GitHub Actions to test builds
+{ config, pkgs, lib, home-manager, nur, ... }:
 
 let
-  hostname = "nix-mac-chg";
-  user = {
-    name =  "heywoodlh";
-    full_name = "Spencer Heywood";
-    description = "Spencer Heywood";
-  };
+  hostname = "chg-macbook-pro";
+  username = "sheywood";
 in {
   imports = [
-    ../desktop.nix
+    ../roles/defaults.nix
+    ../roles/brew.nix
+    ../roles/yabai.nix
+    ../roles/network.nix
+    ../roles/users/${username}.nix
+    ../roles/home-manager/settings.nix
   ];
 
-  users.users."${user.name}" = {
-    description = "${user.description}";
-    home = "/Users/${user.name}";
-    name = "${user.full_name}";
-    shell = pkgs.powershell;
-    packages = [
-      pkgs.gcc
-      pkgs.git
-      pkgs.gnupg
-      pkgs.powershell
-      pkgs.skhd
-      pkgs.tmux
-      pkgs.wireguard-tools
-    ];
-  };
+  # Set home-manager configs for username
+  home-manager.users.${username} = import ../roles/home-manager/user.nix;
 
-  # Networking stuff specific to each machine
-  networking = {
-    knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
-    hostName = "${hostname}";
-    computerName = "${hostname}";
-    localHostName = "${hostname}";
-  };
+  # Set hostname
+  networking.hostName = "${hostname}";
+
+  system.stateVersion = 4;
 }

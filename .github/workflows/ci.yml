@@ -5,17 +5,10 @@ on:
     branches:
     - 'master'
     paths:
-    - darwin/**
-    - workstation/**
     - flake.nix
-    - flake.lock
     - .github/workflows/ci.yml
-    - roles/**
-    - '!darwin/**.md'
-    - '!workstation/**.md' 
-    - '!**.md'
   schedule:
-  - cron: '0 0 * * Thu'
+  - cron: '0 0 * * Thu' # To update flake.lock
   workflow_dispatch:
 
 jobs:
@@ -80,4 +73,4 @@ jobs:
         echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
         /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
         # Build macos-desktop output
-        nix build .#darwinConfigurations.macos-desktop-intel.system
+        nix build .#darwinConfigurations.nix-mac-mini.system

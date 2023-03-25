@@ -1,0 +1,44 @@
+name: build-nixos-envs
+
+on:
+  push:
+    branches:
+    - 'master'
+    paths:
+    - nixos/**
+    - .github/workflows/nixos.yml
+    - roles/**
+    - '!nixos/**.md' 
+    - '!**.md'
+  workflow_dispatch:
+
+jobs:
+  build-nixos-env:
+    name: Build NixOS env
+    runs-on: ubuntu-latest
+  
+    steps:
+    - name: Use Apache Flink free_disk_space.sh
+      run: |
+        curl -L 'https://raw.githubusercontent.com/apache/flink/02d30ace69dc18555a5085eccf70ee884e73a16e/tools/azure-pipelines/free_disk_space.sh' -o ./free_disk_space.sh \
+          && chmod +x ./free_disk_space.sh \
+          && ./free_disk_space.sh \
+          && rm -f ./free_disk_space.sh 
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+  
+    - name: Install Nix
+      uses: cachix/install-nix-action@v18
+    
+    - name: Build nixos-desktop output 
+      run: |
+        # Build nixos-desktop output
+        nix build .#nixosConfigurations.nixos-desktop-intel.config.system.build.toplevel
+        rm -rf ./result
+
+    - name: Build nixos-server output 
+      run: |
+        # Build nixos-server output
+        nix build .#nixosConfigurations.nixos-server-intel.config.system.build.toplevel
+        rm -rf ./result

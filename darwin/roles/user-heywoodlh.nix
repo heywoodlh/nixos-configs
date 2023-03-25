@@ -1,18 +1,12 @@
-{ config, pkgs, lib, system, ... }:
-
+{ config, pkgs, lib, ... }:
 
 let
-  hostname = "generic-intel";
   user = {
     name =  "heywoodlh";
     full_name = "Spencer Heywood";
     description = "Spencer Heywood";
   };
 in {
-  imports = [
-    ../desktop.nix
-  ];
-
   users.users."${user.name}" = {
     description = "${user.description}";
     home = "/Users/${user.name}";
@@ -27,13 +21,5 @@ in {
       pkgs.tmux
       pkgs.wireguard-tools
     ];
-  };
-
-  # Networking stuff specific to each machine
-  networking = {
-    knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
-    hostName = "${hostname}";
-    computerName = "${hostname}";
-    localHostName = "${hostname}";
   };
 }

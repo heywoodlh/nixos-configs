@@ -23,25 +23,19 @@
       "nix-macbook-air" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs;
-        modules = [ ./darwin/hosts/nix-macbook-air.nix ];
+        modules = [ ./darwin/hosts/m2-macbook-air.nix ];
+      };
+      # chg-macbook-pro
+      "nix-mac-mini" = darwin.lib.darwinSystem {
+        system = "x86_64-darwin";
+        specialArgs = inputs;
+        modules = [ ./darwin/hosts/mac-mini.nix ];
       };
       # chg-macbook-pro
       "nix-mac-chg" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         specialArgs = inputs;
         modules = [ ./darwin/hosts/chg-macbook-pro.nix ];
-      };
-      # generic darwin intel config
-      "macos-desktop-intel" = darwin.lib.darwinSystem {
-        system = "x86_64-darwin";
-        specialArgs = inputs;
-        modules = [ ./darwin/hosts/generic-intel.nix ];
-      };
-      # generic darwin m1/m2 config
-      "macos-desktop-m1" = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = inputs;
-        modules = [ ./darwin/hosts/generic-m1.nix ];
       };
     };
 

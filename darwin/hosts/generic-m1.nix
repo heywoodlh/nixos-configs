@@ -1,8 +1,8 @@
-{ config, pkgs, lib, system, ... }:
+{ config, pkgs, lib, ... }:
 
 
 let
-  hostname = "nix-mac-chg";
+  hostname = "generic-m1";
   user = {
     name =  "heywoodlh";
     full_name = "Spencer Heywood";
@@ -36,4 +36,9 @@ in {
     computerName = "${hostname}";
     localHostName = "${hostname}";
   };
+
+  # Include extra architecture 
+  nix.extraOptions = ''
+    extra-platforms = aarch64-darwin x86_64-darwin
+  '';
 }

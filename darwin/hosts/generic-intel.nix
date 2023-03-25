@@ -2,7 +2,7 @@
 
 
 let
-  hostname = "nix-mac-chg";
+  hostname = "generic-intel";
   user = {
     name =  "heywoodlh";
     full_name = "Spencer Heywood";

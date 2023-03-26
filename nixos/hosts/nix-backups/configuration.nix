@@ -51,6 +51,11 @@
   services.logind.lidSwitchExternalPower = "ignore";
   services.logind.lidSwitchDocked = "ignore";
 
+  # Install btrfs-progs
+  environment.systemPackages = with pkgs; [
+    btrfs-progs
+  ];
+
   # Mount backup drive
   fileSystems."/media/backups" = {
     device = "/dev/disk/by-uuid/fd16f657-ba9c-4829-9f71-3869ee18f240";

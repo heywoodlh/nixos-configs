@@ -49,7 +49,7 @@
   # Ignore lid close
   services.logind.lidSwitch = "ignore";
   services.logind.lidSwitchExternalPower = "ignore";
-  services.logind.lidSwitchExternalPowerDocked = "ignore";
+  services.logind.lidSwitchDocked = "ignore";
 
   system.stateVersion = "22.11";
 }

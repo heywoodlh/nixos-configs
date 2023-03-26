@@ -51,5 +51,12 @@
   services.logind.lidSwitchExternalPower = "ignore";
   services.logind.lidSwitchDocked = "ignore";
 
+  # Mount backup drive
+  fileSystems."/media/backups" = {
+    device = "/dev/disk/by-uuid/fd16f657-ba9c-4829-9f71-3869ee18f240";
+    fsType = "btrfs";
+    options = [ "defaults" "nofail" ];
+  };
+
   system.stateVersion = "22.11";
 }

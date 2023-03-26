@@ -86,6 +86,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-media/configuration.nix ];
       };
+      nix-backups = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/nix-backups/configuration.nix ];
+      };
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

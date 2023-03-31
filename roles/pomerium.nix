@@ -8,6 +8,6 @@
 
   services.pomerium = {
     enable = true;
-    configFile = /opt/pomerium/config.yaml;
+    configFile = /services/pomerium/config.yaml;
   };
 }

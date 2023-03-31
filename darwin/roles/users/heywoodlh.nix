@@ -16,6 +16,7 @@ in {
       pkgs.gcc
       pkgs.git
       pkgs.gnupg
+      pkgs.pomerium-cli
       pkgs.powershell
       pkgs.skhd
       pkgs.tmux

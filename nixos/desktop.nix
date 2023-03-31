@@ -217,6 +217,7 @@ in {
       pinentry-gnome
       pinentry-rofi
       procmail
+      pomerium-cli
       powershell
       pwgen
       python310

@@ -41,15 +41,10 @@
 
     # nixos target
     nixosConfigurations = {
-      nix-zalman = nixpkgs.lib.nixosSystem {
+      nix-pomerium = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-zalman/configuration.nix ];
-      };
-      nix-vostro = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-vostro/configuration.nix ];
+        modules = [ ./nixos/hosts/nix-pomerium/configuration.nix ];
       };
       nix-steam-deck = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

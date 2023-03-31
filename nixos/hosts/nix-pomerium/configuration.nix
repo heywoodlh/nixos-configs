@@ -47,5 +47,14 @@
     "resolv.conf".text = "nameserver 10.50.50.1\n";
   };
 
+  # Set crons
+  # Enable cron service
+  services.cron = {
+    enable = true;
+    systemCronJobs = [
+      "0 0 * * Sun      root    /opt/certbot/certbot.sh &> /dev/null"
+    ];
+  };
+
   system.stateVersion = "22.11";
 }

@@ -11,9 +11,12 @@
       sshwifty = {
         image = "docker.io/niruix/sshwifty:0.2.32-beta-release";
         ports = ["10.50.50.31:8182:8182"];
-        #volumes = [
-        #  "/opt/sshwifty:/config"
-        #];
+        volumes = [
+          "/opt/sshwifty/sshwifty.conf:/sshwifty.conf"
+        ];
+        environment = {
+          SSHWIFTY_CONFIG = "/sshwifty.conf";
+        };
       };
     };
   };

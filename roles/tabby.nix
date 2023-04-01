@@ -3,6 +3,7 @@
 {
   networking.firewall.allowedTCPPorts = [
     8182
+    9000
   ];
 
   virtualisation.oci-containers = {
@@ -24,7 +25,7 @@
       };
       tabby-connection-gateway = {
         image = "ghcr.io/eugeny/tabby-connection-gateway:master";
-        ports = ["10.50.50.31:9000:9000"];
+        ports = ["9000:9000"];
         cmd = [
           "--token-auth"
           "--host"

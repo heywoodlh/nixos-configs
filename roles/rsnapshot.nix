@@ -19,15 +19,15 @@ retain	daily	7
 retain	weekly	4
 retain	monthly	6
 
-backup	root@ct-1.wireguard:/etc/	ct-1/etc/
-backup	root@ct-1.wireguard:/home/	ct-1/home/
-backup	root@ct-1.wireguard:/opt/	ct-1/opt/
-backup	root@ct-1.wireguard:/root/	ct-1/root/
+backup	root@ct-1.wireguard:/etc/	ct-1/
+backup	root@ct-1.wireguard:/home/	ct-1/
+backup	root@ct-1.wireguard:/opt/	ct-1/
+backup	root@ct-1.wireguard:/root/	ct-1/
 
-backup	root@nix-pomerium.wireguard:/etc/	nix-pomerium/etc/
-backup	root@nix-pomerium.wireguard:/home/	nix-pomerium/home/
-backup	root@nix-pomerium.wireguard:/opt/	nix-pomerium/opt/
-backup	root@nix-pomerium.wireguard:/root/	nix-pomerium/root/
+backup	root@nix-pomerium.wireguard:/etc/	nix-pomerium/
+backup	root@nix-pomerium.wireguard:/home/	nix-pomerium/
+backup	root@nix-pomerium.wireguard:/opt/	nix-pomerium/
+backup	root@nix-pomerium.wireguard:/root/	nix-pomerium/
 
     '';
   };

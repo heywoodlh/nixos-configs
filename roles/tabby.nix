@@ -15,7 +15,7 @@
           /opt/tabby/tabby-web-env
         ];
         volumes = [
-          "/opt/tabby/distros:/distros"
+          "/opt/tabby/distros:/app-dist"
           "/opt/tabby/db:/db"
         ];
         dependsOn = [

@@ -14,6 +14,9 @@
         environmentFiles = [
           /opt/tabby/tabby-web-env
         ];
+        volumes = [
+          "/opt/tabby/distros:/distros"
+        ];
         dependsOn = [
           "tabby-db"
           "tabby-connection-gateway"

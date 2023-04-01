@@ -29,6 +29,8 @@
           "--token-auth"
           "--host"
           "0.0.0.0"
+          "--port"
+          "9000"
         ];
         environmentFiles = [
           /opt/tabby/tabby-connection-gateway-env

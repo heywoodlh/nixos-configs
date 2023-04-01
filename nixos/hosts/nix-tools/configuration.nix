@@ -47,5 +47,11 @@
     "resolv.conf".text = "nameserver 10.50.50.1\n";
   };
 
+  users.users.heywoodlh = {
+    openssh.authorizedKeys.keys = [ 
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC2NUJMRopUF8JvhLK4/l4zkgxZWNIZwxgfEWEoYsD9MnfCj9nflLxHM5zJ7pPx7DYoXaLguvdyCJlDNDlvd3vGW0RgfTyflZJzsQ6HxwsxO1dlyYJY6m0fekUXrFJBcU8uk0mMBO6rrMKMqz077qofCdzbf7vvdR5AsSy2pFcjiNSW0TwGCg3lrEUDX10bKFYkhHqSL/rF9ajZRs7EVVfFmilzGYKxRsvzpP6p72Gdxy50ebMcrUHAilwMzQnode8H+C25hQrkTJWhv9kmcNb//mJcar7atrvEGEBfUJ9/5A3FL6RNap1NPfLQ2w/mXtgfAqyHi1sq/f/+Kje1MazIu4y/U5oSGH3fc5iraN2wF0jIKO1LvDJQmbSrfjCq4FrBs24waPGtp+VcESfBIHYxyr740JMoi6BSjzvJR7gnyWkwWAEjoTBVL8szr2cbogna/g2pHmKDLagJlMOKQNTkPCUboKKj/Dy3wvim/m0D+aBXpkWnGiR7zEchiLV45Bc= sshwifty (ssh.heywoodlh.io)"
+    ];
+  };
+
   system.stateVersion = "22.11";
 }

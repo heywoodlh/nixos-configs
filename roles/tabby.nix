@@ -14,9 +14,13 @@
         environmentFiles = [
           /opt/tabby/tabby-web-env
         ];
+        dependsOn = [
+          "tabby-db"
+          "tabby-connection-gateway"
+        ];
       };
       tabby-db = {
-        image = "ghcr.io/mariadb:10.7.1";
+        image = "docker.io/mariadb:10.7.1";
         volumes = [
           "/opt/tabby/db:/var/lib/mysql"
         ];

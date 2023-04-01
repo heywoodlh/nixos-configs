@@ -30,4 +30,9 @@
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC2NUJMRopUF8JvhLK4/l4zkgxZWNIZwxgfEWEoYsD9MnfCj9nflLxHM5zJ7pPx7DYoXaLguvdyCJlDNDlvd3vGW0RgfTyflZJzsQ6HxwsxO1dlyYJY6m0fekUXrFJBcU8uk0mMBO6rrMKMqz077qofCdzbf7vvdR5AsSy2pFcjiNSW0TwGCg3lrEUDX10bKFYkhHqSL/rF9ajZRs7EVVfFmilzGYKxRsvzpP6p72Gdxy50ebMcrUHAilwMzQnode8H+C25hQrkTJWhv9kmcNb//mJcar7atrvEGEBfUJ9/5A3FL6RNap1NPfLQ2w/mXtgfAqyHi1sq/f/+Kje1MazIu4y/U5oSGH3fc5iraN2wF0jIKO1LvDJQmbSrfjCq4FrBs24waPGtp+VcESfBIHYxyr740JMoi6BSjzvJR7gnyWkwWAEjoTBVL8szr2cbogna/g2pHmKDLagJlMOKQNTkPCUboKKj/Dy3wvim/m0D+aBXpkWnGiR7zEchiLV45Bc= tabby"
     ];
   };
+  users.users.root = {
+    openssh.authorizedKeys.keys = [ 
+      "from='10.50.50.34' ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCqdFcgb5hjpk09z4y7YW8ocSghB7QuuX71izgwSQgcBam2TYi+wsFYpnx+IJmRNp3470jjib/qUZkOICrpjLMiFuveGeySp4ZxzNjIvr/GcTOewmmoAFiQm5JU/Z1Sm8ZtqbglhLJiuMP7ybdCGzKnmiNCyCEE2U39KA+6mH68eGBvYLa7MKuRiv2X0DC2WJoxPHW9nnzIhB7L6nokzs08LBox6j5CM2UoXoFAbb8/06iURzBPXp2uNn0S1VJ3QX7W3GV5vUNnmWriWukNb5+G1yNafRbr6WwvfL+n9wXH3gMavma/NRaPE9B9smjJJ5201v8YBOBFPjJ9w0iUr/mN/bsba5g83APTAD88obRqrkcFFCFxRSZZ6CxvUEN0om9O3GasU734xt1eReO5w4LYw84/j7SmNwsezG8c6/lLUnW7e0VqP7UQ+6Y7Db/HVZ8v9rRxMWI6IbVKYTS/LtTEvkcOvO7gJlBsa1gxUxyKDczP/O6Y4d2BLmXmbql5nvU= root@nix-backups"
+    ];
+  };
 }

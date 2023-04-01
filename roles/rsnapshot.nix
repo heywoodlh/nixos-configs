@@ -23,6 +23,12 @@ backup	root@ct-1.wireguard:/etc/	ct-1/etc/
 backup	root@ct-1.wireguard:/home/	ct-1/home/
 backup	root@ct-1.wireguard:/opt/	ct-1/opt/
 backup	root@ct-1.wireguard:/root/	ct-1/root/
+
+backup	root@nix-pomerium.wireguard:/etc/	ct-1/etc/
+backup	root@nix-pomerium.wireguard:/home/	ct-1/home/
+backup	root@nix-pomerium.wireguard:/opt/	ct-1/opt/
+backup	root@nix-pomerium.wireguard:/root/	ct-1/root/
+
     '';
   };
 }

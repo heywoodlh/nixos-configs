@@ -13,6 +13,7 @@
         ports = ["10.50.50.31:8182:8182"];
         volumes = [
           "/opt/sshwifty/sshwifty.conf:/sshwifty.conf"
+          "/opt/sshwifty/id_rsa:/id_rsa"
         ];
         environment = {
           SSHWIFTY_CONFIG = "/sshwifty.conf";

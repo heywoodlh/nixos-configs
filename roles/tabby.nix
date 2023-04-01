@@ -16,19 +16,10 @@
         ];
         volumes = [
           "/opt/tabby/distros:/distros"
+          "/opt/tabby/db:/db"
         ];
         dependsOn = [
-          "tabby-db"
           "tabby-connection-gateway"
-        ];
-      };
-      tabby-db = {
-        image = "docker.io/mariadb:10.7.1";
-        volumes = [
-          "/opt/tabby/db:/var/lib/mysql"
-        ];
-        environmentFiles = [
-          /opt/tabby/tabby-db-env
         ];
       };
       tabby-connection-gateway = {

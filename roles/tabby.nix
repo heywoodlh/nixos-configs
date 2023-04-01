@@ -27,7 +27,11 @@
       tabby-connection-gateway = {
         image = "ghcr.io/eugeny/tabby-connection-gateway:master";
         ports = ["10.50.50.31:9000:9000"];
-        cmd = "--token-auth --host 0.0.0.0";
+        cmd = [
+          "--token-auth"
+          "--host"
+          "0.0.0.0"
+        ];
         environmentFiles = [
           /opt/tabby/tabby-connection-gateway-env
         ];

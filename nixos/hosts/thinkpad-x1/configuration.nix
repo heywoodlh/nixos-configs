@@ -1,4 +1,4 @@
-# Config specific to Dell XPS 13
+# Config specific to Lenovo ThinkPad X1
 
 { config, pkgs, lib, ... }:
 
@@ -10,7 +10,7 @@
       ../../../roles/gnome-boxes.nix
     ];
 
-  # Bootloader.
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
@@ -79,4 +79,10 @@
 
   # Set version of NixOS to target 
   system.stateVersion = "22.11";
+
+  # Ignore lid close events
+  services.upower = {
+    enable = true;
+    ignoreLid = true;
+  };
 }

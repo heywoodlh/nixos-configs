@@ -23,7 +23,7 @@ backup	root@ct-1.wireguard:/etc/	ct-1/
 backup	root@ct-1.wireguard:/home/	ct-1/
 backup	root@ct-1.wireguard:/opt/	ct-1/
 backup	root@ct-1.wireguard:/root/	ct-1/
-backup	root@ct-1.wireguard:/media/disk2/ct-storage	ct-1/
+backup	root@ct-1.wireguard:/media/disk2/ct-storage	ct-1/	exclude=/media/disk2/ct-storage/nextcloud
 
 backup	root@nix-pomerium.wireguard:/etc/	nix-pomerium/
 backup	root@nix-pomerium.wireguard:/home/	nix-pomerium/

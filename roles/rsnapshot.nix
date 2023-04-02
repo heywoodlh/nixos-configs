@@ -39,8 +39,6 @@ backup	root@arch-precision.wireguard:/etc/	arch-precision/
 backup	root@arch-precision.wireguard:/home/	arch-precision/
 backup	root@arch-precision.wireguard:/opt/	arch-precision/
 backup	root@arch-precision.wireguard:/root/	arch-precision/
-backup	root@arch-precision.wireguard:/virtual-machines/	arch-precision/
-backup	root@arch-precision.wireguard:/virtual-machines-2/	arch-precision/
 
 backup	root@tools.wireguard:/etc/	tools/
 backup	root@tools.wireguard:/home/	tools/

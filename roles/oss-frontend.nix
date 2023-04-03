@@ -12,11 +12,6 @@ let
     port = "10412";
   };
 in {
-  networking.firewall.interfaces.${interface}.allowedTCPPorts = [
-    ${teddit.port} # teddit 
-    ${cloudtube.port} # cloudtube
-  ];
-
   system.activationScripts.mkTedditNet = ''
     ${pkgs.docker}/bin/docker network create teddit
   '';

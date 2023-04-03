@@ -27,12 +27,13 @@
         image = "docker.io/heywoodlh/cloudtube:2023_02";
         ports = ["10412:10412"];
         environment = {
-          INSTANCE_URI = "http://second:3000";
+          INSTANCE_URI = "http://10.50.50.42:3000";
         };
         dependsOn = [ "second" ];
       };
       second = {
         image = "docker.io/heywoodlh/second:2023_02";
+        ports = ["10.50.50.42:3000:3000"];
       };
     };
   };

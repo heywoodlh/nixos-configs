@@ -54,6 +54,12 @@ backup	root@nix-media.wireguard:/media/services/sabnzbd/	nix-media/
 backup	root@nix-media.wireguard:/media/services/radarr/	nix-media/
 backup	root@nix-media.wireguard:/media/services/sonarr/	nix-media/
 backup	root@nix-media.wireguard:/media/services/tautulli/	nix-media/
+
+backup	root@matrix.wireguard:/etc/	matrix/
+backup	root@matrix.wireguard:/home/	matrix/
+backup	root@matrix.wireguard:/opt/	matrix/
+backup	root@matrix.wireguard:/root/	matrix/
+backup	root@matrix.wireguard:/matrix/	matrix/
     '';
   };
 }

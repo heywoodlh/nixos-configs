@@ -1,17 +1,17 @@
 { config, pkgs, ... }:
 
 {
-  networking.firewall.allowedTCPPorts = [
-    8182
-    9000
-  ];
+  system.activationScripts.mkTabbyNet = ''
+    ${pkgs.docker}/bin/docker network create tabby &2>/dev/null || true
+  '';
 
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
       tabby = {
         image = "ghcr.io/eugeny/tabby-web:latest";
-        ports = ["10.50.50.31:8080:80"];
+        autoStart = true;
+        ports = ["8182:80"];
         environmentFiles = [
           /opt/tabby/tabby-web-env
         ];
@@ -22,10 +22,13 @@
         dependsOn = [
           "tabby-connection-gateway"
         ];
+        extraOptions = [
+          "--network=tabby"
+        ];
       };
       tabby-connection-gateway = {
         image = "ghcr.io/eugeny/tabby-connection-gateway:master";
-        ports = ["9000:9000"];
+        autoStart = true;
         cmd = [
           "--token-auth"
           "--host"
@@ -35,6 +38,9 @@
         ];
         environmentFiles = [
           /opt/tabby/tabby-connection-gateway-env
+        ];
+        extraOptions = [
+          "--network=tabby"
         ];
       };
     };

@@ -15,11 +15,11 @@ let
   };
 in {
   system.activationScripts.mkTedditNet = ''
-    ${pkgs.docker}/bin/docker network create teddit || true
+    ${pkgs.docker}/bin/docker network create teddit  &2>/dev/null || true
   '';
 
   system.activationScripts.mkCloudtubeNet = ''
-    ${pkgs.docker}/bin/docker network create cloudtube || true
+    ${pkgs.docker}/bin/docker network create cloudtube &2>/dev/null || true
   '';
   # Various open source front-ends for specific, proprietary web apps
   virtualisation.oci-containers = {

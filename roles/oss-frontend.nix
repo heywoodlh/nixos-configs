@@ -10,6 +10,8 @@ let
   };
   cloudtube = {
     port = "10412";
+    image_tag = "2023_02";
+    second_image_tag = "2023_02";
   };
 in {
   system.activationScripts.mkTedditNet = ''
@@ -25,7 +27,7 @@ in {
     containers = {
       teddit = {
         image = "docker.io/teddit/teddit:${teddit.image_tag}";
-        ports = ["${teddit_port}:8080"];
+        ports = ["${teddit.port}:8080"];
         environment = {
           REDIS_HOST = "teddit-redis";
           DOMAIN = "${teddit.domain}";
@@ -49,8 +51,8 @@ in {
       };
 
       cloudtube = {
-        image = "docker.io/heywoodlh/cloudtube:2023_02";
-        ports = ["${cloudtube_port}:10412"];
+        image = "docker.io/heywoodlh/cloudtube:${cloudtube.image_tag}";
+        ports = ["${cloudtube.port}:10412"];
         environment = {
           INSTANCE_URI = "http://second:3000";
         };
@@ -61,7 +63,7 @@ in {
         ];
       };
       second = {
-        image = "docker.io/heywoodlh/second:2023_02";
+        image = "docker.io/heywoodlh/second:${cloudtube.second_image_tag}";
         extraOptions = [
           "--restart=always"
           "--network=cloudtube"

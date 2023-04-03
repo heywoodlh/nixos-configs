@@ -4,7 +4,7 @@ let
   interface = "shadow";
   teddit = {
     port = "8086";
-    image_tag = "2.11.1";
+    image_tag = "latest";
     domain = "teddit.heywoodlh.io";
     redis_image_tag = "6.2.5-alpine";
   };

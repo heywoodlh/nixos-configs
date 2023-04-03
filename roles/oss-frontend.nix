@@ -27,6 +27,7 @@ in {
     containers = {
       teddit = {
         image = "docker.io/teddit/teddit:${teddit.image_tag}";
+        autoStart = true;
         ports = ["${teddit.port}:8080"];
         environment = {
           REDIS_HOST = "teddit-redis";
@@ -34,38 +35,37 @@ in {
         };
         dependsOn = [ "teddit-redis" ];
         extraOptions = [
-          "--restart=always"
           "--network=teddit"
         ];
       };
       teddit-redis = {
         image = "docker.io/redis:${teddit.redis_image_tag}";
+        autoStart = true;
         cmd = [ "redis-server" ];
         environment = {
           REDIS_REPLICATION_MODE = "master";
         };
         extraOptions = [
-          "--restart=always"
           "--network=teddit"
         ];
       };
 
       cloudtube = {
         image = "docker.io/heywoodlh/cloudtube:${cloudtube.image_tag}";
+        autoStart = true;
         ports = ["${cloudtube.port}:10412"];
         environment = {
           INSTANCE_URI = "http://second:3000";
         };
         dependsOn = [ "second" ];
         extraOptions = [
-          "--restart=always"
           "--network=cloudtube"
         ];
       };
       second = {
         image = "docker.io/heywoodlh/second:${cloudtube.second_image_tag}";
+        autoStart = true;
         extraOptions = [
-          "--restart=always"
           "--network=cloudtube"
         ];
       };

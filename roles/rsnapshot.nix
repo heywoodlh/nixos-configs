@@ -14,6 +14,7 @@
 #Separate everything with tabs, not spaces	
 #Convert spaces to tabs in vim with :%s/\s\+/\t/g
 snapshot_root	/media/backups/
+logfile	/media/backups/log/rsnapshot.log
 retain	hourly	24
 retain	daily	7
 retain	weekly	4

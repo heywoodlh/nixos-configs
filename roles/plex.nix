@@ -62,6 +62,7 @@
     containers = {
       tautulli = {
         image = "docker.io/linuxserver/tautulli:2.11.1";
+        autoStart = true;
         ports = ["10.50.50.42:8181:8181"];
         volumes = [
           "/opt/tautulli/config:/config"

@@ -8,6 +8,7 @@
     ../../../roles/media-nfs.nix
     ../../../roles/plex.nix
     ../../../roles/freshrss.nix
+    ../../../roles/oss-frontend.nix
   ];
 
   # Bootloader.

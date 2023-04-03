@@ -5,10 +5,10 @@
     enable = true;
     enableManualRsnapshot = true;
     cronIntervals = {
-      daily = "0 3 * * *";
       hourly = "0 * * * *";
-      weekly = "0 1 * * 1";
-      monthly = "0 1 1 * *";
+      daily = "30 5 * * *";
+      weekly = "0 8 * * 1";
+      monthly = "0 13 1 * *";
     };
     extraConfig = ''
 #Separate everything with tabs, not spaces	

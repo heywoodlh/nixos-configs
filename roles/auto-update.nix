@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  gotify-setup = pkgs.writeScriptBin "nixos-switch-auto" ''
+  nixos-switch-auto = pkgs.writeScriptBin "nixos-switch-auto" ''
     #!/usr/bin/env bash
     # This script automatically updates my flake locally
 

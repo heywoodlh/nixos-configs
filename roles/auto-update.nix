@@ -6,6 +6,7 @@ let
     # This script automatically updates my flake locally
 
     [[ ! -d /opt/nixos-configs ]] && git clone https://github.com/heywoodlh/nixos-configs /opt/nixos-configs && export NIXOS_DOWNLOAD=1
+    git -C /home/heywoodlh/opt/conf pull origin master || true
 
     # If NIXOS_DOWNLOAD = 1, then run nixos-rebuild switch
     if [[ $NIXOS_DOWNLOAD == 1 ]]
@@ -45,7 +46,7 @@ in {
   services.cron = {
     enable = true;
     systemCronJobs = [
-      "*/5 * * * *      root    nixos-switch-auto"
+      "*/5 * * * *      root    ${nixos-switch-auto} | tee -a /tmp/nixos-auto-update.log"
     ];
   };
 }

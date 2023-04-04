@@ -35,7 +35,6 @@
     openFirewall = true;
     dataDir = "/opt/plex";
     user = "media";
-    restartOnFailure = true;
   };
 
   services.radarr = {
@@ -43,7 +42,6 @@
     openFirewall = true;
     dataDir = "/opt/radarr";
     user = "media";
-    restartOnFailure = true;
   };
 
   services.sonarr = {
@@ -51,14 +49,12 @@
     openFirewall = true;
     dataDir = "/opt/sonarr";
     user = "media";
-    restartOnFailure = true;
   };
 
   services.sabnzbd = {
     enable = true;
     user = "media"; 
     configFile = "/media/services/sabnzbd/config.ini";
-    restartOnFailure = true;
   };
 
   virtualisation.oci-containers = {

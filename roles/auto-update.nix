@@ -46,7 +46,7 @@ in {
   services.cron = {
     enable = true;
     systemCronJobs = [
-      "* * * * *      heywoodlh    sudo ${nixos-switch-auto} | tee -a /tmp/nixos-auto-update.log"
+      "* * * * *      heywoodlh    sudo ${nixos-switch-auto}"
     ];
   };
 }

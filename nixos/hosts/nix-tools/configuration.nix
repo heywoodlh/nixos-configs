@@ -46,5 +46,9 @@
     "resolv.conf".text = "nameserver 10.50.50.1\n";
   };
 
+  environment.systemPackages = with pkgs; [
+    docker-compose
+  ];
+
   system.stateVersion = "22.11";
 }

@@ -64,5 +64,11 @@
     options = [ "defaults" "nofail" ];
   };
 
+  # Enable auto upgrade
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:heywoodlh/nixos-configs#nix-backups";
+  };
+
   system.stateVersion = "22.11";
 }

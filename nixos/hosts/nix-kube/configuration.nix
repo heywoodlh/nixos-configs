@@ -47,5 +47,11 @@
     "resolv.conf".text = "nameserver 10.50.50.1\n";
   };
 
+  # Enable auto upgrade
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:heywoodlh/nixos-configs#nix-kube";
+  };
+
   system.stateVersion = "22.11";
 }

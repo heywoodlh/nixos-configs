@@ -31,12 +31,6 @@
         specialArgs = inputs;
         modules = [ ./darwin/hosts/mac-mini.nix ];
       };
-      # chg-macbook-pro
-      "nix-mac-chg" = darwin.lib.darwinSystem {
-        system = "x86_64-darwin";
-        specialArgs = inputs;
-        modules = [ ./darwin/hosts/chg-macbook-pro.nix ];
-      };
     };
 
     # nixos target

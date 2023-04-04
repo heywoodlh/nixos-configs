@@ -56,5 +56,11 @@
     ];
   };
 
+  # Enable auto upgrade
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:heywoodlh/nixos-configs#nix-pomerium";
+  };
+
   system.stateVersion = "22.11";
 }

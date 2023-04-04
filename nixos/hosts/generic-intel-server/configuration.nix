@@ -11,6 +11,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  
+
+  # Enable auto upgrade
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:heywoodlh/nixos-configs#nixos-server-intel";
+  };  
   system.stateVersion = "22.11";
 }

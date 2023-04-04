@@ -50,5 +50,11 @@
     docker-compose
   ];
 
+  # Enable auto upgrade
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:heywoodlh/nixos-configs#nix-tools";
+  };
+
   system.stateVersion = "22.11";
 }

@@ -6,7 +6,6 @@
     ../roles/sshd.nix
     ../roles/sshd-monitor.nix
     ../roles/squid-client.nix
-    ../roles/auto-update.nix
   ];
   
   # Allow non-free applications to be installed

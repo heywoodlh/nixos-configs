@@ -46,9 +46,6 @@ jobs:
         # Build nixos-server output
         nix build .#nixosConfigurations.nixos-server-intel.config.system.build.toplevel
         rm -rf ./result
-        # Build nix-pomerium output
-        nix build .#nixosConfigurations.nix-pomerium.config.system.build.toplevel --impure
-        rm -rf ./result
    
     - name: If scheduled or manually triggered, add updated flake.lock if changed, commit and push
       if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}

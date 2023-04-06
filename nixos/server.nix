@@ -27,6 +27,7 @@
     git
     gnumake
     gnupg 
+    htop
     jq 
     nix-index
     patchelf

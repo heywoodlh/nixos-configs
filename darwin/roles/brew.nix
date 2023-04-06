@@ -61,7 +61,6 @@
       "neofetch"
       "neovim"
       "nim"
-      "nimlsp"
       "node"
       "openssl@3"
       "pandoc"

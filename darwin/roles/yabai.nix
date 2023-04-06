@@ -53,6 +53,7 @@
     yabai -m rule --add app="/opt/homebrew/bin/pinentry-mac" manage=off
     yabai -m rule --add app="pinentry-mac" manage=off
     yabai -m rule --add app="^System Preferences$" manage=off
+    yabai -m rule --add app="/Applications/Secretive.app/Contents/MacOS/Secretive" manage=off
   '';
 
   services.skhd.enable = true;

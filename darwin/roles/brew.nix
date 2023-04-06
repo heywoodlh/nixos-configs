@@ -60,6 +60,7 @@
       "mosh"
       "neofetch"
       "neovim"
+      "nim"
       "node"
       "openssl@3"
       "pandoc"

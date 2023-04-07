@@ -8,6 +8,12 @@
     dataDir = "/opt/deluge/data";
     user = "media";
     openFirewall = true;
+    extraPackages = [
+      pkgs.unzip
+      pkgs.gnutar
+      pkgs.xz
+      pkgs.bzip2
+    ];
     web = {
       enable = true;
       openFirewall = true;

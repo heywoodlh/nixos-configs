@@ -7,6 +7,7 @@
     ../../server.nix
     ../../../roles/media-nfs.nix
     ../../../roles/plex.nix
+    ../../../roles/deluge.nix
     ../../../roles/freshrss.nix
     ../../../roles/oss-frontend.nix
   ];

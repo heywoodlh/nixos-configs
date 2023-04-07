@@ -37,6 +37,13 @@
     user = "media";
   };
 
+  services.lidarr = {
+    enable = true;
+    openFirewall = true;
+    dataDir = "/opt/lidarr";
+    user = "media";
+  };
+
   services.radarr = {
     enable = true;
     openFirewall = true;

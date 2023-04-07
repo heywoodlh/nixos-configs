@@ -67,6 +67,7 @@
       "pass"
       "pass-otp"
       "pinentry-mac"
+      "plexamp"
       "popeye"
       "pre-commit"
       "proxychains-ng"

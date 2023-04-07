@@ -216,9 +216,10 @@ in {
       pinentry-curses
       pinentry-gnome
       pinentry-rofi
-      procmail
+      plexamp
       pomerium-cli
       powershell
+      procmail
       pwgen
       python310
       qemu-utils

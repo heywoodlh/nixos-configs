@@ -46,6 +46,8 @@
       fi
     }    
 
+    # Custom stuff
+    ## Unmanaged apps
     yabai -m rule --add app="/usr/local/bin/choose" manage=off
     yabai -m rule --add app="/opt/homebrew/bin/choose" manage=off
     yabai -m rule --add app="choose" manage=off
@@ -207,29 +209,10 @@
     ctrl + cmd - p ; passthrough
     passthrough < ctrl + cmd - p ; default
     
-    ctrl + cmd - s : bash -c 'source ~/.bash.d/darwin && pass-choose' 
+    ctrl + shift - b : ~/bin/macos-battpop.sh 
     
-    ctrl + cmd - b : bash -c 'source ~/.bash.d/functions && battpop'
-    ctrl + cmd - d : bash -c 'source ~/.bash.d/functions && timepop'
-    
-    #cmd - space : bash -c "source ~/.bash.d/darwin && choose-launcher" ## Use raycast instead
-    cmd - b : bash -c "source ~/.bash.d/darwin && choose-buku"
-    cmd + shift - k : bash -c "source ~/.bash.d/darwin && snippets"
-    
-    #ctrl - 0x29 : bash -c "~/Applications/keynav.app/Contents/MacOS/XEasyMotion"
-    
-    ## Control mouse with keyboard
-    #ctrl - k : cliclick "m:+0,-15" #up
-    #ctrl - j : cliclick "m:+0,+15" #down
-    #ctrl - l : cliclick "m:+15,+0" #right
-    #ctrl - h : cliclick "m:-15,+0" #left
-    
-    #ctrl + shift - k : cliclick "m:+0,-80" #up
-    #ctrl + shift - j : cliclick "m:+0,+80" #down
-    #ctrl + shift - l : cliclick "m:+80,+0" #right
-    #ctrl + shift - h : cliclick "m:-80,+0" #left
-    
-    #ctrl - 0x21 : cliclick ku:ctrl c:. # click
-    #ctrl - 0x1E : cliclick ku:ctrl rc:.  # right click
+    # Launch Alacritty
+    ctrl + alt - t : /Applications/Alacritty.app/Contents/MacOS/alacritty
+    cmd - return : /Applications/Alacritty.app/Contents/MacOS/alacritty
   '';
 }

@@ -114,8 +114,8 @@
       "kdash-rs/kdash"
     ];
     casks = [
+      "alacritty"
       "android-platform-tools"
-      "beeper"
       "bitwarden"
       "blockblock"
       "brave-browser"
@@ -130,7 +130,6 @@
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"
       "hiddenbar"
-      "iterm2"
       "knockknock"
       "lastpass"
       "lulu"

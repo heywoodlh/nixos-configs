@@ -186,7 +186,6 @@ in {
       k9s
       keyutils
       kind
-      kitty
       kubectl
       kubernetes-helm
       libarchive
@@ -337,7 +336,7 @@ in {
           "hidetopbar@mathieu.bidon.ca"
           "gsconnect@andyholmes.github.io"
         ];
-        favorite-apps = ["firefox.desktop" "kitty.desktop"];
+        favorite-apps = ["firefox.desktop" "alacritty.desktop"];
         had-bluetooth-devices-setup = true;
         remember-mount-password = false;
         welcome-dialog-last-shown-version = "42.4";
@@ -409,13 +408,13 @@ in {
         ];
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-        name = "kitty super";
-        command = "kitty";
+        name = "terminal super";
+        command = "alacritty";
         binding = "<Super>Return";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
-        name = "kitty ctrl_alt";
-        command = "kitty";
+        name = "terminal ctrl_alt";
+        command = "alacritty";
         binding = "<Ctrl><Alt>t";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {

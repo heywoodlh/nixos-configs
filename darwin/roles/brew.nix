@@ -123,6 +123,7 @@
       "cursorcerer"
       "discord"
       "element"
+      "displaylink"
       "docker"
       "firefox"
       "font-droid-sans-mono-for-powerline"

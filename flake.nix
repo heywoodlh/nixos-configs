@@ -25,6 +25,11 @@
         specialArgs = inputs;
         modules = [ ./darwin/hosts/m2-macbook-air.nix ];
       };
+      "hephaestus" = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = inputs;
+        modules = [ ./darwin/hosts/hephaestus.nix ];
+      };
       # mac-mini output -- used with CI
       "nix-mac-mini" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";

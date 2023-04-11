@@ -50,16 +50,6 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/steam-deck/configuration.nix ];
       };
-      nix-razer = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/razer-blade-15/configuration.nix ];
-      };
-      nix-xps = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/xps-13/configuration.nix ];
-      };
       nix-thinkpad = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

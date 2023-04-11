@@ -28,10 +28,10 @@
   # Enable networking
   networking.networkmanager.enable = true;
   # Set DNS
-  networking.nameservers = [ "10.50.50.1" ];
-  environment.etc = {
-    "resolv.conf".text = "nameserver 10.50.50.1\n";
-  };
+  #networking.nameservers = [ "10.50.50.1" ];
+  #environment.etc = {
+  #  "resolv.conf".text = "nameserver 10.50.50.1\n";
+  #};
 
   # Set your time zone.
   time.timeZone = "America/Denver";

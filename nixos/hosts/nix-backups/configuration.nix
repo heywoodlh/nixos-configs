@@ -42,10 +42,10 @@
   i18n.defaultLocale = "en_US.utf8";
 
   # Set DNS
-  networking.nameservers = [ "10.50.50.1" ];
-  environment.etc = {
-    "resolv.conf".text = "nameserver 10.50.50.1\n";
-  };
+  #networking.nameservers = [ "10.50.50.1" ];
+  #environment.etc = {
+  #  "resolv.conf".text = "nameserver 10.50.50.1\n";
+  #};
 
   # Ignore lid close
   services.logind.lidSwitch = "ignore";

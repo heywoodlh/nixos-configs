@@ -77,7 +77,6 @@
       "ripgrep"
       "screen"
       "speedtest-cli"
-      "tailscale"
       "tarsnap"
       "tcpdump"
       "tfenv"

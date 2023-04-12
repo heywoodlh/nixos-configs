@@ -50,24 +50,24 @@
     ];
   };
 
-  systemd.services = {
-    wireguard = {
-      enable = true;
-      description = "Wireguard on Demand Service";
-      serviceConfig = {
-        ExecStart = "/opt/scripts/wireguard.sh";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
-    wireguard-wired = {
-      enable = true;
-      description = "Wireguard on Demand Ethernet Service";
-      serviceConfig = {
-        ExecStart = "/opt/scripts/wireguard-wired.sh";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
-  };
+  #systemd.services = {
+  #  wireguard = {
+  #    enable = true;
+  #    description = "Wireguard on Demand Service";
+  #    serviceConfig = {
+  #      ExecStart = "/opt/scripts/wireguard.sh";
+  #    };
+  #    wantedBy = [ "multi-user.target" ];
+  #  };
+  #  wireguard-wired = {
+  #    enable = true;
+  #    description = "Wireguard on Demand Ethernet Service";
+  #    serviceConfig = {
+  #      ExecStart = "/opt/scripts/wireguard-wired.sh";
+  #    };
+  #    wantedBy = [ "multi-user.target" ];
+  #  };
+  #};
 
   # Enable fprint
   environment.systemPackages = [

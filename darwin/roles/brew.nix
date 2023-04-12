@@ -57,6 +57,7 @@
       "lima"
       "m-cli"
       "mas"
+      "moreutils"
       "mosh"
       "neofetch"
       "neovim"

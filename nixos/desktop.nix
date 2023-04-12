@@ -192,6 +192,7 @@ in {
       libnotify
       lima
       matrix-commander
+      moreutils
       nixfmt
       nixos-generators
       nixos-install-tools

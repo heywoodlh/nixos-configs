@@ -7,7 +7,7 @@ in {
   imports = [
     ../roles/m1.nix
     ../roles/defaults.nix
-    ../roles/min-brew.nix
+    ../roles/brew.nix
     ../roles/yabai.nix
     ../roles/network.nix
     ../roles/home-manager/settings.nix

@@ -10,7 +10,7 @@ let
     grep_regex_pattern='Failed password|Invalid verification code|Invalid user|Accepted publickey|Accepted password|Accepted keyboard-interactive'
     
     ### Pattern to exclude with `grep -v -E ...`
-    grep_exclude_regex_pattern='nagios|Accepted publickey for root from 10.50.50.34'
+    grep_exclude_regex_pattern='nagios|Accepted publickey for root from 100.126.114.23'
     
     journalctl -u "''${service}" -n 0 -f | grep --line-buffered -iE "''${grep_regex_pattern}" | grep --line-buffered -ivE "''${grep_exclude_regex_pattern}" | while read line
     do

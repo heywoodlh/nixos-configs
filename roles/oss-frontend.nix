@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 
 let
-  interface = "shadow";
   teddit = {
     port = "8086";
     image_tag = "latest";

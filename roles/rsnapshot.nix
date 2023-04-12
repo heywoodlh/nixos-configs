@@ -20,47 +20,47 @@ retain	daily	7
 retain	weekly	4
 retain	monthly	6
 
-backup	root@ct-1.wireguard:/etc/	ct-1/
-backup	root@ct-1.wireguard:/home/	ct-1/	exclude=/home/heywoodlh/.local/share/docker
-backup	root@ct-1.wireguard:/opt/	ct-1/
-backup	root@ct-1.wireguard:/root/	ct-1/
-backup	root@ct-1.wireguard:/media/disk2/ct-storage/	ct-1/	exclude=/media/disk2/ct-storage/nextcloud
+backup	root@ct-1.tailscale:/etc/	ct-1/
+backup	root@ct-1.tailscale:/home/	ct-1/	exclude=/home/heywoodlh/.local/share/docker
+backup	root@ct-1.tailscale:/opt/	ct-1/
+backup	root@ct-1.tailscale:/root/	ct-1/
+backup	root@ct-1.tailscale:/media/disk2/ct-storage/	ct-1/	exclude=/media/disk2/ct-storage/nextcloud
 
-backup	root@nix-pomerium.wireguard:/etc/	nix-pomerium/
-backup	root@nix-pomerium.wireguard:/home/	nix-pomerium/
-backup	root@nix-pomerium.wireguard:/opt/	nix-pomerium/
-backup	root@nix-pomerium.wireguard:/root/	nix-pomerium/
+backup	root@nix-pomerium.tailscale:/etc/	nix-pomerium/
+backup	root@nix-pomerium.tailscale:/home/	nix-pomerium/
+backup	root@nix-pomerium.tailscale:/opt/	nix-pomerium/
+backup	root@nix-pomerium.tailscale:/root/	nix-pomerium/
 
-backup	root@nix-tools.wireguard:/etc/	nix-tools/
-backup	root@nix-tools.wireguard:/home/	nix-tools/
-backup	root@nix-tools.wireguard:/opt/	nix-tools/
-backup	root@nix-tools.wireguard:/root/	nix-tools/
+backup	root@nix-tools.tailscale:/etc/	nix-tools/
+backup	root@nix-tools.tailscale:/home/	nix-tools/
+backup	root@nix-tools.tailscale:/opt/	nix-tools/
+backup	root@nix-tools.tailscale:/root/	nix-tools/
 
-backup	root@arch-precision.wireguard:/etc/	arch-precision/
-backup	root@arch-precision.wireguard:/home/	arch-precision/
-backup	root@arch-precision.wireguard:/opt/	arch-precision/
-backup	root@arch-precision.wireguard:/root/	arch-precision/
+backup	root@arch-precision.tailscale:/etc/	arch-precision/
+backup	root@arch-precision.tailscale:/home/	arch-precision/
+backup	root@arch-precision.tailscale:/opt/	arch-precision/
+backup	root@arch-precision.tailscale:/root/	arch-precision/
 
-backup	root@tools.wireguard:/etc/	tools/
-backup	root@tools.wireguard:/home/	tools/
-backup	root@tools.wireguard:/opt/	tools/
-backup	root@tools.wireguard:/root/	tools/
+backup	root@tools.tailscale:/etc/	tools/
+backup	root@tools.tailscale:/home/	tools/
+backup	root@tools.tailscale:/opt/	tools/
+backup	root@tools.tailscale:/root/	tools/
 
-backup	root@nix-media.wireguard:/etc/	nix-media/
-backup	root@nix-media.wireguard:/home/	nix-media/
-backup	root@nix-media.wireguard:/opt/	nix-media/
-backup	root@nix-media.wireguard:/root/	nix-media/
-backup	root@nix-media.wireguard:/media/services/freshrss/	nix-media/
-backup	root@nix-media.wireguard:/media/services/sabnzbd/	nix-media/
-backup	root@nix-media.wireguard:/media/services/radarr/	nix-media/
-backup	root@nix-media.wireguard:/media/services/sonarr/	nix-media/
-backup	root@nix-media.wireguard:/media/services/tautulli/	nix-media/
+backup	root@nix-media.tailscale:/etc/	nix-media/
+backup	root@nix-media.tailscale:/home/	nix-media/
+backup	root@nix-media.tailscale:/opt/	nix-media/
+backup	root@nix-media.tailscale:/root/	nix-media/
+backup	root@nix-media.tailscale:/media/services/freshrss/	nix-media/
+backup	root@nix-media.tailscale:/media/services/sabnzbd/	nix-media/
+backup	root@nix-media.tailscale:/media/services/radarr/	nix-media/
+backup	root@nix-media.tailscale:/media/services/sonarr/	nix-media/
+backup	root@nix-media.tailscale:/media/services/tautulli/	nix-media/
 
-backup	root@matrix.wireguard:/etc/	matrix/
-backup	root@matrix.wireguard:/home/	matrix/
-backup	root@matrix.wireguard:/opt/	matrix/
-backup	root@matrix.wireguard:/root/	matrix/
-backup	root@matrix.wireguard:/matrix/	matrix/
+backup	root@matrix.tailscale:/etc/	matrix/
+backup	root@matrix.tailscale:/home/	matrix/
+backup	root@matrix.tailscale:/opt/	matrix/
+backup	root@matrix.tailscale:/root/	matrix/
+backup	root@matrix.tailscale:/matrix/	matrix/
     '';
   };
 }

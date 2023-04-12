@@ -115,7 +115,6 @@
     ];
     casks = [
       "alacritty"
-      "android-platform-tools"
       "bitwarden"
       "blockblock"
       "brave-browser"
@@ -142,22 +141,19 @@
       "raycast"
       "reikey"
       "rustdesk"
-      "seaglass"
       "secretive"
       "slack"
       "syncthing"
-      "tageditor"
       "tailscale"
       "tunnelblick"
       "utm"
-      "zoom"
     ];
-    masApps = {
-      DaisyDisk = 411643860;
-      Vimari = 1480933944;
-      "WiFi Explorer" = 494803304;
-      "Reeder 5." = 1529448980;
-      "Okta Extension App" = 1439967473;
-    };
+    #masApps = {
+      #DaisyDisk = 411643860;
+      #Vimari = 1480933944;
+      #"WiFi Explorer" = 494803304;
+      #"Reeder 5." = 1529448980;
+      #"Okta Extension App" = 1439967473;
+    #};
   };
 }

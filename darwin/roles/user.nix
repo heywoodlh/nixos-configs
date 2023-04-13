@@ -10,6 +10,7 @@
     pkgs.gnupg
     pkgs.pomerium-cli
     pkgs.powershell
+    pkgs.python310Packages.upass
     pkgs.skhd
     pkgs.tmux
     pkgs.wireguard-tools

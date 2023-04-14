@@ -9,7 +9,7 @@ let
 in {
   imports = [ 
     home-manager.nixosModule
-    ../roles/linux-dotfiles.nix
+    ./roles/linux-dotfiles.nix
   ];
 
   # Import nur as nixpkgs.overlays

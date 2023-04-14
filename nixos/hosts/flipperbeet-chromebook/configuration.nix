@@ -7,10 +7,10 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../desktop.nix
-      ../../../roles/flipperbeet.nix
-      ../../../roles/sshd.nix
-      ../../../roles/sshd-monitor.nix
-      ../../../roles/xrdp.nix
+      ../roles/flipperbeet.nix
+      ../roles/sshd.nix
+      ../roles/sshd-monitor.nix
+      ../roles/xrdp.nix
     ];
 
   # Bootloader

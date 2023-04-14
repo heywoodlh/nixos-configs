@@ -5,7 +5,7 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
-    ../../../roles/rsnapshot.nix
+    ../../roles/rsnapshot.nix
   ];
 
   # Bootloader.

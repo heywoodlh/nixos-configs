@@ -3,7 +3,7 @@
 {
   imports = [ 
     ./hardware-configuration.nix 
-    ./steam-deck.nix
+    ../../roles/steam-deck.nix
     ../../desktop.nix
   ];
 

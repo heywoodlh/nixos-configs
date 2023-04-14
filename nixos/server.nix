@@ -2,11 +2,11 @@
 
 {
   imports = [
-    ../roles/linux-dotfiles.nix
-    ../roles/sshd.nix
-    ../roles/sshd-monitor.nix
-    ../roles/squid-client.nix
-    ../roles/tailscale.nix
+    ./roles/linux-dotfiles.nix
+    ./roles/sshd.nix
+    ./roles/sshd-monitor.nix
+    ./roles/squid-client.nix
+    ./roles/tailscale.nix
   ];
   
   # Allow non-free applications to be installed

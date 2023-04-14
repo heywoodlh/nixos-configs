@@ -45,6 +45,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-pomerium/configuration.nix ];
       };
+      flipperbeet-chromebook = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/flipperbeet-chromebook/configuration.nix ];
+      };
       nix-steam-deck = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

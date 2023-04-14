@@ -80,9 +80,4 @@
   # Set version of NixOS to target 
   system.stateVersion = "22.11";
 
-  # Ignore lid close events
-  services.upower = {
-    enable = true;
-    ignoreLid = true;
-  };
 }

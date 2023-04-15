@@ -167,6 +167,7 @@ in {
       gitleaks
       glib.dev
       glow
+      gnome.gnome-terminal
       gnome.gnome-tweaks
       gnomeExtensions.caffeine
       gnomeExtensions.gsconnect
@@ -436,7 +437,7 @@ in {
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
         binding = "<Shift><Control>e";
-        command = "/home/heywoodlh/bin/vim-ime.py --cmd 'alacritty -o window.dimensions.columns=60 window.dimensions.lines=8 -e vim' --outfile '/home/heywoodlh/tmp/vim-ime.txt'";
+        command = "/home/heywoodlh/bin/vim-ime.py --cmd 'gnome-terminal --geometry=60x8 -- vim' --outfile '/home/heywoodlh/tmp/vim-ime.txt'";
         name = "vim-ime";
       };
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6" = {

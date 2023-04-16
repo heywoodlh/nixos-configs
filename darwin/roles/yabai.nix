@@ -212,7 +212,7 @@
     ctrl + shift - b : ~/bin/macos-battpop.sh 
     
     # Launch Alacritty
-    ctrl + alt - t : /Applications/Alacritty.app/Contents/MacOS/alacritty
-    cmd - return : /Applications/Alacritty.app/Contents/MacOS/alacritty
+    ctrl + alt - t : /Applications/Hyper.app/Contents/Resources/bin/hyper
+    cmd - return : /Applications/Hyper.app/Contents/Resources/bin/hyper 
   '';
 }

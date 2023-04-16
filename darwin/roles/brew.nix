@@ -125,6 +125,7 @@
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"
       "hiddenbar"
+      "hyper"
       "knockknock"
       "lastpass"
       "lulu"

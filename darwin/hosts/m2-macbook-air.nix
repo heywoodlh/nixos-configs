@@ -26,5 +26,12 @@ in {
   # Always show menu bar on M2 Macbook Air 
   system.defaults.NSGlobalDomain._HIHideMenuBar = lib.mkForce false;
 
+  # Applications specific to this machine
+  homebrew = {
+    casks = [
+      "zoom"
+    ];
+  };
+
   system.stateVersion = 4;
 }

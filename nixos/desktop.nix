@@ -182,6 +182,7 @@ in {
       gotify-desktop
       guake
       htop
+      hyper
       inotify-tools
       jq
       k9s

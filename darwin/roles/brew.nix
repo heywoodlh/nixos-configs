@@ -27,6 +27,7 @@
       "dante"
       "dos2unix"
       "ffmpeg"
+      "figlet"
       "findutils"
       "fzf"
       "gcc"

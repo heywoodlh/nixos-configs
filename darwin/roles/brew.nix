@@ -76,6 +76,7 @@
       "speedtest-cli"
       "tarsnap"
       "tcpdump"
+      "termshot"
       "tfenv"
       "tmux"
       "tor"
@@ -109,6 +110,7 @@
       "mike-engel/jwt-cli"
       "aaronraimist/homebrew-tap"
       "kdash-rs/kdash"
+      "homeport/tap" # Termshot
     ];
     casks = [
       "alacritty"

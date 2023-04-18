@@ -73,6 +73,9 @@
       NSNavPanelExpandedStateForSaveMode2 = true;
       _HIHideMenuBar = true;
     };
+    CustomUserPreferences = {
+      "NSGlobalDomain" = { "AppleSpacesSwitchOnActivate" = 0; };
+    };
   };
    # Add flake support 
   nix.extraOptions = ''

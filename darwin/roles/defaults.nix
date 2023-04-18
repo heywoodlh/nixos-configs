@@ -74,7 +74,13 @@
       _HIHideMenuBar = true;
     };
     CustomUserPreferences = {
-      "NSGlobalDomain" = { "AppleSpacesSwitchOnActivate" = 0; };
+      "NSGlobalDomain" = { 
+        "AppleSpacesSwitchOnActivate" = 0;
+      };
+      "com.googlecode.iterm2" = {
+        "PrefsCustomFolder" = "~/.config/iterm2";
+        "LoadPrefsFromCustomFolder" = 1;
+      };
     };
   };
    # Add flake support 

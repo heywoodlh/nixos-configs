@@ -128,6 +128,7 @@
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"
       "hiddenbar"
+      "iterm2"
       "knockknock"
       "lastpass"
       "lulu"

@@ -136,7 +136,6 @@
       "oversight"
       "plexamp"
       "powershell"
-      "raycast"
       "reikey"
       "rustdesk"
       "secretive"

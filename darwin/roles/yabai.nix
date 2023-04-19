@@ -50,6 +50,7 @@
     ## Unmanaged apps
     yabai -m rule --add app="/usr/local/bin/choose" manage=off
     yabai -m rule --add app="/opt/homebrew/bin/choose" manage=off
+    yabai -m rule --add app="choose-launcher.sh" manage=off
     yabai -m rule --add app="choose" manage=off
     yabai -m rule --add app="/usr/local/bin/pinentry-mac" manage=off
     yabai -m rule --add app="/opt/homebrew/bin/pinentry-mac" manage=off
@@ -211,6 +212,8 @@
     
     ctrl + shift - b : ~/bin/macos-battpop.sh 
     
+    ctrl + cmd - s : ~/bin/bwmenu 
+    cmd - space : ~/bin/choose-launcher.sh 
     # Launch Alacritty
     ctrl + alt - t : /Applications/Alacritty.app/Contents/MacOS/alacritty
     cmd - return : /Applications/Alacritty.app/Contents/MacOS/alacritty 

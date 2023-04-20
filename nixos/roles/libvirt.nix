@@ -8,5 +8,10 @@
     libvirt
   ];
 
+  services.cockpit = {
+    enable = true;
+    openFirewall = true;
+  };
+
   boot.extraModprobeConfig = "options kvm_intel nested=1";
 }

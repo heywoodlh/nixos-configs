@@ -6,6 +6,8 @@
   ];
   environment.systemPackages = with pkgs; [
     libvirt
+    packagekit
+    pkgs.nur.repos.fedx.cockpit-machines
   ];
 
   services.cockpit = {

@@ -6,6 +6,7 @@
     ./hardware-configuration.nix
     ../../server.nix
     ../../roles/pihole.nix
+    ../../roles/squid.nix
   ];
 
   # Bootloader.

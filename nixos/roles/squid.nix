@@ -21,9 +21,9 @@
           "/opt/squid/cache:/var/spool/squid"
           "/opt/squid/log:/var/log/squid"
         ];
-        #extraOptions = [
-        #  "--ulimit nofile=1024:2048"
-        #];
+        extraOptions = [
+          "--ulimit nofile=1024:2048"
+        ];
       };
     };
   };

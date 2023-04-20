@@ -35,13 +35,14 @@
     mountPoint = "/media/virtual-machines";
     fsType = "ext4";
     options = [ "rw" "relatime" ];
-  }
+  };
+
   filesystems."virtual-machines-2" = {
     device = "/dev/disk/by-uuid/b1d9e75f-df2c-4ec0-a691-71aebf100cd6";
     mountPoint = "/media/virtual-machines-2";
     fsType = "ext4";
     options = [ "discard" "noatime" "commit=600" "errors=remount-ro" ];
-  }
+  };
 
   system.stateVersion = "22.11";
 }

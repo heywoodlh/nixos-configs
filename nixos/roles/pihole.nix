@@ -8,7 +8,7 @@
     ];
     allowedTCPPorts = [
       53
-      8000
+      80
     ];
   };
 

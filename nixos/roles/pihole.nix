@@ -18,12 +18,6 @@
       pihole = {
         image = "docker.io/pihole/pihole:2023.03.1";
         autoStart = true;
-        ports = [
-          "53:53"
-          "53:53/udp"
-          "67:67/udp"
-          "8000:80"
-        ];
         volumes = [
           "/opt/pihole/etc-pihole:/etc/pihole"
           "/opt/pihole/etc-dnsmasq.d:/etc/dnsmasq.d"
@@ -34,6 +28,7 @@
         ];
         extraOptions = [
           "--cap-add=NET_ADMIN"
+          "--network=host"
         ];
       };
       cloudflared = {

@@ -2,8 +2,8 @@
 
 {
   networking.proxy = {
-    httpProxy = "http://100.91.102.3:3128";
-    httpsProxy = "http://100.91.102.3:3128";
+    httpProxy = "http://100.113.9.57:3128";
+    httpsProxy = "http://100.113.9.57:3128";
     noProxy = "localhost,127.0.0.1";
   };
 }

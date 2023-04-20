@@ -30,16 +30,14 @@
   };
 
   # Virtual machine media
-  filesystems."virtual-machines" = {
+  filesystems."/media/virtual-machines" = {
     device = "/dev/disk/by-uuid/2fa5a6c4-b938-4853-844d-c85a77ae33e7";
-    mountPoint = "/media/virtual-machines";
     fsType = "ext4";
     options = [ "rw" "relatime" ];
   };
 
-  filesystems."virtual-machines-2" = {
+  filesystems."/media/virtual-machines-2" = {
     device = "/dev/disk/by-uuid/b1d9e75f-df2c-4ec0-a691-71aebf100cd6";
-    mountPoint = "/media/virtual-machines-2";
     fsType = "ext4";
     options = [ "discard" "noatime" "commit=600" "errors=remount-ro" ];
   };

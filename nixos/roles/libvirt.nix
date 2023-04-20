@@ -13,5 +13,11 @@
     openFirewall = true;
   };
 
+  services.libvirtd = {
+    enable = true;
+    qemu.ovmf.enable = true;
+    qemu.swtpm.enable = true;
+  };
+
   boot.extraModprobeConfig = "options kvm_intel nested=1";
 }

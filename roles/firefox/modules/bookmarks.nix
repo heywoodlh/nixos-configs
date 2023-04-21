@@ -15,7 +15,7 @@
       }
       {
         name = "nix-darwin configuration options";
-        url = "https://nix-community.github.io/home-manager/options.html";
+        url = "https://daiderd.com/nix-darwin/manual/index.html#sec-options";
       }
       {
         name = "nix packages";

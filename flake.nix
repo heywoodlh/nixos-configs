@@ -18,8 +18,8 @@
   };
 
   outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, ... }: {
+    # macos targets
     darwinConfigurations = {
-      # nix-macbook-air target 
       "nix-macbook-air" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs;
@@ -38,7 +38,7 @@
       };
     };
 
-    # nixos target
+    # nixos targets
     nixosConfigurations = {
       nix-pomerium = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -99,6 +99,16 @@
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/generic-intel-server/configuration.nix ];
+      };
+    };
+
+    # home-manager targets (non NixOS/MacOS, ideally Ubuntu x86_64) 
+    homeConfigurations = {
+      heywoodlh = home-manager.lib.homeManagerConfiguration {
+        specialArgs = inputs;
+        modules = [
+          ./home-manager/home.nix
+        ];
       };
     };
   };

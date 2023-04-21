@@ -2,7 +2,7 @@
 
 {
   imports = [
-    "./cockpit-machines.nix"
+    ./cockpit-machines.nix
   ];
 
   users.users.heywoodlh.extraGroups = [

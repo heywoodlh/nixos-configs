@@ -7,6 +7,7 @@
   environment.systemPackages = with pkgs; [
     libvirt
     packagekit
+    qemu
   ];
 
   services.cockpit = {

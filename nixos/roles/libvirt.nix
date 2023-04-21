@@ -1,4 +1,4 @@
-{ config, pkgs, nur, ... }:
+{ config, pkgs, ... }:
 
 {
   users.users.heywoodlh.extraGroups = [
@@ -7,7 +7,6 @@
   environment.systemPackages = with pkgs; [
     libvirt
     packagekit
-    nur.repos.fedx.cockpit-machines
   ];
 
   services.cockpit = {

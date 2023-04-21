@@ -105,7 +105,7 @@
     # home-manager targets (non NixOS/MacOS, ideally Ubuntu x86_64) 
     homeConfigurations = {
       heywoodlh = home-manager.lib.homeManagerConfiguration {
-        specialArgs = inputs;
+        pkgs = nixpkgs.legacyPackages."x86_64-linux";
         modules = [
           ./home-manager/home.nix
         ];

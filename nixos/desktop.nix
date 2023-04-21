@@ -1,12 +1,6 @@
 { config, pkgs, home-manager, nur, ... }:
 
-let
-  bookmarks = pkgs.writeScriptBin "bookmarks" ''
-    #!/usr/bin/env bash
-    ## This script opens my bookmarks 
-    xdg-open ~/opt/bookmarks/index.html
-  '';
-in {
+{
   imports = [ 
     home-manager.nixosModule
     ./roles/linux-dotfiles.nix

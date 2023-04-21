@@ -1,16 +1,13 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nur, ... }:
 
 {
-  imports = [
-    ./cockpit-machines.nix { inherit pkgs; }
-  ];
-
   users.users.heywoodlh.extraGroups = [
     "libvirtd"
   ];
   environment.systemPackages = with pkgs; [
     libvirt
     packagekit
+    nur.repos.fedx.cockpit-machines
   ];
 
   services.cockpit = {

@@ -17,7 +17,14 @@
     nur.url = "github:nix-community/NUR";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, ... }: {
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, ... }: 
+    let
+      nixpkgsDefaults = {
+        config = {
+          allowUnfree = true;
+        };
+      };
+    in {
     # macos targets
     darwinConfigurations = {
       "nix-macbook-air" = darwin.lib.darwinSystem {
@@ -105,7 +112,9 @@
     # home-manager targets (non NixOS/MacOS, ideally Ubuntu x86_64) 
     homeConfigurations = {
       heywoodlh = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        pkgs = import inputs.nixpkgs (nixpkgsDefaults // { system = "x86_64-linux"; });
+        #pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        extraSpecialArgs = inputs;
         modules = [
           ./home-manager/home.nix
         ];

@@ -3,7 +3,7 @@
 {
   imports = [ 
     home-manager.nixosModule
-    ./roles/linux-dotfiles.nix
+    ./roles/home.nix
   ];
 
   # Import nur as nixpkgs.overlays

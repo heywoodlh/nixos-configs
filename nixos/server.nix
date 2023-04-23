@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./roles/linux-dotfiles.nix
+    ./roles/home.nix
     ./roles/sshd.nix
     ./roles/sshd-monitor.nix
     ./roles/squid-client.nix
@@ -32,12 +32,12 @@
     jq 
     nix-index
     patchelf
-    powershell
     python310 
     python310Packages.pip
     unzip
     vim
     wireguard-tools
+    zsh
   ];
 
   # Enable Docker 
@@ -52,7 +52,7 @@
     home = "/home/heywoodlh";
     description = "Spencer Heywood";
     extraGroups = [ "wheel" ];
-    shell = pkgs.powershell;
+    shell = pkgs.zsh;
   };
 
   # Allow heywoodlh to run sudo commands without password

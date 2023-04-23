@@ -65,18 +65,23 @@
     
     font = {
       normal = {
-        family = "Iosevka Nerd Font Mono";
+        family = "JetBrainsMono Nerd Font Mono";
+        style = "Medium";
       };
       bold = {
-        family = "Iosevka Nerd Font Mono";
+        family = "JetBrainsMono Nerd Font Mono";
+        style = "Medium";
       };
       italic = {
-        family = "Iosevka Nerd Font Mono";
+        family = "JetBrainsMono Nerd Font Mono";
+        style = "Medium";
       };
       bold_italic = {
-        family = "Iosevka Nerd Font Mono";
+        family = "JetBrainsMono Nerd Font Mono";
+        style = "Medium";
       };
       size = 14;
+      builtin_box_drawing = true;
     };
     window = {
       decorations = "none";

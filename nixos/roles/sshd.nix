@@ -12,7 +12,7 @@
 
   services.openssh = {
     enable = true;
-    sftpServerExecutable = "internal-sftp";
+    #sftpServerExecutable = "internal-sftp";
     settings.permitRootLogin = "prohibit-password";
     settings.PasswordAuthentication = false;
   };

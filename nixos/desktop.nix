@@ -130,14 +130,13 @@
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     shell = pkgs.powershell;
-    packages = import ../roles/packages.nix { inherit config; inherit pkgs; }; 
   };
 
   environment.homeBinInPath = true;
   environment.shells = [ 
     pkgs.bashInteractive
     pkgs.powershell
-    "/etc/profiles/per-user/heywoodlh/bin/tmux"
+    "/home/heywoodlh/.nix-profile/bin/tmux"
   ];
 
   # Bluetooth settings
@@ -149,10 +148,12 @@
   # Home-manager settings specific for Linux
   home-manager.users.heywoodlh = {
     home.stateVersion = "22.11";
+    home.packages = import ../roles/home-manager/packages.nix { inherit config; inherit pkgs; }; 
+    programs.password-store = import ../roles/home-manager/pass.nix { inherit config; inherit pkgs; }; 
     # Dconf/GNOME settings
-    dconf.settings = import ../roles/gnome/dconf.nix { inherit config; inherit pkgs; };
+    dconf.settings = import ../roles/home-manager/gnome/dconf.nix { inherit config; inherit pkgs; };
     # Firefox settings
-    programs.firefox = import ../roles/firefox/linux.nix { inherit config; inherit pkgs; };
+    programs.firefox = import ../roles/home-manager/firefox/linux.nix { inherit config; inherit pkgs; };
   };
   # End home-manager config
 }

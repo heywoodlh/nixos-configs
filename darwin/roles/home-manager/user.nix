@@ -33,5 +33,5 @@
     };
   }; 
 
-  programs.firefox = import ../../../roles/firefox/darwin.nix { inherit config; inherit pkgs; };
+  programs.firefox = import ../../../roles/home-manager/firefox/darwin.nix { inherit config; inherit pkgs; };
 }

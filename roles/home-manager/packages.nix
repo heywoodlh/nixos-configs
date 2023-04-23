@@ -22,7 +22,6 @@ with pkgs; [
   go
   ffmpeg
   file
-  firefox
   fzf
   gcc
   git
@@ -71,15 +70,9 @@ with pkgs; [
   olm
   openssl
   pandoc
-  pass 
-  (pass.withExtensions (ext: with ext; 
-  [ 
-    pass-otp 
-  ])) 
   pciutils
   peru
   pinentry-curses
-  pinentry-gnome
   pinentry-rofi
   plexamp
   pomerium-cli

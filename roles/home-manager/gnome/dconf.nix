@@ -7,7 +7,7 @@
   "apps/guake/general" = {
     abbreviate-tab-names = false;
     compat-delete = "delete-sequence";
-    default-shell = "/etc/profiles/per-user/heywoodlh/bin/tmux";
+    default-shell = "/home/heywoodlh/.nix-profile/bin/tmux";
     display-n = 0;
     display-tab-names = 0;
     gtk-prefer-dark-theme = true;

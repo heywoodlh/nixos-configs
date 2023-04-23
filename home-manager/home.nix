@@ -13,11 +13,12 @@
   };
   home.username = "heywoodlh";
   home.homeDirectory = "/home/heywoodlh";
-  home.packages = import ../roles/packages.nix { inherit config; inherit pkgs; };
+  programs.password-store = import ../roles/home-manager/pass.nix { inherit config; inherit pkgs; };
+  home.packages = import ../roles/home-manager/packages.nix { inherit config; inherit pkgs; };
   # Dconf/GNOME settings
-  dconf.settings = import ../roles/gnome/dconf.nix { inherit config; inherit pkgs; };
+  dconf.settings = import ../roles/home-manager/gnome/dconf.nix { inherit config; inherit pkgs; };
   # Firefox settings
-  programs.firefox = import ../roles/firefox/linux.nix { inherit config; inherit pkgs; };
+  programs.firefox = import ../roles/home-manager/firefox/linux.nix { inherit config; inherit pkgs; };
 
   home.stateVersion = "22.11";
 }

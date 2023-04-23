@@ -213,9 +213,9 @@
     ctrl + shift - b : ~/bin/macos-battpop.sh 
     
     ctrl + cmd - s : ~/bin/bwmenu 
-    cmd - space : ~/bin/choose-launcher.sh 
+    cmd - space : ~/bin/choose-launcher.zsh 
     # Launch Alacritty
-    ctrl + alt - t : /Applications/Alacritty.app/Contents/MacOS/alacritty
-    cmd - return : /Applications/Alacritty.app/Contents/MacOS/alacritty 
+    ctrl + alt - t : /opt/homebrew/bin/alacritty
+    cmd - return : /opt/homebrew/bin/alacritty 
   '';
 }

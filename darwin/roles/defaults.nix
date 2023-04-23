@@ -13,7 +13,10 @@
     bashInteractive
     freshfetch
     zsh
-    powershell
+  ];
+
+  environment.systemPackages = with pkgs; [
+    zsh
   ];
 
   # add nerd fonts

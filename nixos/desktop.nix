@@ -1,9 +1,10 @@
 { config, pkgs, home-manager, nur, ... }:
 
-{
+let 
+  username = "heywoodlh";
+in {
   imports = [ 
-    home-manager.nixosModule
-    ./roles/home.nix
+    ./roles/home-manager/settings.nix
   ];
 
   # Import nur as nixpkgs.overlays
@@ -91,15 +92,15 @@
     };
     syncthing = {
       enable = true;
-      user = "heywoodlh";
-      dataDir = "/home/heywoodlh/Sync";
-      configDir = "/home/heywoodlh/.config/syncthing";
+      user = "${username}";
+      dataDir = "/home/${username}/Sync";
+      configDir = "/home/${username}/.config/syncthing";
     };
   };
 
   # Virtualbox
-  users.extraGroups.vboxusers.members = [ "heywoodlh" ];
-  users.extraGroups.disk.members = [ "heywoodlh" ];
+  users.extraGroups.vboxusers.members = [ "${username}" ];
+  users.extraGroups.disk.members = [ "${username}" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -121,22 +122,21 @@
   };
 
   fonts.fonts = with pkgs; [
-    (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" ]; })
+    (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" "JetBrainsMono" ]; })
   ];
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.heywoodlh = {
+  users.users.${username} = {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = pkgs.powershell;
+    shell = pkgs.zsh;
   };
 
   environment.homeBinInPath = true;
   environment.shells = [ 
     pkgs.bashInteractive
     pkgs.powershell
-    "/home/heywoodlh/.nix-profile/bin/tmux"
+    "/run/current-system/sw/bin/zsh"
   ];
 
   # Bluetooth settings
@@ -145,15 +145,6 @@
     General = { ControllerMode = "dual"; } ;
   };
 
-  # Home-manager settings specific for Linux
-  home-manager.users.heywoodlh = {
-    home.stateVersion = "22.11";
-    home.packages = import ../roles/home-manager/packages.nix { inherit config; inherit pkgs; }; 
-    programs.password-store = import ../roles/home-manager/pass.nix { inherit config; inherit pkgs; }; 
-    # Dconf/GNOME settings
-    dconf.settings = import ../roles/home-manager/gnome/dconf.nix { inherit config; inherit pkgs; };
-    # Firefox settings
-    programs.firefox = import ../roles/home-manager/firefox/linux.nix { inherit config; inherit pkgs; };
-  };
-  # End home-manager config
+  # Home-manager configs
+  home-manager.users.${username} = import ./roles/home-manager/desktop.nix;
 }

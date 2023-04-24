@@ -1,8 +1,10 @@
 { config, pkgs, ... }:
 
-{
+let
+  username = "heywoodlh";
+in {
   imports = [
-    ./roles/home.nix
+    ./roles/home-manager/settings.nix
     ./roles/sshd.nix
     ./roles/sshd-monitor.nix
     ./roles/squid-client.nix
@@ -54,6 +56,9 @@
     extraGroups = [ "wheel" ];
     shell = pkgs.zsh;
   };
+
+  # Set home-manager configs for username
+  home-manager.users.${username} = import ./roles/home-manager/no-desktop.nix;
 
   # Allow heywoodlh to run sudo commands without password
   security.sudo.wheelNeedsPassword = false;

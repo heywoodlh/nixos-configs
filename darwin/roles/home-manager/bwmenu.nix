@@ -1,7 +1,7 @@
 ''
   #!/usr/bin/env bash
   # Choose extension for Bitwarden-cli
-  PATH="/opt/homebrew/bin:/Users/heywoodlh/.nix-profile/bin:/etc/profiles/per-user/heywoodlh/bin:/run/current-system/sw/bin:$PATH"
+  PATH="/opt/homebrew/bin:/Users/$USER/.nix-profile/bin:/etc/profiles/per-user/$USER/bin:/run/current-system/sw/bin:$PATH"
   NAME="$(basename "$0")"
   VERSION="0.4.1"
   DEFAULT_CLEAR=15

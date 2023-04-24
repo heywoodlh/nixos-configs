@@ -10,4 +10,6 @@
   nixpkgs.overlays = [ 
     nur.overlay 
   ];
+
+  home.stateVersion = "23.05";
 }

@@ -1,10 +1,6 @@
 { config, pkgs, home-manager, ... }:
 
 {
-  imports = [
-    ./roles/dotfiles.nix
-  ];
-
   # Import nur
   nixpkgs.config.packageOverrides = pkgs: {
     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
@@ -13,12 +9,16 @@
   };
   home.username = "heywoodlh";
   home.homeDirectory = "/home/heywoodlh";
-  programs.password-store = import ../roles/home-manager/pass.nix { inherit config; inherit pkgs; };
-  home.packages = import ../roles/home-manager/packages.nix { inherit config; inherit pkgs; };
-  # Dconf/GNOME settings
-  dconf.settings = import ../roles/home-manager/gnome/dconf.nix { inherit config; inherit pkgs; };
-  # Firefox settings
-  programs.firefox = import ../roles/home-manager/firefox/linux.nix { inherit config; inherit pkgs; };
 
-  home.stateVersion = "22.11";
+  # home-manager shared configs
+  dconf.settings =  import ../roles/home-manager/gnome/dconf.nix { inherit config; inherit pkgs; };
+  home.packages =  import ../roles/home-manager/packages.nix { inherit config; inherit pkgs; }; 
+  programs.alacritty =  import ../roles/home-manager/alacritty.nix { inherit config; inherit pkgs; };
+  programs.firefox =  import ../roles/home-manager/firefox/linux.nix { inherit config; inherit pkgs; };
+  programs.password-store =  import ../roles/home-manager/pass.nix { inherit config; inherit pkgs; }; 
+  programs.tmux =  import ../roles/home-manager/tmux.nix { inherit config; inherit pkgs; };
+  programs.vim =  import ../roles/home-manager/vim.nix { inherit config; inherit pkgs; };
+  programs.zsh =  import ../roles/home-manager/zsh.nix { inherit config; inherit pkgs; };
+
+  home.stateVersion = "23.05";
 }

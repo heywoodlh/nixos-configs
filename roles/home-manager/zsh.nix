@@ -88,7 +88,6 @@
       "rbw"
       "ssh-agent"
       "sudo"
-      "tmux"
     ];
     theme = "apple";
   };

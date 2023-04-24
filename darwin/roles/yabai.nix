@@ -5,9 +5,6 @@
   services.yabai.package = pkgs.yabai;
   services.yabai.enableScriptingAddition = false;
   services.yabai.extraConfig = ''
-    yabai -m config status_bar                   off
-    yabai -m config mouse_follows_focus          off
-    yabai -m config focus_follows_mouse          on
     yabai -m config window_placement             first_child
     yabai -m config window_topmost               off
     yabai -m config window_opacity               off
@@ -215,7 +212,7 @@
     ctrl + cmd - s : ~/bin/bwmenu 
     cmd - space : ~/bin/choose-launcher.zsh 
     # Launch Alacritty
-    ctrl + alt - t : /opt/homebrew/bin/alacritty
-    cmd - return : /opt/homebrew/bin/alacritty 
+    ctrl + alt - t : open -a Alacritty.app
+    cmd - return : open -a Alacritty.app
   '';
 }

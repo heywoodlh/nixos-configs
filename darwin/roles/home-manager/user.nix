@@ -40,10 +40,14 @@
       	echo 'Please install choose. Exiting.'
       fi
       
-      selection=$(find "''${application_dirs[@]}" -name "*.app" 2&>/dev/null | rev | cut -d/ -f1 | rev | /usr/bin/sort -u | choose)
+      selection=$(for dir in ''${application_dirs[@]}; do ls ''${dir};done | grep ".app" | rev | cut -d/ -f1 | rev | /usr/bin/sort -u | choose)
       
       open -a "''${selection}"
     '';
     executable = true;
   };
+  home.file.".config/iterm2/iterm2-profiles.json" = {
+    text = import ./iterm2-profiles.nix;
+  };
+
 }

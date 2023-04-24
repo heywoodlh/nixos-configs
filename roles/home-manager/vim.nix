@@ -2,7 +2,6 @@
 
 {
   enable = true;
-
   extraConfig = ''
     syntax on
     

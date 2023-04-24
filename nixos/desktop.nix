@@ -133,9 +133,10 @@ in {
   };
 
   environment.homeBinInPath = true;
+  programs.zsh.enable = true;
   environment.shells = [ 
     pkgs.bashInteractive
-    pkgs.powershell
+    pkgs.zsh
     "/run/current-system/sw/bin/zsh"
   ];
 

@@ -47,7 +47,8 @@ in {
     docker.enable = true;
   };
 
-  # Define user
+  # Define use
+  programs.zsh.enable = true;
   users.users.heywoodlh = {
     isNormalUser = true;
     uid = 1000;

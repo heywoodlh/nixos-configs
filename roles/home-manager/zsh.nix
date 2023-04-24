@@ -50,14 +50,12 @@
       #NixOS specific config
       if grep -q 'ID=nixos' /etc/os-release
       then
-        is_nixos = "true"
-      fi
-      if [[ $is_nixos == "true" ]]
-      then
+        alias sudo="/run/wrappers/bin/sudo $@"
         function nixos-switch {
           git -C ~/opt/nixos-configs pull origin master
-          sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure
+          /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure
         }
+      # All other Linux distros managed with Nix
       else
         function home-switch {
           git -C ~/opt/nixos-configs pull origin master

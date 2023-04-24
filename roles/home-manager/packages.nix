@@ -94,7 +94,7 @@ with pkgs; [
   tree
   unzip
   uxplay
-  vim
+  #vim # managed with vim.nix
   virt-manager
   vultr-cli
   w3m

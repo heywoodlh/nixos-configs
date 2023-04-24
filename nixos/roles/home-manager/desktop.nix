@@ -1,6 +1,7 @@
 { config, pkgs, home-manager, ... }:
 
 {
+  home.stateVersion = "23.05";
   dconf.settings = import ../../../roles/home-manager/gnome/dconf.nix { inherit config; inherit pkgs; };
   home.packages = import ../../../roles/home-manager/packages.nix { inherit config; inherit pkgs; }; 
   programs.alacritty = import ../../../roles/home-manager/alacritty.nix { inherit config; inherit pkgs; };

@@ -65,6 +65,10 @@
     fi
   '';
 
+  shellAliases = {
+    ssh-unlock = "bw get item ssh/id_rsa | jq -r .notes | ssh-add -t 4h -";
+  };
+
   # Enable oh-my-zsh
   oh-my-zsh = {
     enable = true;

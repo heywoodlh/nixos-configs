@@ -108,7 +108,7 @@
     switch-to-workspace-right = ["<Super>bracketright"];
     switch-input-source = ["disabled"];
     switch-input-source-backward = ["disabled"];
-    toggle-maximized = "['<Super>m']";
+    toggle-maximized = ["<Super>Up"];
     unmaximize = ["disabled"];
   };
   "org/gnome/desktop/wm/preferences" = {

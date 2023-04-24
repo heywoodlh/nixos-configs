@@ -20,5 +20,19 @@
   programs.vim =  import ../roles/home-manager/vim.nix { inherit config; inherit pkgs; };
   programs.zsh =  import ../roles/home-manager/zsh.nix { inherit config; inherit pkgs; };
 
+  home.file.".config/rbw/config.json" = {
+    text = ''
+      {
+        "email": "l.spencer.heywood@protonmail.com",
+        "base_url": null,
+        "identity_url": null,
+        "lock_timeout": 3600,
+        "pinentry": "pinentry-gnome3",
+        "client_cert_path": null
+      }
+    '';
+  };
+
+
   home.stateVersion = "23.05";
 }

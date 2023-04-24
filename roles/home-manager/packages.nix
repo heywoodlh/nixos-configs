@@ -73,7 +73,7 @@ with pkgs; [
   pandoc
   pciutils
   peru
-  pinentry-curses
+  pinentry-gnome
   pinentry-rofi
   plexamp
   pomerium-cli

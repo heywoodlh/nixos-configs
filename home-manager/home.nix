@@ -39,5 +39,9 @@
     text = import ../roles/home-manager/rofi/config.rasi.nix;
   };
 
+  # Work better on other Linux distributions
+  targets.genericLinux.enable = true;
+  font.fontconfig.enable = true;
+
   home.stateVersion = "23.05";
 }

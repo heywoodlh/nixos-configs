@@ -47,7 +47,13 @@
     executable = true;
   };
   home.file.".config/iterm2/iterm2-profiles.json" = {
-    text = import ./iterm2-profiles.nix;
+    text = import ./iterm/iterm2-profiles.nix;
   };
-
+  home.file.".config/iterm2/com.googlecode.iterm2.plist" = {
+    text = import ./iterm/com.googlecode.iterm2.plist.nix;
+  };
+  home.file."bin/bwmenu" = {
+    text = import ./bwmenu.nix;
+    executable = true;
+  };
 }

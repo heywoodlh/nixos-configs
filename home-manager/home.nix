@@ -32,7 +32,12 @@
       }
     '';
   };
-
+  home.file.".config/rofi/nord.rasi" = {
+    text = import ../roles/home-manager/rofi/nord.rasi.nix;
+  };
+  home.file.".config/rofi/config.rasi" = {
+    text = import ../roles/home-manager/rofi/config.rasi.nix;
+  };
 
   home.stateVersion = "23.05";
 }

@@ -18,7 +18,7 @@ in {
   users.users.${username} = import ../roles/user.nix { inherit config; inherit pkgs; };
 
   # Set home-manager configs for username
-  home-manager.users.${username} = import ../roles/home-manager/user.nix;
+  home-manager.users.${username} = import ../../roles/home-manager/darwin.nix;
 
   # Set hostname
   networking.hostName = "${hostname}";

@@ -123,6 +123,8 @@
               username = "heywoodlh";
               homeDirectory = "/home/heywoodlh";
             };
+            fonts.fontconfig.enable = true;
+            targets.genericLinux.enable = true;
           }
         ];
         extraSpecialArgs = inputs;

@@ -2,6 +2,13 @@
 
 {
   home.stateVersion = "22.11";
+  nix = {
+    package = pkgs.nix;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
+
   # Import nur as nixpkgs.overlays
   nixpkgs.overlays = [ 
     nur.overlay 

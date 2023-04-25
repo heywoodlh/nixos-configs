@@ -11,7 +11,7 @@ in {
     ../roles/brew.nix
     ../roles/yabai.nix
     ../roles/network.nix
-    ../roles/home-manager/settings.nix
+    ../../roles/home-manager/darwin/settings.nix
   ];
 
   # Define user settings

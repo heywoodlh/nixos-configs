@@ -328,11 +328,10 @@
       then
         source ~/.zsh.d/custom
       fi
+      
+      # Set ssh-unlock if it's not already set
+      alias | grep -q ssh-unlock || alias ssh-unlock="bw get item ssh/id_rsa | jq -r .notes | ssh-add -t 4h -"
     '';
-  
-    shellAliases = {
-      ssh-unlock = "bw get item ssh/id_rsa | jq -r .notes | ssh-add -t 4h -";
-    };
   
     # Enable oh-my-zsh
     oh-my-zsh = {

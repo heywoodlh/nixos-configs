@@ -2,6 +2,6 @@
 
 {
   home.packages = [
-    (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" "JetBrainsMono" ]; })
+    (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
   ];
 }

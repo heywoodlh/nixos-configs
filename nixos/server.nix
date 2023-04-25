@@ -1,10 +1,8 @@
 { config, pkgs, ... }:
 
-let
-  username = "heywoodlh";
-in {
+{
   imports = [
-    ./roles/home-manager/settings.nix
+    ../roles/home-manager/linux/no-desktop.nix
     ./roles/sshd.nix
     ./roles/sshd-monitor.nix
     ./roles/squid-client.nix
@@ -59,7 +57,7 @@ in {
   };
 
   # Set home-manager configs for username
-  home-manager.users.${username} = import ./roles/home-manager/no-desktop.nix;
+  home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix;
 
   # Allow heywoodlh to run sudo commands without password
   security.sudo.wheelNeedsPassword = false;

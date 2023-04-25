@@ -257,7 +257,6 @@
     openssl
     pandoc
     pciutils
-    peru
     pinentry-gnome
     pinentry-rofi
     plexamp
@@ -266,7 +265,6 @@
     procmail
     pwgen
     python310
-    pkgs.python310Packages.upass
     qemu-utils
     rbw
     rofi

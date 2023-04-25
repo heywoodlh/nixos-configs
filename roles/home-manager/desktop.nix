@@ -323,6 +323,11 @@
       export EDITOR="vim"
       export PAGER="less"
       export PATH="$HOME/.nix-profile/bin:/etc/profiles/per-user/heywoodlh/bin:/run/current-system/sw/bin:$PATH"
+
+      if [[ -e ~/.zsh.d/custom ]]
+      then
+        source ~/.zsh.d/custom
+      fi
     '';
   
     shellAliases = {

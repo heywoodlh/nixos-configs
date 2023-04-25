@@ -6,6 +6,13 @@
     ./firefox/darwin.nix
   ];
 
+  nix = {
+    package = lib.mkForce pkgs.nix;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
+
   programs.zsh = {
     initExtra = ''
       # MacOS specific ZSH config

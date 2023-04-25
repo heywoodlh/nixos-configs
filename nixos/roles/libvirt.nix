@@ -10,8 +10,11 @@
     qemu
   ];
 
+  services.virtqemud.enable = true;
+
   virtualisation.libvirtd = {
     enable = true;
+    onBoot = "start";
     qemu.ovmf = {
       enable = true;
       packages = [ pkgs.OVMFFull.fd ];

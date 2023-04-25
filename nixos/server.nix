@@ -1,12 +1,20 @@
-{ config, pkgs, ... }:
+{ config, pkgs, home-manager, nur, ... }:
 
 {
   imports = [
+    home-manager.nixosModule
     ../roles/home-manager/linux/no-desktop.nix
     ./roles/sshd.nix
     ./roles/sshd-monitor.nix
     ./roles/squid-client.nix
     ./roles/tailscale.nix
+  ];
+
+  home-manager.useGlobalPkgs = true;
+
+  # Import nur as nixpkgs.overlays
+  nixpkgs.overlays = [ 
+    nur.overlay 
   ];
   
   # Allow non-free applications to be installed
@@ -22,6 +30,8 @@
     autoPatchelfHook
     bind
     busybox
+    nur.repos.fedx.cockpit-machines
+    nur.repos.fedx.cockpit-podman
     croc
     file
     gcc
@@ -58,6 +68,12 @@
 
   # Set home-manager configs for username
   home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix;
+
+  # Enable cockpit
+  services.cockpit = {
+    enable = true;
+    openFirewall = true;
+  };
 
   # Allow heywoodlh to run sudo commands without password
   security.sudo.wheelNeedsPassword = false;

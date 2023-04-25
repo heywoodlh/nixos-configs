@@ -6,6 +6,7 @@
     ./hardware-configuration.nix
     ../../server.nix
     ../../roles/libvirt.nix
+    ../../roles/cockpit.nix
   ];
 
   # Bootloader.

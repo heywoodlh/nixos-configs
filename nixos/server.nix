@@ -30,8 +30,6 @@
     autoPatchelfHook
     bind
     busybox
-    nur.repos.fedx.cockpit-machines
-    nur.repos.fedx.cockpit-podman
     croc
     file
     gcc
@@ -68,12 +66,6 @@
 
   # Set home-manager configs for username
   home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix;
-
-  # Enable cockpit
-  services.cockpit = {
-    enable = true;
-    openFirewall = true;
-  };
 
   # Allow heywoodlh to run sudo commands without password
   security.sudo.wheelNeedsPassword = false;

@@ -2,7 +2,6 @@
 
 {
   #package config
-  nix.package = pkgs.nix;
   nixpkgs.config.allowUnfree = true;
 
   services.activate-system.enable = true;

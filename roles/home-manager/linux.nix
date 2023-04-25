@@ -483,7 +483,7 @@
         else
           function home-switch {
             git -C ~/opt/nixos-configs pull origin master
-            nix --extra-experimental-features "nix-command flakes" run github:heywoodlh/nixos-configs#homeConfigurations.$(whoami).activationPackage --impure
+            nix run ~/opt/nixos-configs#homeConfigurations.$(whoami).activationPackage --impure
           } 
         fi
       fi

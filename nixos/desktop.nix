@@ -1,11 +1,11 @@
 { config, pkgs, home-manager, nur, ... }:
 
-let 
-  username = "heywoodlh";
-in {
+{
   imports = [ 
-    ./roles/home-manager/settings.nix
+    home-manager.nixosModule
   ];
+
+  home-manager.useGlobalPkgs = true;
 
   # Import nur as nixpkgs.overlays
   nixpkgs.overlays = [ 
@@ -92,15 +92,15 @@ in {
     };
     syncthing = {
       enable = true;
-      user = "${username}";
-      dataDir = "/home/${username}/Sync";
-      configDir = "/home/${username}/.config/syncthing";
+      user = "heywoodlh";
+      dataDir = "/home/heywoodlh/Sync";
+      configDir = "/home/heywoodlh/.config/syncthing";
     };
   };
 
   # Virtualbox
-  users.extraGroups.vboxusers.members = [ "${username}" ];
-  users.extraGroups.disk.members = [ "${username}" ];
+  users.extraGroups.vboxusers.members = [ "heywoodlh" ];
+  users.extraGroups.disk.members = [ "heywoodlh" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -125,7 +125,7 @@ in {
     (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" "JetBrainsMono" ]; })
   ];
 
-  users.users.${username} = {
+  users.users.heywoodlh = {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
@@ -147,5 +147,5 @@ in {
   };
 
   # Home-manager configs
-  home-manager.users.${username} = import ./roles/home-manager/desktop.nix;
+  home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix { inherit config; inherit pkgs; inherit home-manager; };
 }

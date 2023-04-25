@@ -23,8 +23,8 @@
         config = {
           allowUnfree = true;
         };
-      };
-    in {
+      }; 
+    in rec {
     # macos targets
     darwinConfigurations = {
       "nix-macbook-air" = darwin.lib.darwinSystem {
@@ -97,27 +97,35 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-backups/configuration.nix ];
       };
+      # Used in CI
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/generic-intel/configuration.nix ];
       };
+      # Used in CI
       nixos-server-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/generic-intel-server/configuration.nix ];
       };
     };
-
-    # home-manager targets (non NixOS/MacOS, ideally Ubuntu x86_64) 
+    # home-manager targets (non NixOS/MacOS, ideally Arch Linux) 
     homeConfigurations = {
+      # Used in CI
       heywoodlh = home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs (nixpkgsDefaults // { system = "x86_64-linux"; });
         #pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        extraSpecialArgs = inputs;
         modules = [
-          ./home-manager/home.nix
+          ./roles/home-manager/linux.nix
+          {
+            home = {
+              username = "heywoodlh";
+              homeDirectory = "/home/heywoodlh";
+            };
+          }
         ];
+        extraSpecialArgs = inputs;
       };
     };
   };

@@ -118,13 +118,13 @@
         #pkgs = nixpkgs.legacyPackages."x86_64-linux";
         modules = [
           ./roles/home-manager/linux.nix
+          ./roles/home-manager/non-nixos.nix
           {
             home = {
               username = "heywoodlh";
               homeDirectory = "/home/heywoodlh";
             };
             fonts.fontconfig.enable = true;
-            targets.genericLinux.enable = true;
           }
         ];
         extraSpecialArgs = inputs;

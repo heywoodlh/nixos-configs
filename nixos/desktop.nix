@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, ... }:
+{ config, pkgs, lib, home-manager, nur, ... }:
 
 {
   imports = [ 
@@ -99,16 +99,13 @@
   };
 
   # Virtualbox
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
   users.extraGroups.vboxusers.members = [ "heywoodlh" ];
   users.extraGroups.disk.members = [ "heywoodlh" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # So that `nix search` works
-  nix.extraOptions = '' 
-    extra-experimental-features = nix-command flakes
-  '';
 
   networking.firewall = {
     enable = true;
@@ -147,5 +144,5 @@
   };
 
   # Home-manager configs
-  home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix { inherit config; inherit pkgs; inherit home-manager; };
+  home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix { inherit config; inherit pkgs; inherit home-manager; inherit lib; };
 }

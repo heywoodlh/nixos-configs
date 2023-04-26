@@ -328,6 +328,16 @@
       then
         source ~/.zsh.d/custom
       fi
+
+      check_ssh () {
+        ssh_symbol = ""
+        [[ -n $SSH_CONNECTION ]] && echo "''${ssh_symbol}[$(whoami)@$(hostname)]"
+      }
+
+      theme_precmd () {
+        check_ssh
+        vcs_info
+      }
       
       # Set ssh-unlock if it's not already set
       alias | grep -q ssh-unlock || alias ssh-unlock="bw get item ssh/id_rsa | jq -r .notes | ssh-add -t 4h -"

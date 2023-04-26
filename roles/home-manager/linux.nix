@@ -1,10 +1,17 @@
-{ config, pkgs, home-manager, ... }:
+{ config, pkgs, lib, home-manager, ... }:
 
 {
   imports = [
     ./desktop.nix
     ./firefox/linux.nix
   ];
+  # So that `nix search` works
+  nix = lib.mkForce {
+    package = pkgs.nix;
+    extraOptions = '' 
+      extra-experimental-features = nix-command flakes
+    '';
+  };
 
   dconf.settings = {
     "org/gnome/desktop/input-sources" = {

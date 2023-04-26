@@ -3,7 +3,7 @@
   # Choose extension for Bitwarden-cli
   PATH="/opt/homebrew/bin:/Users/$USER/.nix-profile/bin:/etc/profiles/per-user/$USER/bin:/run/current-system/sw/bin:$PATH"
   NAME="$(basename "$0")"
-  VERSION="0.4.1"
+  VERSION="0.4.2"
   DEFAULT_CLEAR=15
   BW_HASH=
   
@@ -30,42 +30,42 @@
   DEDUP_MARK="(+)"
   
   check_keychain() {
-    if ! security list-keychains | grep -iq bitwarden_choose
+    if ! /usr/bin/security list-keychains | grep -iq bitwarden_choose
     then
-      password=$(osascript -e 'Tell application "System Events" to display dialog "Enter Bitwarden Vault Password:" with hidden answer default answer ""' -e 'text returned of result')
-      if ! echo -n $password | bw unlock --raw &>/dev/null
+      password=$(/usr/bin/osascript -e 'Tell application "System Events" to display dialog "Enter Bitwarden Vault Password:" with hidden answer default answer ""' -e 'text returned of result')
+      if ! /bin/echo -n $password | bw unlock --raw &>/dev/null
       then
         exit_error $? "Could not unlock vault" 
       fi
-      security create-keychain -p "$password" bitwarden_choose
-      security list-keychains -s $(security list-keychains | xargs) bitwarden_choose 
-      security set-keychain-settings -lut "$AUTO_LOCK" bitwarden_choose
+      /usr/bin/security create-keychain -p "$password" bitwarden_choose
+      /usr/bin/security list-keychains -s $(/usr/bin/security list-keychains | /usr/bin/xargs) bitwarden_choose 
+      /usr/bin/security set-keychain-settings -lut "$AUTO_LOCK" bitwarden_choose
     fi
   }
   
   ask_password() {
     if [[ -z "$password" ]]
     then
-      mpw=$(osascript -e 'Tell application "System Events" to display dialog "Enter Bitwarden Vault Password:" with hidden answer default answer ""' -e 'text returned of result') || exit $?
+      mpw=$(/usr/bin/osascript -e 'Tell application "System Events" to display dialog "Enter Bitwarden Vault Password:" with hidden answer default answer ""' -e 'text returned of result') || exit $?
     else
       mpw="$password"
     fi
-    echo -n "$mpw" | bw unlock --raw 2>/dev/null || exit_error $? "Could not unlock vault"
+    /bin/echo -n "$mpw" | bw unlock --raw 2>/dev/null || exit_error $? "Could not unlock vault"
   }
   
   get_session_key() {
     if [ $AUTO_LOCK -eq 0 ]
     then
-      if security list-keychains | grep -iq bitwarden_choose
+      if /usr/bin/security list-keychains | grep -iq bitwarden_choose
       then
         lock_vault
       fi
       BW_HASH=$(ask_password)
     else
-      if ! BW_HASH=$(security find-generic-password -a $USER -s bw_session -w bitwarden_choose 2>/dev/null)
+      if ! BW_HASH=$(/usr/bin/security find-generic-password -a $USER -s bw_session -w bitwarden_choose 2>/dev/null)
       then
         BW_HASH=$(ask_password)
-        security add-generic-password -a $USER -s bw_session -w "$BW_HASH" bitwarden_choose &>/dev/null
+        /usr/bin/security add-generic-password -a $USER -s bw_session -w "$BW_HASH" bitwarden_choose &>/dev/null
         [[ -z "$BW_HASH" ]] && exit_error 1 "Could not unlock vault"
       fi
     fi
@@ -76,7 +76,7 @@
   load_items() {
     if ! ITEMS=$(bw list items --session "$BW_HASH" 2>/dev/null)
     then
-      security delete-generic-password -a $USER -s bw_session bitwarden_choose
+      /usr/bin/security delete-generic-password -a $USER -s bw_session bitwarden_choose
       exit_error $? "Could not load items. Deleting cookie."
     fi
   }
@@ -85,39 +85,39 @@
     local code="$1"
     local message="$2"
   
-    osascript -e "tell app "System Events" to display dialog "$message""
+    /usr/bin/osascript -e "tell app "System Events" to display dialog "$message""
     exit "$code"
   }
   
   choose_mode() {
-    CHOOSE_MODE=$(printf "passwordntotpnnotesnusernamenresyncnlock" | choose -n6 $CHOOSE_OPTIONS)
+    CHOOSE_MODE=$(printf "password\\ntotp\\nnotes\\nusername\\nresync\\nlock" | choose -n6 $CHOOSE_OPTIONS)
   }
   
   show_password_items() {
-    echo "$ITEMS" | jq -r '.[] | select( has( "login" ) ) | "(.name), ((.id))"'
+    /bin/echo "$ITEMS" | jq -r '.[] | select( has( "login" ) ) | "\(.name),\(.id)"'
   }
   
   show_username_items() {
-    echo "$ITEMS" | jq -r '.[] | select(.login.username != null) | "(.name), ((.id))"'
+    /bin/echo "$ITEMS" | jq -r '.[] | select(.login.username != null) | "\(.name),\(.id)"'
   }
   
   show_totp_items() {
-    echo "$ITEMS" | jq -r '.[] | select(.login.totp != null) | "(.name), ((.id))"'
+    /bin/echo "$ITEMS" | jq -r '.[] | select(.login.totp != null) | "\(.name),\(.id)"'
   }
   
   show_note_items() {
-    echo "$ITEMS" | jq -r '.[] | select(.notes != null) | "(.name), ((.id))"'
+    /bin/echo "$ITEMS" | jq -r '.[] | select(.notes != null) | "\(.name),\(.id)"'
   }
   
   get_secret() {
     id=$1
     key=$2
-    echo "$ITEMS" | jq -r ".[] | select( .id=="$id" ) | "$key""
+    /bin/echo "$ITEMS" | jq -r ".[] | select( .id==\"$id\" ) | $key"
   }
   
   notify-send() {
     message="$1"
-    osascript -e "display notification "$message" with title "Bitwarden-Choose""
+    /usr/bin/osascript -e "display notification \"$message\" with title \"Bitwarden-Choose\""
   }
   
   # re-sync the BitWarden items with the server
@@ -130,12 +130,12 @@
   }
   
   clipboard-clear() {
-    echo -n "" | pbcopy 
+    /bin/echo -n "" | pbcopy 
   }
   
   # Lock the vault by purging the key used to store the session hash
   lock_vault() {
-    security delete-generic-password -a $USER -s bw_session bitwarden_choose
+    /usr/bin/security delete-generic-password -a $USER -s bw_session bitwarden_choose
   }
   
   choose_menu() {
@@ -162,21 +162,25 @@
     then
       lock_vault
     fi
-  
+    [[ "$VERBOSE" == "yes" ]] && /bin/echo "SELECTION_KEY: ''${SELECTION_KEY}" 
     if [[ -n "$SELECTION" ]]
     then
-      SELECTION_ID=$(echo "$SELECTION" |  awk -F "[()]" '{ for (i=2; i<NF; i+=2) print $i }')
+      [[ "$VERBOSE" == "yes" ]] && /bin/echo "SELECTION: ''${SELECTION}"
+      SELECTION_ID=$(/bin/echo "$SELECTION" | /usr/bin/awk -F, '{print substr($NF, 1)}') 
+      [[ "$VERBOSE" == "yes" ]] && /bin/echo "SELECTION_ID: ''${SELECTION_ID}"
       if [[ "$CHOOSE_MODE" != "totp" ]]
       then
+        [[ "$VERBOSE" == "yes" ]] && /bin/echo "[RUN] /bin/echo \"\$(bw list items --session "$BW_HASH" 2>/dev/null)\" | jq -r \".[] | select( .id==\\\"$SELECTION_ID\\\" ) | $SELECTION_KEY\""
         SECRET=$(get_secret "$SELECTION_ID" "$SELECTION_KEY")
       else
+        [[ "$VERBOSE" == "yes" ]] && /bin/echo "[RUN] bw get totp \"$SELECTION_ID\" --session \"$BW_HASH\""
         SECRET=$(bw get totp "$SELECTION_ID" --session "$BW_HASH")
       fi
       if [[ "$SHOW_PASSWORD" == "yes" ]]
       then
         notify-send "$SECRET"
       else
-        echo -n "$SECRET" | pbcopy
+        /bin/echo -n "$SECRET" | pbcopy
         notify-send "Copying secret to clipboard for $CLEAR seconds"
         if [[ $CLEAR -gt 0 ]]
         then
@@ -239,8 +243,8 @@
           shift
           exit 0
           ;;
-        --version )
-          echo "$NAME $VERSION"
+        -v | --version )
+          /bin/echo "$NAME $VERSION"
           shift
           exit 0
           ;;
@@ -258,6 +262,10 @@
           ;;
         --show-password )
           SHOW_PASSWORD=yes
+          shift
+          ;;
+        --verbose )
+          VERBOSE=yes
           shift
           ;;
         -- )

@@ -331,7 +331,7 @@
 
       check_ssh () {
         ssh_symbol=""
-        [[ -n $SSH_CONNECTION ]] && echo "''${ssh_symbol}[$(whoami)@$(hostname)]"
+        [[ -n $SSH_CONNECTION ]] && echo $fg[red] $(echo "''${ssh_symbol}[$(whoami)@$(hostname)]")
       }
 
       theme_precmd () {

@@ -330,7 +330,7 @@
       fi
 
       check_ssh () {
-        ssh_symbol = ""
+        ssh_symbol=""
         [[ -n $SSH_CONNECTION ]] && echo "''${ssh_symbol}[$(whoami)@$(hostname)]"
       }
 

@@ -495,6 +495,8 @@
         fi
       fi
     '';
+  };
+  
   home.file.".zshenv".text = lib.mkForce ''
     . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" 
 
@@ -507,6 +509,4 @@
     ZSH="${pkgs.oh-my-zsh}/share/oh-my-zsh";
     ZSH_CACHE_DIR="/var/empty/.cache/oh-my-zsh";
   '';
-
-  };
 }

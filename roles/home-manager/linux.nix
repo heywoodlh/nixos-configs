@@ -495,5 +495,18 @@
         fi
       fi
     '';
+  home.file.".zshenv".text = lib.mkForce ''
+    . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" 
+
+    # Only source this once
+    if [[ -z "$__HM_ZSH_SESS_VARS_SOURCED" ]]
+    then
+      export __HM_ZSH_SESS_VARS_SOURCED=1
+    fi
+    
+    ZSH="${pkgs.oh-my-zsh}/share/oh-my-zsh";
+    ZSH_CACHE_DIR="/var/empty/.cache/oh-my-zsh";
+  '';
+
   };
 }

@@ -42,3 +42,9 @@ Run the following command to use the Home Manager implementation on any Linux di
 ```
 nix --extra-experimental-features "nix-command flakes" run github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh.activationPackage
 ```
+
+For headless Linux machines:
+
+```
+nix --extra-experimental-features "nix-command flakes" run github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage
+```

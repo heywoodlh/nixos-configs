@@ -44,7 +44,7 @@
   };
 
   home.file.".zshenv".text = lib.mkForce ''
-    . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" 
+    [[ -e $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]] && . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" 
 
     # Only source this once
     if [[ -z "$__HM_ZSH_SESS_VARS_SOURCED" ]]

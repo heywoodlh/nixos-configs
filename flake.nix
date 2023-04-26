@@ -118,13 +118,34 @@
         #pkgs = nixpkgs.legacyPackages."x86_64-linux";
         modules = [
           ./roles/home-manager/linux.nix
-          ./roles/home-manager/non-nixos.nix
+          ./roles/home-manager/non-nixos/base.nix
           {
             home = {
               username = "heywoodlh";
               homeDirectory = "/home/heywoodlh";
             };
             fonts.fontconfig.enable = true;
+          }
+        ];
+        extraSpecialArgs = inputs;
+      };
+      heywoodlh-server = home-manager.lib.homeManagerConfiguration {
+        pkgs = import inputs.nixpkgs (nixpkgsDefaults // { system = "x86_64-linux"; });
+        #pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        modules = [
+          ./roles/home-manager/linux.nix
+          ./roles/home-manager/non-nixos/no-desktop.nix
+          ./roles/home-manager/non-nixos/base.nix
+          {
+            home = {
+              username = "heywoodlh";
+              homeDirectory = "/home/heywoodlh";
+            };
+            fonts.fontconfig.enable = true;
+            programs.zsh.shellAliases = {
+              # Override the home-switch function provided in roles/home-manager/linux.nix
+              home-switch = "git -C ~/opt/nixos-configs pull origin master; nix run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure";
+            };
           }
         ];
         extraSpecialArgs = inputs;

@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./desktop.nix
+    ./base.nix
     ./firefox/linux.nix
   ];
   # So that `nix search` works

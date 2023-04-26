@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./desktop.nix
+    ./base.nix
     ./firefox/darwin.nix
   ];
 

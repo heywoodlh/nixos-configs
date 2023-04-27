@@ -8,6 +8,8 @@
     ];
   };
 
+  # Remember to run the following command wto initially setup the bridge:
+  # docker run -it --rm --name=protonmail-bridge -v /opt/protonmail-bridge/data:/root docker.io/shenxn/protonmail-bridge:${image_tag} init
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {

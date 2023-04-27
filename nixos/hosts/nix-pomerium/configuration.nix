@@ -53,6 +53,7 @@
     enable = true;
     systemCronJobs = [
       "0 0 * * Sun      root    /opt/certbot/certbot.sh &> /dev/null"
+      "0 1 * * Sun      root    /opt/heywoodlh.tech-certbot/certbot.sh &> /dev/null"
     ];
   };
 

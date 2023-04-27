@@ -21,8 +21,8 @@ let
   gotify-setup = pkgs.writeScriptBin "gotify-setup" ''
     #!/usr/bin/env bash
     # This script sets up the Gotify configuration file.
-    sudo mkdir -p /etc/gotify
-    sudo gotify init
+    /run/wrappers/bin/sudo mkdir -p /etc/gotify
+    /run/wrappers/bin/sudo gotify init
   '';
 
 in {

@@ -10,14 +10,14 @@ in {
     ../roles/brew.nix
     ../roles/yabai.nix
     ../roles/network.nix
-    ../roles/home-manager/settings.nix
+    ../../roles/home-manager/darwin/settings.nix
   ];
 
   # Define user settings
   users.users.${username} = import ../roles/user.nix { inherit config; inherit pkgs; };
 
   # Set home-manager configs for username
-  home-manager.users.${username} = import ../roles/home-manager/user.nix;
+  home-manager.users.${username} = import ../../roles/home-manager/user.nix;
 
   # Set hostname
   networking.hostName = "${hostname}";

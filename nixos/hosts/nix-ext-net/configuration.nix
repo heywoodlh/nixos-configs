@@ -7,6 +7,7 @@
     ../../server.nix
     ../../roles/pihole.nix
     ../../roles/squid.nix
+    ../../roles/protonmail-bridge.nix
   ];
 
   # Bootloader.

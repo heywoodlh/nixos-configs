@@ -324,6 +324,8 @@
       export PAGER="less"
       export PATH="$HOME/.nix-profile/bin:/etc/profiles/per-user/heywoodlh/bin:/run/current-system/sw/bin:$PATH"
 
+      [[ -e ~/.ssh ]] || mkdir -p -m 700 ~/.ssh
+
       if [[ -e ~/.zsh.d/custom ]]
       then
         source ~/.zsh.d/custom

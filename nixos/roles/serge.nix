@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+  networking.firewall.allowedTCPPorts = [
+    8008
+  ];
+
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {

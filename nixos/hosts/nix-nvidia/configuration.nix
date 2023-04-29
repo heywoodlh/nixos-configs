@@ -34,10 +34,7 @@
   nixpkgs.config.allowUnfree = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    nvidia-docker
-  ];
+  virtualisation.docker.enableNvidia = true;
 
   system.stateVersion = "22.11";
 }

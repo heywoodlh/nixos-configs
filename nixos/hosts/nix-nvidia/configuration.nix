@@ -35,5 +35,9 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;
 
+  environment.systemPackages = with pkgs; [
+    nvidia-docker
+  ];
+
   system.stateVersion = "22.11";
 }

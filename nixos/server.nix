@@ -69,4 +69,7 @@
 
   # Allow heywoodlh to run sudo commands without password
   security.sudo.wheelNeedsPassword = false;
+
+  # Disable wait-online service for Network Manager
+  systemd.services.NetworkManager-wait-online.enable = false;
 }

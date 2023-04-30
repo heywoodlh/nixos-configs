@@ -14,6 +14,9 @@
         environmentFiles = [
           /opt/gotify-convert/gotify-convert.env
         ];
+        extraOptions = [
+          "--tty"
+        ];
       };
     };
   };

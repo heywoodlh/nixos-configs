@@ -12,7 +12,7 @@
           "/etc/localtime:/etc/localtime:ro"
         ];
         environmentFiles = [
-          "/opt/gotify-pushover/gotify-convert.env"
+          "/opt/gotify-convert/gotify-convert.env"
         ];
       };
     };

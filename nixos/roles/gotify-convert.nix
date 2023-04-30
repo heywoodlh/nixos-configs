@@ -8,7 +8,7 @@
         image = "docker.io/heywoodlh/gotify-convert:0.0.1";
         autoStart = true;
         volumes = [
-          "/opt/gotify-pushover/ntfy/ntfy.yml:/etc/ntfy/ntfy.yml"
+          "/opt/gotify-convert/ntfy/ntfy.yml:/etc/ntfy/ntfy.yml"
           "/etc/localtime:/etc/localtime:ro"
         ];
         environmentFiles = [

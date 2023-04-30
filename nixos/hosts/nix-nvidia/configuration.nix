@@ -4,14 +4,9 @@
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../desktop.nix
-    ../../roles/sshd.nix
-    ../../roles/sshd-monitor.nix
-    ../../roles/xrdp.nix
+    ../../server.nix
     ../../roles/libvirt.nix
     ../../roles/serge.nix
-    ../../roles/sunshine.nix
-    ../../roles/squid-client.nix
   ];
 
   # Bootloader.

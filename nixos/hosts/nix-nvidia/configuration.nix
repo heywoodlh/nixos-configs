@@ -4,10 +4,14 @@
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../server.nix
+    ../../desktop.nix
+    ../../roles/sshd.nix
+    ../../roles/sshd-monitor.nix
+    ../../roles/xrdp.nix
     ../../roles/libvirt.nix
     ../../roles/serge.nix
-    ../../roles/sunshine-docker.nix
+    ../../roles/sunshine.nix
+    ../../roles/squid-client.nix
   ];
 
   # Bootloader.
@@ -37,7 +41,6 @@
   hardware.opengl.enable = true;
   hardware.opengl.driSupport32Bit = true;
   virtualisation.docker.enableNvidia = true;
-
 
   environment.systemPackages = with pkgs; [
     ntfs3g

@@ -7,6 +7,7 @@
     ../../server.nix
     ../../roles/libvirt.nix
     ../../roles/serge.nix
+    ../../roles/sunshine-docker.nix
   ];
 
   # Bootloader.

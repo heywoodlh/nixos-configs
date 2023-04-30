@@ -30,12 +30,10 @@
           "/etc/localtime:/etc/localtime:ro"
         ];
         extraOptions = [
-          "--gpus"
-          "all"
-          "--network"
-          "host"
-          "-h"
-          "sunshine-docker"
+          "--gpus=all"
+          "--network=host"
+          "-h=sunshine-docker"
+          "--memory=8g"
         ];
       };
     };

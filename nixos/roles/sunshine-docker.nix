@@ -24,11 +24,6 @@
       sunshine = {
         image = "docker.io/heywoodlh/sunshine:latest";
         autoStart = true;
-        ports = [
-          "47984-47990:47984-47990/tcp"
-          "48010:48010"
-          "47998-48000:47998-48000/udp"
-        ];
         volumes = [
           "/opt/sunshine/config:/config"
           "/opt/sunshine/steam:/steam"
@@ -37,6 +32,8 @@
         extraOptions = [
           "--gpus"
           "all"
+          "--network"
+          "host"
         ];
       };
     };

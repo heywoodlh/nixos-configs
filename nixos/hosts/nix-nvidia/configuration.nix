@@ -38,5 +38,18 @@
   hardware.opengl.driSupport32Bit = true;
   virtualisation.docker.enableNvidia = true;
 
+
+  environment.systemPackages = with pkgs; [
+    ntfs3g
+  ];
+
+  # Support NTFS
+  boot.supportedFilesystems = [ "ntfs" ];
+#  fileSystems."/path/to/mount/to" =
+#    { device = "/path/to/the/device";
+#      fsType = "ntfs3"; 
+#      options = [ "rw" "uid=theUidOfYourUser"];
+#    };
+
   system.stateVersion = "22.11";
 }

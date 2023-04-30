@@ -34,6 +34,8 @@
           "all"
           "--network"
           "host"
+          "-h"
+          "sunshine-docker"
         ];
       };
     };

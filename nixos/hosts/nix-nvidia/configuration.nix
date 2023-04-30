@@ -7,6 +7,7 @@
     ../../server.nix
     ../../roles/libvirt.nix
     ../../roles/serge.nix
+    ../../roles/fauxpilot.nix
   ];
 
   # Bootloader.
@@ -34,8 +35,6 @@
   nixpkgs.config.allowUnfree = true;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;
-  hardware.opengl.driSupport32Bit = true;
-  virtualisation.docker.enableNvidia = true;
 
   environment.systemPackages = with pkgs; [
     ntfs3g

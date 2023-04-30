@@ -44,7 +44,7 @@
           "--model-repository=/model"
         ];
         environment = {
-          NUM_GPUS = 1;
+          NUM_GPUS = "1";
           GPUS = "0";
         };
       };

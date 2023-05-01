@@ -210,6 +210,7 @@
     dante
     docker-client
     docker-compose
+    doctl
     gnome.dconf-editor
     go
     ffmpeg
@@ -256,6 +257,7 @@
     nodejs
     nodePackages.cspell
     lefthook
+    linode-cli
     mosh
     neovim
     nim

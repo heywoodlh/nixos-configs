@@ -9,7 +9,14 @@
 
   # Enable docker-nvidia
   hardware.opengl.driSupport32Bit = true;
-  virtualisation.docker.enableNvidia = true;
+  virtualisation.docker = {
+    enableNvidia = true;
+    extraOptions = ''
+      "--runtime=nvidia"
+      "-e=NVIDIA_DRIVER_CAPABILITIES=compute,utility"
+      "-e=NVIDIA_VISIBLE_DEVICES=all"
+    '';
+  };
 
   system.activationScripts.mkFauxpilotNet = ''
     ${pkgs.docker}/bin/docker network create fauxpilot &2>/dev/null || true

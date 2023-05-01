@@ -17,9 +17,9 @@
 
   system.activationScripts.buildFauxpilot = ''
     mkdir -p /opt/fauxpilot/
-    [[ -d /opt/fauxpilot/src ]] || git clone https://github.com/fauxpilot/fauxpilot.git /opt/fauxpilot/src
-    git -C /opt/fauxpilot/src pull origin main
-    docker build -t local/heywoodlh/fauxpilot:latest /opt/fauxpilot/src -f /opt/fauxpilot/src/triton.Dockerfile
+    [[ -d /opt/fauxpilot/src ]] || ${pkgs.git}/bin/git clone https://github.com/fauxpilot/fauxpilot.git /opt/fauxpilot/src
+    ${pkgs.git}/bin/git -C /opt/fauxpilot/src pull origin main
+    ${pkgs.docker}/bin/docker build -t local/heywoodlh/fauxpilot:latest /opt/fauxpilot/src -f /opt/fauxpilot/src/triton.Dockerfile
   '';
 
   virtualisation.oci-containers = {

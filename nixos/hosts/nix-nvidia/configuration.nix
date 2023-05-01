@@ -48,9 +48,5 @@
       options = [ "rw" "uid=1000"];
     };
 
-  # Enable docker-nvidia
-  hardware.opengl.driSupport32Bit = true;
-  virtualisation.docker.enableNvidia = true;
-
   system.stateVersion = "22.11";
 }

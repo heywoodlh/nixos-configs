@@ -1,32 +1,25 @@
 { config, pkgs, ... }:
 
-# Make sure to set the following configs in your host config:
-#hardware.opengl.driSupport32Bit = true;
-#virtualisation.docker.enableNvidia = true;
-
-let
-  buildFauxpilot = ''
-    mkdir -p /opt/fauxpilot/
-    [[ -d /opt/fauxpilot/src ]] || git clone https://github.com/fauxpilot/fauxpilot.git /opt/fauxpilot/src
-    git -C /opt/fauxpilot/src pull origin main
-    docker build -t local/heywoodlh/fauxpilot:latest /opt/fauxpilot/src -f /opt/fauxpilot/src/triton.Dockerfile
-  '';
-in {
+{
   networking.firewall.allowedTCPPorts = [
     8000
     8001
     8002
   ];
 
-  # Build fauxpilot image before evaluating the rest of the config 
-  config = config // {
-    preModule = ''
-      ${buildFauxpilot}
-    '';
-  };
+  # Enable docker-nvidia
+  hardware.opengl.driSupport32Bit = true;
+  virtualisation.docker.enableNvidia = true;
 
   system.activationScripts.mkFauxpilotNet = ''
     ${pkgs.docker}/bin/docker network create fauxpilot &2>/dev/null || true
+  '';
+
+  system.activationScripts.buildFauxpilot = ''
+    mkdir -p /opt/fauxpilot/
+    [[ -d /opt/fauxpilot/src ]] || git clone https://github.com/fauxpilot/fauxpilot.git /opt/fauxpilot/src
+    git -C /opt/fauxpilot/src pull origin main
+    docker build -t local/heywoodlh/fauxpilot:latest /opt/fauxpilot/src -f /opt/fauxpilot/src/triton.Dockerfile
   '';
 
   virtualisation.oci-containers = {

@@ -41,21 +41,17 @@
         dependsOn = ["copilot-proxy"];
         extraOptions = [
           "--runtime=nvidia"
-          "-e=\"NVIDIA_VISIBLE_DEVICES=all\""
-          "-e=\"NVIDIA_DRIVER_CAPABILITIES=compute,utility\""
           "--network=fauxpilot"
           "--gpus=all"
         ];
         cmd = [
-          "bash"
-          "-c"
-          "\"CUDA_VISIBLE_DEVICES=0"
+          "CUDA_VISIBLE_DEVICES=0"
           "mpirun"
           "-n"
           "1"
           "--allow-run-as-root"
           "/opt/tritonserver/bin/tritonserver"
-          "--model-repository=/model\""
+          "--model-repository=/model"
         ];
         environment = {
           NUM_GPUS = "1";

@@ -45,7 +45,6 @@
           "--gpus=all"
         ];
         cmd = [
-          "CUDA_VISIBLE_DEVICES=0"
           "mpirun"
           "-n"
           "1"
@@ -56,6 +55,7 @@
         environment = {
           NUM_GPUS = "1";
           GPUS = "0";
+          CUDA_VISIBLE_DEVICES = "0";
         };
       };
       copilot-proxy = {

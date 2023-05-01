@@ -11,11 +11,6 @@
   hardware.opengl.driSupport32Bit = true;
   virtualisation.docker = {
     enableNvidia = true;
-    extraOptions = ''
-      "--default-runtime=nvidia"
-      "-e=NVIDIA_DRIVER_CAPABILITIES=compute,utility"
-      "-e=NVIDIA_VISIBLE_DEVICES=all"
-    '';
   };
 
   system.activationScripts.mkFauxpilotNet = ''
@@ -45,6 +40,9 @@
         ];
         dependsOn = ["copilot-proxy"];
         extraOptions = [
+          "--runtime=nvidia"
+          "-e=NVIDIA_VISIBLE_DEVICES=all"
+          "-e=NVIDIA_DRIVER_CAPABILITIES=compute,utility"
           "--network=fauxpilot"
           "--gpus=all"
         ];

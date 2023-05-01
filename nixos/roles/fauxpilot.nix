@@ -49,7 +49,7 @@
         cmd = [
           "bash"
           "-c"
-          "CUDA_VISIBLE_DEVICES=$GPUS"
+          "CUDA_VISIBLE_DEVICES=0"
           "mpirun"
           "-n"
           "1"

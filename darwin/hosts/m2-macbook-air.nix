@@ -29,6 +29,7 @@ in {
   # Applications specific to this machine
   homebrew = {
     casks = [
+      "libreoffice"
       "zoom"
     ];
   };

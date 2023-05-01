@@ -1,11 +1,25 @@
 { config, pkgs, ... }:
 
-{
+let
+  buildFauxpilot = ''
+    mkdir -p /opt/fauxpilot/
+    [[ -d /opt/fauxpilot/src ]] || git clone https://github.com/fauxpilot/fauxpilot.git /opt/fauxpilot/src
+    git -C /opt/fauxpilot/src pull origin main
+    docker build -t local/heywoodlh/fauxpilot:latest /opt/fauxpilot/src -f /opt/fauxpilot/src/triton.Dockerfile
+  '';
+in {
   networking.firewall.allowedTCPPorts = [
     8000
     8001
     8002
   ];
+
+  # Build fauxpilot image before evaluating the rest of the config 
+  config = config // {
+    preModule = ''
+      ${buildFauxpilot}
+    '';
+  };
 
   hardware.opengl.driSupport32Bit = true;
   virtualisation.docker.enableNvidia = true;
@@ -18,7 +32,7 @@
     backend = "docker";
     containers = {
       fauxpilot = {
-        image = "docker.io/heywoodlh/fauxpilot:latest";
+        image = "local/heywoodlh/fauxpilot:latest";
         autoStart = true;
         ports = [
           "8000-8002:8000-8002"

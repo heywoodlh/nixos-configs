@@ -1,5 +1,9 @@
 { config, pkgs, ... }:
 
+# Make sure to set the following configs in your host config:
+#hardware.opengl.driSupport32Bit = true;
+#virtualisation.docker.enableNvidia = true;
+
 let
   buildFauxpilot = ''
     mkdir -p /opt/fauxpilot/
@@ -20,9 +24,6 @@ in {
       ${buildFauxpilot}
     '';
   };
-
-  hardware.opengl.driSupport32Bit = true;
-  virtualisation.docker.enableNvidia = true;
 
   system.activationScripts.mkFauxpilotNet = ''
     ${pkgs.docker}/bin/docker network create fauxpilot &2>/dev/null || true
@@ -45,6 +46,7 @@ in {
         dependsOn = ["copilot-proxy"];
         extraOptions = [
           "--network=fauxpilot"
+          "--gpus=all"
         ];
         cmd = [
           "bash"

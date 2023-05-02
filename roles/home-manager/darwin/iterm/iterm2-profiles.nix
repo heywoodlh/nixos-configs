@@ -17,7 +17,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.75577855110168457
   },
-  "Use Italic Font" : true,
+  "Use Italic Font" : false,
   "HotKey Characters" : "`",
   "Foreground Color" : {
     "Red Component" : 0.81214725971221924,
@@ -293,7 +293,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.29435792565345764
   },
-  "Use Bold Font" : true,
+  "Use Bold Font" : false,
   "Silence Bell" : true,
   "Ansi 12 Color" : {
     "Red Component" : 0.43401443958282471,
@@ -364,7 +364,7 @@
     "Green Component" : 0.19692185521125793
   },
   "Blur" : false,
-  "Normal Font" : "JetBrainsMonoNerdFontCompleteM-Medium 14",
+  "Normal Font" : "JetBrainsMonoNFM-Regular 14",
   "Vertical Spacing" : 1,
   "Ansi 7 Color" : {
     "Red Component" : 0.87367779016494751,
@@ -417,7 +417,7 @@
   "Bound Hosts" : [
 
   ],
-  "Non Ascii Font" : "Monaco 12",
+  "Non Ascii Font" : "JetBrainsMonoNFM-Regular 14",
   "Ansi 13 Color" : {
     "Red Component" : 0.64283657073974609,
     "Color Space" : "Calibrated",

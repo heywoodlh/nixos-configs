@@ -118,7 +118,7 @@
     # home-manager targets (non NixOS/MacOS, ideally Arch Linux) 
     homeConfigurations = {
       # Used in CI
-      heywoodlh = home-manager.lib.homeManagerConfiguration {
+      heywoodlh-desktop-x86_64 = home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs (nixpkgsDefaults // { system = "x86_64-linux"; });
         #pkgs = nixpkgs.legacyPackages."x86_64-linux";
         modules = [
@@ -134,7 +134,23 @@
         ];
         extraSpecialArgs = inputs;
       };
-      heywoodlh-server = home-manager.lib.homeManagerConfiguration {
+      heywoodlh-desktop-aarch64 = home-manager.lib.homeManagerConfiguration {
+        pkgs = import inputs.nixpkgs (nixpkgsDefaults // { system = "aarch64-linux"; });
+        #pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        modules = [
+          ./roles/home-manager/linux.nix
+          ./roles/home-manager/non-nixos/base.nix
+          {
+            home = {
+              username = "heywoodlh";
+              homeDirectory = "/home/heywoodlh";
+            };
+            fonts.fontconfig.enable = true;
+          }
+        ];
+        extraSpecialArgs = inputs;
+      };
+      heywoodlh-server-x86_64 = home-manager.lib.homeManagerConfiguration {
         pkgs = import inputs.nixpkgs (nixpkgsDefaults // { system = "x86_64-linux"; });
         #pkgs = nixpkgs.legacyPackages."x86_64-linux";
         modules = [
@@ -149,7 +165,28 @@
             fonts.fontconfig.enable = true;
             programs.zsh.shellAliases = {
               # Override the home-switch function provided in roles/home-manager/linux.nix
-              home-switch = "git -C ~/opt/nixos-configs pull origin master; nix run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure";
+              home-switch = "git -C ~/opt/nixos-configs pull origin master; nix run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server-$(arch).activationPackage --impure";
+            };
+          }
+        ];
+        extraSpecialArgs = inputs;
+      };
+      heywoodlh-server-aarch64 = home-manager.lib.homeManagerConfiguration {
+        pkgs = import inputs.nixpkgs (nixpkgsDefaults // { system = "aarch64-linux"; });
+        #pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        modules = [
+          ./roles/home-manager/linux.nix
+          ./roles/home-manager/non-nixos/no-desktop.nix
+          ./roles/home-manager/non-nixos/base.nix
+          {
+            home = {
+              username = "heywoodlh";
+              homeDirectory = "/home/heywoodlh";
+            };
+            fonts.fontconfig.enable = true;
+            programs.zsh.shellAliases = {
+              # Override the home-switch function provided in roles/home-manager/linux.nix
+              home-switch = "git -C ~/opt/nixos-configs pull origin master; nix run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server-$(arch).activationPackage --impure";
             };
           }
         ];

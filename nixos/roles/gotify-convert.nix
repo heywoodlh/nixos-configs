@@ -16,6 +16,7 @@
         ];
         extraOptions = [
           "--tty"
+          "--hostname=gotify-convert"
         ];
       };
     };

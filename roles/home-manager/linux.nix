@@ -83,11 +83,11 @@ in {
       disable-user-extensions = false;
       disabled-extensions = ["disabled"];
       enabled-extensions = [
+        "caffeine@patapon.info"
+        "gsconnect@andyholmes.github.io"
+        "just-perfection-desktop@just-perfection"
         "native-window-placement@gnome-shell-extensions.gcampax.github.com"
         "pop-shell@system76.com"
-        "caffeine@patapon.info"
-        "hidetopbar@mathieu.bidon.ca"
-        "gsconnect@andyholmes.github.io"
       ];
       favorite-apps = ["firefox.desktop" "alacritty.desktop"];
       had-bluetooth-devices-setup = true;
@@ -97,9 +97,35 @@ in {
     "org/gnome/mutter" = {
       dynamic-workspaces = false;
     };
-    "org/gnome/shell/extensions/hidetopbar" = {
-      enable-active-window = false;
-      enable-intellihide = false; 
+    "org/gnome/shell/extensions/just-perfection" = {
+      accessibility-menu = true;
+      app-menu = true;
+      app-menu-icon = true;
+      background-menu = false;
+      controls-manager-spacing-size = 22;
+      dash = false;
+      dash-icon-size = 0;
+      double-super-to-appgrid = false;
+      gesture = false;
+      hot-corner = true;
+      osd = false;
+      panel = false;
+      panel-arrow = true;
+      panel-corner-size = 1;
+      panel-in-overview = false;
+      ripple-box = false;
+      search = false;
+      show-apps-button = true;
+      startup-status = 0;
+      theme = true;
+      window-demands-attention-focus = true;
+      window-picker-icon = false;
+      window-preview-caption = false;
+      window-preview-close-button = false;
+      workspace = false;
+      workspace-background-corner-size = 15;
+      workspace-popup = false;
+      workspaces-in-app-grid = false;
     };
     "org/gnome/desktop/interface" = {
       clock-show-seconds = true;
@@ -232,10 +258,9 @@ in {
     gnome.gnome-tweaks
     gnomeExtensions.caffeine
     gnomeExtensions.gsconnect
-    gnomeExtensions.hide-top-bar
+    gnomeExtensions.just-perfection
     gnomeExtensions.pop-shell
     gnomeExtensions.tray-icons-reloaded
-    gnomeExtensions.zilence
     gnumake
     gnupg
     go

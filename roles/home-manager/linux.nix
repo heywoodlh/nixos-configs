@@ -1,6 +1,12 @@
 { config, pkgs, lib, home-manager, ... }:
 
-{
+let
+  pbcopy = pkgs.writeShellScriptBin "pbcopy" ''
+    #!/usr/bin/env zsh
+    read input
+    echo ''${input} | xclip -selection clipboard
+  '';
+in {
   imports = [
     ./base.nix
     ./firefox/linux.nix
@@ -265,6 +271,7 @@
     olm
     openssl
     pandoc
+    pbcopy
     pciutils
     pinentry-gnome
     pinentry-rofi

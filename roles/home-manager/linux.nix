@@ -492,7 +492,8 @@
         else
           function home-switch {
             git -C ~/opt/nixos-configs pull origin master
-            nix run ~/opt/nixos-configs#homeConfigurations.$(whoami)-desktop-$(arch).activationPackage --impure
+            mkdir -p ~/opt/nix
+            nix run ~/opt/nixos-configs#homeConfigurations.$(whoami)-desktop-$(arch).activationPackage --impure -p ~/opt/nix/current
           } 
         fi
       fi

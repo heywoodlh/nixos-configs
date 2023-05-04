@@ -356,10 +356,8 @@
 
       [[ -e ~/.ssh ]] || mkdir -p -m 700 ~/.ssh
 
-      if [[ -e ~/.zsh.d/custom ]]
-      then
-        source ~/.zsh.d/custom
-      fi
+      [[ -e ~/.zsh.d/functions ]] && source ~/.zsh.d/functions
+      [[ -e ~/.zsh.d/custom ]] && source ~/.zsh.d/custom
 
       check_ssh () {
         ssh_symbol=""
@@ -397,5 +395,8 @@
       ];
       theme = "apple";
     };
+  };
+  home.file.".zsh.d/functions" = {
+    text = import ./zsh.d/functions.nix;
   };
 }

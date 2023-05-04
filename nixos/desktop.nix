@@ -98,9 +98,15 @@
     };
   };
 
-  # Virtualbox
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
+  # Virtualization
+  virtualisation = {
+    virtualbox.host.enable = true;
+    virtualbox.host.enableExtensionPack = true;
+    docker.rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
   users.extraGroups.vboxusers.members = [ "heywoodlh" ];
   users.extraGroups.disk.members = [ "heywoodlh" ];
 

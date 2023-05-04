@@ -312,6 +312,36 @@
       vim-terraform
     ];
   };
+
+  programs.vscode = {
+    enable = true;
+    enableExtensionUpdateCheck = false;
+    enableUpdateCheck = false;
+    extensions = with pkgs.vscode-extensions; [
+      arcticicestudio.nord-visual-studio-code
+      eamodio.gitlens
+      github.copilot
+      jnoortheen.nix-ide
+      ms-python.python
+      vscodevim.vim
+    ];
+    keybindings = [
+      {
+        key = "ctrl+t";
+        command = "workbench.action.terminal.toggleTerminal";
+      }
+      {
+        key = "ctrl+n";
+        command = "workbench.action.toggleSidebarVisibility";
+      }
+    ];
+    userSettings = {
+      "editor.fontFamily" = "'JetBrainsMono Nerd Font Mono', 'monospace', 'Droid Sans Mono', 'monospace', 'Droid Sans Fallback'";
+      "telemetry.enableTelemetry" = false;
+      "workbench.colorTheme" = "Nord";
+    };
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;

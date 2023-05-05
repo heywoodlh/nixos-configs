@@ -72,4 +72,11 @@
 
   # Disable wait-online service for Network Manager
   systemd.services.NetworkManager-wait-online.enable = false;
+
+
+  nix.gc = {
+    automatic = true;
+    dates = "daily";
+    options = "--delete-older-than 7d";
+  };
 }

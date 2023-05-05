@@ -149,6 +149,12 @@
     General = { ControllerMode = "dual"; } ;
   };
 
+  nix.gc = {
+    automatic = true;
+    dates = "daily";
+    options = "--delete-older-than 7d";
+  };
+
   # Home-manager configs
   home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix { inherit config; inherit pkgs; inherit home-manager; inherit lib; };
 }

@@ -15,9 +15,13 @@
       flake = false;
     };
     nur.url = "github:nix-community/NUR";
+    nix-on-droid = {
+      url = "github:t184256/nix-on-droid";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, ... }: 
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, nix-on-droid, ... }: 
     let
       nixpkgsDefaults = {
         config = {
@@ -192,6 +196,10 @@
         ];
         extraSpecialArgs = inputs;
       };
+    };
+
+    nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
+      modules = [ ./nixos/droid.nix ];
     };
   };
 }

@@ -114,6 +114,7 @@
     ];
     casks = [
       "alacritty"
+      "android-platform-tools"
       "bitwarden"
       "blockblock"
       "brave-browser"

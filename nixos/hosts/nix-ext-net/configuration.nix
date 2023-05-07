@@ -27,6 +27,25 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 
+  # Enable mullvad wireguard
+  networking.wg-quick.interfaces = {
+    shadow = {
+      address = [ "10.66.216.224/32" ];
+      privateKeyFile = "/root/wgkey";
+      listenPort = 51820;
+
+      peers = [
+        {
+          publicKey = "vkbSMnaddVm4YWkuuf8rOSc45XTfpVLJEom0FaJWq2g=";
+          allowedIPs = [ "10.64.0.1/24" ];
+          endpoint = "69.4.234.141:51820";
+          persistentKeepalive = 25;
+        }
+      ];
+    };
+  };
+
+
   # Enable auto upgrade
   system.autoUpgrade = {
     enable = true;

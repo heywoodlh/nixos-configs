@@ -46,26 +46,25 @@
   };
 
   # Forward port 1080 to tailscale interface to mullvad
-  networking.firewall = {
-    allowedTCPPorts = [
-      1080
-    ];
-    extraCommands = ''
-      iptables -A FORWARD -i tailscale0 -o mullvad -p tcp --syn --dport 1080 -m conntrack --ctstate NEW -j ACCEPT -w
-      iptables -A FORWARD -i tailscale0 -o mullvad -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT -w
-      iptables -A FORWARD -i mullvad -o tailscale0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT -w
-      iptables -t nat -A PREROUTING -i tailscale0 -p tcp --dport 1080 -j DNAT --to-destination 10.64.0.1 -w
-      iptables -t nat -A POSTROUTING -o mullvad -p tcp --dport 1080 -d 10.64.0.1 -j SNAT --to-source 100.113.9.57 -w
-    '';
-    extraStopCommands = ''
-      iptables -D FORWARD -i tailscale0 -o mullvad -p tcp --syn --dport 1080 -m conntrack --ctstate NEW -j ACCEPT -w
-      iptables -D FORWARD -i tailscale0 -o mullvad -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT -w
-      iptables -D FORWARD -i mullvad -o tailscale0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT -w
-      iptables -t nat -D PREROUTING -i tailscale0 -p tcp --dport 1080 -j DNAT --to-destination 10.64.0.1 -w
-      iptables -t nat -D POSTROUTING -o mullvad -p tcp --dport 1080 -d 10.64.0.1 -j SNAT --to-source 100.113.9.57 -w
-    '';
+  networking = {
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 1080 ];
+      extraCommands = "iptables -t nat -A POSTROUTING -d 10.64.0.1 -p tcp -m tcp --dport 1080 -j MASQUERADE";
+    };
+    nat = {
+      enable = true;
+      internalInterfaces = [ "mullvad" ];
+      externalInterface = "tailscale0";
+      forwardPorts = [
+        {
+          sourcePort = 1080;
+          proto = "tcp";
+          destination = "10.64.0.1:1080";
+        }
+      ];
+    };
   };
-
 
   # Enable auto upgrade
   system.autoUpgrade = {

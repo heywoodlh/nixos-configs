@@ -31,6 +31,8 @@
       "findutils"
       "fzf"
       "gcc"
+      "git"
+      "git-lfs"
       "gitleaks"
       "glib"
       "glow"

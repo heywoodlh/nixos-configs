@@ -290,8 +290,8 @@
       " Ignore case with search
       set ignorecase smartcase
 
-      " Use the system clipboard on MacOS/Linux
-      clipboard=unnamedplus
+      " Use the system clipboard on Windows/MacOS/Linux
+      set clipboard^=unnamed,unnamedplus
     '';
   
     plugins = with pkgs.vimPlugins; [

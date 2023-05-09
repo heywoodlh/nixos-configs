@@ -287,8 +287,11 @@
       " Convert tabs to spaces
       set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
       
-      " Ignore case
+      " Ignore case with search
       set ignorecase smartcase
+
+      " Use the system clipboard on MacOS/Linux
+      clipboard=unnamedplus
     '';
   
     plugins = with pkgs.vimPlugins; [
@@ -337,7 +340,11 @@
     ];
     userSettings = {
       "editor.fontFamily" = "'JetBrainsMono Nerd Font Mono', 'monospace', 'Droid Sans Mono', 'monospace', 'Droid Sans Fallback'";
+      "remote.SSH.useLocalServer" = false;
       "telemetry.enableTelemetry" = false;
+      "terminal.integrated.macOptionIsMeta" = true;
+      "terminal.integrated.shellIntegration.enabled" = true;
+      "vim.useSystemClipboard" = true;
       "workbench.colorTheme" = "Nord";
     };
   };

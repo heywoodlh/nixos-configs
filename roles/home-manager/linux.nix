@@ -282,8 +282,8 @@ in {
     gotify-cli
     gotify-desktop
     guake
+    home-manager
     htop
-    hyper
     inotify-tools
     jq
     k9s

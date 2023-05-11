@@ -169,9 +169,8 @@
       
       bind a send-prefix
       
-      # vim-copy
+      # vim-selection
       bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
-      bind-key -T copy-mode-vi 'y' send-keys -X copy-pipe-and-cancel 'pbcopy'
       
       # Status bar
       set -g status off
@@ -180,6 +179,7 @@
     '';
     plugins = with pkgs.tmuxPlugins; [
       nord
+      yank
     ];
   };
   programs.vim = {

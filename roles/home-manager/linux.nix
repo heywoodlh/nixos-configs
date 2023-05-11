@@ -94,6 +94,12 @@ in {
       remember-mount-password = false;
       welcome-dialog-last-shown-version = "42.4";
     };
+    "org/gnome/shell/keybindings" = {
+      switch-to-application-1 = "disabled";
+      switch-to-application-2 = "disabled";
+      switch-to-application-3 = "disabled";
+      switch-to-application-4 = "disabled";
+    };
     "org/gnome/mutter" = {
       dynamic-workspaces = false;
     };
@@ -147,8 +153,16 @@ in {
       move-to-monitor-left = ["disabled"];
       move-to-monitor-right = ["disabled"];
       move-to-monitor-up = ["disabled"];
+      move-to-workspace-1 = ["<Shift><Super>1"];
+      move-to-workspace-2 = ["<Shift><Super>2"];
+      move-to-workspace-3 = ["<Shift><Super>3"];
+      move-to-workspace-4 = ["<Shift><Super>4"];
       move-to-workspace-down = ["disabled"];
       move-to-workspace-up = ["disabled"];
+      switch-to-workspace-1 = ["<Super>1"];
+      switch-to-workspace-2 = ["<Super>2"];
+      switch-to-workspace-3 = ["<Super>3"];
+      switch-to-workspace-4 = ["<Super>4"];
       switch-to-workspace-left = ["<Super>bracketleft"];
       switch-to-workspace-right = ["<Super>bracketright"];
       switch-input-source = ["disabled"];
@@ -269,8 +283,8 @@ in {
     gotify-cli
     gotify-desktop
     guake
+    home-manager
     htop
-    hyper
     inotify-tools
     jq
     k9s

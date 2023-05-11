@@ -36,10 +36,10 @@ backup	root@nix-tools.tailscale:/home/	nix-tools/
 backup	root@nix-tools.tailscale:/opt/	nix-tools/
 backup	root@nix-tools.tailscale:/root/	nix-tools/
 
-backup	root@arch-precision.tailscale:/etc/	arch-precision/
-backup	root@arch-precision.tailscale:/home/	arch-precision/
-backup	root@arch-precision.tailscale:/opt/	arch-precision/
-backup	root@arch-precision.tailscale:/root/	arch-precision/
+backup	root@nix-precision.tailscale:/etc/	nix-precision/
+backup	root@nix-precision.tailscale:/home/	nix-precision/
+backup	root@nix-precision.tailscale:/opt/	nix-precision/
+backup	root@nix-precision.tailscale:/root/	nix-precision/
 
 backup	root@tools.tailscale:/etc/	tools/
 backup	root@tools.tailscale:/home/	tools/
@@ -61,6 +61,16 @@ backup	root@matrix.tailscale:/home/	matrix/
 backup	root@matrix.tailscale:/opt/	matrix/
 backup	root@matrix.tailscale:/root/	matrix/
 backup	root@matrix.tailscale:/matrix/	matrix/
+
+backup	root@nix-ext-net.tailscale:/etc/	nix-ext-net/
+backup	root@nix-ext-net.tailscale:/home/	nix-ext-net/
+backup	root@nix-ext-net.tailscale:/opt/	nix-ext-net/
+backup	root@nix-ext-net.tailscale:/root/	nix-ext-net/
+
+backup	root@nix-nvidia.tailscale:/etc/	nix-nvidia/
+backup	root@nix-nvidia.tailscale:/home/	nix-nvidia/
+backup	root@nix-nvidia.tailscale:/opt/	nix-nvidia/
+backup	root@nix-nvidia.tailscale:/root/	nix-nvidia/
     '';
   };
 }

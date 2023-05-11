@@ -100,8 +100,6 @@
 
   # Virtualization
   virtualisation = {
-    virtualbox.host.enable = true;
-    virtualbox.host.enableExtensionPack = true;
     docker.rootless = {
       enable = true;
       setSocketVariable = true;

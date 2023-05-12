@@ -7,7 +7,7 @@
     ../../server.nix
     ../../roles/libvirt.nix
     ../../roles/cockpit.nix
-    ../../roles/iperf3.nix
+    ../../roles/iperf.nix
   ];
 
   # Bootloader.

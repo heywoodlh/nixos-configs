@@ -266,6 +266,7 @@ in {
     git
     github-cli
     gitleaks
+    git-lfs
     glib.dev
     glow
     gnome.gnome-terminal

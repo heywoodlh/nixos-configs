@@ -11,6 +11,7 @@
     ../../roles/gotify.nix
     ../../roles/gotify-convert.nix
     ../../roles/iperf.nix
+    ../../roles/http-proxy-pac.nix
   ];
 
   # Bootloader.

@@ -10,6 +10,7 @@
     ../../roles/protonmail-bridge.nix
     ../../roles/gotify.nix
     ../../roles/gotify-convert.nix
+    ../../roles/iperf3.nix
   ];
 
   # Bootloader.

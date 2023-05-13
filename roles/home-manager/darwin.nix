@@ -35,7 +35,7 @@
 
       function darwin-switch {
         git -C ~/opt/nixos-configs pull origin master
-        darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure
+        darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
       }
     '';
     oh-my-zsh.plugins = [

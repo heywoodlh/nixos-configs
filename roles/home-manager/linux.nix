@@ -33,7 +33,7 @@
       mouse-display = true;
       open-tab-cwd = true;
       prompt-on-quit = true;
-      quick-open-command-line = "gedit %(file_path)s";
+      quick-open-command-line = "code %(file_path)s";
       restore-tabs-notify = false;
       restore-tabs-startup = false;
       save-tabs-when-changed = false;
@@ -125,7 +125,7 @@
       workspace = false;
       workspace-background-corner-size = 15;
       workspace-popup = false;
-      workspaces-in-app-grid = false;
+      workspaces-in-app-grid = true;
     };
     "org/gnome/desktop/interface" = {
       clock-show-seconds = true;
@@ -526,14 +526,14 @@
           alias sudo="/run/wrappers/bin/sudo $@"
           function nixos-switch {
             git -C ~/opt/nixos-configs pull origin master
-            /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure
+            /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
           }
         # All other Linux distros managed with Nix
         else
           function home-switch {
             git -C ~/opt/nixos-configs pull origin master
             mkdir -p ~/opt/nix
-            nix run ~/opt/nixos-configs#homeConfigurations.$(whoami)-desktop-$(arch).activationPackage --impure
+            nix run ~/opt/nixos-configs#homeConfigurations.$(whoami)-desktop-$(arch).activationPackage --impure $@
           } 
         fi
       fi

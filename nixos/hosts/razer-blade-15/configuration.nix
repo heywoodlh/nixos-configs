@@ -7,7 +7,6 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../desktop.nix
-      ../../../roles/gnome-boxes.nix
     ];
   
   boot.kernelParams = [ "button.lid_init_state=open" ];

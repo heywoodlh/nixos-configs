@@ -101,12 +101,12 @@
       accessibility-menu = true;
       app-menu = true;
       app-menu-icon = true;
-      background-menu = false;
+      background-menu = true;
       controls-manager-spacing-size = 22;
-      dash = false;
+      dash = true;
       dash-icon-size = 0;
-      double-super-to-appgrid = false;
-      gesture = false;
+      double-super-to-appgrid = true;
+      gesture = true;
       hot-corner = true;
       osd = false;
       panel = false;
@@ -115,16 +115,16 @@
       panel-in-overview = false;
       ripple-box = false;
       search = false;
-      show-apps-button = true;
+      show-apps-button = false;
       startup-status = 0;
       theme = true;
       window-demands-attention-focus = true;
       window-picker-icon = false;
-      window-preview-caption = false;
-      window-preview-close-button = false;
+      window-preview-caption = true;
+      window-preview-close-button = true;
       workspace = false;
       workspace-background-corner-size = 15;
-      workspace-popup = false;
+      workspace-popup = true;
       workspaces-in-app-grid = false;
     };
     "org/gnome/desktop/interface" = {

@@ -105,6 +105,45 @@
       };
     };
   }; 
+
+  programs.git = {
+    enable = true;
+    extraConfig = {
+      user = {
+          email = "l.spencer.heywood@protonmail.com";
+          name = "Spencer Heywood";
+      };
+      core = {
+          editor = "vim";
+          autocrlf = "input";
+          whitespace = "cr-at-eol";
+          pager = "less -+F";
+      };
+      mergetool = {
+          prompt = "false";
+      };
+      merge = {
+          tool = "vimdiff";
+          conflictstyle = "diff3";
+      };
+      color = {
+          ui = "auto";
+      };
+      diff = {
+          renames = "copies";
+      };
+      push = {
+          default = "simple";
+      };
+      format = {
+          pretty = "%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset";
+      };
+      pull = {
+          rebase = "false";
+      };
+    };
+  };
+
   programs.password-store = {
     enable = true;
     package = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
@@ -374,7 +413,7 @@
       }
       
       # Set ssh-unlock if it's not already set
-      alias | grep -q ssh-unlock || alias ssh-unlock="bw get item ssh/id_rsa | jq -r .notes | ssh-add -t 4h -"
+      alias | grep -q ssh-unlock || alias ssh-unlock="bw get item 01451f67-ca4d-4912-95b6-af8f016e101f | jq -r .notes | ssh-add -t 4h -"
     '';
   
     # Enable oh-my-zsh

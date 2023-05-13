@@ -24,12 +24,6 @@
 
   # Set hostname
   networking.hostName = "nix-razer"; 
-  # Set DNS
-  networking.nameservers = [ "10.50.50.1" ];
-  environment.etc = {
-    "resolv.conf".text = "nameserver 10.50.50.1\n";
-  };
-
 
   # Set your time zone.
   time.timeZone = "America/Denver";
@@ -53,32 +47,6 @@
     };
   };
 
-  # Create wireguard on demand service
-  systemd.services = {
-    wireguard = {
-      enable = true;
-      description = "Wireguard on Demand Service";
-      unitConfig = {
-        Type = "simple";
-      };
-      serviceConfig = {
-        ExecStart = "/opt/scripts/wireguard.sh";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
-    wireguard-wired = {
-      enable = true;
-      description = "Wireguard on Demand Wired Service";
-      unitConfig = {
-        Type = "simple";
-      };
-      serviceConfig = {
-        ExecStart = "/opt/scripts/wireguard-wired.sh";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
-  };
-  
   # Set version of NixOS to target 
   system.stateVersion = "22.11";
 }

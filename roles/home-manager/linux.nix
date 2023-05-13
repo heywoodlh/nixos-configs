@@ -112,7 +112,7 @@
       panel = false;
       panel-arrow = true;
       panel-corner-size = 1;
-      panel-in-overview = false;
+      panel-in-overview = true;
       ripple-box = false;
       search = false;
       show-apps-button = false;

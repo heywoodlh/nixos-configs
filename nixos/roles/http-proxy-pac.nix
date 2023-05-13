@@ -2,7 +2,7 @@
 
 {
   networking.firewall.allowedTCPPorts = [
-    1080
+    1085
   ];
 
   environment.etc."proxy.pac" = {

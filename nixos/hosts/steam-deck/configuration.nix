@@ -65,6 +65,8 @@
       options = [ "nofail" "x-systemd.automount" ];
     };
   };
+  
+  environment.systemPackages = [ pkgs.moonlight-qt ];
 
   system.stateVersion = "22.11";
 

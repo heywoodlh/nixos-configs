@@ -71,7 +71,7 @@
       allow-bold = true;
       palette = "#3B3B42425252:#BFBF61616A6A:#A3A3BEBE8C8C:#EBEBCBCB8B8B:#8181A1A1C1C1:#B4B48E8EADAD:#8888C0C0D0D0:#E5E5E9E9F0F0:#4C4C56566A6A:#BFBF61616A6A:#A3A3BEBE8C8C:#EBEBCBCB8B8B:#8181A1A1C1C1:#B4B48E8EADAD:#8F8FBCBCBBBB:#ECECEFEFF4F4:#D8D8DEDEE9E9:#2E2E34344040";
       palette-name = "Nord";
-      style = "JetBrainsMono Nerd Font 14";
+      style = "JetBrainsMono Nerd Font 12";
     };
     "org/gnome/shell" = {
       disable-user-extensions = false;

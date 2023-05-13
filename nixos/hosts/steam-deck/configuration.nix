@@ -18,14 +18,14 @@
 
   i18n.defaultLocale = "en_US.utf8";
 
-  systemd.services.wireguard = {
-    enable = true;
-    description = "Wireguard on Demand Service";
-    serviceConfig = {
-      ExecStart = "/opt/scripts/wireguard.sh";
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
+  #systemd.services.wireguard = {
+  #  enable = true;
+  #  description = "Wireguard on Demand Service";
+  #  serviceConfig = {
+  #    ExecStart = "/opt/scripts/wireguard.sh";
+  #  };
+  #  wantedBy = [ "multi-user.target" ];
+  #};
 
   users.users.heywoodlh = {
     openssh.authorizedKeys.keys = [ 
@@ -44,10 +44,6 @@
     allowedUDPPortRanges = [
       { from = 60000; to = 61000; }
     ];
-  };
-
-  networking.firewall.interfaces.shadow-internal = {
-    allowedTCPPorts = [ 8384 ];
   };
 
   services.syncthing.guiAddress = "0.0.0.0:8384";

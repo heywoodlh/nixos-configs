@@ -32,7 +32,7 @@
   "datareporting.policy.dataSubmissionEnabled" = false;
   "network.allow-experiments" = false;
   "network.proxy.no_proxies_on" = "localhost,127.0.0.1,.lan,.wireguard,.kube,.heywoodlh.tech,google.com,.okta.com,okta.com,.amazon.com,amazon.com,.mychg.com,mychg.com,chghealthcare.com,office.com,.office.com,microsoft.com,.microsoft.com,.atlassian.com,atlassian.com,jira.com,.jira.com,amazonaws.com,.amazonaws.com,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,paypal.com,.paypal.com,unity.com,awsapps.com,.awsapps.com,.wired,chat.openai.com,heywoodlh.tech,.tailscale";
-  "network.proxy.socks" = "nix-ext-net.tailscale";
+  "network.proxy.socks" = "100.113.9.57";
   "network.proxy.socks_port" = 1080;
   #"network.proxy.type" = 1;
   "signon.rememberSignons" = false;

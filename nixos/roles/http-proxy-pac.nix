@@ -20,7 +20,7 @@
               return "DIRECT";
           
            // Proxy traffic if none of the rules above match
-           return "SOCKS 10.64.0.1:1080";
+           return "SOCKS 100.113.9.57:1085";
       }
     '';
   };
@@ -31,7 +31,7 @@
       http-proxy-pac = {
         image = "docker.io/httpd:latest";
         autoStart = true;
-        ports = ["1080:80"];
+        ports = ["1085:80"];
         volumes = [
           "/etc/proxy.pac:/usr/local/apache2/htdocs/proxy.pac"
         ];

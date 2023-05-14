@@ -5,7 +5,6 @@
     ./hardware-configuration.nix 
     ../../roles/steam-deck.nix
     ../../desktop.nix
-    ../../roles/xrdp.nix
   ];
 
 
@@ -67,7 +66,9 @@
     };
   };
   
-  environment.systemPackages = [ pkgs.moonlight-qt ];
+  home.heywoodlh.home.packages = with pkgs; [ 
+    pkgs.moonlight-qt
+  ];
 
   system.stateVersion = "22.11";
 

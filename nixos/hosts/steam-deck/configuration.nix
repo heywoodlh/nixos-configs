@@ -66,7 +66,7 @@
     };
   };
   
-  home.heywoodlh.home.packages = with pkgs; [ 
+  home-manager.users.heywoodlh.home.packages = with pkgs; [ 
     pkgs.moonlight-qt
   ];
 

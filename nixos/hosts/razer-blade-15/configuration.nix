@@ -46,7 +46,10 @@
     };
   };
 
-  environment.systemPackages = [ pkgs.rustdesk ];
+  environment.systemPackages = [ 
+    pkgs.remmina
+    pkgs.rustdesk
+  ];
 
   # Set version of NixOS to target 
   system.stateVersion = "22.11";

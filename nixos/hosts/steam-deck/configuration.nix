@@ -5,7 +5,7 @@
     ./hardware-configuration.nix 
     ../../roles/steam-deck.nix
     ../../desktop.nix
-    ../../xrdp.nix
+    ../../roles/xrdp.nix
   ];
 
 

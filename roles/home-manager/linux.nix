@@ -82,6 +82,7 @@
         "just-perfection-desktop@just-perfection"
         "native-window-placement@gnome-shell-extensions.gcampax.github.com"
         "pop-shell@system76.com"
+        "user-theme@gnome-shell-extensions.gcampax.github.com"
       ];
       favorite-apps = ["firefox.desktop" "alacritty.desktop"];
       had-bluetooth-devices-setup = true;
@@ -96,6 +97,9 @@
     };
     "org/gnome/mutter" = {
       dynamic-workspaces = false;
+    };
+    "org/gnome/shell/extensions/user-theme" = {
+      name = "Nordic-darker";
     };
     "org/gnome/shell/extensions/just-perfection" = {
       accessibility-menu = true;
@@ -210,9 +214,9 @@
       binding = "<Ctrl><Super>s";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
-      name = "rofi launcher";
-      command = "rofi -theme nord -show run -display-run 'run: '";
-      binding = "<Super>space";
+      name = "ulauncher";
+      command = "ulauncher";
+      binding = "<Super>Space";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
       binding = "<Ctrl><Shift>s";
@@ -235,6 +239,7 @@
   home.packages = with pkgs; [
     acpi
     alacritty
+    albert
     appimage-run
     aerc
     ansible
@@ -310,14 +315,11 @@
     pinentry-rofi
     plexamp
     pomerium-cli
-    powershell
     procmail
     pwgen
     python310
     qemu-utils
     rbw
-    rofi
-    rofi-rbw
     scrot
     slack
     tcpdump
@@ -325,6 +327,7 @@
     texlive.combined.scheme-full
     tmux
     tree
+    ulauncher
     unzip
     uxplay
     virt-manager
@@ -339,163 +342,199 @@
     zsh
   ];
 
-  home.file.".config/rofi/config.rasi" = {
+
+  #programs.rofi = {
+  #  enable = true;
+  #  font = "JetBrainsMono Nerd Font Mono 16";
+  #  theme = "~/.config/rofi/nord.rasi";
+  #};
+
+  home.file.".config/pop-shell/config.json" = {
     text = ''
-      configuration {
-          font: "JetBrainsMono Nerd Font Mono 16";
-          line-margin: 10;
-      
-          display-ssh:    "";
-          display-run:    "";
-          display-drun:   "";
-          display-window: "";
-          display-combi:  "";
-          show-icons:     true;
-      }
-      
-      @theme "~/.config/rofi/nord.rasi"
-      
-      listview {
-      	lines: 6;
-      	columns: 2;
-      }
-      
-      window {
-      	width: 30%;
-      }
-    ''; 
-  };
-  home.file.".config/rofi/nord.rasi" = {
-    text = ''
-      /**
-       * Nordic rofi theme
-       * Adapted by undiabler <undiabler@gmail.com>
-       *
-       * Nord Color palette imported from https://www.nordtheme.com/
-       *
-       */
-      
-      
-      * {
-      	nord0: #2e3440;
-      	nord1: #3b4252;
-      	nord2: #434c5e;
-      	nord3: #4c566a;
-      
-      	nord4: #d8dee9;
-      	nord5: #e5e9f0;
-      	nord6: #eceff4;
-      
-      	nord7: #8fbcbb;
-      	nord8: #88c0d0;
-      	nord9: #81a1c1;
-      	nord10: #5e81ac;
-      	nord11: #bf616a;
-      
-      	nord12: #d08770;
-      	nord13: #ebcb8b;
-      	nord14: #a3be8c;
-      	nord15: #b48ead;
-      
-          foreground:  @nord9;
-          backlight:   #ccffeedd;
-          background-color:  transparent;
-          
-          highlight:     underline bold #eceff4;
-      
-          transparent: rgba(46,52,64,0);
-      }
-      
-      window {
-          location: center;
-          anchor:   center;
-          transparency: "screenshot";
-          padding: 10px;
-          border:  0px;
-          border-radius: 6px;
-      
-          background-color: @transparent;
-          spacing: 0;
-          children:  [mainbox];
-          orientation: horizontal;
-      }
-      
-      mainbox {
-          spacing: 0;
-          children: [ inputbar, message, listview ];
-      }
-      
-      message {
-          color: @nord0;
-          padding: 5;
-          border-color: @foreground;
-          border:  0px 2px 2px 2px;
-          background-color: @nord7;
-      }
-      
-      inputbar {
-          color: @nord6;
-          padding: 11px;
-          background-color: #3b4252;
-      
-          border: 1px;
-          border-radius:  6px 6px 0px 0px;
-          border-color: @nord10;
-      }
-      
-      entry, prompt, case-indicator {
-          text-font: inherit;
-          text-color:inherit;
-      }
-      
-      prompt {
-          margin: 0px 1em 0em 0em ;
-      }
-      
-      listview {
-          padding: 8px;
-          border-radius: 0px 0px 6px 6px;
-          border-color: @nord10;
-          border: 0px 1px 1px 1px;
-          background-color: rgba(46,52,64,0.9);
-          dynamic: false;
-      }
-      
-      element {
-          padding: 3px;
-          vertical-align: 0.5;
-          border-radius: 4px;
-          background-color: transparent;
-          color: @foreground;
-          text-color: rgb(216, 222, 233);
-      }
-      
-      element selected.normal {
-      	background-color: @nord7;
-      	text-color: #2e3440;
-      }
-      
-      element-text, element-icon {
-          background-color: inherit;
-          text-color:       inherit;
-      }
-      
-      button {
-          padding: 6px;
-          color: @foreground;
-          horizontal-align: 0.5;
-      
-          border: 2px 0px 2px 2px;
-          border-radius: 4px 0px 0px 4px;
-          border-color: @foreground;
-      }
-      
-      button selected normal {
-          border: 2px 0px 2px 2px;
-          border-color: @foreground;
+      {
+        "float": [
+          {
+            "class": "ulauncher",
+            "title": "ulauncher"
+          }
+        ],
+        "skiptaskbarhidden": [],
+        "log_on_focus": false
       }
     '';
   };
+
+  home.file.".config/ulauncher/user-themes/ulauncher-nord" = {
+    source = builtins.fetchGit {
+      url = "https://github.com/LucianoBigliazzi/ulauncher-nord";
+      rev = "0ea923673d959d7c0db3e15d40b9b87cd7a55841"; 
+    };
+  };
+  home.file.".config/ulauncher/settings.json" = {
+    text = ''
+      {
+          "blacklisted-desktop-dirs": "/usr/share/locale:/usr/share/app-install:/usr/share/kservices5:/usr/share/fk5:/usr/share/kservicetypes5:/usr/share/applications/screensavers:/usr/share/kde4:/usr/share/mimelnk",
+          "clear-previous-query": true,
+          "disable-desktop-filters": false,
+          "grab-mouse-pointer": false,
+          "hotkey-show-app": "<Primary>space",
+          "render-on-screen": "mouse-pointer-monitor",
+          "show-indicator-icon": true,
+          "show-recent-apps": "0",
+          "terminal-command": "",
+          "theme-name": "dark"
+      }
+    '';
+  };
+
+  home.file.".config/ulauncher/extensions.json" = {
+    text = ''
+      {
+          "com.github.kbialek.ulauncher-bitwarden": {
+              "id": "com.github.kbialek.ulauncher-bitwarden",
+              "url": "https://github.com/kbialek/ulauncher-bitwarden",
+              "updated_at": "2023-05-14T19:07:17.097496",
+              "last_commit": "e5c25ebc24142f064eaebb29f6e473ded6d6b315",
+              "last_commit_time": "2022-10-19T06:09:55"
+          }
+      }
+    '';
+  };
+
+
+
+  #home.file.".config/rofi/nord.rasi" = {
+  #  text = ''
+  #    /**
+  #     * Nordic rofi theme
+  #     * Adapted by undiabler <undiabler@gmail.com>
+  #     *
+  #     * Nord Color palette imported from https://www.nordtheme.com/
+  #     *
+  #     */
+  #    
+  #    
+  #    * {
+  #    	nord0: #2e3440;
+  #    	nord1: #3b4252;
+  #    	nord2: #434c5e;
+  #    	nord3: #4c566a;
+  #    
+  #    	nord4: #d8dee9;
+  #    	nord5: #e5e9f0;
+  #    	nord6: #eceff4;
+  #    
+  #    	nord7: #8fbcbb;
+  #    	nord8: #88c0d0;
+  #    	nord9: #81a1c1;
+  #    	nord10: #5e81ac;
+  #    	nord11: #bf616a;
+  #    
+  #    	nord12: #d08770;
+  #    	nord13: #ebcb8b;
+  #    	nord14: #a3be8c;
+  #    	nord15: #b48ead;
+  #    
+  #        foreground:  @nord9;
+  #        backlight:   #ccffeedd;
+  #        background-color:  transparent;
+  #        
+  #        highlight:     underline bold #eceff4;
+  #    
+  #        transparent: rgba(46,52,64,0);
+  #    }
+  #    
+  #    window {
+  #        location: center;
+  #        anchor:   center;
+  #        transparency: "screenshot";
+  #        padding: 10px;
+  #        border:  0px;
+  #        border-radius: 6px;
+  #    
+  #        background-color: @transparent;
+  #        spacing: 0;
+  #        children:  [mainbox];
+  #        orientation: horizontal;
+  #    }
+  #    
+  #    mainbox {
+  #        spacing: 0;
+  #        children: [ inputbar, message, listview ];
+  #    }
+  #    
+  #    message {
+  #        color: @nord0;
+  #        padding: 5;
+  #        border-color: @foreground;
+  #        border:  0px 2px 2px 2px;
+  #        background-color: @nord7;
+  #    }
+  #    
+  #    inputbar {
+  #        color: @nord6;
+  #        padding: 11px;
+  #        background-color: #3b4252;
+  #    
+  #        border: 1px;
+  #        border-radius:  6px 6px 0px 0px;
+  #        border-color: @nord10;
+  #    }
+  #    
+  #    entry, prompt, case-indicator {
+  #        text-font: inherit;
+  #        text-color:inherit;
+  #    }
+  #    
+  #    prompt {
+  #        margin: 0px 1em 0em 0em ;
+  #    }
+  #    
+  #    listview {
+  #        padding: 8px;
+  #        border-radius: 0px 0px 6px 6px;
+  #        border-color: @nord10;
+  #        border: 0px 1px 1px 1px;
+  #        background-color: rgba(46,52,64,0.9);
+  #        dynamic: false;
+  #    }
+  #    
+  #    element {
+  #        padding: 3px;
+  #        vertical-align: 0.5;
+  #        border-radius: 4px;
+  #        background-color: transparent;
+  #        color: @foreground;
+  #        text-color: rgb(216, 222, 233);
+  #    }
+  #    
+  #    element selected.normal {
+  #    	background-color: @nord7;
+  #    	text-color: #2e3440;
+  #    }
+  #    
+  #    element-text, element-icon {
+  #        background-color: inherit;
+  #        text-color:       inherit;
+  #    }
+  #    
+  #    button {
+  #        padding: 6px;
+  #        color: @foreground;
+  #        horizontal-align: 0.5;
+  #    
+  #        border: 2px 0px 2px 2px;
+  #        border-radius: 4px 0px 0px 4px;
+  #        border-color: @foreground;
+  #    }
+  #    
+  #    button selected normal {
+  #        border: 2px 0px 2px 2px;
+  #        border-color: @foreground;
+  #    }
+  #  '';
+  #};
+
   home.file.".config/rbw/config.json" = {
     text = ''
       {

@@ -52,9 +52,6 @@
       window-tabbar = false;
       window-width = 100;
     };
-    "apps/guake/keybindings/global" = {
-      show-hide = "<Primary>grave";
-    };
     "apps/guake/keybindings/local" = {
       focus-terminal-left = "<Primary>braceleft";
       focus-terminal-right = "<Primary>braceright";
@@ -196,6 +193,7 @@
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/"
       ];
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -232,6 +230,11 @@
       binding = "<Shift><Control>b";
       command = "bash -c 'notify-send $(acpi -b | grep -Eo [0-9]+%)'";
       name = "battpop";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7" = {
+      binding = "<Control>grave";
+      command = "guake";
+      name = "guake";
     };
   }; 
   # End dconf.settings 

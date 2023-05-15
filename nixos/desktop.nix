@@ -84,7 +84,7 @@
     };
     unclutter = {
       enable = true;
-      timeout = 10;
+      timeout = 5;
     };
     gnome = {
       gnome-browser-connector.enable = true;

@@ -155,6 +155,11 @@
     options = "--delete-older-than 7d";
   };
 
+  environment.systemPackages = with pkgs; [ 
+    plexamp
+    zoom-us
+  ];
+
   # Home-manager configs
   home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix { inherit config; inherit pkgs; inherit home-manager; inherit lib; };
 }

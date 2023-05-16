@@ -416,7 +416,7 @@
         else
           function home-switch {
             git -C ~/opt/nixos-configs pull origin master
-            home-manager switch --flake ~/opt/nixos-configs#heywoodlh $@
+            nix --extra-experimental-features 'nix-command flakes' switch github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure $@
           } 
         fi
       fi

@@ -575,7 +575,7 @@
           function home-switch {
             git -C ~/opt/nixos-configs pull origin master
             mkdir -p ~/opt/nix
-            nix run ~/opt/nixos-configs#homeConfigurations.$(whoami)-desktop-$(arch).activationPackage --impure $@
+            nix run ~/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure $@
           } 
         fi
       fi

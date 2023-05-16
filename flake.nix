@@ -141,7 +141,7 @@
             fonts.fontconfig.enable = true;
             programs.zsh.shellAliases = {
               # Override the home-switch function provided in roles/home-manager/linux.nix
-              home-switch = "git -C ~/opt/nixos-configs pull origin master; nix run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure";
+              home-switch = "git -C ~/opt/nixos-configs pull origin master; home-manager switch --flake ~/opt/nixos-configs#heywoodlh-server --impure";
             };
           }
         ];

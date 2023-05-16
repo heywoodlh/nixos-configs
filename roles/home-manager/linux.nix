@@ -416,8 +416,7 @@
         else
           function home-switch {
             git -C ~/opt/nixos-configs pull origin master
-            mkdir -p ~/opt/nix
-            nix run ~/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure $@
+            home-manager switch --flake ~/opt/nixos-configs#heywoodlh $@
           } 
         fi
       fi

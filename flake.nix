@@ -116,7 +116,6 @@
         inherit pkgs;
         modules = [
           ./roles/home-manager/linux.nix
-          ./roles/home-manager/non-nixos/base.nix
           {
             home = {
               username = "heywoodlh";
@@ -124,6 +123,10 @@
             };
             fonts.fontconfig.enable = true;
             programs.home-manager.enable = true;
+            targets.genericLinux.enable = true;
+            home.packages = [
+              (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
+            ];
           }
         ];
         extraSpecialArgs = inputs;
@@ -133,17 +136,45 @@
         modules = [
           ./roles/home-manager/linux.nix
           ./roles/home-manager/non-nixos/no-desktop.nix
-          ./roles/home-manager/non-nixos/base.nix
           {
             home = {
               username = "heywoodlh";
               homeDirectory = "/home/heywoodlh";
             };
             fonts.fontconfig.enable = true;
+            targets.genericLinux.enable = true;
             programs.home-manager.enable = true;
             programs.zsh.shellAliases = {
               # Override the home-switch function provided in roles/home-manager/linux.nix
               home-switch = "git -C ~/opt/nixos-configs pull origin master; home-manager switch --flake ~/opt/nixos-configs#heywoodlh-server --impure";
+            };
+            # Get rid of stuff from linux.nix that we don't want
+            dconf.settings = pkgs.lib.mkForce {
+            };
+          
+            home.packages = with pkgs; lib.mkForce [
+              curl
+              glow
+              htop
+              jq
+              lefthook
+              lima
+              pandoc
+              rbw
+              tcpdump
+              tmux
+              tree
+              w3m
+              vim
+              zsh
+            ];
+          
+            programs.alacritty = pkgs.lib.mkForce {
+              enable = false;
+            };
+          
+            programs.firefox = pkgs.lib.mkForce {
+              enable = false;
             };
           }
         ];

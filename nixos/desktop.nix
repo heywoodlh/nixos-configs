@@ -21,6 +21,8 @@
 
   # Enable sandbox
   nix.settings.sandbox = true;
+  # Automatically optimize store for better storage
+  nix.settings.auto-optimise-store = true;
 
   # Enable NetworkManager
   networking.networkmanager.enable = true;

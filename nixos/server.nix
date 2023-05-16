@@ -24,6 +24,8 @@
   nix.extraOptions = '' 
     extra-experimental-features = nix-command flakes
   '';
+  # Automatically optimize store for better storage
+  nix.settings.auto-optimise-store = true;
 
   # Packages to install on entire system  
   environment.systemPackages = with pkgs; [

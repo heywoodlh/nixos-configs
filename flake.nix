@@ -135,7 +135,6 @@
         inherit pkgs;
         modules = [
           ./roles/home-manager/linux.nix
-          ./roles/home-manager/non-nixos/no-desktop.nix
           {
             home = {
               username = "heywoodlh";

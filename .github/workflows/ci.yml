@@ -47,11 +47,11 @@ jobs:
         nix build .#nixosConfigurations.nixos-server-intel.config.system.build.toplevel
         rm -rf ./result
 
-    - name: Build home-manager output 
-      run: |
-        # Build home heywoodlh output
-        nix --extra-experimental-features "nix-command flakes" build github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure
-        rm -rf ./result
+    #- name: Build home-manager output 
+    #  run: |
+    #    # Build home heywoodlh output
+    #    nix --extra-experimental-features "nix-command flakes" build github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure
+    #    rm -rf ./result
 
     - name: If scheduled or manually triggered, add updated flake.lock if changed, commit and push
       if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}

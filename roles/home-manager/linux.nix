@@ -218,7 +218,7 @@
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
       binding = "<Ctrl><Shift>s";
-      command = "scrot /home/heywoodlh/Documents/screenshots/scrot-+%Y-%m-%d_%H_%M_%S.png -s -e 'xclip -selection clipboard -t image/png -i $f'";
+      command = "gnome-screenshot -a -c";
       name = "screenshot";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
@@ -260,6 +260,7 @@
     docker-compose
     doctl
     gnome.dconf-editor
+    gnome.gnome-screenshot
     go
     ffmpeg
     file
@@ -323,7 +324,6 @@
     python310
     qemu-utils
     rbw
-    scrot
     slack
     tcpdump
     terraform-docs

@@ -37,14 +37,14 @@ darwin-rebuild switch --flake github:heywoodlh/nixos-configs#macos-desktop-intel
 
 ### Other Linux distributions:
 
-Run the following command to use the Home Manager implementation on any Linux distribution with `nix` installed:
+Run the following command to use the Home Manager implementation on any Linux distribution with `home-manager` installed:
 
 ```
-nix --extra-experimental-features "nix-command flakes" run github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh.activationPackage
+home-manager --extra-experimental-features "nix-command flakes" switch github:heywoodlh/nixos-configs#heywoodlh
 ```
 
 For headless Linux machines:
 
 ```
-nix --extra-experimental-features "nix-command flakes" run github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage
+home-manager --extra-experimental-features "nix-command flakes" switch github:heywoodlh/nixos-configs#heywoodlh-server
 ```

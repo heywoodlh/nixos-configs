@@ -217,8 +217,8 @@
       binding = "<Super>Space";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
-      binding = "<Ctrl><Shift>s";
-      command = "gnome-screenshot -a -c";
+      binding = "<Super><Shift>s";
+      command = "bash -c 'gnome-screenshot -a -f /tmp/screenshot.png && xclip -in -selection clipboard -target image/png /tmp/screenshot.png'";
       name = "screenshot";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {

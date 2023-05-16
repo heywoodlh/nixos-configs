@@ -25,7 +25,7 @@
     };
     in {
     # macos targets
-    darwinConfigurations = {
+    packages.darwinConfigurations = {
       "nix-macbook-air" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs;
@@ -40,7 +40,7 @@
     };
 
     # nixos targets
-    nixosConfigurations = {
+    packages.nixosConfigurations = {
       nix-pomerium = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

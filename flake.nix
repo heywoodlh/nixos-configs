@@ -123,6 +123,7 @@
               homeDirectory = "/home/heywoodlh";
             };
             fonts.fontconfig.enable = true;
+            programs.home-manager.enable = true;
           }
         ];
         extraSpecialArgs = inputs;
@@ -139,6 +140,7 @@
               homeDirectory = "/home/heywoodlh";
             };
             fonts.fontconfig.enable = true;
+            programs.home-manager.enable = true;
             programs.zsh.shellAliases = {
               # Override the home-switch function provided in roles/home-manager/linux.nix
               home-switch = "git -C ~/opt/nixos-configs pull origin master; home-manager switch --flake ~/opt/nixos-configs#heywoodlh-server --impure";

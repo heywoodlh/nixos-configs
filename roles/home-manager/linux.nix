@@ -108,7 +108,7 @@
       dash-icon-size = 0;
       double-super-to-appgrid = true;
       gesture = true;
-      hot-corner = true;
+      hot-corner = false;
       osd = false;
       panel = false;
       panel-arrow = true;
@@ -116,14 +116,14 @@
       panel-in-overview = true;
       ripple-box = false;
       search = false;
-      show-apps-button = false;
+      show-apps-button = true;
       startup-status = 0;
       theme = true;
       window-demands-attention-focus = true;
       window-picker-icon = false;
       window-preview-caption = true;
       window-preview-close-button = true;
-      workspace = false;
+      workspace = true;
       workspace-background-corner-size = 15;
       workspace-popup = false;
       workspaces-in-app-grid = true;

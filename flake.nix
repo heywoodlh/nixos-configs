@@ -161,6 +161,7 @@
               k9s
               kubectl
               lefthook
+              libvirt
               pandoc
               rbw
               tcpdump
@@ -168,7 +169,6 @@
               tree
               w3m
               vim
-              virsh
               zsh
             ];
           

@@ -470,4 +470,12 @@
   home.file.".zsh.d/functions" = {
     text = import ./zsh.d/functions.nix;
   };
+
+  home.file."tmp/.placeholder.txt" = {
+    text = "";
+  };
+
+  home.file."share/redirector.json" = {
+    text = import ./share/redirector.json.nix;
+  };
 }

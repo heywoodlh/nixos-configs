@@ -77,9 +77,6 @@
   # Seahorse (Gnome Keyring)
   programs.seahorse.enable = true;
 
-  # Enable steam
-  programs.steam.enable = true;
-  
   services = {
     logind = {
       extraConfig = "RuntimeDirectorySize=10G";
@@ -149,17 +146,21 @@
     General = { ControllerMode = "dual"; } ;
   };
 
-  nix.gc = {
-    automatic = true;
-    dates = "daily";
-    options = "--delete-older-than 7d";
-  };
-
   environment.systemPackages = with pkgs; [ 
     plexamp
     zoom-us
   ];
 
+  # Disable wait-online service for Network Manager
+  systemd.services.NetworkManager-wait-online.enable = false;
+
   # Home-manager configs
   home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix { inherit config; inherit pkgs; inherit home-manager; inherit lib; };
+
+  # Automatically garbage collect
+  nix.gc = {
+    automatic = true;
+    dates = "daily";
+    options = "--delete-older-than 7d";
+  };
 }

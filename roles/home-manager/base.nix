@@ -439,6 +439,9 @@
       
       # Set ssh-unlock if it's not already set
       alias | grep -q ssh-unlock || alias ssh-unlock="bw get item 01451f67-ca4d-4912-95b6-af8f016e101f | jq -r .notes | ssh-add -t 4h -"
+
+      # Set bw-unlock alias
+      alias bw-unlock='export BW_SESSION="$(bw unlock --raw)"'
     '';
   
     # Enable oh-my-zsh

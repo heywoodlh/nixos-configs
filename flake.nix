@@ -145,7 +145,7 @@
             programs.home-manager.enable = true;
             programs.zsh.shellAliases = {
               # Override the home-switch function provided in roles/home-manager/linux.nix
-              home-switch = "git -C ~/opt/nixos-configs pull origin master; nix --extra-experimental-features 'nix-command flakes' switch ~/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure";
+              home-switch = "git -C ~/opt/nixos-configs pull origin master; nix --extra-experimental-features 'nix-command flakes' run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure";
             };
             # Get rid of stuff from linux.nix that we don't want
             dconf.settings = pkgs.lib.mkForce {

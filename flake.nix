@@ -168,6 +168,7 @@
               tree
               w3m
               vim
+              virsh
               zsh
             ];
           

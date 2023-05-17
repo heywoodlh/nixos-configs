@@ -263,7 +263,7 @@
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
       name = "terminal ctrl_alt";
-      command = "alacritty";
+      command = "gnome-terminal";
       binding = "<Ctrl><Alt>t";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {

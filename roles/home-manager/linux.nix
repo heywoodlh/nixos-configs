@@ -217,6 +217,7 @@
       use-theme-transparency = false;
       use-transparent-background = false;
       visible-name = "Nord";
+      scrollbar-policy = "never";
       palette = [
         "#3B4252"
         "#BF616A"

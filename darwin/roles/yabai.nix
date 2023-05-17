@@ -214,5 +214,9 @@
     # Launch Alacritty
     ctrl + alt - t : open -a Alacritty.app
     cmd - return : open -a Alacritty.app
+
+    .blacklist [
+        "vmware fusion"
+    ]
   '';
 }

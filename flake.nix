@@ -152,12 +152,15 @@
             };
           
             home.packages = with pkgs; lib.mkForce [
+              ansible
               curl
+              git
               glow
               htop
               jq
+              k9s
+              kubectl
               lefthook
-              lima
               pandoc
               rbw
               tcpdump

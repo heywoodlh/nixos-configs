@@ -442,6 +442,9 @@
 
       # Set bw-unlock alias
       alias bw-unlock='export BW_SESSION="$(bw unlock --raw)"'
+
+      # Set culug-do-unlock alias
+      alias culug-do-unlock='export DIGITALOCEAN_ACCESS_TOKEN="$(bw get password d7952a46-bc1a-4c32-b038-b0050177111d)"'
     '';
   
     # Enable oh-my-zsh

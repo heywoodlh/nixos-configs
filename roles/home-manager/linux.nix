@@ -366,6 +366,7 @@
     nodePackages.cspell
     nordic
     openssl
+    operator-sdk
     pandoc
     pciutils
     pinentry-gnome

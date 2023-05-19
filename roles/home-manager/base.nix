@@ -445,6 +445,9 @@
 
       # Set culug-do-unlock alias
       alias culug-do-unlock='export DIGITALOCEAN_ACCESS_TOKEN="$(bw get password d7952a46-bc1a-4c32-b038-b0050177111d)"'
+
+      # Set vultr-unlock alias
+      alias vultr-unlock='export VULTR_API_KEY="$(bw get password 2eb34e09-f5b4-4fc2-9c65-ace7013dd1b4)"'
     '';
   
     # Enable oh-my-zsh

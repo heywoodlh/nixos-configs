@@ -31,4 +31,9 @@ in
     bash
     git
   ];
+
+  environment.etc."ansible/ansible.cfg" = {
+    enable = true;
+    text = import ansible/ansible.cfg.nix;
+  };
 }

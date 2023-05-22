@@ -372,7 +372,8 @@
     pinentry-gnome
     pomerium-cli
     pwgen
-    python310
+    python3
+    python3Packages.pip
     rbw
     rofi
     rofi-rbw

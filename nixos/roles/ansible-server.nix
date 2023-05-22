@@ -7,7 +7,6 @@ let
     ${pkgs.git}/bin/git -C /opt/ansible pull origin master || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/ansible /opt/ansible
 
     ${pkgs.ansible}/bin/ansible-galaxy install -r /opt/ansible/requirements.yml
-    ${pkgs.ansible}/bin/ansible-playbook /opt/ansible/setup.yml
   '';
   cronJobs = [
   ];
@@ -23,7 +22,7 @@ in
     enable = true;
     systemCronJobs = [
     "0 * * * * ${pkgs.git}/bin/git -C /opt/ansible pull origin master"
-    "15 * * * * ${pkgs.ansible}/bin/ansible-playbook --private-key /root/ansible-ssh -i /opt/ansible/inventory/tailscale.py tag_server /opt/ansible/playbooks/servers/server.yml"
+    "15 * * * * ${pkgs.ansible}/bin/ansible-playbook --private-key /root/ansible-ssh -i /opt/ansible/inventory/tailscale.py --limit tag_server /opt/ansible/playbooks/servers/server.yml"
     ];
   };
 

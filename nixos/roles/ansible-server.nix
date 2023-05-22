@@ -10,18 +10,6 @@ let
     ${pkgs.ansible}/bin/ansible-playbook /opt/ansible/setup.yml
   '';
   cronJobs = [
-    {
-      name = "update-ansible-inventory";
-      command = "${pkgs.git}/bin/git -C /opt/ansible pull origin master";
-      schedule = "0 * * * *";
-      user = "root";
-    }
-    {
-      name = "deploy-ansible-server-playbook";
-      command = "${pkgs.ansible}/bin/ansible-playbook --private-key /root/ansible-ssh -i /opt/ansible/inventory/tailscale.py tag_server /opt/ansible/playbooks/servers/server.yml";
-      schedule = "15 * * * *";
-      user = "root";
-    }
   ];
 in
 {
@@ -33,7 +21,10 @@ in
   };
   services.cron = {
     enable = true;
-    systemCronJobs = cronJobs;
+    systemCronJobs = [
+    "0 * * * * ${pkgs.git}/bin/git -C /opt/ansible pull origin master"
+    "15 * * * * ${pkgs.ansible}/bin/ansible-playbook --private-key /root/ansible-ssh -i /opt/ansible/inventory/tailscale.py tag_server /opt/ansible/playbooks/servers/server.yml"
+    ];
   };
 
   environment.systemPackages = with pkgs; [ 

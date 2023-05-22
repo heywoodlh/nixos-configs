@@ -33,7 +33,7 @@ in
   };
   services.cron = {
     enable = true;
-    jobs = cronJobs;
+    systemCronJobs = cronJobs;
   };
 
   environment.systemPackages = with pkgs; [ 

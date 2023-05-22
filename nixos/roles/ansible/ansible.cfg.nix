@@ -12,11 +12,9 @@
 
 # some basic default values...
 
-#inventory      = /etc/ansible/hosts
 inventory      = /opt/ansible/inventory/tailscale.py
-#inventory       = inventory/
 #library        = /usr/share/my_modules/
-roles_path     = $HOME/.ansible/roles:./roles:/etc/ansible/roles
+roles_path     = /root/.ansible/roles:/etc/ansible/roles
 #remote_tmp     = $HOME/.ansible/tmp
 pattern        = *
 forks          = 25

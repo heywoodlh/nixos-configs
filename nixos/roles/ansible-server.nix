@@ -35,4 +35,10 @@ in
     enable = true;
     jobs = cronJobs;
   };
+
+  environment.systemPackages = with pkgs; [ 
+    ansible
+    bash
+    git
+  ];
 }

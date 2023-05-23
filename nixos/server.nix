@@ -38,6 +38,7 @@
     git
     gnumake
     gnupg 
+    gptfdisk
     htop
     jq 
     nix-index

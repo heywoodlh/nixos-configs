@@ -16,7 +16,7 @@ roles_path     = /root/.ansible/roles:/etc/ansible/roles
 pattern        = *
 forks          = 25
 poll_interval  = 15
-sudo_user      = root
+sudo_user      = heywoodlh
 #ask_sudo_pass = True
 #ask_pass      = True
 transport      = smart
@@ -25,7 +25,6 @@ module_lang    = C
 
 [inventory]
 enable_plugins = host_list, script, yaml, ini
-
 
 # plays will gather facts by default, which contain information about
 # the remote system.

@@ -41,12 +41,11 @@
   #];
 
   # Support NTFS
-  #boot.supportedFilesystems = [ "ntfs" ];
-  #fileSystems."/opt/sunshine/steam" ={
-  #  device = "/dev/disk/by-uuid/3E7EF2A470BF8D03";
-  #  fsType = "ntfs3"; 
-  #  options = [ "rw" "uid=1000"];
-  #};
+  fileSystems."/media/disk1" ={
+    device = "/dev/disk/by-uuid/01cc4cb8-4646-471c-969d-a8729570c564";
+    fsType = "btrfs"; 
+    options = [ "rw" "uid=1000" "rw" "relatime" "x-systemd.mount-timeout=5min" ];
+  };
 
   system.stateVersion = "22.11";
 }

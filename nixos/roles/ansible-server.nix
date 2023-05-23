@@ -22,7 +22,7 @@ in
     enable = true;
     systemCronJobs = [
     "0 * * * * ${pkgs.git}/bin/git -C /opt/ansible pull origin master"
-    "0 4 * * Sun ${pkgs.ansible}/bin/ansible-playbook --private-key /root/ansible-ssh -i /opt/ansible/inventory/tailscale.py --limit tag_server /opt/ansible/playbooks/servers/server.yml"
+    "0 4 * * Sun ${pkgs.ansible}/bin/ansible --private-key /root/ansible-ssh -i /opt/ansible/inventory/tailscale.py tag_server -m ansible.builtin.command -a 'ansible-pull -c local -U https://github.com/heywoodlh/ansible playbooks/servers/server.yml'"
     ];
   };
 

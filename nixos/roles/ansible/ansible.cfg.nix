@@ -9,9 +9,6 @@
 # finds first
 
 [defaults]
-
-# some basic default values...
-
 inventory      = /opt/ansible/inventory/tailscale.py
 #library        = /usr/share/my_modules/
 roles_path     = /root/.ansible/roles:/etc/ansible/roles
@@ -25,6 +22,9 @@ sudo_user      = root
 transport      = smart
 #remote_port    = 22
 module_lang    = C
+
+[inventory]
+enable_plugins = host_list, script, yaml, ini
 
 
 # plays will gather facts by default, which contain information about

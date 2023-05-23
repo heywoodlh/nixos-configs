@@ -94,7 +94,7 @@
           family = "JetBrainsMono Nerd Font Mono";
           style = "Medium";
         };
-        size = 12;
+        size = 14;
         builtin_box_drawing = true;
       };
       window = {

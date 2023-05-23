@@ -36,17 +36,17 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    ntfs3g
-  ];
+  #environment.systemPackages = with pkgs; [
+  #  ntfs3g
+  #];
 
   # Support NTFS
-  boot.supportedFilesystems = [ "ntfs" ];
-  fileSystems."/opt/sunshine/steam" =
-    { device = "/dev/disk/by-uuid/3E7EF2A470BF8D03";
-      fsType = "ntfs3"; 
-      options = [ "rw" "uid=1000"];
-    };
+  #boot.supportedFilesystems = [ "ntfs" ];
+  #fileSystems."/opt/sunshine/steam" ={
+  #  device = "/dev/disk/by-uuid/3E7EF2A470BF8D03";
+  #  fsType = "ntfs3"; 
+  #  options = [ "rw" "uid=1000"];
+  #};
 
   system.stateVersion = "22.11";
 }

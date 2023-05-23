@@ -40,12 +40,12 @@
   #  ntfs3g
   #];
 
-  # Support NTFS
-  fileSystems."/media/disk1" ={
-    device = "/dev/disk/by-uuid/01cc4cb8-4646-471c-969d-a8729570c564";
-    fsType = "btrfs"; 
-    options = [ "rw" "uid=1000" "rw" "relatime" "x-systemd.mount-timeout=5min" ];
-  };
+  # This drive seems to have issues
+  #fileSystems."/media/disk1" ={
+  #  device = "/dev/disk/by-uuid/01cc4cb8-4646-471c-969d-a8729570c564";
+  #  fsType = "btrfs"; 
+  #  options = [ "rw" "uid=1000" "rw" "relatime" "x-systemd.mount-timeout=5min" ];
+  #};
 
   system.stateVersion = "22.11";
 }

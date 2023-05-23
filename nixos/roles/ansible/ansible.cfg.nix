@@ -175,8 +175,8 @@ retry_files_save_path = ~/.ansible-retry
 
 
 [privilege_escalation]
-#become=True
-#become_method='sudo'
+become=True
+become_method='sudo'
 become_user='root'
 #become_ask_pass=False
 

@@ -31,6 +31,7 @@
   environment.systemPackages = with pkgs; [
     autoPatchelfHook
     bind
+    btrfs-progs
     busybox
     croc
     file

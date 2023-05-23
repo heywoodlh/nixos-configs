@@ -122,7 +122,6 @@
       "brave-browser"
       "caffeine"
       "cursorcerer"
-      "element"
       "docker"
       "firefox"
       "font-droid-sans-mono-for-powerline"

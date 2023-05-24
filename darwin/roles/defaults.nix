@@ -85,6 +85,7 @@
       };
       "org.gpgtools.common" = {
         "UseKeychain" = "NO";
+        "DisableKeychain" = "yes";
       };
     };
   };

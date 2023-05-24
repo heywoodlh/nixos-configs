@@ -312,6 +312,7 @@
     gnomeExtensions.pop-shell
     gnomeExtensions.tray-icons-reloaded
     guake
+    home-manager
     inotify-tools
     keyutils
     nixos-install-tools

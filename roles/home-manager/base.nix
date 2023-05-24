@@ -37,7 +37,6 @@
     gnused
     gomuks
     gotify-cli
-    home-manager
     htop
     inetutils
     jq

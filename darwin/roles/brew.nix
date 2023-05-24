@@ -21,6 +21,7 @@
       "choose-gui"
       "clamav"
       "cliclick"
+      "colima"
       "coreutils"
       "croc"
       "curl"

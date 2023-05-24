@@ -218,12 +218,13 @@
     # Toggle tiling
     ctrl - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'
 
-    # Focus on display (determined by Mission Control)
-    ctrl + shift - n : yabai -m space --focus next
-    ctrl + shift - p : yabai -m space --focus prev
+    # Play, pause, fast forward in plexamp
+    ctrl + shift - p : osascript -e 'tell application "Plexamp" to previous track'
+    ctrl + shift - n : osascript -e 'tell application "Plexamp" to next track'
+    ctrl + shift - space : osascript -e 'tell application "Plexamp" to playpause'
 
     .blacklist [
-        "vmware fusion"
+      "vmware fusion"
     ]
   '';
 }

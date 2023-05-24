@@ -55,8 +55,6 @@
     openssl
     operator-sdk
     pandoc
-    pass
-    passExtensions.pass-otp
     pciutils
     pomerium-cli
     popeye
@@ -71,11 +69,9 @@
     torsocks
     tree
     unzip
-    vim
     vultr-cli
     w3m
     zip
-    zsh
   ];
 
   # Import nur as nixpkgs.overlays

@@ -76,6 +76,7 @@
       "rbw"
       "ripgrep"
       "screen"
+      "shortcat"
       "speedtest-cli"
       "tarsnap"
       "tcpdump"

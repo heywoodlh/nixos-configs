@@ -43,7 +43,7 @@
       use-default-font = false;
       use-login-shell = false;
       use-popup = false;
-      use-scrollbar = true;
+      use-scrollbar = false;
       use-trayicon = false;
       window-halignment = 0;
       window-height = 50;
@@ -85,7 +85,7 @@
         "pop-shell@system76.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
       ];
-      favorite-apps = ["firefox.desktop" "gnome-terminal.desktop"];
+      favorite-apps = ["firefox.desktop" "alacritty.desktop"];
       had-bluetooth-devices-setup = true;
       remember-mount-password = false;
       welcome-dialog-last-shown-version = "42.4";
@@ -258,12 +258,12 @@
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       name = "terminal super";
-      command = "gnome-terminal";
+      command = "alacritty";
       binding = "<Super>Return";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
       name = "terminal ctrl_alt";
-      command = "gnome-terminal";
+      command = "alacritty";
       binding = "<Ctrl><Alt>t";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {

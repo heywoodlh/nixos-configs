@@ -10,8 +10,8 @@
       glow
       htop
       jq
+      kubectl
       lefthook
-      lima
       pandoc
       rbw
       tcpdump

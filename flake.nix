@@ -125,6 +125,7 @@
             programs.home-manager.enable = true;
             targets.genericLinux.enable = true;
             home.packages = [
+              pkgs.colima
               (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
             ];
           }

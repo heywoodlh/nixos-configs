@@ -83,6 +83,9 @@
         "PrefsCustomFolder" = "~/.config/iterm2";
         "LoadPrefsFromCustomFolder" = 1;
       };
+      "org.gpgtools.common" = {
+        "UseKeychain" = "NO";
+      };
     };
   };
    # Add flake support 

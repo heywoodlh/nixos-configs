@@ -216,7 +216,7 @@
     cmd - return : open -a Alacritty.app
 
     # Toggle tiling
-    ctrl + y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'
+    ctrl - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'
 
     # Focus on display (determined by Mission Control)
     ctrl + shift - n : yabai -m space --focus next

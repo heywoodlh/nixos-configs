@@ -9,6 +9,76 @@
     '';
   };
 
+  # Packages I need installed on every system
+  home.packages = with pkgs; [
+    aerc
+    alacritty
+    ansible
+    bind
+    bitwarden-cli
+    coreutils
+    curl
+    dante
+    docker-client
+    docker-compose
+    doctl
+    dos2unix
+    file
+    findutils
+    fzf
+    gcc
+    git
+    git-lfs
+    github-cli
+    gitleaks
+    glow
+    gnupg
+    gnumake
+    gnused
+    gomuks
+    gotify-cli
+    home-manager
+    htop
+    inetutils
+    jq
+    kind
+    k9s
+    kubectl
+    kubernetes-helm
+    lefthook
+    libarchive
+    libvirt
+    linode-cli
+    mosh
+    nixfmt
+    nmap
+    nodePackages.cspell
+    openssl
+    operator-sdk
+    pandoc
+    pass
+    passExtensions.pass-otp
+    pciutils
+    pomerium-cli
+    popeye
+    pwgen
+    python3Packages.bandit
+    python3
+    rbw
+    screen
+    tcpdump
+    tmux
+    tor
+    torsocks
+    tree
+    unzip
+    vim
+    vultr-cli
+    w3m
+    zip
+    zsh
+  ];
+
   # Import nur as nixpkgs.overlays
   nixpkgs.overlays = [ 
     nur.overlay 

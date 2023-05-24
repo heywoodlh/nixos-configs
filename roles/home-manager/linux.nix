@@ -301,32 +301,7 @@
 
   home.packages = with pkgs; [
     acpi
-    aerc
-    alacritty
-    ansible
-    appimage-run
-    automake
-    awscli2
-    bind
-    bitwarden-cli
-    cargo
-    cmake
-    coreutils
-    curl
-    dante
-    docker-client
-    docker-compose
-    doctl
-    ffmpeg
-    file
-    fzf
-    gcc
-    git
-    git-lfs
-    github-cli
-    gitleaks
-    glib.dev
-    glow
+    arch-install-scripts
     gnome.dconf-editor
     gnome.gnome-screenshot
     gnome.gnome-terminal
@@ -336,59 +311,16 @@
     gnomeExtensions.just-perfection
     gnomeExtensions.pop-shell
     gnomeExtensions.tray-icons-reloaded
-    gnumake
-    gnupg
-    go
-    go
-    gomuks
-    gotify-cli
     guake
-    home-manager
-    htop
     inotify-tools
-    jq
-    k9s
     keyutils
-    kind
-    kubectl
-    kubernetes-helm
-    lefthook
-    libarchive
-    libnotify
-    libvirt
-    linode-cli
-    moreutils
-    mosh
-    nim
-    nixfmt
-    nixos-generators
     nixos-install-tools
-    nodePackages.cspell
     nordic
-    openssl
-    operator-sdk
-    pandoc
-    pciutils
     pinentry-gnome
-    pomerium-cli
-    pwgen
-    python3
-    python3Packages.pip
-    rbw
     rofi
     rofi-rbw
-    tcpdump
-    terraform-docs
-    tmux
-    tree
-    unzip
-    vultr-cli
-    w3m
-    wireguard-tools
     xclip
     xdotool
-    zip
-    zsh
   ];
 
   home.file.".config/rofi/config.rasi" = {

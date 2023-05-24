@@ -26,6 +26,7 @@
       "croc"
       "curl"
       "dante"
+      "docker"
       "dos2unix"
       "ffmpeg"
       "figlet"

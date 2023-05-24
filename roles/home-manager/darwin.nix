@@ -13,6 +13,11 @@
     '';
   };
 
+  home.packages = with pkgs; [
+    colima
+    docker-client
+  ];
+
   programs.zsh = {
     initExtra = ''
       # MacOS specific ZSH config

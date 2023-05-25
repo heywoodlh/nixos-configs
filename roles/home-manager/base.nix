@@ -490,6 +490,7 @@
       [[ -e ~/.ssh ]] || mkdir -p -m 700 ~/.ssh
 
       [[ -e ~/.zsh.d/functions ]] && source ~/.zsh.d/functions
+      [[ -e ~/.zsh.d/docker ]] && source ~/.zsh.d/docker
       [[ -e ~/.zsh.d/custom ]] && source ~/.zsh.d/custom
 
       check_ssh () {
@@ -540,6 +541,9 @@
   };
   home.file.".zsh.d/functions" = {
     text = import ./zsh.d/functions.nix;
+  };
+  home.file.".zsh.d/docker" = {
+    text = import ./zsh.d/docker.nix;
   };
 
   home.file."tmp/.placeholder.txt" = {

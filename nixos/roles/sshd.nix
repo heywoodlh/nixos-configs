@@ -29,6 +29,7 @@
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBmGLMTS02Ck2EkTTWxGkLp3B+l/6uvxMSlwrQ7gBTojZYnZab4AncwyHyFA08vGXCm/jKOMsyqmNHXQZkmZ4QA= nix-macbook-air@secretive.nix-macbook-air.local"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAc8AsAcXbCv3ujEpxgpgfcJIslsGTFypkU6fQMp2HdU"
       "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBO5jIGdWoLLGP8F5yqI4j9UQUQSwTfqHDn+SqukOYdlXQAVnlAfY2hk9dPPJhf2yyC+eTLxZARFkdBVgzLW2LNg= heywoodlh@ipadpro"
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC048tlchSyxPGn/gPHOtf7x2DwKEx3IJD7gfpjR9qCprmcKnOUKjW1TvnqkwIRh9wfYSE4g1iKuer8cP3gm9lZmpYA30e8ZJqms0mH+IqD4IC24vM7NWEsYBXjia31PgZvbk7ZR0dor/qItJBkeccuVGxnOlJYvlTLKUSAej/PArsRLtVewdhIEeW275EERnXtINlItIWq3ei2qj887Sw7eh3JSuYMtmVh+j+XBnPf7NirlXGzAtJn2yeBVyvNEj4QiJNvz3M9EZ0ZniPeY4wNXaKyAj+JVEBe1/0yyMt7ePgf4e8cO8LVZnRCISukMySX1ECjPybVt6KKqmtd9mKo3GZwU/fU4wiz+i/mX7HiFxD9W0H8SInfuWbza/zYOzNVFOjypiKfC6ANESCAhfUbT+1L3mgfia2bKPnpMKmg2HtyFfE8x5wC6Xtot01jkPb+4crqUdycktcJtN3+bUC1FENLPaKSie8T6GbtRFGQqPaJ6U+4yTQvwwXS6C4oRmk= root@nix-ipad"
     ];
   };
   users.users.root = {

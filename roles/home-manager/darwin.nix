@@ -13,12 +13,12 @@
     '';
   };
 
-  #home.packages = with pkgs; [
-  #  colima
-  #  m-cli
-  #  mas
-  #  pinentry_mac
-  #];
+  home.packages = with pkgs; [
+    colima
+    m-cli
+    mas
+    pinentry_mac
+  ];
 
   programs.zsh = {
     initExtra = ''

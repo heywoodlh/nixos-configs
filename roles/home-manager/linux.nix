@@ -505,6 +505,13 @@
         function toon {
           echo -n ""
         }
+
+        # Ansible fix for https://github.com/NixOS/nixpkgs/issues/223151
+        alias ansible='LC_ALL=C.UTF-8 ansible'
+        alias ansible-pull='LC_ALL=C.UTF-8 ansible-pull'
+        alias ansible-playbook='LC_ALL=C.UTF-8 ansible-playbook'
+        alias ansible-operator='LC_ALL=C.UTF-8 ansible-operator'
+        alias ansible-galaxy='LC_ALL=C.UTF-8 ansible-galaxy'
   
         #NixOS specific config
         if grep -q 'ID=nixos' /etc/os-release

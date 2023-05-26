@@ -44,6 +44,12 @@
         git -C ~/opt/nixos-configs pull origin master
         darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
       }
+      function docker {
+        docker_bin="$(command which docker)"
+        args="$@"
+        colima list | grep default | grep -q Running || colima start default # Start/create default colima instance if not running/created
+        $docker_bin "$args"
+      }
     '';
     oh-my-zsh.plugins = [
       "macos"

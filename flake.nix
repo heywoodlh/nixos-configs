@@ -133,7 +133,7 @@
                 docker_bin="$(command which docker)"
                 args="$@"
                 colima list | grep default | grep -q Running || colima start default # Start/create default colima instance if not running/created
-                $docker_bin "$args"
+                $docker_bin $args
               }
             '';
           }

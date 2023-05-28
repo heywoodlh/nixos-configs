@@ -99,4 +99,8 @@
     text = import ./darwin/bwmenu.nix;
     executable = true;
   };
+
+  programs.rbw.settings = {
+    pinentry = "pinentry-mac";
+  };
 }

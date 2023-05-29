@@ -56,6 +56,10 @@
   # Enable Docker 
   virtualisation = {
     docker.enable = true;
+    docker.rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
   };
 
   # Define use

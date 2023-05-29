@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager = {
@@ -17,7 +18,7 @@
     nur.url = "github:nix-community/NUR";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, flake-utils, ... }: 
+  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, darwin, home-manager, jovian-nixos, nur, flake-utils, ... }: 
   flake-utils.lib.eachDefaultSystem (system: let 
     pkgs = import nixpkgs {
       inherit system;

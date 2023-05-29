@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixpkgs-stable, ... }:
 
-{
+let 
+  stable-nixpkgs = nixpkgs-stable.legacyPackages.x86_64-linux;
+in {
   imports = [ 
     ./hardware-configuration.nix 
     ../../roles/steam-deck.nix
@@ -69,6 +71,9 @@
   home-manager.users.heywoodlh.home.packages = with pkgs; [ 
     pkgs.moonlight-qt
   ];
+
+  # Fix for https://github.com/Jovian-Experiments/Jovian-NixOS/issues/88
+  nixpkgs.overlays = [ (self: super: { alsa-ucm-conf = stable-nixpkgs.alsa-ucm-conf;} ) ];
 
   system.stateVersion = "22.11";
 

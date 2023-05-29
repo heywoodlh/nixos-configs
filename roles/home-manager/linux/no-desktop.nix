@@ -6,7 +6,9 @@
     dconf.settings = lib.mkForce {};
 
     home.packages = with pkgs; lib.mkForce [
+      colima
       curl
+      docker-client
       glow
       htop
       jq

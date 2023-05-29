@@ -31,6 +31,7 @@
   environment.systemPackages = with pkgs; [
     autoPatchelfHook
     bind
+    bitwarden-cli
     btrfs-progs
     busybox
     croc

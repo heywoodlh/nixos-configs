@@ -74,6 +74,7 @@ in {
 
   # Fix for https://github.com/Jovian-Experiments/Jovian-NixOS/issues/88
   nixpkgs.overlays = [ (self: super: { alsa-ucm-conf = stable-nixpkgs.alsa-ucm-conf;} ) ];
+  programs.steam.enable = true;
 
   system.stateVersion = "22.11";
 

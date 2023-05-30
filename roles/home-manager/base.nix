@@ -185,7 +185,7 @@
           pager = "less -+F";
       };
       mergetool = {
-          prompt = "false";
+          prompt = "true";
       };
       merge = {
           tool = "vimdiff";
@@ -393,6 +393,10 @@
       
       " Ignore case with search
       set ignorecase smartcase
+
+      " Show trailing whitespaces
+      highlight ExtraWhitespace ctermbg=red guibg=red
+      match ExtraWhitespace /\s\+$/
     '';
   
     plugins = with pkgs.vimPlugins; [

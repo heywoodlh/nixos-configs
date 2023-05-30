@@ -2,7 +2,8 @@
 
 {
   description = "Spencer Heywood";
-  name = "Spencer Heywood";
+  name = "heywoodlh";
+  home = "/Users/heywoodlh";
   shell = "/run/current-system/sw/bin/zsh";
   packages = [
     pkgs.gcc

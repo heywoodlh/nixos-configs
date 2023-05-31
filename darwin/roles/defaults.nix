@@ -76,7 +76,7 @@
       _HIHideMenuBar = true;
     };
     CustomUserPreferences = {
-      "NSGlobalDomain" = { 
+      "NSGlobalDomain" = {
         "AppleSpacesSwitchOnActivate" = 0;
       };
       "com.googlecode.iterm2" = {
@@ -89,7 +89,7 @@
       };
     };
   };
-   # Add flake support 
+   # Add flake support
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';

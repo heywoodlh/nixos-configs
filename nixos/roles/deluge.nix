@@ -19,7 +19,7 @@
       openFirewall = true;
     };
   };
-  
+
   # Allow Tor SOCKS proxy
   networking.firewall.allowedTCPPorts = [
     9150

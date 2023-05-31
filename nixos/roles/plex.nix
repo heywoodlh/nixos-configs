@@ -60,7 +60,7 @@
 
   services.sabnzbd = {
     enable = true;
-    user = "media"; 
+    user = "media";
     configFile = "/media/services/sabnzbd/config.ini";
   };
 

@@ -56,14 +56,14 @@
   };
 
   home.file.".zshenv".text = lib.mkForce ''
-    [[ -e $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]] && . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" 
+    [[ -e $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]] && . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
     # Only source this once
     if [[ -z "$__HM_ZSH_SESS_VARS_SOURCED" ]]
     then
       export __HM_ZSH_SESS_VARS_SOURCED=1
     fi
-    
+
     ZSH="${pkgs.oh-my-zsh}/share/oh-my-zsh";
     ZSH_CACHE_DIR="/var/empty/.cache/oh-my-zsh";
   '';
@@ -73,17 +73,17 @@
       #!/run/current-system/sw/bin/zsh
       source ~/.zshrc
       application_dirs=( /Applications /System/Applications /System/Library/CoreServices /System/Applications/Utilities $HOME/Applications )
-      
+
       ### Simple MacOS application launcher that relies on choose: https://github.com/chipsenkbeil/choose
       ### brew install choose-gui
-      
+
       if ! command -v choose > /dev/null
       then
       	echo 'Please install choose. Exiting.'
       fi
-      
+
       selection=$(for dir in ''${application_dirs[@]}; do ls ''${dir};done | grep ".app" | rev | cut -d/ -f1 | rev | /usr/bin/sort -u | choose)
-      
+
       open -a "''${selection}"
     '';
     executable = true;

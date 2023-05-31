@@ -11,7 +11,7 @@
     export EDITOR="vim"
     export PAGER="less"
     export PATH="$HOME/.nix-profile/bin:/etc/profiles/per-user/heywoodlh/bin:/run/current-system/sw/bin:$PATH"
-  
+
     # MacOS specific config
     if [[ $(uname) == 'Darwin' ]]
     then
@@ -38,7 +38,7 @@
       }
     fi
 
-    # Linux specific config 
+    # Linux specific config
     if [[ $(uname) == 'Linux' ]]
     then
       alias pbcopy='xclip -selection clipboard'
@@ -60,7 +60,7 @@
         function home-switch {
           git -C ~/opt/nixos-configs pull origin master
           nix --extra-experimental-features "nix-command flakes" run github:heywoodlh/nixos-configs#homeConfigurations.$(whoami).activationPackage --impure
-        } 
+        }
       fi
     fi
   '';

@@ -12,7 +12,7 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
-  
+
   # Enable networking
   networking.networkmanager.enable = true;
   networking.hostName = "nix-pomerium"; # Define your hostname
@@ -37,7 +37,7 @@
 
   # Set your time zone.
   time.timeZone = "America/Denver";
-  
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 

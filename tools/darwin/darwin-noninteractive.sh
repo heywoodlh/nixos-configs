@@ -35,7 +35,7 @@ else
     homebrew_dir='/usr/local'
 fi
 
-# Install Nix noninteractively if not installed 
+# Install Nix noninteractively if not installed
 if ! test -e /etc/nix/nix.conf > /dev/null
 then
     echo 'nix not installed, installing now'

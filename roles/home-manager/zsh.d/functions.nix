@@ -7,10 +7,10 @@ marp-template () {
 	if [[ ''${error} != 'true' ]]
 	then
 		filename="$1"
-		cat > "''${filename}" << EOF	
+		cat > "''${filename}" << EOF
 ---
 marp: true
-title: Slide Title 
+title: Slide Title
 description: Slide description
 paginate: true
 _paginate: false

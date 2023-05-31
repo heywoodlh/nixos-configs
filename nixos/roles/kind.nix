@@ -35,11 +35,11 @@ nodes:
   - hostPath: /var/run/docker.sock
     containerPath: /var/run/docker.sock
 EOF
-else 
+else
   echo "nix-kind cluster already exists"
 fi
   '';
-in {  
+in {
   # Kubernetes packages
   environment.systemPackages = with pkgs; [
     kind
@@ -59,11 +59,11 @@ in {
 
   systemd.services.kind = {
     description = "Start Kind";
-    path = [ 
+    path = [
       pkgs.bash
       pkgs.docker
       pkgs.kind
-      pkgs.systemd 
+      pkgs.systemd
     ];
     serviceConfig = {
       Type = "simple";

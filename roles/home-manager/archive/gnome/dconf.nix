@@ -80,7 +80,7 @@
   };
   "org/gnome/shell/extensions/hidetopbar" = {
     enable-active-window = false;
-    enable-intellihide = false; 
+    enable-intellihide = false;
   };
   "org/gnome/desktop/interface" = {
     clock-show-seconds = true;

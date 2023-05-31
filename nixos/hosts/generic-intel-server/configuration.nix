@@ -16,6 +16,6 @@
   system.autoUpgrade = {
     enable = true;
     flake = "github:heywoodlh/nixos-configs#nixos-server-intel";
-  };  
+  };
   system.stateVersion = "22.11";
 }

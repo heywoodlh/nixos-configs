@@ -16,7 +16,7 @@
   services.xserver.displayManager.gdm.wayland = lib.mkForce true; # lib.mkForce is only required on my setup because I'm using some other NixOS configs that conflict with this value
   services.xserver.displayManager.defaultSession = "steam-wayland";
   services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "heywoodlh"; 
+  services.xserver.displayManager.autoLogin.user = "heywoodlh";
 
   # Enable GNOME
   sound.enable = true;

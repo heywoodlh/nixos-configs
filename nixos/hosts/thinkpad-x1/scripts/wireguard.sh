@@ -16,7 +16,7 @@ do
 		echo "On home wifi"
 
 		if ps aux | grep -i 'openconnect' | grep -q 'pa-vpn.mychg.com'
-		then 
+		then
 			echo 'On home wifi, but on CHG VPN'
 			ip addr | grep -qE ${internal_wireguard_interface} && echo "Bringing down ${internal_wireguard_interface}" && wg-quick down ${internal_wireguard_interface}
 			ip addr | grep -qE ${external_wireguard_interface} && echo "Bringing down ${external_wireguard_interface}" && wg-quick down ${external_wireguard_interface}

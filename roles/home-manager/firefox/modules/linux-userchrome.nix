@@ -15,12 +15,12 @@
   .titlebar-spacer {
 	    display: none !important;
   }
-        
-  /* Remove import bookmarks button */ 
+
+  /* Remove import bookmarks button */
   #import-button {
     display: none;
-  } 
-  
+  }
+
   /* Remove bookmark toolbar */
   toolbarbutton.bookmark-item:not(.subviewbutton) {
     display: none;
@@ -39,30 +39,30 @@
   /* Hide Firefox tab icon */
   .tab-icon-image {
     display: none;
-  } 
+  }
 
   /* Linux stuff to keep GNOME system theme */
   .titlebar-min {
     appearance: auto !important;
     -moz-default-appearance: -moz-window-button-minimize !important;
   }
-  
+
   .titlebar-max {
     appearance: auto !important;
-    -moz-default-appearance: -moz-window-button-maximize !important;  
+    -moz-default-appearance: -moz-window-button-maximize !important;
   }
-  
+
   .titlebar-restore {
     appearance: auto !important;
     -moz-default-appearance: -moz-window-button-restore !important;
   }
-  
+
   .titlebar-close {
     appearance: auto !important;
     -moz-default-appearance: -moz-window-button-close !important;
   }
-  
+
   .titlebar-button{
     list-style-image: none !important;
-  } 
+  }
 ''

@@ -4,12 +4,12 @@
   # Allow Sunshine ports
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 
+    allowedTCPPorts = [
       47984
       47989
       48010
     ];
-    allowedUDPPorts = [ 
+    allowedUDPPorts = [
       47998
       47999
       48000
@@ -18,7 +18,7 @@
     ];
   };
   # Ensure Sunshine is installed
-  environment.systemPackages = with pkgs; [ 
+  environment.systemPackages = with pkgs; [
     sunshine
   ];
   # Define and start Sunshine service

@@ -15,15 +15,15 @@ jobs:
   build-macos-env:
     name: Build macOS Nix env
     runs-on: macos-latest
-  
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-  
+
     - name: Install Nix
       uses: cachix/install-nix-action@v18
 
-    - name: Build macos-desktop output 
+    - name: Build macos-desktop output
       run: |
         # Create /run directory
         echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null

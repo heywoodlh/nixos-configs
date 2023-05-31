@@ -5,7 +5,7 @@
     # nixos folder
     name = "nixos";
     bookmarks = [
-      { 
+      {
         name = "nixos configuration options";
         url = "https://search.nixos.org/options?";
       }

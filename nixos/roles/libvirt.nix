@@ -9,7 +9,7 @@
     packagekit
     qemu
   ];
-  
+
   virtualisation.libvirtd = {
     enable = true;
     onBoot = "start";

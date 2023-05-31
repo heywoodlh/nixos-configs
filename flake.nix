@@ -18,8 +18,8 @@
     nur.url = "github:nix-community/NUR";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, darwin, home-manager, jovian-nixos, nur, flake-utils, ... }: 
-  flake-utils.lib.eachDefaultSystem (system: let 
+  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, darwin, home-manager, jovian-nixos, nur, flake-utils, ... }:
+  flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
@@ -110,7 +110,7 @@
         modules = [ ./nixos/hosts/generic-intel-server/configuration.nix ];
       };
     };
-    # home-manager targets (non NixOS/MacOS, ideally Arch Linux) 
+    # home-manager targets (non NixOS/MacOS, ideally Arch Linux)
     packages.homeConfigurations = {
       # Used in CI
       heywoodlh = home-manager.lib.homeManagerConfiguration {
@@ -159,7 +159,7 @@
             # Get rid of stuff from linux.nix that we don't want
             dconf.settings = pkgs.lib.mkForce {
             };
-          
+
             home.packages = with pkgs; lib.mkForce [
               ansible
               curl
@@ -180,11 +180,11 @@
               vim
               zsh
             ];
-          
+
             programs.alacritty = pkgs.lib.mkForce {
               enable = false;
             };
-          
+
             programs.firefox = pkgs.lib.mkForce {
               enable = false;
             };

@@ -14,14 +14,14 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  
+
   # Enable networking
   networking.networkmanager.enable = true;
   networking.hostName = "nix-nvidia"; # Define your hostname
 
   # Set your time zone.
   time.timeZone = "America/Denver";
-  
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 
@@ -43,7 +43,7 @@
   # This drive seems to have issues
   #fileSystems."/media/disk1" ={
   #  device = "/dev/disk/by-uuid/01cc4cb8-4646-471c-969d-a8729570c564";
-  #  fsType = "btrfs"; 
+  #  fsType = "btrfs";
   #  options = [ "rw" "uid=1000" "rw" "relatime" "x-systemd.mount-timeout=5min" ];
   #};
 

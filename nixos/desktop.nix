@@ -1,15 +1,15 @@
 { config, pkgs, lib, home-manager, nur, ... }:
 
 {
-  imports = [ 
+  imports = [
     home-manager.nixosModule
   ];
 
   home-manager.useGlobalPkgs = true;
 
   # Import nur as nixpkgs.overlays
-  nixpkgs.overlays = [ 
-    nur.overlay 
+  nixpkgs.overlays = [
+    nur.overlay
   ];
 
   boot = {
@@ -70,7 +70,7 @@
     ""
     "${pkgs.bluez}/libexec/bluetooth/bluetoothd --experimental"
   ];
-  
+
   # Android debugging
   programs.adb.enable = true;
 
@@ -134,7 +134,7 @@
 
   environment.homeBinInPath = true;
   programs.zsh.enable = true;
-  environment.shells = [ 
+  environment.shells = [
     pkgs.bashInteractive
     pkgs.zsh
     "/run/current-system/sw/bin/zsh"
@@ -146,7 +146,7 @@
     General = { ControllerMode = "dual"; } ;
   };
 
-  environment.systemPackages = with pkgs; [ 
+  environment.systemPackages = with pkgs; [
     plexamp
     zoom-us
   ];

@@ -26,7 +26,7 @@ in
     ];
   };
 
-  environment.systemPackages = with pkgs; [ 
+  environment.systemPackages = with pkgs; [
     ansible
     bash
     git

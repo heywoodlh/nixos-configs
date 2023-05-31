@@ -19,7 +19,7 @@
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
   ];
-  
+
   # Enable networking
   networking.networkmanager.enable = true;
   networking.hostName = "nix-zalman"; # Define your hostname
@@ -32,7 +32,7 @@
       47990 # sunshine
     ];
   };
-  
+
   # Allow syncthing on all interfaces
   services.syncthing.guiAddress = "0.0.0.0:8384";
   # Enable wireguard
@@ -55,7 +55,7 @@
 
   # Set your time zone.
   time.timeZone = "America/Denver";
-  
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 
@@ -71,7 +71,7 @@
     "resolv.conf".text = "nameserver 10.50.50.1\n";
   };
 
-  # Enable Nvidia driver 
+  # Enable Nvidia driver
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;
 
@@ -89,16 +89,16 @@
   ];
 
   # Mount wd-black
-  fileSystems."/home/heywoodlh/mnt/wd-black" = { 
+  fileSystems."/home/heywoodlh/mnt/wd-black" = {
     device = "/dev/disk/by-uuid/18AB699E4AAEA95F";
-    fsType = "ntfs3"; 
+    fsType = "ntfs3";
     options = [ "rw" "uid=heywoodlh" ];
   };
 
   # Mount games-ssd
-  fileSystems."/home/heywoodlh/mnt/games-ssd" = { 
+  fileSystems."/home/heywoodlh/mnt/games-ssd" = {
     device = "/dev/disk/by-uuid/29A41880637FC63C";
-    fsType = "ntfs3"; 
+    fsType = "ntfs3";
     options = [ "rw" "uid=heywoodlh" ];
   };
 

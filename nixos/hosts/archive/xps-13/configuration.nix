@@ -38,7 +38,7 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
- 
+
   ## Hardware acceleration for Intel graphics
   hardware.opengl = {
     enable = true;
@@ -69,6 +69,6 @@
     };
   };
 
-  # Set version of NixOS to target 
+  # Set version of NixOS to target
   system.stateVersion = "22.11";
 }

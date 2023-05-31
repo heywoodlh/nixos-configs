@@ -11,7 +11,7 @@
       monthly = "0 13 1 * *";
     };
     extraConfig = ''
-#Separate everything with tabs, not spaces	
+#Separate everything with tabs, not spaces
 #Convert spaces to tabs in vim with :%s/\s\+/\t/g
 logfile	/media/backups/log/rsnapshot.log
 snapshot_root	/media/backups/

@@ -22,7 +22,7 @@
   networking.firewall.interfaces.shadow = {
     allowedTCPPorts = [ 8384 ];
   };
-  
+
   # Allow syncthing on all interfaces
   services.syncthing.guiAddress = "0.0.0.0:8384";
   # Enable wireguard
@@ -45,7 +45,7 @@
 
   # Set your time zone.
   time.timeZone = "America/Denver";
-  
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 

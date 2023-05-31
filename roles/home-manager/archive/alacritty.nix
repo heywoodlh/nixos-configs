@@ -62,7 +62,7 @@
         white = "#aeb3bb";
       };
     };
-    
+
     font = {
       normal = {
         family = "JetBrainsMono Nerd Font Mono";

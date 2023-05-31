@@ -13,21 +13,21 @@
   home-manager.useGlobalPkgs = true;
 
   # Import nur as nixpkgs.overlays
-  nixpkgs.overlays = [ 
-    nur.overlay 
+  nixpkgs.overlays = [
+    nur.overlay
   ];
-  
+
   # Allow non-free applications to be installed
   nixpkgs.config.allowUnfree = true;
 
   # So that `nix search` works
-  nix.extraOptions = '' 
+  nix.extraOptions = ''
     extra-experimental-features = nix-command flakes
   '';
   # Automatically optimize store for better storage
   nix.settings.auto-optimise-store = true;
 
-  # Packages to install on entire system  
+  # Packages to install on entire system
   environment.systemPackages = with pkgs; [
     autoPatchelfHook
     bind
@@ -39,13 +39,13 @@
     gcc
     git
     gnumake
-    gnupg 
+    gnupg
     gptfdisk
     htop
-    jq 
+    jq
     nix-index
     patchelf
-    python310 
+    python310
     python310Packages.pip
     unzip
     vim
@@ -53,7 +53,7 @@
     zsh
   ];
 
-  # Enable Docker 
+  # Enable Docker
   virtualisation = {
     docker.enable = true;
     docker.rootless = {

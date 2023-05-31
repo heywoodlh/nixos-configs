@@ -32,7 +32,7 @@
     foreground:  @nord9;
     backlight:   #ccffeedd;
     background-color:  transparent;
-    
+
     highlight:     underline bold #eceff4;
 
     transparent: rgba(46,52,64,0);

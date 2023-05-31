@@ -38,7 +38,7 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
- 
+
   ## Hardware acceleration for Intel graphics
   hardware.opengl = {
     enable = true;
@@ -77,7 +77,7 @@
   services.fprintd.tod.enable = true;
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
 
-  # Set version of NixOS to target 
+  # Set version of NixOS to target
   system.stateVersion = "22.11";
 
 }

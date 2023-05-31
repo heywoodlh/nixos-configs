@@ -23,7 +23,7 @@ in {
   # Set hostname
   networking.hostName = "${hostname}";
 
-  # Always show menu bar on M2 Macbook Air 
+  # Always show menu bar on M2 Macbook Air
   system.defaults.NSGlobalDomain._HIHideMenuBar = lib.mkForce false;
 
   # Applications specific to this machine

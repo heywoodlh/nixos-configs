@@ -15,12 +15,12 @@
   .titlebar-spacer {
 	    display: none !important;
   }
-      
-  /* Remove import bookmarks button */ 
+
+  /* Remove import bookmarks button */
   #import-button {
     display: none;
-  } 
-  
+  }
+
   /* Remove bookmark toolbar */
   toolbarbutton.bookmark-item:not(.subviewbutton) {
     display: none;
@@ -39,5 +39,5 @@
   /* Hide Firefox tab icon */
   .tab-icon-image {
     display: none;
-  } 
+  }
 ''

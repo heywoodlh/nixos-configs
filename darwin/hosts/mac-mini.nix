@@ -20,7 +20,7 @@ in {
   home-manager.users.${username} = import ../../roles/home-manager/darwin.nix;
 
   # Extra homebrew packages for this host
-  homebrew.brews = [ 
+  homebrew.brews = [
     "libheif" # For mautrix-imessage
   ];
 

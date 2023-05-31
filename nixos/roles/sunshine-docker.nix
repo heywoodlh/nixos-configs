@@ -4,12 +4,12 @@
   # Allow Sunshine ports
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 
+    allowedTCPPorts = [
       47984
       47989
       48010
     ];
-    allowedUDPPorts = [ 
+    allowedUDPPorts = [
       47998
       47999
       48000

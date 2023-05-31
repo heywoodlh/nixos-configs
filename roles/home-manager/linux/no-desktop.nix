@@ -23,11 +23,11 @@
       vim
       zsh
     ];
-  
+
     programs.alacritty = lib.mkForce {
       enable = false;
     };
-  
+
     programs.firefox = lib.mkForce {
       enable = false;
     };

@@ -14,6 +14,7 @@
     aerc
     alacritty
     ansible
+    ansible-lint
     bind
     bitwarden-cli
     coreutils
@@ -71,6 +72,7 @@
     unzip
     vultr-cli
     w3m
+    yamllint
     zip
   ];
 

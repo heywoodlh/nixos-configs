@@ -149,6 +149,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    nuclear
     plexamp
     zoom-us
   ];

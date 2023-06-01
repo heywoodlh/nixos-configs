@@ -4,7 +4,9 @@
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../server.nix
+    ../../desktop.nix
+    ../../roles/sshd.nix
+    ../../roles/sshd-monitor.nix
     ../../roles/libvirt.nix
     ../../roles/serge.nix
     ../../roles/fauxpilot.nix

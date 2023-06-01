@@ -27,7 +27,6 @@
     nixos-install-tools
     nordic
     pinentry-gnome
-    rofi
     rofi-rbw
     rofi-wayland
     xclip

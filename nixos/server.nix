@@ -29,6 +29,7 @@
 
   # Packages to install on entire system
   environment.systemPackages = with pkgs; [
+    ansible
     autoPatchelfHook
     bind
     bitwarden-cli

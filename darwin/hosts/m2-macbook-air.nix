@@ -30,6 +30,7 @@ in {
   homebrew = {
     casks = [
       "libreoffice"
+      "vmware-fusion"
       "zoom"
     ];
   };

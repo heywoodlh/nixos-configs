@@ -52,25 +52,15 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/steam-deck/configuration.nix ];
       };
-      nix-thinkpad = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      nix-vmware = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/thinkpad-x1/configuration.nix ];
-      };
-      nix-razer = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/razer-blade-15/configuration.nix ];
+        modules = [ ./nixos/hosts/vmware-fusion/configuration.nix ];
       };
       nix-tools = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-tools/configuration.nix ];
-      };
-      nix-kube = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-kube/configuration.nix ];
       };
       nix-precision = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

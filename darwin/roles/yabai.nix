@@ -225,6 +225,7 @@
 
     .blacklist [
       "vmware fusion"
+      "python3.10" # virt-manager
     ]
   '';
 }

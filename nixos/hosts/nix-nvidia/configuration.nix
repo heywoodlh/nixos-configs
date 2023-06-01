@@ -10,6 +10,7 @@
     ../../roles/libvirt.nix
     ../../roles/serge.nix
     ../../roles/fauxpilot.nix
+    ../../roles/wayvnc.nix
   ];
 
   # Bootloader.

@@ -17,7 +17,7 @@
       # Path to the wayvnc binary
       ExecStart = "${pkgs.wayvnc}/bin/wayvnc";
       # Command-line arguments for wayvnc
-      ExecStartPost = "--config /opt/wayvnc/config";
+      ExecStartPost = "--config /home/heywoodlh/.config/wayvnc/config";
       # User and group to run the service as
       User = "heywoodlh";
       # Optionally, set working directory

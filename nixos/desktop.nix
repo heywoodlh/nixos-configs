@@ -112,6 +112,8 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  # Allow x86 packages to be installed on aarch64
+  nixpkgs.config.allowUnsupportedSystem = true;
 
   networking.firewall = {
     enable = true;

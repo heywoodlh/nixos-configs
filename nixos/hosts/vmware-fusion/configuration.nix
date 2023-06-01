@@ -28,7 +28,9 @@
   # Set version of NixOS to target
   system.stateVersion = "23.05";
 
-# Configuration for VMWare guests
-  virtualisation.vmware.guest.enable = true;
+  # System-wide packages
+  environment.systemPackages = with pkgs; [
+    open-vm-tools
+  ];
 
 }

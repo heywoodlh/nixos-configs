@@ -8,7 +8,6 @@
     ../../roles/libvirt.nix
     ../../roles/serge.nix
     ../../roles/fauxpilot.nix
-    ../../roles/xrdp.nix
   ];
 
   # Bootloader.

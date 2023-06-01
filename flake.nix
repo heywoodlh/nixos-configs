@@ -52,11 +52,6 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/steam-deck/configuration.nix ];
       };
-      nix-vmware = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/vmware-fusion/configuration.nix ];
-      };
       nix-tools = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

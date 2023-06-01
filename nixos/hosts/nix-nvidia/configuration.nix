@@ -4,13 +4,11 @@
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../desktop.nix
-    ../../roles/sshd.nix
-    ../../roles/sshd-monitor.nix
+    ../../server.nix
     ../../roles/libvirt.nix
     ../../roles/serge.nix
     ../../roles/fauxpilot.nix
-    ../../roles/wayvnc.nix
+    ../../roles/xrdp.nix
   ];
 
   # Bootloader.
@@ -49,6 +47,12 @@
   #  fsType = "btrfs";
   #  options = [ "rw" "uid=1000" "rw" "relatime" "x-systemd.mount-timeout=5min" ];
   #};
+
+  # Prevent system from sleeping (for XRDP to work)
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
 
   system.stateVersion = "22.11";
 }

@@ -45,7 +45,7 @@ fact_caching_timeout = 86400
 #roles_path    = ./roles:/etc/ansible/roles
 
 # uncomment this to disable SSH key host checking
-#host_key_checking = False
+host_key_checking = False
 
 # change this for alternative sudo implementations
 sudo_exe = sudo
@@ -83,7 +83,7 @@ timeout = 10
 
 # if set, always use this private key file for authentication, same as
 # if passing --private-key to ansible or ansible-playbook
-private_key_file = /root/ansible-ssh
+private_key_file = /opt/ansible-ssh
 
 # format of string {{ ansible_managed }} available within Jinja2
 # templates indicates to users editing templates files will be replaced.

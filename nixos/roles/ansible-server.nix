@@ -10,6 +10,10 @@ let
   '';
   cronJobs = [
   ];
+  server-update = pkgs.writeShellScriptBin "server-update" ''
+    #!/usr/bin/env bash
+    ${pkgs.ansible}/bin/ansible --private-key /root/ansible-ssh -i /opt/ansible/inventory/tailscale.py tag_server -m ansible.builtin.command -a 'ansible-pull -c local -U https://github.com/heywoodlh/ansible playbooks/servers/server.yml'"
+  '';
 in
 {
   systemd.services.update-ansible = {
@@ -30,6 +34,7 @@ in
     ansible
     bash
     git
+    server-update
   ];
 
   environment.etc."ansible/ansible.cfg" = {

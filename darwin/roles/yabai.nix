@@ -97,16 +97,16 @@
     cmd + alt - x : yabai -m space --focus recent
     cmd + alt - z : yabai -m space --focus prev
     cmd + alt - c : yabai -m space --focus next
-    cmd - 1 : yabai -m space --focus 1
-    cmd - 2 : yabai -m space --focus 2
-    cmd - 3 : yabai -m space --focus 3
-    cmd - 4 : yabai -m space --focus 4
-    cmd - 5 : yabai -m space --focus 5
-    cmd - 6 : yabai -m space --focus 6
-    cmd - 7 : yabai -m space --focus 7
-    cmd - 8 : yabai -m space --focus 8
-    cmd - 9 : yabai -m space --focus 9
-    cmd - 0 : yabai -m space --focus 10
+    #cmd - 1 : yabai -m space --focus 1
+    #cmd - 2 : yabai -m space --focus 2
+    #cmd - 3 : yabai -m space --focus 3
+    #cmd - 4 : yabai -m space --focus 4
+    #cmd - 5 : yabai -m space --focus 5
+    #cmd - 6 : yabai -m space --focus 6
+    #cmd - 7 : yabai -m space --focus 7
+    #cmd - 8 : yabai -m space --focus 8
+    #cmd - 9 : yabai -m space --focus 9
+    #cmd - 0 : yabai -m space --focus 10
 
     # send window to desktop and follow focus
     shift + cmd - x : yabai -m window --space recent; yabai -m space --focus recent

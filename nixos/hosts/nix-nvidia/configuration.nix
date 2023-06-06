@@ -8,6 +8,7 @@
     ../../roles/libvirt.nix
     ../../roles/serge.nix
     ../../roles/fauxpilot.nix
+    ../../roles/syslog-ng/server.nix
   ];
 
   # Bootloader.

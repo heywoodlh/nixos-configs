@@ -8,6 +8,7 @@
     ./roles/sshd-monitor.nix
     ./roles/squid-client.nix
     ./roles/tailscale.nix
+    ./roles/syslog-ng/client.nix
   ];
 
   home-manager.useGlobalPkgs = true;

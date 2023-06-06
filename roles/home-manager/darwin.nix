@@ -81,12 +81,11 @@
       then
         /bin/echo 'Please install choose. Exiting.'
       fi
-      #bin_dirs="$(/bin/echo $PATH | /usr/bin/sed 's/:/ /g')"
-      #bins=$(/bin/echo "''${bin_dirs}" | /usr/bin/xargs -n 1 -I {} /usr/bin/find -L {} -type f -perm +111 2&>/dev/null | /usr/bin/sort -u | /usr/bin/sed "s|$HOME|~|" | /usr/bin/grep -vE '^\.')
+      bin_dirs="$(/bin/echo $PATH | /usr/bin/sed 's/:/ /g')"
+      bins=$(/bin/echo "''${bin_dirs}" | /usr/bin/xargs -n 1 -I {} /usr/bin/find -L {} -type f -perm +111 2&>/dev/null | /usr/bin/sort -u | /usr/bin/sed "s|$HOME|~|" | /usr/bin/grep -vE '^\.')
       applications=$(/bin/echo "''${application_dirs}" | /usr/bin/xargs -n 1 -I {} /usr/bin/find -L {} -name "*.app" 2&>/dev/null | /usr/bin/rev | /usr/bin/cut -d/ -f1 | /usr/bin/rev | /usr/bin/sort -u)
 
-      #selection=$(/usr/bin/printf "''${bins} ''${applications}" | choose)
-      selection=$(/usr/bin/printf "''${applications}" | choose)
+      selection=$(/usr/bin/printf "''${bins} ''${applications}" | choose)
 
       if [[ -n ''${selection} ]]
       then

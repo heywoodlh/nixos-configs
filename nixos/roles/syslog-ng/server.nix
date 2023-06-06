@@ -16,10 +16,15 @@
           "1514:1514"
           "1515:1515"
         ];
+        environment = {
+          TZ = "America/Denver";
+          PUID = "1000";
+          PGID = "1000";
+        };
         volumes = [
           "/opt/syslog-ng/config/syslog-ng.conf:/config/syslog-ng.conf"
           "/opt/syslog-ng/config/conf.d:/config/conf.d"
-          "/log:/data"
+          "/opt/syslog-ng/data:/data"
           "/etc/localtime:/etc/localtime:ro"
         ];
       };

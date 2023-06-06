@@ -5,7 +5,6 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
-    ../../roles/media-nfs.nix
     ../../roles/plex.nix
     ../../roles/deluge.nix
     ../../roles/freshrss.nix
@@ -55,6 +54,17 @@
   system.autoUpgrade = {
     enable = true;
     flake = "github:heywoodlh/nixos-configs#nix-media";
+  };
+
+  # Media mounts
+  fileSystems."/media/disk1" = {
+    device = "/dev/disk/by-uuid/5f1975e9-ffde-4dbf-bd14-657bfb26287a";
+    fsType = "btrfs";
+  };
+
+  fileSystems."/media/disk2" = {
+    device = "/dev/disk/by-uuid/7d1d10dd-392d-47ce-b178-bffd2295637e";
+    fsType = "btrfs";
   };
 
   system.stateVersion = "22.11";

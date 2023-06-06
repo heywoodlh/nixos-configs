@@ -50,6 +50,7 @@
     libvirt
     linode-cli
     mosh
+    nim
     nixfmt
     nmap
     nodePackages.cspell

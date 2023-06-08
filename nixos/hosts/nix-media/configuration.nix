@@ -9,6 +9,7 @@
     ../../roles/deluge.nix
     ../../roles/freshrss.nix
     ../../roles/oss-frontend.nix
+    ../../roles/containers/syncthing.nix
   ];
 
   # Bootloader.

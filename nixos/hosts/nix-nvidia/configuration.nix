@@ -9,6 +9,7 @@
     ../../roles/serge.nix
     ../../roles/fauxpilot.nix
     ../../roles/syslog-ng/server.nix
+    ../../roles/security/tailscale-session-recorder.nix
   ];
 
   # Bootloader.

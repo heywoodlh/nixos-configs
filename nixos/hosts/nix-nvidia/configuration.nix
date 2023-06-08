@@ -9,7 +9,6 @@
     ../../roles/serge.nix
     ../../roles/fauxpilot.nix
     ../../roles/syslog-ng/server.nix
-    ../../roles/nixos/hydra.nix
   ];
 
   # Bootloader.

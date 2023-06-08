@@ -26,9 +26,9 @@
       # Architecture specific differences
       if [[ $(arch) == 'arm64' ]]
       then
-        export PATH="/opt/homebrew/bin:$PATH"
+        export PATH="$PATH:/opt/homebrew/bin"
       else
-        export PATH="/usr/local/bin:$PATH"
+        export PATH="$PATH:/usr/local/bin"
       fi
 
       function toon {

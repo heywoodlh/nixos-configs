@@ -65,6 +65,7 @@
     python3
     rbw
     screen
+    tailscale
     tcpdump
     tmux
     tor

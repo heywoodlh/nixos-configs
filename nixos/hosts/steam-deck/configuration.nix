@@ -76,7 +76,16 @@ in {
   nixpkgs.overlays = [ (self: super: { alsa-ucm-conf = stable-nixpkgs.alsa-ucm-conf;} ) ];
   programs.steam.enable = true;
 
+  # Use a remote machine for builds
+  nix = {
+    distributedBuilds = true;
+    buildMachines = [
+      {
+        hostname = "nix-nvidia.tailscale";
+        protocol = "ssh";
+      }
+    ];
+  };
   system.stateVersion = "22.11";
-
 }
 

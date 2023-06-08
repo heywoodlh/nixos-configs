@@ -81,7 +81,8 @@ in {
     distributedBuilds = true;
     buildMachines = [
       {
-        hostname = "nix-nvidia.tailscale";
+        hostName = "nix-nvidia.tailscale";
+        system = "x86_64-linux";
         protocol = "ssh";
       }
     ];

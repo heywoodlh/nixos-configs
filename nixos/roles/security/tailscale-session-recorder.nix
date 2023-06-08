@@ -16,6 +16,12 @@
         environmentFiles = [
           /opt/tsrecorder/environment
         ];
+        cmd = [
+          "/tsrecorder"
+          "--dst=/data/recordings"
+          "--statedir=/data/state"
+          "--ui"
+        ];
       };
     };
   };

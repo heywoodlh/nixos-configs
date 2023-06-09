@@ -7,7 +7,6 @@
     ../../server.nix
     ../../roles/libvirt.nix
     ../../roles/iperf.nix
-    ../../roles/virtualization/docker-macos.nix
   ];
 
   # Bootloader.

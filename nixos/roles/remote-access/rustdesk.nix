@@ -44,7 +44,7 @@
         cmd = [
           "hbbs"
           "-r"
-          "rdp.heywoodlh.tech:21117"
+          "rustdesk-hbbr:21117"
         ];
       };
       rustdesk-hbbr = {

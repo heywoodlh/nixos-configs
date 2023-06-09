@@ -48,7 +48,7 @@
         ];
       };
       rustdesk-hbbr = {
-        image = "docker.io/heywoodlh/rustdesk-server:latest";
+        image = "docker.io/rustdesk/rustdesk-server:latest";
         autoStart = true;
         dependsOn = ["rustdesk-hbbr"];
         ports = [

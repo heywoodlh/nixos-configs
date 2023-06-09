@@ -1,4 +1,4 @@
-# Config specific to Lenovo ThinkPad X1
+# Config specific to Lenovo Thinkpad Yoga
 
 { config, pkgs, lib, ... }:
 
@@ -19,8 +19,6 @@
     "/crypto_keyfile.bin" = null;
   };
 
-  # Deep sleep
-  boot.kernelParams = [ "mem_sleep_default=deep" ];
 
   networking.hostName = "nix-yoga"; # Define your hostname.
 
@@ -41,13 +39,19 @@
     ];
   };
 
-  # Enable fprint
-  environment.systemPackages = [
-    pkgs.fprintd
+
+  # Hardware config specific to Lenovo Yoga 7i
+  # Arch Wiki was helpful: https://wiki.archlinux.org/title/Lenovo_Yoga_7i
+  hardware.sensor.iio.enable = true;
+  boot.kernelParams = [ "mem_sleep_default=s2idle" "ideapad_laptop" ];
+  services.power-profiles-daemon.enable = true;
+  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix-550a;
+  environment.systemPackages = with pkgs; [
+    gnomeExtensions.ideapad
   ];
+  # Enable fprint
   services.fprintd.enable = true;
   services.fprintd.tod.enable = true;
-  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-vfs0090;
 
   # Set version of NixOS to target
   system.stateVersion = "23.05";

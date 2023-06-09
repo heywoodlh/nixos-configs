@@ -115,11 +115,7 @@
   networking.firewall = {
     enable = true;
     checkReversePath = "loose";
-    interfaces.shadow-internal.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131; } ];
-    interfaces.shadow-external.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
     interfaces.tailscale0.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
-    interfaces.shadow-internal.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
-    interfaces.shadow-external.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
     interfaces.tailscale0.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
   };
 

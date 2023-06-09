@@ -39,6 +39,22 @@
     ];
   };
 
+  ## Spotify config
+  home-manager.users.heywoodlh = {
+    home.packages = with pkgs; [
+      spotify-tui
+    ];
+    services.spotifyd = {
+      enable = true;
+      settings = {
+        global = {
+          username = "31los4pph7awxi3i2inw5xiyut4u";
+          password_cmd = "cat ~/.config/spotifyd/password.txt";
+          device_name = "nix";
+        };
+      };
+    };
+  };
 
   # Hardware config specific to Lenovo Yoga 7i
   # Arch Wiki was helpful: https://wiki.archlinux.org/title/Lenovo_Yoga_7i

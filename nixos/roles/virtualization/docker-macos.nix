@@ -18,8 +18,8 @@
           /media/virtual-machines-2/docker-macos/environment
         ];
         environment = {
-          GENERATE_UNIQUE = true;
-          GENERATE_SPECIFIC = true;
+          GENERATE_UNIQUE = "true";
+          GENERATE_SPECIFIC = "true";
           DEVICE_MODEL = "iMacPro1,1";
           MASTER_PLIST_URL = "https://raw.githubusercontent.com/sickcodes/osx-serial-generator/master/config-custom.plist";
           SCREEN_SHARE_PORT = "5900";

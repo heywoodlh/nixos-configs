@@ -52,6 +52,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/steam-deck/configuration.nix ];
       };
+      nix-yoga = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/yoga/configuration.nix ];
+      };
       nix-tools = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

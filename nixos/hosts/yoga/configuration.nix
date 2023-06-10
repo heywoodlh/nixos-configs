@@ -39,11 +39,12 @@
     ];
   };
 
-  ## Spotify config
   home-manager.users.heywoodlh = {
     home.packages = with pkgs; [
       spotify-tui
+      rustdesk
     ];
+    ## Spotify config
     services.spotifyd = {
       enable = true;
       settings = {

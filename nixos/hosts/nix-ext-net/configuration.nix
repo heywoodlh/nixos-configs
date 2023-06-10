@@ -12,6 +12,7 @@
     ../../roles/gotify-convert.nix
     ../../roles/iperf.nix
     ../../roles/http-proxy-pac.nix
+    ../../roles/remote-access/rustdesk.nix
   ];
 
   # Bootloader.

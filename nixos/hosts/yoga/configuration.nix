@@ -41,8 +41,9 @@
 
   home-manager.users.heywoodlh = {
     home.packages = with pkgs; [
-      spotify-tui
+      remmina
       rustdesk
+      spotify-tui
     ];
     ## Spotify config
     services.spotifyd = {

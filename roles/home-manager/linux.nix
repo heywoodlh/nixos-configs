@@ -24,6 +24,7 @@
     home-manager
     inotify-tools
     keyutils
+    libnotify #(notify-send)
     nixos-install-tools
     nordic
     pinentry-gnome

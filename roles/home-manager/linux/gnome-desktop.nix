@@ -253,6 +253,7 @@
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/"
       ];
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -294,6 +295,11 @@
       binding = "<Control>grave";
       command = "guake";
       name = "guake";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8" = {
+      binding = "<Shift><Control>d";
+      command = "bash -c 'notify-send \"$(date \"+%T\")\"'";
+      name = "datepop";
     };
   };
   # End dconf.settings

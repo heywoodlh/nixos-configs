@@ -225,6 +225,7 @@
 
     .blacklist [
       "vmware fusion"
+      "vmware remote console"
       "python3.10" # virt-manager
     ]
   '';

@@ -12,6 +12,21 @@
     gnomeExtensions.tray-icons-reloaded
   ];
 
+  home.file.".config/pop-shell/config.json" = {
+    enable = true;
+    text = ''
+      {
+        "float": [
+          {
+            "class": "1Password"
+          }
+        ],
+        "skiptaskbarhidden": [],
+        "log_on_focus": false
+      }
+    '';
+  };
+
   dconf.settings = {
     "org/gnome/desktop/input-sources" = {
       xkb-options = ["caps:super"];
@@ -247,7 +262,7 @@
       custom-keybindings = [
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
-        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+        #"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
@@ -266,11 +281,11 @@
       command = "alacritty";
       binding = "<Ctrl><Alt>t";
     };
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
-      name = "rofi-rbw";
-      command = "rofi-rbw --action copy";
-      binding = "<Ctrl><Super>s";
-    };
+    #"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+    #  name = "rofi-1pass";
+    #  command = "/home/heywoodlh/bin/rofi-1pass";
+    #  binding = "<Ctrl><Super>s";
+    #};
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
       name = "launcher";
       command = "rofi -theme nord -show run -display-run 'run: '";

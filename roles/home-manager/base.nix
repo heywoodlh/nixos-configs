@@ -11,6 +11,7 @@
 
   # Packages I need installed on every system
   home.packages = with pkgs; [
+    _1password
     aerc
     alacritty
     ansible

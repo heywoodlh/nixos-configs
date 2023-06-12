@@ -32,6 +32,7 @@
       "aaronraimist/homebrew-tap"
     ];
     casks = [
+      "1password"
       "alacritty"
       "android-platform-tools"
       "bitwarden"

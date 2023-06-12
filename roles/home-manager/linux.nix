@@ -17,6 +17,7 @@
 
 
   home.packages = with pkgs; [
+    _1password-gui
     acpi
     arch-install-scripts
     guake
@@ -27,9 +28,8 @@
     libnotify #(notify-send)
     nixos-install-tools
     nordic
-    pinentry-gnome
-    rofi-rbw
-    rofi-wayland
+    pinentry-rofi
+    rofi
     xclip
     xdotool
   ];
@@ -192,17 +192,55 @@
     '';
   };
 
-  home.file.".config/rbw/config.json" = {
+  home.file.".gnupg/gpg-agent.conf" = {
+    text = ''
+      pinentry-program ${pkgs.pinentry-rofi}/bin/pinentry-rofi
+    '';
+  };
+  home.file.".config/1Password/settings/settings.json" = {
     text = ''
       {
-        "email": "l.spencer.heywood@protonmail.com",
-        "base_url": null,
-        "identity_url": null,
-        "lock_timeout": 3600,
-        "pinentry": "pinentry-gnome3",
-        "client_cert_path": null
-      }
-    '';
+        "version": 1,
+        "ui.routes.lastUsedRoute": "{\"type\":\"ItemDetail\",\"content\":{\"itemListRoute\":{\"unlockedRoute\":{\"collectionUuid\":\"UTCG7LWIBNC7LHEM5OSPMN7J64\"},\"itemListType\":{\"type\":\"Category\",\"content\":\"114\"},\"category\":null,\"sortBehavior\":null},\"itemId\":\"1CB\"}}",
+        "security.authenticatedUnlock.enabled": true,
+        "sshAgent.storeKeyTitles": true,
+        "sshAgent.storeSshKeyTitlesResponseGiven": true,
+        "sshAgent.enabled": true,
+        "keybinds.open": "",
+        "keybinds.quickAccess": "CommandOrControl+Meta+[s]S",
+        "app.theme": "dark",
+        "appearance.interfaceDensity": "compact",
+        "developers.cliSharedLockState.enabled": true,
+        "app.useHardwareAcceleration": true,
+        "authTags": {
+          "app.useHardwareAcceleration": "QroNuMzaoNSAt92MMVg6Od7R1nRiyKx+yNsJjrkITy0",
+          "developers.cliSharedLockState.enabled": "BENLWIG69/EFYJWyUrsTvfcCGGi6VZpT/pCsbt1fIdE",
+          "keybinds.open": "J2ZIPrxfDVulvqV10I0DSxDAeCeKdPrnA8VN5QQhccQ",
+          "keybinds.quickAccess": "DrO+203uZNRbp50aXYKsA9HUEKj6lLKwlmS1+uR8YS8",
+          "security.authenticatedUnlock.enabled": "af75cCzvjtC4tmat7GMO3X8gw7EGbMzF1A9iNVTzlNg",
+          "sshAgent.enabled": "BnZKtIeW3NcF4eo/9EvXSP4drNb8HYijf5PL2tK4SXA",
+          "sshAgent.storeKeyTitles": "fuN25iiDAt1/G7H2KFgu+3Yi+38WWWrz1ZEtiysgyVk",
+          "sshAgent.storeSshKeyTitlesResponseGiven": "Q4RomTjUe69OBCBWnyZD0St1F3psDo/+u/GX9hfoF8I",
+          "ui.routes.lastUsedRoute": "8XGr1Jjakozu4u73yri5yQEvNvtQhc0hxnqn3fZP2O4"
+          }
+      }'';
+  };
+
+  programs.git = {
+    extraConfig = {
+      user = {
+        signingkey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCYn+7oSNHXN3qqDDidw42Vv7fDS0iEpYqaa0wCXRPBlfWAnD81f6dxj/QPGfZtxpl9jvk7nAKpE7RVUvQiJzUC2VM3Bw/4ucT+xliEHo3oesMQQa1AT70VPTbP5PdU7oUpgQWLq39j9XHno2YPJ/WWtuOl/UTjY6IDokkAmNmvft/jqqkiwSkGMmw68qrLFEM7+rNwJV5cXKvvpB6Gqc7qnbJmk1TZ1MRGW5eLjP9ofDqiyoLbnTm7Dw3iHn40GgTcnv5CWGpa0vrKnnLEGrgRB7kR/pyvfsjapkHz0PDvuinQov+MgJfV8B8PHdPC94dsS0DEWJplxhYojtsYa1VZy5zTEMNWICz1QG1yKHN1JQtpbEreHG6DVYvqwnKvK/XN5yiEeiamhD2oKnSh36PexIR0h0AAPO29Ln+anqpRlqJ0nET2CNS04e0vpV4VDJrG6BnyGUQ6CCo7THSq97F4Ne0nY9fpYu5WTFTCh1tTm+nSey0fP/xk22oINl/41VTI/Vk5pNQuuhHUvQupJHw9cD74aKzRddwvgfuAQjPlEuxxsqgFTltTiPF6lZQNeoMIc1OMCRsnl1xNqIepnb7Q5O1CGq+BqtOWh3G4/SPQI5ZUIkOAZegsnPpGWYMrRd7s6LJn5LrBYaY6IvRxmpGOig3tjOUy3fqk7coyTeJXmQ==";
+      };
+      gpg = {
+        format = "ssh";
+      };
+      "gpg \"ssh\"" = {
+        program = "/home/heywoodlh/.nix-profile/bin/op-ssh-sign";
+      };
+      commit = {
+        gpgsign = "true";
+      };
+    };
   };
 
   programs.zsh = {
@@ -210,11 +248,17 @@
       # Linux specific config
       if [[ $(uname) == 'Linux' ]]
       then
+        PINENTRY_PROGRAM="${pkgs.pinentry-rofi}/bin/pinentry-rofi"
         alias pbcopy='xclip -selection clipboard'
 
         function toon {
           echo -n ""
         }
+
+        if [[ -e ~/.1password/agent.sock ]]
+        then
+          export SSH_AUTH_SOCK=~/.1password/agent.sock
+        fi
 
         # Ansible fix for https://github.com/NixOS/nixpkgs/issues/223151
         alias ansible='LC_ALL=C.UTF-8 ansible'

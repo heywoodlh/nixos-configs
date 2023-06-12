@@ -1,10 +1,10 @@
 { pkgs, ... }:
 
 with pkgs.nur.repos.rycee.firefox-addons; [
-  bitwarden
   darkreader
   gnome-shell-integration
   noscript
+  onepassword-password-manager
   privacy-badger
   private-relay
   redirector

@@ -209,7 +209,6 @@
 
     ctrl + shift - b : ~/bin/macos-battpop.sh
 
-    ctrl + cmd - s : ~/bin/bwmenu
     cmd - space : ~/bin/choose-launcher.zsh
     # Launch Alacritty
     ctrl + alt - t : open -a Alacritty.app

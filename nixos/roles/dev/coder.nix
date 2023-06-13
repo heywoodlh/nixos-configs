@@ -4,10 +4,39 @@
   networking.firewall.allowedTCPPorts = [
     3000
   ];
-  
-  services.coder = {
-    enable = true;
-    listenAddress = "0.0.0.0:3000";
-    accessUrl = "https://coder.heywoodlh.io";
+
+  system.activationScripts.mkCoderNet = ''
+    ${pkgs.docker}/bin/docker network create coder &2>/dev/null || true
+  '';
+
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      coder = {
+        image = "local/heywoodlh/coder:latest";
+        autoStart = true;
+        ports = [
+          "8000-8002:8000-8002"
+        ];
+        volumes = [
+          "/var/run/docker.sock:/var/run/docker.sock"
+          "/etc/localtime:/etc/localtime:ro"
+        ];
+        dependsOn = ["coder-db"];
+        environmentFiles = [
+          /opt/coder/environment
+        ];
+      };
+      coder-db = {
+        image = "docker.io/postgres:14.2";
+        autoStart = true;
+        extraOptions = [
+          "--network=coder"
+        ];
+        environmentFiles = [
+          /opt/coder/environment
+        ];
+      };
+    };
   };
 }

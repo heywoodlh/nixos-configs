@@ -22,17 +22,17 @@
           "/var/run/docker.sock:/var/run/docker.sock"
           "/etc/localtime:/etc/localtime:ro"
         ];
-        dependsOn = ["coder-db"];
+        extraOptions = [
+          "--network=coder"
+        ];
         environmentFiles = [
           /opt/coder/environment
         ];
+        dependsOn = ["coder-db"];
       };
       coder-db = {
         image = "docker.io/postgres:14.2";
         autoStart = true;
-        ports = [
-          "5432:5432"
-        ];
         extraOptions = [
           "--network=coder"
         ];

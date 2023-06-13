@@ -39,6 +39,10 @@
         environmentFiles = [
           /opt/coder/environment
         ];
+        volumes = [
+          "/opt/coder/db:/var/lib/postgresql/data"
+          "/etc/localtime:/etc/localtime:ro"
+        ];
       };
     };
   };

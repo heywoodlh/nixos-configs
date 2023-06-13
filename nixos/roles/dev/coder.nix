@@ -16,7 +16,7 @@
         image = "ghcr.io/coder/coder:v0.24.0";
         autoStart = true;
         ports = [
-          "8000-8002:8000-8002"
+          "3000:3000"
         ];
         volumes = [
           "/var/run/docker.sock:/var/run/docker.sock"
@@ -30,6 +30,9 @@
       coder-db = {
         image = "docker.io/postgres:14.2";
         autoStart = true;
+        ports = [
+          "5432:5432"
+        ];
         extraOptions = [
           "--network=coder"
         ];

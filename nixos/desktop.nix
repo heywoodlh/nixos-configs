@@ -145,9 +145,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    nuclear
-    plexamp
-    zoom-us
+    usbutils
   ];
 
   # Disable wait-online service for Network Manager

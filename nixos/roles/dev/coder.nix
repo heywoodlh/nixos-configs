@@ -13,7 +13,7 @@
     backend = "docker";
     containers = {
       coder = {
-        image = "local/heywoodlh/coder:latest";
+        image = "ghcr.io/coder/coder:v0.24.0";
         autoStart = true;
         ports = [
           "8000-8002:8000-8002"

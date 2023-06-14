@@ -54,13 +54,5 @@
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
-  virtualisation = {
-    podman = {
-      enable = true;
-      dockerCompat = true;
-      defaultNetwork.dnsname.enable = true;
-    };
-  };
-
   system.stateVersion = "22.11";
 }

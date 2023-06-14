@@ -19,7 +19,7 @@
           "3000:3000"
         ];
         volumes = [
-          "/var/run/docker.sock:/var/run/docker.sock"
+          "/run/user/1000/docker.sock:/var/run/docker.sock"
           "/etc/localtime:/etc/localtime:ro"
         ];
         extraOptions = [

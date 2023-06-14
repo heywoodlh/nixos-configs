@@ -521,7 +521,7 @@
       alias | grep -q ssh-unlock || alias ssh-unlock="op read 'op://Personal/id_rsa/private key' | ssh-add -t 4h -"
 
       # coder-unlock
-      alias coder-unlock='eval $(op signin) && export CODER_SESSION_TOKEN=$(op read "op://Personal/6z7y5hf7uroa3fkkm3eu6qkfse/password")'
+      alias coder-unlock='eval $(op signin) && export CODER_SESSION_TOKEN=$(op read "op://Personal/6z7y5hf7uroa3fkkm3eu6qkfse/password") && export CODER_URL="https://coder.heywoodlh.io"'
 
       # Set bw-unlock alias
       alias bw-unlock='export BW_SESSION="$(bw unlock --raw)"'

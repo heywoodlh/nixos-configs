@@ -111,7 +111,6 @@
       heywoodlh = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          ./roles/home-manager/base.nix
           ./roles/home-manager/linux.nix
           {
             home = {
@@ -139,7 +138,6 @@
       heywoodlh-server = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          ./roles/home-manager/base.nix
           ./roles/home-manager/linux.nix
           {
             home = {

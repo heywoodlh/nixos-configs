@@ -155,7 +155,11 @@
             dconf.settings = pkgs.lib.mkForce {
             };
 
+            # Disable Starship
+            programs.starship.enable = pkgs.lib.mkForce false;
+
             home.packages = with pkgs; lib.mkForce [
+              _1password
               ansible
               curl
               git
@@ -167,7 +171,6 @@
               lefthook
               libvirt
               pandoc
-              rbw
               tcpdump
               tmux
               tree

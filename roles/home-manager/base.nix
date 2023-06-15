@@ -223,6 +223,18 @@
     enable = true;
     package = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
   };
+
+  # Enable Starship (disabled in non-GUI builds)
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = {
+      character = {
+        success_symbol = "[❯](bold white)";
+      };
+    };
+  };
+
   programs.tmux = {
     enable = true;
     clock24 = true;
@@ -506,16 +518,6 @@
       [[ -e ~/.zsh.d/docker ]] && source ~/.zsh.d/docker
       [[ -e ~/.zsh.d/custom ]] && source ~/.zsh.d/custom
 
-      check_ssh () {
-        ssh_symbol=""
-        [[ -n $SSH_CONNECTION ]] && echo $fg[red] $(echo "''${ssh_symbol}[$(whoami)@$(hostname)]")
-      }
-
-      theme_precmd () {
-        check_ssh
-        vcs_info
-      }
-
       # Set ssh-unlock if it's not already set
       alias op-unlock='eval $(op signin)'
       alias | grep -q ssh-unlock || alias ssh-unlock="op read 'op://Personal/id_rsa/private key' | ssh-add -t 4h -"
@@ -537,6 +539,7 @@
     oh-my-zsh = {
       enable = true;
       plugins = [
+        "1password"
         "aliases"
         "ansible"
         "aws"
@@ -549,11 +552,8 @@
         "nmap"
         "pass"
         "python"
-        "rbw"
         "ssh-agent"
-        "sudo"
       ];
-      theme = "apple";
     };
   };
   home.file.".zsh.d/functions" = {

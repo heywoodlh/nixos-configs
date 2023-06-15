@@ -153,7 +153,7 @@
                 home-switch = "git -C ~/opt/nixos-configs pull origin master; nix --extra-experimental-features 'nix-command flakes' run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure";
               };
               initExtra = ''
-                PROMPT=$'%~ %F{green}$(git branch --show-current 2&>/dev/null) %F{red}$(env | grep -i SSH_CLIENT | grep -v '0.0.0.0' | cut -d= -f2 | awk \'{print $1}\' 2&>/dev/null) %F{white}\n> '
+                PROMPT=$'%~ %F{green}$(git branch --show-current 2&>/dev/null) %F{red}$(env | grep -i SSH_CLIENT | grep -v "0.0.0.0" | cut -d= -f2 | awk \'{print $1}\' 2&>/dev/null) %F{white}\n> '
               '';
             };
             # Get rid of stuff from linux.nix that we don't want

@@ -30,6 +30,7 @@
     nordic
     pinentry-rofi
     rofi
+    virt-manager
     xclip
     xdotool
   ];

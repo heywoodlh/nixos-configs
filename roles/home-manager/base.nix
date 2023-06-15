@@ -73,7 +73,6 @@
     torsocks
     tree
     unzip
-    virt-manager
     vultr-cli
     w3m
     yamllint

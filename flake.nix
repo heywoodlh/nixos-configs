@@ -147,9 +147,14 @@
             fonts.fontconfig.enable = true;
             targets.genericLinux.enable = true;
             programs.home-manager.enable = true;
-            programs.zsh.shellAliases = {
-              # Override the home-switch function provided in roles/home-manager/linux.nix
-              home-switch = "git -C ~/opt/nixos-configs pull origin master; nix --extra-experimental-features 'nix-command flakes' run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure";
+            programs.zsh = {
+              shellAliases = {
+                # Override the home-switch function provided in roles/home-manager/linux.nix
+                home-switch = "git -C ~/opt/nixos-configs pull origin master; nix --extra-experimental-features 'nix-command flakes' run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure";
+              };
+              initExtra = ''
+                PROMPT=$'%~ %F{green}$(git branch --show-current 2&>/dev/null) %F{red}$(env | grep -i SSH_CLIENT | cut -d= -f2 | awk \'{print $1}\' 2&>/dev/null) %F{white}\n> '
+              '';
             };
             # Get rid of stuff from linux.nix that we don't want
             dconf.settings = pkgs.lib.mkForce {

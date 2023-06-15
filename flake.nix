@@ -127,7 +127,7 @@
             programs.zsh.initExtra = ''
               function docker {
                 docker_bin="$(command which docker)"
-                colima list | grep default | grep -q Running || colima start default # Start/create default colima instance if not running/created
+                colima list | grep default | grep -q Running || colima start default &>/dev/null # Start/create default colima instance if not running/created
                 $docker_bin $@
               }
             '';
@@ -192,6 +192,8 @@
             programs.firefox = pkgs.lib.mkForce {
               enable = false;
             };
+
+            programs.vim.enable = true;
           }
         ];
         extraSpecialArgs = inputs;

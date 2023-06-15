@@ -36,8 +36,6 @@
       enable = false;
     };
 
-    programs.starship.enable = lib.mkForce {
-      enable = false;
-    };
+    programs.starship.enable = lib.mkForce false;
   };
 }

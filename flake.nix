@@ -156,8 +156,7 @@
             };
 
             # Disable Starship
-            programs.starship = pkgs.lib.mkForce {
-            };
+            programs.starship.enable = pkgs.lib.mkForce false;
 
             home.packages = with pkgs; lib.mkForce [
               _1password

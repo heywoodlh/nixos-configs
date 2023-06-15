@@ -14,6 +14,7 @@
       jq
       kubectl
       lefthook
+      openssh
       pandoc
       rbw
       tcpdump

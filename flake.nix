@@ -175,6 +175,7 @@
               kubectl
               lefthook
               libvirt
+              openssh
               pandoc
               tcpdump
               tmux

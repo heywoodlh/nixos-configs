@@ -10,6 +10,7 @@
     ../../roles/freshrss.nix
     ../../roles/oss-frontend.nix
     ../../roles/containers/syncthing.nix
+    ../../roles/feeds/rsshub.nix
   ];
 
   # Bootloader.

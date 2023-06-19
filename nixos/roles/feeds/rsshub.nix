@@ -13,7 +13,7 @@
     backend = "docker";
     containers = {
       rsshub = {
-        image = "local/heywoodlh/rsshub:latest";
+        image = "docker.io/diygod/rsshub:2023-06-16";
         autoStart = true;
         ports = [
           "1200:1200"

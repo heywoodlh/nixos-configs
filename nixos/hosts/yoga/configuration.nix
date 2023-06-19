@@ -63,10 +63,6 @@
   hardware.sensor.iio.enable = true;
   boot.kernelParams = [ "mem_sleep_default=s2idle" "ideapad_laptop" ];
   services.power-profiles-daemon.enable = true;
-  # Enable fprint
-  services.fprintd.enable = true;
-  services.fprintd.tod.enable = true;
-  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix-550a;
   environment.systemPackages = with pkgs; [
     gnomeExtensions.ideapad
   ];

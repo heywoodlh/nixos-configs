@@ -46,4 +46,10 @@
       };
     };
   };
+
+  systemd.services = {
+    "docker-coder.service" = {
+      after = [ "heywoodlh@docker.service" ];
+    };
+  };
 }

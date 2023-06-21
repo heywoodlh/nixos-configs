@@ -20,6 +20,10 @@
     pinentry_mac
   ];
 
+  home.shellAliases = {
+    ls = "ls --color";
+  };
+
   programs.git = {
     extraConfig = {
       user = {
@@ -99,7 +103,7 @@
       	echo 'Please install choose. Exiting.'
       fi
 
-      selection=$(for dir in ''${application_dirs[@]}; do ls ''${dir};done | grep ".app" | rev | cut -d/ -f1 | rev | /usr/bin/sort -u | choose)
+      selection=$(for dir in ''${application_dirs[@]}; do /bin/ls ''${dir};done | grep ".app" | rev | cut -d/ -f1 | rev | /usr/bin/sort -u | choose)
 
       open -a "''${selection}"
 

@@ -22,7 +22,6 @@ in {
   # Extra homebrew packages for this host
   homebrew.brews = [
     "libheif" # For mautrix-imessage
-    "tailscale"
   ];
 
   # Set hostname

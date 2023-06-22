@@ -35,7 +35,6 @@
       "1password"
       "alacritty"
       "android-platform-tools"
-      "bitwarden"
       "blockblock"
       "caffeine"
       "cursorcerer"

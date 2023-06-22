@@ -30,6 +30,7 @@
     nordic
     pinentry-rofi
     rofi
+    tailscale
     virt-manager
     xclip
     xdotool

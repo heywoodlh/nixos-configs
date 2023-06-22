@@ -1,7 +1,8 @@
 { config, pkgs, home-manager, nur, ... }:
 
 {
-  home.stateVersion = "22.11";
+  home.stateVersion = "23.05";
+  home.enableNixpkgsReleaseCheck = false;
   nix = {
     package = pkgs.nix;
     extraOptions = ''

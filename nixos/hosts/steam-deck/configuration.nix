@@ -1,8 +1,6 @@
-{ config, pkgs, nixpkgs-stable, ... }:
+{ config, pkgs, ... }:
 
-let
-  stable-nixpkgs = nixpkgs-stable.legacyPackages.x86_64-linux;
-in {
+{
   imports = [
     ./hardware-configuration.nix
     ../../roles/steam-deck.nix
@@ -72,8 +70,6 @@ in {
     pkgs.moonlight-qt
   ];
 
-  # Fix for https://github.com/Jovian-Experiments/Jovian-NixOS/issues/88
-  nixpkgs.overlays = [ (self: super: { alsa-ucm-conf = stable-nixpkgs.alsa-ucm-conf;} ) ];
   programs.steam.enable = true;
 
   # Use a remote machine for builds

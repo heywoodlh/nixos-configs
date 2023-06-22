@@ -268,6 +268,14 @@
         alias ansible-operator='LC_ALL=C.UTF-8 ansible-operator'
         alias ansible-galaxy='LC_ALL=C.UTF-8 ansible-galaxy'
 
+        # Arm64 specific config
+        if [[ $(arch) == "aarch64" ]]
+        then
+            # Required for VSCode stuff
+            # VSCode isn't used on headless non-NixOS systems
+            export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1
+        fi
+
         #NixOS specific config
         if grep -q 'ID=nixos' /etc/os-release
         then

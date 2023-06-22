@@ -159,9 +159,9 @@
     "org/gnome/desktop/wm/keybindings" = {
       activate-window-menu = ["disabled"];
       toggle-message-tray = ["disabled"];
-      close = "['<Super>q', '<Alt>F4']";
+      close = ["<Super>q"];
       maximize = ["disabled"];
-      minimize = "['<Super>comma']";
+      minimize = ["<Super>comma"];
       move-to-monitor-down = ["disabled"];
       move-to-monitor-left = ["disabled"];
       move-to-monitor-right = ["disabled"];

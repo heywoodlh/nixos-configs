@@ -42,12 +42,6 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 
-  # Set DNS
-  #networking.nameservers = [ "10.50.50.1" ];
-  #environment.etc = {
-  #  "resolv.conf".text = "nameserver 10.50.50.1\n";
-  #};
-
   environment.systemPackages = with pkgs; [
     docker-compose
   ];
@@ -57,6 +51,8 @@
     enable = true;
     flake = "github:heywoodlh/nixos-configs#nix-tools";
   };
+
+  services.k3s.extraFlags = "--tls-san=nix-tools.tailscale";
 
   system.stateVersion = "22.11";
 }

@@ -9,6 +9,7 @@
     ../../roles/serge.nix
     ../../roles/dev/coder.nix
     ../../roles/syslog-ng/server.nix
+    ../../roles/gaming/minecraft-bedrock.nix
   ];
 
   # Bootloader.

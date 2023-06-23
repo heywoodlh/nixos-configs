@@ -213,7 +213,7 @@
           pretty = "%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset";
       };
       pull = {
-          rebase = "false";
+          ff = "only";
       };
     };
   };

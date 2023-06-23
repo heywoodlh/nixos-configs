@@ -6,6 +6,7 @@
     ./hardware-configuration.nix
     ../../server.nix
     ../../roles/ansible-server.nix
+    ../../roles/containers/k3s.nix
   ];
 
   # Bootloader.

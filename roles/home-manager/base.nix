@@ -50,6 +50,7 @@
     lefthook
     libarchive
     libvirt
+    lima
     linode-cli
     mosh
     nim

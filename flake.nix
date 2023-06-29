@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager = {
@@ -17,7 +18,7 @@
     nur.url = "github:nix-community/NUR";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, home-manager, jovian-nixos, nur, flake-utils, ... }:
+  outputs = inputs@{ self, nixpkgs, nixos-wsl, darwin, home-manager, jovian-nixos, nur, flake-utils, ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
       inherit system;
@@ -56,10 +57,10 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/steam-deck/configuration.nix ];
       };
-      nix-yoga = nixpkgs.lib.nixosSystem {
+      nix-wsl = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/yoga/configuration.nix ];
+        modules = [ ./nixos/hosts/nix-wsl/configuration.nix ];
       };
       nix-tools = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

@@ -28,7 +28,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Nix
-      uses: cachix/install-nix-action@v18
+      uses: DeterminateSystems/nix-installer-action@main
+
+    - name: Setup Nix Magic Cache
+      uses: DeterminateSystems/magic-nix-cache-action@main
 
     - name: If scheduled or manually triggered, update inputs again
       if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
@@ -71,7 +74,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Nix
-      uses: cachix/install-nix-action@v18
+      uses: DeterminateSystems/nix-installer-action@main
+
+    - name: Setup Nix Magic Cache
+      uses: DeterminateSystems/magic-nix-cache-action@main
 
     - name: Build macos-desktop output
       run: |

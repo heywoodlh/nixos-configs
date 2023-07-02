@@ -19,7 +19,7 @@
     ansible-lint
     bind
     bitwarden-cli
-    coder
+    #coder #Marked broken
     coreutils
     curl
     dante

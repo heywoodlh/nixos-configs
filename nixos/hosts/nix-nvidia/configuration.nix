@@ -11,6 +11,7 @@
     ../../roles/syslog-ng/server.nix
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/containers/k3s.nix
+    ../../roles/containers/registry.nix
   ];
 
   # Bootloader.

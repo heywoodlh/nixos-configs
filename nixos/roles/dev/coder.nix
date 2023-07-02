@@ -25,6 +25,7 @@
         ];
         extraOptions = [
           "--network=coder"
+          "--network=host"
         ];
         environmentFiles = [
           /opt/coder/environment

@@ -19,6 +19,7 @@
     ansible-lint
     bind
     bitwarden-cli
+    coder
     coreutils
     curl
     dante

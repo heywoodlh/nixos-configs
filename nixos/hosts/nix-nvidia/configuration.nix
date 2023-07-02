@@ -10,6 +10,7 @@
     ../../roles/dev/coder.nix
     ../../roles/syslog-ng/server.nix
     ../../roles/gaming/minecraft-bedrock.nix
+    ../../roles/containers/k3s.nix
   ];
 
   # Bootloader.
@@ -54,6 +55,9 @@
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
+
+  # K8s cluster for coder
+  services.k3s.extraFlags = "--tls-san=nix-nvidia.tailscale";
 
   system.stateVersion = "22.11";
 }

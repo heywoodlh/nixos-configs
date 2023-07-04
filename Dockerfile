@@ -5,13 +5,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV DONT_PROMPT_WSL_INSTALL=1
 
 # Install dependencies
-RUN apt-get update && apt-get install -y curl xz-utils git gnome-shell dbus screen ca-certificates openssh-client --no-install-recommends \
+RUN apt-get update && apt-get install -y curl xz-utils git gnome-shell dbus screen ca-certificates openssh-client sudo --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Add heywoodlh user
 RUN adduser --disabled-password --gecos "" --uid 1000 heywoodlh \
     && chown -R heywoodlh /home/heywoodlh \
-    && mkdir -m 0755 /nix && chown heywoodlh /nix
+    && mkdir -m 0755 /nix && chown heywoodlh /nix \
+    && echo "heywoodlh ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 COPY docker/session.conf /etc/dbus-1/session.conf
 # Run Nix configurations

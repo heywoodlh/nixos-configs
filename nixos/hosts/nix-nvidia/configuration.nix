@@ -60,5 +60,10 @@
   # K8s cluster for coder
   services.k3s.extraFlags = "--tls-san=nix-nvidia.tailscale";
 
+  # Exposed ports
+  networking.firewall.allowedTCPPorts = [
+    443
+  ];
+
   system.stateVersion = "22.11";
 }

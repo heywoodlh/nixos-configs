@@ -47,6 +47,11 @@
 
     # nixos targets
     packages.nixosConfigurations = {
+      nix-yoga = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/yoga/configuration.nix ];
+      };
       nix-pomerium = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

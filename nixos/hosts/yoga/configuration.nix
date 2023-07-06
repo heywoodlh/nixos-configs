@@ -19,7 +19,6 @@
     "/crypto_keyfile.bin" = null;
   };
 
-
   networking.hostName = "nix-yoga"; # Define your hostname.
 
   # Set your time zone.
@@ -43,19 +42,7 @@
     home.packages = with pkgs; [
       remmina
       rustdesk
-      spotify-tui
     ];
-    ## Spotify config
-    services.spotifyd = {
-      enable = true;
-      settings = {
-        global = {
-          username = "31los4pph7awxi3i2inw5xiyut4u";
-          password_cmd = "cat ~/.config/spotifyd/password.txt";
-          device_name = "nix";
-        };
-      };
-    };
   };
 
   # Hardware config specific to Lenovo Yoga 7i

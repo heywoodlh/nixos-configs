@@ -72,6 +72,24 @@
         "type": "github"
       }
     },
+    "flake-utils_3": {
+      "inputs": {
+        "systems": "systems_3"
+      },
+      "locked": {
+        "lastModified": 1687709756,
+        "narHash": "sha256-Y5wKlQSkgEK2weWdOu4J3riRd+kV/VCgHsqLNTTWQ/0=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "dbabf0ca0c0c4bce6ea5eaf65af5cb694d2082c7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -162,6 +180,20 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1688556768,
+        "narHash": "sha256-mhd6g0iJGjEfOr3+6mZZOclUveeNr64OwxdbNtLc8mY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "27bd67e55fe09f9d68c77ff151c3e44c4f81f7de",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
     "nur": {
       "locked": {
         "lastModified": 1688593494,
@@ -185,7 +217,8 @@
         "jovian-nixos": "jovian-nixos",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
-        "nur": "nur"
+        "nur": "nur",
+        "vim-configs": "vim-configs"
       }
     },
     "systems": {
@@ -215,6 +248,41 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_3": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "vim-configs": {
+      "inputs": {
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1688607039,
+        "narHash": "sha256-LbOMca+/FRRNDwb4dnBNLrgHsmGxvA0Tfh23rFLAW9g=",
+        "owner": "heywoodlh",
+        "repo": "vim-configs",
+        "rev": "5012297d85107705a3ba98e10f349850378eb921",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "main",
+        "repo": "vim-configs",
         "type": "github"
       }
     }

@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    vim-configs.url = "github:heywoodlh/vim-configs/main";
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager = {
@@ -18,7 +19,7 @@
     nur.url = "github:nix-community/NUR";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixos-wsl, darwin, home-manager, jovian-nixos, nur, flake-utils, ... }:
+  outputs = inputs@{ self, nixpkgs, nixos-wsl, vim-configs, darwin, home-manager, jovian-nixos, nur, flake-utils, ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
       inherit system;
@@ -30,18 +31,39 @@
       "nix-macbook-air" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs;
-        modules = [ ./darwin/hosts/m2-macbook-air.nix ];
+        modules = [
+          ./darwin/hosts/m2-macbook-air.nix
+          {
+            environment.systemPackages = [
+              vim-configs.defaultPackage.${system}
+            ];
+          }
+        ];
       };
       "mac-vm" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         specialArgs = inputs;
-        modules = [ ./darwin/hosts/mac-vm.nix ];
+        modules = [
+          ./darwin/hosts/mac-vm.nix
+          {
+            environment.systemPackages = [
+              vim-configs.defaultPackage.${system}
+            ];
+          }
+        ];
       };
       # mac-mini output -- used with CI
       "nix-mac-mini" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";
         specialArgs = inputs;
-        modules = [ ./darwin/hosts/mac-mini.nix ];
+        modules = [
+          ./darwin/hosts/mac-mini.nix
+          {
+            environment.systemPackages = [
+              vim-configs.defaultPackage.${system}
+            ];
+          }
+        ];
       };
     };
 
@@ -50,7 +72,14 @@
       nix-yoga = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/yoga/configuration.nix ];
+        modules = [
+          ./nixos/hosts/yoga/configuration.nix
+          {
+            environment.systemPackages = [
+              vim-configs.defaultPackage.${system}
+            ];
+          }
+        ];
       };
       nix-pomerium = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -101,7 +130,14 @@
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/generic-intel/configuration.nix ];
+        modules = [
+          ./nixos/hosts/generic-intel/configuration.nix
+          {
+            environment.systemPackages = [
+              vim-configs.defaultPackage.${system}
+            ];
+          }
+        ];
       };
       # Used in CI
       nixos-server-intel = nixpkgs.lib.nixosSystem {
@@ -128,6 +164,7 @@
             home.packages = [
               pkgs.colima
               (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
+              vim-configs.defaultPackage.${system}
             ];
             programs.zsh.initExtra = ''
               function docker {

@@ -99,7 +99,7 @@
         "pop-shell@system76.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
       ];
-      favorite-apps = ["firefox.desktop" "alacritty.desktop"];
+      favorite-apps = ["firefox.desktop" "wezterm.desktop"];
       had-bluetooth-devices-setup = true;
       remember-mount-password = false;
       welcome-dialog-last-shown-version = "42.4";
@@ -273,12 +273,12 @@
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       name = "terminal super";
-      command = "alacritty";
+      command = "wezterm";
       binding = "<Super>Return";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
       name = "terminal ctrl_alt";
-      command = "alacritty";
+      command = "wezterm";
       binding = "<Ctrl><Alt>t";
     };
     #"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {

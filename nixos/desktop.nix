@@ -145,6 +145,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    busybox
     usbutils
   ];
 

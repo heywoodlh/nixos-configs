@@ -14,7 +14,6 @@
   home.packages = with pkgs; [
     _1password
     aerc
-    alacritty
     ansible
     ansible-lint
     bind
@@ -85,102 +84,6 @@
   nixpkgs.overlays = [
     nur.overlay
   ];
-
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      colors = {
-        primary = {
-          background = "#2e3440";
-          foreground = "#d8dee9";
-          dim_foreground = "#a5abb6";
-        };
-        cursor = {
-          text = "#2e3440";
-          cursor = "#d8dee9";
-          style = {
-            shape = "Block";
-          };
-          blinking = "On";
-        };
-        vi_mode_cursor = {
-          text = "#2e3440";
-          cursor = "#d8dee9";
-        };
-        selection = {
-          text = "CellForeground";
-          background = "#4c566a";
-        };
-        search = {
-          matches = {
-            foreground = "CellBackground";
-            background = "#88c0d0";
-          };
-        };
-        footer_bar = {
-          background = "#434c5e";
-          foreground = "#d8dee9";
-        };
-        normal = {
-          black = "#3b4252";
-          red = "#bf616a";
-          green = "#a3be8c";
-          yellow = "#ebcb8b";
-          blue = "#81a1c1";
-          magenta = "#b48ead";
-          cyan = "#88c0d0";
-          white = "#e5e9f0";
-        };
-        bright = {
-          black = "#4c566a";
-          red = "#bf616a";
-          green = "#a3be8c";
-          yellow = "#ebcb8b";
-          blue = "#81a1c1";
-          magenta = "#b48ead";
-          cyan = "#8fbcbb";
-          white = "#eceff4";
-        };
-        dim = {
-          black = "#373e4d";
-          red = "#94545d";
-          green = "#809575";
-          yellow = "#b29e75";
-          blue = "#68809a";
-          magenta = "#8c738c";
-          cyan = "#6d96a5";
-          white = "#aeb3bb";
-        };
-      };
-
-      font = {
-        normal = {
-          family = "JetBrainsMono Nerd Font Mono";
-          style = "Medium";
-        };
-        bold = {
-          family = "JetBrainsMono Nerd Font Mono";
-          style = "Medium";
-        };
-        italic = {
-          family = "JetBrainsMono Nerd Font Mono";
-          style = "Medium";
-        };
-        bold_italic = {
-          family = "JetBrainsMono Nerd Font Mono";
-          style = "Medium";
-        };
-        size = 14;
-        builtin_box_drawing = true;
-      };
-      window = {
-        decorations = "none";
-      };
-      shell = {
-        program = ".nix-profile/bin/tmux";
-      };
-    };
-  };
 
   programs.git = {
     enable = true;
@@ -500,6 +403,81 @@
       "workbench.welcomePage.walkthroughs.openOnInstall" = false;
     };
   };
+
+  programs.wezterm = {
+    enable = true;
+    extraConfig = ''
+      -- Pull in the wezterm API
+      local wezterm = require 'wezterm'
+
+      -- This table will hold the configuration.
+      local config = {}
+
+      -- In newer versions of wezterm, use the config_builder which will
+      -- help provide clearer error messages
+      if wezterm.config_builder then
+        config = wezterm.config_builder()
+      end
+
+      -- This is where you actually apply your config choices
+
+      -- Nord color scheme:
+      config.color_scheme = 'nord'
+      config.font_size = 14.0
+
+      -- Appearance tweaks
+      config.window_decorations = "NONE"
+      config.hide_tab_bar_if_only_one_tab = true
+      config.audible_bell = "Disabled"
+
+      -- Set zsh to default shell
+      config.default_prog = { '/home/heywoodlh/.nix-profile/bin/zsh' }
+
+      -- Keybindings
+      config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
+      config.keys = {
+        {
+          key = '|',
+          mods = 'LEADER|SHIFT',
+          action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
+        },
+        {
+          key = '-',
+          mods = 'LEADER',
+          action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' },
+        },
+        {
+          key = 'h',
+          mods = 'LEADER',
+          action = wezterm.action.ActivatePaneDirection 'Left',
+        },
+        {
+          key = 'j',
+          mods = 'LEADER',
+          action = wezterm.action.ActivatePaneDirection 'Down',
+        },
+        {
+          key = 'k',
+          mods = 'LEADER',
+          action = wezterm.action.ActivatePaneDirection 'Up',
+        },
+        {
+          key = 'l',
+          mods = 'LEADER',
+          action = wezterm.action.ActivatePaneDirection 'Right',
+        },
+        {
+          key = "[",
+          mods = "LEADER",
+          action = wezterm.action.ActivateCopyMode,
+        },
+      }
+      -- and finally, return the configuration to wezterm
+      return config
+    '';
+  };
+
+
 
   programs.zsh = {
     enable = true;

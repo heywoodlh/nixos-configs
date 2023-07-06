@@ -210,9 +210,9 @@
     ctrl + shift - b : ~/bin/macos-battpop.sh
 
     cmd - space : ~/bin/choose-launcher.zsh
-    # Launch Alacritty
-    ctrl + alt - t : open -a Alacritty.app
-    cmd - return : open -a Alacritty.app
+    # Launch Terminal
+    ctrl + alt - t : open -a Wezterm.app
+    cmd - return : open -a Wezterm.app
 
     # Toggle tiling
     ctrl - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'

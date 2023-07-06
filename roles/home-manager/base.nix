@@ -292,12 +292,12 @@
       config.font_size = 14.0
 
       -- Appearance tweaks
-      config.window_decorations = "NONE"
+      config.window_decorations = "RESIZE"
       config.hide_tab_bar_if_only_one_tab = true
       config.audible_bell = "Disabled"
 
       -- Set zsh to default shell
-      config.default_prog = { '/home/heywoodlh/.nix-profile/bin/zsh' }
+      config.default_prog = { "${pkgs.zsh}/bin/zsh" }
 
       -- Keybindings
       config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }

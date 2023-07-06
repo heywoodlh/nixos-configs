@@ -33,7 +33,6 @@
     ];
     casks = [
       "1password"
-      "alacritty"
       "android-platform-tools"
       "blockblock"
       "caffeine"

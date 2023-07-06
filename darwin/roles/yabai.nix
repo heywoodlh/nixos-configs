@@ -211,8 +211,8 @@
 
     cmd - space : ~/bin/choose-launcher.zsh
     # Launch Terminal
-    ctrl + alt - t : open -a Wezterm.app
-    cmd - return : open -a Wezterm.app
+    ctrl + alt - t : ${pkgs.wezterm}/bin/wezterm
+    cmd - return : ${pkgs.wezterm}/bin/wezterm
 
     # Toggle tiling
     ctrl - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'

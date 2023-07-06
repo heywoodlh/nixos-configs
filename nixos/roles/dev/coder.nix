@@ -19,7 +19,6 @@
           "3000:3000"
         ];
         volumes = [
-          "/run/user/1000/docker.sock:/var/run/docker.sock"
           "/opt/coder/kube:/home/coder/.kube"
           "/etc/localtime:/etc/localtime:ro"
         ];
@@ -45,12 +44,6 @@
           "/etc/localtime:/etc/localtime:ro"
         ];
       };
-    };
-  };
-
-  systemd.services = {
-    "docker-coder.service" = {
-      after = [ "heywoodlh@docker.service" ];
     };
   };
 }

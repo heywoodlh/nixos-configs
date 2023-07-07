@@ -50,9 +50,6 @@
   hardware.sensor.iio.enable = true;
   boot.kernelParams = [ "mem_sleep_default=s2idle" "ideapad_laptop" ];
   services.power-profiles-daemon.enable = true;
-  environment.systemPackages = with pkgs; [
-    gnomeExtensions.ideapad
-  ];
 
   # Set version of NixOS to target
   system.stateVersion = "23.05";

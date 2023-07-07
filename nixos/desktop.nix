@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nur, ... }:
+{ config, pkgs, lib, home-manager, nur, hyprland, ... }:
 
 {
   imports = [
@@ -32,10 +32,14 @@
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.wayland = false;
-  services.xserver.desktopManager.gnome = {
+  services.xserver.displayManager.gdm.wayland = true;
+
+  # Enable hyprland
+  programs.hyprland = {
     enable = true;
+    xwayland.enable = true;
   };
+  security.pam.services.swaylock.text = "auth include login";
 
   # Exclude root from displayManager
   services.xserver.displayManager.hiddenUsers = [
@@ -153,7 +157,7 @@
   systemd.services.NetworkManager-wait-online.enable = false;
 
   # Home-manager configs
-  home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix { inherit config; inherit pkgs; inherit home-manager; inherit lib; };
+  home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix { inherit config; inherit pkgs; inherit home-manager; inherit lib; inherit hyprland; };
 
   # Automatically garbage collect
   nix.gc = {

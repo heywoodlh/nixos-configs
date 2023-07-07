@@ -11,6 +11,7 @@
       url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland.url = "github:hyprwm/Hyprland";
     # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
     jovian-nixos = {
       url = "git+https://github.com/Jovian-Experiments/Jovian-NixOS?ref=development";
@@ -19,7 +20,17 @@
     nur.url = "github:nix-community/NUR";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixos-wsl, vim-configs, darwin, home-manager, jovian-nixos, nur, flake-utils, ... }:
+  outputs = inputs@{ self,
+                       nixpkgs,
+                       nixos-wsl,
+                       vim-configs,
+                       darwin,
+                       home-manager,
+                       hyprland,
+                       jovian-nixos,
+                       nur,
+                       flake-utils,
+                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
       inherit system;

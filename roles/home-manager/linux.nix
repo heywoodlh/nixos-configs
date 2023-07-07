@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, ... }:
+{ config, pkgs, lib, home-manager, hyprland, ... }:
 
 {
   imports = [
@@ -6,6 +6,9 @@
     ./firefox/linux.nix
     # GNOME settings
     ./linux/gnome-desktop.nix
+    # Hyprland
+    hyprland.homeManagerModules.default
+    ./linux/hyprland.nix
   ];
   # So that `nix search` works
   nix = lib.mkForce {

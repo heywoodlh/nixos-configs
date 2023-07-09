@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, ... }:
+{ config, pkgs, lib, home-manager, hyprland, ... }:
 
 {
   home.packages = with pkgs; [
@@ -131,7 +131,7 @@
   wayland.windowManager.hyprland = {
     enable = true;
     extraConfig = ''
-      # Fix blurry X11 apps
+      # Fix blurry X11 apps, hidpi
       exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 32c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
       xwayland {
         force_zero_scaling = true
@@ -152,7 +152,6 @@
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
       exec-once = ${pkgs.swaybg}/bin/swaybg -i /home/heywoodlh/.wallpaper.png
-      exec-once = ${pkgs.swayidle}/bin/swayidle -m timeout 300 'swaylock -f --screenshots' timeout 600 'hyperctl dispatch dpms off' resume 'hyperctl dispatch dpms on' before-sleep 'swaylock -f'
       ## Start wezterm in special workspace so I can toggle it
       exec-once = [workspace special:terminal] wezterm
       # Animations
@@ -186,7 +185,7 @@
       ## Launcher
       bind = $mainMod, Space, exec, fuzzel
       ## Lock screen
-      bind = $mainMod, l, exec, ${pkgs.swaylock-effects}/bin/swaylock --screenshots
+      bind = $mainMod, l, exec, ${pkgs.swaylock-effects}/bin/swaylock
       ## Remap caps lock to super
       input {
         kb_options = caps:super

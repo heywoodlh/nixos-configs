@@ -11,7 +11,7 @@
       url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "github:hyprwm/Hyprland/main";
     # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
     jovian-nixos = {
       url = "git+https://github.com/Jovian-Experiments/Jovian-NixOS?ref=development";
@@ -56,11 +56,6 @@
         specialArgs = inputs;
         modules = [
           ./darwin/hosts/mac-vm.nix
-          {
-            environment.systemPackages = [
-              vim-configs.defaultPackage.${system}
-            ];
-          }
         ];
       };
       # mac-mini output -- used with CI
@@ -69,11 +64,6 @@
         specialArgs = inputs;
         modules = [
           ./darwin/hosts/mac-mini.nix
-          {
-            environment.systemPackages = [
-              vim-configs.defaultPackage.${system}
-            ];
-          }
         ];
       };
     };
@@ -85,11 +75,6 @@
         specialArgs = inputs;
         modules = [
           ./nixos/hosts/yoga/configuration.nix
-          {
-            environment.systemPackages = [
-              vim-configs.defaultPackage.${system}
-            ];
-          }
         ];
       };
       nix-pomerium = nixpkgs.lib.nixosSystem {
@@ -143,11 +128,6 @@
         specialArgs = inputs;
         modules = [
           ./nixos/hosts/generic-intel/configuration.nix
-          {
-            environment.systemPackages = [
-              vim-configs.defaultPackage.${system}
-            ];
-          }
         ];
       };
       # Used in CI
@@ -164,6 +144,11 @@
         inherit pkgs;
         modules = [
           ./roles/home-manager/linux.nix
+          ./roles/home-manager/desktop.nix # Base desktop config
+          ./roles/home-manager/linux/desktop.nix # Linux-specific desktop config
+          ./roles/home-manager/linux/gnome-desktop.nix
+          hyprland.homeManagerModules.default
+          ./roles/home-manager/linux/hyprland.nix
           {
             home = {
               username = "heywoodlh";
@@ -192,6 +177,7 @@
         inherit pkgs;
         modules = [
           ./roles/home-manager/linux.nix
+          ./roles/home-manager/linux/no-desktop.nix
           {
             home = {
               username = "heywoodlh";
@@ -209,44 +195,6 @@
                 PROMPT=$'%~ %F{green}$(git branch --show-current 2&>/dev/null) %F{red}$(env | grep -i SSH_CLIENT | grep -v "0.0.0.0" | cut -d= -f2 | awk \'{print $1}\' 2&>/dev/null) %F{white}\n> '
               '';
             };
-            # Get rid of stuff from linux.nix that we don't want
-            dconf.settings = pkgs.lib.mkForce {
-            };
-
-            # Disable Starship
-            programs.starship.enable = pkgs.lib.mkForce false;
-
-            home.packages = with pkgs; lib.mkForce [
-              _1password
-              ansible
-              curl
-              git
-              glow
-              htop
-              jq
-              k9s
-              kubectl
-              lefthook
-              libvirt
-              openssh
-              pandoc
-              tcpdump
-              tmux
-              tree
-              w3m
-              vim
-              zsh
-            ];
-
-            programs.alacritty = pkgs.lib.mkForce {
-              enable = false;
-            };
-
-            programs.firefox = pkgs.lib.mkForce {
-              enable = false;
-            };
-
-            programs.vim.enable = true;
           }
         ];
         extraSpecialArgs = inputs;

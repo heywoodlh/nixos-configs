@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, vim-configs, ... }:
 
-{
+let
+  system = pkgs.system;
+in {
   #package config
   nixpkgs.config.allowUnfree = true;
 
@@ -15,6 +17,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    vim-configs.defaultPackage.${system}
     zsh
   ];
 

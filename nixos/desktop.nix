@@ -1,8 +1,10 @@
-{ config, pkgs, lib, home-manager, nur, hyprland, ... }:
+{ config, pkgs, lib, home-manager, nur, vim-configs, hyprland, ... }:
 
-{
+let
+  system = pkgs.system;
+in {
   imports = [
-    home-manager.nixosModule
+    home-manager.nixosModules.home-manager
   ];
 
   home-manager.useGlobalPkgs = true;
@@ -148,16 +150,25 @@
     General = { ControllerMode = "dual"; } ;
   };
 
-  environment.systemPackages = with pkgs; [
-    busybox
-    usbutils
+  environment.systemPackages = [
+    pkgs.busybox
+    pkgs.usbutils
+    vim-configs.defaultPackage.${system}
   ];
 
   # Disable wait-online service for Network Manager
   systemd.services.NetworkManager-wait-online.enable = false;
 
   # Home-manager configs
-  home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix { inherit config; inherit pkgs; inherit home-manager; inherit lib; inherit hyprland; };
+  home-manager.users.heywoodlh = { ... }: {
+    imports = [
+      ../roles/home-manager/linux.nix
+      ../roles/home-manager/desktop.nix # base desktop.nix
+      ../roles/home-manager/linux/desktop.nix # linux-specific desktop.nix
+      hyprland.homeManagerModules.default
+      ../roles/home-manager/linux/hyprland.nix
+    ];
+  };
 
   # Automatically garbage collect
   nix.gc = {

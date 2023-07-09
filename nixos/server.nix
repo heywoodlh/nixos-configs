@@ -1,9 +1,10 @@
-{ config, pkgs, home-manager, nur, ... }:
+{ config, pkgs, home-manager, nur, vim-configs, ... }:
 
-{
+let
+  system = pkgs.system;
+in {
   imports = [
     home-manager.nixosModule
-    ../roles/home-manager/linux/no-desktop.nix
     ./roles/sshd.nix
     ./roles/sshd-monitor.nix
     ./roles/squid-client.nix
@@ -29,30 +30,30 @@
   nix.settings.auto-optimise-store = true;
 
   # Packages to install on entire system
-  environment.systemPackages = with pkgs; [
-    ansible
-    autoPatchelfHook
-    bind
-    bitwarden-cli
-    btrfs-progs
-    busybox
-    croc
-    file
-    gcc
-    git
-    gnumake
-    gnupg
-    gptfdisk
-    htop
-    jq
-    nix-index
-    patchelf
-    python310
-    python310Packages.pip
-    unzip
-    vim
-    wireguard-tools
-    zsh
+  environment.systemPackages = [
+    pkgs.ansible
+    pkgs.autoPatchelfHook
+    pkgs.bind
+    pkgs.bitwarden-cli
+    pkgs.btrfs-progs
+    pkgs.busybox
+    pkgs.croc
+    pkgs.file
+    pkgs.gcc
+    pkgs.git
+    pkgs.gnumake
+    pkgs.gnupg
+    pkgs.gptfdisk
+    pkgs.htop
+    pkgs.jq
+    pkgs.nix-index
+    pkgs.patchelf
+    pkgs.python310
+    pkgs.python310Packages.pip
+    pkgs.unzip
+    vim-configs.defaultPackage.${system}
+    pkgs.wireguard-tools
+    pkgs.zsh
   ];
 
   # Enable Docker
@@ -76,7 +77,12 @@
   };
 
   # Set home-manager configs for username
-  home-manager.users.heywoodlh = import ../roles/home-manager/linux.nix;
+  home-manager.users.heywoodlh = { ... }: {
+    imports = [
+      ../roles/home-manager/linux.nix
+      ../roles/home-manager/linux/no-desktop.nix
+    ];
+  };
 
   # Allow heywoodlh to run sudo commands without password
   security.sudo.wheelNeedsPassword = false;

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nur, ... }:
+{ config, pkgs, lib, home-manager, nur, vim-configs, ... }:
 
 
 let

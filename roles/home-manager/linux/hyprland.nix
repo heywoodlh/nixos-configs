@@ -21,12 +21,11 @@
 
   # Download wallpaper
   home.file.".wallpaper.png" = {
-    source = builtins.fetchurl { 
+    source = builtins.fetchurl {
         url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
-        sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab"; 
+        sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
       };
     };
-
 
   # Dunst config
   services.dunst = {
@@ -102,11 +101,11 @@
     executable = true;
     text = ''
       #!/usr/bin/env bash
-      
+
       # Check if hyprland 1password workspace exists
       # If not, create it
-      hyprctl workspaces -j | grep -q 1password || killall -9 1password 2>/dev/null 
-      hyprctl workspaces -j | grep -q 1password || hyprctl dispatch exec "[workspace special:1password] 1password" 
+      hyprctl workspaces -j | grep -q 1password || killall -9 1password 2>/dev/null
+      hyprctl workspaces -j | grep -q 1password || hyprctl dispatch exec "[workspace special:1password] 1password"
       # Toggle 1password workspace
       hyprctl dispatch togglespecialworkspace "1password"
     '';
@@ -199,11 +198,14 @@
       windowrulev2 = dimaround, class:^(1Password)$, floating:1
       windowrule = rounding 10, ^(1Password)$
       windowrule = rounding 10, ^(firefox)$
-      
+      windowrulev2 = float, title:Spotify
+      windowrulev2 = size 1800 1000, title:Spotify
+      windowrulev2 = center, title:Spotify
+
       master {
         new_is_master = true # https://wiki.hyprland.org/Configuring/Master-Layout
       }
-      
+
       ## Gestures
       gestures {
         workspace_swipe = on

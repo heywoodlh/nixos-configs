@@ -49,7 +49,7 @@
   # Allow PAM to use Yubikey for auth
   # Setup with these commands:
   # nix-shell -p yubico-pam -p yubikey-manager
-  # pamu2fcfg -NP > ~/.config/Yubico/u2f_keys 
+  # pamu2fcfg -NP > ~/.config/Yubico/u2f_keys
   security.pam.u2f = {
     enable = true;
     control = "sufficient";

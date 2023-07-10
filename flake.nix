@@ -18,6 +18,7 @@
       flake = false;
     };
     nur.url = "github:nix-community/NUR";
+    spicetify.url = "gitlab:heywoodlh/spicetify-nix/nord";
   };
 
   outputs = inputs@{ self,
@@ -30,6 +31,7 @@
                        jovian-nixos,
                        nur,
                        flake-utils,
+                       spicetify,
                        ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

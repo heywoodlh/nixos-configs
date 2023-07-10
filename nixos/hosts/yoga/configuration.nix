@@ -45,6 +45,15 @@
     ];
   };
 
+  # Allow PAM to use Yubikey for auth
+  # Setup with these commands:
+  # nix-shell -p yubico-pam -p yubikey-manager
+  # pamu2fcfg -NP > ~/.config/Yubico/u2f_keys 
+  security.pam.u2f = {
+    enable = true;
+    control = "sufficient";
+  };
+
   # Hardware config specific to Lenovo Yoga 7i
   # Arch Wiki was helpful: https://wiki.archlinux.org/title/Lenovo_Yoga_7i
   hardware.sensor.iio.enable = true;

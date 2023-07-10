@@ -194,7 +194,7 @@
         "sshAgent.storeSshKeyTitlesResponseGiven": true,
         "sshAgent.enabled": true,
         "keybinds.open": "",
-        "keybinds.quickAccess": "CommandOrControl+Meta+[s]S",
+        "keybinds.quickAccess": "",
         "app.theme": "dark",
         "appearance.interfaceDensity": "compact",
         "developers.cliSharedLockState.enabled": true,

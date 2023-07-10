@@ -16,6 +16,7 @@
     webcord # Discord client that works nicely with Hyprland
     wireplumber
     wl-clipboard
+    xdg-desktop-portal-hyprland
   ];
 
   # Download wallpaper
@@ -24,7 +25,8 @@
         url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
         sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab"; 
       };
-  };
+    };
+
 
   # Dunst config
   services.dunst = {
@@ -148,6 +150,7 @@
       }
 
       # Apps to start on login
+      exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
       exec-once = [workspace special:1password] /home/heywoodlh/.nix-profile/bin/1password
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
@@ -176,12 +179,36 @@
         disable_splash_rendering = true
       }
 
+      ## Window rules
+      windowrulev2 = dimaround, class:^(1Password)$, floating:1
+      windowrule = rounding 10, ^(1Password)$
+      windowrule = rounding 10, ^(firefox)$
+      
+      master {
+        new_is_master = true # https://wiki.hyprland.org/Configuring/Master-Layout
+      }
+      
+      ## Gestures
+      gestures {
+        workspace_swipe = on
+      }
+
+      input {
+        float_switch_override_focus = 1
+        touchpad {
+          natural_scroll = yes
+          disable_while_typing = true
+        }
+      }
+
       # General Keybindings
       $mainMod = SUPER
       ## Terminal
       bind = $mainMod, Return, exec, wezterm
       bind = CTRL_ALT, t, exec, wezterm
       bind = CTRL, grave, togglespecialworkspace, terminal
+      ## 1Password
+      bind = CTRL_SUPER, s, togglespecialworkspace, 1password
       ## Launcher
       bind = $mainMod, Space, exec, fuzzel
       ## Lock screen
@@ -198,31 +225,6 @@
       bind = CTRL_SHIFT, b, exec, /home/heywoodlh/bin/battpop.sh
       bind = CTRL_SHIFT, e, exec, hyprctl dispatch exit
 
-      ## Gestures
-      gestures {
-        workspace_swipe = on
-      }
-
-      input {
-        float_switch_override_focus = 1
-        touchpad {
-          natural_scroll = yes
-          disable_while_typing = true
-        }
-      }
-
-      master {
-        new_is_master = true # https://wiki.hyprland.org/Configuring/Master-Layout
-      }
-
-      ## Window rules
-      windowrule = forceinput, class:^(1Password)$
-      windowrule = float, class:^(1Password)$
-      windowrule = center, class:^(1Password)$
-      windowrule = rounding 10,^(firefox)$
-
-      ## 1Password keybind
-      bindr = CTRL_SUPER, s, exec, /home/heywoodlh/.nix-profile/bin/1password --quick-access
       ## Navigation
       bind = $mainMod, 1, workspace, 1
       bind = $mainMod, 1, workspace, 2

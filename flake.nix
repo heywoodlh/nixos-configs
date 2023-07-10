@@ -183,6 +183,9 @@
               username = "heywoodlh";
               homeDirectory = "/home/heywoodlh";
             };
+            home.packages = [
+              vim-configs.defaultPackage.${system}
+            ];
             fonts.fontconfig.enable = true;
             targets.genericLinux.enable = true;
             programs.home-manager.enable = true;

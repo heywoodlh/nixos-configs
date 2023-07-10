@@ -96,6 +96,22 @@
     '';
   };
 
+  # 1Password script
+  home.file."bin/1password-toggle.sh" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      
+      # Check if hyprland 1password workspace exists
+      # If not, create it
+      hyprctl workspaces -j | grep -q 1password || killall -9 1password 2>/dev/null 
+      hyprctl workspaces -j | grep -q 1password || hyprctl dispatch exec "[workspace special:1password] 1password" 
+      # Toggle 1password workspace
+      hyprctl dispatch togglespecialworkspace "1password"
+    '';
+  };
+
   # Swaylock
   programs.swaylock = {
     enable = true;
@@ -208,7 +224,7 @@
       bind = CTRL_ALT, t, exec, wezterm
       bind = CTRL, grave, togglespecialworkspace, terminal
       ## 1Password
-      bind = CTRL_SUPER, s, togglespecialworkspace, 1password
+      bind = CTRL_SUPER, s, exec, /home/heywoodlh/bin/1password-toggle.sh
       ## Launcher
       bind = $mainMod, Space, exec, fuzzel
       ## Lock screen

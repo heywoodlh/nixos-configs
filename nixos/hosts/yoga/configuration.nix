@@ -39,11 +39,26 @@
   };
 
   home-manager.users.heywoodlh = {
+    services.spotifyd = {
+      enable = true;
+      settings = {
+        global = {
+          username = "31los4pph7awxi3i2inw5xiyut4u";
+          password_cmd = "cat ~/.config/spotifyd/password.txt";
+          device_name = "spotifyd";
+        };
+      };
+    };
     home.packages = with pkgs; [
       remmina
       rustdesk
       spicetify.packages.x86_64-linux.nord
+      spotify-tui
     ];
+    wayland.windowManager.hyprland.extraConfig = ''
+      exec-once = [workspace special:music] wezterm start -- spt
+      bind = CTRL_SHIFT, m, togglespecialworkspace, music
+    '';
   };
 
   # Allow PAM to use Yubikey for auth

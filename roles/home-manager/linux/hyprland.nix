@@ -14,6 +14,7 @@
     swayidle
     swaylock-effects
     webcord # Discord client that works nicely with Hyprland
+    wf-recorder
     wireplumber
     wl-clipboard
     xdg-desktop-portal-hyprland
@@ -80,8 +81,64 @@
     enable = true;
     executable = true;
     text = ''
-    #!/usr/bin/env bash
-    ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp -d)" - | ${pkgs.wl-clipboard}/bin/wl-copy
+      #!/usr/bin/env bash
+      ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp -d)" - | ${pkgs.wl-clipboard}/bin/wl-copy
+    '';
+  };
+
+  # Screenrecord scripts
+  home.file."bin/screenrecord.sh" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      filename="/home/heywoodlh/Videos/$(date +%Y-%m-%d_%H-%M-%S).mp4"
+      ${pkgs.wf-recorder}/bin/wf-recorder -g "$(${pkgs.slurp}/bin/slurp)" -t -f $filename
+      [[ -e $filename ]] && ${pkgs.libnotify}/bin/notify-send "Screenrecord" "Saved to $filename"
+    '';
+  };
+
+  # Screenrecord scripts
+  home.file."bin/screenrecord-kill.sh" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      killall -SIGINT wf-recorder
+    '';
+  };
+
+  # Screen record desktop file
+  home.file.".local/share/applications/screenrecord.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Screenrecord
+      GenericName=recorder
+      Comment=Interactively record screen
+      Exec=/home/heywoodlh/bin/screenrecord.sh
+      Terminal=false
+      Type=Application
+      Keywords=recorder;screen;record;video;hyprland
+      Icon=nix-snowflake
+      Categories=Utility;
+    '';
+  };
+
+  # Screen record killer desktop file
+  home.file.".local/share/applications/screenrecord-kill.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Screenrecord (Kill)
+      GenericName=recorder-kill
+      Comment=Kill recording screen
+      Exec=/home/heywoodlh/bin/screenrecord-kill.sh
+      Terminal=false
+      Type=Application
+      Keywords=recorder;screen;record;video;hyprland
+      Icon=nix-snowflake
+      Categories=Utility;
     '';
   };
 

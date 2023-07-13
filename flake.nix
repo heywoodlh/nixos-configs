@@ -119,6 +119,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-media/configuration.nix ];
       };
+      nix-drive = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/nix-drive/configuration.nix ];
+      };
       nix-backups = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

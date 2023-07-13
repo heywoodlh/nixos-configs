@@ -27,8 +27,11 @@ in {
   # Automatically optimize store for better storage
   nix.settings.auto-optimise-store = true;
 
-  # Enable NetworkManager
-  networking.networkmanager.enable = true;
+  # Networking
+  networking = {
+    nftables.enable = true;
+    networkmanager.enable = true;
+  };
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -55,6 +58,7 @@ in {
     xwayland.enable = true;
   };
   security.pam.services.swaylock.text = "auth include login";
+  hardware.brillo.enable = true;
 
   # Enable kde connect
   programs.kdeconnect.enable = true;
@@ -176,6 +180,15 @@ in {
     General = { ControllerMode = "dual"; } ;
   };
 
+  services.opensnitch = {
+    enable = true;
+    settings = {
+      Firewall = "nftables";
+      DefaultDuration = "always";
+    };
+  };
+
+  # Desktop packages
   environment.systemPackages = [
     pkgs.busybox
     pkgs.usbutils
@@ -194,6 +207,7 @@ in {
       hyprland.homeManagerModules.default
       ../roles/home-manager/linux/hyprland.nix
     ];
+    services.opensnitch-ui.enable = true;
   };
 
   # Automatically garbage collect

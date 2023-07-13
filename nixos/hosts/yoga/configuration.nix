@@ -1,6 +1,6 @@
 # Config specific to Lenovo Thinkpad Yoga
 
-{ config, pkgs, lib, spicetify, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -39,44 +39,13 @@
   };
 
   home-manager.users.heywoodlh = {
-    # Spotify-tui + spotify-tui
-    services.spotifyd = {
-      enable = true;
-      settings = {
-        global = {
-          username = "31los4pph7awxi3i2inw5xiyut4u";
-          password_cmd = "cat ~/.config/spotifyd/password.txt";
-          device_name = "spotifyd";
-        };
-      };
-    };
+    imports = [
+      ../../../roles/home-manager/linux/hyprland-spotify.nix
+    ];
     home.packages = with pkgs; [
       remmina
       rustdesk
-      spicetify.packages.x86_64-linux.nord
-      spotify-tui
     ];
-    wayland.windowManager.hyprland.extraConfig = ''
-      exec-once = [workspace special:music] ${pkgs.wezterm}/bin/wezterm start -- ${pkgs.spotify-tui}/bin/spt
-      windowrulev2 = workspace special:music, class:^(Spotify-TUI)$
-      bind = CTRL_SHIFT, m, togglespecialworkspace, music
-    '';
-    # spotify-tui desktop entry
-    home.file.".local/share/applications/spotify-tui.desktop" = {
-      enable = true;
-      text = ''
-        [Desktop Entry]
-        Name=spotify-tui
-        GenericName=spotify-tui
-        Comment=Spotify in terminal
-        Exec=${pkgs.wezterm}/bin/wezterm start --class="Spotify-TUI" -- ${pkgs.spotify-tui}/bin/spt
-        Terminal=false
-        Type=Application
-        Keywords=music
-        Icon=nix-snowflake
-        Categories=Music;
-      '';
-    };
   };
 
   # Allow PAM to use Yubikey for auth

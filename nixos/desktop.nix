@@ -5,6 +5,7 @@ let
 in {
   imports = [
     home-manager.nixosModules.home-manager
+    ./roles/desktop/user-icon.nix
   ];
 
   home-manager.useGlobalPkgs = true;
@@ -32,9 +33,21 @@ in {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.wayland = true;
+  # Enable nord-themed lightdm
+  services.xserver.displayManager.lightdm = {
+    enable = true;
+    background = builtins.fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
+      sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
+    };
+    greeters.gtk = {
+      enable = true;
+      theme = {
+        name = "Nordic-darker";
+        package = pkgs.nordic;
+      };
+    };
+  };
 
   # Enable hyprland
   programs.hyprland = {
@@ -42,6 +55,13 @@ in {
     xwayland.enable = true;
   };
   security.pam.services.swaylock.text = "auth include login";
+
+  # Enable kde connect
+  programs.kdeconnect.enable = true;
+  networking.firewall = {
+    interfaces.tailscale0.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
+    interfaces.tailscale0.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
+  };
 
   # Exclude root from displayManager
   services.xserver.displayManager.hiddenUsers = [
@@ -121,8 +141,6 @@ in {
   networking.firewall = {
     enable = true;
     checkReversePath = "loose";
-    interfaces.tailscale0.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
-    interfaces.tailscale0.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
   };
 
   fonts.fonts = with pkgs; [
@@ -134,6 +152,13 @@ in {
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     shell = pkgs.zsh;
+    # users.users.<name>.icon not a NixOS option
+    # made possible with ./roles/desktop/user-icon.nix
+    icon = builtins.fetchurl {
+      url = "https://avatars.githubusercontent.com/u/18178614?v=4";
+      sha256 = "sha256:02937kl4qmj29gms9r06kckq8fjpvl40bqi9vpxipwa4xy0wrymg";
+    };
+    homeMode = "755";
   };
 
   environment.homeBinInPath = true;

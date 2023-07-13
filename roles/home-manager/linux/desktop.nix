@@ -24,6 +24,18 @@
     xdotool
   ];
 
+  home.shellAliases = {
+    open = "xdg-open";
+  };
+
+  # Profile
+  home.file.".face" = {
+    source = builtins.fetchurl {
+      url = "https://avatars.githubusercontent.com/u/18178614?v=4";
+      sha256 = "sha256:02937kl4qmj29gms9r06kckq8fjpvl40bqi9vpxipwa4xy0wrymg";
+    };
+  };
+
   # Rofi config
   home.file.".config/rofi/config.rasi" = {
     text = ''

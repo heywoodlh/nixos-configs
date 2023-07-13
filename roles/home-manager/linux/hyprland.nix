@@ -9,6 +9,7 @@
     polkit-kde-agent
     libnotify
     pamix
+    playerctl
     slurp
     swaybg
     swayidle
@@ -23,10 +24,10 @@
   # Download wallpaper
   home.file.".wallpaper.png" = {
     source = builtins.fetchurl {
-        url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
-        sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
-      };
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
+      sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
     };
+  };
 
   # Dunst config
   services.dunst = {
@@ -299,6 +300,9 @@
       bind = SUPER_SHIFT, s, exec, /home/heywoodlh/bin/screenshot.sh
       bind = CTRL_SHIFT, b, exec, /home/heywoodlh/bin/battpop.sh
       bind = CTRL_SHIFT, e, exec, hyprctl dispatch exit
+      bind = CTRL_SHIFT, space, exec, ${pkgs.playerctl}/bin/playerctl play-pause
+      bind = CTRL_SHIFT, n, exec, ${pkgs.playerctl}/bin/playerctl next
+      bind = CTRL_SHIFT, p, exec, ${pkgs.playerctl}/bin/playerctl previous
 
       ## Navigation
       bind = $mainMod, 1, workspace, 1

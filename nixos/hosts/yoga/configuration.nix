@@ -57,7 +57,8 @@
       spotify-tui
     ];
     wayland.windowManager.hyprland.extraConfig = ''
-      exec-once = [workspace special:music] wezterm start -- spt
+      exec-once = [workspace special:music] ${pkgs.wezterm}/bin/wezterm start -- ${pkgs.spotify-tui}/bin/spt
+      windowrulev2 = workspace special:music, class:^(Spotify-TUI)$
       bind = CTRL_SHIFT, m, togglespecialworkspace, music
     '';
     # spotify-tui desktop entry
@@ -68,7 +69,7 @@
         Name=spotify-tui
         GenericName=spotify-tui
         Comment=Spotify in terminal
-        Exec=${pkgs.wezterm} start --class="Spotify-TUI" -- ${pkgs.spotify-tui}/bin/spt
+        Exec=${pkgs.wezterm}/bin/wezterm start --class="Spotify-TUI" -- ${pkgs.spotify-tui}/bin/spt
         Terminal=false
         Type=Application
         Keywords=music

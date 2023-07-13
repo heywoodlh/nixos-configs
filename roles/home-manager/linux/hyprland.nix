@@ -1,9 +1,12 @@
 { config, pkgs, lib, home-manager, hyprland, ... }:
 
-{
+let
+  homeDir = config.home.homeDirectory;
+in {
   home.packages = with pkgs; [
     acpi
     bluetuith
+    brillo
     dunst
     grim
     polkit-kde-agent
@@ -93,7 +96,7 @@
     executable = true;
     text = ''
       #!/usr/bin/env bash
-      filename="/home/heywoodlh/Videos/$(date +%Y-%m-%d_%H-%M-%S).mp4"
+      filename="${homeDir}/Videos/$(date +%Y-%m-%d_%H-%M-%S).mp4"
       ${pkgs.wf-recorder}/bin/wf-recorder -g "$(${pkgs.slurp}/bin/slurp)" -t -f $filename
       [[ -e $filename ]] && ${pkgs.libnotify}/bin/notify-send "Screenrecord" "Saved to $filename"
     '';
@@ -117,7 +120,7 @@
       Name=Screenrecord
       GenericName=recorder
       Comment=Interactively record screen
-      Exec=/home/heywoodlh/bin/screenrecord.sh
+      Exec=${homeDir}/bin/screenrecord.sh
       Terminal=false
       Type=Application
       Keywords=recorder;screen;record;video;hyprland
@@ -134,7 +137,7 @@
       Name=Screenrecord (Kill)
       GenericName=recorder-kill
       Comment=Kill recording screen
-      Exec=/home/heywoodlh/bin/screenrecord-kill.sh
+      Exec=${homeDir}/bin/screenrecord-kill.sh
       Terminal=false
       Type=Application
       Keywords=recorder;screen;record;video;hyprland
@@ -175,7 +178,7 @@
     package = pkgs.swaylock-effects;
     settings = {
       clock = true;
-      image = "/home/heywoodlh/.wallpaper.png";
+      image = "${homeDir}/.wallpaper.png";
     };
   };
 
@@ -224,10 +227,10 @@
 
       # Apps to start on login
       exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
-      exec-once = [workspace special:1password] /home/heywoodlh/.nix-profile/bin/1password
+      exec-once = [workspace special:1password] ${homeDir}/.nix-profile/bin/1password
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
-      exec-once = ${pkgs.swaybg}/bin/swaybg -i /home/heywoodlh/.wallpaper.png
+      exec-once = ${pkgs.swaybg}/bin/swaybg -i ${homeDir}/.wallpaper.png
       ## Start wezterm in special workspace so I can toggle it
       exec-once = [workspace special:terminal] wezterm
       # Animations
@@ -284,7 +287,7 @@
       bind = CTRL_ALT, t, exec, wezterm
       bind = CTRL, grave, togglespecialworkspace, terminal
       ## 1Password
-      bind = CTRL_SUPER, s, exec, /home/heywoodlh/bin/1password-toggle.sh
+      bind = CTRL_SUPER, s, exec, ${homeDir}/bin/1password-toggle.sh
       ## Launcher
       bind = $mainMod, Space, exec, fuzzel
       ## Lock screen
@@ -293,16 +296,30 @@
       input {
         kb_options = caps:super
       }
-      ## Media keys
-      binde =,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-      binde =,XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
-      bind =,XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-      bind = SUPER_SHIFT, s, exec, /home/heywoodlh/bin/screenshot.sh
-      bind = CTRL_SHIFT, b, exec, /home/heywoodlh/bin/battpop.sh
-      bind = CTRL_SHIFT, e, exec, hyprctl dispatch exit
+      ## Audio
+      bindle =,XF86AudioLowerVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+      binde =,XF86AudioLowerVolume, exec, ${pkgs.libnotify}/bin/notify-send -t "1000" -e "Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)"
+      bindle =,XF86AudioRaiseVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
+      binde =,XF86AudioRaiseVolume, exec, ${pkgs.libnotify}/bin/notify-send -t "1000" -e "Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)"
+      bindle =,XF86AudioMute, exec, ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+      binde =,XF86AudioMute, exec, ${pkgs.libnotify}/bin/notify-send -t "1000" -e "Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)"
       bind = CTRL_SHIFT, space, exec, ${pkgs.playerctl}/bin/playerctl play-pause
+      bind = CTRL_SHIFT, space, exec, ${pkgs.libnotify}/bin/notify-send -e "Media: $(playerctl status)"
       bind = CTRL_SHIFT, n, exec, ${pkgs.playerctl}/bin/playerctl next
+      bind = CTRL_SHIFT, n, exec, ${pkgs.libnotify}/bin/notify-send -e "Media: next track"
       bind = CTRL_SHIFT, p, exec, ${pkgs.playerctl}/bin/playerctl previous
+      bind = CTRL_SHIFT, p, exec, ${pkgs.libnotify}/bin/notify-send -e "Media: previous track"
+
+      ## Backlight
+      bindle = , XF86MonBrightnessUp, exec, ${pkgs.brillo}/bin/brillo -A 5
+      binde = , XF86MonBrightnessUp, exec, ${pkgs.libnotify}/bin/notify-send -e "Brightness: $(${pkgs.brillo}/bin/brillo)"
+      bindle = , XF86MonBrightnessDown, exec, ${pkgs.brillo}/bin/brillo -U 5
+      binde = , XF86MonBrightnessDown, exec, ${pkgs.libnotify}/bin/notify-send -e "Brightness: $(${pkgs.brillo}/bin/brillo)"
+
+      ## Productivity
+      bind = SUPER_SHIFT, s, exec, ${homeDir}/bin/screenshot.sh
+      bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
+      bind = CTRL_SHIFT, e, exec, hyprctl dispatch exit
 
       ## Navigation
       bind = $mainMod, 1, workspace, 1

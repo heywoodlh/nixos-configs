@@ -132,6 +132,7 @@ in {
   };
   users.extraGroups.vboxusers.members = [ "heywoodlh" ];
   users.extraGroups.disk.members = [ "heywoodlh" ];
+  users.extraGroups.video.members = [ "heywoodlh" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

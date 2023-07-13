@@ -39,6 +39,7 @@
   };
 
   home-manager.users.heywoodlh = {
+    # Spotify-tui + spotify-tui
     services.spotifyd = {
       enable = true;
       settings = {
@@ -59,6 +60,22 @@
       exec-once = [workspace special:music] wezterm start -- spt
       bind = CTRL_SHIFT, m, togglespecialworkspace, music
     '';
+    # spotify-tui desktop entry
+    home.file.".local/share/applications/spotify-tui.desktop" = {
+      enable = true;
+      text = ''
+        [Desktop Entry]
+        Name=spotify-tui
+        GenericName=spotify-tui
+        Comment=Spotify in terminal
+        Exec=${pkgs.wezterm} start --class="Spotify-TUI" -- ${pkgs.spotify-tui}/bin/spt
+        Terminal=false
+        Type=Application
+        Keywords=music
+        Icon=nix-snowflake
+        Categories=Music;
+      '';
+    };
   };
 
   # Allow PAM to use Yubikey for auth

@@ -115,14 +115,6 @@ in {
     logind = {
       extraConfig = "RuntimeDirectorySize=10G";
     };
-    unclutter = {
-      enable = true;
-      timeout = 5;
-    };
-    gnome = {
-      gnome-browser-connector.enable = true;
-      evolution-data-server.enable = true;
-    };
     syncthing = {
       enable = true;
       user = "heywoodlh";

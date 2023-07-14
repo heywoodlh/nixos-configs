@@ -14,9 +14,9 @@ in {
     polkit-kde-agent
     jq
     libnotify
-    pamix
     pavucontrol
     playerctl
+    pulseaudio
     slurp
     swaybg
     swayidle
@@ -225,7 +225,8 @@ in {
       #!/usr/bin/env bash
       # Hyprland
       # Script to select open apps and switch focus to it
-      selection=$(hyprctl clients -j | ${pkgs.jq}/bin/jq -r '.[] | select(.class != "") | (.class + ": " + .title + ":" + .address)' | ${pkgs.fuzzel}/bin/fuzzel -d --width=100 | ${pkgs.util-linux}/bin/rev | ${pkgs.coreutils}/bin/cut -d ':' -f1 | ${pkgs.util-linux}/bin/rev)
+      # Excludes apps in special workspaces
+      selection=$(hyprctl clients -j | ${pkgs.jq}/bin/jq -r '.[] | select(.class != "") | select(.workspace.name | contains("special") | not) | (.class + ":" + .title + ":" + .address)' | ${pkgs.fuzzel}/bin/fuzzel -d --width=100 | ${pkgs.util-linux}/bin/rev | ${pkgs.coreutils}/bin/cut -d ':' -f1 | ${pkgs.util-linux}/bin/rev)
 
       hyprctl dispatch focuswindow address:$selection
     '';
@@ -243,6 +244,60 @@ in {
       Terminal=false
       Type=Application
       Keywords=hyprland;monitor
+      Icon=nix-snowflake
+      Categories=Utility;
+    '';
+  };
+
+  # Default sound device switching script
+  home.file."bin/sound.sh" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+
+      # This script is intended to make switching audio devices easier
+      # Intended for PipeWire
+
+      # Get current audio device info
+      wpctl_status=$(wpctl status)
+      audio_section=$(printf "$wpctl_status" | sed -n '/Audio/,/Streams/p')
+
+      # Choose whether to set output (speaker) or input (microphone)
+      selection=$(printf "Output\nInput" | fuzzel -d)
+
+      if [[ $selection == "Output" ]]
+      then
+          sink_selection=$(printf "$audio_section" | sed -n '/Sinks/,/Sink endpoints/p' | grep -E '\.' | cut -d'[' -f1 | fuzzel --width=100 -d | head -1)
+          sink_selection_name=$(printf "$sink_selection" | cut -d'.' -f2)
+          sink_selection_id=$(printf "$sink_selection" | grep -o '[0-9]*')
+          [[ -n $sink_selection_id ]] && wpctl set-default $sink_selection_id &&\
+              notify-send "Set default audio input to$sink_selection_name"
+      fi
+
+      if [[ $selection == "Input" ]]
+      then
+          source_selection=$(printf "$audio_section" | sed -n '/Sources/,/Source endpoints/p' | grep -E '\.' | cut -d'[' -f1 | fuzzel --width=100 -d | head -1)
+          source_selection_name=$(printf "$source_selection" | cut -d'.' -f2)
+          source_selection_id=$(printf "$source_selection" | grep -o '[0-9]*')
+          [[ -n $source_selection_id ]] && wpctl set-default $source_selection_id &&\
+              notify-send "Set default audio output to$source_selection_name"
+      fi
+    '';
+  };
+
+  # Default sound switcher
+  home.file.".local/share/applications/default-sound-switcher.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Default Sound Device Switcher
+      GenericName=sound
+      Comment=Switch default sound device
+      Exec=${homeDir}/bin/sound.sh
+      Terminal=false
+      Type=Application
+      Keywords=hyprland;audio
       Icon=nix-snowflake
       Categories=Utility;
     '';
@@ -433,6 +488,7 @@ in {
       ## Productivity
       bind = SUPER_SHIFT, s, exec, ${homeDir}/bin/screenshot.sh
       bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
+      bind = CTRL_SHIFT, f, exec, ${homeDir}/bin/applications.sh
       bind = CTRL_SHIFT, e, exec, hyprctl dispatch exit
 
       ## Navigation

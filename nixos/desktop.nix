@@ -95,6 +95,10 @@ in {
     pulse.enable = true;
   };
 
+  ## Bluetooth
+  hardware.bluetooth = {
+    enable = true;
+  };
   ## Experimental flag allows battery reporting for bluetooth devices
   systemd.services.bluetooth.serviceConfig.ExecStart = [
     ""

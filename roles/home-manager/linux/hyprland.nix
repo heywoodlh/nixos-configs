@@ -6,12 +6,16 @@ in {
   home.packages = with pkgs; [
     acpi
     bluetuith
+    bluez
     brillo
+    coreutils
     dunst
     grim
     polkit-kde-agent
+    jq
     libnotify
     pamix
+    pavucontrol
     playerctl
     slurp
     swaybg
@@ -181,6 +185,38 @@ in {
     '';
   };
 
+  # Monitor switching script
+  home.file."bin/monitors.sh" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      # Hyprland
+      # Script to select monitor and switch focus on it
+      selection=$(hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused == false) | (.name + ": " + .description)' | ${pkgs.fuzzel}/bin/fuzzel -d | ${pkgs.coreutils}/bin/cut -d':' -f1)
+      hyprctl dispatch focusmonitor $selection
+      ${pkgs.libnotify}/bin/notify-send "Monitor switched to $selection"
+    '';
+  };
+
+  # Screen record killer desktop file
+  home.file.".local/share/applications/monitor-switch.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Monitor switch focus
+      GenericName=monitors
+      Comment=Switch monitor focus
+      Exec=${homeDir}/bin/monitors.sh
+      Terminal=false
+      Type=Application
+      Keywords=hyprland;monitor
+      Icon=nix-snowflake
+      Categories=Utility;
+    '';
+  };
+
+
   # 1Password script
   home.file."bin/1password-toggle.sh" = {
     enable = true;
@@ -324,6 +360,7 @@ in {
           natural_scroll = yes
           disable_while_typing = true
         }
+        follow_mouse = 0
       }
 
       # General Keybindings

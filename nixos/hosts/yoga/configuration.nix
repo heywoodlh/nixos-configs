@@ -40,7 +40,7 @@
 
   home-manager.users.heywoodlh = {
     imports = [
-      ../../../roles/home-manager/linux/hyprland-spotify.nix
+      ../../../roles/home-manager/linux/hyprland/spotify.nix
     ];
     home.packages = with pkgs; [
       remmina

@@ -21,6 +21,7 @@ in {
     swaybg
     swayidle
     swaylock-effects
+    util-linux
     webcord # Discord client that works nicely with Hyprland
     wf-recorder
     wireplumber
@@ -199,7 +200,7 @@ in {
     '';
   };
 
-  # Screen record killer desktop file
+  # Monitor switch
   home.file.".local/share/applications/monitor-switch.desktop" = {
     enable = true;
     text = ''
@@ -216,6 +217,36 @@ in {
     '';
   };
 
+  # Application switching script
+  home.file."bin/applications.sh" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      # Hyprland
+      # Script to select open apps and switch focus to it
+      selection=$(hyprctl clients -j | ${pkgs.jq}/bin/jq -r '.[] | select(.class != "") | (.class + ": " + .title + ":" + .address)' | ${pkgs.fuzzel}/bin/fuzzel -d --width=100 | ${pkgs.util-linux}/bin/rev | ${pkgs.coreutils}/bin/cut -d ':' -f1 | ${pkgs.util-linux}/bin/rev)
+
+      hyprctl dispatch focuswindow address:$selection
+    '';
+  };
+
+  # App switcher
+  home.file.".local/share/applications/app-switcher.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=App Switcher
+      GenericName=applications
+      Comment=Switch application focus
+      Exec=${homeDir}/bin/applications.sh
+      Terminal=false
+      Type=Application
+      Keywords=hyprland;monitor
+      Icon=nix-snowflake
+      Categories=Utility;
+    '';
+  };
 
   # 1Password script
   home.file."bin/1password-toggle.sh" = {
@@ -415,6 +446,8 @@ in {
       bind = CTRL_SHIFT, 4, movetoworkspace, 4
       bind = $mainMod, bracketleft, workspace, r-1
       bind = $mainMod, bracketright, workspace, r+1
+      bind = CTRL_SHIFT, bracketleft, focusmonitor, left
+      bind = CTRL_SHIFT, bracketright, focusmonitor, right
     '';
     xwayland = {
       enable = true;

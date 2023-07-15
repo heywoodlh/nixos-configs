@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    vim-configs.url = "github:heywoodlh/vim-configs/main";
+    vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager = {

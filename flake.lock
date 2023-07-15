@@ -119,11 +119,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1689357751,
-        "narHash": "sha256-72rOd/X5dyO/5fxmeXz5oT13/Di5C71nyEj534rU2T4=",
+        "lastModified": 1689438441,
+        "narHash": "sha256-1d04FXsZz5I6FEgaygyxDjvEWys0zb53zAn7j4O7Ms8=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "459afcc47f7a8fd0b85c4b89645099e2643732b3",
+        "rev": "06563d70342312789d45061d9367e67de9a09776",
         "type": "github"
       },
       "original": {
@@ -225,11 +225,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1689209875,
-        "narHash": "sha256-8AVcBV1DiszaZzHFd5iLc8HSLfxRAuqcU0QdfBEF3Ag=",
+        "lastModified": 1689326639,
+        "narHash": "sha256-79zi0t83Dcc2dE0NuYZ+2hqtKXZN1yWVq5mtx8D2d7Y=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "fcc147b1e9358a8386b2c4368bd928e1f63a7df2",
+        "rev": "9fdfaeb7b96f05e869f838c73cde8d98c640c649",
         "type": "github"
       },
       "original": {
@@ -270,11 +270,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1689394075,
-        "narHash": "sha256-swbrzuMh9ThPUzSiJCec1NNRy28MdadLpwXp5AS2he8=",
+        "lastModified": 1689442752,
+        "narHash": "sha256-oBmOZaW9bwuNZ6mhpKW2PAzezXtdoH46aJe2RnqR06A=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "d24cae4bc1f69ec64b4c01c41208b7c09bb5a60e",
+        "rev": "420db9ad7b6025c76ad8a084998f1244db7f7d95",
         "type": "github"
       },
       "original": {
@@ -384,17 +384,19 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1689400632,
-        "narHash": "sha256-qZ5t8/CPTx5fUcw1LMutEOVIVc+21pYON1vOB+mZTt8=",
+        "dir": "vim",
+        "lastModified": 1689446798,
+        "narHash": "sha256-8yrMmwjoewNGr3lltyO59vpZJ4moE5zAWHMcbxzlx0Q=",
         "owner": "heywoodlh",
-        "repo": "vim-configs",
-        "rev": "002fe16f7a6fa12ea3b93b44c5d876592ab457e7",
+        "repo": "flakes",
+        "rev": "b40b5e89fb3c098d5404d3c744bb663c3695104b",
         "type": "github"
       },
       "original": {
+        "dir": "vim",
         "owner": "heywoodlh",
         "ref": "main",
-        "repo": "vim-configs",
+        "repo": "flakes",
         "type": "github"
       }
     },

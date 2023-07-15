@@ -11,7 +11,7 @@
     ../../roles/oss-frontend.nix
     ../../roles/containers/syncthing.nix
     ../../roles/feeds/rsshub.nix
-    ../../roles/messaging/slidge.nix
+    ../../roles/messaging/bitlbee.nix
   ];
 
   # Bootloader.
@@ -68,6 +68,12 @@
   fileSystems."/media/disk2" = {
     device = "/dev/disk/by-uuid/7d1d10dd-392d-47ce-b178-bffd2295637e";
     fsType = "btrfs";
+  };
+
+  # Host-specific bitlbee config
+  services.bitlbee = {
+    hostName = "nix-media.tailscale";
+    interface = "100.67.2.30";
   };
 
   system.stateVersion = "22.11";

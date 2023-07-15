@@ -11,6 +11,7 @@
     ../../roles/oss-frontend.nix
     ../../roles/containers/syncthing.nix
     ../../roles/feeds/rsshub.nix
+    ../../roles/messaging/slidge.nix
   ];
 
   # Bootloader.

@@ -88,4 +88,8 @@
     ZSH="${pkgs.oh-my-zsh}/share/oh-my-zsh";
     ZSH_CACHE_DIR="/var/empty/.cache/oh-my-zsh";
   '';
+
+  programs.tiny = {
+    enable = true;
+  };
 }

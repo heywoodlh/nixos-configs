@@ -303,22 +303,6 @@ in {
     '';
   };
 
-  # 1Password script
-  home.file."bin/1password-toggle.sh" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-
-      # Check if hyprland 1password workspace exists
-      # If not, create it
-      hyprctl workspaces -j | grep -q 1password || killall -9 1password 2>/dev/null
-      hyprctl workspaces -j | grep -q 1password || hyprctl dispatch exec "[workspace special:1password] 1password"
-      # Toggle 1password workspace
-      hyprctl dispatch togglespecialworkspace "1password"
-    '';
-  };
-
   # Nord-themed Swaylock
   programs.swaylock = {
     enable = true;
@@ -426,6 +410,7 @@ in {
       ## Window rules
       windowrulev2 = dimaround, class:^(1Password)$, floating:1
       windowrule = rounding 10, ^(1Password)$
+      windowrulev2 = workspace special:1password, class:^(1Password)$ #confine 1Password to special workspace
       windowrule = rounding 10, ^(firefox)$
       windowrulev2 = float, title:Spotify
       windowrulev2 = size 1800 1000, title:Spotify
@@ -456,7 +441,7 @@ in {
       bind = CTRL_ALT, t, exec, wezterm
       bind = CTRL, grave, togglespecialworkspace, terminal
       ## 1Password
-      bind = CTRL_SUPER, s, exec, ${homeDir}/bin/1password-toggle.sh
+      bind = CTRL_SUPER, s, togglespecialworkspace, 1password
       ## Launcher
       bind = $mainMod, Space, exec, fuzzel
       ## Lock screen

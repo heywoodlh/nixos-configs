@@ -1,6 +1,8 @@
 { config, pkgs, home-manager, nur, ... }:
 
-{
+let
+  homeDir = config.home.homeDirectory;
+in {
   home.stateVersion = "23.05";
   home.enableNixpkgsReleaseCheck = false;
   nix = {
@@ -281,5 +283,20 @@
 
   home.file."share/redirector.json" = {
     text = import ./share/redirector.json.nix;
+  };
+
+  # 1Password CLI wrapper
+  home.file."bin/op-wrapper.sh" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      [[ -z "$OP_SESSION" ]] && eval $(op signin) && export OP_SESSION
+      ${pkgs._1password}/bin/op "$@"
+    '';
+  };
+
+  # Cross-platform shell aliases
+  home.shellAliases = {
+    op = "${homeDir}/bin/op-wrapper.sh";
   };
 }

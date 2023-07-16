@@ -19,6 +19,7 @@
     m-cli
     mas
     pinentry_mac
+    tiny
   ];
 
   home.shellAliases = {

@@ -10,11 +10,11 @@
     configDir = "/opt/bitlbee/etc";
     portNumber = 6667;
     libpurple_plugins = with pkgs; [
+      purple-discord
       purple-signald
       purple-matrix
     ];
     plugins = with pkgs; [
-      bitlbee-discord
       bitlbee-mastodon
     ];
   };

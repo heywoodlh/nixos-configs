@@ -16,6 +16,7 @@ in {
   ];
 
   boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
     kernelParams = [ "quiet" "splash" ];
     plymouth.enable = true;
     consoleLogLevel = 0;

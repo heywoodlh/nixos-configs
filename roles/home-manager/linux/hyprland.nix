@@ -401,12 +401,12 @@ in {
     enable = true;
     extraConfig = ''
       # Fix blurry X11 apps, hidpi
-      exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 32c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
+      exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 24c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
       xwayland {
         force_zero_scaling = true
       }
       env = GDK_SCALE,2
-      env = XCURSOR_SIZE,32
+      env = XCURSOR_SIZE,24
 
       general {
         col.active_border = 81a1c1ff
@@ -477,6 +477,7 @@ in {
       bind = CTRL, grave, togglespecialworkspace, terminal
       ## 1Password
       bind = CTRL_SUPER, s, togglespecialworkspace, 1password
+      bind = $mainMod, backslash, exec, ${pkgs._1password}/bin/1password --quick-access
       ## Launcher
       bind = $mainMod, Space, exec, fuzzel
       ## Lock screen

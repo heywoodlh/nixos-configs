@@ -176,14 +176,6 @@ in {
     General = { ControllerMode = "dual"; } ;
   };
 
-  services.opensnitch = {
-    enable = true;
-    settings = {
-      Firewall = "nftables";
-      DefaultDuration = "always";
-    };
-  };
-
   # Desktop packages
   environment.systemPackages = [
     pkgs.busybox
@@ -203,7 +195,6 @@ in {
       hyprland.homeManagerModules.default
       ../roles/home-manager/linux/hyprland.nix
     ];
-    services.opensnitch-ui.enable = true;
   };
 
   # Automatically garbage collect

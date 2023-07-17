@@ -16,6 +16,7 @@ in {
     libnotify
     pavucontrol
     playerctl
+    procps
     pulseaudio
     slurp
     swaybg
@@ -248,6 +249,44 @@ in {
       Categories=Utility;
     '';
   };
+
+  # Caffeine toggle script
+  home.file."bin/caffeine.sh" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      export caffeine_enabled="false"
+      ${pkgs.procps}/bin/ps aux | ${pkgs.gnugrep}/bin/grep -i systemd-inhibit | ${pkgs.gnugrep}/bin/grep -iq caffeine && caffeine_enabled="true"
+
+      if [[ "$caffeine_enabled" == "true" ]]
+      then
+          ${pkgs.procps}/bin/pkill -9 systemd-inhibit && ${pkgs.libnotify}/bin/notify-send "Disabled caffeine"
+      else
+          ${pkgs.systemd}/bin/systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep inf &
+          disown
+          ${pkgs.libnotify}/bin/notify-send "Enabled caffeine"
+      fi
+    '';
+  };
+
+  # Caffeine toggler
+  home.file.".local/share/applications/caffeine.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Caffeine toggle
+      GenericName=caffeine
+      Comment=Toggle caffeine
+      Exec=${homeDir}/bin/caffeine.sh
+      Terminal=false
+      Type=Application
+      Keywords=hyprland;monitor;caffeine;suspend
+      Icon=nix-snowflake
+      Categories=Utility;
+    '';
+  };
+
 
   # Default sound device switching script
   home.file."bin/sound.sh" = {

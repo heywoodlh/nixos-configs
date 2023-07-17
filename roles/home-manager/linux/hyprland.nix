@@ -449,11 +449,7 @@ in {
       ## Window rules
       windowrulev2 = dimaround, class:^(1Password)$, floating:1
       windowrule = rounding 10, ^(1Password)$
-      windowrulev2 = workspace special:1password, class:^(1Password)$ #confine 1Password to special workspace
       windowrule = rounding 10, ^(firefox)$
-      windowrulev2 = float, title:Spotify
-      windowrulev2 = size 1800 1000, title:Spotify
-      windowrulev2 = center, title:Spotify
 
       master {
         new_is_master = true # https://wiki.hyprland.org/Configuring/Master-Layout

@@ -1,6 +1,6 @@
 # Config specific to Lenovo Thinkpad Yoga
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, spicetify, ... }:
 
 {
   imports =
@@ -47,6 +47,7 @@
     home.packages = with pkgs; [
       remmina
       rustdesk
+      spicetify.packages.x86_64-linux.nord
     ];
   };
 

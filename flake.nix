@@ -154,8 +154,6 @@
           ./roles/home-manager/desktop.nix # Base desktop config
           ./roles/home-manager/linux/desktop.nix # Linux-specific desktop config
           ./roles/home-manager/linux/gnome-desktop.nix
-          hyprland.homeManagerModules.default
-          ./roles/home-manager/linux/hyprland.nix
           {
             home = {
               username = "heywoodlh";
@@ -176,7 +174,13 @@
                 $docker_bin $@
               }
             '';
+            nix.settings = {
+              substituters = ["https://hyprland.cachix.org"];
+              trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+            };
           }
+          hyprland.homeManagerModules.default
+          ./roles/home-manager/linux/hyprland.nix
         ];
         extraSpecialArgs = inputs;
       };

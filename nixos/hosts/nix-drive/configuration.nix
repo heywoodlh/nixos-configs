@@ -5,6 +5,7 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
+    ../../roles/storage/nextcloud.nix
   ];
 
   # Bootloader.
@@ -28,10 +29,10 @@
   };
 
   # Media mounts
-  #fileSystems."/media/disk1" = {
-  #  device = "/dev/disk/by-uuid/5f1975e9-ffde-4dbf-bd14-657bfb26287a";
-  #  fsType = "btrfs";
-  #};
+  fileSystems."/media/storage" = {
+    device = "/dev/disk/by-uuid/ce3c27ed-2e55-40a9-9737-154e71a637b4";
+    fsType = "ext4";
+  };
 
   system.stateVersion = "23.05";
 }

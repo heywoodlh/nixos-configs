@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 80 ];
+
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud27;
@@ -8,6 +10,7 @@
     config = {
       adminpassFile = "/opt/nextcloud/pass.txt";
       adminuser = "heywoodlh";
+      dbtype = "pgsql";
       extraTrustedDomains = [
         "nix-drive.tailscale"
         "nextcloud"
@@ -18,7 +21,6 @@
     autoUpdateApps.enable = true;
     database = {
       createLocally = true;
-      dbtype = "pgsql";
     };
     home = "/media/storage/nextcloud";
   };

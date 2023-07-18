@@ -83,7 +83,22 @@ in {
   };
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.hplipWithPlugin ];
+  };
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    openFirewall = true; # For wifi printers
+  };
+  # For scanning documents
+  hardware.sane = {
+    enable = true;
+    extraBackends = [ pkgs.hplipWithPlugin ];
+  };
+  users.extraGroups.lp.members = [ "heywoodlh" ];
+  users.extraGroups.scanner.members = [ "heywoodlh" ];
 
   # Enable sound with pipewire.
   sound.enable = true;

@@ -8,9 +8,9 @@
     package = pkgs.nextcloud27;
     hostName = "drive.heywoodlh.io";
     config = {
+      dbtype = "pgsql";
       adminpassFile = "/opt/nextcloud/pass.txt";
       adminuser = "heywoodlh";
-      dbtype = "pgsql";
       extraTrustedDomains = [
         "nix-drive.tailscale"
         "nextcloud"
@@ -23,5 +23,9 @@
       createLocally = true;
     };
     home = "/media/storage/nextcloud";
+    phpOptions = {
+      upload_max_filesize = "40G";
+      post_max_size = "40G";
+    };
   };
 }

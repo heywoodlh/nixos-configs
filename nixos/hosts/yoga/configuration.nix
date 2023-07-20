@@ -47,6 +47,7 @@
     home.packages = with pkgs; [
       remmina
       rustdesk
+      signal-desktop
       spicetify.packages.x86_64-linux.nord
     ];
   };

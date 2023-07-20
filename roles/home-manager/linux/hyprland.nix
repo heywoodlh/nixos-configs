@@ -405,8 +405,9 @@ in {
       xwayland {
         force_zero_scaling = true
       }
-      env = GDK_SCALE,2
-      env = XCURSOR_SIZE,24
+      env = GDK_SCALE, 2
+      env = XCURSOR_SIZE, 24
+      env = NIXOS_OZONE_WL, 1
 
       general {
         col.active_border = 81a1c1ff

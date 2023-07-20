@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -73,6 +73,16 @@
   system.autoUpgrade = {
     enable = true;
     flake = "github:heywoodlh/nixos-configs#nix-ext-net";
+  };
+
+  # Disable squid client on this system
+  # Prevents recursive dependencies
+  # I.E. squid not able to come up due to squid not being up
+  networking.proxy = {
+    default = lib.mkForce null;
+    httpProxy = lib.mkForce config.networking.proxy.default;
+    httpsProxy = lib.mkForce config.networking.proxy.default;
+    noProxy = lib.mkForce config.networking.proxy.default;
   };
 
   system.stateVersion = "22.11";

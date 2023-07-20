@@ -34,7 +34,6 @@ in {
     pkgs.ansible
     pkgs.autoPatchelfHook
     pkgs.bind
-    pkgs.bitwarden-cli
     pkgs.btrfs-progs
     pkgs.busybox
     pkgs.croc

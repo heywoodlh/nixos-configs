@@ -13,6 +13,18 @@ in {
   # Import nur as nixpkgs.overlays
   nixpkgs.overlays = [
     nur.overlay
+    # pin docker to older nixpkgs due to broken build
+    (let
+      pinnedPkgs = import(pkgs.fetchFromGitHub {
+        owner = "NixOS";
+        repo = "nixpkgs";
+        rev = "b6bbc53029a31f788ffed9ea2d459f0bb0f0fbfc";
+        sha256 = "sha256-JVFoTY3rs1uDHbh0llRb1BcTNx26fGSLSiPmjojT+KY=";
+      }) {};
+    in
+    final: prev: {
+      docker = pinnedPkgs.docker;
+    })
   ];
 
   boot = {
@@ -30,7 +42,6 @@ in {
     substituters = ["https://hyprland.cachix.org"];
     trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
   };
-
 
   # Networking
   networking = {

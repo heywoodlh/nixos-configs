@@ -2,8 +2,7 @@
   description = "heywoodlh nix config";
 
   inputs = {
-    # Temporary fix for https://github.com/NixOS/nixpkgs/issues/244159
-    nixpkgs.url = "github:nixos/nixpkgs/b6bbc53029a31f788ffed9ea2d459f0bb0f0fbfc";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
     darwin.url = "github:LnL7/nix-darwin/master";

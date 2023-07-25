@@ -44,7 +44,7 @@ in {
 
   # Enable nord-themed lightdm
   services.xserver.displayManager.lightdm = {
-    enable = true;
+    enable = false;
     background = builtins.fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
       sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
@@ -56,6 +56,12 @@ in {
         package = pkgs.nordic;
       };
     };
+  };
+
+  # Enable GNOME
+  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.displayManager.gdm = {
+    enable = true;
   };
 
   # Enable hyprland
@@ -214,6 +220,7 @@ in {
       ../roles/home-manager/linux.nix
       ../roles/home-manager/desktop.nix # base desktop.nix
       ../roles/home-manager/linux/desktop.nix # linux-specific desktop.nix
+      ../roles/home-manager/linux/gnome-desktop.nix
       hyprland.homeManagerModules.default
       ../roles/home-manager/linux/hyprland.nix
     ];

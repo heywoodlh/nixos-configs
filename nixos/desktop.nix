@@ -1,7 +1,9 @@
-{ config, pkgs, lib, home-manager, nur, vim-configs, hyprland, ... }:
+{ config, pkgs, lib, home-manager, nur, vim-configs, hyprland, nixpkgs-stable, nixpkgs-backports, ... }:
 
 let
   system = pkgs.system;
+  pkgs-stable = nixpkgs-stable.legacyPackages.${system};
+  pkgs-backports = nixpkgs-backports.legacyPackages.${system};
 in {
   imports = [
     home-manager.nixosModules.home-manager
@@ -10,21 +12,9 @@ in {
 
   home-manager.useGlobalPkgs = true;
 
-  # Import nur as nixpkgs.overlays
   nixpkgs.overlays = [
+    # Import nur as nixpkgs.overlays
     nur.overlay
-    # pin docker to older nixpkgs due to broken build
-    (let
-      pinnedPkgs = import(pkgs.fetchFromGitHub {
-        owner = "NixOS";
-        repo = "nixpkgs";
-        rev = "b6bbc53029a31f788ffed9ea2d459f0bb0f0fbfc";
-        sha256 = "sha256-JVFoTY3rs1uDHbh0llRb1BcTNx26fGSLSiPmjojT+KY=";
-      }) {};
-    in
-    final: prev: {
-      docker = pinnedPkgs.docker;
-    })
   ];
 
   boot = {
@@ -157,6 +147,7 @@ in {
   # Virtualization
   virtualisation = {
     docker.rootless = {
+      package = pkgs-backports.docker;
       enable = true;
       setSocketVariable = true;
     };

@@ -2,7 +2,9 @@
   description = "heywoodlh nix config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
     darwin.url = "github:LnL7/nix-darwin/master";
@@ -23,6 +25,8 @@
 
   outputs = inputs@{ self,
                        nixpkgs,
+                       nixpkgs-stable,
+                       nixpkgs-backports,
                        nixos-wsl,
                        vim-configs,
                        darwin,
@@ -164,6 +168,7 @@
             targets.genericLinux.enable = true;
             home.packages = [
               pkgs.colima
+              inputs.nixpkgs-backports.legacyPackages.${system}.docker-client
               (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
               vim-configs.defaultPackage.${system}
             ];
@@ -195,6 +200,7 @@
               homeDirectory = "/home/heywoodlh";
             };
             home.packages = [
+              inputs.nixpkgs-backports.legacyPackages.${system}.docker-client
               vim-configs.defaultPackage.${system}
             ];
             fonts.fontconfig.enable = true;

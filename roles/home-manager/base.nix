@@ -24,7 +24,6 @@ in {
     coreutils
     curl
     dante
-    docker-client
     docker-compose
     doctl
     dos2unix

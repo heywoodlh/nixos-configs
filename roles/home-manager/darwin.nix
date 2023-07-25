@@ -14,12 +14,12 @@
     '';
   };
 
-  home.packages = with pkgs; [
-    colima
-    m-cli
-    mas
-    pinentry_mac
-    tiny
+  home.packages = [
+    pkgs.colima
+    pkgs.m-cli
+    pkgs.mas
+    pkgs.pinentry_mac
+    pkgs.tiny
   ];
 
   home.shellAliases = {

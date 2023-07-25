@@ -1,6 +1,8 @@
 { config, pkgs, lib, home-manager, ... }:
 
-{
+let
+  homeDir = config.home.homeDirectory;
+in {
   home.packages = with pkgs; [
     gnome.dconf-editor
     gnome.gnome-terminal
@@ -10,6 +12,7 @@
     gnomeExtensions.just-perfection
     gnomeExtensions.pop-shell
     gnomeExtensions.tray-icons-reloaded
+    pop-launcher
   ];
 
   home.file.".config/pop-shell/config.json" = {
@@ -27,6 +30,14 @@
     '';
   };
 
+  # Download wallpaper
+  home.file.".wallpaper.png" = {
+    source = builtins.fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
+      sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
+    };
+  };
+
   dconf.settings = {
     "org/gnome/desktop/input-sources" = {
       xkb-options = ["caps:super"];
@@ -34,7 +45,7 @@
     "apps/guake/general" = {
       abbreviate-tab-names = false;
       compat-delete = "delete-sequence";
-      default-shell = "/home/heywoodlh/.nix-profile/bin/tmux";
+      default-shell = "${homeDir}/.nix-profile/bin/tmux";
       display-n = 0;
       display-tab-names = 0;
       gtk-prefer-dark-theme = true;
@@ -146,6 +157,18 @@
       workspace-popup = false;
       workspaces-in-app-grid = true;
     };
+    "org/gnome/desktop/background" = {
+      color-shading = "solid";
+      picture-options = "zoom";
+      picture-uri = "file://${homeDir}/.wallpaper.png";
+      picture-uri-dark = "file://${homeDir}/.wallpaper.png";
+    };
+    "org/gnome/desktop/screensaver" = {
+      color-shading = "solid";
+      picture-options = "zoom";
+      picture-uri = "file://${homeDir}/.wallpaper.png";
+      picture-uri-dark = "file://${homeDir}/.wallpaper.png";
+    };
     "org/gnome/desktop/interface" = {
       clock-show-seconds = true;
       clock-show-weekday = true;
@@ -191,6 +214,7 @@
       focus-right = ["disabled"];
       tile-by-default = true;
       tile-enter = ["disabled"];
+      activate-launcher = ["<Super>space"];
     };
     "org/gnome/desktop/notifications" = {
       show-in-lock-screen = false;
@@ -217,7 +241,7 @@
       cursor-colors-set = true;
       cursor-foreground-color = "rgb(59,66,82)";
       cursor-shape = "ibeam";
-      custom-command = "/home/heywoodlh/.nix-profile/bin/tmux";
+      custom-command = "${homeDir}/.nix-profile/bin/tmux";
       font = "JetBrainsMonoNL Nerd Font 12";
       foreground-color = "#D8DEE9";
       highlight-background-color = "rgb(136,192,208)";
@@ -262,8 +286,8 @@
       custom-keybindings = [
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
-        #"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
-        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+        #"/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/"
@@ -281,16 +305,16 @@
       command = "wezterm";
       binding = "<Ctrl><Alt>t";
     };
-    #"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
-    #  name = "rofi-1pass";
-    #  command = "/home/heywoodlh/bin/rofi-1pass";
-    #  binding = "<Ctrl><Super>s";
-    #};
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
-      name = "launcher";
-      command = "rofi -theme nord -show run -display-run 'run: '";
-      binding = "<Super>Space";
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+      name = "rofi-1pass";
+      command = "1password --quick-access";
+      binding = "<Ctrl><Super>s";
     };
+    #"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3" = {
+    #  name = "launcher";
+    #  command = "albert --show";
+    #  binding = "<Super>Space";
+    #};
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
       binding = "<Super><Shift>s";
       command = "bash -c 'gnome-screenshot -a -f /tmp/screenshot.png && xclip -in -selection clipboard -target image/png /tmp/screenshot.png'";
@@ -298,7 +322,7 @@
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5" = {
       binding = "<Shift><Control>e";
-      command = "/home/heywoodlh/bin/vim-ime.py --cmd 'gnome-terminal --geometry=60x8 -- vim' --outfile '/home/heywoodlh/tmp/vim-ime.txt'";
+      command = "${homeDir}/bin/vim-ime.py --cmd 'gnome-terminal --geometry=60x8 -- vim' --outfile '${homeDir}/tmp/vim-ime.txt'";
       name = "vim-ime";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6" = {

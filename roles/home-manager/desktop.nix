@@ -79,7 +79,7 @@
       -- Nord color scheme:
       config.color_scheme = 'nord'
       config.font = wezterm.font 'JetBrainsMono Nerd Font Mono'
-      config.font_size = 12.0
+      config.font_size = 18.0
 
       -- Appearance tweaks
       config.window_decorations = "RESIZE"
@@ -88,6 +88,11 @@
 
       -- Set zsh to default shell
       config.default_prog = { "${pkgs.zsh}/bin/zsh" }
+
+      -- Disable hiding mouse cursor when typing
+      -- Assumes something else will hide cursor
+      -- (i.e. Cursorcerer on MacOS, unclutter on Linux)
+      config.hide_mouse_cursor_when_typing = false
 
       -- Keybindings
       config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
@@ -128,6 +133,7 @@
           action = wezterm.action.ActivateCopyMode,
         },
       }
+
       -- and finally, return the configuration to wezterm
       return config
     '';

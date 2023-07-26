@@ -209,18 +209,14 @@
 
     ctrl + shift - b : ~/bin/macos-battpop.sh
 
-    cmd - space : ~/bin/choose-launcher.zsh
+    # Disabled: now using Spotlight
+    # cmd - space : ~/bin/choose-launcher.zsh
     # Launch Terminal
     ctrl + alt - t : ${pkgs.wezterm}/bin/wezterm
     cmd - return : ${pkgs.wezterm}/bin/wezterm
 
     # Toggle tiling
     ctrl - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'
-
-    # Play, pause, fast forward in plexamp
-    ctrl + shift - p : osascript -e 'tell application "Plexamp" to previous track'
-    ctrl + shift - n : osascript -e 'tell application "Plexamp" to next track'
-    ctrl + shift - space : osascript -e 'tell application "Plexamp" to playpause'
 
     .blacklist [
       "vmware fusion"

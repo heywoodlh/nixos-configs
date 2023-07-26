@@ -80,7 +80,7 @@ in {
     };
     CustomUserPreferences = {
       "NSGlobalDomain" = {
-        "AppleSpacesSwitchOnActivate" = 0;
+        "AppleSpacesSwitchOnActivate" = 1;
       };
       "com.googlecode.iterm2" = {
         "PrefsCustomFolder" = "~/.config/iterm2";

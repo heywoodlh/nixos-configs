@@ -79,7 +79,7 @@
       -- Nord color scheme:
       config.color_scheme = 'nord'
       config.font = wezterm.font 'JetBrainsMono Nerd Font Mono'
-      config.font_size = 18.0
+      config.font_size = 16.0
 
       -- Appearance tweaks
       config.window_decorations = "RESIZE"

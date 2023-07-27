@@ -11,6 +11,7 @@ in {
     ../roles/brew.nix
     ../roles/yabai.nix
     ../roles/network.nix
+    ../roles/spicetify.nix
     ../../roles/home-manager/darwin/settings.nix
   ];
 

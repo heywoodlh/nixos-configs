@@ -33,6 +33,7 @@ in {
       "discord"
       "libreoffice"
       "screens"
+      "signal"
       "vmware-fusion"
       "zoom"
     ];

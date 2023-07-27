@@ -14,6 +14,7 @@
     ../../roles/containers/registry.nix
     ../../roles/containers/registry.nix
     ../../roles/monitoring/zabbix-server.nix
+    ../../roles/monitoring/nfcapd.nix
   ];
 
   # Bootloader.

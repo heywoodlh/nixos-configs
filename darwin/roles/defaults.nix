@@ -1,4 +1,4 @@
-{ config, pkgs, vim-configs, ... }:
+{ config, pkgs, vim-configs, wezterm-configs, ... }:
 
 let
   system = pkgs.system;
@@ -18,6 +18,7 @@ in {
 
   environment.systemPackages = with pkgs; [
     vim-configs.defaultPackage.${system}
+    wezterm-configs.packages.${system}
     zsh
   ];
 

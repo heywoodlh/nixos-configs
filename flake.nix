@@ -7,6 +7,7 @@
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
+    wezterm-configs.url = "github:heywoodlh/flakes/main?dir=wezterm";
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager = {
@@ -29,6 +30,7 @@
                        nixpkgs-backports,
                        nixos-wsl,
                        vim-configs,
+                       wezterm-configs,
                        darwin,
                        home-manager,
                        hyprland,
@@ -171,6 +173,7 @@
               inputs.nixpkgs-backports.legacyPackages.${system}.docker-client
               (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
               vim-configs.defaultPackage.${system}
+              wezterm-configs.packages.${system}
             ];
             programs.zsh.initExtra = ''
               function docker {

@@ -123,6 +123,7 @@ in {
     };
     "org/gnome/mutter" = {
       dynamic-workspaces = false;
+      workspaces-only-on-primary = false;
     };
     "org/gnome/shell/extensions/user-theme" = {
       name = "Nordic-darker";

@@ -1,6 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, wezterm-configs, ... }:
 
-{
+let
+  system = pkgs.system;
+  weztermConfig = wezterm-configs.packages.${system}.wezterm;
+in {
   services.yabai.enable = true;
   services.yabai.package = pkgs.yabai;
   services.yabai.enableScriptingAddition = false;
@@ -212,8 +215,8 @@
     # Disabled: now using Spotlight
     # cmd - space : ~/bin/choose-launcher.zsh
     # Launch Terminal
-    ctrl + alt - t : ${pkgs.wezterm}/bin/wezterm
-    cmd - return : ${pkgs.wezterm}/bin/wezterm
+    ctrl + alt - t : ${weztermConfig}/bin/wezterm
+    cmd - return : ${weztermConfig}/bin/wezterm
 
     # Toggle tiling
     ctrl - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nur, vim-configs, hyprland, nixpkgs-stable, nixpkgs-backports, wezterm-configs, ... }:
+{ config, pkgs, lib, home-manager, nur, vim-configs, hyprland, nixpkgs-stable, nixpkgs-backports, wezterm-configs, fish-configs, ... }:
 
 let
   system = pkgs.system;
@@ -172,7 +172,7 @@ in {
     checkReversePath = "loose";
   };
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" "JetBrainsMono" ]; })
   ];
 
@@ -180,7 +180,7 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = pkgs.zsh;
+    shell = pkgs.bash;
     # users.users.<name>.icon not a NixOS option
     # made possible with ./roles/desktop/user-icon.nix
     icon = builtins.fetchurl {
@@ -209,22 +209,37 @@ in {
     pkgs.busybox
     pkgs.usbutils
     vim-configs.defaultPackage.${system}
-    wezterm-configs.packages.${system}.wezterm
   ];
 
   # Disable wait-online service for Network Manager
   systemd.services.NetworkManager-wait-online.enable = false;
 
   # Home-manager configs
-  home-manager.users.heywoodlh = { ... }: {
-    imports = [
-      ../roles/home-manager/linux.nix
-      ../roles/home-manager/desktop.nix # base desktop.nix
-      ../roles/home-manager/linux/desktop.nix # linux-specific desktop.nix
-      ../roles/home-manager/linux/gnome-desktop.nix
-      hyprland.homeManagerModules.default
-      ../roles/home-manager/linux/hyprland.nix
-    ];
+  home-manager = {
+    extraSpecialArgs = {
+      inherit fish-configs;
+      inherit wezterm-configs;
+    };
+    users.heywoodlh = { ... }: {
+      imports = [
+        ../roles/home-manager/linux.nix
+        ../roles/home-manager/desktop.nix # base desktop.nix
+        ../roles/home-manager/linux/desktop.nix # linux-specific desktop.nix
+        ../roles/home-manager/linux/gnome-desktop.nix
+        hyprland.homeManagerModules.default
+        ../roles/home-manager/linux/hyprland.nix
+      ];
+      home.file."bin/nixos-switch" = {
+        enable = true;
+        executable = true;
+        text = ''
+          #!/usr/bin/env bash
+          [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
+          git -C ~/opt/nixos-configs pull origin master
+          /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
+        '';
+      };
+    };
   };
 
   # Automatically garbage collect

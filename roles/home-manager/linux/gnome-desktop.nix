@@ -1,18 +1,20 @@
-{ config, pkgs, lib, home-manager, ... }:
+{ config, pkgs, lib, home-manager, fish-configs, ... }:
 
 let
+  system = pkgs.system;
   homeDir = config.home.homeDirectory;
 in {
-  home.packages = with pkgs; [
-    gnome.dconf-editor
-    gnome.gnome-terminal
-    gnome.gnome-tweaks
-    gnomeExtensions.caffeine
-    gnomeExtensions.gsconnect
-    gnomeExtensions.just-perfection
-    gnomeExtensions.pop-shell
-    gnomeExtensions.tray-icons-reloaded
-    pop-launcher
+  home.packages = [
+    fish-configs.packages.${system}.fish
+    pkgs.gnome.dconf-editor
+    pkgs.gnome.gnome-terminal
+    pkgs.gnome.gnome-tweaks
+    pkgs.gnomeExtensions.caffeine
+    pkgs.gnomeExtensions.gsconnect
+    pkgs.gnomeExtensions.just-perfection
+    pkgs.gnomeExtensions.pop-shell
+    pkgs.gnomeExtensions.tray-icons-reloaded
+    pkgs.pop-launcher
   ];
 
   home.file.".config/pop-shell/config.json" = {
@@ -45,7 +47,7 @@ in {
     "apps/guake/general" = {
       abbreviate-tab-names = false;
       compat-delete = "delete-sequence";
-      default-shell = "${homeDir}/.nix-profile/bin/tmux";
+      default-shell = "${homeDir}/.nix-profile/bin/fish";
       display-n = 0;
       display-tab-names = 0;
       gtk-prefer-dark-theme = true;

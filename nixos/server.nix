@@ -87,6 +87,16 @@ in {
       ../roles/home-manager/linux.nix
       ../roles/home-manager/linux/no-desktop.nix
     ];
+    home.file."bin/nixos-switch" = {
+      enable = true;
+      executable = true;
+      text = ''
+        #!/usr/bin/env bash
+        [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
+        git -C ~/opt/nixos-configs pull origin master
+        /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
+      '';
+    };
   };
 
   # Allow heywoodlh to run sudo commands without password

@@ -1,27 +1,30 @@
-{ config, pkgs, home-manager, ... }:
+{ config, pkgs, home-manager, wezterm-configs, ... }:
 
-{
+let
+  system = pkgs.system;
+in {
   imports = [
     ../firefox/linux.nix
   ];
 
-  home.packages = with pkgs; [
-    _1password-gui
-    acpi
-    arch-install-scripts
-    guake
-    gnome.gnome-screenshot
-    inotify-tools
-    keyutils
-    libnotify #(notify-send)
-    nixos-install-tools
-    nordic
-    pinentry-rofi
-    rofi
-    tailscale
-    virt-manager
-    xclip
-    xdotool
+  home.packages = [
+    pkgs._1password-gui
+    pkgs.acpi
+    pkgs.arch-install-scripts
+    pkgs.guake
+    pkgs.gnome.gnome-screenshot
+    pkgs.inotify-tools
+    pkgs.keyutils
+    pkgs.libnotify #(notify-send)
+    pkgs.nixos-install-tools
+    pkgs.nordic
+    pkgs.pinentry-rofi
+    pkgs.rofi
+    pkgs.tailscale
+    pkgs.virt-manager
+    pkgs.xclip
+    pkgs.xdotool
+    wezterm-configs.packages.${system}.wezterm
   ];
 
   home.shellAliases = {

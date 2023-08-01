@@ -1,6 +1,8 @@
-{ config, pkgs, home-manager, nur, lib, ... }:
+{ config, pkgs, home-manager, nur, lib, fish-configs, ... }:
 
-{
+let
+  system = pkgs.system;
+in {
   imports = [
     ./base.nix
     ./desktop.nix
@@ -15,6 +17,7 @@
   };
 
   home.packages = [
+    fish-configs.packages.${system}.fish
     pkgs.colima
     pkgs.m-cli
     pkgs.mas
@@ -62,20 +65,31 @@
       then
         export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
       fi
-
-      function darwin-switch {
-        git -C ~/opt/nixos-configs pull origin master
-        darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
-      }
-      function docker {
-        docker_bin="$(command which docker)"
-        colima list | grep default | grep -q Running || colima start default # Start/create default colima instance if not running/created
-        $docker_bin $@
-      }
     '';
     oh-my-zsh.plugins = [
       "macos"
     ];
+  };
+
+  home.file."bin/darwin-switch" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
+      git -C ~/opt/nixos-configs pull origin master
+      darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
+    '';
+  };
+
+  home.file."bin/docker" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      ${pkgs.colima}/bin/colima list | grep default | grep -q Running || ${pkgs.colima}/bin/colima start default # Start/create default colima instance if not running/created
+      ${pkgs.docker-client}/bin/docker ''$@
+    '';
   };
 
   home.file.".zshenv".text = lib.mkForce ''

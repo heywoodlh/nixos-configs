@@ -1,4 +1,4 @@
-{ config, pkgs, vim-configs, wezterm-configs, ... }:
+{ config, pkgs, vim-configs, ... }:
 
 let
   system = pkgs.system;
@@ -16,10 +16,9 @@ in {
     zsh
   ];
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = [
     vim-configs.defaultPackage.${system}
-    wezterm-configs.packages.${system}
-    zsh
+    pkgs.zsh
   ];
 
   # add nerd fonts

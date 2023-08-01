@@ -8,6 +8,7 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
     wezterm-configs.url = "github:heywoodlh/flakes/main?dir=wezterm";
+    fish-configs.url = "github:heywoodlh/flakes/main?dir=fish";
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager = {
@@ -25,20 +26,21 @@
   };
 
   outputs = inputs@{ self,
-                       nixpkgs,
-                       nixpkgs-stable,
-                       nixpkgs-backports,
-                       nixos-wsl,
-                       vim-configs,
-                       wezterm-configs,
-                       darwin,
-                       home-manager,
-                       hyprland,
-                       jovian-nixos,
-                       nur,
-                       flake-utils,
-                       spicetify,
-                       ... }:
+                      nixpkgs,
+                      nixpkgs-stable,
+                      nixpkgs-backports,
+                      nixos-wsl,
+                      vim-configs,
+                      wezterm-configs,
+                      fish-configs,
+                      darwin,
+                      home-manager,
+                      hyprland,
+                      jovian-nixos,
+                      nur,
+                      flake-utils,
+                      spicetify,
+                      ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
       inherit system;
@@ -57,13 +59,6 @@
               vim-configs.defaultPackage.${system}
             ];
           }
-        ];
-      };
-      "mac-vm" = darwin.lib.darwinSystem {
-        system = "x86_64-darwin";
-        specialArgs = inputs;
-        modules = [
-          ./darwin/hosts/mac-vm.nix
         ];
       };
       # mac-mini output -- used with CI
@@ -171,17 +166,19 @@
             home.packages = [
               pkgs.colima
               inputs.nixpkgs-backports.legacyPackages.${system}.docker-client
+              fish-configs.packages.${system}.fish
               (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
               vim-configs.defaultPackage.${system}
-              wezterm-configs.packages.${system}
             ];
-            programs.zsh.initExtra = ''
-              function docker {
-                docker_bin="$(command which docker)"
-                colima list | grep default | grep -q Running || colima start default &>/dev/null # Start/create default colima instance if not running/created
-                $docker_bin $@
-              }
-            '';
+            home.file."bin/docker" = {
+              enable = true;
+              executable = true;
+              text = ''
+                #!/usr/bin/env bash
+                ${pkgs.colima}/bin/colima list | grep default | grep -q Running || ${pkgs.colima}/bin/colima start default # Start/create default colima instance if not running/created
+                ${pkgs.docker-client}/bin/docker ''$@
+              '';
+            };
             nix.settings = {
               substituters = ["https://hyprland.cachix.org"];
               trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
@@ -203,6 +200,7 @@
               homeDirectory = "/home/heywoodlh";
             };
             home.packages = [
+              fish-configs.packages.${system}.fish
               inputs.nixpkgs-backports.legacyPackages.${system}.docker-client
               vim-configs.defaultPackage.${system}
             ];

@@ -1,5 +1,5 @@
 # Remember that this is used for GitHub Actions to test builds
-{ config, pkgs, lib, home-manager, nur, ... }:
+{ config, pkgs, lib, home-manager, nur, fish-configs, ... }:
 
 let
   hostname = "nix-mac-mini";
@@ -16,8 +16,14 @@ in {
   # Define user settings
   users.users.${username} = import ../roles/user.nix { inherit config; inherit pkgs; };
 
-  # Set home-manager configs for username
-  home-manager.users.${username} = import ../../roles/home-manager/darwin.nix;
+  # Home-Manager config
+  home-manager = {
+    extraSpecialArgs = {
+      inherit fish-configs;
+    };
+    # Set home-manager configs for username
+    users.${username} = import ../../roles/home-manager/darwin.nix;
+  };
 
   # Extra homebrew packages for this host
   homebrew.brews = [

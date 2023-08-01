@@ -375,7 +375,7 @@
   },
   "Space" : -1,
   "HotKey Window AutoHides" : true,
-  "Command" : "~\/.nix-profile\/bin\/tmux",
+  "Command" : "~/.nix-profile/bin/fish",
   "Terminal Type" : "xterm-256color",
   "Horizontal Spacing" : 1,
   "Tab Color" : {

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nur, vim-configs, ... }:
+{ config, pkgs, lib, home-manager, nur, vim-configs, fish-configs, ... }:
 
 
 let
@@ -18,8 +18,14 @@ in {
   # Define user settings
   users.users.${username} = import ../roles/user.nix { inherit config; inherit pkgs; };
 
-  # Set home-manager configs for username
-  home-manager.users.${username} = import ../../roles/home-manager/darwin.nix;
+  # Home-Manager config
+  home-manager = {
+    extraSpecialArgs = {
+      inherit fish-configs;
+    };
+    # Set home-manager configs for username
+    users.${username} = import ../../roles/home-manager/darwin.nix;
+  };
 
   # Set hostname
   networking.hostName = "${hostname}";

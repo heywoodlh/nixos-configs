@@ -287,7 +287,6 @@ in {
     '';
   };
 
-
   # Default sound device switching script
   home.file."bin/sound.sh" = {
     enable = true;
@@ -339,6 +338,21 @@ in {
       Keywords=hyprland;audio
       Icon=nix-snowflake
       Categories=Utility;
+    '';
+  };
+
+
+  # 1Password script
+  home.file."bin/1password-toggle.sh" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      # Check if 1password is running
+      ps aux | grep -i 1password | grep -iq silent || ${homeDir}/.nix-profile/bin/1password --silent
+
+      # Open 1password quick access
+      ${homeDir}/.nix-profile/bin/1password --quick-access
     '';
   };
 
@@ -419,7 +433,7 @@ in {
 
       # Apps to start on login
       exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
-      exec-once = [workspace special:1password] ${homeDir}/.nix-profile/bin/1password
+      exec-once = ${homeDir}/.nix-profile/bin/1password --silent
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
       exec-once = ${pkgs.swaybg}/bin/swaybg -i ${homeDir}/.wallpaper.png
@@ -445,10 +459,12 @@ in {
       misc {
         disable_hyprland_logo = true
         disable_splash_rendering = true
+        suppress_portal_warnings = true
       }
 
       ## Window rules
-      windowrulev2 = dimaround, class:^(1Password)$, floating:1
+      windowrulev2 = dimaround, class:^(1Password)$, floating
+      windowrulev2 = stayfocused,class:^(1Password)$
       windowrule = rounding 10, ^(1Password)$
       windowrule = rounding 10, ^(firefox)$
 
@@ -462,12 +478,10 @@ in {
       }
 
       input {
-        float_switch_override_focus = 1
         touchpad {
           natural_scroll = yes
           disable_while_typing = true
         }
-        follow_mouse = 0
       }
 
       # General Keybindings
@@ -477,8 +491,7 @@ in {
       bind = CTRL_ALT, t, exec, wezterm
       bind = CTRL, grave, togglespecialworkspace, terminal
       ## 1Password
-      bind = CTRL_SUPER, s, togglespecialworkspace, 1password
-      bind = $mainMod, backslash, exec, ${pkgs._1password}/bin/1password --quick-access
+      bind = CTRL_SUPER, s, exec, ${homeDir}/bin/1password-toggle.sh
       ## Launcher
       bind = $mainMod, Space, exec, fuzzel
       ## Lock screen

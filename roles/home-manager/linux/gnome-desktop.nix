@@ -7,6 +7,7 @@ in {
   home.packages = [
     fish-configs.packages.${system}.fish
     pkgs.gnome.dconf-editor
+    pkgs.gnome.gnome-boxes
     pkgs.gnome.gnome-terminal
     pkgs.gnome.gnome-tweaks
     pkgs.gnomeExtensions.caffeine

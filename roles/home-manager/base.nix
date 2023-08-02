@@ -283,15 +283,6 @@ in {
     text = import ./share/redirector.json.nix;
   };
 
-  home.file."bin/op-unlock" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!${homeDir}/.nix-profile/bin/fish
-      eval $(op signin --account my)
-    '';
-  };
-
   # 1Password CLI wrapper
   home.file."bin/op-wrapper.sh" = {
     executable = true;

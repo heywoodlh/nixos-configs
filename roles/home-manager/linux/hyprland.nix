@@ -464,6 +464,7 @@ in {
 
       ## Window rules
       windowrulev2 = dimaround, class:^(1Password)$, floating
+      windowrulev2 = center, class:^(1Password)$
       windowrulev2 = stayfocused,class:^(1Password)$
       windowrule = rounding 10, ^(1Password)$
       windowrule = rounding 10, ^(firefox)$

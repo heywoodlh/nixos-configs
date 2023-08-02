@@ -232,7 +232,6 @@ in {
       [[ -e ~/.zsh.d/custom ]] && source ~/.zsh.d/custom
 
       # Set ssh-unlock if it's not already set
-      alias op-unlock='eval $(op signin)'
       alias | grep -q ssh-unlock || alias ssh-unlock="op read 'op://Personal/id_rsa/private key' | ssh-add -t 4h -"
 
       # coder-unlock
@@ -282,6 +281,15 @@ in {
 
   home.file."share/redirector.json" = {
     text = import ./share/redirector.json.nix;
+  };
+
+  home.file."bin/op-unlock" = {
+    enable = true;
+    executable = true;
+    text = ''
+      #!${homeDir}/.nix-profile/bin/fish
+      eval $(op signin --account my)
+    '';
   };
 
   # 1Password CLI wrapper

@@ -22,7 +22,7 @@
       flake = false;
     };
     nur.url = "github:nix-community/NUR";
-    spicetify.url = "gitlab:heywoodlh/spicetify-nix/nord";
+    spicetify.url = "gitlab:heywoodlh/spicetify-nix/macos-support";
   };
 
   outputs = inputs@{ self,

@@ -210,7 +210,7 @@ in {
     ctrl + cmd - p ; passthrough
     passthrough < ctrl + cmd - p ; default
 
-    ctrl + shift - b : ~/bin/macos-battpop.sh
+    ctrl + shift - b : ~/bin/battpop.sh
 
     # Disabled: now using Spotlight
     # cmd - space : ~/bin/choose-launcher.zsh
@@ -220,6 +220,11 @@ in {
 
     # Toggle tiling
     ctrl - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'
+
+    # Control Spotify (if installed)
+    ctrl + shift - p: osascript -e 'tell application "Spotify" to previous track'
+    ctrl + shift - n: osascript -e 'tell application "Spotify" to next track'
+    ctrl + shift - space: osascript -e 'tell application "Spotify" to playpause'
 
     .blacklist [
       "vmware fusion"

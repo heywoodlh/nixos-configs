@@ -9,8 +9,8 @@ let
   };
   cloudtube = {
     port = "10412";
-    image_tag = "2023_02";
-    second_image_tag = "2023_02";
+    image_tag = "2023_08";
+    second_image_tag = "2023_08";
   };
 in {
   system.activationScripts.mkTedditNet = ''

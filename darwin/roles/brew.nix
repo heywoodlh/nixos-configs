@@ -31,7 +31,7 @@
       "aaronraimist/homebrew-tap"
     ];
     casks = [
-      "1password"
+      "1password-beta"
       "android-platform-tools"
       "blockblock"
       "caffeine"

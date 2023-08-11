@@ -4,16 +4,13 @@
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../server.nix
+    ../../desktop.nix
+    ../../roles/sshd.nix
+    ../../roles/xrdp.nix
     ../../roles/libvirt.nix
-    ../../roles/serge.nix
-    ../../roles/dev/coder.nix
     ../../roles/syslog-ng/server.nix
     ../../roles/gaming/minecraft-bedrock.nix
-    ../../roles/containers/k3s.nix
     ../../roles/containers/registry.nix
-    ../../roles/containers/registry.nix
-    ../../roles/monitoring/zabbix-server.nix
     ../../roles/monitoring/nfcapd.nix
   ];
 
@@ -43,9 +40,13 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;
 
-  #environment.systemPackages = with pkgs; [
-  #  ntfs3g
-  #];
+  environment.systemPackages = with pkgs; [
+    rustdesk
+  ];
+
+  services.xserver.displayManager.autoLogin = {
+    user = "heywoodlh";
+  };
 
   # This drive seems to have issues
   #fileSystems."/media/disk1" ={
@@ -53,6 +54,12 @@
   #  fsType = "btrfs";
   #  options = [ "rw" "uid=1000" "rw" "relatime" "x-systemd.mount-timeout=5min" ];
   #};
+
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  };
 
   # Prevent system from sleeping (for XRDP to work)
   systemd.targets.sleep.enable = false;

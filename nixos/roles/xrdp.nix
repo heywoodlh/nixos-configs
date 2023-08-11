@@ -17,7 +17,6 @@
 
   # GNOME settings through home-manager
   home-manager.users.heywoodlh = {
-    home.stateVersion = "22.11";
     ## Create startwm.sh for XRDP
     home.file."startwm.sh".text = ''
       #!/usr/bin/env bash

@@ -37,6 +37,7 @@ in {
     casks = [
       "discord"
       "libreoffice"
+      "microsoft-remote-desktop"
       "screens"
       "signal"
       "vmware-fusion"

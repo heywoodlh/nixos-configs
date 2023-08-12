@@ -12,6 +12,10 @@
     user = "heywoodlh";
   };
 
+  environment.systemPackages = with pkgs; [
+    gnome.gnome-remote-desktop
+  ];
+
   # GNOME settings through home-manager
   home-manager.users.heywoodlh = {
     dconf.settings = {

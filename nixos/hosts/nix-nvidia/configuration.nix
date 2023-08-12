@@ -12,7 +12,7 @@
     ../../roles/containers/registry.nix
     ../../roles/monitoring/nfcapd.nix
     ../../roles/gnome-remote-desktop.nix
-    ../../roles/sunshine.nix
+    ../../roles/gaming/sunshine.nix
   ];
 
   # Bootloader.
@@ -43,6 +43,7 @@
 
   environment.systemPackages = with pkgs; [
     rustdesk
+    sunshine
   ];
 
   # This drive seems to have issues
@@ -71,6 +72,8 @@
   networking.firewall.allowedTCPPorts = [
     443
   ];
+
+  services.sunshine.enable = true;
 
   system.stateVersion = "22.11";
 }

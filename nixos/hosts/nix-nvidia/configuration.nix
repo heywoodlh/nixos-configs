@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -37,9 +37,25 @@
   };
 
   # Enable Nvidia driver
+  boot.kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_xanmod_stable;
+  services.xserver.displayManager.gdm.wayland = false;
   nixpkgs.config.allowUnfree = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.opengl.enable = true;
+  # Make sure opengl is enabled
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+
+  # Tell Xorg to use the nvidia driver (also valid for Wayland)
+  services.xserver.videoDrivers = ["nvidia"];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    open = false;
+    nvidiaSettings = true;
+    package = pkgs.linuxKernel.packages.linux_xanmod_stable.nvidia_x11;
+  };
 
   environment.systemPackages = with pkgs; [
     rustdesk

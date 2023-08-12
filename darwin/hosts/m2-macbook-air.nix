@@ -38,6 +38,7 @@ in {
       "discord"
       "libreoffice"
       "microsoft-remote-desktop"
+      "moonlight"
       "screens"
       "signal"
       "vmware-fusion"

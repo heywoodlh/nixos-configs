@@ -25,7 +25,10 @@ in {
         "float": [
           {
             "class": "1Password"
-          }
+          },
+          {
+            "class": "Rustdesk"
+          },
         ],
         "skiptaskbarhidden": [],
         "log_on_focus": false

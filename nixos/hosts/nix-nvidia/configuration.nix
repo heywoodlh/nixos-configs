@@ -12,6 +12,7 @@
     ../../roles/containers/registry.nix
     ../../roles/monitoring/nfcapd.nix
     ../../roles/gnome-remote-desktop.nix
+    ../../roles/sunshine.nix
   ];
 
   # Bootloader.

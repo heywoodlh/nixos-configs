@@ -6,12 +6,12 @@
     ./hardware-configuration.nix
     ../../desktop.nix
     ../../roles/sshd.nix
-    ../../roles/xrdp.nix
     ../../roles/libvirt.nix
     ../../roles/syslog-ng/server.nix
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/containers/registry.nix
     ../../roles/monitoring/nfcapd.nix
+    ../../roles/gnome-remote-desktop.nix
   ];
 
   # Bootloader.
@@ -43,10 +43,6 @@
   environment.systemPackages = with pkgs; [
     rustdesk
   ];
-
-  services.xserver.displayManager.autoLogin = {
-    user = "heywoodlh";
-  };
 
   # This drive seems to have issues
   #fileSystems."/media/disk1" ={

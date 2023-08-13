@@ -56,6 +56,7 @@ in {
     mosh
     nim
     nixfmt
+    nixopsUnstable
     nmap
     nodePackages.cspell
     openssl

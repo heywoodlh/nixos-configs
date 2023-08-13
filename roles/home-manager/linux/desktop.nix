@@ -43,7 +43,7 @@ in {
             realname: heywoodlh
             nicks: [heywoodlh]
             nickserv_ident:
-                command: "~/bin/op-wrapper.sh item get bitlbee/heywoodlh --fields password"
+                command: "op-wrapper.sh item get bitlbee/heywoodlh --fields password"
             join:
                 - "&bitlbee"
       defaults:

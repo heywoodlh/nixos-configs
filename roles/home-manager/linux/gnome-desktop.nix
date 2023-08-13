@@ -28,7 +28,7 @@ in {
           },
           {
             "class": "Rustdesk"
-          },
+          }
         ],
         "skiptaskbarhidden": [],
         "log_on_focus": false

@@ -2,8 +2,8 @@
   description = "heywoodlh nix config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
@@ -27,7 +27,7 @@
 
   outputs = inputs@{ self,
                       nixpkgs,
-                      nixpkgs-stable,
+                      nixpkgs-unstable,
                       nixpkgs-backports,
                       nixos-wsl,
                       vim-configs,

@@ -1,8 +1,8 @@
-{ config, pkgs, home-manager, nur, vim-configs, nixpkgs-stable, nixpkgs-backports, ... }:
+{ config, pkgs, home-manager, nur, vim-configs, nixpkgs-unstable, nixpkgs-backports, ... }:
 
 let
   system = pkgs.system;
-  pkgs-stable = nixpkgs-stable.legacyPackages.${system};
+  pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
 in {
   imports = [

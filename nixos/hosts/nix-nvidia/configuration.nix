@@ -11,7 +11,6 @@
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/containers/registry.nix
     ../../roles/monitoring/nfcapd.nix
-    ../../roles/gnome-remote-desktop.nix
     ../../roles/gaming/sunshine.nix
   ];
 

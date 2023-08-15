@@ -61,6 +61,18 @@
           }
         ];
       };
+      "nix-m1-mac-mini" = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = inputs;
+        modules = [
+          ./darwin/hosts/m1-mac-mini.nix
+          {
+            environment.systemPackages = [
+              vim-configs.defaultPackage.${system}
+            ];
+          }
+        ];
+      };
       # mac-mini output -- used with CI
       "nix-mac-mini" = darwin.lib.darwinSystem {
         system = "x86_64-darwin";

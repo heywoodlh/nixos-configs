@@ -29,6 +29,7 @@ in {
     dos2unix
     file
     findutils
+    fluxcd
     fzf
     gcc
     git

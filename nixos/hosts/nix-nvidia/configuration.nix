@@ -12,6 +12,7 @@
     ../../roles/containers/registry.nix
     ../../roles/monitoring/nfcapd.nix
     ../../roles/gaming/sunshine.nix
+    ../../roles/containers/k3s.nix
   ];
 
   # Bootloader.

@@ -58,6 +58,7 @@ in {
     nim
     nixfmt
     nixopsUnstable
+    nixos-rebuild
     nmap
     nodePackages.cspell
     openssl

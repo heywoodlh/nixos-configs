@@ -11,6 +11,7 @@
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/containers/registry.nix
     ../../roles/monitoring/nfcapd.nix
+    ../../roles/monitoring/graylog.nix
     ../../roles/gaming/sunshine.nix
     ../../roles/containers/k3s.nix
   ];

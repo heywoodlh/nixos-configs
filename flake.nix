@@ -92,6 +92,13 @@
           ./nixos/hosts/yoga/configuration.nix
         ];
       };
+      nix-pixelbook = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [
+          ./nixos/hosts/pixelbook-go/configuration.nix
+        ];
+      };
       nix-pomerium = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

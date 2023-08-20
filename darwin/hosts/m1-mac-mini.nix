@@ -39,5 +39,8 @@ in {
     ];
   };
 
+  system.defaults.alf.globalstate = lib.mkForce 0;
+  system.defaults.alf.stealthenabled = lib.mkForce 0;
+
   system.stateVersion = 4;
 }

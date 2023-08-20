@@ -6,6 +6,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../desktop.nix
+      ../../roles/messaging/thelounge.nix
     ];
 
   # Bootloader

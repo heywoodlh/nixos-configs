@@ -45,7 +45,7 @@
     home.packages = with pkgs; [
       remmina
       signal-desktop
-      spicetify.packages.x86_64-linux.nord
+      spicetify.packages.x86_64-linux.nord-text
       zoom-us
     ];
   };

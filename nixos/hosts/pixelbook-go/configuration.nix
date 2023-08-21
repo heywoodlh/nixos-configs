@@ -1,7 +1,10 @@
 # Config specific to Pixelbook Go
-{ config, pkgs, lib, spicetify, ... }:
+{ config, pkgs, lib, spicetify, nixpkgs-unstable, ... }:
 
-{
+let
+  system = pkgs.system;
+  unstable = nixpkgs-unstable.legacyPackages.${system};
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -59,6 +62,13 @@
     enable = true;
     control = "sufficient";
   };
+
+  # Config specific to Pixelbook Go
+  boot.extraModprobeConfig = ''
+    options snd-intel-dspcfg dsp_driver=1
+  '';
+  nixpkgs.overlays = [ ( self: super: { sof-firmware = unstable.sof-firmware; } ) ];
+  hardware.pulseaudio.package = unstable.pulseaudioFull;
 
   # Set version of NixOS to target
   system.stateVersion = "23.05";

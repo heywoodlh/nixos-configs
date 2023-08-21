@@ -23,6 +23,7 @@
     };
     nur.url = "github:nix-community/NUR";
     spicetify.url = "gitlab:heywoodlh/spicetify-nix/macos-support";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
   outputs = inputs@{ self,
@@ -40,6 +41,7 @@
                       nur,
                       flake-utils,
                       spicetify,
+                      nixos-hardware,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -96,6 +98,7 @@
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [
+          nixos-hardware.nixosModules.google-pixelbook
           ./nixos/hosts/pixelbook-go/configuration.nix
         ];
       };

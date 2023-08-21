@@ -1,6 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixpkgs-unstable, ... }:
 
-{
+let
+  system = pkgs.system;
+  unstable = nixpkgs-unstable.legacyPackages.${system};
+in {
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 80 ];
 
   services.nextcloud = {
@@ -12,6 +15,7 @@
       adminpassFile = "/opt/nextcloud/pass.txt";
       adminuser = "heywoodlh";
       extraTrustedDomains = [
+        "drive.heywoodlh.io"
         "nix-drive.tailscale"
         "nextcloud"
         "nextcloud.tailscale"

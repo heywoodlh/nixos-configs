@@ -8,7 +8,6 @@ in {
   imports = [
     home-manager.nixosModules.home-manager
     ./roles/desktop/user-icon.nix
-    ./roles/messaging/thelounge.nix
   ];
 
   home-manager.useGlobalPkgs = true;

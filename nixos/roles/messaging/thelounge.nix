@@ -11,5 +11,9 @@
     plugins = with pkgs; [
       nodePackages.thelounge-theme-nord
     ];
+    extraConfig = {
+      reverseProxy = true;
+      host = "nix-media.tailscale";
+    };
   };
 }

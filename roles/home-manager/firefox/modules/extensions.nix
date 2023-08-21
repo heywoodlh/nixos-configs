@@ -7,6 +7,7 @@ with pkgs.nur.repos.rycee.firefox-addons; [
   multi-account-containers
   noscript
   onepassword-password-manager
+  persistentpin
   privacy-badger
   private-relay
   redirector

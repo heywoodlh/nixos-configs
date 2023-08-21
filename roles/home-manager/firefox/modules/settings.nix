@@ -54,4 +54,5 @@
   "toolkit.telemetry.unified" = false;
   "toolkit.telemetry.unifiedIsOptIn" = false;
   "toolkit.telemetry.updatePing.enabled" = false;
+  "browser.sessionstore.restore_pinned_tabs_on_demand" = false;
 }

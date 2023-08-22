@@ -3,6 +3,7 @@
 {
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
     9000
+    514
   ];
 
   virtualisation.oci-containers = {

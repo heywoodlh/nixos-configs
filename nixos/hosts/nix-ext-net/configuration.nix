@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, nixpkgs-unstable, ... }:
 
-{
+let
+  system = pkgs.system;
+  unstable = nixpkgs-unstable.legacyPackages.${system};
+in {
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -13,6 +16,7 @@
     ../../roles/iperf.nix
     ../../roles/http-proxy-pac.nix
     ../../roles/remote-access/rustdesk.nix
+    ../../roles/remote-access/cloudflared.nix
   ];
 
   # Bootloader.

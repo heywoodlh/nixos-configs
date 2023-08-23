@@ -24,6 +24,7 @@ in {
     coreutils
     curl
     dante
+    deploy-rs
     docker-compose
     doctl
     dos2unix
@@ -57,7 +58,6 @@ in {
     mosh
     nim
     nixfmt
-    nixopsUnstable
     nixos-rebuild
     nmap
     nodePackages.cspell

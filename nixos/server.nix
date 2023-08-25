@@ -29,7 +29,12 @@ in {
     extra-experimental-features = nix-command flakes
   '';
   # Automatically optimize store for better storage
-  nix.settings.auto-optimise-store = true;
+  nix.settings = {
+    auto-optimise-store = true;
+    trusted-users = [
+      "heywoodlh"
+    ];
+  };
 
   # Packages to install on entire system
   environment.systemPackages = [
@@ -104,6 +109,9 @@ in {
 
   # Disable wait-online service for Network Manager
   systemd.services.NetworkManager-wait-online.enable = false;
+
+  # Enable cloudflared
+  services.cloudflared.enable = true;
 
   nix.gc = {
     automatic = true;

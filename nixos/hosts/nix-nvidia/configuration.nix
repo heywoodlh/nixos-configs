@@ -14,6 +14,7 @@
     ../../roles/monitoring/graylog.nix
     ../../roles/gaming/sunshine.nix
     ../../roles/containers/k3s.nix
+    ../../roles/remote-access/xrdp.nix
   ];
 
   # Bootloader.

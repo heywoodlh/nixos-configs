@@ -78,5 +78,10 @@
     interface = "100.67.2.30";
   };
 
+  # Docker config
+  virtualisation.docker.extraOptions = ''
+    --data-root /media/disk1/docker
+  '';
+
   system.stateVersion = "22.11";
 }

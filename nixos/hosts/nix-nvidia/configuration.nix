@@ -14,7 +14,6 @@
     ../../roles/monitoring/graylog.nix
     ../../roles/gaming/sunshine.nix
     ../../roles/containers/k3s.nix
-    ../../roles/remote-access/xrdp.nix
   ];
 
   # Bootloader.
@@ -89,9 +88,12 @@
   # Exposed ports
   networking.firewall.allowedTCPPorts = [
     443
+    3389
+    5900
   ];
 
   services.sunshine.enable = true;
+  services.gnome.gnome-remote-desktop.enable = true;
 
   system.stateVersion = "22.11";
 }

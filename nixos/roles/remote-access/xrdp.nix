@@ -5,10 +5,7 @@
 
   services.xrdp = {
     enable = true;
-  };
-
-  networking.firewall = {
-    allowedTCPPorts = [ 3389 ];
+    openFirewall = true;
   };
 
   environment.systemPackages = with pkgs; [

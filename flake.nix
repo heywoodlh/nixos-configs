@@ -102,11 +102,6 @@
           ./nixos/hosts/pixelbook-go/configuration.nix
         ];
       };
-      nix-pomerium = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-pomerium/configuration.nix ];
-      };
       nix-steam-deck = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

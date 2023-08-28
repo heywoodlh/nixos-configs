@@ -14,7 +14,7 @@
     ../../roles/monitoring/graylog.nix
     ../../roles/gaming/sunshine.nix
     ../../roles/containers/k3s.nix
-    ../../roles/nixos/hydra.nix
+    ../../roles/nixos/cache.nix
   ];
 
   # Bootloader.

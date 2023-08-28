@@ -12,15 +12,5 @@
     buildMachinesFiles = [];
     useSubstitutes = true;
   };
-
-  nix = {
-    buildMachines = [
-      {
-        hostName = "nixos-x86_64";
-        system = "x86_64-linux";
-        supportedFeatures = ["kvm" "nixos-test" "big-parallel" "benchmark"];
-        maxJobs = 8;
-      }
-    ];
-  };
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 }

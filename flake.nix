@@ -179,6 +179,7 @@
             };
             fonts.fontconfig.enable = true;
             programs.home-manager.enable = true;
+            programs.tmux.shell = "/home/heywoodlh/.nix-profile/bin/fish";
             targets.genericLinux.enable = true;
             home.packages = [
               pkgs.colima
@@ -196,13 +197,9 @@
                 ${pkgs.docker-client}/bin/docker ''$@
               '';
             };
-            nix.settings = {
-              substituters = ["https://hyprland.cachix.org"];
-              trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
-            };
           }
-          hyprland.homeManagerModules.default
-          ./roles/home-manager/linux/hyprland.nix
+          #hyprland.homeManagerModules.default
+          #./roles/home-manager/linux/hyprland.nix
         ];
         extraSpecialArgs = inputs;
       };

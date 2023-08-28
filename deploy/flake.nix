@@ -2,7 +2,7 @@
   description = "nixops configurations";
   inputs = {
     deploy-rs.url = "github:serokell/deploy-rs";
-    nixos-configs.url = "../";
+    nixos-configs.url = "github:heywoodlh/nixos-configs/master";
   };
 
   outputs = { self, nixpkgs, deploy-rs, nixos-configs }:

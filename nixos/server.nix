@@ -34,6 +34,15 @@ in {
     trusted-users = [
       "heywoodlh"
     ];
+    substituters = [
+      "http://100.108.77.60:5000" # nix-nvidia
+      "https://nix-community.cachix.org"
+      "https://cache.nixos.org/"
+    ];
+    trusted-public-keys = [
+      "binarycache.heywoodlh.io:Xbb19z4SD0zokZbHC/KlINDRM1hlJqVOGT3ftkGknLeZ2Eg3gZnPCk7MSc4pTCQuKIsJBe/wVAy1wr8H9AfpCA=="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
   };
 
   # Packages to install on entire system
@@ -118,20 +127,5 @@ in {
     automatic = true;
     dates = "daily";
     options = "--delete-older-than 7d";
-  };
-
-  # Enable nix binary cache
-  nix = {
-    settings = {
-      substituters = [
-        "http://100.108.77.60:5000" # nix-nvidia
-        "https://nix-community.cachix.org"
-        "https://cache.nixos.org/"
-      ];
-      trusted-public-keys = [
-        "binarycache.heywoodlh.io:Xbb19z4SD0zokZbHC/KlINDRM1hlJqVOGT3ftkGknLeZ2Eg3gZnPCk7MSc4pTCQuKIsJBe/wVAy1wr8H9AfpCA=="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      ];
-    };
   };
 }

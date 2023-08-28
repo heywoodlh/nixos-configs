@@ -25,14 +25,23 @@ in {
     initrd.verbose = false;
   };
 
-  # Automatically optimize store for better storage
   nix.settings = {
     sandbox = true;
+    # Automatically optimize store for better storage
     auto-optimise-store = true;
-    substituters = ["https://hyprland.cachix.org"];
-    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+    substituters = [
+      "https://hyprland.cachix.org"
+      "http://100.108.77.60:5000" # nix-nvidia
+      "https://nix-community.cachix.org"
+      "https://cache.nixos.org/"
+    ];
     trusted-users = [
       "heywoodlh"
+    ];
+    trusted-public-keys = [
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "binarycache.heywoodlh.io:Xbb19z4SD0zokZbHC/KlINDRM1hlJqVOGT3ftkGknLeZ2Eg3gZnPCk7MSc4pTCQuKIsJBe/wVAy1wr8H9AfpCA==" # nix-nvidia
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
 

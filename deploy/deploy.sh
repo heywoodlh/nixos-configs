@@ -17,6 +17,5 @@ then
 fi
 
 cd $script_dir
-nix flake update && git add flake.lock
 deploy --remote-build --skip-checks .#$host
 cd $cur_dir

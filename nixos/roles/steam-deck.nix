@@ -88,7 +88,6 @@
 
   # GNOME settings through home-manager
   home-manager.users.heywoodlh = {
-    home.stateVersion = "22.11";
     dconf.settings = {
       # Enable on-screen keyboard
       "org/gnome/desktop/a11y/applications" = {

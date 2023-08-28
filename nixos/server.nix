@@ -52,6 +52,7 @@ in {
     pkgs.gptfdisk
     pkgs.htop
     pkgs.jq
+    pkgs.lsof
     pkgs.nix-index
     pkgs.patchelf
     pkgs.python310

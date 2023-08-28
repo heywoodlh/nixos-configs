@@ -2,7 +2,6 @@
 
 {
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
-    5000
     6667
   ];
 

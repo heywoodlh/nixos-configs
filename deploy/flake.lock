@@ -350,14 +350,18 @@
         "wezterm-configs": "wezterm-configs"
       },
       "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-KRd3+XOxxIszalm8uy0we35l9kMOfxZOYgKIawSK3aI=",
-        "path": "/nix/store/2lrb9jggj58j0bxmnvrbl1k265f58j5d-source",
-        "type": "path"
+        "lastModified": 1693262228,
+        "narHash": "sha256-rWFvIhlyZQa7wIhb4jXdgaD8r/A9BM+Zj2lRR863hBs=",
+        "owner": "heywoodlh",
+        "repo": "nixos-configs",
+        "rev": "b19012bc6f2bacdcc34a9407fa4368035444ea59",
+        "type": "github"
       },
       "original": {
-        "path": "/nix/store/2lrb9jggj58j0bxmnvrbl1k265f58j5d-source",
-        "type": "path"
+        "owner": "heywoodlh",
+        "ref": "master",
+        "repo": "nixos-configs",
+        "type": "github"
       }
     },
     "nixos-hardware": {

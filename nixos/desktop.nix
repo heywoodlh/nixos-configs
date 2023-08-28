@@ -40,7 +40,7 @@ in {
     ];
     trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-      "binarycache.heywoodlh.io:Xbb19z4SD0zokZbHC/KlINDRM1hlJqVOGT3ftkGknLeZ2Eg3gZnPCk7MSc4pTCQuKIsJBe/wVAy1wr8H9AfpCA==" # nix-nvidia
+      "binarycache.heywoodlh.io:hT9E35rju+9L2CE/SDGUsytJtIZJfqVma7B7cp7Jym4=" # nix-nvidia
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };

@@ -24,8 +24,8 @@
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nix-nvidia --impure
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nix-ext-net --impure
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nix-backups --impure
-      ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nix-server-intel --impure
-      ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nix-desktop-intel --impure
+      ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nixos-server-intel --impure
+      ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nixos-desktop-intel --impure
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nix-steam-deck --impure
 
       rm -rf /tmp/nixos-configs

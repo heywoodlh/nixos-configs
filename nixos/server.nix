@@ -40,7 +40,7 @@ in {
       "https://cache.nixos.org/"
     ];
     trusted-public-keys = [
-      "binarycache.heywoodlh.io:Xbb19z4SD0zokZbHC/KlINDRM1hlJqVOGT3ftkGknLeZ2Eg3gZnPCk7MSc4pTCQuKIsJBe/wVAy1wr8H9AfpCA=="
+      "binarycache.heywoodlh.io:hT9E35rju+9L2CE/SDGUsytJtIZJfqVma7B7cp7Jym4="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };

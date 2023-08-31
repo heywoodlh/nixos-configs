@@ -15,6 +15,7 @@
           "webtop-nix:/nix"
           "webtop-home:/home"
           "webtop-config:/config"
+          "webtop-usr-local-bin:/usr/local/bin"
           "/var/run/docker.sock:/var/run/docker.sock"
           "/etc/localtime:/etc/localtime:ro"
         ];

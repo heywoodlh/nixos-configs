@@ -11,9 +11,6 @@
       webtop = {
         image = "docker.io/linuxserver/webtop:ubuntu-xfce";
         autoStart = true;
-        ports = [
-          "3000"
-        ];
         volumes = [
           "webtop-nix:/nix"
           "webtop-home:/home"
@@ -23,6 +20,7 @@
         ];
         extraOptions = [
           "--privileged"
+          "--network=host"
         ];
         environmentFiles = [
           "/opt/webtop/environment"

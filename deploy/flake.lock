@@ -410,11 +410,11 @@
         "wezterm-configs": "wezterm-configs"
       },
       "locked": {
-        "lastModified": 1693517777,
-        "narHash": "sha256-Auoy/3lfg2ry1daf7L5JvyoKBjxAfoem0r5hCSexMXA=",
+        "lastModified": 1693520749,
+        "narHash": "sha256-pe/XdIl4u9VT1X2xTykXt/TFg+WobHoOCmsBo4k5Nho=",
         "owner": "heywoodlh",
         "repo": "nixos-configs",
-        "rev": "0f1333ce0638f05f9602729bd0609724f9d6a282",
+        "rev": "271ec1b505305826f1e2313091e55cfdc1253d03",
         "type": "github"
       },
       "original": {

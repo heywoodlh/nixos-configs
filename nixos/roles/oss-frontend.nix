@@ -10,7 +10,7 @@ let
   cloudtube = {
     port = "10412";
     image_tag = "2023_08";
-    second_image_tag = "2023_08";
+    second_image_tag = "aug_30_hotfix";
   };
 in {
   system.activationScripts.mkTedditNet = ''

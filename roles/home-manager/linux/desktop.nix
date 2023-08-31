@@ -155,5 +155,5 @@ in {
           "ui.routes.lastUsedRoute": "8XGr1Jjakozu4u73yri5yQEvNvtQhc0hxnqn3fZP2O4"
           }
       }'';
-    };
+  };
 }

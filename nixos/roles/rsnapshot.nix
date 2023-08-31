@@ -20,17 +20,6 @@ retain	daily	7
 retain	weekly	4
 retain	monthly	6
 
-backup	root@ct-1.tailscale:/etc/	ct-1/
-backup	root@ct-1.tailscale:/home/	ct-1/	exclude=/home/heywoodlh/.local/share/docker
-backup	root@ct-1.tailscale:/opt/	ct-1/
-backup	root@ct-1.tailscale:/root/	ct-1/
-backup	root@ct-1.tailscale:/media/disk2/ct-storage/	ct-1/	exclude=/media/disk2/ct-storage/nextcloud
-
-backup	root@nix-pomerium.tailscale:/etc/	nix-pomerium/
-backup	root@nix-pomerium.tailscale:/home/	nix-pomerium/
-backup	root@nix-pomerium.tailscale:/opt/	nix-pomerium/
-backup	root@nix-pomerium.tailscale:/root/	nix-pomerium/
-
 backup	root@nix-tools.tailscale:/etc/	nix-tools/
 backup	root@nix-tools.tailscale:/home/	nix-tools/
 backup	root@nix-tools.tailscale:/opt/	nix-tools/
@@ -56,12 +45,6 @@ backup	root@nix-media.tailscale:/media/services/radarr/	nix-media/
 backup	root@nix-media.tailscale:/media/services/sonarr/	nix-media/
 backup	root@nix-media.tailscale:/media/services/tautulli/	nix-media/
 
-backup	root@matrix.tailscale:/etc/	matrix/
-backup	root@matrix.tailscale:/home/	matrix/
-backup	root@matrix.tailscale:/opt/	matrix/
-backup	root@matrix.tailscale:/root/	matrix/
-backup	root@matrix.tailscale:/matrix/	matrix/
-
 backup	root@nix-ext-net.tailscale:/etc/	nix-ext-net/
 backup	root@nix-ext-net.tailscale:/home/	nix-ext-net/
 backup	root@nix-ext-net.tailscale:/opt/	nix-ext-net/
@@ -71,6 +54,11 @@ backup	root@nix-nvidia.tailscale:/etc/	nix-nvidia/
 backup	root@nix-nvidia.tailscale:/home/	nix-nvidia/
 backup	root@nix-nvidia.tailscale:/opt/	nix-nvidia/
 backup	root@nix-nvidia.tailscale:/root/	nix-nvidia/
+
+backup	root@nix-drive.tailscale:/etc/	nix-drive/
+backup	root@nix-drive.tailscale:/home/	nix-drive/
+backup	root@nix-drive.tailscale:/opt/	nix-drive/
+backup	root@nix-drive.tailscale:/root/	nix-drive/
     '';
   };
 }

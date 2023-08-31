@@ -33,7 +33,6 @@ in {
     fluxcd
     fzf
     gcc
-    git
     git-lfs
     github-cli
     gitleaks
@@ -88,44 +87,6 @@ in {
   nixpkgs.overlays = [
     nur.overlay
   ];
-
-  programs.git = {
-    enable = true;
-    extraConfig = {
-      user = {
-          email = "l.spencer.heywood@protonmail.com";
-          name = "Spencer Heywood";
-      };
-      core = {
-          editor = "vim";
-          autocrlf = "input";
-          whitespace = "cr-at-eol";
-          pager = "less -+F";
-      };
-      mergetool = {
-          prompt = "true";
-      };
-      merge = {
-          tool = "vimdiff";
-          conflictstyle = "diff3";
-      };
-      color = {
-          ui = "auto";
-      };
-      diff = {
-          renames = "copies";
-      };
-      push = {
-          default = "simple";
-      };
-      format = {
-          pretty = "%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset";
-      };
-      pull = {
-          ff = "only";
-      };
-    };
-  };
 
   programs.password-store = {
     enable = true;

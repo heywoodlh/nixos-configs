@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nur, vim-configs, hyprland, nixpkgs-unstable, nixpkgs-backports, wezterm-configs, fish-configs, ... }:
+{ config, pkgs, lib, home-manager, nur, vim-configs, git-configs, hyprland, nixpkgs-unstable, nixpkgs-backports, wezterm-configs, fish-configs, ... }:
 
 let
   system = pkgs.system;
@@ -221,6 +221,7 @@ in {
     pkgs.busybox
     pkgs.usbutils
     vim-configs.defaultPackage.${system}
+    git-configs.packages.${system}.git
   ];
 
   # Disable wait-online service for Network Manager

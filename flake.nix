@@ -7,6 +7,7 @@
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
+    git-configs.url = "github:heywoodlh/flakes/main?dir=git";
     wezterm-configs.url = "github:heywoodlh/flakes/main?dir=wezterm";
     fish-configs.url = "github:heywoodlh/flakes/main?dir=fish";
     darwin.url = "github:LnL7/nix-darwin/master";
@@ -32,6 +33,7 @@
                       nixpkgs-backports,
                       nixos-wsl,
                       vim-configs,
+                      git-configs,
                       wezterm-configs,
                       fish-configs,
                       darwin,
@@ -187,6 +189,7 @@
               fish-configs.packages.${system}.fish
               (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
               vim-configs.defaultPackage.${system}
+              git-configs.packages.${system}.git
             ];
             home.file."bin/docker" = {
               enable = true;

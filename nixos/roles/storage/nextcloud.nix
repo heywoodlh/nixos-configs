@@ -8,7 +8,7 @@ in {
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud27;
+    package = unstable.nextcloud27;
     hostName = "drive.heywoodlh.io";
     config = {
       dbtype = "pgsql";

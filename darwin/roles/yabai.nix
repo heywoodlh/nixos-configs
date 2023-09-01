@@ -219,7 +219,7 @@ in {
     cmd - return : ${weztermConfig}/bin/wezterm
 
     # Toggle tiling
-    ctrl - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'
+    cmd - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'
 
     # Control Spotify (if installed)
     ctrl + shift - p: osascript -e 'tell application "Spotify" to previous track'

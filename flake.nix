@@ -96,12 +96,12 @@
           ./nixos/hosts/yoga/configuration.nix
         ];
       };
-      nix-pixelbook = nixpkgs.lib.nixosSystem {
+      nixos-xps = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [
-          nixos-hardware.nixosModules.google-pixelbook
-          ./nixos/hosts/pixelbook-go/configuration.nix
+          nixos-hardware.nixosModules.dell-xps-13-9310
+          ./nixos/hosts/xps/configuration.nix
         ];
       };
       nix-steam-deck = nixpkgs.lib.nixosSystem {

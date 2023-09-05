@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, ... }:
+{ config, pkgs, home-manager, nur, git-configs, ... }:
 
 let
   homeDir = config.home.homeDirectory;

@@ -13,13 +13,15 @@ in {
     pkgs.gnomeExtensions.caffeine
     pkgs.gnomeExtensions.gsconnect
     pkgs.gnomeExtensions.just-perfection
-    pkgs.gnomeExtensions.pop-shell
+    pkgs.gnomeExtensions.paperwm
+    #pkgs.gnomeExtensions.pop-shell
     pkgs.gnomeExtensions.tray-icons-reloaded
-    pkgs.pop-launcher
+    #pkgs.pop-launcher
+    pkgs.gnomeExtensions.switcher
   ];
 
   home.file.".config/pop-shell/config.json" = {
-    enable = true;
+    enable = false;
     text = ''
       {
         "float": [
@@ -32,6 +34,64 @@ in {
         ],
         "skiptaskbarhidden": [],
         "log_on_focus": false
+      }
+    '';
+  };
+
+  home.file.".config/paperwm/user.js" = {
+    enable = true;
+    text = ''
+      // -*- mode: gnome-shell -*-
+      var Meta = imports.gi.Meta;
+      var Clutter = imports.gi.Clutter;
+      var St = imports.gi.St;
+      var Main = imports.ui.main;
+      var Shell = imports.gi.Shell;
+
+      // Extension local imports
+      var Extension, Me, Tiling, Utils, App, Keybindings, Examples;
+
+      function init() {
+          // Runs _only_ once on startup
+
+          // Initialize extension imports here to make gnome-shell-reload work
+          Extension = imports.misc.extensionUtils.getCurrentExtension();
+          Me = Extension.imports.user;
+          Tiling = Extension.imports.tiling;
+          Utils = Extension.imports.utils;
+          Keybindings = Extension.imports.keybindings;
+          Examples = Extension.imports.examples;
+          App = Extension.imports.app;
+
+          Tiling.defwinprop({
+              wm_class: "Spotify",
+              scratch_layer: true,
+          });
+
+          Tiling.defwinprop({
+              wm_class: "1Password",
+              scratch_layer: true,
+          });
+
+          Tiling.defwinprop({
+              wm_class: "firefox",
+              preferredWidth: "100%",
+          });
+
+          Tiling.defwinprop({
+              wm_class: "org.wezfurlong.wezterm",
+              preferredWidth: "100%",
+          });
+
+
+      }
+
+      function enable() {
+          // Runs on extension reloads, eg. when unlocking the session
+      }
+
+      function disable() {
+          // Runs on extension reloads eg. when locking the session (`<super>L).
       }
     '';
   };
@@ -113,8 +173,9 @@ in {
         "gsconnect@andyholmes.github.io"
         "just-perfection-desktop@just-perfection"
         "native-window-placement@gnome-shell-extensions.gcampax.github.com"
-        "pop-shell@system76.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
+        "paperwm@hedning:matrix.org"
+        "switcher@landau.fi"
       ];
       favorite-apps = ["firefox.desktop" "wezterm.desktop"];
       had-bluetooth-devices-setup = true;
@@ -163,6 +224,15 @@ in {
       workspace-background-corner-size = 15;
       workspace-popup = false;
       workspaces-in-app-grid = true;
+    };
+    "org/gnome/shell/extensions/switcher" = {
+      show-switcher = ["<Super>space"];
+      max-width-percentage = lib.hm.gvariant.mkUint32 40;
+      font-size = lib.hm.gvariant.mkUint32 20;
+    };
+    "org/gnome/shell/extensions/paperwm" = {
+      use-default-background = true;
+      show-window-position-bar = false;
     };
     "org/gnome/desktop/background" = {
       color-shading = "solid";
@@ -290,6 +360,7 @@ in {
       previous = [ "<Shift><Control>p" ];
       play = [ "<Shift><Control>space" ];
       terminal = "disabled";
+      logout = [ "<Shift><Super>e" ];
       custom-keybindings = [
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"

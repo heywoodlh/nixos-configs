@@ -221,7 +221,6 @@ in {
     pkgs.busybox
     pkgs.usbutils
     vim-configs.defaultPackage.${system}
-    git-configs.packages.${system}.git
   ];
 
   # Disable wait-online service for Network Manager
@@ -241,6 +240,9 @@ in {
         ../roles/home-manager/linux/gnome-desktop.nix
         hyprland.homeManagerModules.default
         ../roles/home-manager/linux/hyprland.nix
+      ];
+      home.packages = [
+        git-configs.packages.${system}.git
       ];
       home.file."bin/nixos-switch" = {
         enable = true;

@@ -1,18 +1,20 @@
 # Config specific to Dell XPS 13
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, spicetify, nixpkgs-unstable, ... }:
 
-{
+let
+  system = pkgs.system;
+  unstable = nixpkgs-unstable.legacyPackages.${system};
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../desktop.nix
     ];
 
-  # Bootloader.
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   # Setup keyfile
   boot.initrd.secrets = {
@@ -24,7 +26,7 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  # Set your time zone
   time.timeZone = "America/Denver";
 
   # Select internationalisation properties.

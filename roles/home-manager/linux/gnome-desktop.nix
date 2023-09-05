@@ -64,11 +64,6 @@ in {
           App = Extension.imports.app;
 
           Tiling.defwinprop({
-              wm_class: "Spotify",
-              scratch_layer: true,
-          });
-
-          Tiling.defwinprop({
               wm_class: "1Password",
               scratch_layer: true,
           });
@@ -82,8 +77,6 @@ in {
               wm_class: "org.wezfurlong.wezterm",
               preferredWidth: "100%",
           });
-
-
       }
 
       function enable() {

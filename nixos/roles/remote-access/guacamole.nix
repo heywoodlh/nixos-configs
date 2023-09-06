@@ -16,6 +16,7 @@ in {
   services.guacamole-server = {
     enable = true;
     package = unstable.guacamole-server;
+    userMappingXml = "/opt/guacamole/user-mapping.xml";
   };
   services.guacamole-client = {
     enable = true;

@@ -9,6 +9,10 @@ in {
     (nixpkgs-unstable + /nixos/modules/services/web-apps/guacamole-server.nix)
   ];
 
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+    8080
+  ];
+
   services.guacamole-server = {
     enable = true;
     package = unstable.guacamole-server;

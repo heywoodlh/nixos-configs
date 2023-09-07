@@ -14,6 +14,9 @@
         volumes = [
           "/opt/cloudflared-tunnel:/etc/cloudflared"
         ];
+        extraOptions = [
+          "--network=host"
+        ];
       };
     };
   };

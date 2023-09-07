@@ -9,6 +9,8 @@
     enable = true;
     settings = {
       listen-http = ":8082";
+      base-url = "http://nix-ext-net.tailscale:8082";
+      upstream-base-url = "https://ntfy.sh";
     };
   };
 }

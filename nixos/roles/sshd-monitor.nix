@@ -19,12 +19,6 @@ let
   '';
 
 in {
-  # Ensure that dependencies are installed
-  environment.systemPackages = with pkgs; [
-    bash
-    ntfy-setup
-  ];
-
   services.openssh.settings.LogLevel = "VERBOSE";
   services.openssh.extraConfig = ''
     SyslogFacility AUTHPRIV

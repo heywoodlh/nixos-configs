@@ -231,6 +231,8 @@ in {
     "org/gnome/shell/extensions/paperwm/keybindings" = {
       switch-right = ["<Super>bracketright"];
       switch-left = ["<Super>bracketleft"];
+      move-left = ["<Shift><Super>braceleft"];
+      move-right = ["<Shift><Super>braceright"];
     };
 
     "org/gnome/desktop/background" = {

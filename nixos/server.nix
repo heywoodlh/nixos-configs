@@ -35,12 +35,12 @@ in {
       "heywoodlh"
     ];
     substituters = [
-      "http://100.108.77.60:5000" # nix-nvidia
+      #"http://100.108.77.60:5000" # nix-nvidia
       "https://nix-community.cachix.org"
       "https://cache.nixos.org/"
     ];
     trusted-public-keys = [
-      "binarycache.heywoodlh.io:hT9E35rju+9L2CE/SDGUsytJtIZJfqVma7B7cp7Jym4="
+      #"binarycache.heywoodlh.io:hT9E35rju+9L2CE/SDGUsytJtIZJfqVma7B7cp7Jym4="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };

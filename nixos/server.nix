@@ -7,8 +7,8 @@ let
 in {
   imports = [
     home-manager.nixosModule
-    ./roles/sshd.nix
-    ./roles/sshd-monitor.nix
+    ./roles/remote-access/sshd.nix
+    ./roles/security/sshd-monitor.nix
     ./roles/squid-client.nix
     ./roles/tailscale.nix
     ./roles/syslog-ng/client.nix

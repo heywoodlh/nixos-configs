@@ -5,7 +5,8 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../desktop.nix
-    ../../roles/sshd.nix
+    ../../roles/remote-access/sshd.nix
+    ../../roles/security/sshd-monitor.nix
     ../../roles/libvirt.nix
     ../../roles/syslog-ng/server.nix
     ../../roles/gaming/minecraft-bedrock.nix

@@ -14,7 +14,8 @@ let
 
     journalctl -u "''${service}" -n 0 -f | grep --line-buffered -iE "''${grep_regex_pattern}" | grep --line-buffered -ivE "''${grep_exclude_regex_pattern}" | while read line
     do
-        ${pkgs.curl}/bin/curl -d "''${line}" http://100.113.9.57:8082/ssh-notifications
+        # Using Cloudflare Zero Trust to restrict access to this endpoint
+        ${pkgs.curl}/bin/curl -d "''${line}" https://ntfy.heywoodlh.io/ssh-notifications
     done
   '';
 

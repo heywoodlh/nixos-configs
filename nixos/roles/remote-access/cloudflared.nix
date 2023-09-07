@@ -5,7 +5,7 @@
     backend = "docker";
     containers = {
       cloudflared-tunnel = {
-        image = "docker.io/cloudflare/cloudflared:2023.8.0";
+        image = "docker.io/cloudflare/cloudflared:2023.8.2";
         autoStart = true;
         cmd = [
           "tunnel"

@@ -227,6 +227,12 @@ in {
       use-default-background = true;
       show-window-position-bar = false;
     };
+
+    "org/gnome/shell/extensions/paperwm/keybindings" = {
+      switch-right = ["<Super>bracketright"];
+      switch-left = ["<Super>bracketleft"];
+    };
+
     "org/gnome/desktop/background" = {
       color-shading = "solid";
       picture-options = "zoom";
@@ -269,8 +275,8 @@ in {
       switch-to-workspace-2 = ["<Super>2"];
       switch-to-workspace-3 = ["<Super>3"];
       switch-to-workspace-4 = ["<Super>4"];
-      switch-to-workspace-left = ["<Super>bracketleft"];
-      switch-to-workspace-right = ["<Super>bracketright"];
+      switch-to-workspace-left = ["disabled"];
+      switch-to-workspace-right = ["disabled"];
       switch-input-source = ["disabled"];
       switch-input-source-backward = ["disabled"];
       toggle-maximized = ["<Super>Up"];

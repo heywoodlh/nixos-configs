@@ -14,23 +14,15 @@ let
 
     journalctl -u "''${service}" -n 0 -f | grep --line-buffered -iE "''${grep_regex_pattern}" | grep --line-buffered -ivE "''${grep_exclude_regex_pattern}" | while read line
     do
-        echo "''${line}" | gotify push
+        ${pkgs.curl}/bin/curl -d "''${line}" https://ntfy.heywoodlh.io/ssh-notifications
     done
-  '';
-
-  gotify-setup = pkgs.writeScriptBin "gotify-setup" ''
-    #!/usr/bin/env bash
-    # This script sets up the Gotify configuration file.
-    /run/wrappers/bin/sudo mkdir -p /etc/gotify
-    /run/wrappers/bin/sudo gotify init
   '';
 
 in {
   # Ensure that dependencies are installed
   environment.systemPackages = with pkgs; [
     bash
-    gotify-cli
-    gotify-setup
+    ntfy-setup
   ];
 
   services.openssh.settings.LogLevel = "VERBOSE";
@@ -42,7 +34,6 @@ in {
     description = "Monitor SSH daemon";
     path = [
       pkgs.bash
-      pkgs.gotify-cli
       pkgs.systemd
     ];
     serviceConfig = {

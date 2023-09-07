@@ -11,12 +11,11 @@ in {
     ../../roles/pihole.nix
     ../../roles/squid.nix
     ../../roles/protonmail-bridge.nix
-    ../../roles/gotify.nix
-    ../../roles/gotify-convert.nix
     ../../roles/iperf.nix
     ../../roles/http-proxy-pac.nix
     ../../roles/remote-access/rustdesk.nix
     ../../roles/remote-access/cloudflared.nix
+    ../../roles/messaging/ntfy.nix
   ];
 
   # Bootloader.

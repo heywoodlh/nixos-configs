@@ -17,5 +17,11 @@ then
 fi
 
 cd $script_dir
-deploy --remote-build --skip-checks .#$host
+git pull origin master --rebase
+if uname -a | grep -q Darwin
+then
+    deploy --remote-build --skip-checks .#$host
+else
+    deploy --remote-build .#$host
+fi
 cd $cur_dir

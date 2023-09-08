@@ -119,6 +119,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-tools/configuration.nix ];
       };
+      nixos-arm64-vm = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/nix-arm64-vm/configuration.nix ];
+      };
       nix-precision = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

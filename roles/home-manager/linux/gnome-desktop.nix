@@ -69,6 +69,11 @@ in {
           });
 
           Tiling.defwinprop({
+              wm_class: "Code",
+              preferredWidth: "100%",
+          });
+
+          Tiling.defwinprop({
               wm_class: "firefox",
               preferredWidth: "100%",
           });

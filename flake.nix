@@ -23,7 +23,7 @@
       flake = false;
     };
     nur.url = "github:nix-community/NUR";
-    spicetify.url = "gitlab:heywoodlh/spicetify-nix/macos-support";
+    spicetify.url = "gitlab:kylesferrazza/spicetify-nix";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 

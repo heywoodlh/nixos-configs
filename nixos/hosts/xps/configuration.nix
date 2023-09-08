@@ -36,7 +36,7 @@ in {
   home-manager.users.heywoodlh = {
    home.packages = with pkgs; [
       signal-desktop
-      spicetify.packages.x86_64-linux.nord-text
+      spicetify.packages.x86_64-linux.nord
       zoom-us
     ];
   };

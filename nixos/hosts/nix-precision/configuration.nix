@@ -7,6 +7,7 @@
     ../../server.nix
     ../../roles/libvirt.nix
     ../../roles/iperf.nix
+    ../../roles/monitoring/scrutiny.nix
   ];
 
   # Bootloader.
@@ -42,6 +43,12 @@
     fsType = "ext4";
     options = [ "discard" "noatime" "commit=600" "errors=remount-ro" ];
   };
+
+  virtualisation.oci-containers.containers.scrutiny.extraOptions = [
+    "--device=/dev/sda"
+    "--device=/dev/sdc"
+    "--device=/dev/sdf"
+  ];
 
   system.stateVersion = "22.11";
 }

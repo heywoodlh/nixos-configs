@@ -14,6 +14,7 @@
     ../../roles/feeds/miniflux.nix
     ../../roles/messaging/bitlbee.nix
     ../../roles/messaging/thelounge.nix
+    ../../roles/monitoring/scrutiny.nix
   ];
 
   # Bootloader.
@@ -82,6 +83,12 @@
   virtualisation.docker.extraOptions = ''
     --data-root /media/disk1/docker
   '';
+
+  virtualisation.oci-containers.containers.scrutiny.extraOptions = [
+    "--device=/dev/vda"
+    "--device=/dev/vdc"
+    "--device=/dev/vdb"
+  ];
 
   system.stateVersion = "22.11";
 }

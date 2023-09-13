@@ -6,6 +6,7 @@
     ./hardware-configuration.nix
     ../../server.nix
     ../../roles/storage/nextcloud.nix
+    ../../roles/monitoring/scrutiny.nix
   ];
 
   # Bootloader.
@@ -33,6 +34,11 @@
     device = "/dev/disk/by-uuid/ce3c27ed-2e55-40a9-9737-154e71a637b4";
     fsType = "ext4";
   };
+
+  virtualisation.oci-containers.containers.scrutiny.extraOptions = [
+    "--device=/dev/vda"
+    "--device=/dev/sda"
+  ];
 
   system.stateVersion = "23.05";
 }

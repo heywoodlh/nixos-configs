@@ -26,7 +26,7 @@
           "--cap-add=SYS_RAWIO"
         ];
         environment = {
-          SCRUTINY_WEB_NOTIFY_URLS = "[\"ntfy://100.113.9.57/smartd-notifications\"]";
+          SCRUTINY_WEB_NOTIFY_URLS = "ntfy://100.113.9.57/smartd-notifications";
         };
       };
     };

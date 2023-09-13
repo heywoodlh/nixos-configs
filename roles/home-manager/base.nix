@@ -17,10 +17,8 @@ in {
     _1password
     aerc
     ansible
-    ansible-lint
     bind
     bitwarden-cli
-    #coder #Marked broken
     coreutils
     curl
     dante
@@ -56,19 +54,15 @@ in {
     linode-cli
     mosh
     nim
-    nixfmt
     nixos-rebuild
     nixos-shell
     nmap
-    nodePackages.cspell
     openssl
     operator-sdk
     pandoc
     pciutils
-    pomerium-cli
     popeye
     pwgen
-    python3Packages.bandit
     python3
     rbw
     screen
@@ -80,7 +74,6 @@ in {
     unzip
     vultr-cli
     w3m
-    yamllint
     zip
   ];
 

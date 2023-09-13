@@ -6,6 +6,7 @@
     ./hardware-configuration.nix
     ../../server.nix
     ../../roles/rsnapshot.nix
+    ../../roles/monitoring/scrutiny.nix
   ];
 
   # Bootloader.
@@ -69,6 +70,13 @@
     enable = true;
     flake = "github:heywoodlh/nixos-configs#nix-backups";
   };
+
+  virtualisation.oci-containers.containers.scrutiny.extraOptions = [
+    "--device=/dev/sda"
+    "--device=/dev/sdb"
+  ];
+
+
 
   system.stateVersion = "22.11";
 }

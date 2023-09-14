@@ -32,6 +32,24 @@ in {
     captive-portal = "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
   };
 
+  # Start 1Password minimized
+
+  home.file.".config/autostart/onepassword.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=1Password
+      Exec=1password --silent %U
+      Terminal=false
+      Type=Application
+      Icon=1password
+      StartupWMClass=1Password
+      Comment=Password manager and secure wallet
+      MimeType=x-scheme-handler/onepassword;
+      Categories=Office;
+    '';
+  };
+
   # Tiny config
   home.file.".config/tiny/config.yml" = {
     enable = true;

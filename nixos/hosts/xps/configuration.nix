@@ -37,6 +37,7 @@ in {
    home.packages = with pkgs; [
       signal-desktop
       spicetify.packages.x86_64-linux.nord
+      webcord
       zoom-us
     ];
   };

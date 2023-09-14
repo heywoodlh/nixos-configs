@@ -2,6 +2,7 @@
 
 let
   system = pkgs.system;
+  homeDir = config.home.homeDirectory;
 in {
   imports = [
     ../firefox/linux.nix
@@ -32,8 +33,24 @@ in {
     captive-portal = "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
   };
 
-  # Start 1Password minimized
+  # Webcord nord config
+  home.file.".local/share/applications/webcord-nord.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Configure WebCord (Nord)
+      GenericName=discord
+      Comment=Configure WebCord to use Nordic theme
+      Exec=webcord --add-css-theme ${homeDir}/.config/WebCord/Themes/nordic.theme.css
+      Terminal=false
+      Type=Application
+      Keywords=webcord;discord;
+      Icon=nix-snowflake
+      Categories=Utility;
+    '';
+  };
 
+  # Start 1Password minimized
   home.file.".config/autostart/onepassword.desktop" = {
     enable = true;
     text = ''

@@ -56,6 +56,11 @@ in {
   services.fprintd.tod.enable = true;
   services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
 
+  # Disable suspend when docked
+  services.logind.extraConfig = ''
+    HandleLidSwitchDocked=ignore
+  '';
+
   # Set version of NixOS to target
   system.stateVersion = "23.05";
 }

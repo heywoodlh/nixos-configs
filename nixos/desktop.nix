@@ -1,4 +1,8 @@
-{ config, pkgs, lib, home-manager, nur, vim-configs, git-configs, hyprland, nixpkgs-unstable, nixpkgs-backports, wezterm-configs, fish-configs, ... }:
+{ config, pkgs, lib, home-manager,
+  nur, vim-configs, git-configs,
+  hyprland, nixpkgs-unstable,
+  nixpkgs-backports, wezterm-configs,
+  fish-configs, ... }:
 
 let
   system = pkgs.system;
@@ -55,20 +59,20 @@ in {
   services.xserver.enable = true;
 
   # Enable nord-themed lightdm
-  services.xserver.displayManager.lightdm = {
-    enable = false;
-    background = builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
-      sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
-    };
-    greeters.gtk = {
-      enable = true;
-      theme = {
-        name = "Nordic-darker";
-        package = pkgs.nordic;
-      };
-    };
-  };
+  #services.xserver.displayManager.lightdm = {
+  #  enable = false;
+  #  background = builtins.fetchurl {
+  #    url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
+  #    sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
+  #  };
+  #  greeters.gtk = {
+  #    enable = true;
+  #    theme = {
+  #      name = "Nordic-darker";
+  #      package = pkgs.nordic;
+  #    };
+  #  };
+  #};
 
   # Enable GNOME
   services.xserver.desktopManager.gnome.enable = true;
@@ -81,8 +85,8 @@ in {
   #  enable = true;
   #  xwayland.enable = true;
   #};
-  security.pam.services.swaylock.text = "auth include login";
-  hardware.brillo.enable = true;
+  #security.pam.services.swaylock.text = "auth include login";
+  #hardware.brillo.enable = true;
 
   # Enable kde connect
   programs.kdeconnect.enable = true;
@@ -137,12 +141,11 @@ in {
   ## Bluetooth
   hardware.bluetooth = {
     enable = true;
+    settings = {
+      # Necessary for Airpods
+      General = { ControllerMode = "dual"; } ;
+    };
   };
-  ## Experimental flag allows battery reporting for bluetooth devices
-  systemd.services.bluetooth.serviceConfig.ExecStart = [
-    ""
-    "${pkgs.bluez}/libexec/bluetooth/bluetoothd --experimental"
-  ];
 
   # Android debugging
   programs.adb.enable = true;
@@ -203,18 +206,9 @@ in {
   };
 
   environment.homeBinInPath = true;
-  programs.zsh.enable = true;
   environment.shells = [
     pkgs.bashInteractive
-    pkgs.zsh
-    "/run/current-system/sw/bin/zsh"
   ];
-
-  # Bluetooth settings
-  hardware.bluetooth.settings = {
-    # Necessary for Airpods
-    General = { ControllerMode = "dual"; } ;
-  };
 
   # Desktop packages
   environment.systemPackages = [

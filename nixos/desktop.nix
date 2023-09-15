@@ -150,6 +150,9 @@ in {
   # Android debugging
   programs.adb.enable = true;
 
+  # iPhone usb support
+  services.usbmuxd.enable = true;
+
   # Seahorse (Gnome Keyring)
   programs.seahorse.enable = true;
 
@@ -213,6 +216,9 @@ in {
   # Desktop packages
   environment.systemPackages = [
     pkgs.busybox
+    pkgs.libimobiledevice # for iPhone
+    pkgs.idevicerestore # for iPhone
+    pkgs.ifuse
     pkgs.usbutils
     vim-configs.defaultPackage.${system}
   ];

@@ -56,15 +56,15 @@
     lxd.enable = true;
   };
 
-  fileSystems = {
-    # SD card
-    "/sdcard" = {
-      device = "/dev/disk/by-uuid/00b4681f-37f2-4fc7-81ec-a8a53e761d5b";
-      fsType = "ext4";
-      # It's okay if it's missing, automounted on access
-      options = [ "nofail" "x-systemd.automount" ];
-    };
-  };
+  #fileSystems = {
+  #  # SD card
+  #  "/sdcard" = {
+  #    device = "/dev/disk/by-uuid/00b4681f-37f2-4fc7-81ec-a8a53e761d5b";
+  #    fsType = "ext4";
+  #    # It's okay if it's missing, automounted on access
+  #    options = [ "nofail" "x-systemd.automount" ];
+  #  };
+  #};
 
   home-manager.users.heywoodlh.home.packages = with pkgs; [
     pkgs.moonlight-qt

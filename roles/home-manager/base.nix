@@ -62,7 +62,7 @@ in {
     pandoc
     pciutils
     popeye
-    proxychains
+    proxychains-ng
     pwgen
     python3
     rbw
@@ -257,7 +257,7 @@ in {
     executable = true;
     text = ''
       #!/usr/bin/env bash
-      ${pkgs.proxychains}/bin/proxychains4 "$@"
+      ${pkgs.proxychains-ng}/bin/proxychains4 "$@"
     '';
   };
 

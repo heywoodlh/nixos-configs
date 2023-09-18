@@ -16,6 +16,7 @@
     ../../roles/containers/k3s.nix
     ../../roles/nixos/cache.nix
     ../../roles/remote-access/guacamole.nix
+    ../../roles/security/fleetdm.nix
   ];
 
   # Bootloader.

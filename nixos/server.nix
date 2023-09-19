@@ -12,7 +12,6 @@ in {
     ./roles/squid-client.nix
     ./roles/tailscale.nix
     ./roles/syslog-ng/client.nix
-    ./roles/monitoring/osqueryd.nix
   ];
 
   home-manager.useGlobalPkgs = true;

@@ -8,6 +8,8 @@ in {
 
   services.nextcloud = {
     enable = true;
+    # Caching
+    configureRedis = true;
     package = unstable.nextcloud27;
     hostName = "drive.heywoodlh.io";
     config = {

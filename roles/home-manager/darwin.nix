@@ -7,6 +7,7 @@ in {
     ./base.nix
     ./desktop.nix
     ./firefox/darwin.nix
+    ./darwin/hammerspoon.nix
   ];
 
   nix = {

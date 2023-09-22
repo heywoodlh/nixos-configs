@@ -415,7 +415,7 @@ Paste</string>
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
-			<string>~/.nix-profile/bin/tmux</string>
+			<string>~/.nix-profile/bin/fish</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Alpha Component</key>

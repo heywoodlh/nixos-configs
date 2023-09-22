@@ -47,6 +47,7 @@ in {
       "moonlight"
       "screens"
       "signal"
+      "steam"
       "vmware-fusion"
       "zoom"
     ];

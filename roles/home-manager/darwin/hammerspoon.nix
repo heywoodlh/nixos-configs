@@ -60,6 +60,7 @@ let
     })
     PaperWM.window_filter = PaperWM.window_filter:setAppFilter("${wezterm}/bin/wezterm", true)
     PaperWM.window_filter = PaperWM.window_filter:setAppFilter("Finder", false)
+    PaperWM.window_filter = PaperWM.window_filter:setAppFilter("Slack", true)
     PaperWM:start()
 
     -- Keyboard shortcuts

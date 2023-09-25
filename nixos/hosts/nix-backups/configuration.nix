@@ -5,7 +5,7 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
-    ../../roles/rsnapshot.nix
+    ../../roles/backups/rsnapshot.nix
     ../../roles/monitoring/scrutiny.nix
   ];
 

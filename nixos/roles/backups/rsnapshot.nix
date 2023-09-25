@@ -54,11 +54,6 @@ backup	root@nix-precision.tailscale:/home/	nix-precision/
 backup	root@nix-precision.tailscale:/opt/	nix-precision/
 backup	root@nix-precision.tailscale:/root/	nix-precision/
 
-backup	root@tools.tailscale:/etc/	tools/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@tools.tailscale:/home/	tools/
-backup	root@tools.tailscale:/opt/	tools/
-backup	root@tools.tailscale:/root/	tools/
-
 backup	root@nix-media.tailscale:/etc/	nix-media/	exclude=/etc/shadow,exclude=/etc/passwd
 backup	root@nix-media.tailscale:/home/	nix-media/
 backup	root@nix-media.tailscale:/opt/	nix-media/

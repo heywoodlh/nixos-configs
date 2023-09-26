@@ -1,5 +1,5 @@
 # Remember that this is used for GitHub Actions to test builds
-{ config, pkgs, lib, home-manager, nur, fish-configs, ... }:
+{ config, pkgs, lib, home-manager, nur, fish-configs, wezterm-configs, ... }:
 
 let
   hostname = "nix-mac-mini";
@@ -10,24 +10,34 @@ in {
     ../roles/brew.nix
     ../roles/yabai.nix
     ../roles/network.nix
+    ../roles/sketchybar.nix
     ../../roles/home-manager/darwin/settings.nix
   ];
 
   # Define user settings
-  users.users.${username} = import ../roles/user.nix { inherit config; inherit pkgs; };
+  users.users.${username} = import ../roles/user.nix {
+    inherit config;
+    inherit pkgs;
+  };
 
   # Home-Manager config
   home-manager = {
     extraSpecialArgs = {
       inherit fish-configs;
+      inherit wezterm-configs;
     };
     # Set home-manager configs for username
-    users.${username} = import ../../roles/home-manager/darwin.nix;
+    users.${username} = { ... }: {
+      imports = [
+        ../../roles/home-manager/darwin.nix
+      ];
+    };
   };
 
   # Extra homebrew packages for this host
   homebrew.brews = [
-    "libheif" # For mautrix-imessage
+    "libheif" # mautrix-imessage
+    "libolm" # mautrix-imessage
   ];
 
   # Set hostname

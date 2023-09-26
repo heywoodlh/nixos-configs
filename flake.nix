@@ -129,6 +129,11 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-precision/configuration.nix ];
       };
+      nixos-matrix = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/nixos-matrix/configuration.nix ];
+      };
       nix-nvidia = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

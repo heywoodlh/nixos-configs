@@ -10,6 +10,8 @@ in {
     ../roles/defaults.nix
     ../roles/brew.nix
     ../roles/network.nix
+    ../roles/yabai.nix
+    ../roles/sketchybar.nix
     ../../roles/home-manager/darwin/settings.nix
   ];
 
@@ -35,9 +37,6 @@ in {
 
   # Set hostname
   networking.hostName = "${hostname}";
-
-  # Always show menu bar on M2 Macbook Air
-  system.defaults.NSGlobalDomain._HIHideMenuBar = lib.mkForce false;
 
   # Applications specific to this machine
   homebrew = {

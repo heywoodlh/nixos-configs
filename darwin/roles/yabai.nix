@@ -24,6 +24,7 @@
 
     yabai -m config layout                       bsp
     yabai -m config top_padding                  10
+    yabai -m config external_bar                 all:30:0
     yabai -m config bottom_padding               10
     yabai -m config left_padding                 20
     yabai -m config right_padding                20

@@ -40,6 +40,9 @@ in {
 
   # Applications specific to this machine
   homebrew = {
+    brews = [
+      "neofetch"
+    ];
     casks = [
       "discord"
       "microsoft-remote-desktop"

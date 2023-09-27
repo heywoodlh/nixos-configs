@@ -34,7 +34,6 @@
       "1password-beta"
       "android-platform-tools"
       "blockblock"
-      "caffeine"
       "cursorcerer"
       "firefox"
       "font-droid-sans-mono-for-powerline"

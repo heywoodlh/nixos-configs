@@ -30,6 +30,10 @@ in {
       server_name = "matrix.heywoodlh.io";
       #enable_registration = true;
       public_baseurl = "https://${fqdn}";
+      app_service_config_files = [
+        "/opt/mautrix-wsproxy/registration.yaml"
+        "/opt/mautrix-signal/data/registration.yaml"
+      ];
       listeners = [
         {
           port = 8008;
@@ -60,7 +64,7 @@ in {
         ];
       };
       mautrix-wsproxy = {
-        image = "dock.mau.dev/mautrix/wsproxy:latest";
+        image = "dock.mau.dev/mautrix/wsproxy:01e263da210a268fcfa715c7e051fb6913b2226a-amd64";
         autoStart = true;
         volumes = [
           "/opt/mautrix-wsproxy/data:/data"
@@ -75,15 +79,11 @@ in {
         environmentFiles = [
           /opt/mautrix-wsproxy/environment
         ];
-        cmd = [
-          "/usr/bin/mautrix-wsproxy"
-          "-config"
-          "/data/config.yaml"
-        ];
       };
       mautrix-signal = {
-        image = "dock.mau.dev/mautrix/signal:latest";
+        image = "dock.mau.dev/mautrix/signal:370a85354f56e44fff7744764a75e3f5f74b8761-amd64";
         autoStart = true;
+        user = "994:994";
         volumes = [
           "/opt/mautrix-signal/data:/data"
           "/run/signald:/signald"
@@ -93,7 +93,7 @@ in {
           "--network=host"
         ];
         environment = {
-          HOMESERVER_URL = "http://localhost:8008";
+          HOMESERVER_URL = "https://matrix.heywoodlh.io";
         };
       };
     };

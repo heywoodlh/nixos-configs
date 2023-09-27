@@ -125,6 +125,8 @@ in {
     script = ''
       set -eu
       systemctl restart signald.service
+      sleep 20
+      systemctl restart docker-mautrix-signal.service
     '';
     serviceConfig = {
       Type = "oneshot";

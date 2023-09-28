@@ -44,6 +44,7 @@ in {
       "neofetch"
     ];
     casks = [
+      "diffusionbee"
       "discord"
       "microsoft-remote-desktop"
       "moonlight"

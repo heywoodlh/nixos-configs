@@ -16,9 +16,7 @@ in {
   home.packages = with pkgs; [
     _1password
     aerc
-    ansible
     bind
-    bitwarden-cli
     coreutils
     curl
     dante
@@ -28,7 +26,6 @@ in {
     dos2unix
     file
     findutils
-    fluxcd
     fzf
     gcc
     git-lfs
@@ -51,17 +48,13 @@ in {
     libarchive
     libvirt
     lima
-    linode-cli
     mosh
     nim
-    nixos-rebuild
-    nixos-shell
     nmap
     openssl
     operator-sdk
     pandoc
     pciutils
-    popeye
     proxychains-ng
     pwgen
     python3
@@ -73,7 +66,6 @@ in {
     torsocks
     tree
     unzip
-    vultr-cli
     w3m
     zip
   ];

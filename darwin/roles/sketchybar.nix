@@ -100,14 +100,14 @@ let
     TRACK=""
     ALBUM=""
     ARTIST=""
-    if [ $RUNNING -eq 0 ]
+    if [[ $RUNNING -eq 0 ]]
     then
-      [ "$(osascript -e 'if application "Spotify" is running then tell application "Spotify" to get player state')" == "playing" ] && PLAYING=0
+      [[ "$(osascript -e 'if application "Spotify" is running then tell application "Spotify" to get player state')" == "playing" ]] && PLAYING=0
       TRACK="$(osascript -e 'tell application "Spotify" to get name of current track')"
       ARTIST="$(osascript -e 'tell application "Spotify" to get artist of current track')"
       ALBUM="$(osascript -e 'tell application "Spotify" to get album of current track')"
     fi
-    if [ -n "$TRACK" ]
+    if [[ -n "$TRACK" ]]
     then
       [[ "$PLAYING" -eq 0 ]] && ICON=""
       [[ "$PLAYING" -eq 1 ]] && ICON=""

@@ -8,6 +8,7 @@
     ../../roles/libvirt.nix
     ../../roles/iperf.nix
     ../../roles/monitoring/scrutiny.nix
+    ../../roles/remote-access/cockpit.nix
   ];
 
   # Bootloader.

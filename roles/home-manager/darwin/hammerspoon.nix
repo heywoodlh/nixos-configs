@@ -3,12 +3,6 @@
 let
   system = pkgs.system;
   wezterm = wezterm-configs.packages.${system}.wezterm;
-  #paperwm.spoon = pkgs.fetchFromGitHub {
-  #  owner = "mogenson";
-  #  repo = "PaperWM.spoon";
-  #  rev = "7c15e00b01177b70f288eef2fe5d41855f0da96e";
-  #  hash = "sha256-NdzdvJNv3ynz1P6SdfTycgbF1PBT3nYMEJacFMt8KFQ=";
-  #};
 
   hammerspoon-lua = ''
     -- Keyboard shortcuts
@@ -41,8 +35,4 @@ in {
   home.file.".hammerspoon/init.lua" = {
     text = hammerspoon-lua;
   };
-
-  #home.file.".hammerspoon/Spoons/PaperWM.spoon" = {
-  #  source = paperwm.spoon;
-  #};
 }

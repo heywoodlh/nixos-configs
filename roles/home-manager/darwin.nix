@@ -2,6 +2,7 @@
 
 let
   system = pkgs.system;
+  homeDir = config.home.homeDirectory;
 in {
   imports = [
     ./base.nix
@@ -232,6 +233,12 @@ in {
 
 [commit]
   gpgsign = true
+    '';
+  };
+
+  home.activation = {
+    aerc-link = ''
+      ln -s ${homeDir}/.config/aerc ${homeDir}/Library/Preferences/aerc || true
     '';
   };
 }

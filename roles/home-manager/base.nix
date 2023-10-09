@@ -292,6 +292,7 @@ in {
       outgoing = smtp+plain://l.spencer.heywood%40protonmail.com@nix-ext-net.tailscale:25
       outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/erkt5oy644dks54kax57ib2rue/password'
       default = INBOX
+      from = Spencer Heywood <l.spencer.heywood@protonmail.com>
     '';
   };
   programs.aerc = {

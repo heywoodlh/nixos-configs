@@ -3,8 +3,12 @@
 let
   system = pkgs.system;
   wezterm = wezterm-configs.packages.${system}.wezterm;
+  homeDir = config.home.homeDirectory;
 
   hammerspoon-lua = ''
+    -- CLI tools
+    require("hs.ipc")
+
     -- Keyboard shortcuts
     hs.hotkey.bind({"ctrl", "alt"}, "t", function()
         hs.execute("${wezterm}/bin/wezterm")

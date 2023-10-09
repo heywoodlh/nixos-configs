@@ -100,4 +100,9 @@ in {
 
   # Use touch ID for sudo auth
   security.pam.enableSudoTouchIdAuth = true;
+
+  # Commands to run after each build
+  environment.postBuild = ''
+    ls -l /Applications/Hammerspoon.app/Contents/Frameworks/hs/hs &> /dev/null && /Applications/Hammerspoon.app/Contents/Frameworks/hs/hs -c "hs.reload()" || true
+  '';
 }

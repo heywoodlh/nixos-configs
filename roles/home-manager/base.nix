@@ -2,6 +2,15 @@
 
 let
   homeDir = config.home.homeDirectory;
+  aerc-html-filter = pkgs.writeScriptBin "html" ''
+    export SOCKS_SERVER="127.0.0.1:1"
+    exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
+      -T text/html \
+      -cols $(${pkgs.ncurses}/bin/tput cols) \
+      -dump \
+      -o display_image=false \
+      -o display_link_number=true
+  '';
 in {
   home.stateVersion = "23.05";
   home.enableNixpkgsReleaseCheck = false;
@@ -15,14 +24,10 @@ in {
   # Packages I need installed on every system
   home.packages = with pkgs; [
     _1password
-    aerc
     bind
     coreutils
     curl
-    dante
-    deploy-rs
     docker-compose
-    doctl
     dos2unix
     file
     findutils
@@ -36,7 +41,6 @@ in {
     gnumake
     gnused
     gomuks
-    gotify-cli
     htop
     inetutils
     jq
@@ -49,11 +53,8 @@ in {
     libvirt
     lima
     mosh
-    nim
     nmap
     openssl
-    operator-sdk
-    pandoc
     pciutils
     proxychains-ng
     pwgen
@@ -66,7 +67,6 @@ in {
     torsocks
     tree
     unzip
-    w3m
     zip
   ];
 
@@ -272,5 +272,35 @@ in {
   # Cross-platform shell aliases
   home.shellAliases = {
     op = "${homeDir}/bin/op-wrapper.sh";
+  };
+
+  # Aerc
+  home.file.".config/aerc/accounts.conf" = {
+    enable = true;
+    text = ''
+      [fastmail]
+      source = imaps://heywoodlh%40heywoodlh.io@imap.fastmail.com:993
+      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/44abj6tnhmrjdhv6potivbc5by/password'
+      outgoing = smtps://heywoodlh%40heywoodlh.io@smtp.fastmail.com:465
+      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/44abj6tnhmrjdhv6potivbc5by/password'
+      default = INBOX
+      from = Spencer Heywood <heywoodlh@heywoodlh.io>
+
+      [protonmail]
+      source = imap+insecure://l.spencer.heywood%40protonmail.com@nix-ext-net.tailscale:143
+      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/erkt5oy644dks54kax57ib2rue/password'
+      outgoing = smtp+plain://l.spencer.heywood%40protonmail.com@nix-ext-net.tailscale:25
+      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/erkt5oy644dks54kax57ib2rue/password'
+      default = INBOX
+    '';
+  };
+  programs.aerc = {
+    enable = true;
+    extraConfig = {
+      general.unsafe-accounts-conf = true;
+      filters = {
+        "text/html" = "${aerc-html-filter}/bin/html";
+      };
+    };
   };
 }

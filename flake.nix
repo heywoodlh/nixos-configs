@@ -16,7 +16,7 @@
       url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    hyprland.url = "github:hyprwm/Hyprland/main";
+    #hyprland.url = "github:hyprwm/Hyprland/main";
     # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
     jovian-nixos = {
       url = "git+https://github.com/Jovian-Experiments/Jovian-NixOS?ref=development";
@@ -38,7 +38,6 @@
                       fish-configs,
                       darwin,
                       home-manager,
-                      hyprland,
                       jovian-nixos,
                       nur,
                       flake-utils,

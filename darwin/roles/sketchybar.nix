@@ -47,7 +47,7 @@ let
       killall caffeinate
       sketchybar --set $NAME icon="󰛊"
     else
-      caffeinate & disown
+      caffeinate -d & disown
       sketchybar --set $NAME icon="󰅶"
     fi
   '';
@@ -92,6 +92,7 @@ let
   '';
   spotify-indicator-sh = pkgs.writeShellScriptBin "spotify-indicator.sh" ''
     RUNNING="$(osascript -e 'if application "Spotify" is running then return 0')"
+    sketchybar --set "$NAME" updates=on
     if [ $RUNNING != 0 ]
     then
       RUNNING=1
@@ -109,6 +110,7 @@ let
     fi
     if [[ -n "$TRACK" ]]
     then
+      sketchybar -m --set "$NAME" drawing=on
       [[ "$PLAYING" -eq 0 ]] && ICON=""
       [[ "$PLAYING" -eq 1 ]] && ICON=""
       if [ "$ARTIST" == "" ]
@@ -118,7 +120,7 @@ let
         sketchybar -m --set "$NAME" label="''${ICON} ''${TRACK} - ''${ARTIST}"
       fi
     else
-      sketchybar -m --set "$NAME" label=""
+      sketchybar -m --set "$NAME" label="" drawing=off
     fi
   '';
 

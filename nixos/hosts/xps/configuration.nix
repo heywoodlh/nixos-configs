@@ -34,7 +34,8 @@ in {
 
   # Configuration for this machine
   home-manager.users.heywoodlh = {
-   home.packages = with pkgs; [
+    home.packages = with pkgs; [
+      rustdesk
       signal-desktop
       spicetify.packages.x86_64-linux.nord
       webcord

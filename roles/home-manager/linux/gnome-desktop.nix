@@ -20,6 +20,16 @@ in {
     pkgs.gnomeExtensions.switcher
   ];
 
+  # Enable unclutter
+  services.unclutter = {
+    enable = true;
+    timeout = 3;
+    extraOptions = [
+      "exclude-root"
+      "ignore-scrolling"
+    ];
+  };
+
   home.file.".config/pop-shell/config.json" = {
     enable = false;
     text = ''

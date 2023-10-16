@@ -7,7 +7,7 @@ let
 in {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      /etc/nixos/hardware-configuration.nix
       ../../desktop.nix
     ];
 
@@ -20,7 +20,7 @@ in {
     "/crypto_keyfile.bin" = null;
   };
 
-  networking.hostName = "nix-pixelbook"; # Define your hostname.
+  networking.hostName = "nixos-pixelbook"; # Define your hostname.
 
   # Set your time zone.
   time.timeZone = "America/Denver";
@@ -40,15 +40,11 @@ in {
   };
 
   home-manager.users.heywoodlh = {
-    imports = [
-      ../../../roles/home-manager/linux/hyprland/spotify.nix
-      ../../../roles/home-manager/linux/hyprland/laptop.nix
-      ../../../roles/home-manager/linux/hyprland/office-monitors.nix
-    ];
     home.packages = with pkgs; [
-      remmina
+      rustdesk
       signal-desktop
-      spicetify.packages.x86_64-linux.nord-text
+      spicetify.packages.x86_64-linux.nord
+      webcord
       zoom-us
     ];
   };

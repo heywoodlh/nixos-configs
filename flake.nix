@@ -88,11 +88,11 @@
 
     # nixos targets
     packages.nixosConfigurations = {
-      nix-yoga = nixpkgs.lib.nixosSystem {
+      nixos-pixelbook = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [
-          ./nixos/hosts/yoga/configuration.nix
+          ./nixos/hosts/pixelbook-go/configuration.nix
         ];
       };
       nixos-xps = nixpkgs.lib.nixosSystem {

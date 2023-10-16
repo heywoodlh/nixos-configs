@@ -72,6 +72,15 @@
 
   programs.steam.enable = true;
 
+  # Flatpak for Retrodeck
+  services.flatpak.enable = true;
+  users.users.heywoodlh = {
+    packages = with pkgs; [
+      flatpak
+      gnome.gnome-software
+    ];
+  };
+
   # Use a remote machine for builds
   nix = {
     distributedBuilds = true;

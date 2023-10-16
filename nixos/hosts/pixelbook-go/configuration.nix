@@ -65,8 +65,10 @@ in {
     options snd-hda-intel model=auto
     options snd-hda-intel dmic_detect=0
   '';
-  nixpkgs.overlays = [ ( self: super: { sof-firmware = unstable.sof-firmware; } ) ];
-  hardware.pulseaudio.package = unstable.pulseaudioFull;
+
+  hardware.firmware = [
+    pkgs.sof-firmware
+  ];
 
   # Set version of NixOS to target
   system.stateVersion = "23.05";

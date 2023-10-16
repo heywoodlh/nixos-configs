@@ -20,10 +20,21 @@ in {
       home = "/home/backups";
       shell = "${pkgs.bash}/bin/bash";
       openssh.authorizedKeys.keys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCbD30q6xvJoS/pmXvqGQHCGF8HgifaLlHzIS3bMBTDT4pPC0oJyawgBUY2ZM8XCkXcwCDQQxOsAC7JYAUr0LCUwNvI4DJVlO9pBivpZoo5KhHQJEj3SvIkgnKAdoruBWgS9reuAznWQcRTAhsRZWwcgPuFASVqoPPr5rGQo+Ki0Za4/+pAXjgnREG6e/2KwYNoPYpb00ekE+VwHSh+xTb/PZYU46SDPOaxXr9hPB0ICfvBFlXPI32QAhbRTdYYTPkG19bYUp1NTuEJE6ys9BNn4HF4TYfWF1Jb7CdPkvPwmnIgAiw5HTSxOQH0JUhCzgNDPGsXgQt0McQpU41iFp0DJss0d2uWiBs6hWypptKSczgsyb10HRp7LWQkKJ0pWU4fW2NZl2aoSpX0p6L3e1XI9eqXGJxW9iJ8bfpog7Z8lS1oHGUbP5tdaOEzw/0CoI+mIBignZhyKhVmRL6ZgRnZbjwZgnVPtNkd2ly0uKT5T9ukiP1Rqafi+m4AQpHrKvGraZxTT1DLM8PPDV+gKv4J7jNb7zEiQxkdcA8e0MqptS+C40VM2zicv+kEZtm7KtFpCKaqcDYFy9kCrPtO2ORi5uCYG88QLwkcjW8uhD5pkK8ohBgnEoemKZl3QF8oOkpEHRzRjojHdfaRr4UbQqPmjYmxcCAQa78L8kr+hbEvXQ== nextcloud"
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDfGoaMlrNGuu3kPeq3spOKN8d8orcMKdnEHccSaZQOZ09UdOQVTd6xxpNUvghsvl5QidcZVW6Rftql3D2y3dwjnZ5JO4m+u+15RLRsh43duUO/S+uDzhgcQ/JxAnqUFbJwV/JRUCrKMzhlecAZIrN49lpceTkWhqKalfEz/04+mQ== nix-drive"
       ];
     };
   };
+
+  services.openssh.settings.Macs = [
+   "hmac-sha2-512-etm@openssh.com"
+   "hmac-sha2-256-etm@openssh.com"
+   "umac-128-etm@openssh.com"
+   "hmac-sha2-256"
+   "hmac-sha1-96"
+   "hmac-sha1"
+   "hmac-md5-96"
+   "hmac-md5"
+  ];
 
   services.rsnapshot = {
     enable = true;

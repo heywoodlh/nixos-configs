@@ -301,6 +301,7 @@ in {
       general.unsafe-accounts-conf = true;
       filters = {
         "text/html" = "${aerc-html-filter}/bin/html";
+        "text/plain" = "${pkgs.coreutils}/bin/fold -w 80";
       };
     };
   };

@@ -10,7 +10,6 @@
     ../../roles/libvirt.nix
     ../../roles/syslog-ng/server.nix
     ../../roles/gaming/minecraft-bedrock.nix
-    ../../roles/monitoring/nfcapd.nix
     ../../roles/monitoring/graylog.nix
     ../../roles/gaming/sunshine.nix
     ../../roles/containers/k3s.nix

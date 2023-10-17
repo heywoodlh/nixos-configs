@@ -60,23 +60,12 @@
     package = pkgs.linuxKernel.packages.linux_xanmod_stable.nvidia_x11;
   };
 
-  environment.systemPackages = with pkgs; [
-    rustdesk
-    sunshine
-  ];
-
   # This drive seems to have issues
   #fileSystems."/media/disk1" ={
   #  device = "/dev/disk/by-uuid/01cc4cb8-4646-471c-969d-a8729570c564";
   #  fsType = "btrfs";
   #  options = [ "rw" "uid=1000" "rw" "relatime" "x-systemd.mount-timeout=5min" ];
   #};
-
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-  };
 
   # Prevent system from sleeping (for XRDP to work)
   systemd.targets.sleep.enable = false;
@@ -88,13 +77,17 @@
   services.k3s.extraFlags = "--tls-san=nix-nvidia.tailscale";
 
   # Exposed ports
-  networking.firewall.allowedTCPPorts = [
-    443
-    3389
-    5900
-  ];
+  networking.firewall = {
+    allowedUDPPorts = [
+      9995
+    ];
+    allowedTCPPorts = [
+      443
+      3389
+      5900
+    ];
+  };
 
-  services.sunshine.enable = true;
   services.gnome.gnome-remote-desktop.enable = true;
 
   system.stateVersion = "22.11";

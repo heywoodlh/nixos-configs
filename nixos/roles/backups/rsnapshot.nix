@@ -55,6 +55,11 @@ retain	daily	7
 retain	weekly	4
 retain	monthly	6
 
+backup	root@nixos-matrix.tailscale:/etc/	nixos-matrix/	exclude=/etc/shadow,exclude=/etc/passwd
+backup	root@nixos-matrix.tailscale:/home/	nixos-matrix/
+backup	root@nixos-matrix.tailscale:/opt/	nixos-matrix/
+backup	root@nixos-matrix.tailscale:/root/	nixos-matrix/
+
 backup	root@nix-tools.tailscale:/etc/	nix-tools/	exclude=/etc/shadow,exclude=/etc/passwd
 backup	root@nix-tools.tailscale:/home/	nix-tools/
 backup	root@nix-tools.tailscale:/opt/	nix-tools/

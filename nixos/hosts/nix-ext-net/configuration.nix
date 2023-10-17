@@ -16,6 +16,7 @@ in {
     ../../roles/remote-access/rustdesk.nix
     ../../roles/remote-access/cloudflared.nix
     ../../roles/messaging/ntfy.nix
+    ../../roles/monitoring/bash-uptime.nix
   ];
 
   # Bootloader.

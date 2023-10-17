@@ -33,6 +33,7 @@ in {
       app_service_config_files = [
         "/opt/mautrix-wsproxy/registration.yaml"
         "/opt/mautrix-signal/data/registration.yaml"
+        "/opt/mautrix-discord/data/registration.yaml"
       ];
       listeners = [
         {
@@ -96,16 +97,19 @@ in {
           HOMESERVER_URL = "https://matrix.heywoodlh.io";
         };
       };
+      mautrix-discord = {
+        image = "dock.mau.dev/mautrix/discord:v0.6.3";
+        autoStart = true;
+        volumes = [
+          "/opt/mautrix-discord/data:/data"
+          "/etc/localtime:/etc/localtime:ro"
+        ];
+        extraOptions = [
+          "--network=host"
+        ];
+      };
     };
   };
-
-  # Discord AppService
-  #services.matrix-appservice-discord = {
-  #  enable = true;
-  #  port = 9005;
-  #  environmentFile = "/opt/matrix-discord/environment";
-  #  settings = {};
-  #};
 
   # Signald
   services.signald = {

@@ -1,5 +1,5 @@
 # Config specific to Pixelbook Go
-{ config, pkgs, lib, spicetify, nixpkgs-unstable, ... }:
+{ config, pkgs, lib, nixpkgs-unstable, ... }:
 
 let
   system = pkgs.system;
@@ -43,7 +43,6 @@ in {
     home.packages = with pkgs; [
       rustdesk
       signal-desktop
-      spicetify.packages.x86_64-linux.nord
       webcord
       zoom-us
     ];

@@ -107,8 +107,8 @@ in {
   # Download wallpaper
   home.file.".wallpaper.png" = {
     source = builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
-      sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
+      url = "https://raw.githubusercontent.com/linuxdotexe/nordic-wallpapers/2339404ab827f617268cf0f10aad144a69bdccfe/wallpapers/BirdNord.png";
+      sha256 = "sha256:130kbzi8dka9c145jn5sln8zb2ich3r3xz3w9bcw3h5a9i7k003c";
     };
   };
 

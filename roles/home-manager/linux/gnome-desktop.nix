@@ -214,6 +214,7 @@ in {
       double-super-to-appgrid = true;
       gesture = true;
       hot-corner = false;
+      notification-banner-position = 2;
       osd = false;
       panel = false;
       panel-arrow = true;

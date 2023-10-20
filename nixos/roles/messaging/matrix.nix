@@ -145,4 +145,10 @@ in {
     signaldctl
   ];
 
+  # Fix mautrix-discord registration permissions
+  systemd.services."matrix-synapse".serviceConfig = {
+    execStartPre = [
+      "chmod +r /opt/mautrix-discord/data/registration.yaml"
+    ];
+  };
 }

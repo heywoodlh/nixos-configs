@@ -8,6 +8,7 @@ let
   system = pkgs.system;
   pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
+  fish = fish-configs.packages.${system}.fish;
 in {
   imports = [
     home-manager.nixosModules.home-manager
@@ -198,7 +199,7 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = pkgs.bash;
+    shell = "${fish}/bin/fish";
     # users.users.<name>.icon not a NixOS option
     # made possible with ./roles/desktop/user-icon.nix
     icon = builtins.fetchurl {

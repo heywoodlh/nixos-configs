@@ -1,9 +1,16 @@
-{ config, pkgs, home-manager, nur, vim-configs, nixpkgs-unstable, nixpkgs-backports, ... }:
+{ config, pkgs,
+  home-manager, nur,
+  vim-configs,
+  nixpkgs-unstable,
+  nixpkgs-backports,
+  fish-configs,
+  ... }:
 
 let
   system = pkgs.system;
   pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
+  fish = fish-configs.packages.${system}.fish;
 in {
   imports = [
     home-manager.nixosModule
@@ -93,7 +100,7 @@ in {
     home = "/home/heywoodlh";
     description = "Spencer Heywood";
     extraGroups = [ "wheel" ];
-    shell = pkgs.zsh;
+    shell = "${fish}/bin/fish";
   };
 
   # Set home-manager configs for username

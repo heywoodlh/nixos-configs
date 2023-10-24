@@ -16,6 +16,7 @@
     ../../roles/nixos/cache.nix
     ../../roles/remote-access/guacamole.nix
     ../../roles/security/fleetdm.nix
+    ../../roles/monitoring/osqueryd.nix
   ];
 
   # Bootloader.

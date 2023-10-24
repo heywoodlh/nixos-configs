@@ -2,12 +2,12 @@
 
 let
   secret = pkgs.fetchurl {
-    url = "https://drive.heywoodlh.io/s/L2gFPmozS8gxwGt/download/secret.txt";
-    hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
+    url = "http://100.113.9.57:9080/secret.txt";
+    sha256 = "sha256-foUAIXGl1IpTc2i0gKARz7HKPxUNo0uEBvE/jRvc6co=";
   };
   cert = pkgs.fetchurl {
-    url = "https://drive.heywoodlh.io/s/8g58tycZyR487ES/download/fleet.pem";
-    hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
+    url = "http://100.113.9.57:9080/fleet.pem";
+    sha256 = "sha256-n6wRM5SXALOaJNwXsyc29tED2OnjwQzNk/Z5yckCqLU=";
   };
 in {
   services.osquery = {

@@ -8,6 +8,7 @@ in {
     8181
   ];
 
+  users.groups.media = {};
   users.users.media = {
     group = "media";
     isSystemUser = true;

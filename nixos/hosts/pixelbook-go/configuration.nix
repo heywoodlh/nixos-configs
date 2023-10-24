@@ -1,10 +1,7 @@
 # Config specific to Pixelbook Go
-{ config, pkgs, lib, nixpkgs-unstable, ... }:
+{ config, pkgs, lib, ... }:
 
-let
-  system = pkgs.system;
-  unstable = nixpkgs-unstable.legacyPackages.${system};
-in {
+{
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix

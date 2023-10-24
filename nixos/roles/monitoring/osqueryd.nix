@@ -1,8 +1,6 @@
-{ config, pkgs, nixpkgs-unstable, ... }:
+{ config, pkgs, ... }:
 
 let
-  system = pkgs.system;
-  unstable = nixpkgs-unstable.legacyPackages.${system};
   secret = pkgs.fetchurl {
     url = "https://drive.heywoodlh.io/s/L2gFPmozS8gxwGt/download/secret.txt";
     hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
@@ -12,9 +10,6 @@ let
     hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
   };
 in {
-  imports = [
-    (nixpkgs-unstable + /nixos/modules/services/monitoring/osquery.nix)
-  ];
   services.osquery = {
     enable = true;
     flags = {

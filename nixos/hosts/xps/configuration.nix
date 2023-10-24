@@ -1,11 +1,8 @@
 # Config specific to Dell XPS 13
 
-{ config, pkgs, lib, spicetify, nixpkgs-unstable, ... }:
+{ config, pkgs, lib, spicetify, ... }:
 
-let
-  system = pkgs.system;
-  unstable = nixpkgs-unstable.legacyPackages.${system};
-in {
+{
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix

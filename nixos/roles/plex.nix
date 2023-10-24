@@ -1,8 +1,7 @@
-{ config, pkgs, nixpkgs-unstable, ... }:
+{ config, pkgs, ... }:
 
 let
   system = pkgs.system;
-  unstable = nixpkgs-unstable.legacyPackages.${system};
 in {
   networking.firewall.allowedTCPPorts = [
     8081
@@ -31,7 +30,6 @@ in {
 
   services.radarr = {
     enable = true;
-    package = unstable.radarr;
     openFirewall = true;
     dataDir = "/opt/radarr";
     user = "media";

@@ -2,8 +2,7 @@
   description = "heywoodlh nix config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
@@ -13,8 +12,8 @@
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.05";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     #hyprland.url = "github:hyprwm/Hyprland/main";
     # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
@@ -29,7 +28,6 @@
 
   outputs = inputs@{ self,
                       nixpkgs,
-                      nixpkgs-unstable,
                       nixpkgs-backports,
                       nixos-wsl,
                       vim-configs,

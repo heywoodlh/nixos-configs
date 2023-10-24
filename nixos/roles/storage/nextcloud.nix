@@ -1,16 +1,12 @@
-{ config, pkgs, nixpkgs-unstable, ... }:
+{ config, pkgs, ... }:
 
-let
-  system = pkgs.system;
-  unstable = nixpkgs-unstable.legacyPackages.${system};
-in {
+{
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 80 ];
 
   services.nextcloud = {
     enable = true;
     # Caching
     configureRedis = true;
-    package = unstable.nextcloud27;
     hostName = "drive.heywoodlh.io";
     config = {
       dbtype = "pgsql";

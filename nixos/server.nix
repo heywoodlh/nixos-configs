@@ -1,14 +1,12 @@
 { config, pkgs,
   home-manager, nur,
   vim-configs,
-  nixpkgs-unstable,
   nixpkgs-backports,
   fish-configs,
   ... }:
 
 let
   system = pkgs.system;
-  pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   fish = fish-configs.packages.${system}.fish;
 in {

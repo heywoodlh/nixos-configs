@@ -1,12 +1,11 @@
 { config, pkgs, lib, home-manager,
   nur, vim-configs, git-configs,
-  hyprland, nixpkgs-unstable,
-  nixpkgs-backports, wezterm-configs,
-  fish-configs, ... }:
+  hyprland, nixpkgs-backports,
+  wezterm-configs, fish-configs,
+  ... }:
 
 let
   system = pkgs.system;
-  pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   fish = fish-configs.packages.${system}.fish;
 in {
@@ -191,7 +190,7 @@ in {
     checkReversePath = "loose";
   };
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" "JetBrainsMono" ]; })
   ];
 

@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
+    nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon/main";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
     git-configs.url = "github:heywoodlh/flakes/main?dir=git";
@@ -29,6 +30,7 @@
   outputs = inputs@{ self,
                       nixpkgs,
                       nixpkgs-backports,
+                      nixos-apple-silicon,
                       nixos-wsl,
                       vim-configs,
                       git-configs,

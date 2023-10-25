@@ -59,7 +59,7 @@ in {
       var Shell = imports.gi.Shell;
 
       // Extension local imports
-      var Extension, Me, Tiling, Utils, App, Keybindings, Examples;
+      var Extension, Me, Tiling, Utils, App, Keybindings;
 
       function init() {
           // Runs _only_ once on startup
@@ -70,7 +70,6 @@ in {
           Tiling = Extension.imports.tiling;
           Utils = Extension.imports.utils;
           Keybindings = Extension.imports.keybindings;
-          Examples = Extension.imports.examples;
           App = Extension.imports.app;
 
           Tiling.defwinprop({
@@ -249,6 +248,7 @@ in {
       switch-left = ["<Super>bracketleft"];
       move-left = ["<Shift><Super>braceleft"];
       move-right = ["<Shift><Super>braceright"];
+      toggle-maximize-width = ["<Super>Up"];
     };
 
     "org/gnome/desktop/background" = {

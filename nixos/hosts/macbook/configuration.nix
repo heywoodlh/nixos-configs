@@ -3,16 +3,16 @@
 let
   hostname = "nixos-macbook";
 in {
-  imports =
-  [
+  imports = [
     /etc/nixos/hardware-configuration.nix
-    /etc/nixos/apple-silicon-support
+    ../../roles/nixos/asahi.nix
     ../../desktop.nix
   ];
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
+  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/40adb1af-7c06-47fc-99bb-80d61ff8cd8e";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -25,18 +25,11 @@ in {
   i18n.defaultLocale = "en_US.utf8";
 
   # Configuration for this machine
-  home-manager.users.heywoodlh = {
-    home.packages = with pkgs; [
-      rustdesk
-      signal-desktop
-      spicetify.packages.x86_64-linux.nord
-      webcord
-      zoom-us
-    ];
-  };
-
-  # Emulate x86_64 linux
-  boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
+  environment.systemPackages = with pkgs; [
+    #rustdesk
+    #signal-desktop
+    webcord
+  ];
 
   system.stateVersion = "23.11";
 }

@@ -1,7 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs,
+  nixos-configs,
+  ... }:
 
 let
-  hostname = "nixos-matrix";
+  hostname = "nixos-dev";
 in {
   imports =
   [ # Include the results of the hardware scan.

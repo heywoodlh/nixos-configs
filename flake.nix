@@ -86,11 +86,11 @@
 
     # nixos targets
     packages.nixosConfigurations = {
-      nixos-pixelbook = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      nixos-macbook = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
         specialArgs = inputs;
         modules = [
-          ./nixos/hosts/pixelbook-go/configuration.nix
+          ./nixos/hosts/macbook/configuration.nix
         ];
       };
       nixos-xps = nixpkgs.lib.nixosSystem {

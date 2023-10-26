@@ -34,7 +34,7 @@
     home.packages = with pkgs; [
       rustdesk
       signal-desktop
-      spicetify.packages.x86_64-linux.nord
+      spicetify.packages.x86_64-linux.nord-text
       webcord
       zoom-us
     ];

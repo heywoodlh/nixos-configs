@@ -12,9 +12,6 @@
     ../../roles/containers/syncthing.nix
     ../../roles/feeds/rsshub.nix
     ../../roles/feeds/miniflux.nix
-    ../../roles/messaging/bitlbee.nix
-    ../../roles/messaging/thelounge.nix
-    ../../roles/messaging/znc.nix
     ../../roles/monitoring/scrutiny.nix
   ];
 

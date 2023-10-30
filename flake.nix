@@ -50,10 +50,6 @@
       config.allowUnfree = true;
     };
 
-    vim-configs = inputs.myFlakes.vim;
-    git-configs = inputs.myFlakes.git;
-    wezterm-configs = inputs.myFlakes.wezterm;
-    fish-configs = inputs.myFlakes.fish;
     in {
     # macos targets
     packages.darwinConfigurations = {

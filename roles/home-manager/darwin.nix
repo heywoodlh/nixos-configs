@@ -28,124 +28,14 @@ in {
   };
 
   home.packages = [
-    fish-configs.packages.${system}.fish
     pkgs.colima
     pkgs.m-cli
     pkgs.mas
     pkgs.pinentry_mac
-    pkgs.tiny
   ];
 
   home.shellAliases = {
     ls = "ls --color";
-  };
-
-  home.file."Library/Application Support/tiny/config.yml" = {
-    enable = true;
-    text = ''
-      servers:
-          - addr: nix-media.tailscale
-            port: 6667
-            tls: false
-            realname: heywoodlh
-            nicks: [heywoodlh]
-            nickserv_ident:
-                command: "/usr/local/bin/op item get bitlbee/heywoodlh --fields password"
-            join:
-                - "&bitlbee"
-      defaults:
-          nicks: [heywoodlh]
-          realname: heywoodlh
-          join: []
-          tls: false
-      log_dir: "/tmp/tiny_logs"
-      colors:
-          nick: [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14]
-          clear:
-              fg: default
-              bg: default
-          user_msg:
-              fg: black
-              bg: default
-          err_msg:
-              fg: black
-              bg: maroon
-              attrs: [bold]
-          topic:
-              fg: cyan
-              bg: default
-              attrs: [bold]
-          cursor:
-              fg: black
-              bg: default
-          join:
-              fg: lime
-              bg: default
-              attrs: [bold]
-          part:
-              fg: maroon
-              bg: default
-              attrs: [bold]
-          nick_change:
-              fg: lime
-              bg: default
-              attrs: [bold]
-          faded:
-              fg: 242
-              bg: default
-          exit_dialogue:
-              fg: default
-              bg: navy
-          highlight:
-              fg: red
-              bg: default
-              attrs: [bold]
-          completion:
-              fg: 84
-              bg: default
-          timestamp:
-              fg: 242
-              bg: default
-          tab_active:
-              fg: default
-              bg: default
-              attrs: [bold]
-          tab_normal:
-              fg: gray
-              bg: default
-          tab_new_msg:
-              fg: purple
-              bg: default
-          tab_highlight:
-              fg: red
-              bg: default
-              attrs: [bold]
-    '';
-  };
-
-  programs.zsh = {
-    initExtra = ''
-      # MacOS specific ZSH config
-      # Architecture specific differences
-      if [[ $(arch) == 'arm64' ]]
-      then
-        export PATH="$PATH:/opt/homebrew/bin"
-      else
-        export PATH="$PATH:/usr/local/bin"
-      fi
-
-      function toon {
-        echo -n ""
-      }
-
-      if [[ -e ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ]]
-      then
-        export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
-      fi
-    '';
-    oh-my-zsh.plugins = [
-      "macos"
-    ];
   };
 
   home.file."bin/darwin-switch" = {
@@ -168,19 +58,6 @@ in {
       ${pkgs.docker-client}/bin/docker ''$@
     '';
   };
-
-  home.file.".zshenv".text = lib.mkForce ''
-    [[ -e $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]] && . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-
-    # Only source this once
-    if [[ -z "$__HM_ZSH_SESS_VARS_SOURCED" ]]
-    then
-      export __HM_ZSH_SESS_VARS_SOURCED=1
-    fi
-
-    ZSH="${pkgs.oh-my-zsh}/share/oh-my-zsh";
-    ZSH_CACHE_DIR="/var/empty/.cache/oh-my-zsh";
-  '';
 
   home.file."bin/choose-launcher.zsh" = {
     text = ''
@@ -209,14 +86,6 @@ in {
   };
   home.file.".config/iterm2/com.googlecode.iterm2.plist" = {
     text = import ./darwin/iterm/com.googlecode.iterm2.plist.nix;
-  };
-  home.file."bin/bwmenu" = {
-    text = import ./darwin/bwmenu.nix;
-    executable = true;
-  };
-
-  programs.rbw.settings = {
-    pinentry = "pinentry-mac";
   };
 
   #1Password config

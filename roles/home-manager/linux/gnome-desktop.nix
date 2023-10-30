@@ -181,7 +181,7 @@ in {
         "just-perfection-desktop@just-perfection"
         "native-window-placement@gnome-shell-extensions.gcampax.github.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
-        "paperwm@hedning:matrix.org"
+        "paperwm@paperwm.github.com"
         "switcher@landau.fi"
       ];
       favorite-apps = ["firefox.desktop" "wezterm.desktop"];

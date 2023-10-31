@@ -3,6 +3,7 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
+  myFish = fish-configs.packages.${system}.fish;
 in {
   imports = [
     ./base.nix
@@ -82,10 +83,10 @@ in {
   };
 
   home.file.".config/iterm2/iterm2-profiles.json" = {
-    text = import ./darwin/iterm/iterm2-profiles.nix;
+    text = import ./darwin/iterm/iterm2-profiles.nix { inherit myFish; };
   };
   home.file.".config/iterm2/com.googlecode.iterm2.plist" = {
-    text = import ./darwin/iterm/com.googlecode.iterm2.plist.nix;
+    text = import ./darwin/iterm/com.googlecode.iterm2.plist.nix { inherit myFish; };
   };
 
   #1Password config

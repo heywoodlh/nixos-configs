@@ -1,3 +1,5 @@
+{ myFish, }:
+
 ''
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -415,7 +417,7 @@ Paste</string>
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
-			<string>~/.nix-profile/bin/fish</string>
+			<string>${myFish}/bin/fish</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Alpha Component</key>

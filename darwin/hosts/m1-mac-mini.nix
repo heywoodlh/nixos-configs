@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nur, vim-configs, fish-configs, wezterm-configs, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, ... }:
 
 
 let
@@ -24,8 +24,7 @@ in {
   # Home-Manager config
   home-manager = {
     extraSpecialArgs = {
-      inherit fish-configs;
-      inherit wezterm-configs;
+      inherit myFlakes;
     };
     # Set home-manager configs for username
     users.${username} = { ... }: {

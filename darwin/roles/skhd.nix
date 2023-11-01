@@ -1,8 +1,8 @@
-{ config, pkgs, wezterm-configs, ... }:
+{ config, pkgs, myFlakes, ... }:
 
 let
   system = pkgs.system;
-  weztermConfig = wezterm-configs.packages.${system}.wezterm;
+  weztermConfig = myFlakes.packages.${system}.wezterm;
 in {
   services.skhd.enable = true;
   services.skhd.package =  pkgs.skhd;

@@ -1,4 +1,4 @@
-{ config, pkgs, vim-configs, git-configs, ... }:
+{ config, pkgs, myFlakes, ... }:
 
 let
   system = pkgs.system;
@@ -17,9 +17,8 @@ in {
   ];
 
   environment.systemPackages = [
-    vim-configs.defaultPackage.${system}
-    git-configs.packages.${system}.git
-    pkgs.zsh
+    myFlakes.packages.${system}.vim
+    myFlakes.packages.${system}.git
   ];
 
   # add nerd fonts

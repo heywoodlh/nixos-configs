@@ -3,13 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    myFlakes.url = "github:heywoodlh/flakes";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon/main";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    vim-configs.url = "github:heywoodlh/flakes/main?dir=vim";
-    git-configs.url = "github:heywoodlh/flakes/main?dir=git";
-    wezterm-configs.url = "github:heywoodlh/flakes/main?dir=wezterm";
-    fish-configs.url = "github:heywoodlh/flakes/main?dir=fish";
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager = {
@@ -29,13 +26,10 @@
 
   outputs = inputs@{ self,
                       nixpkgs,
+                      myFlakes,
                       nixpkgs-backports,
                       nixos-apple-silicon,
                       nixos-wsl,
-                      vim-configs,
-                      git-configs,
-                      wezterm-configs,
-                      fish-configs,
                       darwin,
                       home-manager,
                       jovian-nixos,
@@ -60,7 +54,7 @@
           ./darwin/hosts/m2-macbook-air.nix
           {
             environment.systemPackages = [
-              vim-configs.defaultPackage.${system}
+              myFlakes.packages.${system}.vim
             ];
           }
         ];
@@ -72,7 +66,7 @@
           ./darwin/hosts/m1-mac-mini.nix
           {
             environment.systemPackages = [
-              vim-configs.defaultPackage.${system}
+              myFlakes.packages.${system}.vim
             ];
           }
         ];
@@ -196,10 +190,10 @@
             home.packages = [
               pkgs.colima
               inputs.nixpkgs-backports.legacyPackages.${system}.docker-client
-              fish-configs.packages.${system}.fish
+              myFlakes.packages.${system}.fish
               (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
-              vim-configs.defaultPackage.${system}
-              git-configs.packages.${system}.git
+              myFlakes.packages.${system}.git
+              myFlakes.packages.${system}.vim
             ];
             home.file."bin/docker" = {
               enable = true;
@@ -227,22 +221,13 @@
               homeDirectory = "/home/heywoodlh";
             };
             home.packages = [
-              fish-configs.packages.${system}.fish
+              myFlakes.packages.${system}.fish
               inputs.nixpkgs-backports.legacyPackages.${system}.docker-client
-              vim-configs.defaultPackage.${system}
+              myFlakes.packages.${system}.vim
             ];
             fonts.fontconfig.enable = true;
             targets.genericLinux.enable = true;
             programs.home-manager.enable = true;
-            programs.zsh = {
-              shellAliases = {
-                # Override the home-switch function provided in roles/home-manager/linux.nix
-                home-switch = "git -C ~/opt/nixos-configs pull origin master; nix --extra-experimental-features 'nix-command flakes' run ~/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure";
-              };
-              initExtra = ''
-                PROMPT=$'%~ %F{green}$(git branch --show-current 2&>/dev/null) %F{red}$(env | grep -i SSH_CLIENT | grep -v "0.0.0.0" | cut -d= -f2 | awk \'{print $1}\' 2&>/dev/null) %F{white}\n> '
-              '';
-            };
           }
         ];
         extraSpecialArgs = inputs;

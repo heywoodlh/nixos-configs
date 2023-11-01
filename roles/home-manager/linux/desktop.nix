@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, wezterm-configs, ... }:
+{ config, pkgs, home-manager, myFlakes, ... }:
 
 let
   system = pkgs.system;
@@ -25,7 +25,7 @@ in {
     pkgs.virt-manager
     pkgs.xclip
     pkgs.xdotool
-    wezterm-configs.packages.${system}.wezterm
+    myFlakes.packages.${system}.wezterm
   ];
 
   home.shellAliases = {

@@ -1,11 +1,11 @@
-{ config, pkgs, lib, home-manager, fish-configs, ... }:
+{ config, pkgs, lib, home-manager, myFlakes, ... }:
 
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
 in {
   home.packages = [
-    fish-configs.packages.${system}.fish
+    myFlakes.packages.${system}.fish
     pkgs.gnome.dconf-editor
     pkgs.gnome.gnome-boxes
     pkgs.gnome.gnome-terminal

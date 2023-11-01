@@ -1,13 +1,11 @@
 { config, pkgs, lib, home-manager,
-  nur, vim-configs, git-configs,
-  hyprland, nixpkgs-backports,
-  wezterm-configs, fish-configs,
-  ... }:
+  nur, hyprland, nixpkgs-backports,
+  myFlakes, ... }:
 
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  fish = fish-configs.packages.${system}.fish;
+  fish = myFlakes.packages.${system}.fish;
 in {
   imports = [
     home-manager.nixosModules.home-manager
@@ -220,7 +218,7 @@ in {
     pkgs.idevicerestore # for iPhone
     pkgs.ifuse
     pkgs.usbutils
-    vim-configs.defaultPackage.${system}
+    myFlakes.packages.${system}.vim
   ];
 
   # Disable wait-online service for Network Manager
@@ -236,8 +234,7 @@ in {
   # Home-manager configs
   home-manager = {
     extraSpecialArgs = {
-      inherit fish-configs;
-      inherit wezterm-configs;
+      inherit myFlakes;
     };
     users.heywoodlh = { ... }: {
       imports = [
@@ -249,7 +246,7 @@ in {
         #../roles/home-manager/linux/hyprland.nix
       ];
       home.packages = [
-        git-configs.packages.${system}.git
+        myFlakes.packages.${system}.git
       ];
       home.file."bin/nixos-switch" = {
         enable = true;

@@ -1,14 +1,13 @@
 { config, pkgs,
   home-manager, nur,
-  vim-configs,
+  myFlakes,
   nixpkgs-backports,
-  fish-configs,
   ... }:
 
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  fish = fish-configs.packages.${system}.fish;
+  fish = myFlakes.packages.${system}.fish;
 in {
   imports = [
     home-manager.nixosModule
@@ -73,7 +72,7 @@ in {
     pkgs.python310
     pkgs.python310Packages.pip
     pkgs.unzip
-    vim-configs.defaultPackage.${system}
+    myFlakes.packages.${system}.vim
     pkgs.wireguard-tools
     pkgs.zsh
   ];

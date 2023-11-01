@@ -1,9 +1,9 @@
-{ config, pkgs, home-manager, nur, lib, fish-configs, ... }:
+{ config, pkgs, home-manager, nur, lib, myFlakes, ... }:
 
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  myFish = fish-configs.packages.${system}.fish;
+  myFish = myFlakes.packages.${system}.fish;
 in {
   imports = [
     ./base.nix

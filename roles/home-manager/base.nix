@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, git-configs, ... }:
+{ config, pkgs, home-manager, nur, myFlakes, ... }:
 
 let
   homeDir = config.home.homeDirectory;

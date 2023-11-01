@@ -1,8 +1,8 @@
-{ config, pkgs, wezterm-configs, ... }:
+{ config, pkgs, myFlakes, ... }:
 
 let
   system = pkgs.system;
-  wezterm = wezterm-configs.packages.${system}.wezterm;
+  wezterm = myFlakes.packages.${system}.wezterm;
   homeDir = config.home.homeDirectory;
 
   hammerspoon-lua = ''

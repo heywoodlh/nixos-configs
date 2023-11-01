@@ -1,5 +1,5 @@
 # Remember that this is used for GitHub Actions to test builds
-{ config, pkgs, lib, home-manager, nur, fish-configs, wezterm-configs, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, ... }:
 
 let
   hostname = "nix-mac-mini";
@@ -23,8 +23,7 @@ in {
   # Home-Manager config
   home-manager = {
     extraSpecialArgs = {
-      inherit fish-configs;
-      inherit wezterm-configs;
+      inherit myFlakes;
     };
     # Set home-manager configs for username
     users.${username} = { ... }: {

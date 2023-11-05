@@ -1,4 +1,4 @@
-{ myFish }:
+{ myTmux }:
 
 ''
 {
@@ -377,7 +377,7 @@
   },
   "Space" : -1,
   "HotKey Window AutoHides" : true,
-  "Command" : "${myFish}/bin/fish",
+  "Command" : "${myTmux}/bin/tmux",
   "Terminal Type" : "xterm-256color",
   "Horizontal Spacing" : 1,
   "Tab Color" : {

@@ -1,4 +1,4 @@
-{ myFish, }:
+{ myTmux, }:
 
 ''
 <?xml version="1.0" encoding="UTF-8"?>
@@ -417,7 +417,7 @@ Paste</string>
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
-			<string>${myFish}/bin/fish</string>
+			<string>${myTmux}/bin/tmux</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Alpha Component</key>

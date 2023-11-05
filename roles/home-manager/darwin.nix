@@ -3,7 +3,7 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  myFish = myFlakes.packages.${system}.fish;
+  myTmux = myFlakes.packages.${system}.tmux;
 in {
   imports = [
     ./base.nix
@@ -83,10 +83,10 @@ in {
   };
 
   home.file.".config/iterm2/iterm2-profiles.json" = {
-    text = import ./darwin/iterm/iterm2-profiles.nix { inherit myFish; };
+    text = import ./darwin/iterm/iterm2-profiles.nix { inherit myTmux; };
   };
   home.file.".config/iterm2/com.googlecode.iterm2.plist" = {
-    text = import ./darwin/iterm/com.googlecode.iterm2.plist.nix { inherit myFish; };
+    text = import ./darwin/iterm/com.googlecode.iterm2.plist.nix { inherit myTmux; };
   };
 
   #1Password config

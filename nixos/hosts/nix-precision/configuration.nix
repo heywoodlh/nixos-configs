@@ -1,6 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixpkgs-backports, ... }:
 
-{
+let
+  system = pkgs.system;
+  stable-pkgs = nixpkgs-backports.legacyPackages.${system};
+in {
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -9,6 +12,7 @@
     ../../roles/iperf.nix
     ../../roles/monitoring/scrutiny.nix
     ../../roles/remote-access/cockpit.nix
+    ../../roles/containers/k3s.nix
   ];
 
   # Bootloader.
@@ -51,5 +55,14 @@
     "--device=/dev/sdf"
   ];
 
-  system.stateVersion = "22.11";
+  services.k3s = {
+    package = stable-pkgs.k3s;
+    extraFlags = toString [
+      "--tls-san=nix-precision.tailscale"
+      "--tls-san=nix-precision"
+      "--tls-san=100.107.238.93"
+    ];
+  };
+
+  system.stateVersion = "23.05";
 }

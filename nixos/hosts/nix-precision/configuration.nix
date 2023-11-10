@@ -13,6 +13,7 @@ in {
     ../../roles/monitoring/scrutiny.nix
     ../../roles/remote-access/cockpit.nix
     ../../roles/containers/k3s.nix
+    ../../roles/storage/plex-media.nix
     #../../roles/media/plex.nix
     #../../roles/deluge.nix
     #../../roles/freshrss.nix

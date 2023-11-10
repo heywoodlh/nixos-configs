@@ -2,7 +2,6 @@
 
 let
   system = pkgs.system;
-  stable-pkgs = nixpkgs-backports.legacyPackages.${system};
 in {
   imports =
   [ # Include the results of the hardware scan.
@@ -66,7 +65,6 @@ in {
   ];
 
   services.k3s = {
-    package = stable-pkgs.k3s;
     extraFlags = toString [
       "--tls-san=nix-precision.tailscale"
       "--tls-san=nix-precision"

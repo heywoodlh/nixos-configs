@@ -3,7 +3,7 @@
   ... }:
 
 let
-  hostname = "nixos-dev";
+  hostname = "nixos-matrix";
 in {
   imports =
   [ # Include the results of the hardware scan.

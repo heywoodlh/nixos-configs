@@ -13,7 +13,15 @@ in {
     ../../roles/monitoring/scrutiny.nix
     ../../roles/remote-access/cockpit.nix
     ../../roles/containers/k3s.nix
-    ../../roles/storage/nfs-kube.nix
+    #../../roles/media/plex.nix
+    #../../roles/deluge.nix
+    #../../roles/freshrss.nix
+    #../../roles/oss-frontend.nix
+    #../../roles/containers/syncthing.nix
+    #../../roles/feeds/rsshub.nix
+    #../../roles/feeds/miniflux.nix
+    #../../roles/monitoring/scrutiny.nix
+    #../../roles/storage/nfs-media.nix
   ];
 
   # Bootloader.

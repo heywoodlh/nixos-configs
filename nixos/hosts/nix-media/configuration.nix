@@ -5,15 +5,15 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
-    ../../roles/plex.nix
-    ../../roles/deluge.nix
-    ../../roles/freshrss.nix
-    ../../roles/oss-frontend.nix
-    ../../roles/containers/syncthing.nix
-    ../../roles/feeds/rsshub.nix
-    ../../roles/feeds/miniflux.nix
-    ../../roles/monitoring/scrutiny.nix
-    ../../roles/storage/nfs-media.nix
+    #../../roles/media/plex.nix
+    #../../roles/media/deluge.nix
+    #../../roles/media/freshrss.nix
+    #../../roles/oss-frontend.nix
+    #../../roles/containers/syncthing.nix
+    #../../roles/feeds/rsshub.nix
+    #../../roles/feeds/miniflux.nix
+    #../../roles/monitoring/scrutiny.nix
+    #../../roles/storage/nfs-media.nix
   ];
 
   # Bootloader.
@@ -59,11 +59,11 @@
     --data-root /media/disk1/docker
   '';
 
-  virtualisation.oci-containers.containers.scrutiny.extraOptions = [
-    "--device=/dev/vda"
-    "--device=/dev/vdc"
-    "--device=/dev/vdb"
-  ];
+  #virtualisation.oci-containers.containers.scrutiny.extraOptions = [
+  #  "--device=/dev/vda"
+  #  "--device=/dev/vdc"
+  #  "--device=/dev/vdb"
+  #];
 
   system.stateVersion = "22.11";
 }

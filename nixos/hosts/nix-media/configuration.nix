@@ -38,15 +38,15 @@
   };
 
   # Media mounts
-  fileSystems."/media/disk1" = {
-    device = "/dev/disk/by-uuid/5f1975e9-ffde-4dbf-bd14-657bfb26287a";
-    fsType = "btrfs";
-  };
+  #fileSystems."/media/disk1" = {
+  #  device = "/dev/disk/by-uuid/5f1975e9-ffde-4dbf-bd14-657bfb26287a";
+  #  fsType = "btrfs";
+  #};
 
-  fileSystems."/media/disk2" = {
-    device = "/dev/disk/by-uuid/7d1d10dd-392d-47ce-b178-bffd2295637e";
-    fsType = "btrfs";
-  };
+  #fileSystems."/media/disk2" = {
+  #  device = "/dev/disk/by-uuid/7d1d10dd-392d-47ce-b178-bffd2295637e";
+  #  fsType = "btrfs";
+  #};
 
   # Host-specific bitlbee config
   services.bitlbee = {

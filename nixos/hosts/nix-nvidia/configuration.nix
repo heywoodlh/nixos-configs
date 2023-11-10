@@ -7,7 +7,7 @@
     ../../desktop.nix
     ../../roles/remote-access/sshd.nix
     ../../roles/security/sshd-monitor.nix
-    ../../roles/libvirt.nix
+    ../../roles/virtualization/libvirt.nix
     ../../roles/syslog-ng/server.nix
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/monitoring/graylog.nix

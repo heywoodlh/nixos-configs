@@ -8,8 +8,8 @@ in {
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
-    ../../roles/libvirt.nix
-    ../../roles/iperf.nix
+    ../../roles/virtualization/libvirt.nix
+    ../../roles/monitoring/iperf.nix
     ../../roles/monitoring/scrutiny.nix
     ../../roles/remote-access/cockpit.nix
     ../../roles/containers/k3s.nix
@@ -71,6 +71,16 @@ in {
       "--tls-san=nix-precision"
       "--tls-san=100.107.238.93"
     ];
+  };
+
+  fileSystems."/media/disk1" = {
+    device = "/dev/disk/by-uuid/5f1975e9-ffde-4dbf-bd14-657bfb26287a";
+    fsType = "btrfs";
+  };
+
+  fileSystems."/media/disk2" = {
+    device = "/dev/disk/by-uuid/7d1d10dd-392d-47ce-b178-bffd2295637e";
+    fsType = "btrfs";
   };
 
   system.stateVersion = "23.05";

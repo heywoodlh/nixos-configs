@@ -13,15 +13,12 @@ in {
     ../../roles/remote-access/cockpit.nix
     ../../roles/containers/k3s.nix
     ../../roles/storage/plex-media.nix
-    #../../roles/media/plex.nix
-    #../../roles/deluge.nix
-    #../../roles/freshrss.nix
-    #../../roles/oss-frontend.nix
-    #../../roles/containers/syncthing.nix
-    #../../roles/feeds/rsshub.nix
-    #../../roles/feeds/miniflux.nix
-    #../../roles/monitoring/scrutiny.nix
-    #../../roles/storage/nfs-media.nix
+    ../../roles/media/plex.nix
+    ../../roles/media/oss-frontend.nix
+    ../../roles/containers/syncthing.nix
+    ../../roles/feeds/rsshub.nix
+    ../../roles/feeds/miniflux.nix
+    ../../roles/monitoring/scrutiny.nix
   ];
 
   # Bootloader.
@@ -60,7 +57,10 @@ in {
 
   virtualisation.oci-containers.containers.scrutiny.extraOptions = [
     "--device=/dev/sda"
+    "--device=/dev/sdb"
     "--device=/dev/sdc"
+    "--device=/dev/sdd"
+    "--device=/dev/sde"
     "--device=/dev/sdf"
   ];
 

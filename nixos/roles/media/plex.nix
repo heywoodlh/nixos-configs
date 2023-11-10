@@ -46,7 +46,7 @@ in {
   services.sabnzbd = {
     enable = true;
     user = "media";
-    configFile = "/media/services/sabnzbd/config.ini";
+    configFile = "/opt/sabnzbd/config.ini";
   };
 
   virtualisation.oci-containers = {

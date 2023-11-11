@@ -17,6 +17,12 @@
   systemd.services."nix-cache-build" = {
     script = ''
       set -eu
+      export NIXPKGS_ALLOW_UNFREE=1
+      # spicetify nord
+      ${pkgs.nix}/bin/nix --extra-experimental-features "nix-command flakes" build gitlab:kylesferrazza/spicetify-nix#nord-text --impure
+      # rustdesk
+      ${pkgs.nix}/bin/nix --extra-experimental-features "nix-command flakes" build nixpkgs#rustdesk --impure
+      # nixos-configs build
       rm -rf /tmp/nixos-configs
       ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs.git /tmp/nixos-configs
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nix-tools --impure

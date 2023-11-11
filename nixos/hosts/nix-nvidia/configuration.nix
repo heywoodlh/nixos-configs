@@ -90,6 +90,7 @@
   };
 
   services.gnome.gnome-remote-desktop.enable = true;
+  services.sunshine.enable = true; # For remote access
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.05";
 }

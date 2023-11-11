@@ -12,7 +12,7 @@
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/monitoring/graylog.nix
     ../../roles/gaming/sunshine.nix
-    ../../roles/containers/k3s.nix
+    #../../roles/containers/k3s.nix
     ../../roles/nixos/cache.nix
     ../../roles/remote-access/guacamole.nix
     ../../roles/security/fleetdm.nix

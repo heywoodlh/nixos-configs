@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 80 ];
@@ -26,8 +26,8 @@
     };
     home = "/media/storage/nextcloud";
     phpOptions = {
-      upload_max_filesize = "40G";
-      post_max_size = "40G";
+      upload_max_filesize = lib.mkForce "40G";
+      post_max_size = lib.mkForce "40G";
     };
   };
 }

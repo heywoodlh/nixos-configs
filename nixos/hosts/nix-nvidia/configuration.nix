@@ -90,7 +90,12 @@
   };
 
   services.gnome.gnome-remote-desktop.enable = true;
-  services.sunshine.enable = true; # For remote access
+
+  # Sunshine config, for remote access
+  # systemctl --user enable sunshine.service
+  services.xserver.displayManager.autoLogin.user = "heywoodlh";
+  users.users.heywoodlh.extraGroups = [ "input" ];
+  services.sunshine.enable = true;
 
   system.stateVersion = "23.05";
 }

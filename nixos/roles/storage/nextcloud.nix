@@ -5,6 +5,7 @@
 
   services.nextcloud = {
     enable = true;
+    package = pkgs.nextcloud27;
     # Caching
     configureRedis = true;
     hostName = "drive.heywoodlh.io";

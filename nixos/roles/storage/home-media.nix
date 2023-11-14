@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   networking.firewall.interfaces.tailscale0 = {
@@ -13,3 +13,4 @@
     '';
   };
 }
+

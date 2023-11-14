@@ -12,7 +12,8 @@ in {
     ../../roles/monitoring/scrutiny.nix
     ../../roles/remote-access/cockpit.nix
     ../../roles/containers/k3s.nix
-    ../../roles/storage/plex-media.nix
+    ../../roles/storage/home-media.nix
+    ../../roles/storage/nfs-kube.nix
     ../../roles/media/plex.nix
     ../../roles/media/oss-frontend.nix
     ../../roles/containers/syncthing.nix
@@ -25,6 +26,14 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.supportedFilesystems = [
+    "ext4"
+    "btrfs"
+    "vfat"
+    "xfs"
+    "ntfs"
+    "cifs"
+  ];
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -72,12 +81,12 @@ in {
     ];
   };
 
-  fileSystems."/media/disk1" = {
-    device = "/dev/disk/by-uuid/5f1975e9-ffde-4dbf-bd14-657bfb26287a";
+  fileSystems."/media/home-media/disk1" = {
+    device = "/dev/disk/by-uuid/8f645e4b-0544-4ce9-8797-7dfe7f85df5a";
     fsType = "btrfs";
   };
 
-  fileSystems."/media/disk2" = {
+  fileSystems."/media/home-media/disk2" = {
     device = "/dev/disk/by-uuid/7d1d10dd-392d-47ce-b178-bffd2295637e";
     fsType = "btrfs";
   };

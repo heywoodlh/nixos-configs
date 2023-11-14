@@ -6,7 +6,7 @@
   services.nfs.server = {
     enable = true;
     exports = ''
-      /media/virtual-machines/kube	100.64.0.0/10(rw,nohide,insecure,no_subtree_check)
+      /media/virtual-machines/kube	100.64.0.0/10(rw,async,no_root_squash,no_subtree_check,insecure,fsid=1)
     '';
   };
 }

@@ -12,7 +12,6 @@ in {
     ../../roles/monitoring/scrutiny.nix
     ../../roles/remote-access/cockpit.nix
     ../../roles/containers/k3s.nix
-    ../../roles/storage/home-media.nix
     ../../roles/storage/nfs-kube.nix
     ../../roles/media/plex.nix
     ../../roles/media/oss-frontend.nix

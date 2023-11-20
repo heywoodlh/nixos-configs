@@ -5,7 +5,7 @@
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  fish = myFlakes.packages.${system}.fish;
+  tmux = myFlakes.packages.${system}.tmux;
 in {
   imports = [
     home-manager.nixosModules.home-manager
@@ -196,7 +196,7 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = "${fish}/bin/fish";
+    shell = "${tmux}/bin/tmux";
     # users.users.<name>.icon not a NixOS option
     # made possible with ./roles/desktop/user-icon.nix
     icon = builtins.fetchurl {

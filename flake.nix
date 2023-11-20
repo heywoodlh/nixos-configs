@@ -9,6 +9,10 @@
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
+    ssh-keys = {
+      url = "https://github.com/heywoodlh.keys";
+      flake = false;
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,6 +41,7 @@
                       flake-utils,
                       spicetify,
                       nixos-hardware,
+                      ssh-keys,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

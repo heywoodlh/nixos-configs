@@ -17,6 +17,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    osquery-fix-nixpkgs = {
+      url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
+    };
     #hyprland.url = "github:hyprwm/Hyprland/main";
     # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
     jovian-nixos = {
@@ -42,6 +45,7 @@
                       spicetify,
                       nixos-hardware,
                       ssh-keys,
+                      osquery-fix-nixpkgs,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

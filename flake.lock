@@ -802,11 +802,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1700599986,
-        "narHash": "sha256-4sgooeExRWsXBiGFe6nv8T+JAasW5lDGJOvox0CdbJs=",
+        "lastModified": 1700601937,
+        "narHash": "sha256-Uw3I98IGPri1So41lbBtoXmulcc+pdmgehorboPz3J4=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "2a4da31a2bc133a4ae5050690960878e8e1b1063",
+        "rev": "e7d3768059b87c735a91c64af28842cd85bcc2cf",
         "type": "github"
       },
       "original": {
@@ -834,6 +834,22 @@
         "type": "path"
       }
     },
+    "osquery-fix-nixpkgs": {
+      "locked": {
+        "lastModified": 1690997355,
+        "narHash": "sha256-JgriPhM8Fd0Ed8Yu5irnXno6BlIaeG9sWkVwRTPhFA4=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e4235192047a058776b3680f559579bf885881da",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e4235192047a058776b3680f559579bf885881da",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
@@ -847,6 +863,7 @@
         "nixpkgs": "nixpkgs_9",
         "nixpkgs-backports": "nixpkgs-backports",
         "nur": "nur",
+        "osquery-fix-nixpkgs": "osquery-fix-nixpkgs",
         "spicetify": "spicetify",
         "ssh-keys": "ssh-keys"
       }

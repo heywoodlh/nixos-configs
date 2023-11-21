@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ lib, config, pkgs, osquery-fix-nixpkgs, ... }:
 
 let
   secret = pkgs.fetchurl {
@@ -9,9 +9,10 @@ let
     url = "http://100.113.9.57:9080/fleet.pem";
     sha256 = "sha256-n6wRM5SXALOaJNwXsyc29tED2OnjwQzNk/Z5yckCqLU=";
   };
+  system = pkgs.system;
 in {
   services.osquery = {
-    enable = true;
+    enable = false; # Until openssl is fixed
     flags = {
       tls_hostname = "fleet.heywoodlh.io";
       tls_server_certs = "${cert}";

@@ -22,7 +22,7 @@
   ];
 
   users.users.heywoodlh = {
-    openssh.authorizedKeys.keys = [ ssh-keys.outPath ];
+    openssh.authorizedKeys.keyFiles = [ ssh-keys.outPath ];
   };
   users.users.root = {
     openssh.authorizedKeys.keys = [

@@ -7,7 +7,7 @@
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  fish = myFlakes.packages.${system}.fish;
+  tmux = myFlakes.packages.${system}.tmux;
 in {
   imports = [
     home-manager.nixosModule
@@ -71,7 +71,6 @@ in {
     pkgs.patchelf
     pkgs.python310
     pkgs.python310Packages.pip
-    myFlakes.packages.${system}.tmux
     pkgs.unzip
     myFlakes.packages.${system}.vim
     pkgs.wireguard-tools
@@ -99,7 +98,7 @@ in {
     home = "/home/heywoodlh";
     description = "Spencer Heywood";
     extraGroups = [ "wheel" ];
-    shell = "${fish}/bin/fish";
+    shell = "${tmux}/bin/tmux";
   };
 
   # Set home-manager configs for username

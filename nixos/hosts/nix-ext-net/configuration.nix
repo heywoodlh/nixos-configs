@@ -8,7 +8,7 @@
     ../../roles/pihole.nix
     ../../roles/squid.nix
     ../../roles/protonmail-bridge.nix
-    ../../roles/iperf.nix
+    ../../roles/monitoring/iperf.nix
     ../../roles/http-proxy-pac.nix
     ../../roles/remote-access/rustdesk.nix
     ../../roles/remote-access/cloudflared.nix

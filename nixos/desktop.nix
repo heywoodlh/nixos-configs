@@ -5,7 +5,7 @@
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  tmux = myFlakes.packages.${system}.tmux;
+  fish = myFlakes.packages.${system}.fish;
 in {
   imports = [
     home-manager.nixosModules.home-manager
@@ -196,7 +196,7 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = "${tmux}/bin/tmux";
+    shell = "${fish}/bin/fish";
     # users.users.<name>.icon not a NixOS option
     # made possible with ./roles/desktop/user-icon.nix
     icon = builtins.fetchurl {
@@ -218,6 +218,7 @@ in {
     pkgs.idevicerestore # for iPhone
     pkgs.ifuse
     pkgs.usbutils
+    myFlakes.packages.${system}.tmux
     myFlakes.packages.${system}.vim
   ];
 

@@ -3,6 +3,7 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
+  st = myFlakes.packages.${system}.st;
 in {
   home.packages = [
     myFlakes.packages.${system}.fish
@@ -89,6 +90,10 @@ in {
 
           Tiling.defwinprop({
               wm_class: "org.wezfurlong.wezterm",
+              preferredWidth: "100%",
+          });
+          Tiling.defwinprop({
+              wm_class: "st-256color",
               preferredWidth: "100%",
           });
       }
@@ -392,12 +397,12 @@ in {
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       name = "terminal super";
-      command = "wezterm";
+      command = "${st}/bin/st -A '0.9'";
       binding = "<Super>Return";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
       name = "terminal ctrl_alt";
-      command = "wezterm";
+      command = "${st}/bin/st -A '0.9'";
       binding = "<Ctrl><Alt>t";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {

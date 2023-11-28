@@ -11,7 +11,7 @@ let
 
     -- Keyboard shortcuts
     hs.hotkey.bind({"ctrl", "alt"}, "t", function()
-        hs.execute("${wezterm}/bin/wezterm")
+        hs.execute("open -a ${wezterm}/bin/wezterm")
     end)
 
     hs.hotkey.bind({"ctrl", "shift"}, "b", function()

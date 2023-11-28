@@ -54,8 +54,6 @@ in {
     screen
     tcpdump
     tmux
-    tor
-    torsocks
     tree
     unzip
     zip

@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-lts.url = "github:nixos/nixpkgs/nixos-unstable"; # Separate input for overriding
     myFlakes.url = "github:heywoodlh/flakes";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon/main";
@@ -35,6 +36,7 @@
                       nixpkgs,
                       myFlakes,
                       nixpkgs-backports,
+                      nixpkgs-lts,
                       nixos-apple-silicon,
                       nixos-wsl,
                       darwin,
@@ -52,7 +54,6 @@
       inherit system;
       config.allowUnfree = true;
     };
-
     in {
     # macos targets
     packages.darwinConfigurations = {
@@ -194,12 +195,9 @@
             };
             fonts.fontconfig.enable = true;
             programs.home-manager.enable = true;
-            programs.tmux.shell = "/home/heywoodlh/.nix-profile/bin/fish";
             targets.genericLinux.enable = true;
             home.packages = [
               pkgs.colima
-              inputs.nixpkgs-backports.legacyPackages.${system}.docker-client
-              myFlakes.packages.${system}.fish
               (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
               myFlakes.packages.${system}.git
               myFlakes.packages.${system}.vim
@@ -211,6 +209,16 @@
                 #!/usr/bin/env bash
                 ${pkgs.colima}/bin/colima list | grep default | grep -q Running || ${pkgs.colima}/bin/colima start default # Start/create default colima instance if not running/created
                 ${pkgs.docker-client}/bin/docker ''$@
+              '';
+            };
+            home.file."bin/home-switch" = {
+              enable = true;
+              executable = true;
+              text = ''
+                #!/usr/bin/env bash
+                git clone https://github.com/heywoodlh/nixos-configs ~/opt/nixos-configs &>/dev/null || true
+                git -C ~/opt/nixos-configs pull origin master --rebase
+                nix --extra-experimental-features "nix-command flakes" run ~/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure $@
               '';
             };
           }

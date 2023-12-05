@@ -1,24 +1,24 @@
-{ config, pkgs, lib, home-manager, myFlakes, ... }:
+{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, ... }:
 
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   st = myFlakes.packages.${system}.st;
+  gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
 in {
-  home.packages = [
-    myFlakes.packages.${system}.fish
-    pkgs.gnome.dconf-editor
-    pkgs.gnome.gnome-boxes
-    pkgs.gnome.gnome-terminal
-    pkgs.gnome.gnome-tweaks
-    pkgs.gnomeExtensions.caffeine
-    pkgs.gnomeExtensions.gsconnect
-    pkgs.gnomeExtensions.just-perfection
-    pkgs.gnomeExtensions.paperwm
-    #pkgs.gnomeExtensions.pop-shell
-    pkgs.gnomeExtensions.tray-icons-reloaded
-    #pkgs.pop-launcher
-    pkgs.gnomeExtensions.switcher
+  home.packages = with gnome-pkgs; [
+    gnome.dconf-editor
+    gnome.gnome-boxes
+    gnome.gnome-terminal
+    gnome.gnome-tweaks
+    gnomeExtensions.caffeine
+    gnomeExtensions.gsconnect
+    gnomeExtensions.just-perfection
+    #gnomeExtensions.paperwm
+    gnomeExtensions.pop-shell
+    gnomeExtensions.tray-icons-reloaded
+    #pop-launcher
+    gnomeExtensions.switcher
   ];
 
   # Enable unclutter
@@ -45,65 +45,6 @@ in {
         ],
         "skiptaskbarhidden": [],
         "log_on_focus": false
-      }
-    '';
-  };
-
-  home.file.".config/paperwm/user.js" = {
-    enable = true;
-    text = ''
-      // -*- mode: gnome-shell -*-
-      var Meta = imports.gi.Meta;
-      var Clutter = imports.gi.Clutter;
-      var St = imports.gi.St;
-      var Main = imports.ui.main;
-      var Shell = imports.gi.Shell;
-
-      // Extension local imports
-      var Extension, Me, Tiling, Utils, App, Keybindings;
-
-      function init() {
-          // Runs _only_ once on startup
-
-          // Initialize extension imports here to make gnome-shell-reload work
-          Extension = imports.misc.extensionUtils.getCurrentExtension();
-          Me = Extension.imports.user;
-          Tiling = Extension.imports.tiling;
-          Utils = Extension.imports.utils;
-          Keybindings = Extension.imports.keybindings;
-          App = Extension.imports.app;
-
-          Tiling.defwinprop({
-              wm_class: "1Password",
-              scratch_layer: true,
-          });
-
-          Tiling.defwinprop({
-              wm_class: "Code",
-              preferredWidth: "100%",
-          });
-
-          Tiling.defwinprop({
-              wm_class: "firefox",
-              preferredWidth: "100%",
-          });
-
-          Tiling.defwinprop({
-              wm_class: "org.wezfurlong.wezterm",
-              preferredWidth: "100%",
-          });
-          Tiling.defwinprop({
-              wm_class: "st-256color",
-              preferredWidth: "100%",
-          });
-      }
-
-      function enable() {
-          // Runs on extension reloads, eg. when unlocking the session
-      }
-
-      function disable() {
-          // Runs on extension reloads eg. when locking the session (`<super>L).
       }
     '';
   };
@@ -185,8 +126,8 @@ in {
         "gsconnect@andyholmes.github.io"
         "just-perfection-desktop@just-perfection"
         "native-window-placement@gnome-shell-extensions.gcampax.github.com"
+        "pop-shell@system76.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
-        "paperwm@paperwm.github.com"
         "switcher@landau.fi"
       ];
       favorite-apps = ["firefox.desktop" "wezterm.desktop"];
@@ -298,8 +239,8 @@ in {
       switch-to-workspace-2 = ["<Super>2"];
       switch-to-workspace-3 = ["<Super>3"];
       switch-to-workspace-4 = ["<Super>4"];
-      switch-to-workspace-left = ["disabled"];
-      switch-to-workspace-right = ["disabled"];
+      switch-to-workspace-left = ["<Super>bracketleft"];
+      switch-to-workspace-right = ["<Super>bracketright"];
       switch-input-source = ["disabled"];
       switch-input-source-backward = ["disabled"];
       toggle-maximized = ["<Super>Up"];

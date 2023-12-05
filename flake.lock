@@ -659,6 +659,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-lts": {
+      "locked": {
+        "lastModified": 1701436327,
+        "narHash": "sha256-tRHbnoNI8SIM5O5xuxOmtSLnswEByzmnQcGGyNRjxsE=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "91050ea1e57e50388fa87a3302ba12d188ef723a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_10": {
       "locked": {
         "lastModified": 1691155369,
@@ -862,6 +878,7 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_9",
         "nixpkgs-backports": "nixpkgs-backports",
+        "nixpkgs-lts": "nixpkgs-lts",
         "nur": "nur",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs",
         "spicetify": "spicetify",

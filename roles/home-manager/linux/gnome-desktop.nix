@@ -4,6 +4,7 @@ let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   st = myFlakes.packages.${system}.st;
+  tmux = myFlakes.packages.${system}.tmux;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
 in {
   home.packages = with gnome-pkgs; [
@@ -64,7 +65,7 @@ in {
     "apps/guake/general" = {
       abbreviate-tab-names = false;
       compat-delete = "delete-sequence";
-      default-shell = "${homeDir}/.nix-profile/bin/fish";
+      default-shell = "${tmux}/bin/tmux";
       display-n = 0;
       display-tab-names = 0;
       gtk-prefer-dark-theme = true;

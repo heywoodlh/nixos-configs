@@ -33,7 +33,7 @@ in {
   };
 
   home.file.".config/pop-shell/config.json" = {
-    enable = false;
+    enable = true;
     text = ''
       {
         "float": [

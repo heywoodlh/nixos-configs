@@ -207,7 +207,7 @@
               executable = true;
               text = ''
                 #!/usr/bin/env bash
-                ${pkgs.colima}/bin/colima list | grep default | grep -q Running || ${pkgs.colima}/bin/colima start default # Start/create default colima instance if not running/created
+                ${pkgs.colima}/bin/colima list | grep default | grep -q Running || ${pkgs.colima}/bin/colima start default &>/dev/null # Start/create default colima instance if not running/created
                 ${pkgs.docker-client}/bin/docker ''$@
               '';
             };

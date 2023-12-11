@@ -90,15 +90,14 @@ in {
     };
   };
 
-  # Define use
-  programs.zsh.enable = true;
+  # Define user
   users.users.heywoodlh = {
     isNormalUser = true;
     uid = 1000;
     home = "/home/heywoodlh";
     description = "Spencer Heywood";
     extraGroups = [ "wheel" ];
-    shell = "${tmux}/bin/tmux";
+    shell = "${pkgs.bash}/bin/bash";
   };
 
   # Set home-manager configs for username

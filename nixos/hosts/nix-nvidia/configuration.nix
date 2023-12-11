@@ -98,4 +98,5 @@
   services.sunshine.enable = true;
 
   system.stateVersion = "23.05";
+  users.users.heywoodlh.shell = lib.mkForce "${pkgs.bash}/bin/bash";
 }

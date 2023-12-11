@@ -15,6 +15,7 @@
     #../../roles/containers/k3s.nix
     ../../roles/nixos/cache.nix
     ../../roles/remote-access/guacamole.nix
+    ../../roles/remote-access/xrdp.nix
     ../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
   ];

@@ -12,6 +12,7 @@ in {
     ../../roles/monitoring/scrutiny.nix
     ../../roles/remote-access/cockpit.nix
     ../../roles/storage/nfs-kube.nix
+    ../../roles/storage/nfs-media.nix
     ../../roles/media/plex.nix
     ../../roles/containers/syncthing.nix
     ../../roles/feeds/rsshub.nix

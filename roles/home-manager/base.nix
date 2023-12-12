@@ -11,6 +11,9 @@ let
       -o display_image=false \
       -o display_link_number=true
   '';
+  system = pkgs.system;
+  myTmux = myFlakes.packages.${system}.tmux;
+  myFish = myFlakes.packages.${system}.fish;
 in {
   home.stateVersion = "23.05";
   home.enableNixpkgsReleaseCheck = false;
@@ -53,10 +56,11 @@ in {
     python3
     screen
     tcpdump
-    tmux
     tree
     unzip
     zip
+    myTmux # For non-nix use-cases
+    myFish # For non-nix use-cases
   ];
 
   # Import nur as nixpkgs.overlays

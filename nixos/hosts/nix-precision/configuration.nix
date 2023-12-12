@@ -13,7 +13,6 @@ in {
     ../../roles/remote-access/cockpit.nix
     ../../roles/storage/nfs-kube.nix
     ../../roles/media/plex.nix
-    ../../roles/media/oss-frontend.nix
     ../../roles/containers/syncthing.nix
     ../../roles/feeds/rsshub.nix
     ../../roles/feeds/miniflux.nix

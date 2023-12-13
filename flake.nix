@@ -218,7 +218,20 @@
                 #!/usr/bin/env bash
                 git clone https://github.com/heywoodlh/nixos-configs ~/opt/nixos-configs &>/dev/null || true
                 git -C ~/opt/nixos-configs pull origin master --rebase
-                nix --extra-experimental-features "nix-command flakes" run ~/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure $@
+                ## OS-specific support (mostly, Ubuntu vs anything else)
+                ## Anything else will use nixpkgs-unstable
+                EXTRA_ARGS=""
+                if grep -iq Ubuntu /etc/os-release
+                then
+                  version="$(grep VERSION_ID /etc/os-release | cut -d'=' -f2 | tr -d '"')"
+                  ## Support for Ubuntu 22.04
+                  if [[ "$version" == "22.04" ]]
+                  then
+                    EXTRA_ARGS="--override-input 'nixpkgs-lts' 'github:nixos/nixpkgs/22.05'"
+                  fi
+                  ## TODO: Support Ubuntu 24.04 when released
+                end
+                nix --extra-experimental-features 'nix-command flakes' run github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure $EXTRA_ARGS
               '';
             };
           }

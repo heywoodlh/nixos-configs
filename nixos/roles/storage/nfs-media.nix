@@ -9,7 +9,7 @@
   services.nfs.server = {
     enable = true;
     exports = ''
-      /media/home-media	100.64.0.0/10(rw,async,no_root_squash,no_subtree_check,insecure,fsid=1)
+      /media/home-media      100.64.0.0/10(rw,crossmnt,sync,no_wdelay,root_squash,insecure,no_subtree_check,fsid=0)
     '';
   };
 }

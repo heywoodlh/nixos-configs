@@ -7,7 +7,8 @@
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  tmux = myFlakes.packages.${system}.tmux;
+  myTmux = myFlakes.packages.${system}.tmux;
+  myVim = myFlakes.packages.${system}.vim;
 in {
   imports = [
     home-manager.nixosModule
@@ -72,7 +73,7 @@ in {
     pkgs.python310
     pkgs.python310Packages.pip
     pkgs.unzip
-    myFlakes.packages.${system}.vim
+    myVim
     pkgs.wireguard-tools
     pkgs.zsh
   ];
@@ -101,20 +102,25 @@ in {
   };
 
   # Set home-manager configs for username
-  home-manager.users.heywoodlh = { ... }: {
-    imports = [
-      ../roles/home-manager/linux.nix
-      ../roles/home-manager/linux/no-desktop.nix
-    ];
-    home.file."bin/nixos-switch" = {
-      enable = true;
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-        [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
-        git -C ~/opt/nixos-configs pull origin master
-        /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
-      '';
+  home-manager = {
+    extraSpecialArgs = {
+      inherit myFlakes;
+    };
+    users.heywoodlh = { ... }: {
+      imports = [
+        ../roles/home-manager/linux.nix
+        ../roles/home-manager/linux/no-desktop.nix
+      ];
+      home.file."bin/nixos-switch" = {
+        enable = true;
+        executable = true;
+        text = ''
+          #!/usr/bin/env bash
+          [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
+          git -C ~/opt/nixos-configs pull origin master
+          /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
+        '';
+      };
     };
   };
 

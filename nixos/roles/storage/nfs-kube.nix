@@ -6,7 +6,12 @@
   services.nfs.server = {
     enable = true;
     exports = ''
-      /media/virtual-machines/kube      100.64.0.0/10(rw,sync,no_wdelay,root_squash,insecure,no_subtree_check,fsid=0)
+      # k8s-node-1
+      /media/virtual-machines/kube      100.122.112.166(rw,sync,no_wdelay,root_squash,insecure,no_subtree_check,fsid=0)
+      # k8s-node-2
+      /media/virtual-machines/kube      100.98.186.142(rw,sync,no_wdelay,root_squash,insecure,no_subtree_check,fsid=0)
+      # k8s-node-3
+      /media/virtual-machines/kube      100.118.109.137(rw,sync,no_wdelay,root_squash,insecure,no_subtree_check,fsid=0)
     '';
   };
 }

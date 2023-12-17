@@ -23,7 +23,7 @@
           "21027:21027/udp"
         ];
         volumes = [
-          "/media/disk2/ct-storage/syncthing:/var/syncthing"
+          "/media/virtual-machines/services/syncthing:/var/syncthing"
           "/etc/localtime:/etc/localtime:ro"
         ];
       };

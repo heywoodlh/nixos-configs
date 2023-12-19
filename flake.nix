@@ -230,8 +230,8 @@
                     EXTRA_ARGS="--override-input 'nixpkgs-lts' 'github:nixos/nixpkgs/22.05'"
                   fi
                   ## TODO: Support Ubuntu 24.04 when released
-                end
-                nix --extra-experimental-features 'nix-command flakes' run github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure $EXTRA_ARGS
+                fi
+                nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" --impure $EXTRA_ARGS
               '';
             };
           }

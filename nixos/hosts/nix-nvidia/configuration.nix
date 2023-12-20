@@ -18,6 +18,7 @@
     ../../roles/remote-access/xrdp.nix
     ../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
+    ../../roles/assistants/ollama-webui.nix
   ];
 
   # Bootloader.
@@ -90,14 +91,14 @@
     ];
   };
 
-  services.gnome.gnome-remote-desktop.enable = true;
-
   # Sunshine config, for remote access
   # systemctl --user enable sunshine.service
   services.xserver.displayManager.autoLogin.user = "heywoodlh";
   users.users.heywoodlh.extraGroups = [ "input" ];
   services.sunshine.enable = true;
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
+
+  # Switch shell to bash to match servers default shell
   users.users.heywoodlh.shell = lib.mkForce "${pkgs.bash}/bin/bash";
 }

@@ -86,7 +86,7 @@ in {
     executable = true;
     text = ''
       #!/usr/bin/env bash
-      [[ -z "$OP_SESSION" ]] && eval $(op signin) && export OP_SESSION
+      [[ -z "$OP_SESSION" ]] && eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
       ${pkgs._1password}/bin/op "$@"
     '';
   };
@@ -116,9 +116,20 @@ in {
     '';
   };
 
-  # Cross-platform shell aliases
-  home.shellAliases = {
-    op = "${homeDir}/bin/op-wrapper.sh";
+  home.file."bin/op" = {
+    enable = true;
+    executable = true;
+    text = ''
+      ${homeDir}/bin/op-wrapper.sh $argv
+    '';
+  };
+
+  home.file."bin/ssh-unlock" = {
+    enable = true;
+    executable = true;
+    text = ''
+      ${homeDir}/bin/op-wrapper.sh read 'op://Personal/uwxs2btf3eoweg4phzag2hfkge/private_key' | ${pkgs.openssh}/bin/ssh-add -t 4h -
+    '';
   };
 
   # Aerc

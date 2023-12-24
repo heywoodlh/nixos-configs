@@ -44,7 +44,6 @@
       "hiddenbar"
       "iterm2"
       "knockknock"
-      "lastpass"
       "lulu"
       "oversight"
       "reikey"

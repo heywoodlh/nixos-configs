@@ -5,6 +5,8 @@ let
 in {
   #package config
   nixpkgs.config.allowUnfree = true;
+  # nix configuration
+  nix.settings.auto-optimise-store = true;
 
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;

@@ -18,31 +18,14 @@ in {
       "gnome-nightly" = "https://nightly.gnome.org/gnome-nightly.flatpakrepo";
     };
     packages = [
-      "gnome-nightly:app/org.gnome.Epiphany.Devel//master"
+      #"gnome-nightly:app/org.gnome.Epiphany.Devel//master"
     ];
     postInitCommand = ''
       # Enable extensions in Epiphany
-      ${pkgs.flatpak}/bin/flatpak run --user --command=gsettings org.gnome.Epiphany.Devel set org.gnome.Epiphany.web:/org/gnome/epiphany/web/ enable-webextensions true
+      #${pkgs.flatpak}/bin/flatpak run --user --command=gsettings org.gnome.Epiphany.Devel set org.gnome.Epiphany.web:/org/gnome/epiphany/web/ enable-webextensions true
       # Allow flatpak to see ~/.themes and ~/.icons
       ${pkgs.flatpak}/bin/flatpak override --user --filesystem=${homeDir}/.themes
       ${pkgs.flatpak}/bin/flatpak override --user --filesystem=${homeDir}/.icons
-    '';
-  };
-
-  # Epiphany
-  home.file.".local/share/applications/epiphany.desktop" = {
-    enable = true;
-    text = ''
-      [Desktop Entry]
-      Name=Web
-      GenericName=Epiphany
-      Comment=Browse the web
-      Exec=${pkgs.flatpak}/bin/flatpak run --user org.gnome.Epiphany.Devel//master
-      Terminal=false
-      Type=Application
-      Keywords=browser;
-      Icon=${homeDir}/.icons/snowflake.png
-      Categories=Utility;
     '';
   };
 

@@ -4,8 +4,8 @@ let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   st = myFlakes.packages.${system}.st;
-  tmux = myFlakes.packages.${system}.tmux;
-  fish = myFlakes.packages.${system}.fish;
+  myTmux = myFlakes.packages.${system}.tmux;
+  myFish = myFlakes.packages.${system}.fish;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
 in {
   home.packages = with gnome-pkgs; [
@@ -21,6 +21,7 @@ in {
     gnomeExtensions.tray-icons-reloaded
     #pop-launcher
     gnomeExtensions.switcher
+    pkgs.epiphany
   ];
 
   # Enable unclutter
@@ -66,7 +67,7 @@ in {
     "apps/guake/general" = {
       abbreviate-tab-names = false;
       compat-delete = "delete-sequence";
-      default-shell = "${fish}/bin/fish"; # Use fish instead of tmux because gomuks
+      default-shell = "${myFish}/bin/fish"; # Use fish instead of tmux because gomuks
       display-n = 0;
       display-tab-names = 0;
       gtk-prefer-dark-theme = true;
@@ -283,7 +284,7 @@ in {
       cursor-colors-set = true;
       cursor-foreground-color = "rgb(59,66,82)";
       cursor-shape = "ibeam";
-      custom-command = "${homeDir}/.nix-profile/bin/tmux";
+      custom-command = "${myTmux}/bin/tmux";
       font = "JetBrainsMonoNL Nerd Font 12";
       foreground-color = "#D8DEE9";
       highlight-background-color = "rgb(136,192,208)";
@@ -319,6 +320,9 @@ in {
     };
     "org/gnome/tweaks" = {
       show-extensions-notice = false;
+    };
+    "org/gnome/epiphany/web" = {
+      enable-webextensions = true;
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
       next = [ "<Shift><Control>n" ];

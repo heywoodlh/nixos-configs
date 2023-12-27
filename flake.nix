@@ -227,7 +227,7 @@
                   ## Support for Ubuntu 22.04
                   if [[ "$version" == "22.04" ]]
                   then
-                    EXTRA_ARGS="--override-input 'nixpkgs-lts' 'github:nixos/nixpkgs/22.05'"
+                    EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-22.05"
                   fi
                   ## TODO: Support Ubuntu 24.04 when released
                 fi

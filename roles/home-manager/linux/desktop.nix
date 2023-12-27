@@ -8,10 +8,57 @@ in {
     ../firefox/linux.nix
   ];
 
+  # Flatpak support
+  services.flatpak = {
+    enableModule = true;
+    target-dir = "${homeDir}/.local/share/flatpak";
+    remotes = {
+      "flathub" = "https://dl.flathub.org/repo/flathub.flatpakrepo";
+      "flathub-beta" = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";
+      "gnome-nightly" = "https://nightly.gnome.org/gnome-nightly.flatpakrepo";
+    };
+    packages = [
+      "gnome-nightly:app/org.gnome.Epiphany.Devel//master"
+    ];
+    postInitCommand = ''
+      # Enable extensions in Epiphany
+      ${pkgs.flatpak}/bin/flatpak run --user --command=gsettings org.gnome.Epiphany.Devel set org.gnome.Epiphany.web:/org/gnome/epiphany/web/ enable-webextensions true
+      # Allow flatpak to see ~/.themes and ~/.icons
+      ${pkgs.flatpak}/bin/flatpak override --user --filesystem=${homeDir}/.themes
+      ${pkgs.flatpak}/bin/flatpak override --user --filesystem=${homeDir}/.icons
+    '';
+  };
+
+  # Epiphany
+  home.file.".local/share/applications/epiphany.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Web
+      GenericName=Epiphany
+      Comment=Browse the web
+      Exec=${pkgs.flatpak}/bin/flatpak run --user org.gnome.Epiphany.Devel//master
+      Terminal=false
+      Type=Application
+      Keywords=browser;
+      Icon=${homeDir}/.icons/snowflake.png
+      Categories=Utility;
+    '';
+  };
+
+  # Nix snowflake icon
+  home.file.".icons/snowflake.png" = {
+    source = builtins.fetchurl {
+      url = "https://github.com/NixOS/nixos-artwork/blob/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png?raw=true";
+      sha256 = "sha256:0pd45ya86x1z00fb67aqhmmvm7pk50awkmw3bigmhhiwd4lv9n6h";
+    };
+  };
+
   home.packages = [
     pkgs._1password-gui
     pkgs.acpi
     pkgs.arch-install-scripts
+    pkgs.flatpak
     pkgs.guake
     pkgs.gnome.gnome-screenshot
     pkgs.inotify-tools
@@ -40,11 +87,11 @@ in {
       Name=Configure WebCord (Nord)
       GenericName=discord
       Comment=Configure WebCord to use Nordic theme
-      Exec=webcord --add-css-theme ${homeDir}/.config/WebCord/Themes/nordic.theme.css
+      Exec=${pkgs.webcord}/bin/webcord --add-css-theme ${homeDir}/.config/WebCord/Themes/nordic.theme.css
       Terminal=false
       Type=Application
       Keywords=webcord;discord;
-      Icon=nix-snowflake
+      Icon=${homeDir}/.icons/snowflake.png
       Categories=Utility;
     '';
   };

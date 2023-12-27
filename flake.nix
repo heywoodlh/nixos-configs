@@ -30,6 +30,7 @@
     nur.url = "github:nix-community/NUR";
     spicetify.url = "github:heywoodlh/spicetify-nix";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    flatpaks.url = "github:GermanBread/declarative-flatpak/stable";
   };
 
   outputs = inputs@{ self,
@@ -48,6 +49,7 @@
                       nixos-hardware,
                       ssh-keys,
                       osquery-fix-nixpkgs,
+                      flatpaks,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -184,6 +186,7 @@
       heywoodlh = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
+          flatpaks.homeManagerModules.default
           ./roles/home-manager/linux.nix
           ./roles/home-manager/desktop.nix # Base desktop config
           ./roles/home-manager/linux/desktop.nix # Linux-specific desktop config

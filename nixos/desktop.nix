@@ -1,6 +1,7 @@
 { config, pkgs, lib, home-manager,
   nur, hyprland, nixpkgs-backports,
-  nixpkgs-lts, myFlakes, ... }:
+  nixpkgs-lts, myFlakes, flatpaks,
+  ... }:
 
 let
   system = pkgs.system;
@@ -244,6 +245,7 @@ in {
         ../roles/home-manager/desktop.nix # base desktop.nix
         ../roles/home-manager/linux/desktop.nix # linux-specific desktop.nix
         ../roles/home-manager/linux/gnome-desktop.nix
+        flatpaks.homeManagerModules.default
         #hyprland.homeManagerModules.default
         #../roles/home-manager/linux/hyprland.nix
       ];

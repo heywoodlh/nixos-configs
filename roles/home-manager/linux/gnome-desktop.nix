@@ -3,9 +3,9 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  st = myFlakes.packages.${system}.st;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
+  myWezterm = myFlakes.packages.${system}.wezterm-gl;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
 in {
   home.packages = with gnome-pkgs; [
@@ -363,12 +363,12 @@ in {
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
       name = "terminal super";
-      command = "${st}/bin/st -A '0.9'";
+      command = "${myWezterm}/bin/wezterm";
       binding = "<Super>Return";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
       name = "terminal ctrl_alt";
-      command = "${st}/bin/st -A '0.9'";
+      command = "${myWezterm}/bin/wezterm";
       binding = "<Ctrl><Alt>t";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {

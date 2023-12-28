@@ -60,6 +60,22 @@ in {
     };
   };
 
+  # Epiphany CSS
+  home.file.".local/share/epiphany/user-stylesheet.css" = {
+    text = ''
+      #overview {
+        background-color: #3B4252 !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        position: fixed !important;
+      }
+
+      #overview .overview-title {
+        color: white !important;
+      }
+    '';
+  };
+
   dconf.settings = {
     "org/gnome/desktop/input-sources" = {
       xkb-options = ["caps:super"];
@@ -323,6 +339,9 @@ in {
     };
     "org/gnome/epiphany/web" = {
       enable-webextensions = true;
+      remember-passwords = false;
+      homepage-url = "about:newtab";
+      enable-user-css = true;
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
       next = [ "<Shift><Control>n" ];

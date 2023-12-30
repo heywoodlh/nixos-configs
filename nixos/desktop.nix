@@ -115,7 +115,7 @@ in {
   };
   services.avahi = {
     enable = true;
-    nssmdns = true;
+    nssmdns4 = true;
     openFirewall = true; # For wifi printers
   };
   # For scanning documents

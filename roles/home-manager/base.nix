@@ -142,6 +142,7 @@ in {
       outgoing = smtps://heywoodlh%40heywoodlh.io@smtp.fastmail.com:465
       outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/44abj6tnhmrjdhv6potivbc5by/password'
       default = INBOX
+      copy-to = Sent
       from = Spencer Heywood <heywoodlh@heywoodlh.io>
 
       [protonmail]
@@ -150,6 +151,7 @@ in {
       outgoing = smtp+plain://l.spencer.heywood%40protonmail.com@nix-ext-net.tailscale:25
       outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/erkt5oy644dks54kax57ib2rue/password'
       default = INBOX
+      copy-to = Sent
       from = Spencer Heywood <l.spencer.heywood@protonmail.com>
     '';
   };

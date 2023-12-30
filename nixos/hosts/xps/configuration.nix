@@ -51,8 +51,8 @@
   # Fingerprint
   services.fprintd.enable = true;
   services.fprintd.tod.enable = true;
-  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
+  services.fprintd.tod.driver = lib.mkForce pkgs.libfprint-2-tod1-goodix;
 
   # Set version of NixOS to target
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
 }

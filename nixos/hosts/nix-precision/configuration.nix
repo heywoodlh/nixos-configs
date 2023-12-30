@@ -15,7 +15,6 @@ in {
     ../../roles/storage/nfs-media.nix
     ../../roles/storage/webdav-media.nix
     ../../roles/media/plex.nix
-    ../../roles/containers/syncthing.nix
     ../../roles/feeds/rsshub.nix
     ../../roles/feeds/miniflux.nix
     ../../roles/monitoring/scrutiny.nix

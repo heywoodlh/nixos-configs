@@ -9,6 +9,7 @@ let
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   myTmux = myFlakes.packages.${system}.tmux;
   myVim = myFlakes.packages.${system}.vim;
+  myGit = myFlakes.packages.${system}.git;
 in {
   imports = [
     home-manager.nixosModule
@@ -61,7 +62,7 @@ in {
     pkgs.croc
     pkgs.file
     pkgs.gcc
-    pkgs.git
+    myGit
     pkgs.gnumake
     pkgs.gnupg
     pkgs.gptfdisk

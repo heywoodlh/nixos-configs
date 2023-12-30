@@ -23,21 +23,21 @@ in {
   };
 
   services.lidarr = {
-    enable = true;
+    enable = false;
     openFirewall = true;
     dataDir = "/opt/lidarr";
     user = "media";
   };
 
   services.radarr = {
-    enable = true;
+    enable = false;
     openFirewall = true;
     dataDir = "/opt/radarr";
     user = "media";
   };
 
   services.sonarr = {
-    enable = true;
+    enable = false;
     openFirewall = true;
     dataDir = "/opt/sonarr";
     user = "media";

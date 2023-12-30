@@ -268,9 +268,11 @@
         extraSpecialArgs = inputs;
       };
     };
-    nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
-      extraSpecialArgs = inputs;
-      modules = [ ./nixos/droid.nix ];
+    packages.nixOnDroidConfigurations = {
+      default = nix-on-droid.lib.nixOnDroidConfiguration {
+        extraSpecialArgs = inputs;
+        modules = [ ./nixos/droid.nix ];
+      };
     };
   });
 }

@@ -31,6 +31,7 @@
     spicetify.url = "github:heywoodlh/spicetify-nix";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flatpaks.url = "github:GermanBread/declarative-flatpak/stable";
+    nix-on-droid.url = "github:nix-community/nix-on-droid/release-23.05";
   };
 
   outputs = inputs@{ self,
@@ -50,6 +51,7 @@
                       ssh-keys,
                       osquery-fix-nixpkgs,
                       flatpaks,
+                      nix-on-droid,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -265,6 +267,10 @@
         ];
         extraSpecialArgs = inputs;
       };
+    };
+    nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
+      extraSpecialArgs = inputs;
+      modules = [ ./nixos/droid.nix ];
     };
   });
 }

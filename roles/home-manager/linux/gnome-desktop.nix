@@ -14,6 +14,7 @@ in {
     gnome.gnome-terminal
     gnome.gnome-tweaks
     gnomeExtensions.caffeine
+    gnomeExtensions.gnome-bedtime
     gnomeExtensions.gsconnect
     gnomeExtensions.just-perfection
     #gnomeExtensions.paperwm
@@ -55,8 +56,8 @@ in {
   # Download wallpaper
   home.file.".wallpaper.png" = {
     source = builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/linuxdotexe/nordic-wallpapers/2339404ab827f617268cf0f10aad144a69bdccfe/wallpapers/BirdNord.png";
-      sha256 = "sha256:130kbzi8dka9c145jn5sln8zb2ich3r3xz3w9bcw3h5a9i7k003c";
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-simple-light-gray.png";
+      sha256 = "sha256:0i6d0xv1nzrv7na9hjrgzl3jrwn81vnprnq2pxyznlxbjcgkjnk2";
     };
   };
 
@@ -148,6 +149,7 @@ in {
         "pop-shell@system76.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
         "switcher@landau.fi"
+        "gnomebedtime@ionutbortis.gmail.com"
       ];
       favorite-apps = ["firefox.desktop" "wezterm.desktop"];
       had-bluetooth-devices-setup = true;

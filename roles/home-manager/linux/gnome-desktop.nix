@@ -5,7 +5,7 @@ let
   homeDir = config.home.homeDirectory;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
-  myWezterm = myFlakes.packages.${system}.wezterm-gl;
+  myWezterm = myFlakes.packages.${system}.wezterm;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
 in {
   home.packages = with gnome-pkgs; [

@@ -86,7 +86,7 @@ in {
     executable = true;
     text = ''
       #!/usr/bin/env bash
-      [[ -z "$OP_SESSION" ]] && eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
+      env | grep -iq OP_SESSION || eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
       ${pkgs._1password}/bin/op "$@"
     '';
   };
@@ -120,7 +120,7 @@ in {
     enable = true;
     executable = true;
     text = ''
-      ${homeDir}/bin/op-wrapper.sh $argv
+      ${homeDir}/bin/op-wrapper.sh $@
     '';
   };
 

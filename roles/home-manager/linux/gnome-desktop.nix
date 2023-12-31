@@ -166,6 +166,10 @@ in {
       dynamic-workspaces = false;
       workspaces-only-on-primary = false;
     };
+    "org/gnome/shell/extensions/bedtime-mode" = {
+      bedtime-mode-active = true;
+      color-tone-factor = 80;
+    };
     "org/gnome/shell/extensions/user-theme" = {
       name = "Nordic-darker";
     };

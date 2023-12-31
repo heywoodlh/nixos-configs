@@ -1,16 +1,20 @@
-{ config, pkgs, nix-on-droid, myFlakes, ... }:
+{ config, pkgs, nix-on-droid, myFlakes, ssh-keys, ... }:
 
 let
   sshdTmpDirectory = "${config.user.home}/sshd-tmp";
   sshdDirectory = "${config.user.home}/sshd";
-  pathToPubKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCYn+7oSNHXN3qqDDidw42Vv7fDS0iEpYqaa0wCXRPBlfWAnD81f6dxj/QPGfZtxpl9jvk7nAKpE7RVUvQiJzUC2VM3Bw/4ucT+xliEHo3oesMQQa1AT70VPTbP5PdU7oUpgQWLq39j9XHno2YPJ/WWtuOl/UTjY6IDokkAmNmvft/jqqkiwSkGMmw68qrLFEM7+rNwJV5cXKvvpB6Gqc7qnbJmk1TZ1MRGW5eLjP9ofDqiyoLbnTm7Dw3iHn40GgTcnv5CWGpa0vrKnnLEGrgRB7kR/pyvfsjapkHz0PDvuinQov+MgJfV8B8PHdPC94dsS0DEWJplxhYojtsYa1VZy5zTEMNWICz1QG1yKHN1JQtpbEreHG6DVYvqwnKvK/XN5yiEeiamhD2oKnSh36PexIR0h0AAPO29Ln+anqpRlqJ0nET2CNS04e0vpV4VDJrG6BnyGUQ6CCo7THSq97F4Ne0nY9fpYu5WTFTCh1tTm+nSey0fP/xk22oINl/41VTI/Vk5pNQuuhHUvQupJHw9cD74aKzRddwvgfuAQjPlEuxxsqgFTltTiPF6lZQNeoMIc1OMCRsnl1xNqIepnb7Q5O1CGq+BqtOWh3G4/SPQI5ZUIkOAZegsnPpGWYMrRd7s6LJn5LrBYaY6IvRxmpGOig3tjOUy3fqk7coyTeJXmQ==";
+  pathToPubKey = ssh-keys.outPath;
   port = 8022;
   system = pkgs.system;
   myVim = myFlakes.packages.${system}.vim;
   myTmux = myFlakes.packages.${system}.tmux;
+  myGit = myFlakes.packages.${system}.git;
 in
 {
   user.shell = "${myTmux}/bin/tmux";
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
 
   build.activation.sshd = ''
     $DRY_RUN_CMD mkdir $VERBOSE_ARG --parents "${config.user.home}/.ssh"
@@ -37,6 +41,7 @@ in
       echo "Starting sshd in non-daemonized way on port ${toString port}"
       ${pkgs.openssh}/bin/sshd -f "${sshdDirectory}/sshd_config" -D
     '')
+    myGit
     myVim
   ];
   system.stateVersion = "23.05";

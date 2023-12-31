@@ -31,7 +31,10 @@
     spicetify.url = "github:heywoodlh/spicetify-nix";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flatpaks.url = "github:GermanBread/declarative-flatpak/stable";
-    nix-on-droid.url = "github:nix-community/nix-on-droid/release-23.05";
+    nix-on-droid = {
+      url = "github:nix-community/nix-on-droid/release-23.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self,
@@ -272,6 +275,7 @@
       default = nix-on-droid.lib.nixOnDroidConfiguration {
         extraSpecialArgs = inputs;
         modules = [ ./nixos/droid.nix ];
+        home-manager-path = home-manager.outPath;
       };
     };
   });

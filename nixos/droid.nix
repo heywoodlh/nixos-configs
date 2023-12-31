@@ -43,6 +43,14 @@ in
     '')
     myGit
     myVim
+    pkgs.busybox
+    pkgs.coreutils
   ];
+
+  home-manager = {
+    config = ./roles/droid/home.nix;
+    backupFileExtension = "hm-bak";
+    useGlobalPkgs = true;
+  };
   system.stateVersion = "23.05";
 }

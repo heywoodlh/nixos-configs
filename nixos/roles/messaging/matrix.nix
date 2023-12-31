@@ -34,6 +34,7 @@ in {
         "/opt/mautrix-wsproxy/registration.yaml"
         "/opt/mautrix-signal/data/registration.yaml"
         "/opt/mautrix-discord/data/registration.yaml"
+        "/opt/matrix-doublepuppet/registration.yaml"
       ];
       listeners = [
         {

@@ -35,6 +35,10 @@
       url = "github:nix-community/nix-on-droid/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-artwork = {
+      url = "github:NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ self,
@@ -55,6 +59,7 @@
                       osquery-fix-nixpkgs,
                       flatpaks,
                       nix-on-droid,
+                      nixos-artwork,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

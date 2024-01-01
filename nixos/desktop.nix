@@ -1,7 +1,7 @@
 { config, pkgs, lib, home-manager,
   nur, hyprland, nixpkgs-backports,
   nixpkgs-lts, myFlakes, flatpaks,
-  ... }:
+  nixos-artwork, ... }:
 
 let
   system = pkgs.system;
@@ -238,6 +238,7 @@ in {
     extraSpecialArgs = {
       inherit myFlakes;
       inherit nixpkgs-lts;
+      inherit nixos-artwork;
     };
     users.heywoodlh = { ... }: {
       imports = [

@@ -1,4 +1,4 @@
-{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, ... }:
+{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, nixos-artwork, ... }:
 
 let
   system = pkgs.system;
@@ -17,6 +17,7 @@ in {
     gnomeExtensions.gnome-bedtime
     gnomeExtensions.gsconnect
     gnomeExtensions.just-perfection
+    gnomeExtensions.night-theme-switcher
     #gnomeExtensions.paperwm
     gnomeExtensions.pop-shell
     gnomeExtensions.tray-icons-reloaded
@@ -150,6 +151,7 @@ in {
         "user-theme@gnome-shell-extensions.gcampax.github.com"
         "switcher@landau.fi"
         "gnomebedtime@ionutbortis.gmail.com"
+        "nightthemeswitcher@romainvigier.fr"
       ];
       favorite-apps = ["firefox.desktop" "wezterm.desktop"];
       had-bluetooth-devices-setup = true;
@@ -170,9 +172,24 @@ in {
       bedtime-mode-active = true;
       color-tone-factor = 80;
     };
-    "org/gnome/shell/extensions/user-theme" = {
-      name = "Nordic-darker";
+    "org/gnome/shell/extensions/nightthemeswitcher/time" = {
+      manual-schedule = true;
+      sunrise = 8.0;
+      sunset = 18.0;
     };
+    "org/gnome/shell/extensions/nightthemeswitcher/shell-variants" = {
+      enabled = true;
+      day = "Nordic-Polar";
+      night = "Nordic-darker";
+    };
+    "org/gnome/shell/extensions/nightthemeswitcher/gtk-variants" = {
+      enabled = true;
+      day = "Nordic-Polar";
+      night = "Nordic-darker";
+    };
+    #"org/gnome/shell/extensions/user-theme" = {
+    #  name = "Nordic-darker";
+    #};
     "org/gnome/shell/extensions/just-perfection" = {
       accessibility-menu = true;
       app-menu = true;
@@ -225,8 +242,8 @@ in {
     "org/gnome/desktop/background" = {
       color-shading = "solid";
       picture-options = "zoom";
-      picture-uri = "file://${homeDir}/.wallpaper.png";
-      picture-uri-dark = "file://${homeDir}/.wallpaper.png";
+      picture-uri = "file://${nixos-artwork}/wallpapers/nix-wallpaper-simple-light-gray.png";
+      picture-uri-dark = "file://${nixos-artwork}/wallpapers/nix-wallpaper-dracula.png";
     };
     "org/gnome/desktop/screensaver" = {
       color-shading = "solid";
@@ -243,6 +260,7 @@ in {
       font-hinting = "slight";
       gtk-theme = "Nordic";
       toolkit-accessibility = true;
+      icon-theme = "Nordic-darker";
     };
     "org/gnome/desktop/wm/keybindings" = {
       activate-window-menu = ["disabled"];

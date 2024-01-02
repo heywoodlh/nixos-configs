@@ -52,6 +52,7 @@ in {
     pkgs.pinentry-rofi
     pkgs.rofi
     pkgs.tailscale
+    pkgs.vimb
     pkgs.virt-manager
     pkgs.xclip
     pkgs.xdotool

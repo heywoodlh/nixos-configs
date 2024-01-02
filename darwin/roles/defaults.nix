@@ -68,7 +68,8 @@ in {
     };
     SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
     NSGlobalDomain = {
-      AppleInterfaceStyle = "Dark"; # set dark mode
+      #AppleInterfaceStyle = "Dark"; # set dark mode
+      AppleInterfaceStyleSwitchesAutomatically = true;
       AppleKeyboardUIMode = 3;
       ApplePressAndHoldEnabled = false;
       NSAutomaticCapitalizationEnabled = false;

@@ -3,6 +3,11 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
+  myVimb = myFlakes.packages.${system}.vimb;
+  snowflake = builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
+    sha256 = "sha256:0pd45ya86x1z00fb67aqhmmvm7pk50awkmw3bigmhhiwd4lv9n6h";
+  };
 in {
   imports = [
     ../firefox/linux.nix
@@ -31,10 +36,7 @@ in {
 
   # Nix snowflake icon
   home.file.".icons/snowflake.png" = {
-    source = builtins.fetchurl {
-      url = "https://github.com/NixOS/nixos-artwork/blob/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png?raw=true";
-      sha256 = "sha256:0pd45ya86x1z00fb67aqhmmvm7pk50awkmw3bigmhhiwd4lv9n6h";
-    };
+    source = snowflake;
   };
 
   home.packages = [
@@ -52,10 +54,10 @@ in {
     pkgs.pinentry-rofi
     pkgs.rofi
     pkgs.tailscale
-    pkgs.vimb
     pkgs.virt-manager
     pkgs.xclip
     pkgs.xdotool
+    myVimb
   ];
 
   home.shellAliases = {
@@ -75,7 +77,24 @@ in {
       Terminal=false
       Type=Application
       Keywords=webcord;discord;
-      Icon=${homeDir}/.icons/snowflake.png
+      Icon=${snowflake}
+      Categories=Utility;
+    '';
+  };
+
+  # Webcord nord config
+  home.file.".local/share/applications/vimb.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Vimb
+      GenericName=browser
+      Comment=Browse the web
+      Exec=${myVimb}/bin/vimb
+      Terminal=false
+      Type=Application
+      Keywords=browser;vimb;internet;
+      Icon=${snowflake}
       Categories=Utility;
     '';
   };

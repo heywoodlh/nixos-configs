@@ -266,6 +266,9 @@ in {
     };
   };
 
+  programs.nix-index.enable = true;
+  programs.command-not-found.enable = false;
+
   # Automatically garbage collect
   nix.gc = {
     automatic = true;

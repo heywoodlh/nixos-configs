@@ -41,6 +41,10 @@ in {
   homebrew = {
     brews = [
       "neofetch"
+      "gcenx/wine/game-porting-toolkit"
+    ];
+    taps = [
+      "gcenx/homebrew-apple" # For whisky
     ];
     casks = [
       "diffusionbee"
@@ -49,8 +53,8 @@ in {
       "moonlight"
       "screens"
       "signal"
-      "steam"
       "vmware-fusion"
+      "whisky"
       "zoom"
     ];
   };

@@ -39,6 +39,20 @@ in {
     source = snowflake;
   };
 
+  # Berkeley Mono font installer
+  home.file."bin/berkeley-mono-font.sh" = {
+    text = ''
+      eval $(op signin)
+      ${pkgs.curl}/bin/curl 'https://things.heywoodlh.io/berkeley-mono-typeface.zip' -u ":$(op read 'op://Personal/things.heywoodlh.io/password')" -Lo /tmp/berkeley-mono-typeface.zip
+      ${pkgs.unzip}/bin/unzip -o /tmp/berkeley-mono-typeface.zip -d /tmp
+      mkdir -p ~/.local/share/fonts
+      mv /tmp/berkeley-mono/TTF/BerkeleyMono-Regular.ttf ~/.local/share/fonts
+      ${pkgs.fontconfig}/bin/fc-cache -vf ~/.local/share/fonts
+      rm -rf /tmp/berkeley*
+    '';
+    executable = true;
+  };
+
   home.packages = [
     pkgs._1password-gui
     pkgs.acpi

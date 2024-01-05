@@ -62,6 +62,26 @@ in {
     };
   };
 
+  # Epiphany extensions
+  home.file."share/epiphany/dark-reader.xpi" = {
+    source = builtins.fetchurl {
+      url = "https://addons.mozilla.org/firefox/downloads/file/4205543/darkreader-4.9.73.xpi";
+      sha256 = "sha256:06lgnfi0azk62b7yzw8znyq955v2iypsy35d1nw6p2314prryfbw";
+    };
+  };
+  home.file."share/epiphany/vim-vixen.xpi" = {
+    source = builtins.fetchurl {
+      url = "https://addons.mozilla.org/firefox/downloads/file/3845233/vim_vixen-1.2.3.xpi";
+      sha256 = "sha256:1dg9m6iwap1xbvw6pa6mhrvaqccjrrb0ns9j38zzspg6r1xcg1lg";
+    };
+  };
+  home.file."share/epiphany/redirector.xpi" = {
+    source = builtins.fetchurl {
+      url = "https://addons.mozilla.org/firefox/downloads/file/3535009/redirector-3.5.3.xpi";
+      sha256 = "sha256:0w8g3kkr0hdnm8hxnhkgxpf0430frzlxkdpcsq5qsx2fjkax7nzd";
+    };
+  };
+
   # Epiphany CSS
   home.file.".local/share/epiphany/user-stylesheet.css" = {
     text = ''

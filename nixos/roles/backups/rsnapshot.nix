@@ -70,16 +70,6 @@ backup	root@nix-precision.tailscale:/home/	nix-precision/
 backup	root@nix-precision.tailscale:/opt/	nix-precision/
 backup	root@nix-precision.tailscale:/root/	nix-precision/
 
-backup	root@nix-media.tailscale:/etc/	nix-media/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-media.tailscale:/home/	nix-media/
-backup	root@nix-media.tailscale:/opt/	nix-media/
-backup	root@nix-media.tailscale:/root/	nix-media/
-backup	root@nix-media.tailscale:/media/services/freshrss/	nix-media/
-backup	root@nix-media.tailscale:/media/services/sabnzbd/	nix-media/
-backup	root@nix-media.tailscale:/media/services/radarr/	nix-media/
-backup	root@nix-media.tailscale:/media/services/sonarr/	nix-media/
-backup	root@nix-media.tailscale:/media/services/tautulli/	nix-media/
-
 backup	root@nix-ext-net.tailscale:/etc/	nix-ext-net/	exclude=/etc/shadow,exclude=/etc/passwd
 backup	root@nix-ext-net.tailscale:/home/	nix-ext-net/
 backup	root@nix-ext-net.tailscale:/opt/	nix-ext-net/

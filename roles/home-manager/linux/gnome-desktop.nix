@@ -141,6 +141,7 @@ in {
         "disabled"
         "ubuntu-dock@ubuntu.com"
         "ding@rastersoft.com"
+        "nightthemeswitcher@romainvigier.fr"
       ];
       enabled-extensions = [
         "caffeine@patapon.info"
@@ -151,7 +152,6 @@ in {
         "user-theme@gnome-shell-extensions.gcampax.github.com"
         "switcher@landau.fi"
         "gnomebedtime@ionutbortis.gmail.com"
-        "nightthemeswitcher@romainvigier.fr"
       ];
       favorite-apps = ["firefox.desktop" "wezterm.desktop"];
       had-bluetooth-devices-setup = true;
@@ -172,24 +172,24 @@ in {
       bedtime-mode-active = true;
       color-tone-factor = 80;
     };
-    "org/gnome/shell/extensions/nightthemeswitcher/time" = {
-      manual-schedule = true;
-      sunrise = 8.0;
-      sunset = 18.0;
-    };
-    "org/gnome/shell/extensions/nightthemeswitcher/shell-variants" = {
-      enabled = true;
-      day = "Nordic-Polar";
-      night = "Nordic-darker";
-    };
-    "org/gnome/shell/extensions/nightthemeswitcher/gtk-variants" = {
-      enabled = true;
-      day = "Nordic-Polar";
-      night = "Nordic-darker";
-    };
-    #"org/gnome/shell/extensions/user-theme" = {
-    #  name = "Nordic-darker";
+    #"org/gnome/shell/extensions/nightthemeswitcher/time" = {
+    #  manual-schedule = true;
+    #  sunrise = 8.0;
+    #  sunset = 18.0;
     #};
+    #"org/gnome/shell/extensions/nightthemeswitcher/shell-variants" = {
+    #  enabled = true;
+    #  day = "Nordic-Polar";
+    #  night = "Nordic-darker";
+    #};
+    #"org/gnome/shell/extensions/nightthemeswitcher/gtk-variants" = {
+    #  enabled = true;
+    #  day = "Nordic-Polar";
+    #  night = "Nordic-darker";
+    #};
+    "org/gnome/shell/extensions/user-theme" = {
+      name = "Nordic-darker";
+    };
     "org/gnome/shell/extensions/just-perfection" = {
       accessibility-menu = true;
       app-menu = true;

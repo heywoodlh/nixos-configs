@@ -20,10 +20,8 @@
       cask_args appdir: "~/Applications"
     '';
     taps = [
-      "homebrew/cask"
       "homebrew/cask-fonts"
       "homebrew/cask-versions"
-      "homebrew/core"
       "homebrew/services"
       "amar1729/formulae"
       "colindean/fonts-nonfree"

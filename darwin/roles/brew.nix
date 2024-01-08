@@ -59,7 +59,7 @@
       "Dark Reader for Safari" = 1438243180;
       "Redirect Web for Safari" = 1571283503;
       "Vimlike" = 1584519802;
-      "AdGuard for Safari" = 1402042596;
+      "AdGuard for Safari" = 1440147259;
     };
   };
 }

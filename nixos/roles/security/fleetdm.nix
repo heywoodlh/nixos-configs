@@ -16,6 +16,7 @@
         ];
         volumes = [
           "/etc/localtime:/etc/localtime:ro"
+          "/opt/fleet/certs:/opt/fleet/certs"
         ];
         dependsOn = [
           "fleet-mysql"

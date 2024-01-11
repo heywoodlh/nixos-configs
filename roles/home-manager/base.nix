@@ -14,6 +14,7 @@ let
   system = pkgs.system;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
+  myVM = myFlakes.packages.${system}.ubuntu-vm;
 in {
   home.stateVersion = "23.05";
   home.enableNixpkgsReleaseCheck = false;
@@ -61,6 +62,7 @@ in {
     zip
     myTmux # For non-nix use-cases
     myFish # For non-nix use-cases
+    myVM
   ];
 
   # Import nur as nixpkgs.overlays

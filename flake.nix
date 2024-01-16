@@ -5,6 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixos-unstable"; # Separate input for overriding
     myFlakes.url = "github:heywoodlh/flakes";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/release-23.11";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon/main";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
@@ -44,6 +45,7 @@
   outputs = inputs@{ self,
                       nixpkgs,
                       myFlakes,
+                      nixpkgs-stable,
                       nixpkgs-backports,
                       nixpkgs-lts,
                       nixos-apple-silicon,

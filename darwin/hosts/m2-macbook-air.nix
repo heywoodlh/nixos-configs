@@ -43,7 +43,6 @@ in {
       "neofetch"
     ];
     casks = [
-      "beeper"
       "diffusionbee"
       "discord"
       "microsoft-remote-desktop"

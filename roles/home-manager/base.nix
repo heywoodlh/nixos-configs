@@ -50,6 +50,7 @@ in {
     libvirt
     lima
     mosh
+    nixos-rebuild
     nmap
     openssl
     pciutils

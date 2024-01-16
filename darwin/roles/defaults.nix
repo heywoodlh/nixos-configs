@@ -1,4 +1,4 @@
-{ config, pkgs, myFlakes, ... }:
+{ config, pkgs, myFlakes, nixpkgs-stable, ... }:
 
 let
   system = pkgs.system;
@@ -6,8 +6,18 @@ in {
   #package config
   nixpkgs.config.allowUnfree = true;
   # nix configuration
-  nix.settings.auto-optimise-store = true;
-
+  nix = {
+    settings = {
+      auto-optimise-store = true;
+      trusted-users = [
+        "@admin"
+      ];
+    };
+    linux-builder = {
+      enable = true;
+      package = nixpkgs-stable.legacyPackages.${system}.darwin.linux-builder;
+    };
+  };
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   programs.nix-index.enable = true;

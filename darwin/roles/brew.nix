@@ -43,6 +43,7 @@
       "iterm2"
       "knockknock"
       "lulu"
+      "mullvad-browser"
       "oversight"
       "reikey"
       "rustdesk"

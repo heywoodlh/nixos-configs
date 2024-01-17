@@ -65,6 +65,7 @@ in {
     pkgs.libnotify #(notify-send)
     pkgs.nixos-install-tools
     pkgs.nordic
+    pkgs.mullvad-browser
     pkgs.pinentry-rofi
     pkgs.rofi
     pkgs.tailscale

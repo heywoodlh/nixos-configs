@@ -36,7 +36,7 @@
         ];
       };
       graylog = {
-        image = "docker.io/graylog/graylog:5.1.4";
+        image = "docker.io/graylog/graylog:5.2";
         autoStart = true;
         environment = {
           GRAYLOG_IS_MASTER = "true";
@@ -46,6 +46,9 @@
           GRAYLOG_ELASTICSEARCH_HOSTS = "http://localhost:9200";
           GRAYLOG_MONGODB_URI = "mongodb://localhost:27017/graylog";
         };
+        environmentFiles = [
+          /opt/graylog/graylog.env
+        ];
         volumes = [
           "/opt/graylog/data:/usr/share/graylog/data/data"
           "/opt/graylog/journal:/usr/share/graylog/data/journal"

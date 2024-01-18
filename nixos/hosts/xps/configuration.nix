@@ -39,15 +39,6 @@
     ];
   };
 
-  # Smart card
-  services.pcscd.enable = true;
-  environment.systemPackages = with pkgs; [
-    yubikey-manager-qt
-  ];
-  services.udev.packages = with pkgs; [
-    yubikey-manager-qt
-  ];
-
   # Fingerprint
   services.fprintd.enable = true;
   services.fprintd.tod.enable = true;

@@ -19,6 +19,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mullvad-browser-home-manager = {
+      url = "github:heywoodlh/home-manager/mullvad-browser-support";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     osquery-fix-nixpkgs = {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
@@ -52,6 +56,7 @@
                       nixos-wsl,
                       darwin,
                       home-manager,
+                      mullvad-browser-home-manager,
                       jovian-nixos,
                       nur,
                       flake-utils,

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nur, myFlakes, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, mullvad-browser-home-manager, ... }:
 
 
 let
@@ -29,8 +29,14 @@ in {
     # Set home-manager configs for username
     users.${username} = { ... }: {
       imports = [
+        (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
         ../../roles/home-manager/darwin.nix
       ];
+      programs.mullvad-browser = {
+        profiles.home-manager = {
+          search.default = lib.mkForce "Mullvad Leta";
+        };
+      };
     };
   };
 

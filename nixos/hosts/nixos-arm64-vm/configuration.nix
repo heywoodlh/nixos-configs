@@ -6,7 +6,7 @@ in {
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../server.nix
+    ../../desktop.nix
   ];
 
   # Bootloader.

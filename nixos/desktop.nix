@@ -1,7 +1,9 @@
 { config, pkgs, lib, home-manager,
   nur, hyprland, nixpkgs-backports,
   nixpkgs-lts, myFlakes, flatpaks,
-  nixos-artwork, ... }:
+  nixos-artwork,
+  mullvad-browser-home-manager,
+  ... }:
 
 let
   system = pkgs.system;
@@ -242,6 +244,7 @@ in {
     };
     users.heywoodlh = { ... }: {
       imports = [
+        (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
         ../roles/home-manager/linux.nix
         ../roles/home-manager/desktop.nix # base desktop.nix
         ../roles/home-manager/linux/desktop.nix # linux-specific desktop.nix

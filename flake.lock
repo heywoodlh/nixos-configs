@@ -3089,6 +3089,27 @@
         "type": "path"
       }
     },
+    "mullvad-browser-home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1705615774,
+        "narHash": "sha256-uQzlmZbz0x6Yr3+ICjKvqv1zD9nLb3WJ89SnAzn0oy4=",
+        "owner": "heywoodlh",
+        "repo": "home-manager",
+        "rev": "562685201f723d8644f944276532bb7e1601c0fc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "mullvad-browser-support",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "myFlakes": {
       "inputs": {
         "ansible-flake": "ansible-flake",
@@ -5737,6 +5758,7 @@
         "flatpaks": "flatpaks",
         "home-manager": "home-manager",
         "jovian-nixos": "jovian-nixos",
+        "mullvad-browser-home-manager": "mullvad-browser-home-manager",
         "myFlakes": "myFlakes",
         "nix-on-droid": "nix-on-droid",
         "nixos-apple-silicon": "nixos-apple-silicon_5",

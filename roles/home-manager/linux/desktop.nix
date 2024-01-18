@@ -139,6 +139,23 @@ in {
     };
   };
 
+  # Mullvad desktop file
+  home.file.".local/share/applications/mullvad-browser.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Mullvad Browser
+      GenericName=browser
+      Comment=Browse the web
+      Exec=${pkgs.mullvad-browser}/bin/mullvad-browser
+      Terminal=false
+      Type=Application
+      Keywords=browser;internet;
+      Icon=${snowflake}
+      Categories=Utility;
+    '';
+  };
+
   # 1Password GUI settings
   home.file.".config/1Password/settings/settings.json" = {
     text = ''

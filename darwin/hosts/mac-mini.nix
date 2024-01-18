@@ -1,5 +1,5 @@
 # Remember that this is used for GitHub Actions to test builds
-{ config, pkgs, lib, home-manager, nur, myFlakes, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, mullvad-browser-home-manager, ... }:
 
 let
   hostname = "nix-mac-mini";
@@ -28,6 +28,7 @@ in {
     # Set home-manager configs for username
     users.${username} = { ... }: {
       imports = [
+        (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
         ../../roles/home-manager/darwin.nix
       ];
     };

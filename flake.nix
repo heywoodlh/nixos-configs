@@ -203,6 +203,7 @@
       heywoodlh = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
+          (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
           flatpaks.homeManagerModules.default
           ./roles/home-manager/linux.nix
           ./roles/home-manager/desktop.nix # Base desktop config

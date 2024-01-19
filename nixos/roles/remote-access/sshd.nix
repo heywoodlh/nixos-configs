@@ -34,6 +34,6 @@ in {
   };
 
   programs.bash.interactiveShellInit = ''
-    [ -z $TMUX ] && { ${tmux}/bin/tmux attach || exec ${tmux}/bin/tmux new-session && exit;}
+    [ -z $TMUX ] && { ${tmux}/bin/tmux && exit;}
   '';
 }

@@ -4,7 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixos-unstable"; # Separate input for overriding
-    myFlakes.url = "github:heywoodlh/flakes";
+    myFlakes = {
+      url = "github:heywoodlh/flakes";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-23.11";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon/main";

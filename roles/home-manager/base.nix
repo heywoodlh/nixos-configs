@@ -15,6 +15,12 @@ let
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.ubuntu-vm;
+  newsboat_browser = if pkgs.stdenv.isDarwin then ''
+    browser "open %u"
+  ''
+  else ''
+    browser "${pkgs.xdg-utils}/bin/xdg-open %u"
+  '';
 in {
   home.stateVersion = "23.05";
   home.enableNixpkgsReleaseCheck = false;
@@ -167,5 +173,46 @@ in {
         "text/plain" = "${pkgs.coreutils}/bin/fold -w 80";
       };
     };
+  };
+
+  programs.newsboat = {
+    enable = true;
+    extraConfig = ''
+      urls-source "miniflux"
+      miniflux-url "https://feeds.heywoodlh.io"
+      miniflux-login "heywoodlh"
+      miniflux-passwordeval "${homeDir}/bin/op-wrapper.sh read 'op://Personal/a4johfsgd7cnpzulsqcgkavhoq/password'"
+
+      # general settings
+      auto-reload yes
+      max-items 50
+      ${newsboat_browser}
+
+      # unbind keys
+      unbind-key j
+      unbind-key k
+      unbind-key J
+      unbind-key K
+
+      # vim keybindings
+      bind-key j down
+      bind-key k up
+      bind-key l open
+      bind-key h quit
+
+      # solarized
+      color background         default   default
+      color listnormal         default   default
+      color listnormal_unread  default   default
+      color listfocus          black     cyan
+      color listfocus_unread   black     cyan
+      color info               default   black
+      color article            default   default
+
+      # highlights
+      highlight article "^(Title):.*$" blue default
+      highlight article "https?://[^ ]+" red default
+      highlight article "\\[image\\ [0-9]+\\]" green default
+    '';
   };
 }

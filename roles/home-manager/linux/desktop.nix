@@ -9,10 +9,6 @@ let
     sha256 = "sha256:0pd45ya86x1z00fb67aqhmmvm7pk50awkmw3bigmhhiwd4lv9n6h";
   };
 in {
-  imports = [
-    ../firefox/linux.nix
-  ];
-
   # Webcord Nord theme
   home.file.".config/WebCord/Themes/nordic.theme.css" = {
     source = builtins.fetchurl {

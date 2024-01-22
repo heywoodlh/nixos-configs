@@ -21,6 +21,9 @@ let
   else ''
     browser "${pkgs.xdg-utils}/bin/xdg-open %u"
   '';
+  gomuks_keybindings_file = if pkgs.stdenv.isDarwin
+  then "Library/Application Support/gomuks/keybindings.yaml"
+  else ".config/gomuks/keybindings.yaml";
 in {
   home.stateVersion = "23.05";
   home.enableNixpkgsReleaseCheck = false;
@@ -215,4 +218,52 @@ in {
       highlight article "\\[image\\ [0-9]+\\]" green default
     '';
   };
+
+  home.file."${gomuks_keybindings_file}" = {
+    text = ''
+      main:
+        'Ctrl+Down': next_room
+        'Ctrl+Up': prev_room
+        'Ctrl+k': search_rooms
+        'Ctrl+Home': scroll_up
+        'Ctrl+End': scroll_down
+        'Ctrl+Enter': add_newline
+        'Ctrl+l': show_bare
+        'Ctrl+n': next_room
+        'Ctrl+p': prev_room
+        'Alt+k':  search_rooms
+        'Alt+Home': scroll_up
+        'Alt+End': scroll_down
+        'Alt+Enter': add_newline
+        'Alt+a': next_active_room
+        'Alt+l': show_bare
+
+      modal:
+        'Tab': select_next
+        'Down': select_next
+        'Backtab': select_prev
+        'Up': select_prev
+        'Enter': confirm
+        'Escape': cancel
+
+      visual:
+        'Escape': clear
+        'h': clear
+        'Up': select_prev
+        'k': select_prev
+        'Down': select_next
+        'j': select_next
+        'Enter': confirm
+        'l': confirm
+
+      room:
+        'Escape': clear
+        'Ctrl+p': scroll_up
+        'Ctrl+n': scroll_down
+        'PageUp': scroll_up
+        'PageDown': scroll_down
+        'Enter': send
+    '';
+  };
+
 }

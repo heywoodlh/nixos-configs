@@ -8,7 +8,9 @@
     ../../roles/remote-access/sshd.nix
     ../../roles/security/sshd-monitor.nix
     ../../roles/virtualization/libvirt.nix
-    ../../roles/syslog-ng/server.nix
+    ../../roles/monitoring/syslog-ng/server.nix
+    ../../roles/monitoring/syslog-ng/client.nix
+    ../../roles/monitoring/monit.nix
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/monitoring/graylog.nix
     ../../roles/gaming/sunshine.nix

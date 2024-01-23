@@ -17,7 +17,8 @@ in {
     ./roles/security/sshd-monitor.nix
     ./roles/squid-client.nix
     ./roles/tailscale.nix
-    ./roles/syslog-ng/client.nix
+    ./roles/monitoring/syslog-ng/client.nix
+    ./roles/monitoring/monit.nix
     ./roles/monitoring/osqueryd.nix
   ];
 

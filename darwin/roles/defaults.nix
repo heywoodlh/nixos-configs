@@ -93,7 +93,7 @@ in {
     };
     CustomUserPreferences = {
       "NSGlobalDomain" = {
-        "AppleSpacesSwitchOnActivate" = 1;
+        "AppleSpacesSwitchOnActivate" = 0; # Do not automatically refocus spaces
       };
       "com.googlecode.iterm2" = {
         "PrefsCustomFolder" = "~/.config/iterm2";

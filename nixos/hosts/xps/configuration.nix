@@ -1,6 +1,5 @@
 # Config specific to Dell XPS 13
-
-{ config, pkgs, lib, spicetify, ... }:
+{ config, pkgs, lib, spicetify, mullvad-browser-home-manager, ... }:
 
 {
   imports =
@@ -31,12 +30,20 @@
 
   # Configuration for this machine
   home-manager.users.heywoodlh = {
+    imports = [
+      (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
+    ];
     home.packages = with pkgs; [
       signal-desktop
       spicetify.packages.x86_64-linux.nord-text
       webcord
       zoom-us
     ];
+    programs.mullvad-browser = {
+      profiles.home-manager = {
+        search.default = lib.mkForce "Mullvad Leta";
+      };
+    };
   };
 
   # Fingerprint

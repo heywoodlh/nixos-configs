@@ -98,8 +98,8 @@ in {
     executable = true;
     text = ''
       #!/usr/bin/env bash
-      env | grep -iq OP_SESSION || eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
-      ${pkgs._1password}/bin/op "$@"
+      env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
+      ${pkgs._1password}/bin/op --account my "$@"
     '';
   };
 

@@ -37,6 +37,7 @@ in {
         "browser.compactmode.show" = true; # enable compact bar
         "browser.privatebrowsing.autostart" = false; # don't start in private mode
         "privacy.history.custom" = false; # remember history
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true; # userChrome.css
       };
     };
   };

@@ -105,7 +105,7 @@ in {
     "apps/guake/general" = {
       abbreviate-tab-names = false;
       compat-delete = "delete-sequence";
-      default-shell = "${myFish}/bin/fish"; # Use fish instead of tmux because gomuks
+      default-shell = "${myTmux}/bin/tmux";
       display-n = 0;
       display-tab-names = 0;
       gtk-prefer-dark-theme = true;

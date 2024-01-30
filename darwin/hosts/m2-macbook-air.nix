@@ -61,8 +61,5 @@ in {
     ];
   };
 
-  # Use the Tailscale service instead of Tailscale app
-  services.tailscale.enable = true;
-
   system.stateVersion = 4;
 }

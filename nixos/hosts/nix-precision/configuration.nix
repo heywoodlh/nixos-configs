@@ -71,14 +71,6 @@ in {
     "--device=/dev/sdf"
   ];
 
-  #services.k3s = {
-  #  extraFlags = toString [
-  #    "--tls-san=nix-precision.tailscale"
-  #    "--tls-san=nix-precision"
-  #    "--tls-san=100.107.238.93"
-  #  ];
-  #};
-
   fileSystems."/media/home-media/disk1" = {
     device = "/dev/disk/by-uuid/8f645e4b-0544-4ce9-8797-7dfe7f85df5a";
     fsType = "btrfs";

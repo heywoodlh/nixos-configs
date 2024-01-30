@@ -14,7 +14,7 @@
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/monitoring/graylog.nix
     ../../roles/gaming/sunshine.nix
-    #../../roles/containers/k3s.nix
+    ../../roles/containers/k3s.nix
     ../../roles/nixos/cache.nix
     ../../roles/remote-access/guacamole.nix
     ../../roles/remote-access/xrdp.nix
@@ -78,8 +78,14 @@
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
-  # K8s cluster for coder
-  services.k3s.extraFlags = "--tls-san=nix-nvidia.tailscale";
+  # K8s cluster
+  services.k3s = {
+    extraFlags = toString [
+      "--tls-san=nix-nvidia.tailscale"
+      "--tls-san=nix-nvidia"
+      "--tls-san=100.107.238.93"
+    ];
+  };
 
   # Exposed ports
   networking.firewall = {

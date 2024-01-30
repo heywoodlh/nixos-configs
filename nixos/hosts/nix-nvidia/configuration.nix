@@ -10,7 +10,7 @@
     ../../roles/virtualization/libvirt.nix
     ../../roles/monitoring/syslog-ng/server.nix
     ../../roles/monitoring/syslog-ng/client.nix
-    ../../roles/monitoring/monit.nix
+    ../../roles/monitoring/node-exporter.nix
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/monitoring/graylog.nix
     ../../roles/gaming/sunshine.nix

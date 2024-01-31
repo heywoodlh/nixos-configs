@@ -16,6 +16,9 @@
       # k8s-node-3
       /media/home-media      100.118.109.137(rw,crossmnt,sync,no_wdelay,root_squash,insecure,no_subtree_check,fsid=0,anonuid=995,anongid=992)
 
+      #nix-nvidia
+      /media/home-media      100.108.77.60(rw,crossmnt,sync,no_wdelay,root_squash,insecure,no_subtree_check,fsid=0,anonuid=995,anongid=992)
+
       # Everyone else (no read/write)
       /media/home-media      100.64.0.0/10(ro,crossmnt,async,no_wdelay,no_root_squash,insecure,no_subtree_check,anonuid=995,anongid=992)
     '';

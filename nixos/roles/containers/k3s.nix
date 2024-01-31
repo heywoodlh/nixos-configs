@@ -1,8 +1,8 @@
-{ config, pkgs, nixpkgs-backports, ... }:
+{ config, pkgs, nixpkgs-stable, ... }:
 
 let
   system = pkgs.system;
-  stable-pkgs = nixpkgs-backports.legacyPackages.${system};
+  stable-pkgs = nixpkgs-stable.legacyPackages.${system};
 in {
   networking.firewall.allowedTCPPorts = [ 6443 ];
   services.k3s = {

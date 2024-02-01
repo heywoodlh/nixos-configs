@@ -32,11 +32,6 @@ in {
         (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
         ../../roles/home-manager/darwin.nix
       ];
-      programs.mullvad-browser = {
-        profiles.home-manager = {
-          search.default = lib.mkForce "Mullvad Leta";
-        };
-      };
     };
   };
 

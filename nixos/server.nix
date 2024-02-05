@@ -15,7 +15,7 @@ in {
     home-manager.nixosModule
     ./roles/remote-access/sshd.nix
     ./roles/security/sshd-monitor.nix
-    ./roles/squid-client.nix
+    ./roles/networking/squid-client.nix
     ./roles/tailscale.nix
     ./roles/monitoring/syslog-ng/client.nix
     ./roles/monitoring/node-exporter.nix

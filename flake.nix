@@ -165,10 +165,10 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-nvidia/configuration.nix ];
       };
-      nix-ext-net = nixpkgs.lib.nixosSystem {
+      nixos-ext-net = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-ext-net/configuration.nix ];
+        modules = [ ./nixos/hosts/nixos-ext-net/configuration.nix ];
       };
       nix-media = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

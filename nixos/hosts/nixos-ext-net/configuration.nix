@@ -3,10 +3,10 @@
 {
   imports =
   [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+    /etc/nixos/hardware-configuration.nix
     ../../server.nix
-    ../../roles/pihole.nix
-    ../../roles/squid.nix
+    ../../roles/networking/pihole.nix
+    ../../roles/networking/squid.nix
     ../../roles/protonmail-bridge.nix
     ../../roles/monitoring/iperf.nix
     ../../roles/http-proxy-pac.nix
@@ -16,6 +16,24 @@
     ../../roles/monitoring/bash-uptime.nix
   ];
 
+  # /dev/vdb1
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-uuid/8d270e9f-16c7-4dbf-8954-8d93b4d548a6";
+      fsType = "ext4";
+    };
+
+  # /dev/vdc1
+  fileSystems."/opt" =
+    { device = "/dev/disk/by-uuid/7be4354a-a167-423e-9297-f5daae458553";
+      fsType = "ext4";
+    };
+
+  # /dev/vdd1
+  fileSystems."/var" =
+    { device = "/dev/disk/by-uuid/467cdd51-b939-43e3-b844-defec76812ce";
+      fsType = "ext4";
+    };
+
   # Bootloader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -23,7 +41,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.hostName = "nix-ext-net"; # Define your hostname
+  networking.hostName = "nixos-ext-net"; # Define your hostname
 
   # Set your time zone.
   time.timeZone = "America/Denver";

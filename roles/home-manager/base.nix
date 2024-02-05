@@ -266,4 +266,13 @@ in {
     '';
   };
 
+  # config.fish
+  home.file.".config/fish/config.fish" = {
+    enable = true;
+    text = ''
+      function vultr-unlock
+        export VULTR_API_KEY="$(op read 'op://Personal/biw7pdtbal7zj66gu6ylaavgui/api_key')"
+      end
+    '';
+  };
 }

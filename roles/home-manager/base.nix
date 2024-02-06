@@ -157,9 +157,9 @@ in {
       from = Spencer Heywood <heywoodlh@heywoodlh.io>
 
       [protonmail]
-      source = imap+insecure://l.spencer.heywood%40protonmail.com@nix-ext-net.tailscale:143
+      source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143
       source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/erkt5oy644dks54kax57ib2rue/password'
-      outgoing = smtp+plain://l.spencer.heywood%40protonmail.com@nix-ext-net.tailscale:25
+      outgoing = smtp+plain://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25
       outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/erkt5oy644dks54kax57ib2rue/password'
       default = INBOX
       copy-to = Sent

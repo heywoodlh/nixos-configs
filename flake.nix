@@ -4,10 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixos-unstable"; # Separate input for overriding
-    myFlakes = {
-      url = "github:heywoodlh/flakes";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    myFlakes.url = "github:heywoodlh/flakes";
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-23.11";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon/main";
@@ -130,20 +127,17 @@
           ./nixos/hosts/xps/configuration.nix
         ];
       };
-      nix-steam-deck = nixpkgs.lib.nixosSystem {
+      nixos-mac-mini = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/steam-deck/configuration.nix ];
+        modules = [
+          ./nixos/hosts/mac-mini/configuration.nix
+        ];
       };
       nix-wsl = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-wsl/configuration.nix ];
-      };
-      nix-tools = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-tools/configuration.nix ];
       };
       nixos-arm64-vm = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
@@ -164,11 +158,6 @@
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-nvidia/configuration.nix ];
-      };
-      nixos-ext-net = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/nixos-ext-net/configuration.nix ];
       };
       nix-media = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

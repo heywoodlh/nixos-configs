@@ -4,20 +4,15 @@
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../desktop.nix
-    ../../roles/remote-access/sshd.nix
-    ../../roles/security/sshd-monitor.nix
+    ../../server.nix
     ../../roles/virtualization/libvirt.nix
     ../../roles/monitoring/syslog-ng/server.nix
     ../../roles/monitoring/syslog-ng/client.nix
-    ../../roles/monitoring/node-exporter.nix
     ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/monitoring/graylog.nix
-    ../../roles/gaming/sunshine.nix
     ../../roles/containers/k3s.nix
     ../../roles/nixos/cache.nix
     ../../roles/remote-access/guacamole.nix
-    ../../roles/remote-access/xrdp.nix
     ../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
     ../../roles/assistants/ollama-webui.nix
@@ -46,7 +41,6 @@
 
   # Enable Nvidia driver
   boot.kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_xanmod_stable;
-  services.xserver.displayManager.gdm.wayland = false;
   nixpkgs.config.allowUnfree = true;
   # Make sure opengl is enabled
   hardware.opengl = {
@@ -99,14 +93,5 @@
     ];
   };
 
-  # Sunshine config, for remote access
-  # systemctl --user enable sunshine.service
-  services.xserver.displayManager.autoLogin.user = "heywoodlh";
-  users.users.heywoodlh.extraGroups = [ "input" ];
-  services.sunshine.enable = true;
-
   system.stateVersion = "23.11";
-
-  # Switch shell to bash to match servers default shell
-  users.users.heywoodlh.shell = lib.mkForce "${pkgs.bash}/bin/bash";
 }

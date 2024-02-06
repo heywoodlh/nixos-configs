@@ -4,6 +4,11 @@
   imports = [
     ./base.nix
   ];
+
+  home.packages = with pkgs; [
+    libvirt
+  ];
+
   # So that `nix search` works
   nix = lib.mkForce {
     package = pkgs.nix;

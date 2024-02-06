@@ -56,7 +56,6 @@ in {
     jq
     lefthook
     libarchive
-    libvirt
     lima
     mosh
     nixos-rebuild

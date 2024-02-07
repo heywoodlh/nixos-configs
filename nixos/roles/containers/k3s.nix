@@ -15,4 +15,12 @@ in {
     ipset
     openiscsi
   ];
+  security.pam.loginLimits = [
+    {
+      domain = "*";
+      type = "-";
+      item = "nofile";
+      value = "9192";
+    }
+  ];
 }

@@ -93,17 +93,5 @@
     ];
   };
 
-  nix.settings.substituters = lib.mkForce [
-    "https://nix-community.cachix.org"
-    "https://cache.nixos.org/"
-  ];
-
-  networking.proxy = {
-    default = lib.mkForce "";
-    httpProxy = lib.mkForce "";
-    httpsProxy = lib.mkForce "";
-    noProxy = lib.mkForce "";
-  };
-
   system.stateVersion = "23.11";
 }

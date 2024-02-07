@@ -16,11 +16,6 @@
   boot.kernelModules = [ "wl" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
 
-  # Setup keyfile
-  boot.initrd.secrets = {
-    "/crypto_keyfile.bin" = null;
-  };
-
   networking.hostName = "nixos-mac-mini"; # Define your hostname.
 
   # Enable networking

@@ -158,9 +158,9 @@ in {
 
       [protonmail]
       source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143
-      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/erkt5oy644dks54kax57ib2rue/password'
-      outgoing = smtp+plain://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25
-      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/erkt5oy644dks54kax57ib2rue/password'
+      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/ryivzwmpoawrujyggsdi42jtqe/password'
+      outgoing = smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25
+      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/ryivzwmpoawrujyggsdi42jtqe/password'
       default = INBOX
       copy-to = Sent
       from = Spencer Heywood <l.spencer.heywood@protonmail.com>

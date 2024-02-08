@@ -21,6 +21,17 @@ in {
     openFirewall = true;
     dataDir = "/opt/plex";
     user = "media";
+    extraPlugins = [
+      (builtins.path {
+        name = "Audnexus.bundle";
+        path = pkgs.fetchFromGitHub {
+          owner = "djdembeck";
+          repo = "Audnexus.bundle";
+          rev = "v1.3.1";
+          sha256 = "sha256-HgbPZdKZq3uT44n+4owjPajBbkEENexyPwkFuriiqU4=";
+        };
+      })
+    ];
   };
 
   services.lidarr = {

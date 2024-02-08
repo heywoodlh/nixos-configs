@@ -65,7 +65,7 @@ in {
     backend = "docker";
     containers = {
       tautulli = {
-        image = "docker.io/linuxserver/tautulli:2.11.1";
+        image = "docker.io/linuxserver/tautulli:2.13.4";
         autoStart = true;
         ports = ["8181:8181"];
         volumes = [

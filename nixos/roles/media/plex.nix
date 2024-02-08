@@ -6,6 +6,7 @@ in {
   networking.firewall.allowedTCPPorts = [
     8081
     8181
+    3000
   ];
 
   users.groups.media = {};
@@ -59,6 +60,19 @@ in {
         volumes = [
           "/opt/tautulli/config:/config"
           "/opt/tautulli/scripts:/scripts"
+        ];
+      };
+      openaudible = {
+        image = "docker.io/heywoodlh/openaudible:2024_02";
+        autoStart = true;
+        ports = ["3000:3000"];
+        environment = {
+          PGID = "995";
+          PUID = "995";
+        };
+        volumes = [
+          "/opt/openaudible:/config/OpenAudible"
+          "/media/home-media/disk2/books:/media/home-media/disk2/books"
         ];
       };
     };

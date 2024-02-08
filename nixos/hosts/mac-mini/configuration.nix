@@ -33,6 +33,8 @@
       (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
     ];
     home.packages = with pkgs; [
+      remmina
+      rustdesk
       signal-desktop
       spicetify.packages.x86_64-linux.nord-text
       webcord

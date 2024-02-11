@@ -12,7 +12,6 @@ in {
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = false;
-  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/40adb1af-7c06-47fc-99bb-80d61ff8cd8e";
 
   # Enable networking
   networking.networkmanager.enable = true;

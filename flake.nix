@@ -2,15 +2,17 @@
   description = "heywoodlh nix config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-lts.url = "github:nixos/nixpkgs/nixos-unstable"; # Separate input for overriding
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     myFlakes.url = "github:heywoodlh/flakes";
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-23.11";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
-    nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon/main";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    darwin.url = "github:LnL7/nix-darwin/master";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    darwin = {
+      url = "github:LnL7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon";
     ssh-keys = {
       url = "https://github.com/heywoodlh.keys";
       flake = false;
@@ -52,7 +54,6 @@
                       nixpkgs-stable,
                       nixpkgs-backports,
                       nixpkgs-lts,
-                      nixos-apple-silicon,
                       nixos-wsl,
                       darwin,
                       home-manager,

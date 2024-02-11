@@ -62,7 +62,6 @@ in {
     pkgs.libnotify #(notify-send)
     pkgs.nixos-install-tools
     pkgs.nordic
-    pkgs.mullvad-browser
     pkgs.pinentry-rofi
     pkgs.rofi
     pkgs.tailscale
@@ -144,7 +143,7 @@ in {
       Name=Mullvad Browser
       GenericName=browser
       Comment=Browse the web
-      Exec=${pkgs.mullvad-browser}/bin/mullvad-browser
+      Exec=${pkgs.firefox}/bin/firefox
       Terminal=false
       Type=Application
       Keywords=browser;internet;

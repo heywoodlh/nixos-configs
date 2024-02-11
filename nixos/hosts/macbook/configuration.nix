@@ -25,8 +25,8 @@ in {
 
   # Configuration for this machine
   environment.systemPackages = with pkgs; [
-    #rustdesk
-    #signal-desktop
+    psst
+    signal-desktop
     webcord
   ];
 

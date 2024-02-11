@@ -8,6 +8,7 @@ let
     url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
     sha256 = "sha256:0pd45ya86x1z00fb67aqhmmvm7pk50awkmw3bigmhhiwd4lv9n6h";
   };
+  browserBin = if system == "aarch64-linux" then "${pkgs.firefox}/bin/firefox" else "${pkgs.mullvad-browser}/bin/mullvad-browser";
 in {
   # Webcord Nord theme
   home.file.".config/WebCord/Themes/nordic.theme.css" = {
@@ -143,7 +144,7 @@ in {
       Name=Mullvad Browser
       GenericName=browser
       Comment=Browse the web
-      Exec=${pkgs.firefox}/bin/firefox
+      Exec=${browserBin}
       Terminal=false
       Type=Application
       Keywords=browser;internet;

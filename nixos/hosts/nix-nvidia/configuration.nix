@@ -81,16 +81,51 @@
     ];
   };
 
-  # Exposed ports
-  networking.firewall = {
-    allowedUDPPorts = [
-      9995
-    ];
-    allowedTCPPorts = [
-      443
-      3389
-      5900
-    ];
+  # Enable mullvad wireguard
+  networking.wg-quick.interfaces = {
+    mullvad = {
+      address = [ "10.69.133.48/32" ];
+      privateKeyFile = "/root/wgkey";
+      listenPort = 51820;
+
+      peers = [
+        {
+          publicKey = "ioipHdOYhc4nVsQKghmJy/vvnMI38VLLFNZXWgxxOx8=";
+          allowedIPs = [ "10.64.0.1/24" ];
+          endpoint = "69.4.234.139:51820";
+          persistentKeepalive = 25;
+        }
+      ];
+    };
+  };
+
+  # Forward port 1080 to tailscale interface to mullvad
+  networking = {
+    firewall = {
+      enable = true;
+      allowedUDPPorts = [
+        9995
+      ];
+      allowedTCPPorts = [
+        1080
+        443
+        3389
+        5900
+      ];
+      extraCommands = "iptables -t nat -A POSTROUTING -d 10.64.0.1 -p tcp -m tcp --dport 1080 -j MASQUERADE";
+    };
+    nat = {
+      enable = true;
+      internalInterfaces = [ "mullvad" ];
+      externalInterface = "tailscale0";
+      forwardPorts = [
+        {
+          sourcePort = 1080;
+          proto = "tcp";
+          destination = "10.64.0.1:1080";
+        }
+      ];
+    };
   };
 
   system.stateVersion = "23.11";

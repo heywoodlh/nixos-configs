@@ -71,6 +71,7 @@ let
     "toolkit.telemetry.unifiedIsOptIn" = false;
     "toolkit.telemetry.updatePing.enabled" = false;
     "browser.sessionstore.restore_pinned_tabs_on_demand" = false;
+    "gfx.webrender.all" = true;
   };
   linuxUserChrome = if pkgs.stdenv.isDarwin then
   ""

@@ -25,7 +25,6 @@ in {
 
   # Configuration for this machine
   environment.systemPackages = with pkgs; [
-    psst
     signal-desktop
     webcord
   ];

@@ -8,7 +8,60 @@ let
     url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
     sha256 = "sha256:0pd45ya86x1z00fb67aqhmmvm7pk50awkmw3bigmhhiwd4lv9n6h";
   };
-  browserBin = if system == "aarch64-linux" then "${pkgs.firefox}/bin/firefox" else "${pkgs.mullvad-browser}/bin/mullvad-browser";
+  browserBin = if system == "aarch64-linux" then "MESA_GL_VERSION_OVERRIDE=3.3 MESA_GLSL_VERSION_OVERRIDE=330 MESA_GLES_VERSION_OVERRIDE=3.1 MOZ_ENABLE_WAYLAND=1 ${pkgs.firefox}/bin/firefox" else "${pkgs.mullvad-browser}/bin/mullvad-browser";
+
+  # Widevine
+  lacrosVersion = "120.0.6098.0";
+  widevine-installer = pkgs.stdenv.mkDerivation rec {
+    name = "widevine-installer";
+    version = "7a3928fe1342fb07d96f61c2b094e3287588958b";
+    src = pkgs.fetchFromGitHub {
+      owner = "AsahiLinux";
+      repo = "${name}";
+      rev = "${version}";
+      sha256 = "sha256-XI1y4pVNpXS+jqFs0KyVMrxcULOJ5rADsgvwfLF6e0Y=";
+    };
+
+    buildInputs = with pkgs; [ which python3 squashfsTools ];
+
+    installPhase = ''
+      mkdir -p "$out/bin"
+      cp widevine-installer "$out/bin/"
+      cp widevine_fixup.py "$out/bin/"
+      echo "$(which unsquashfs)"
+      sed -e "s|unsquashfs|$(which unsquashfs)|" -i "$out/bin/widevine-installer"
+      sed -e "s|python3|$(which python3)|" -i "$out/bin/widevine-installer"
+      sed -e "s|read|#read|" -i "$out/bin/widevine-installer"
+      sed -e 's|$(whoami)|root|' -i "$out/bin/widevine-installer"
+      sed -e 's|URL=.*|URL="$DISTFILES_BASE"|' -i "$out/bin/widevine-installer"
+    '';
+  };
+  widevine = pkgs.stdenv.mkDerivation {
+    name = "widevine";
+    version = "";
+    buildInputs = with pkgs; [ curl widevine-installer ];
+
+    src = pkgs.fetchurl {
+      urls = [ "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/chromeos-lacros-arm64-squash-zstd-${lacrosVersion}" ];
+      hash = "sha256-OKV8w5da9oZ1oSGbADVPCIkP9Y0MVLaQ3PXS3ZBLFXY=";
+    };
+
+    unpackPhase = "true";
+    installPhase = ''
+      mkdir -p "$out/"
+      COPY_CONFIGS=0 INSTALL_BASE="$out" DISTFILES_BASE="file://$src" widevine-installer
+    '';
+  };
+  chromiumWV = pkgs.runCommand "chromium-wv" { version = pkgs.chromium.version; }
+      ''
+        mkdir -p $out
+        cp -a ${pkgs.chromium.browser}/* $out/
+        chmod u+w $out/libexec/chromium
+        cp -Lr ${widevine}/WidevineCdm $out/libexec/chromium/
+      '';
+  chromiumWidevineWrapper = pkgs.chromium.overrideAttrs (prev: {
+    buildCommand = builtins.replaceStrings [ "${pkgs.chromium.browser}" ] [ "${chromiumWV}" ] prev.buildCommand;
+  });
 in {
   # Webcord Nord theme
   home.file.".config/WebCord/Themes/nordic.theme.css" = {
@@ -150,6 +203,38 @@ in {
       Keywords=browser;internet;
       Icon=${snowflake}
       Categories=Utility;
+    '';
+  };
+
+  home.file.".local/share/applications/chromium-browser.desktop" = {
+    enable = system == "aarch64-linux";
+    text = ''
+      [Desktop Entry]
+      Name=Chromium
+      GenericName=browser
+      Comment=Chromium browser with Widevine
+      Exec=${chromiumWidevineWrapper}/bin/chromium
+      Terminal=false
+      Type=Application
+      Keywords=browser;internet;
+      Icon=${snowflake}
+      Categories=Utility;
+    '';
+  };
+
+  home.file.".local/share/applications/spotify.desktop" = {
+    enable = system == "aarch64-linux";
+    text = ''
+      [Desktop Entry]
+      Name=Spotify
+      GenericName=music
+      Comment=Listen to Spotify
+      Exec=${chromiumWidevineWrapper}/bin/chromium --app=https://open.spotify.com
+      Terminal=false
+      Type=Application
+      Keywords=music;
+      Icon=${snowflake}
+      Categories=Music;
     '';
   };
 

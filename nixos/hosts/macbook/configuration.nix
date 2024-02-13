@@ -1,4 +1,4 @@
-{ config, pkgs, spicetify, ... }:
+{ config, pkgs, spicetify, hyprland, ... }:
 
 let
   hostname = "nixos-macbook";
@@ -28,6 +28,23 @@ in {
     signal-desktop
     webcord
   ];
+
+  # Hyprland configs
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+  security.pam.services.swaylock.text = "auth include login";
+  hardware.brillo.enable = true;
+
+  home-manager = {
+    users.heywoodlh = { ... }: {
+      imports = [
+        hyprland.homeManagerModules.default
+        ../../../roles/home-manager/linux/hyprland.nix
+      ];
+    };
+  };
 
   system.stateVersion = "23.11";
 }

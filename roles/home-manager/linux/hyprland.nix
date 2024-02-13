@@ -1,18 +1,18 @@
-{ config, pkgs, lib, home-manager, hyprland, ... }:
+{ config, pkgs, lib, home-manager, hyprland, myFlakes, nixos-artwork, ... }:
 
 let
+  system = pkgs.system;
   homeDir = config.home.homeDirectory;
+  myWezterm = myFlakes.packages.${system}.wezterm;
 in {
   home.packages = with pkgs; [
     acpi
     bluetuith
     bluez
     brillo
-    coreutils
     dunst
     grim
     polkit-kde-agent
-    jq
     libnotify
     pavucontrol
     playerctl
@@ -23,20 +23,11 @@ in {
     swayidle
     swaylock-effects
     util-linux
-    webcord # Discord client that works nicely with Hyprland
     wf-recorder
     wireplumber
     wl-clipboard
     xdg-desktop-portal-hyprland
   ];
-
-  # Download wallpaper
-  home.file.".wallpaper.png" = {
-    source = builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
-      sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
-    };
-  };
 
   # Dunst config
   services.dunst = {
@@ -336,7 +327,7 @@ in {
     enable = true;
     package = pkgs.swaylock-effects;
     settings = {
-      image = "${homeDir}/.wallpaper.png";
+      image = "${nixos-artwork}/wallpapers/nix-wallpaper-dracula.png";
       bs-hl-color = "b48eadff";
       caps-lock-bs-hl-color = "d08770ff";
       caps-lock-key-hl-color = "ebcb8bff";
@@ -411,9 +402,9 @@ in {
       exec-once = ${homeDir}/.nix-profile/bin/1password --silent
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
-      exec-once = ${pkgs.swaybg}/bin/swaybg -i ${homeDir}/.wallpaper.png
+      exec-once = ${pkgs.swaybg}/bin/swaybg -i ${nixos-artwork}/wallpapers/nix-wallpaper-dracula.png
       ## Start wezterm in special workspace so I can toggle it
-      exec-once = [workspace special:terminal] wezterm
+      exec-once = [workspace special:terminal] ${myWezterm}/bin/wezterm
       # Animations
       animations {
         enabled = yes
@@ -434,7 +425,7 @@ in {
       misc {
         disable_hyprland_logo = true
         disable_splash_rendering = true
-        suppress_portal_warnings = true
+        #suppress_portal_warnings = true
       }
 
       ## Window rules
@@ -463,8 +454,8 @@ in {
       # General Keybindings
       $mainMod = SUPER
       ## Terminal
-      bind = $mainMod, Return, exec, wezterm
-      bind = CTRL_ALT, t, exec, wezterm
+      bind = $mainMod, Return, exec, ${myWezterm}/bin/wezterm
+      bind = CTRL_ALT, t, exec, ${myWezterm}/bin/wezterm
       bind = CTRL, grave, togglespecialworkspace, terminal
       ## 1Password
       bind = CTRL_SUPER, s, exec, ${homeDir}/bin/1password-toggle.sh

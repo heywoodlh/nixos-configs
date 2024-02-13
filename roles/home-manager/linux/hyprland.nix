@@ -460,7 +460,7 @@ in {
       ## 1Password
       bind = CTRL_SUPER, s, exec, ${homeDir}/bin/1password-toggle.sh
       ## Launcher
-      bind = $mainMod, Space, exec, fuzzel
+      bind = $mainMod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel -I
       ## Lock screen
       bind = $mainMod, l, exec, ${pkgs.swaylock-effects}/bin/swaylock
       ## Remap caps lock to super

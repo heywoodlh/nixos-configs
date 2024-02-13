@@ -16,6 +16,11 @@
     experimentalGPUInstallMode = "replace";
   };
 
+  environment.sessionVariables = rec {
+    COGL_DEBUG = "sync-frame";
+    CLUTTER_PAINT = "disable-dynamic-max-render-time";
+  };
+
   boot.extraModprobeConfig = ''
     options hid_apple swap_fn_leftctrl=1
   '';

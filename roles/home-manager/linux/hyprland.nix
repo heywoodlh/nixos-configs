@@ -492,6 +492,8 @@ in {
       bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
       bind = CTRL_SHIFT, f, exec, ${homeDir}/bin/applications.sh
       bind = CTRL_SHIFT, e, exec, hyprctl dispatch exit
+      bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
+      bind = CTRL_SHIFT, d, exec, ${pkgs.bash}/bin/bash -c '${pkgs.libnotify}/bin/notify-send $(date "+%T")'
 
       ## Navigation
       bind = $mainMod, 1, workspace, 1

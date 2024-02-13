@@ -24,6 +24,7 @@ in {
   i18n.defaultLocale = "en_US.utf8";
 
   # Configuration for this machine
+  services.xserver.displayManager.defaultSession = "hyprland";
   environment.systemPackages = with pkgs; [
     signal-desktop
     webcord

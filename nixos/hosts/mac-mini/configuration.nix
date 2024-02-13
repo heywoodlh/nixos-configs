@@ -28,6 +28,7 @@
   i18n.defaultLocale = "en_US.utf8";
 
   # Configuration for this machine
+  services.xserver.displayManager.defaultSession = "hyprland";
   home-manager.users.heywoodlh = {
     imports = [
       (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
@@ -39,6 +40,7 @@
       '';
     };
     home.packages = with pkgs; [
+      moonlight-qt
       remmina
       rustdesk
       signal-desktop

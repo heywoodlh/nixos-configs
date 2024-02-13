@@ -43,7 +43,7 @@ in {
       "heywoodlh"
     ];
     trusted-public-keys = [
-      #"hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
       "binarycache.heywoodlh.io:hT9E35rju+9L2CE/SDGUsytJtIZJfqVma7B7cp7Jym4=" # nix-nvidia
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
@@ -81,12 +81,12 @@ in {
   };
 
   # Enable hyprland
-  #programs.hyprland = {
-  #  enable = true;
-  #  xwayland.enable = true;
-  #};
-  #security.pam.services.swaylock.text = "auth include login";
-  #hardware.brillo.enable = true;
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+  security.pam.services.swaylock.text = "auth include login";
+  hardware.brillo.enable = true;
 
   # Enable kde connect
   programs.kdeconnect.enable = true;
@@ -249,8 +249,8 @@ in {
         ../roles/home-manager/linux/desktop.nix # linux-specific desktop.nix
         ../roles/home-manager/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.default
-        #hyprland.homeManagerModules.default
-        #../roles/home-manager/linux/hyprland.nix
+        hyprland.homeManagerModules.default
+        ../roles/home-manager/linux/hyprland.nix
       ];
       home.packages = [
         myFlakes.packages.${system}.git

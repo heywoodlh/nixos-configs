@@ -178,7 +178,7 @@ in {
   };
 
   programs.newsboat = {
-    enable = true;
+    enable = pkgs.stdenv.isLinux;
     extraConfig = ''
       urls-source "miniflux"
       miniflux-url "https://feeds.heywoodlh.io"

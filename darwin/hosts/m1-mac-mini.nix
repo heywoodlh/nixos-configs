@@ -2,7 +2,7 @@
 
 
 let
-  hostname = "nix-m1-mac-mini";
+  hostname = "mac-mini";
   username = "heywoodlh";
 in {
   imports = [
@@ -45,8 +45,8 @@ in {
       "libolm"
     ];
     casks = [
-      "discord"
       "screens"
+      "signal"
       "vmware-fusion"
       "zoom"
     ];

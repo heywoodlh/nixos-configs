@@ -1,4 +1,4 @@
-{ config, pkgs, myFlakes, nixpkgs-stable, ... }:
+{ config, pkgs, myFlakes, ... }:
 
 let
   system = pkgs.system;
@@ -15,7 +15,7 @@ in {
     };
     linux-builder = {
       enable = true;
-      package = nixpkgs-stable.legacyPackages.${system}.darwin.linux-builder;
+      package = pkgs.darwin.linux-builder;
     };
   };
   services.activate-system.enable = true;

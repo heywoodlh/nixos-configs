@@ -90,7 +90,7 @@
           }
         ];
       };
-      "nix-m1-mac-mini" = darwin.lib.darwinSystem {
+      "mac-mini" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs;
         modules = [

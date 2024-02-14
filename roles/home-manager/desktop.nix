@@ -170,7 +170,7 @@ let
             }
             {
               name = "home-manager configuration options";
-              url = "https://nix-community.github.io/home-manager/options.html";
+              url = "https://nix-community.github.io/home-manager/options.xhtml";
             }
             {
               name = "nix-darwin configuration options";

@@ -35,7 +35,7 @@
       flake = false;
     };
     nur.url = "github:nix-community/NUR";
-    spicetify.url = "github:heywoodlh/spicetify-nix";
+    spicetify.url = "gitlab:heywoodlh/spicetify-nix/cb6493a2eed7726a90e219f34e84c13c71233ff6";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flatpaks.url = "github:GermanBread/declarative-flatpak/stable";
     nix-on-droid = {
@@ -46,6 +46,7 @@
       url = "github:NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae";
       flake = false;
     };
+    choose-nixpkgs.url = "github:heywoodlh/nixpkgs/b0025018535256ce462b4aa2e39677eb110d38b2";
   };
 
   outputs = inputs@{ self,
@@ -69,6 +70,7 @@
                       nix-on-droid,
                       nixos-artwork,
                       hyprland,
+                      choose-nixpkgs,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

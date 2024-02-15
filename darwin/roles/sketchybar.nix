@@ -92,7 +92,6 @@ let
   '';
   spotify-indicator-sh = pkgs.writeShellScriptBin "spotify-indicator.sh" ''
     RUNNING="$(osascript -e 'if application "Spotify" is running then return 0')"
-    sketchybar --set "$NAME" updates=on
     if [ $RUNNING != 0 ]
     then
       RUNNING=1
@@ -123,7 +122,6 @@ let
       sketchybar -m --set "$NAME" label="" drawing=off
     fi
   '';
-
 in {
   services.sketchybar = {
     enable = true;
@@ -197,32 +195,32 @@ in {
           --set code click_script="$HOME/.nix-profile/bin/wezterm" \
 
         # SPACE 3: MUSIC ICON
-        sketchybar -m --add space music left \
-          --set music icon= \
-          --set music icon.highlight_color=0xff8CABC8 \
-          --set music associated_display=1 \
-          --set music associated_space=5 \
-          --set music icon.padding_left=5 \
-          --set music icon.padding_right=5 \
-          --set music label.padding_right=0 \
-          --set music label.padding_left=0 \
-          --set music label.color=0xffeceff4 \
-          --set music background.color=0xff57627A  \
-          --set music background.height=21 \
-          --set music background.padding_left=7 \
-          --set music click_script="open -a Spotify.app" \
+        #sketchybar -m --add space music left \
+        #  --set music icon= \
+        #  --set music icon.highlight_color=0xff8CABC8 \
+        #  --set music associated_display=1 \
+        #  --set music associated_space=5 \
+        #  --set music icon.padding_left=5 \
+        #  --set music icon.padding_right=5 \
+        #  --set music label.padding_right=0 \
+        #  --set music label.padding_left=0 \
+        #  --set music label.color=0xffeceff4 \
+        #  --set music background.color=0xff57627A  \
+        #  --set music background.height=21 \
+        #  --set music background.padding_left=7 \
+        #  --set music click_script="open -a Spotify.app" \
 
         # SPOTIFY STATUS
         # CURRENT SPOTIFY SONG
         # Adding custom events which can listen on distributed notifications from other running processes
-        sketchybar -m --add event spotify_change "com.spotify.client.PlaybackStateChanged" \
-          --add item spotify_indicator left \
-          --set spotify_indicator background.color=0xff57627A  \
-          --set spotify_indicator background.height=21 \
-          --set spotify_indicator background.padding_left=7 \
-          --set spotify_indicator script="${spotify-indicator-sh}/bin/spotify-indicator.sh" \
-          --set spotify_indicator click_script="osascript -e 'tell application \"Spotify\" to pause'" \
-          --subscribe spotify_indicator spotify_change \
+        #sketchybar -m --add event spotify_change "com.spotify.client.PlaybackStateChanged" \
+        #  --add item spotify_indicator left \
+        #  --set spotify_indicator background.color=0xff57627A  \
+        #  --set spotify_indicator background.height=21 \
+        #  --set spotify_indicator background.padding_left=7 \
+        #  --set spotify_indicator script="${spotify-indicator-sh}/bin/spotify-indicator.sh" \
+        #  --set spotify_indicator click_script="osascript -e 'tell application \"Spotify\" to pause'" \
+        #  --subscribe spotify_indicator spotify_change \
 
       ############## ITEM DEFAULTS ###############
         sketchybar -m --default \

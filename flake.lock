@@ -5268,11 +5268,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1707919853,
-        "narHash": "sha256-qxmBGDzutuJ/tsX4gp+Mr7fjxOZBbeT9ixhS5o4iFOw=",
+        "lastModified": 1708031129,
+        "narHash": "sha256-EH20hJfNnc1/ODdDVat9B7aKm0B95L3YtkIRwKLvQG8=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "043ba285c6dc20f36441d48525402bcb9743c498",
+        "rev": "3d6791b3897b526c82920a2ab5f61d71985b3cf8",
         "type": "github"
       },
       "original": {
@@ -5541,11 +5541,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1707958746,
-        "narHash": "sha256-rvbx5aq9IXQyceBdiQeKFiDKQcN957uF8S1bC7p4zZU=",
+        "lastModified": 1708018354,
+        "narHash": "sha256-MlbqBzAjiz4Va2M/AvLN96Wq+jsCbEedhfMs5wW1yFM=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "ef490965a23e043692584ae26dec4f863c88f2f6",
+        "rev": "fbf5ba87ce57752653f3bebf6e2be090c702836e",
         "type": "github"
       },
       "original": {
@@ -5763,11 +5763,11 @@
     "jovian-nixos": {
       "flake": false,
       "locked": {
-        "lastModified": 1707845461,
-        "narHash": "sha256-aTAhJyNvMzYjncOAUWyKdFdjmaRbDx5xhYflf1S+oHc=",
+        "lastModified": 1708007093,
+        "narHash": "sha256-VaBFhJJYn6Jd5SP81K7PpDLDRuLZ4qxN6NbnhAvmLRw=",
         "ref": "development",
-        "rev": "c87a9c5aa904e98a49c66ab82322b754598a4256",
-        "revCount": 649,
+        "rev": "b50eb66618fb15e973789e55a301cd0274404ae5",
+        "revCount": 660,
         "type": "git",
         "url": "https://github.com/Jovian-Experiments/Jovian-NixOS"
       },
@@ -8501,11 +8501,11 @@
     },
     "nixpkgs-lts_9": {
       "locked": {
-        "lastModified": 1707877513,
-        "narHash": "sha256-sp0w2apswd3wv0sAEF7StOGHkns3XUQaO5erhWFZWXk=",
+        "lastModified": 1707939175,
+        "narHash": "sha256-D1xan0lgxbmXDyzVqXTiSYHLmAMrMRdD+alKzEO/p3w=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "89653a03e0915e4a872788d10680e7eec92f8600",
+        "rev": "f7e8132daca31b1e3859ac0fb49741754375ac3d",
         "type": "github"
       },
       "original": {
@@ -8565,11 +8565,11 @@
     },
     "nixpkgs-stable_2": {
       "locked": {
-        "lastModified": 1707959586,
-        "narHash": "sha256-7b1KAtqklDx6cCrWf1b4R+0xL5zv55boNWfCrMsU1DY=",
+        "lastModified": 1708010317,
+        "narHash": "sha256-aUpx73pVvVag2Nyt7Ch2KfpBOh5BsIwHDINKW3pHCIc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "a1ac64b8a1298831d57510c00a5cdb396df07a61",
+        "rev": "0ca77ade2a34c5466be6d54f1267507860c95da8",
         "type": "github"
       },
       "original": {
@@ -8706,11 +8706,11 @@
     },
     "nixpkgs_107": {
       "locked": {
-        "lastModified": 1707877513,
-        "narHash": "sha256-sp0w2apswd3wv0sAEF7StOGHkns3XUQaO5erhWFZWXk=",
+        "lastModified": 1707939175,
+        "narHash": "sha256-D1xan0lgxbmXDyzVqXTiSYHLmAMrMRdD+alKzEO/p3w=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "89653a03e0915e4a872788d10680e7eec92f8600",
+        "rev": "f7e8132daca31b1e3859ac0fb49741754375ac3d",
         "type": "github"
       },
       "original": {
@@ -10474,11 +10474,11 @@
     },
     "nur_9": {
       "locked": {
-        "lastModified": 1707959104,
-        "narHash": "sha256-Y3Yf/fGLYRgxwHutp/flFv3YCcAE4bcfnrkefPtX5+o=",
+        "lastModified": 1708041837,
+        "narHash": "sha256-x7kuIR3qi0+9A8p9W3D1es/GtGrnEF/x8tQnQDY7ljQ=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "5e350241541dfd9f2d5a9ef37653d08957ed12f3",
+        "rev": "d0869493d7569fcfcc439273ca96e36acca35717",
         "type": "github"
       },
       "original": {
@@ -11611,17 +11611,17 @@
         "spicetify-themes-alindl": "spicetify-themes-alindl_9"
       },
       "locked": {
-        "lastModified": 1707956837,
-        "narHash": "sha256-YH3wtK3vl4gZ6QEHOfEZhwKpd3X28VSwBJC77sNqetY=",
+        "lastModified": 1708042689,
+        "narHash": "sha256-haXuojw2ZiTbhq5XvR0uZYHREtMA0ZR+KejIcx9j6AI=",
         "owner": "heywoodlh",
         "repo": "spicetify-nix",
-        "rev": "cb6493a2eed7726a90e219f34e84c13c71233ff6",
+        "rev": "cd176aa4d4f554425e36eef901fdc4e2bd202969",
         "type": "gitlab"
       },
       "original": {
         "owner": "heywoodlh",
+        "ref": "macos-updates-fix",
         "repo": "spicetify-nix",
-        "rev": "cb6493a2eed7726a90e219f34e84c13c71233ff6",
         "type": "gitlab"
       }
     },

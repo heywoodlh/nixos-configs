@@ -35,7 +35,7 @@
       flake = false;
     };
     nur.url = "github:nix-community/NUR";
-    spicetify.url = "gitlab:heywoodlh/spicetify-nix/cb6493a2eed7726a90e219f34e84c13c71233ff6";
+    spicetify.url = "gitlab:heywoodlh/spicetify-nix/macos-updates-fix";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flatpaks.url = "github:GermanBread/declarative-flatpak/stable";
     nix-on-droid = {

@@ -108,7 +108,7 @@ in {
 
   home.activation = {
     aerc-link = ''
-      ln -s ${homeDir}/.config/aerc ${homeDir}/Library/Preferences/aerc || true
+      ln -s ${homeDir}/.config/aerc ${homeDir}/Library/Preferences/aerc &>/dev/null || true
     '';
   };
 }

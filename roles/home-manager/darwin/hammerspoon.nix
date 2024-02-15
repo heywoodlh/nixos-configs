@@ -1,4 +1,4 @@
-{ config, pkgs, myFlakes, choose-nixpkgs, ... }:
+{ config, lib, pkgs, myFlakes, choose-nixpkgs, ... }:
 
 let
   system = pkgs.system;
@@ -7,19 +7,28 @@ let
   choose = choose-nixpkgs.legacyPackages.${system}.choose-gui;
   choose-launcher-sh = pkgs.writeShellScriptBin "choose-launcher.sh" ''
     application_dirs="/Applications/ /System/Applications/ /System/Library/CoreServices/ /System/Applications/Utilities/"
+    PATH="''${HOME}/.nix-profile/bin:''${PATH}"
 
     if [ -e ''${HOME}/.nix-profile/Applications ]
     then
-    	application_dirs="''${application_dirs} ''${HOME}/.nix-profile/Applications"
+      application_dirs="''${application_dirs} ''${HOME}/.nix-profile/Applications"
     fi
     if [ -e ''${HOME}/Applications ]
     then
-    	application_dirs="''${application_dirs} ''${HOME}/Applications"
+      application_dirs="''${application_dirs} ''${HOME}/Applications"
     fi
 
-    selection=$(/bin/ls ''${application_dirs} | /usr/bin/grep -v -E 'Applications/:|Applications:' | /usr/bin/grep '.app' | /usr/bin/sort -u | ${choose}/bin/choose)
+    currentPath="$(echo ''${PATH} | /usr/bin/sed 's/:/ /g')"
 
-    open -a "''${selection}"
+    selection=$(/bin/ls ''${application_dirs} ''${currentPath} | /usr/bin/grep -vE 'Applications/:|Applications:|\:' | /usr/bin/sort -u | ${choose}/bin/choose)
+
+    if echo "''${selection}" | grep -q ".app"
+    then
+      open -a "''${selection}"
+    else
+      binary="$(which ''${selection})" && exec ''${binary}
+    fi
+
   '';
 
   hammerspoon-lua = ''
@@ -54,7 +63,7 @@ let
 
     hs.hotkey.bind({"cmd"}, "space", function()
         hs.execute("${choose-launcher-sh}/bin/choose-launcher.sh")
-    end)
+     end)
   '';
 in {
   home.file.".hammerspoon/init.lua" = {
@@ -65,4 +74,22 @@ in {
     executable = true;
     source = "${choose-launcher-sh}/bin/choose-launcher.sh";
   };
+
+  # Disable hotkeys
+  home.activation.disableHotkeys = let
+    hotkeys = [
+      64 # Spotlight
+    ];
+    disables = map (key:
+      "/usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add ${
+        toString key
+      } '<dict><key>enabled</key><false/></dict>'") hotkeys;
+  in lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    # Disable hotkeys
+    echo >&2 "hotkey suppression..."
+    set -e
+    ${lib.concatStringsSep "\n" disables}
+  '';
+
+
 }

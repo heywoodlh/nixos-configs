@@ -34,6 +34,7 @@ in {
         ../../roles/home-manager/darwin.nix
       ];
       home.packages = with pkgs; [
+        moonlight-qt
         spicetify.packages.aarch64-darwin.nord-text
         utm
       ];

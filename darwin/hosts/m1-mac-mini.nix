@@ -33,8 +33,9 @@ in {
         (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
         ../../roles/home-manager/darwin.nix
       ];
-      home.packages = [
+      home.packages = with pkgs; [
         spicetify.packages.aarch64-darwin.nord-text
+        utm
       ];
     };
   };

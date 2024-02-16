@@ -23,8 +23,11 @@ in {
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 
-  environment.systemPackages = with pkgs; [
-    docker-compose
+  # VMWare Fusion guest
+  virtualisation.vmware.guest.enable = true;
+  # Use host tailscale connection
+  networking.search = [
+    "barn-banana.ts.net"
   ];
 
   # Enable auto upgrade

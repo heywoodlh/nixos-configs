@@ -128,5 +128,8 @@
     };
   };
 
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+
   system.stateVersion = "23.11";
 }

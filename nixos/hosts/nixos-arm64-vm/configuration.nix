@@ -5,7 +5,7 @@ let
 in {
   imports =
   [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+    /etc/nixos/hardware-configuration.nix
     ../../desktop.nix
   ];
 
@@ -33,5 +33,5 @@ in {
     flake = "github:heywoodlh/nixos-configs#${hostname}";
   };
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "24.05";
 }

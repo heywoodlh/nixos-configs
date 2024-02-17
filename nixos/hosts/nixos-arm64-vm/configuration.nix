@@ -27,6 +27,8 @@ in {
   networking.search = [
     "barn-banana.ts.net"
   ];
+  # Use Rosetta2 in UTM
+  virtualisation.rosetta.enable = true;
 
   # Enable auto upgrade
   system.autoUpgrade = {

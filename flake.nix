@@ -80,7 +80,7 @@
     in {
     # macos targets
     packages.darwinConfigurations = {
-      "nix-macbook-air" = darwin.lib.darwinSystem {
+      "macbook-air" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs;
         modules = [

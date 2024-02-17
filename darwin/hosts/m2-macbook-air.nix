@@ -1,8 +1,8 @@
-{ config, pkgs, lib, home-manager, nur, myFlakes, mullvad-browser-home-manager, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, mullvad-browser-home-manager, choose-nixpkgs, spicetify, ... }:
 
 
 let
-  hostname = "nix-macbook-air";
+  hostname = "macbook-air";
   username = "heywoodlh";
 in {
   imports = [
@@ -25,12 +25,18 @@ in {
   home-manager = {
     extraSpecialArgs = {
       inherit myFlakes;
+      inherit choose-nixpkgs;
     };
     # Set home-manager configs for username
     users.${username} = { ... }: {
       imports = [
         (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
         ../../roles/home-manager/darwin.nix
+      ];
+      home.packages = with pkgs; [
+        moonlight-qt
+        spicetify.packages.aarch64-darwin.nord
+        utm
       ];
     };
   };
@@ -47,11 +53,9 @@ in {
       "diffusionbee"
       "discord"
       "microsoft-remote-desktop"
-      "moonlight"
       "screens"
       "signal"
       "vmware-fusion"
-      "whisky"
       "zoom"
     ];
   };

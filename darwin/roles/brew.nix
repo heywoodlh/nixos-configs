@@ -12,7 +12,6 @@
       "choose-gui"
       "cliclick"
       "pinentry-mac"
-      "virt-manager"
       "watch"
       "zsh"
     ];

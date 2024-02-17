@@ -35,7 +35,7 @@ in {
       ];
       home.packages = with pkgs; [
         moonlight-qt
-        spicetify.packages.aarch64-darwin.nord-text
+        spicetify.packages.aarch64-darwin.nord
         utm
       ];
     };

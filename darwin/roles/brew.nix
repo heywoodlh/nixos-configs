@@ -36,7 +36,6 @@
       "font-iosevka-nerd-font"
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"
-      "hammerspoon"
       "hiddenbar"
       "iterm2"
       "knockknock"

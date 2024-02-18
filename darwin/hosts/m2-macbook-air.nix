@@ -38,6 +38,11 @@ in {
         spicetify.packages.aarch64-darwin.nord
         utm
       ];
+      programs.mullvad-browser = {
+        profiles.home-manager = {
+          search.default = lib.mkForce "Mullvad Leta";
+        };
+      };
     };
   };
 

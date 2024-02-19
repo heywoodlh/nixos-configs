@@ -36,6 +36,7 @@ in {
       home.packages = with pkgs; [
         moonlight-qt
         spicetify.packages.aarch64-darwin.nord
+        virt-manager
         utm
       ];
       programs.mullvad-browser = {

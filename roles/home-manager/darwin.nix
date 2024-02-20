@@ -27,7 +27,7 @@ in {
   };
 
   home.packages = [
-    pkgs.colima
+    pkgs.docker-client
     pkgs.m-cli
     pkgs.mas
     pkgs.pinentry_mac
@@ -49,13 +49,14 @@ in {
     '';
   };
 
-  home.file."bin/docker" = {
+  home.file."bin/create-docker" = {
     enable = true;
     executable = true;
     text = ''
       #!/usr/bin/env bash
-      ${pkgs.colima}/bin/colima list | grep default | grep -q Running || ${pkgs.colima}/bin/colima start default # Start/create default colima instance if not running/created
-      ${pkgs.docker-client}/bin/docker ''$@
+      ${pkgs.lima}/bin/limactl list | grep default | grep -q Running || ${pkgs.lima}/bin/limactl start --name=default template://docker # Start/create default lima instance if not running/created
+      ${pkgs.docker-client}/bin/docker context create lima-default --docker "host=unix:///Users/heywoodlh/.lima/default/sock/docker.sock"
+      ${pkgs.docker-client}/bin/docker context use lima-default
     '';
   };
 

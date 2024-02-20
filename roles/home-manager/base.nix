@@ -14,7 +14,7 @@ let
   system = pkgs.system;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
-  myVM = myFlakes.packages.${system}.ubuntu-vm;
+  myVM = myFlakes.packages.${system}.nixos-vm;
   newsboat_browser = if pkgs.stdenv.isDarwin then ''
     browser "open %u"
   ''
@@ -25,7 +25,7 @@ let
   then "Library/Application Support/gomuks/keybindings.yaml"
   else ".config/gomuks/keybindings.yaml";
 in {
-  home.stateVersion = "23.05";
+  home.stateVersion = "23.11";
   home.enableNixpkgsReleaseCheck = false;
   nix = {
     package = pkgs.nix;

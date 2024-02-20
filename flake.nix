@@ -77,6 +77,8 @@
       inherit system;
       config.allowUnfree = true;
     };
+    arch = if pkgs.lib.hasInfix "aarch64" "${system}" then "aarch64" else "x86_64";
+    linuxSystem = "${arch}-linux";
     in {
     # macos targets
     packages.darwinConfigurations = {
@@ -177,6 +179,20 @@
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-backups/configuration.nix ];
+      };
+      nixos-lima-vm = nixpkgs.lib.nixosSystem {
+        system = "${linuxSystem}";
+        specialArgs = inputs;
+        modules = [
+          (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
+          (myFlakes + "/lima/lima-init.nix")
+          (myFlakes + "/lima/configuration.nix")
+          ./nixos/server.nix
+          {
+            networking.hostName = "nixos-lima-vm";
+            system.stateVersion = "24.05";
+          }
+        ];
       };
       # Used in CI
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {

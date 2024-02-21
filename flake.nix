@@ -217,10 +217,10 @@
         modules = [
           (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
           flatpaks.homeManagerModules.default
-          ./roles/home-manager/linux.nix
-          ./roles/home-manager/desktop.nix # Base desktop config
-          ./roles/home-manager/linux/desktop.nix # Linux-specific desktop config
-          ./roles/home-manager/linux/gnome-desktop.nix
+          ./home/linux.nix
+          ./home/desktop.nix # Base desktop config
+          ./home/linux/desktop.nix # Linux-specific desktop config
+          ./home/linux/gnome-desktop.nix
           {
             home = {
               username = "heywoodlh";
@@ -270,15 +270,15 @@
             };
           }
           #hyprland.homeManagerModules.default
-          #./roles/home-manager/linux/hyprland.nix
+          #./home/linux/hyprland.nix
         ];
         extraSpecialArgs = inputs;
       };
       heywoodlh-server = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          ./roles/home-manager/linux.nix
-          ./roles/home-manager/linux/no-desktop.nix
+          ./home/linux.nix
+          ./home/linux/no-desktop.nix
           {
             home = {
               username = "heywoodlh";

@@ -244,13 +244,13 @@ in {
     users.heywoodlh = { ... }: {
       imports = [
         (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
-        ../roles/home-manager/linux.nix
-        ../roles/home-manager/desktop.nix # base desktop.nix
-        ../roles/home-manager/linux/desktop.nix # linux-specific desktop.nix
-        ../roles/home-manager/linux/gnome-desktop.nix
+        ../home/linux.nix
+        ../home/desktop.nix # base desktop.nix
+        ../home/linux/desktop.nix # linux-specific desktop.nix
+        ../home/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.default
         #hyprland.homeManagerModules.default
-        #../roles/home-manager/linux/hyprland.nix
+        #../home/linux/hyprland.nix
       ];
       home.packages = [
         myFlakes.packages.${system}.git

@@ -109,8 +109,8 @@ in {
     };
     users.heywoodlh = { ... }: {
       imports = [
-        ../roles/home-manager/linux.nix
-        ../roles/home-manager/linux/no-desktop.nix
+        ../home/linux.nix
+        ../home/linux/no-desktop.nix
       ];
       home.file."bin/nixos-switch" = {
         enable = true;

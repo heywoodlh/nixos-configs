@@ -12,7 +12,7 @@ in {
     ../roles/yabai.nix
     ../roles/network.nix
     ../roles/sketchybar.nix
-    ../../roles/home-manager/darwin/settings.nix
+    ../../home/darwin/settings.nix
   ];
 
   # Define user settings
@@ -31,7 +31,7 @@ in {
     users.${username} = { ... }: {
       imports = [
         (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
-        ../../roles/home-manager/darwin.nix
+        ../../home/darwin.nix
       ];
       home.packages = with pkgs; [
         moonlight-qt

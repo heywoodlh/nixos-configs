@@ -81,10 +81,10 @@ in {
   };
 
   # Enable hyprland
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
+  #programs.hyprland = {
+  #  enable = true;
+  #  xwayland.enable = true;
+  #};
   security.pam.services.swaylock.text = "auth include login";
   hardware.brillo.enable = true;
 
@@ -249,8 +249,8 @@ in {
         ../roles/home-manager/linux/desktop.nix # linux-specific desktop.nix
         ../roles/home-manager/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.default
-        hyprland.homeManagerModules.default
-        ../roles/home-manager/linux/hyprland.nix
+        #hyprland.homeManagerModules.default
+        #../roles/home-manager/linux/hyprland.nix
       ];
       home.packages = [
         myFlakes.packages.${system}.git

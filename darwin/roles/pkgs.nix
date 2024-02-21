@@ -1,6 +1,18 @@
-{ config, ... }:
+{ config, pkgs, attic, ... }:
 
-{
+let
+  system = pkgs.system;
+  atticClient = attic.packages.${system}.attic-client;
+  configureCache = pkgs.writeShellScriptBin "nix-darwin-cache-config" ''
+    ${atticClient}/bin/attic cache configure nix-darwin --public
+    ${atticClient}/bin/attic cache configure nix-darwin --retention-period '7d'
+  '';
+in {
+  environment.systemPackages = [
+    atticClient
+    configureCache
+  ];
+
   #homebrew packages
   homebrew = {
     enable = true;

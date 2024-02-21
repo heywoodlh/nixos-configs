@@ -51,6 +51,7 @@
       url = "github:pop-os/cosmic-session";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    attic.url = "github:zhaofengli/attic";
   };
 
   outputs = inputs@{ self,
@@ -76,6 +77,7 @@
                       hyprland,
                       choose-nixpkgs,
                       cosmic-session,
+                      attic,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

@@ -8,11 +8,12 @@ in {
   imports = [
     ../roles/m1.nix
     ../roles/defaults.nix
-    ../roles/brew.nix
+    ../roles/pkgs.nix
     ../roles/yabai.nix
     ../roles/network.nix
     ../roles/sketchybar.nix
     ../../home/darwin/settings.nix
+    ../roles/binary-cache.nix
   ];
 
   # Define user settings

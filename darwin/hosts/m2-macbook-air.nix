@@ -8,7 +8,7 @@ in {
   imports = [
     ../roles/m1.nix
     ../roles/defaults.nix
-    ../roles/brew.nix
+    ../roles/pkgs.nix
     ../roles/network.nix
     ../roles/yabai.nix
     ../roles/sketchybar.nix

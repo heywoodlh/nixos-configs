@@ -7,7 +7,7 @@ let
 in {
   imports = [
     ../roles/defaults.nix
-    ../roles/brew.nix
+    ../roles/pkgs.nix
     ../roles/yabai.nix
     ../roles/network.nix
     ../../home/darwin/settings.nix

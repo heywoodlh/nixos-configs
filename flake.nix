@@ -47,6 +47,10 @@
       flake = false;
     };
     choose-nixpkgs.url = "github:heywoodlh/nixpkgs/b0025018535256ce462b4aa2e39677eb110d38b2";
+    cosmic-session = {
+      url = "github:pop-os/cosmic-session";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self,
@@ -71,6 +75,7 @@
                       nixos-artwork,
                       hyprland,
                       choose-nixpkgs,
+                      cosmic-session,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

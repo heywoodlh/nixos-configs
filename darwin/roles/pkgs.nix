@@ -7,10 +7,14 @@ let
     ${atticClient}/bin/attic cache configure nix-darwin --public
     ${atticClient}/bin/attic cache configure nix-darwin --retention-period '7d'
   '';
+  linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
+    sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
+  '';
 in {
   environment.systemPackages = [
     atticClient
     configureCache
+    linuxBuilderSsh
   ];
 
   #homebrew packages

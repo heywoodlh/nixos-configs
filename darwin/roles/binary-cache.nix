@@ -4,6 +4,11 @@ let
   system = pkgs.system;
   atticServer = attic.packages.${system}.attic-server;
   atticClient = attic.packages.${system}.attic-client;
+  configureCache = pkgs.writeShellScriptBin "nix-darwin-cache-config" ''
+    ${atticClient}/bin/attic cache create nix-darwin
+    ${atticClient}/bin/attic cache configure nix-darwin --public
+    ${atticClient}/bin/attic cache configure nix-darwin --retention-period '7d'
+  '';
   garbageCollectCache = pkgs.writeShellScriptBin "nix-darwin-cache-garbage-collect" ''
     ${atticServer}/bin/atticd --mode garbage-collector-once &>>/tmp/binary-cache.log
   '';
@@ -37,9 +42,12 @@ in {
   };
 
   environment.systemPackages = [
+    configureCache
     garbageCollectCache
     populateCache
   ];
 
-  nix.settings.substituters = lib.mkForce [ "" ]; # Disable substiter on binary cache
+  nix.settings.substituters = lib.mkForce [
+    "http://127.0.0.1:8080/nix-darwin"
+  ];
 }

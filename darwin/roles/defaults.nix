@@ -8,7 +8,6 @@ in {
   # nix configuration
   nix = {
     settings = {
-      auto-optimise-store = true;
       trusted-users = [
         "@admin"
       ];

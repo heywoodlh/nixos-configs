@@ -1,4 +1,4 @@
-{ config, pkgs, attic, ... }:
+{ config, pkgs, lib, attic, ... }:
 
 let
   system = pkgs.system;
@@ -21,7 +21,7 @@ let
     rm -rf /tmp/nixos-configs
   '';
   runCache = pkgs.writeShellScript "serve-cache" ''
-    ${atticServer}/bin/atticd --listen 100.117.204.9:8080 &>>/tmp/binary-cache.log
+    ${atticServer}/bin/atticd --listen 0.0.0.0:8080 &>>/tmp/binary-cache.log
   '';
 in {
   launchd.daemons.cache-populate = {
@@ -43,4 +43,6 @@ in {
     garbageCollectCache
     populateCache
   ];
+
+  nix.settings.substituters = lib.mkForce [ "" ]; # Disable substiter on binary cache
 }

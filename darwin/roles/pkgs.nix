@@ -4,6 +4,7 @@ let
   system = pkgs.system;
   atticClient = attic.packages.${system}.attic-client;
   configureCache = pkgs.writeShellScriptBin "nix-darwin-cache-config" ''
+    ${atticClient}/bin/attic cache create nix-darwin
     ${atticClient}/bin/attic cache configure nix-darwin --public
     ${atticClient}/bin/attic cache configure nix-darwin --retention-period '7d'
   '';
@@ -11,11 +12,19 @@ let
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
 in {
+  #nix packages
   environment.systemPackages = [
     atticClient
     configureCache
     linuxBuilderSsh
   ];
+
+  nix.settings = {
+    auto-optimise-store = true;
+    substituters = [
+      "http://mac-mini:8080/nix-darwin"
+    ];
+  };
 
   #homebrew packages
   homebrew = {

@@ -1,31 +1,46 @@
-{ config, pkgs, attic, darwin, ... }:
+{ config, pkgs, attic, ... }:
 
 let
   system = pkgs.system;
-  darwinRebuild = darwin.packages.${system}.darwin-rebuild;
   atticServer = attic.packages.${system}.attic-server;
-  populateCache = pkgs.writeShellScript "nix-build" ''
-    ${darwinRebuild}/bin/darwin-rebuild build --flake "github:heywoodlh/nixos-configs#mac-mini" # aarch64 build
-    ${darwinRebuild}/bin/darwin-rebuild build --flake "github:heywoodlh/nixos-configs#nix-mac-mini" # x86_64 build
+  atticClient = attic.packages.${system}.attic-client;
+  garbageCollectCache = pkgs.writeShellScriptBin "nix-darwin-cache-garbage-collect" ''
+    ${atticServer}/bin/atticd --mode garbage-collector-once &>>/tmp/binary-cache.log
+  '';
+  populateCache = pkgs.writeShellScriptBin "nix-darwin-cache-populate" ''
+    rm -rf /tmp/nixos-configs
+    ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /tmp/nixos-configs
+    cd /tmp/nixos-configs
+    # aarch64 build
+    ${pkgs.nix}/bin/nix build .#darwinConfigurations.mac-mini.config.system.build.toplevel
+    ${atticClient}/bin/attic push nix-darwin ./result
+
+    # x86_64 build
+    ${pkgs.nix}/bin/nix build .#darwinConfigurations.nix-mac-mini.config.system.build.toplevel
+    ${atticClient}/bin/attic push nix-darwin ./result
+    rm -rf /tmp/nixos-configs
   '';
   runCache = pkgs.writeShellScript "serve-cache" ''
-    ${atticServer}/bin/atticd &>>/tmp/binary-cache.log
-  '';
-  garbageCollectCache = pkgs.writeShellScript "cacheCollectGarbage" ''
-    ${atticServer}/bin/atticd --mode garbage-collector-once &>>/tmp/binary-cache.log
+    ${atticServer}/bin/atticd --listen 100.117.204.9:8080 &>>/tmp/binary-cache.log
   '';
 in {
   launchd.daemons.cache-populate = {
-    command = "${populateCache}";
+    command = "${populateCache}/bin/nix-darwin-cache-populate";
     serviceConfig.StartInterval = 86400; # run once a day
   };
 
   launchd.daemons.cache-garbage-collect = {
-    command = "${populateCache}";
+    command = "${populateCache}/bin/nix-darwin-cache-garbage-collect";
     serviceConfig.StartInterval = 604800; # run once a week
   };
 
   launchd.daemons.nix-cache = {
     command = "${runCache}";
+    serviceConfig.RunAtLoad = true;
   };
+
+  environment.systemPackages = [
+    garbageCollectCache
+    populateCache
+  ];
 }

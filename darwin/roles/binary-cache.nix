@@ -15,9 +15,6 @@ let
     ${pkgs.nix}/bin/nix build .#darwinConfigurations.mac-mini.config.system.build.toplevel
     ${atticClient}/bin/attic push nix-darwin ./result
 
-    # x86_64 build
-    ${pkgs.nix}/bin/nix build .#darwinConfigurations.nix-mac-mini.config.system.build.toplevel
-    ${atticClient}/bin/attic push nix-darwin ./result
     rm -rf /tmp/nixos-configs
   '';
   runCache = pkgs.writeShellScript "serve-cache" ''

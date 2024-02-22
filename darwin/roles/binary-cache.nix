@@ -39,6 +39,7 @@ in {
   launchd.daemons.nix-cache = {
     command = "${runCache}";
     serviceConfig.RunAtLoad = true;
+    serviceConfig.KeepAlive = true;
   };
 
   environment.systemPackages = [

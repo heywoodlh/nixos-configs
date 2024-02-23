@@ -19,7 +19,7 @@ in {
       "http://mac-mini:8080/nix-darwin"
     ];
     trusted-public-keys = [
-      "nix-darwin:G9O/sCG6RuR6UI49SotfMFYkG0KcJMID+IiAYIVIWj8="
+      "nix-darwin:zqwtaTJFoluKxoYMF6FZXHIzGtPeuKbv7TQZscovOP0="
     ];
   };
 

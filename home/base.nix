@@ -71,7 +71,7 @@ in {
     zip
     myTmux # For non-nix use-cases
     myFish # For non-nix use-cases
-    myVM
+    #myVM
   ];
 
   # Import nur as nixpkgs.overlays

@@ -49,6 +49,7 @@ in {
   ];
 
   nix.settings.substituters = lib.mkForce [
+    "https://cache.nixos.org/"
     "http://127.0.0.1:8080/nix-darwin"
   ];
 }

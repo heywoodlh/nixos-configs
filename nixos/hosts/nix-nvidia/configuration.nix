@@ -15,7 +15,6 @@
     ../../roles/remote-access/guacamole.nix
     ../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
-    ../../roles/assistants/ollama-webui.nix
   ];
 
   # Bootloader.

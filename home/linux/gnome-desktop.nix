@@ -1,4 +1,4 @@
-{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, nixos-artwork, ... }:
+{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
 
 let
   system = pkgs.system;
@@ -56,10 +56,7 @@ in {
 
   # Download wallpaper
   home.file.".wallpaper.png" = {
-    source = builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-simple-light-gray.png";
-      sha256 = "sha256:0i6d0xv1nzrv7na9hjrgzl3jrwn81vnprnq2pxyznlxbjcgkjnk2";
-    };
+    source = dark-wallpaper;
   };
 
   # Epiphany extensions
@@ -262,8 +259,8 @@ in {
     "org/gnome/desktop/background" = {
       color-shading = "solid";
       picture-options = "zoom";
-      picture-uri = "file://${nixos-artwork}/wallpapers/nix-wallpaper-simple-light-gray.png";
-      picture-uri-dark = "file://${nixos-artwork}/wallpapers/nix-wallpaper-dracula.png";
+      picture-uri = "${light-wallpaper}";
+      picture-uri-dark = "${dark-wallpaper}";
     };
     "org/gnome/desktop/screensaver" = {
       color-shading = "solid";

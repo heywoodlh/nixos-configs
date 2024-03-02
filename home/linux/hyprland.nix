@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, hyprland, myFlakes, nixos-artwork, ... }:
+{ config, pkgs, lib, home-manager, hyprland, myFlakes, dark-wallpaper, ... }:
 
 let
   system = pkgs.system;
@@ -327,7 +327,7 @@ in {
     enable = true;
     package = pkgs.swaylock-effects;
     settings = {
-      image = "${nixos-artwork}/wallpapers/nix-wallpaper-dracula.png";
+      image = "${dark-wallpaper}";
       bs-hl-color = "b48eadff";
       caps-lock-bs-hl-color = "d08770ff";
       caps-lock-key-hl-color = "ebcb8bff";
@@ -402,7 +402,7 @@ in {
       exec-once = ${homeDir}/.nix-profile/bin/1password --silent
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
-      exec-once = ${pkgs.swaybg}/bin/swaybg -i ${nixos-artwork}/wallpapers/nix-wallpaper-dracula.png
+      exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
       ## Start wezterm in special workspace so I can toggle it
       exec-once = [workspace special:terminal] ${myWezterm}/bin/wezterm
       # Animations

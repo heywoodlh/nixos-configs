@@ -1,13 +1,9 @@
-{ config, pkgs, home-manager, myFlakes, ... }:
+{ config, pkgs, home-manager, myFlakes, snowflake, ... }:
 
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   myVimb = myFlakes.packages.${system}.vimb;
-  snowflake = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
-    sha256 = "sha256:0pd45ya86x1z00fb67aqhmmvm7pk50awkmw3bigmhhiwd4lv9n6h";
-  };
   browserBin = if system == "aarch64-linux" then "${pkgs.bash}/bin/bash -c 'MESA_GL_VERSION_OVERRIDE=3.3 MESA_GLSL_VERSION_OVERRIDE=330 MESA_GLES_VERSION_OVERRIDE=3.1 MOZ_ENABLE_WAYLAND=1 ${pkgs.firefox}/bin/firefox'" else "${pkgs.mullvad-browser}/bin/mullvad-browser";
 in {
   # Webcord Nord theme

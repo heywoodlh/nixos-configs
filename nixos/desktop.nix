@@ -1,7 +1,8 @@
 { config, pkgs, lib, home-manager,
   nur, hyprland, nixpkgs-backports,
   nixpkgs-lts, myFlakes, flatpaks,
-  nixos-artwork,
+  light-wallpaper, dark-wallpaper,
+  snowflake,
   mullvad-browser-home-manager,
   ... }:
 
@@ -61,10 +62,7 @@ in {
   # Enable nord-themed lightdm
   #services.xserver.displayManager.lightdm = {
   #  enable = false;
-  #  background = builtins.fetchurl {
-  #    url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/ac04f06feb980e048b4ab2a7ca32997984b8b5ae/wallpapers/nix-wallpaper-dracula.png";
-  #    sha256 = "sha256:07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
-  #  };
+  #  background = dark-wallpaper;
   #  greeters.gtk = {
   #    enable = true;
   #    theme = {
@@ -239,7 +237,9 @@ in {
     extraSpecialArgs = {
       inherit myFlakes;
       inherit nixpkgs-lts;
-      inherit nixos-artwork;
+      inherit light-wallpaper;
+      inherit dark-wallpaper;
+      inherit snowflake;
     };
     users.heywoodlh = { ... }: {
       imports = [

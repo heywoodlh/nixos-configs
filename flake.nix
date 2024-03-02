@@ -42,8 +42,16 @@
       url = "github:nix-community/nix-on-droid/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-artwork = {
-      url = "github:NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae";
+    dark-wallpaper = {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/wallpapers/nix-wallpaper-dracula.png";
+      flake = false;
+    };
+    light-wallpaper = {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/wallpapers/nix-wallpaper-simple-light-gray.png";
+      flake = false;
+    };
+    snowflake = {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
       flake = false;
     };
     choose-nixpkgs.url = "github:heywoodlh/nixpkgs/b0025018535256ce462b4aa2e39677eb110d38b2";
@@ -73,7 +81,9 @@
                       osquery-fix-nixpkgs,
                       flatpaks,
                       nix-on-droid,
-                      nixos-artwork,
+                      dark-wallpaper,
+                      light-wallpaper,
+                      snowflake,
                       hyprland,
                       choose-nixpkgs,
                       cosmic-session,
@@ -156,6 +166,11 @@
         system = "aarch64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nixos-arm64-vm/configuration.nix ];
+      };
+      nixos-arm64-test = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
+        specialArgs = inputs;
+        modules = [ ./nixos/hosts/nixos-arm64-test/configuration.nix ];
       };
       nix-precision = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

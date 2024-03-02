@@ -5,7 +5,7 @@ let
 in {
   imports =
   [ # Include the results of the hardware scan.
-    /etc/nixos/hardware-configuration.nix
+    ./hardware-configuration.nix
     ../../desktop.nix
   ];
 
@@ -22,9 +22,6 @@ in {
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
-
-  # Use Rosetta2 in UTM
-  virtualisation.rosetta.enable = true;
 
   # Enable auto upgrade
   system.autoUpgrade = {

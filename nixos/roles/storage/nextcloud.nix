@@ -13,13 +13,13 @@
       dbtype = "pgsql";
       adminpassFile = "/opt/nextcloud/pass.txt";
       adminuser = "heywoodlh";
-      extraTrustedDomains = [
-        "drive.heywoodlh.io"
-        "nix-drive.tailscale"
-        "nextcloud"
-        "nextcloud.tailscale"
-      ];
     };
+
+    settings.trusted_domains = [
+      "drive.heywoodlh.io"
+      "nix-drive"
+      "nextcloud"
+    ];
     appstoreEnable = true;
     autoUpdateApps.enable = true;
     database = {

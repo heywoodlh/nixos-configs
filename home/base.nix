@@ -15,7 +15,7 @@ let
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
-  newsboat_browser = if pkgs.stdenv.isDarwin then ''
+  newsboat_browser_config = if pkgs.stdenv.isDarwin then ''
     browser "open %u"
   ''
   else ''
@@ -153,17 +153,17 @@ in {
   };
 
   programs.newsboat = {
-    enable = pkgs.stdenv.isLinux;
+    enable = true;
     extraConfig = ''
       urls-source "miniflux"
       miniflux-url "https://feeds.heywoodlh.io"
       miniflux-login "heywoodlh"
-      miniflux-passwordeval "${homeDir}/bin/op-wrapper.sh read 'op://Personal/a4johfsgd7cnpzulsqcgkavhoq/password'"
+      miniflux-passwordeval "${homeDir}/bin/op-wrapper.sh read 'op://Kubernetes/3jdvjlmc67dfngycergck6ikxq/password'"
 
       # general settings
       auto-reload yes
       max-items 50
-      ${newsboat_browser}
+      ${newsboat_browser_config}
 
       # unbind keys
       unbind-key j

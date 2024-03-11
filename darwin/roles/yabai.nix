@@ -221,11 +221,11 @@ in {
       ctrl + shift - n: osascript -e 'tell application "Spotify" to next track'
       ctrl + shift - space: osascript -e 'tell application "Spotify" to playpause'
       .blacklist [
-        "vmware fusion"
-        "vmware remote console"
         "python3.10" # virt-manager
         "moonlight"
         "screens"
+        "screens 4"
+        "screens 5"
       ]
     '';
   };

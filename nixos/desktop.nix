@@ -14,6 +14,7 @@ in {
   imports = [
     home-manager.nixosModules.home-manager
     ./roles/desktop/user-icon.nix
+    ./roles/virtualization/libvirt.nix
   ];
 
   home-manager.useGlobalPkgs = true;

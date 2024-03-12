@@ -60,9 +60,8 @@
 
   # Mount backup drive
   fileSystems."/media/backups" = {
-    device = "/dev/disk/by-uuid/fd16f657-ba9c-4829-9f71-3869ee18f240";
-    fsType = "btrfs";
-    options = [ "defaults" "nofail" ];
+    device = "/dev/disk/by-uuid/0603f046-6c2d-4ea0-a17b-17d34057fdec";
+    fsType = "ext4";
   };
 
   # Enable auto upgrade

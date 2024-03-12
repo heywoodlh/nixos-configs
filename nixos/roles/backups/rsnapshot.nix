@@ -55,25 +55,25 @@ retain	daily	7
 retain	weekly	4
 retain	monthly	6
 
-backup	root@nixos-matrix.tailscale:/etc/	nixos-matrix/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nixos-matrix.tailscale:/home/	nixos-matrix/
-backup	root@nixos-matrix.tailscale:/opt/	nixos-matrix/
-backup	root@nixos-matrix.tailscale:/root/	nixos-matrix/
+backup	root@nixos-matrix:/etc/	nixos-matrix/	exclude=/etc/shadow,exclude=/etc/passwd
+backup	root@nixos-matrix:/home/	nixos-matrix/
+backup	root@nixos-matrix:/opt/	nixos-matrix/
+backup	root@nixos-matrix:/root/	nixos-matrix/
 
-backup	root@nix-precision.tailscale:/etc/	nix-precision/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-precision.tailscale:/home/	nix-precision/
-backup	root@nix-precision.tailscale:/opt/	nix-precision/
-backup	root@nix-precision.tailscale:/root/	nix-precision/
+backup	root@nix-precision:/etc/	nix-precision/	exclude=/etc/shadow,exclude=/etc/passwd
+backup	root@nix-precision:/home/	nix-precision/
+backup	root@nix-precision:/opt/	nix-precision/
+backup	root@nix-precision:/root/	nix-precision/
 
-backup	root@nix-nvidia.tailscale:/etc/	nix-nvidia/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-nvidia.tailscale:/home/	nix-nvidia/
-backup	root@nix-nvidia.tailscale:/opt/	nix-nvidia/
-backup	root@nix-nvidia.tailscale:/root/	nix-nvidia/
+backup	root@nix-nvidia:/etc/	nix-nvidia/	exclude=/etc/shadow,exclude=/etc/passwd
+backup	root@nix-nvidia:/home/	nix-nvidia/
+backup	root@nix-nvidia:/opt/	nix-nvidia/
+backup	root@nix-nvidia:/root/	nix-nvidia/
 
-backup	root@nix-drive.tailscale:/etc/	nix-drive/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-drive.tailscale:/home/	nix-drive/
-backup	root@nix-drive.tailscale:/opt/	nix-drive/
-backup	root@nix-drive.tailscale:/root/	nix-drive/
+backup	root@nix-drive:/etc/	nix-drive/	exclude=/etc/shadow,exclude=/etc/passwd
+backup	root@nix-drive:/home/	nix-drive/
+backup	root@nix-drive:/opt/	nix-drive/
+backup	root@nix-drive:/root/	nix-drive/
 
 cmd_postexec	${chown_script}/bin/chown-rsnapshot
     '';

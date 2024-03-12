@@ -60,20 +60,10 @@ backup	root@nixos-matrix.tailscale:/home/	nixos-matrix/
 backup	root@nixos-matrix.tailscale:/opt/	nixos-matrix/
 backup	root@nixos-matrix.tailscale:/root/	nixos-matrix/
 
-backup	root@nix-tools.tailscale:/etc/	nix-tools/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-tools.tailscale:/home/	nix-tools/
-backup	root@nix-tools.tailscale:/opt/	nix-tools/
-backup	root@nix-tools.tailscale:/root/	nix-tools/
-
 backup	root@nix-precision.tailscale:/etc/	nix-precision/	exclude=/etc/shadow,exclude=/etc/passwd
 backup	root@nix-precision.tailscale:/home/	nix-precision/
 backup	root@nix-precision.tailscale:/opt/	nix-precision/
 backup	root@nix-precision.tailscale:/root/	nix-precision/
-
-backup	root@nix-ext-net.tailscale:/etc/	nix-ext-net/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-ext-net.tailscale:/home/	nix-ext-net/
-backup	root@nix-ext-net.tailscale:/opt/	nix-ext-net/
-backup	root@nix-ext-net.tailscale:/root/	nix-ext-net/
 
 backup	root@nix-nvidia.tailscale:/etc/	nix-nvidia/	exclude=/etc/shadow,exclude=/etc/passwd
 backup	root@nix-nvidia.tailscale:/home/	nix-nvidia/

@@ -71,6 +71,7 @@ in {
         volumes = [
           "/opt/tautulli/config:/config"
           "/opt/tautulli/scripts:/scripts"
+          "/etc/resolv.conf:/etc/resolv.conf:ro"
         ];
       };
       openaudible = {

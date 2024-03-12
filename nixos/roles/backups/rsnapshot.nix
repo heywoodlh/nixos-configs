@@ -20,7 +20,7 @@ in {
       home = "/home/backups";
       shell = "${pkgs.bash}/bin/bash";
       openssh.authorizedKeys.keys = [
-        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDfGoaMlrNGuu3kPeq3spOKN8d8orcMKdnEHccSaZQOZ09UdOQVTd6xxpNUvghsvl5QidcZVW6Rftql3D2y3dwjnZ5JO4m+u+15RLRsh43duUO/S+uDzhgcQ/JxAnqUFbJwV/JRUCrKMzhlecAZIrN49lpceTkWhqKalfEz/04+mQ== nix-drive"
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCWVwzFL5oZVH5wvKTJDmJW1TDqzhL4dXpLIHBVuZ/1sRnR4CiK1vDRhkoVCl1H1BFfAEwTbBfH4UsFjd59GUarzNcWhPJieqN12wIObTpKXsrTCt0vX9akjdFkgqvOkaS6GuvXT+ymPRWSiWpoJtNqUWervLcb3WGauL7fuKgZ4tMQebMTGKbdL5benK144vB2KlDpuH+76cKtg1R0EeD0e4LubRDKy3doCuI6g0Dj8uRtifg69ux75H6g8kPSEQ9FJFuqW2KQt8w1GRr3vSdCO1UqnE7l7NkxtaqBcJPP1cm+GEhW5Toz6fVPe0oON1IfeosFnKIrR7Ayokc/kiTPhp9qgX6XBZWvbiRRxy3hG7f1LehRHwGOVts0onKgct24aeIHROe46EhCdErmRZ/H8Xi2mInRGgnHWu5eDJN2F4lbyZa7S4hV61FsuCLmF7BYzWZ2XblaDj62ACO9wdaKTw+jioPWnvtZidj9+orVU5YGIkgavDKAiklZjdQcuOJp1nVBqL7L8oHoDsTgjI2O4NL+Qt2604mMk4ndDcBJUS7bylvOQQwnPrPrTgF3vdMbuE7QzYehwM4TBjANc5m4THT8oFLxJ3A9W5QjWhNUAB8NA1PMLdt7NXKBmjjvyTcPp+Rvi/6cahLYBA/SOmUUsjvQZONb2TmXifIYzoxX2Q== nix-drive"
       ];
     };
   };

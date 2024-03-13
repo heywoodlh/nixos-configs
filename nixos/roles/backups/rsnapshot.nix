@@ -66,7 +66,6 @@ backup	root@nix-precision:/opt/	nix-precision/
 backup	root@nix-precision:/root/	nix-precision/
 
 backup	root@nix-nvidia:/etc/	nix-nvidia/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-nvidia:/home/	nix-nvidia/
 backup	root@nix-nvidia:/opt/	nix-nvidia/
 backup	root@nix-nvidia:/root/	nix-nvidia/
 

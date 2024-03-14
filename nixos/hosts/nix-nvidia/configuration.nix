@@ -130,5 +130,12 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
+  # Nvidia container settings
+  virtualisation.docker = {
+    enable = true;
+    enableNvidia = true;
+  };
+  environment.systemPackages = with pkgs; [ docker runc ];
+
   system.stateVersion = "23.11";
 }

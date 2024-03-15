@@ -139,6 +139,4 @@ in {
     dates = "daily";
     options = "--delete-older-than 7d";
   };
-
-  services.tailscale.extraUpFlags = "--advertise-tags=tag:server";
 }

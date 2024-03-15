@@ -23,5 +23,4 @@ in {
       value = "9192";
     }
   ];
-  services.tailscale.extraUpFlags = "--advertise-tags=tag:k3s";
 }

@@ -36,7 +36,7 @@ in {
     # Automatically optimize store for better storage
     auto-optimise-store = true;
     substituters = [
-      #"https://hyprland.cachix.org"
+      "https://hyprland.cachix.org"
       "http://100.108.77.60:5000" # nix-nvidia
       "https://nix-community.cachix.org"
       "https://cache.nixos.org/"
@@ -80,10 +80,10 @@ in {
   };
 
   # Enable hyprland
-  #programs.hyprland = {
-  #  enable = true;
-  #  xwayland.enable = true;
-  #};
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
   security.pam.services.swaylock.text = "auth include login";
   hardware.brillo.enable = true;
 
@@ -250,8 +250,8 @@ in {
         ../home/linux/desktop.nix # linux-specific desktop.nix
         ../home/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.default
-        #hyprland.homeManagerModules.default
-        #../home/linux/hyprland.nix
+        hyprland.homeManagerModules.default
+        ../home/linux/hyprland.nix
       ];
       home.packages = [
         myFlakes.packages.${system}.git

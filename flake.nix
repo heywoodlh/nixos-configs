@@ -155,6 +155,25 @@
         specialArgs = inputs;
         modules = [
           ./nixos/hosts/m1-mac-mini/configuration.nix
+          ./nixos/server.nix
+          ./nixos/roles/containers/k3s.nix
+          {
+            networking.hostName = "nixos-mac-mini";
+            system.stateVersion = "24.05";
+            services.k3s = {
+              role = "server";
+              tokenFile = "/root/k3s-token";
+              serverAddr = "https://100.108.77.60:6443";
+              extraFlags = toString [
+                "--tls-san=nixos-mac-mini"
+                "--node-label='env=home'"
+                "--bind-address=100.69.115.100"
+                "--advertise-address=100.69.115.100"
+                "--node-ip=100.69.115.100"
+                "--node-external-ip=100.69.115.100"
+              ];
+            };
+          }
         ];
       };
       nix-wsl = nixpkgs.lib.nixosSystem {
@@ -196,25 +215,6 @@
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-backups/configuration.nix ];
-      };
-      nixos-k8s-vultr = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [
-          ./nixos/hosts/k8s-vultr/configuration.nix
-          {
-            networking.hostName = "nixos-k8s-vultr";
-            system.stateVersion = "24.05";
-            services.k3s = {
-              extraFlags = toString [
-                "--tls-san=nixos-k8s-vultr"
-                "--node-label='env=cloud'"
-                "--node-ip=100.69.115.100"
-                "--node-external-ip=100.69.115.100"
-              ];
-            };
-          }
-        ];
       };
       nixos-lima-vm = nixpkgs.lib.nixosSystem {
         system = "${linuxSystem}";

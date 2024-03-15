@@ -74,9 +74,9 @@
   # K8s cluster
   services.k3s = {
     extraFlags = toString [
-      "--tls-san=nix-nvidia.tailscale"
       "--tls-san=nix-nvidia"
       "--tls-san=100.107.238.93"
+      "--node-label='env=home'"
     ];
   };
 

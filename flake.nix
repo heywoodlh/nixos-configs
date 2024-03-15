@@ -197,6 +197,23 @@
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-backups/configuration.nix ];
       };
+      nixos-k8s-vultr = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [
+          ./nixos/hosts/k8s-vultr/configuration.nix
+          {
+            networking.hostName = "nixos-k8s-vultr";
+            system.stateVersion = "24.05";
+            services.k3s = {
+              extraFlags = toString [
+                "--tls-san=nixos-k8s-vultr"
+                "--node-label='env=cloud'"
+              ];
+            };
+          }
+        ];
+      };
       nixos-lima-vm = nixpkgs.lib.nixosSystem {
         system = "${linuxSystem}";
         specialArgs = inputs;

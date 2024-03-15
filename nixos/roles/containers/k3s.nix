@@ -5,6 +5,7 @@ let
   stable-pkgs = nixpkgs-stable.legacyPackages.${system};
 in {
   networking.firewall.allowedTCPPorts = [ 6443 ];
+  networking.firewall.trustedInterfaces = [ "tailscale0" ]; # for clustering
   services.k3s = {
     package = stable-pkgs.k3s;
     enable = true;

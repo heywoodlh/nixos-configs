@@ -209,6 +209,8 @@
               extraFlags = toString [
                 "--tls-san=nixos-k8s-vultr"
                 "--node-label='env=cloud'"
+                "--node-ip=100.69.115.100"
+                "--node-external-ip=100.69.115.100"
               ];
             };
           }

@@ -73,9 +73,13 @@
 
   # K8s cluster
   services.k3s = {
+    role = "server";
+    clusterInit = true;
     extraFlags = toString [
       "--tls-san=nix-nvidia"
-      "--tls-san=100.107.238.93"
+      "--flannel-iface=tailscale0"
+      "--tls-san=100.108.77.60"
+      "--node-external-ip=100.108.77.60"
       "--node-label='env=home'"
     ];
   };

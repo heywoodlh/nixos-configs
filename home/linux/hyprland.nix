@@ -216,6 +216,22 @@ in {
     '';
   };
 
+  # Wezterm desktop file
+  home.file.".local/share/applications/wezterm.desktop" = {
+    enable = true;
+    text = ''
+      [Desktop Entry]
+      Name=Wezterm
+      GenericName=terminal
+      Exec=${myWezterm}/bin/wezterm
+      Terminal=false
+      Type=Application
+      Keywords=terminal
+      Icon=nix-snowflake
+      Categories=Utility;
+    '';
+  };
+
   # Caffeine toggle script
   home.file."bin/caffeine.sh" = {
     enable = true;
@@ -403,7 +419,7 @@ in {
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
       exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
-      ## Start wezterm in special workspace so I can toggle it
+      # Start wezterm in special workspace so I can toggle it
       exec-once = [workspace special:terminal] ${myWezterm}/bin/wezterm
       # Animations
       animations {
@@ -428,8 +444,8 @@ in {
         #suppress_portal_warnings = true
       }
 
-      ## Window rules
-      windowrulev2 = dimaround, class:^(1Password)$, floating
+      # Window rules
+      #windowrulev2 = dimaround, class:^(1Password)$, floating
       windowrulev2 = center, class:^(1Password)$
       windowrulev2 = stayfocused,class:^(1Password)$
       windowrule = rounding 10, ^(1Password)$
@@ -439,7 +455,7 @@ in {
         new_is_master = true # https://wiki.hyprland.org/Configuring/Master-Layout
       }
 
-      ## Gestures
+      # Gestures
       gestures {
         workspace_swipe = on
       }
@@ -453,21 +469,21 @@ in {
 
       # General Keybindings
       $mainMod = SUPER
-      ## Terminal
+      # Terminal
       bind = $mainMod, Return, exec, ${myWezterm}/bin/wezterm
       bind = CTRL_ALT, t, exec, ${myWezterm}/bin/wezterm
       bind = CTRL, grave, togglespecialworkspace, terminal
-      ## 1Password
+      # 1Password
       bind = CTRL_SUPER, s, exec, ${homeDir}/bin/1password-toggle.sh
-      ## Launcher
+      # Launcher
       bind = $mainMod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel -I
-      ## Lock screen
+      # Lock screen
       bind = $mainMod, l, exec, ${pkgs.swaylock-effects}/bin/swaylock
-      ## Remap caps lock to super
+      # Remap caps lock to super
       input {
         kb_options = caps:super
       }
-      ## Audio
+      # Audio
       bindle =,XF86AudioLowerVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
       binde =,XF86AudioLowerVolume, exec, ${pkgs.libnotify}/bin/notify-send -t "1000" -e "Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)"
       bindle =,XF86AudioRaiseVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
@@ -481,13 +497,13 @@ in {
       bind = CTRL_SHIFT, p, exec, ${pkgs.playerctl}/bin/playerctl previous
       bind = CTRL_SHIFT, p, exec, ${pkgs.libnotify}/bin/notify-send -e "Media: previous track"
 
-      ## Backlight
+      # Backlight
       bindle = , XF86MonBrightnessUp, exec, ${pkgs.brillo}/bin/brillo -A 5
       binde = , XF86MonBrightnessUp, exec, ${pkgs.libnotify}/bin/notify-send -e "Brightness: $(${pkgs.brillo}/bin/brillo)"
       bindle = , XF86MonBrightnessDown, exec, ${pkgs.brillo}/bin/brillo -U 5
       binde = , XF86MonBrightnessDown, exec, ${pkgs.libnotify}/bin/notify-send -e "Brightness: $(${pkgs.brillo}/bin/brillo)"
 
-      ## Productivity
+      # Productivity
       bind = SUPER_SHIFT, s, exec, ${homeDir}/bin/screenshot.sh
       bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
       bind = CTRL_SHIFT, f, exec, ${homeDir}/bin/applications.sh
@@ -495,7 +511,7 @@ in {
       bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
       bind = CTRL_SHIFT, d, exec, ${pkgs.bash}/bin/bash -c '${pkgs.libnotify}/bin/notify-send $(date "+%T")'
 
-      ## Navigation
+      # Navigation
       bind = $mainMod, 1, workspace, 1
       bind = $mainMod, 1, workspace, 2
       bind = $mainMod, 1, workspace, 3

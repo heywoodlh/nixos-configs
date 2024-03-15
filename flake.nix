@@ -151,10 +151,10 @@
         ];
       };
       nixos-mac-mini = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        system = "aarch64-linux";
         specialArgs = inputs;
         modules = [
-          ./nixos/hosts/mac-mini/configuration.nix
+          ./nixos/hosts/m1-mac-mini/configuration.nix
         ];
       };
       nix-wsl = nixpkgs.lib.nixosSystem {
@@ -186,11 +186,6 @@
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [ ./nixos/hosts/nix-nvidia/configuration.nix ];
-      };
-      nix-media = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-media/configuration.nix ];
       };
       nix-drive = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

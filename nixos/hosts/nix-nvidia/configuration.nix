@@ -74,7 +74,6 @@
   # K8s cluster
   services.k3s = {
     role = "server";
-    clusterInit = true;
     extraFlags = toString [
       "--tls-san=nix-nvidia"
       "--flannel-iface=tailscale0"

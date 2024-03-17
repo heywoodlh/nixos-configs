@@ -60,11 +60,13 @@ in {
       "diffusionbee"
       "discord"
       "microsoft-remote-desktop"
-      "screens"
       "signal"
       "vmware-fusion"
       "zoom"
     ];
+    masApps = {
+      "Screens 5: VNC Remote Desktop" = 1663047912;
+    };
   };
 
   system.stateVersion = 4;

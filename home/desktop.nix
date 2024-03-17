@@ -48,6 +48,9 @@ let
     "extensions.webextensions.restrictedDomains" = "";
     "datareporting.healthreport.uploadEnabled" = false;
     "datareporting.policy.dataSubmissionEnabled" = false;
+    "dom.security.https_only_mode" = false;
+    "dom.security.https_only_mode_ever_enabled" = false;
+    "dom.security.https_only_mode_ever_enabled_pbm" = false;
     "layers.acceleration.force-enabled" = true;
     "network.allow-experiments" = false;
     "network.proxy.no_proxies_on" = noproxies;

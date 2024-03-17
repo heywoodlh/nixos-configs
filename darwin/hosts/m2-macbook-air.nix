@@ -40,11 +40,6 @@ in {
         virt-manager
         utm
       ];
-      programs.mullvad-browser = {
-        profiles.home-manager = {
-          search.default = lib.mkForce "Mullvad Leta";
-        };
-      };
     };
   };
 

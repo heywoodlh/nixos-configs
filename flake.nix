@@ -156,22 +156,16 @@
         modules = [
           ./nixos/hosts/m1-mac-mini/configuration.nix
           ./nixos/server.nix
-          ./nixos/roles/containers/k3s.nix
+          ./nixos/roles/media/plex.nix
+          ./nixos/roles/monitoring/iperf.nix
           {
             networking.hostName = "nixos-mac-mini";
             system.stateVersion = "24.05";
-            services.k3s = {
-              role = "server";
-              tokenFile = "/root/k3s-token";
-              serverAddr = "https://100.108.77.60:6443";
-              extraFlags = toString [
-                "--tls-san=nixos-mac-mini"
-                "--node-label='env=home'"
-                "--bind-address=100.69.115.100"
-                "--advertise-address=100.69.115.100"
-                "--node-ip=100.69.115.100"
-                "--node-external-ip=100.69.115.100"
-              ];
+            # Virtual machine media
+            fileSystems."/media/virtual-machines" = {
+              device = "/dev/disk/by-uuid/2fa5a6c4-b938-4853-844d-c85a77ae33e7";
+              fsType = "ext4";
+              options = [ "rw" "relatime" ];
             };
           }
         ];

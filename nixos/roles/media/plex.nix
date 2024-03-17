@@ -9,6 +9,30 @@ in {
     3000
   ];
 
+  boot.supportedFilesystems = [
+    "btrfs"
+  ];
+
+  fileSystems."/media/home-media/disk1" = {
+    device = "/dev/disk/by-uuid/8f645e4b-0544-4ce9-8797-7dfe7f85df5a";
+    fsType = "btrfs";
+    options = [
+      "defaults"
+      "space_cache=v2"
+      "nofail"
+    ];
+  };
+
+  fileSystems."/media/home-media/disk2" = {
+    device = "/dev/disk/by-uuid/7d1d10dd-392d-47ce-b178-bffd2295637e";
+    fsType = "btrfs";
+    options = [
+      "defaults"
+      "space_cache=v2"
+      "nofail"
+    ];
+  };
+
   users.groups.media = {};
   users.users.media = {
     group = "media";

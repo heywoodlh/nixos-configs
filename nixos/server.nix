@@ -131,9 +131,6 @@ in {
   # Disable wait-online service for Network Manager
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  # Enable cloudflared
-  services.cloudflared.enable = true;
-
   nix.gc = {
     automatic = true;
     dates = "daily";

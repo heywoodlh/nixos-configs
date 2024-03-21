@@ -52,11 +52,19 @@ let
     fi
   '';
   battery-sh = pkgs.writeShellScriptBin "battery.sh" ''
-    data=$(pmset -g batt)
-    battery_percent=$(echo $data | grep -Eo "\d+%" | cut -d% -f1)
-    charging=$(echo $data | grep 'AC Power')
+    if pmset -g ac | grep -q 'Family Code = 0x0000' # No battery (i.e. Mac Mini, Mac Pro, etc.)
+    then
+      sketchybar \
+        --set $NAME \
+          icon.color="0xFFFFFFFF" \
+          icon="󰚥" \
+          label="AC"
+    else
+      data=$(pmset -g batt)
+      battery_percent=$(echo $data | grep -Eo "\d+%" | cut -d% -f1)
+      charging=$(echo $data | grep 'AC Power')
 
-    case "$battery_percent" in
+      case "$battery_percent" in
         100)    icon="󰁹" color=0xFFFFFFFF ;;
         9[0-9]) icon="󰂂" color=0xFFFFFFFF ;;
         8[0-9]) icon="󰂁" color=0xFFFFFFFF ;;
@@ -68,18 +76,19 @@ let
         2[0-9]) icon="󰁻" color=0xFFFFFFFF ;;
         1[0-9]) icon="󰁺" color=0xFFFFFFFF ;;
         *)      icon="󰂃" color=0xFFFFFFFF ;;
-    esac
+      esac
 
-    # if is charging
-    if ! [ -z "$charging" ]; then
-        icon="$icon"
-    fi
+      # if is charging
+      if ! [ -z "$charging" ]; then
+        icon="$icon 󰚥"
+      fi
 
-    sketchybar \
+      sketchybar \
         --set $NAME \
-            icon.color="$color" \
-            icon="$icon" \
-            label="$battery_percent%"
+          icon.color="$color" \
+          icon="$icon" \
+          label="$battery_percent%"
+    fi
   '';
   top-proc-sh = pkgs.writeShellScriptBin "top-proc.sh" ''
     TOPPROC=$(ps axo "%cpu,ucomm" | sort -nr | tail +1 | head -n1 | awk '{printf "%.0f%% %s\n", $1, $2}' | sed -e 's/com.apple.//g')
@@ -135,7 +144,7 @@ in {
           position=top \
           padding_left=5 \
           padding_right=5 \
-          color=0xff3b4252 \
+          color=0xff2e3440 \
           shadow=off \
           sticky=on \
           topmost=off

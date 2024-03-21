@@ -49,6 +49,11 @@ in {
     '';
   };
 
+  home.file."Pictures/wallpaper.png" = {
+    enable = true;
+    source = ../wallpapers/nord-apple.png;
+  };
+
   home.file."bin/create-docker" = {
     enable = true;
     executable = true;

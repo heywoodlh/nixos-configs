@@ -8,19 +8,26 @@ let
   noproxies = "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net";
   socksProxy = "nix-nvidia.barn-banana.ts.net";
   socksPort = 1080;
-  browser-settings = if browser == "mullvad-browser"  then {
+  common-firefox-settings = {
+    # Settings in all Firefox derivatives
     "browser.compactmode.show" = true; # enable compact bar
-    "browser.privatebrowsing.autostart" = false; # don't start in private mode
-    "privacy.history.custom" = false; # remember history
+    "browser.theme.content-theme" = 2; # don't use system theme
+    "extensions.activeThemeID" = "{e410fec2-1cbd-4098-9944-e21e708418af}"; # Nord theme
     "toolkit.legacyUserProfileCustomizations.stylesheets" = true; # userChrome.css
     "network.proxy.no_proxies_on" = noproxies;
     "network.proxy.socks" = socksProxy;
     "network.proxy.socks_port" = socksPort;
+    "gfx.webrender.all" = true;
+  };
+  firefox-settings = if browser == "mullvad-browser"  then {
+    # Mullvad Browser settings
+    "browser.privatebrowsing.autostart" = false; # don't start in private mode
+    "privacy.history.custom" = false; # remember history
   } else {
+    # Firefox settings
     "app.shield.optoutstudies.enabled" = false;
     "browser.bookmarks.restore_default_bookmarks" = false;
     "browser.bookmarks.showMobileBookmarks" = false;
-    "browser.compactmode.show" = true;
     "browser.formfill.enable" = false;
     "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
     "browser.newtabpage.activity-stream.feeds.telemetry" = false;
@@ -40,7 +47,6 @@ let
     "experiments.activeExperiment" = false;
     "experiments.enabled" = false;
     "experiments.supported" = false;
-    "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
     "extensions.formautofill.addresses.enabled" = false;
     "extensions.formautofill.creditCards.enabled" = false;
     "extensions.pocket.enabled" = false;
@@ -53,13 +59,9 @@ let
     "dom.security.https_only_mode_ever_enabled_pbm" = false;
     "layers.acceleration.force-enabled" = true;
     "network.allow-experiments" = false;
-    "network.proxy.no_proxies_on" = noproxies;
-    "network.proxy.socks" = socksProxy;
-    "network.proxy.socks_port" = socksPort;
     "signon.rememberSignons" = false;
     "signon.rememberSignons.visibilityToggle" = false;
     "svg.context-properties.content.enabled" = true;
-    "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
     "toolkit.telemetry.archive.enabled" = false;
     "toolkit.telemetry.bhrPing.enabled" = false;
     "toolkit.telemetry.coverage.opt-out" = true;
@@ -75,8 +77,8 @@ let
     "toolkit.telemetry.unifiedIsOptIn" = false;
     "toolkit.telemetry.updatePing.enabled" = false;
     "browser.sessionstore.restore_pinned_tabs_on_demand" = false;
-    "gfx.webrender.all" = true;
   };
+  browser-settings = common-firefox-settings // firefox-settings;
   linuxUserChrome = if pkgs.stdenv.isDarwin then
   ""
   else

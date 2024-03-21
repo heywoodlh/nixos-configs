@@ -73,6 +73,11 @@ in {
     }
 
     # Custom stuff
+    # Focus follows mouse
+    yabai -m config focus_follows_mouse autofocus
+    # Disable shadows
+    yabai -m config window_shadow off
+
     ## Unmanaged apps
     yabai -m rule --add app="/usr/local/bin/choose" manage=off
     yabai -m rule --add app="/opt/homebrew/bin/choose" manage=off

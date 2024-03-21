@@ -47,22 +47,25 @@ in {
       autohide = true;
       orientation = "bottom";
       showhidden = true;
-      mineffect = "genie";
-      launchanim = true;
+      mineffect = "scale";
+      launchanim = false;
       show-process-indicators = true;
       tilesize = 48;
       static-only = true;
-      mru-spaces = false;
-      show-recents = false;
+      mru-spaces = false; # disable automatic rearrangement of spaces
+      show-recents = false; # disable recents
     };
     finder = {
-      AppleShowAllExtensions = true;
+      AppleShowAllExtensions = true; # show all file extensions
+      AppleShowAllFiles = true; # show hidden files
       FXEnableExtensionChangeWarning = false;
       CreateDesktop = false; # disable desktop icons
+      ShowPathbar = true; # show breadcrumb path bar
+      FXPreferredViewStyle = "Nlsv"; # use list view
     };
     trackpad = {
       Clicking = true;
-      TrackpadThreeFingerDrag = true;
+      TrackpadThreeFingerDrag = false; # Disable three finger drag
       Dragging = true;
     };
     # Apple firewall config:
@@ -89,6 +92,12 @@ in {
       NSNavPanelExpandedStateForSaveMode = true;
       NSNavPanelExpandedStateForSaveMode2 = true;
       _HIHideMenuBar = true;
+      NSWindowResizeTime = 0.001;
+      NSAutomaticWindowAnimationsEnabled = false;
+      NSTableViewDefaultSizeMode = 1; # small icons in finder
+      NSDocumentSaveNewDocumentsToCloud = false; # disable saving to iCloud by default
+      "com.apple.sound.beep.volume" = 0.000; # mute beep
+      AppleICUForce24HourTime = true; # use 24 hour time
     };
     CustomUserPreferences = {
       "NSGlobalDomain" = {

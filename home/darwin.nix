@@ -88,10 +88,13 @@ in {
   };
 
   home.file.".config/iterm2/iterm2-profiles.json" = {
-    text = import ./darwin/iterm/iterm2-profiles.nix { inherit myTmux; };
+    text = import ./iterm/iterm2-profiles.nix { inherit myTmux; };
   };
   home.file.".config/iterm2/com.googlecode.iterm2.plist" = {
-    text = import ./darwin/iterm/com.googlecode.iterm2.plist.nix { inherit myTmux; };
+    text = import ./iterm/com.googlecode.iterm2.plist.nix { inherit myTmux; };
+  };
+  home.file.".config/iterm2/README.md" = {
+    source = ./iterm/README.md;
   };
 
   #1Password config

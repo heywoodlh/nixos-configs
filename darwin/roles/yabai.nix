@@ -2,7 +2,6 @@
 
 let
   system = pkgs.system;
-  myWezterm = myFlakes.packages.${system}.wezterm;
   choose = choose-nixpkgs.legacyPackages.${system}.choose-gui;
   choose-launcher-sh = pkgs.writeShellScriptBin "choose-launcher.sh" ''
     application_dirs="/Applications/ /System/Applications/ /System/Library/CoreServices/ /System/Applications/Utilities/"
@@ -213,8 +212,8 @@ in {
       ctrl + shift - b : ~/bin/battpop.sh
       # Disabled: now using Spotlight
       # cmd - space : ~/bin/choose-launcher.zsh
-      # Launch Terminal
-      ctrl + alt - t : ${myWezterm}/bin/wezterm
+      # Launch Terminal (just using iterm builtin keyboard shortcuts now)
+      #ctrl + alt - t :
       # Toggle tiling
       cmd - y : zsh -c 'if yabai -m config layout | grep -q bsp; then yabai -m config layout float; else yabai -m config layout bsp; fi'
 

@@ -4,6 +4,7 @@ let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   myVimb = myFlakes.packages.${system}.vimb;
+  myWezterm = myFlakes.packages.${system}.wezterm;
   browserBin = if system == "aarch64-linux" then "${pkgs.bash}/bin/bash -c 'MESA_GL_VERSION_OVERRIDE=3.3 MESA_GLSL_VERSION_OVERRIDE=330 MESA_GLES_VERSION_OVERRIDE=3.1 MOZ_ENABLE_WAYLAND=1 ${pkgs.firefox}/bin/firefox'" else "${pkgs.mullvad-browser}/bin/mullvad-browser";
 in {
   # Webcord Nord theme

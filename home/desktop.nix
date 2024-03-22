@@ -2,7 +2,6 @@
 
 let
   system = pkgs.system;
-  myWezterm = myFlakes.packages.${system}.wezterm;
   homeDir = config.home.homeDirectory;
   browser = if system == "aarch64-linux" then "firefox" else "mullvad-browser";
   noproxies = "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net";
@@ -216,7 +215,6 @@ let
 in {
   home.packages = [
     pkgs.mdp
-    myWezterm
   ];
 
   # Firefox/Mullvad Browser Browser configuration

@@ -150,6 +150,50 @@
           ./nixos/hosts/xps/configuration.nix
         ];
       };
+      nixos-oryx-pro = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [
+          /etc/nixos/hardware-configuration.nix
+          ./nixos/desktop.nix
+          ./nixos/roles/remote-access/sshd.nix
+          ./nixos/roles/security/sshd-monitor.nix
+          ./nixos/roles/remote-access/xrdp.nix
+          {
+            networking.hostName = "nixos-oryx-pro";
+            # System76 stuff
+            hardware.system76.enableAll = true;
+            services.system76-scheduler.enable = true;
+            # Bootloader
+            boot.loader.systemd-boot.enable = true;
+            boot.loader.efi.canTouchEfiVariables = false;
+            # Enable networking
+            networking.networkmanager.enable = true;
+            # Set your time zone.
+            time.timeZone = "America/Denver";
+            # Select internationalisation properties.
+            i18n.defaultLocale = "en_US.utf8";
+            system.stateVersion = "24.05";
+            # Nvidia
+            services.xserver.displayManager.gdm.wayland = false;
+            boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_stable;
+            # Make sure opengl is enabled
+            hardware.opengl = {
+              enable = true;
+              driSupport = true;
+              driSupport32Bit = true;
+            };
+            # Tell Xorg to use the nvidia driver (also valid for Wayland)
+            services.xserver.videoDrivers = ["nvidia"];
+            hardware.nvidia = {
+              modesetting.enable = true;
+              open = false;
+              nvidiaSettings = true;
+              package = pkgs.linuxKernel.packages.linux_xanmod_stable.nvidia_x11;
+            };
+          }
+        ];
+      };
       nixos-mac-mini = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
         specialArgs = inputs;

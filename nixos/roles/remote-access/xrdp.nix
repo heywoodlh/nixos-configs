@@ -1,8 +1,6 @@
-{ config, pkgs, home-manager, ... }:
+{ config, pkgs, ... }:
 
 {
-  imports = [ home-manager.nixosModule ];
-
   services.xrdp = {
     enable = true;
     openFirewall = true;

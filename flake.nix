@@ -158,7 +158,6 @@
           ./nixos/desktop.nix
           ./nixos/roles/remote-access/sshd.nix
           ./nixos/roles/security/sshd-monitor.nix
-          ./nixos/roles/remote-access/xrdp.nix
           {
             networking.hostName = "nixos-oryx-pro";
             # System76 stuff
@@ -175,7 +174,6 @@
             i18n.defaultLocale = "en_US.utf8";
             system.stateVersion = "24.05";
             # Nvidia
-            services.xserver.displayManager.gdm.wayland = false;
             boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_stable;
             # Make sure opengl is enabled
             hardware.opengl = {
@@ -191,6 +189,11 @@
               nvidiaSettings = true;
               package = pkgs.linuxKernel.packages.linux_xanmod_stable.nvidia_x11;
             };
+            # autologin for RDP
+            services.xserver.displayManager.autoLogin.user = "heywoodlh";
+            networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+              3389
+            ];
           }
         ];
       };

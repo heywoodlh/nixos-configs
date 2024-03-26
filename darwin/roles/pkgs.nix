@@ -80,7 +80,6 @@ in {
       "Redirect Web for Safari" = 1571283503;
       "Vimlike" = 1584519802;
       "AdGuard for Safari" = 1440147259;
-      "Save to Raindrop.io" = 1549370672;
     };
   };
 }

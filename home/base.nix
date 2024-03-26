@@ -1,7 +1,12 @@
 { config, pkgs, home-manager, nur, myFlakes, ... }:
 
 let
+  system = pkgs.system;
   homeDir = config.home.homeDirectory;
+  myTmux = myFlakes.packages.${system}.tmux;
+  myFish = myFlakes.packages.${system}.fish;
+  myVM = myFlakes.packages.${system}.nixos-vm;
+  myVim = myFlakes.packages.${system}.vim;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
     export SOCKS_SERVER="nix-nvidia:1080"
     exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
@@ -14,10 +19,21 @@ let
   todomanWrapper = pkgs.writeScriptBin "todo" ''
     ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null && ${pkgs.todoman}/bin/todo "$@" && ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null
   '';
-  system = pkgs.system;
-  myTmux = myFlakes.packages.${system}.tmux;
-  myFish = myFlakes.packages.${system}.fish;
-  myVM = myFlakes.packages.${system}.nixos-vm;
+  vimTodoAdd = pkgs.writeScriptBin "todo-vim" ''
+    output="$(${pkgs.coreutils}/bin/printf "Summary: \n\n#Example Date:$(${pkgs.coreutils}/bin/date "+%Y-%m-%d %H:%M")\nDue: " | EDITOR='${myVim}/bin/vim' ${pkgs.moreutils}/bin/vipe)"
+    summary="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep 'Summary:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2 | ${pkgs.findutils}/bin/xargs)"
+    date="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep 'Due:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2 | ${pkgs.findutils}/bin/xargs)"
+    if [ -n "$summary" ]
+    then
+      if [[ -n $date ]]
+      then
+        datearg="--due $date"
+      else
+        datearg=""
+      fi
+      ${todomanWrapper}/bin/todo new "$datearg" "$summary"
+    fi
+  '';
   newsboat_browser_config = if pkgs.stdenv.isDarwin then ''
     browser "open %u"
   ''
@@ -77,6 +93,7 @@ in {
     myFish # For non-nix use-cases
     #myVM
     todomanWrapper
+    vimTodoAdd
   ];
 
   # Import nur as nixpkgs.overlays
@@ -289,7 +306,8 @@ in {
       date_format = "%Y-%m-%d"
       time_format = "%H:%M"
       default_list = "FF7A0137-4E3F-4C31-A6C7-C49FE1C91631" # Professional
-      default_due = 48
+      default_due = 0
+      default_command = "list --sort created_at --no-reverse"
     '';
   };
 }

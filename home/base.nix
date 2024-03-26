@@ -3,7 +3,7 @@
 let
   homeDir = config.home.homeDirectory;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
-    export SOCKS_SERVER="127.0.0.1:1"
+    export SOCKS_SERVER="nix-nvidia:1080"
     exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
       -T text/html \
       -cols $(${pkgs.ncurses}/bin/tput cols) \
@@ -66,8 +66,10 @@ in {
     python3
     screen
     tcpdump
+    todoman
     tree
     unzip
+    vdirsyncer
     zip
     myTmux # For non-nix use-cases
     myFish # For non-nix use-cases
@@ -247,6 +249,44 @@ in {
       function vultr-unlock
         export VULTR_API_KEY="$(op read 'op://Personal/biw7pdtbal7zj66gu6ylaavgui/api_key')"
       end
+    '';
+  };
+
+  # vdirsyncer
+  home.file.".config/vdirsyncer/config" = {
+    enable = true;
+    text = ''
+      [general]
+      status_path = "${homeDir}/.config/vdirsyncer/status/"
+
+      [pair my_todo]
+      a = "fastmail_local"
+      b = "fastmail_remote"
+      collections = ["from a", "from b"]
+
+      [storage fastmail_local]
+      type = "filesystem"
+      path = "~/.todo/fastmail"
+      fileext = ".ics"
+
+      [storage fastmail_remote]
+      type = "caldav"
+      item_types = ["VTODO"]
+      url = "https://caldav.fastmail.com"
+      username = "heywoodlh@heywoodlh.io"
+      password.fetch = ["shell", "${homeDir}/bin/op-wrapper.sh item get '44abj6tnhmrjdhv6potivbc5by' --fields label=password"]
+    '';
+  };
+
+  # todoman
+  home.file.".config/todoman/config.py" = {
+    enable = true;
+    text = ''
+      path = "~/.todo/fastmail/*"
+      date_format = "%Y-%m-%d"
+      time_format = "%H:%M"
+      default_list = "FF7A0137-4E3F-4C31-A6C7-C49FE1C91631" # Professional
+      default_due = 48
     '';
   };
 }

@@ -22,11 +22,13 @@ chmod +w *.plist *.json
    `~/.config/iterm2/iterm2-profiles.json` to `com.googlecode.iterm2.plist.nix`
    and `iterm2-profiles.json.nix` in `home/iterm2`
 
-6. Remove writable config files:
+6. Replace `tmux` executables in nix files with `${myTmux}/bin/tmux`
+
+7. Remove writable config files:
 
 ```
 rm ~/.config/iterm2/*plist* ~/.config/iterm2/*json*
 rm -rf ~/Library/Application\ Support/iTerm2/*
 ```
 
-7. Rebuild Nix-Darwin config
+8. Rebuild Nix-Darwin config

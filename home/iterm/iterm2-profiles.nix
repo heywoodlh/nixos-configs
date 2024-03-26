@@ -847,7 +847,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.70216643810272217
   },
-  "Transparency" : 0.39594414893617025,
+  "Transparency" : 0.048545545212765953,
   "HotKey Activated By Modifier" : false,
   "Background Color" : {
     "Red Component" : 0.1357133686542511,

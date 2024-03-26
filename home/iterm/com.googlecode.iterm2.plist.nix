@@ -1722,7 +1722,7 @@ Paste</string>
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Transparency</key>
-			<real>0.39594414893617025</real>
+			<real>0.048545545212765953</real>
 			<key>Unlimited Scrollback</key>
 			<true/>
 			<key>Use Bold Font</key>

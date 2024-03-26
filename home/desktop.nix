@@ -164,34 +164,34 @@ let
     ;
     profiles.home-manager = {
       search.force = true; # This is required so the build won't fail each time
-      bookmarks = [
-        {
-          # nixos folder
-          name = "nixos";
-          bookmarks = [
-            {
-              name = "nixos configuration options";
-              url = "https://search.nixos.org/options?";
-            }
-            {
-              name = "home-manager configuration options";
-              url = "https://nix-community.github.io/home-manager/options.xhtml";
-            }
-            {
-              name = "nix-darwin configuration options";
-              url = "https://daiderd.com/nix-darwin/manual/index.html#sec-options";
-            }
-            {
-              name = "nix packages";
-              url = "https://search.nixos.org/packages";
-            }
-            {
-              name = "nixos discourse";
-              url = "https://discourse.nixos.org/";
-            }
-          ];
-        }
-      ];
+      #bookmarks = [
+      #  {
+      #    # nixos folder
+      #    name = "nixos";
+      #    bookmarks = [
+      #      {
+      #        name = "nixos configuration options";
+      #        url = "https://search.nixos.org/options?";
+      #      }
+      #      {
+      #        name = "home-manager configuration options";
+      #        url = "https://nix-community.github.io/home-manager/options.xhtml";
+      #      }
+      #      {
+      #        name = "nix-darwin configuration options";
+      #        url = "https://daiderd.com/nix-darwin/manual/index.html#sec-options";
+      #      }
+      #      {
+      #        name = "nix packages";
+      #        url = "https://search.nixos.org/packages";
+      #      }
+      #      {
+      #        name = "nixos discourse";
+      #        url = "https://discourse.nixos.org/";
+      #      }
+      #    ];
+      #  }
+      #];
       # View extensions here: https://github.com/nix-community/nur-combined/blob/master/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
         darkreader

@@ -11,6 +11,9 @@ let
       -o display_image=false \
       -o display_link_number=true
   '';
+  todomanWrapper = pkgs.writeScriptBin "todo" ''
+    ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null && ${pkgs.todoman}/bin/todo "$@" && ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null
+  '';
   system = pkgs.system;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
@@ -66,7 +69,6 @@ in {
     python3
     screen
     tcpdump
-    todoman
     tree
     unzip
     vdirsyncer
@@ -74,6 +76,7 @@ in {
     myTmux # For non-nix use-cases
     myFish # For non-nix use-cases
     #myVM
+    todomanWrapper
   ];
 
   # Import nur as nixpkgs.overlays

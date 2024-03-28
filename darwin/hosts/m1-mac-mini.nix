@@ -53,6 +53,7 @@ in {
       "libolm"
     ];
     casks = [
+      "discord"
       "screens"
       "signal"
       "vmware-fusion"

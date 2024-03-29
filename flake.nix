@@ -150,6 +150,28 @@
           ./nixos/hosts/xps/configuration.nix
         ];
       };
+      nixos-pixelbook = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = inputs;
+        modules = [
+          nixos-hardware.nixosModules.google-pixelbook
+          /etc/nixos/hardware-configuration.nix
+          ./nixos/console.nix
+          {
+            networking.hostName = "nixos-pixelbook";
+            # Bootloader
+            boot.loader.systemd-boot.enable = true;
+            boot.loader.efi.canTouchEfiVariables = false;
+            # Enable networking
+            networking.networkmanager.enable = true;
+            # Set your time zone.
+            time.timeZone = "America/Denver";
+            # Select internationalisation properties.
+            i18n.defaultLocale = "en_US.utf8";
+            system.stateVersion = "24.05";
+          }
+        ];
+      };
       nixos-oryx-pro = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;

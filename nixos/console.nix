@@ -7,6 +7,17 @@ let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   tmux = myFlakes.packages.${system}.tmux;
+  battpop = pkgs.writeShellScriptBin "battpop" ''
+    ${pkgs.acpi}/bin/acpi -b | ${pkgs.gnugrep}/bin/grep -Eo [0-9]+%
+  '';
+  timepop = pkgs.writeShellScriptBin "timepop" ''
+    ${pkgs.coreutils}/bin/date "+%T"
+  '';
+  startFbterm = pkgs.writeShellScriptBin "start-fbterm" ''
+    eval $(${pkgs.openssh}/bin/ssh-agent)
+    export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+    /run/wrappers/bin/fbterm
+  '';
 in {
   imports = [
     home-manager.nixosModules.home-manager
@@ -46,15 +57,20 @@ in {
   };
 
   # Enable greetd+fbterm
+  security.wrappers.fbterm = {
+    owner = "root";
+    group = "video";
+    capabilities = "cap_sys_tty_config+ep";
+    source = "${pkgs.fbterm}/bin/fbterm";
+  };
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.greetd}/bin/agreety --cmd ${pkgs.fbterm}/bin/fbterm";
+        command = "${pkgs.greetd.greetd}/bin/agreety --cmd ${startFbterm}/bin/start-fbterm";
       };
     };
   };
-
   # Networking
   networking = {
     nftables.enable = true;
@@ -174,10 +190,14 @@ in {
     pkgs.idevicerestore # for iPhone
     pkgs.ifuse
     pkgs.usbutils
-    pkgs.browsh
     pkgs.fbterm
+    pkgs.browsh
+    pkgs.firefox # for browsh
+    pkgs.w3m
     myFlakes.packages.${system}.tmux
     myFlakes.packages.${system}.vim
+    battpop
+    timepop
   ];
 
   # Disable wait-online service for Network Manager
@@ -207,12 +227,11 @@ in {
           /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
         '';
       };
-
       home.file.".config/fbterm/fbtermrc" = {
         enable = true;
         text = ''
           font-names=JetBrainsMono Nerd Font
-          font-size=14
+          font-size=26
           #font-width=
           #font-height=
 
@@ -221,24 +240,25 @@ in {
           # 8-15 are brighter versions of 0-7
           # 16-231 is 6x6x6 color cube
           # 232-255 is grayscale
-          color-0=000000
-          color-1=AA0000
-          color-2=00AA00
-          color-3=AA5500
-          color-4=0000AA
-          color-5=AA00AA
-          color-6=00AAAA
-          color-7=AAAAAA
-          color-8=555555
-          color-9=FF5555
-          color-10=55FF55
-          color-11=FFFF55
-          color-12=5555FF
-          color-13=FF55FF
-          color-14=55FFFF
-          color-15=FFFFFF
-          color-foreground=7
-          color-background=0
+          # Nord theme, from https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/kitty/nord.conf
+          color-0=3B4252
+          color-1=BF616A
+          color-2=A3BE8C
+          color-3=EBCB8B
+          color-4=81A1C1
+          color-5=B48EAD
+          color-6=88C0D0
+          color-7=E5E9F0
+          color-8=4C566A
+          color-9=BF616A
+          color-10=A3BE8C
+          color-11=EBCB8B
+          color-12=81A1C1
+          color-13=B48EAD
+          color-14=8FBCBB
+          color-15=ECEFF4
+          color-foreground=D8DEE9
+          color-background=2E3440
 
           history-lines=0
           text-encodings=

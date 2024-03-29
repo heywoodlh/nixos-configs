@@ -45,7 +45,7 @@
       tcp_connect_time_out 8000
       localnet 127.0.0.0/255.0.0.0
       [ProxyList]
-      socks5 nix-nvidia 1080
+      socks5 100.108.77.60 1080
     '';
   };
 }

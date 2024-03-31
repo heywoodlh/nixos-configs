@@ -18,6 +18,32 @@ let
     export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
     /run/wrappers/bin/fbterm
   '';
+  pbcopy = pkgs.writeShellScriptBin "pbcopy" ''
+    stdin=$(${pkgs.coreutils}/bin/cat)
+    ${pkgs.coreutils}/bin/printf "%s" "$stdin" | ${pkgs.tmux}/bin/tmux loadb -
+  '';
+  op-wrapper = pkgs.writeShellScript "op-wrapper.sh" ''
+    env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
+    ${pkgs._1password}/bin/op --account my "$@"
+  '';
+  op-base = ''
+    id="$(${op-wrapper} item list | grep -vE '^ID' | ${pkgs.fzf}/bin/fzf --reverse | awk '{print $1}')"
+    [[ -z "$id" ]] && exit 0 # exit if no selection was made
+  '';
+  op-password = pkgs.writeShellScript "op-password" ''
+    ${op-base}
+    ${op-wrapper} item get "$id" --fields label=password || true
+  '';
+  op-otp = pkgs.writeShellScript "op-otp" ''
+    ${op-base}
+    ${op-wrapper} item get "$id" --otp || true
+  '';
+  password = pkgs.writeShellScriptBin "password" ''
+    ${op-password} | ${pbcopy}/bin/pbcopy
+  '';
+  otp = pkgs.writeShellScriptBin "otp" ''
+    ${op-otp} | ${pbcopy}/bin/pbcopy
+  '';
 in {
   imports = [
     home-manager.nixosModules.home-manager
@@ -198,6 +224,9 @@ in {
     myFlakes.packages.${system}.vim
     battpop
     timepop
+    pbcopy
+    password
+    otp
   ];
 
   # Disable wait-online service for Network Manager

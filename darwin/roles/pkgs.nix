@@ -14,7 +14,7 @@ in {
   ];
 
   nix.settings = {
-    auto-optimise-store = true;
+    auto-optimise-store = false; # Breaks things
     substituters = [
       "http://mac-mini:8080/nix-darwin"
     ];

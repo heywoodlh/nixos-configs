@@ -169,6 +169,10 @@
             # Select internationalisation properties.
             i18n.defaultLocale = "en_US.utf8";
             system.stateVersion = "24.05";
+            # System specific packages
+            environment.systemPackages = with pkgs; [
+              spotify-player
+            ];
           }
         ];
       };

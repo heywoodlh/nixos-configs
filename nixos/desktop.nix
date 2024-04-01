@@ -251,6 +251,7 @@ in {
         ../home/linux/desktop.nix # linux-specific desktop.nix
         ../home/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.default
+        (import myFlakes.packages.${system}.gnome-dconf)
         #hyprland.homeManagerModules.default
         #../home/linux/hyprland.nix
       ];

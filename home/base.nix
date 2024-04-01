@@ -43,6 +43,28 @@ let
   gomuks_keybindings_file = if pkgs.stdenv.isDarwin
   then "Library/Application Support/gomuks/keybindings.yaml"
   else ".config/gomuks/keybindings.yaml";
+  op-wrapper = pkgs.writeShellScript "op-wrapper.sh" ''
+    env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
+    ${pkgs._1password}/bin/op --account my "$@"
+  '';
+  op-base = ''
+    id="$(${op-wrapper} item list | grep -vE '^ID' | ${pkgs.fzf}/bin/fzf --reverse | awk '{print $1}')"
+    [[ -z "$id" ]] && exit 0 # exit if no selection was made
+  '';
+  op-password = pkgs.writeShellScript "op-password" ''
+    ${op-base}
+    ${op-wrapper} item get "$id" --fields label=password || true
+  '';
+  op-otp = pkgs.writeShellScript "op-otp" ''
+    ${op-base}
+    ${op-wrapper} item get "$id" --otp || true
+  '';
+  password = pkgs.writeShellScriptBin "password" ''
+    ${op-password} | ${pkgs.tmux}/bin/tmux loadb -
+  '';
+  otp = pkgs.writeShellScriptBin "otp" ''
+    ${op-otp} | ${pkgs.tmux}/bin/tmux loadb -
+  '';
 in {
   home.stateVersion = "23.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -94,6 +116,8 @@ in {
     #myVM
     todomanWrapper
     vimTodoAdd
+    password
+    otp
   ];
 
   # Import nur as nixpkgs.overlays

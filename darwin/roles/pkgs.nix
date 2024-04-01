@@ -50,7 +50,7 @@ in {
       "aaronraimist/homebrew-tap"
     ];
     casks = [
-      "1password-beta"
+      "1password"
       "android-platform-tools"
       "blockblock"
       "cursorcerer"

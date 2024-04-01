@@ -54,6 +54,7 @@ in {
     ];
     casks = [
       "discord"
+      "microsoft-remote-desktop"
       "screens"
       "signal"
       "vmware-fusion"

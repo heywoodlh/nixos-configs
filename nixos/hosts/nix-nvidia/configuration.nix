@@ -15,7 +15,7 @@
     ../../roles/remote-access/guacamole.nix
     ../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
-    ../../roles/dev/vscode.nix
+    #../../roles/dev/vscode.nix # many things don't work with non-standard Nix paths
   ];
 
   # Bootloader.

@@ -33,6 +33,8 @@ in {
       "bash"
       "choose-gui"
       "cliclick"
+      "coder"
+      "flyctl"
       "pinentry-mac"
       "watch"
       "zsh"

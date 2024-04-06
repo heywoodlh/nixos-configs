@@ -53,9 +53,10 @@ in {
     pkgs.acpi
     pkgs.arch-install-scripts
     pkgs.flatpak
-    pkgs.guake
     pkgs.gnome.gnome-screenshot
+    pkgs.guake
     pkgs.inotify-tools
+    pkgs.jetbrains-mono
     pkgs.keyutils
     pkgs.libnotify #(notify-send)
     pkgs.nixos-install-tools
@@ -211,4 +212,7 @@ in {
           }
       }'';
   };
+
+  # Enable fontconfig
+  fonts.fontconfig.enable = true;
 }

@@ -11,12 +11,12 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-zF0ouPqxWVjLjuD2poEHjBBcW95mNLh1ALZN6W4r7r4=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/ansible",
+        "narHash": "sha256-RFENn1WmWqV2OpMmD1Lq4r3JJ+1OhfpymIQrdY/AmcM=",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/ansible",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/ansible",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/ansible",
         "type": "path"
       }
     },
@@ -240,11 +240,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-7iLdOrBwQ6rUQDpfEj9Cci53rJta+eM87KW+uqDzV/A=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/chromium-widevine",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/chromium-widevine",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/chromium-widevine",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/chromium-widevine",
         "type": "path"
       }
     },
@@ -955,11 +955,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-/E94bcF+cO86iy8jPPU3EZXcPIz6bguK+gPtBOxlZ24=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/fish",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/fish",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/fish",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/fish",
         "type": "path"
       }
     },
@@ -1611,7 +1611,7 @@
     },
     "flake-utils_10": {
       "inputs": {
-        "systems": "systems_15"
+        "systems": "systems_14"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -1629,7 +1629,7 @@
     },
     "flake-utils_100": {
       "inputs": {
-        "systems": "systems_100"
+        "systems": "systems_99"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -1647,7 +1647,7 @@
     },
     "flake-utils_101": {
       "inputs": {
-        "systems": "systems_101"
+        "systems": "systems_100"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -1680,7 +1680,7 @@
     },
     "flake-utils_103": {
       "inputs": {
-        "systems": "systems_102"
+        "systems": "systems_101"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -1698,7 +1698,7 @@
     },
     "flake-utils_104": {
       "inputs": {
-        "systems": "systems_103"
+        "systems": "systems_102"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -1716,7 +1716,7 @@
     },
     "flake-utils_105": {
       "inputs": {
-        "systems": "systems_104"
+        "systems": "systems_103"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -1734,7 +1734,7 @@
     },
     "flake-utils_106": {
       "inputs": {
-        "systems": "systems_105"
+        "systems": "systems_104"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -1752,7 +1752,7 @@
     },
     "flake-utils_107": {
       "inputs": {
-        "systems": "systems_106"
+        "systems": "systems_105"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -1770,7 +1770,7 @@
     },
     "flake-utils_108": {
       "inputs": {
-        "systems": "systems_107"
+        "systems": "systems_106"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -1803,7 +1803,7 @@
     },
     "flake-utils_11": {
       "inputs": {
-        "systems": "systems_16"
+        "systems": "systems_15"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -1820,7 +1820,7 @@
     },
     "flake-utils_110": {
       "inputs": {
-        "systems": "systems_108"
+        "systems": "systems_107"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -1838,7 +1838,7 @@
     },
     "flake-utils_111": {
       "inputs": {
-        "systems": "systems_109"
+        "systems": "systems_108"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -1856,7 +1856,7 @@
     },
     "flake-utils_112": {
       "inputs": {
-        "systems": "systems_110"
+        "systems": "systems_109"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -1874,7 +1874,7 @@
     },
     "flake-utils_113": {
       "inputs": {
-        "systems": "systems_111"
+        "systems": "systems_110"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -1892,7 +1892,7 @@
     },
     "flake-utils_114": {
       "inputs": {
-        "systems": "systems_112"
+        "systems": "systems_111"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -1910,7 +1910,7 @@
     },
     "flake-utils_115": {
       "inputs": {
-        "systems": "systems_113"
+        "systems": "systems_112"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -1943,7 +1943,7 @@
     },
     "flake-utils_117": {
       "inputs": {
-        "systems": "systems_114"
+        "systems": "systems_113"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -1961,7 +1961,7 @@
     },
     "flake-utils_118": {
       "inputs": {
-        "systems": "systems_115"
+        "systems": "systems_114"
       },
       "locked": {
         "lastModified": 1692799911,
@@ -1979,7 +1979,7 @@
     },
     "flake-utils_119": {
       "inputs": {
-        "systems": "systems_116"
+        "systems": "systems_115"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -1997,7 +1997,7 @@
     },
     "flake-utils_12": {
       "inputs": {
-        "systems": "systems_17"
+        "systems": "systems_16"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2015,7 +2015,7 @@
     },
     "flake-utils_120": {
       "inputs": {
-        "systems": "systems_117"
+        "systems": "systems_116"
       },
       "locked": {
         "lastModified": 1710146030,
@@ -2033,7 +2033,7 @@
     },
     "flake-utils_121": {
       "inputs": {
-        "systems": "systems_118"
+        "systems": "systems_117"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -2051,7 +2051,7 @@
     },
     "flake-utils_122": {
       "inputs": {
-        "systems": "systems_119"
+        "systems": "systems_118"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -2069,7 +2069,7 @@
     },
     "flake-utils_123": {
       "inputs": {
-        "systems": "systems_120"
+        "systems": "systems_119"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2086,7 +2086,7 @@
     },
     "flake-utils_124": {
       "inputs": {
-        "systems": "systems_121"
+        "systems": "systems_120"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2104,7 +2104,7 @@
     },
     "flake-utils_125": {
       "inputs": {
-        "systems": "systems_122"
+        "systems": "systems_121"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2122,7 +2122,7 @@
     },
     "flake-utils_126": {
       "inputs": {
-        "systems": "systems_123"
+        "systems": "systems_122"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2140,7 +2140,7 @@
     },
     "flake-utils_127": {
       "inputs": {
-        "systems": "systems_124"
+        "systems": "systems_123"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2158,7 +2158,7 @@
     },
     "flake-utils_128": {
       "inputs": {
-        "systems": "systems_125"
+        "systems": "systems_124"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2176,7 +2176,7 @@
     },
     "flake-utils_129": {
       "inputs": {
-        "systems": "systems_126"
+        "systems": "systems_125"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2194,7 +2194,7 @@
     },
     "flake-utils_13": {
       "inputs": {
-        "systems": "systems_18"
+        "systems": "systems_17"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2212,7 +2212,7 @@
     },
     "flake-utils_130": {
       "inputs": {
-        "systems": "systems_127"
+        "systems": "systems_126"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2230,7 +2230,7 @@
     },
     "flake-utils_131": {
       "inputs": {
-        "systems": "systems_128"
+        "systems": "systems_127"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2248,7 +2248,7 @@
     },
     "flake-utils_132": {
       "inputs": {
-        "systems": "systems_129"
+        "systems": "systems_128"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -2266,7 +2266,7 @@
     },
     "flake-utils_133": {
       "inputs": {
-        "systems": "systems_130"
+        "systems": "systems_129"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -2284,7 +2284,7 @@
     },
     "flake-utils_134": {
       "inputs": {
-        "systems": "systems_131"
+        "systems": "systems_130"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -2302,7 +2302,7 @@
     },
     "flake-utils_135": {
       "inputs": {
-        "systems": "systems_132"
+        "systems": "systems_131"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -2320,7 +2320,7 @@
     },
     "flake-utils_136": {
       "inputs": {
-        "systems": "systems_133"
+        "systems": "systems_132"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2353,7 +2353,7 @@
     },
     "flake-utils_138": {
       "inputs": {
-        "systems": "systems_134"
+        "systems": "systems_133"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2371,7 +2371,7 @@
     },
     "flake-utils_139": {
       "inputs": {
-        "systems": "systems_135"
+        "systems": "systems_134"
       },
       "locked": {
         "lastModified": 1692799911,
@@ -2389,7 +2389,7 @@
     },
     "flake-utils_14": {
       "inputs": {
-        "systems": "systems_19"
+        "systems": "systems_18"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2407,7 +2407,7 @@
     },
     "flake-utils_140": {
       "inputs": {
-        "systems": "systems_136"
+        "systems": "systems_135"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -2425,7 +2425,7 @@
     },
     "flake-utils_141": {
       "inputs": {
-        "systems": "systems_137"
+        "systems": "systems_136"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2443,7 +2443,7 @@
     },
     "flake-utils_142": {
       "inputs": {
-        "systems": "systems_138"
+        "systems": "systems_137"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -2461,7 +2461,7 @@
     },
     "flake-utils_143": {
       "inputs": {
-        "systems": "systems_139"
+        "systems": "systems_138"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -2479,7 +2479,7 @@
     },
     "flake-utils_144": {
       "inputs": {
-        "systems": "systems_140"
+        "systems": "systems_139"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -2497,7 +2497,7 @@
     },
     "flake-utils_145": {
       "inputs": {
-        "systems": "systems_141"
+        "systems": "systems_140"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -2515,7 +2515,7 @@
     },
     "flake-utils_146": {
       "inputs": {
-        "systems": "systems_142"
+        "systems": "systems_141"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -2548,7 +2548,7 @@
     },
     "flake-utils_148": {
       "inputs": {
-        "systems": "systems_143"
+        "systems": "systems_142"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -2566,7 +2566,7 @@
     },
     "flake-utils_149": {
       "inputs": {
-        "systems": "systems_144"
+        "systems": "systems_143"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -2584,7 +2584,7 @@
     },
     "flake-utils_15": {
       "inputs": {
-        "systems": "systems_20"
+        "systems": "systems_19"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2602,7 +2602,7 @@
     },
     "flake-utils_150": {
       "inputs": {
-        "systems": "systems_145"
+        "systems": "systems_144"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -2620,7 +2620,7 @@
     },
     "flake-utils_151": {
       "inputs": {
-        "systems": "systems_146"
+        "systems": "systems_145"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -2638,7 +2638,7 @@
     },
     "flake-utils_152": {
       "inputs": {
-        "systems": "systems_147"
+        "systems": "systems_146"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -2656,7 +2656,7 @@
     },
     "flake-utils_153": {
       "inputs": {
-        "systems": "systems_148"
+        "systems": "systems_147"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -2689,7 +2689,7 @@
     },
     "flake-utils_155": {
       "inputs": {
-        "systems": "systems_149"
+        "systems": "systems_148"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -2707,7 +2707,7 @@
     },
     "flake-utils_156": {
       "inputs": {
-        "systems": "systems_150"
+        "systems": "systems_149"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -2725,7 +2725,7 @@
     },
     "flake-utils_157": {
       "inputs": {
-        "systems": "systems_151"
+        "systems": "systems_150"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -2743,7 +2743,7 @@
     },
     "flake-utils_158": {
       "inputs": {
-        "systems": "systems_152"
+        "systems": "systems_151"
       },
       "locked": {
         "lastModified": 1710146030,
@@ -2761,7 +2761,7 @@
     },
     "flake-utils_159": {
       "inputs": {
-        "systems": "systems_153"
+        "systems": "systems_152"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -2779,7 +2779,7 @@
     },
     "flake-utils_16": {
       "inputs": {
-        "systems": "systems_21"
+        "systems": "systems_20"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2797,7 +2797,7 @@
     },
     "flake-utils_160": {
       "inputs": {
-        "systems": "systems_154"
+        "systems": "systems_153"
       },
       "locked": {
         "lastModified": 1710146030,
@@ -2815,7 +2815,7 @@
     },
     "flake-utils_161": {
       "inputs": {
-        "systems": "systems_155"
+        "systems": "systems_154"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -2833,7 +2833,7 @@
     },
     "flake-utils_162": {
       "inputs": {
-        "systems": "systems_156"
+        "systems": "systems_155"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2850,7 +2850,7 @@
     },
     "flake-utils_163": {
       "inputs": {
-        "systems": "systems_157"
+        "systems": "systems_156"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2868,7 +2868,7 @@
     },
     "flake-utils_164": {
       "inputs": {
-        "systems": "systems_158"
+        "systems": "systems_157"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2886,7 +2886,7 @@
     },
     "flake-utils_165": {
       "inputs": {
-        "systems": "systems_159"
+        "systems": "systems_158"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2904,7 +2904,7 @@
     },
     "flake-utils_166": {
       "inputs": {
-        "systems": "systems_160"
+        "systems": "systems_159"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2922,7 +2922,7 @@
     },
     "flake-utils_167": {
       "inputs": {
-        "systems": "systems_161"
+        "systems": "systems_160"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2940,7 +2940,7 @@
     },
     "flake-utils_168": {
       "inputs": {
-        "systems": "systems_162"
+        "systems": "systems_161"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2958,7 +2958,7 @@
     },
     "flake-utils_169": {
       "inputs": {
-        "systems": "systems_163"
+        "systems": "systems_162"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2976,7 +2976,7 @@
     },
     "flake-utils_17": {
       "inputs": {
-        "systems": "systems_22"
+        "systems": "systems_21"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -2994,7 +2994,7 @@
     },
     "flake-utils_170": {
       "inputs": {
-        "systems": "systems_164"
+        "systems": "systems_163"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3012,7 +3012,7 @@
     },
     "flake-utils_171": {
       "inputs": {
-        "systems": "systems_165"
+        "systems": "systems_164"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -3030,7 +3030,7 @@
     },
     "flake-utils_172": {
       "inputs": {
-        "systems": "systems_166"
+        "systems": "systems_165"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -3048,7 +3048,7 @@
     },
     "flake-utils_173": {
       "inputs": {
-        "systems": "systems_167"
+        "systems": "systems_166"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -3066,7 +3066,7 @@
     },
     "flake-utils_174": {
       "inputs": {
-        "systems": "systems_168"
+        "systems": "systems_167"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -3084,7 +3084,7 @@
     },
     "flake-utils_175": {
       "inputs": {
-        "systems": "systems_169"
+        "systems": "systems_168"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3117,7 +3117,7 @@
     },
     "flake-utils_177": {
       "inputs": {
-        "systems": "systems_170"
+        "systems": "systems_169"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3135,7 +3135,7 @@
     },
     "flake-utils_178": {
       "inputs": {
-        "systems": "systems_171"
+        "systems": "systems_170"
       },
       "locked": {
         "lastModified": 1692799911,
@@ -3153,7 +3153,7 @@
     },
     "flake-utils_179": {
       "inputs": {
-        "systems": "systems_172"
+        "systems": "systems_171"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -3171,7 +3171,7 @@
     },
     "flake-utils_18": {
       "inputs": {
-        "systems": "systems_23"
+        "systems": "systems_22"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3189,7 +3189,7 @@
     },
     "flake-utils_180": {
       "inputs": {
-        "systems": "systems_173"
+        "systems": "systems_172"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3207,7 +3207,7 @@
     },
     "flake-utils_181": {
       "inputs": {
-        "systems": "systems_174"
+        "systems": "systems_173"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -3225,7 +3225,7 @@
     },
     "flake-utils_182": {
       "inputs": {
-        "systems": "systems_175"
+        "systems": "systems_174"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -3243,7 +3243,7 @@
     },
     "flake-utils_183": {
       "inputs": {
-        "systems": "systems_176"
+        "systems": "systems_175"
       },
       "locked": {
         "lastModified": 1710146030,
@@ -3261,7 +3261,7 @@
     },
     "flake-utils_184": {
       "inputs": {
-        "systems": "systems_177"
+        "systems": "systems_176"
       },
       "locked": {
         "lastModified": 1710146030,
@@ -3279,7 +3279,7 @@
     },
     "flake-utils_185": {
       "inputs": {
-        "systems": "systems_178"
+        "systems": "systems_177"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -3312,7 +3312,7 @@
     },
     "flake-utils_187": {
       "inputs": {
-        "systems": "systems_179"
+        "systems": "systems_178"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -3330,7 +3330,7 @@
     },
     "flake-utils_188": {
       "inputs": {
-        "systems": "systems_180"
+        "systems": "systems_179"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -3348,7 +3348,7 @@
     },
     "flake-utils_189": {
       "inputs": {
-        "systems": "systems_181"
+        "systems": "systems_180"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -3366,7 +3366,7 @@
     },
     "flake-utils_19": {
       "inputs": {
-        "systems": "systems_24"
+        "systems": "systems_23"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3384,7 +3384,7 @@
     },
     "flake-utils_190": {
       "inputs": {
-        "systems": "systems_182"
+        "systems": "systems_181"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -3402,7 +3402,7 @@
     },
     "flake-utils_191": {
       "inputs": {
-        "systems": "systems_183"
+        "systems": "systems_182"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -3420,7 +3420,7 @@
     },
     "flake-utils_192": {
       "inputs": {
-        "systems": "systems_184"
+        "systems": "systems_183"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -3453,7 +3453,7 @@
     },
     "flake-utils_194": {
       "inputs": {
-        "systems": "systems_185"
+        "systems": "systems_184"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -3471,7 +3471,7 @@
     },
     "flake-utils_195": {
       "inputs": {
-        "systems": "systems_186"
+        "systems": "systems_185"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -3507,7 +3507,7 @@
     },
     "flake-utils_20": {
       "inputs": {
-        "systems": "systems_25"
+        "systems": "systems_24"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -3525,7 +3525,7 @@
     },
     "flake-utils_21": {
       "inputs": {
-        "systems": "systems_26"
+        "systems": "systems_25"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -3543,7 +3543,7 @@
     },
     "flake-utils_22": {
       "inputs": {
-        "systems": "systems_27"
+        "systems": "systems_26"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -3561,7 +3561,7 @@
     },
     "flake-utils_23": {
       "inputs": {
-        "systems": "systems_28"
+        "systems": "systems_27"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -3579,7 +3579,7 @@
     },
     "flake-utils_24": {
       "inputs": {
-        "systems": "systems_29"
+        "systems": "systems_28"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3612,7 +3612,7 @@
     },
     "flake-utils_26": {
       "inputs": {
-        "systems": "systems_30"
+        "systems": "systems_29"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3630,7 +3630,7 @@
     },
     "flake-utils_27": {
       "inputs": {
-        "systems": "systems_31"
+        "systems": "systems_30"
       },
       "locked": {
         "lastModified": 1692799911,
@@ -3648,7 +3648,7 @@
     },
     "flake-utils_28": {
       "inputs": {
-        "systems": "systems_32"
+        "systems": "systems_31"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -3666,7 +3666,7 @@
     },
     "flake-utils_29": {
       "inputs": {
-        "systems": "systems_33"
+        "systems": "systems_32"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -3701,7 +3701,7 @@
     },
     "flake-utils_30": {
       "inputs": {
-        "systems": "systems_34"
+        "systems": "systems_33"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -3719,7 +3719,7 @@
     },
     "flake-utils_31": {
       "inputs": {
-        "systems": "systems_35"
+        "systems": "systems_34"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -3737,7 +3737,7 @@
     },
     "flake-utils_32": {
       "inputs": {
-        "systems": "systems_36"
+        "systems": "systems_35"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3754,7 +3754,7 @@
     },
     "flake-utils_33": {
       "inputs": {
-        "systems": "systems_37"
+        "systems": "systems_36"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3772,7 +3772,7 @@
     },
     "flake-utils_34": {
       "inputs": {
-        "systems": "systems_38"
+        "systems": "systems_37"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3790,7 +3790,7 @@
     },
     "flake-utils_35": {
       "inputs": {
-        "systems": "systems_39"
+        "systems": "systems_38"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3808,7 +3808,7 @@
     },
     "flake-utils_36": {
       "inputs": {
-        "systems": "systems_40"
+        "systems": "systems_39"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3826,7 +3826,7 @@
     },
     "flake-utils_37": {
       "inputs": {
-        "systems": "systems_41"
+        "systems": "systems_40"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3844,7 +3844,7 @@
     },
     "flake-utils_38": {
       "inputs": {
-        "systems": "systems_42"
+        "systems": "systems_41"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3862,7 +3862,7 @@
     },
     "flake-utils_39": {
       "inputs": {
-        "systems": "systems_43"
+        "systems": "systems_42"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3880,7 +3880,7 @@
     },
     "flake-utils_4": {
       "inputs": {
-        "systems": "systems_6"
+        "systems": "systems_5"
       },
       "locked": {
         "lastModified": 1710146030,
@@ -3898,7 +3898,7 @@
     },
     "flake-utils_40": {
       "inputs": {
-        "systems": "systems_44"
+        "systems": "systems_43"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -3916,7 +3916,7 @@
     },
     "flake-utils_41": {
       "inputs": {
-        "systems": "systems_45"
+        "systems": "systems_44"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -3934,7 +3934,7 @@
     },
     "flake-utils_42": {
       "inputs": {
-        "systems": "systems_46"
+        "systems": "systems_45"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -3952,7 +3952,7 @@
     },
     "flake-utils_43": {
       "inputs": {
-        "systems": "systems_47"
+        "systems": "systems_46"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -3970,7 +3970,7 @@
     },
     "flake-utils_44": {
       "inputs": {
-        "systems": "systems_48"
+        "systems": "systems_47"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -3988,7 +3988,7 @@
     },
     "flake-utils_45": {
       "inputs": {
-        "systems": "systems_49"
+        "systems": "systems_48"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4021,7 +4021,7 @@
     },
     "flake-utils_47": {
       "inputs": {
-        "systems": "systems_50"
+        "systems": "systems_49"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4039,7 +4039,7 @@
     },
     "flake-utils_48": {
       "inputs": {
-        "systems": "systems_51"
+        "systems": "systems_50"
       },
       "locked": {
         "lastModified": 1692799911,
@@ -4057,7 +4057,7 @@
     },
     "flake-utils_49": {
       "inputs": {
-        "systems": "systems_52"
+        "systems": "systems_51"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4090,7 +4090,7 @@
     },
     "flake-utils_50": {
       "inputs": {
-        "systems": "systems_53"
+        "systems": "systems_52"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4108,7 +4108,7 @@
     },
     "flake-utils_51": {
       "inputs": {
-        "systems": "systems_54"
+        "systems": "systems_53"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4125,7 +4125,7 @@
     },
     "flake-utils_52": {
       "inputs": {
-        "systems": "systems_55"
+        "systems": "systems_54"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4143,7 +4143,7 @@
     },
     "flake-utils_53": {
       "inputs": {
-        "systems": "systems_56"
+        "systems": "systems_55"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4161,7 +4161,7 @@
     },
     "flake-utils_54": {
       "inputs": {
-        "systems": "systems_57"
+        "systems": "systems_56"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4179,7 +4179,7 @@
     },
     "flake-utils_55": {
       "inputs": {
-        "systems": "systems_58"
+        "systems": "systems_57"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4197,7 +4197,7 @@
     },
     "flake-utils_56": {
       "inputs": {
-        "systems": "systems_59"
+        "systems": "systems_58"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4215,7 +4215,7 @@
     },
     "flake-utils_57": {
       "inputs": {
-        "systems": "systems_60"
+        "systems": "systems_59"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4233,7 +4233,7 @@
     },
     "flake-utils_58": {
       "inputs": {
-        "systems": "systems_61"
+        "systems": "systems_60"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4251,7 +4251,7 @@
     },
     "flake-utils_59": {
       "inputs": {
-        "systems": "systems_62"
+        "systems": "systems_61"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4269,7 +4269,7 @@
     },
     "flake-utils_6": {
       "inputs": {
-        "systems": "systems_7"
+        "systems": "systems_6"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4287,7 +4287,7 @@
     },
     "flake-utils_60": {
       "inputs": {
-        "systems": "systems_63"
+        "systems": "systems_62"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -4305,7 +4305,7 @@
     },
     "flake-utils_61": {
       "inputs": {
-        "systems": "systems_64"
+        "systems": "systems_63"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -4323,7 +4323,7 @@
     },
     "flake-utils_62": {
       "inputs": {
-        "systems": "systems_65"
+        "systems": "systems_64"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -4341,7 +4341,7 @@
     },
     "flake-utils_63": {
       "inputs": {
-        "systems": "systems_66"
+        "systems": "systems_65"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -4359,7 +4359,7 @@
     },
     "flake-utils_64": {
       "inputs": {
-        "systems": "systems_67"
+        "systems": "systems_66"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4392,7 +4392,7 @@
     },
     "flake-utils_66": {
       "inputs": {
-        "systems": "systems_68"
+        "systems": "systems_67"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4410,7 +4410,7 @@
     },
     "flake-utils_67": {
       "inputs": {
-        "systems": "systems_69"
+        "systems": "systems_68"
       },
       "locked": {
         "lastModified": 1692799911,
@@ -4428,7 +4428,7 @@
     },
     "flake-utils_68": {
       "inputs": {
-        "systems": "systems_70"
+        "systems": "systems_69"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4446,7 +4446,7 @@
     },
     "flake-utils_69": {
       "inputs": {
-        "systems": "systems_71"
+        "systems": "systems_70"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4464,7 +4464,7 @@
     },
     "flake-utils_7": {
       "inputs": {
-        "systems": "systems_8"
+        "systems": "systems_7"
       },
       "locked": {
         "lastModified": 1710146030,
@@ -4481,7 +4481,7 @@
     },
     "flake-utils_70": {
       "inputs": {
-        "systems": "systems_72"
+        "systems": "systems_71"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4499,7 +4499,7 @@
     },
     "flake-utils_71": {
       "inputs": {
-        "systems": "systems_73"
+        "systems": "systems_72"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4517,7 +4517,7 @@
     },
     "flake-utils_72": {
       "inputs": {
-        "systems": "systems_74"
+        "systems": "systems_73"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4534,7 +4534,7 @@
     },
     "flake-utils_73": {
       "inputs": {
-        "systems": "systems_75"
+        "systems": "systems_74"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4552,7 +4552,7 @@
     },
     "flake-utils_74": {
       "inputs": {
-        "systems": "systems_76"
+        "systems": "systems_75"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4570,7 +4570,7 @@
     },
     "flake-utils_75": {
       "inputs": {
-        "systems": "systems_77"
+        "systems": "systems_76"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4588,7 +4588,7 @@
     },
     "flake-utils_76": {
       "inputs": {
-        "systems": "systems_78"
+        "systems": "systems_77"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4606,7 +4606,7 @@
     },
     "flake-utils_77": {
       "inputs": {
-        "systems": "systems_79"
+        "systems": "systems_78"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4624,7 +4624,7 @@
     },
     "flake-utils_78": {
       "inputs": {
-        "systems": "systems_80"
+        "systems": "systems_79"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4642,7 +4642,7 @@
     },
     "flake-utils_79": {
       "inputs": {
-        "systems": "systems_81"
+        "systems": "systems_80"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4660,7 +4660,7 @@
     },
     "flake-utils_8": {
       "inputs": {
-        "systems": "systems_12"
+        "systems": "systems_11"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -4678,7 +4678,7 @@
     },
     "flake-utils_80": {
       "inputs": {
-        "systems": "systems_82"
+        "systems": "systems_81"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4696,7 +4696,7 @@
     },
     "flake-utils_81": {
       "inputs": {
-        "systems": "systems_83"
+        "systems": "systems_82"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -4714,7 +4714,7 @@
     },
     "flake-utils_82": {
       "inputs": {
-        "systems": "systems_84"
+        "systems": "systems_83"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -4732,7 +4732,7 @@
     },
     "flake-utils_83": {
       "inputs": {
-        "systems": "systems_85"
+        "systems": "systems_84"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -4750,7 +4750,7 @@
     },
     "flake-utils_84": {
       "inputs": {
-        "systems": "systems_86"
+        "systems": "systems_85"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -4768,7 +4768,7 @@
     },
     "flake-utils_85": {
       "inputs": {
-        "systems": "systems_87"
+        "systems": "systems_86"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4801,7 +4801,7 @@
     },
     "flake-utils_87": {
       "inputs": {
-        "systems": "systems_88"
+        "systems": "systems_87"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4819,7 +4819,7 @@
     },
     "flake-utils_88": {
       "inputs": {
-        "systems": "systems_89"
+        "systems": "systems_88"
       },
       "locked": {
         "lastModified": 1692799911,
@@ -4837,7 +4837,7 @@
     },
     "flake-utils_89": {
       "inputs": {
-        "systems": "systems_90"
+        "systems": "systems_89"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -4855,7 +4855,7 @@
     },
     "flake-utils_9": {
       "inputs": {
-        "systems": "systems_13"
+        "systems": "systems_12"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -4872,7 +4872,7 @@
     },
     "flake-utils_90": {
       "inputs": {
-        "systems": "systems_91"
+        "systems": "systems_90"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4890,7 +4890,7 @@
     },
     "flake-utils_91": {
       "inputs": {
-        "systems": "systems_92"
+        "systems": "systems_91"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4908,7 +4908,7 @@
     },
     "flake-utils_92": {
       "inputs": {
-        "systems": "systems_93"
+        "systems": "systems_92"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4926,7 +4926,7 @@
     },
     "flake-utils_93": {
       "inputs": {
-        "systems": "systems_94"
+        "systems": "systems_93"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4944,7 +4944,7 @@
     },
     "flake-utils_94": {
       "inputs": {
-        "systems": "systems_95"
+        "systems": "systems_94"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4977,7 +4977,7 @@
     },
     "flake-utils_96": {
       "inputs": {
-        "systems": "systems_96"
+        "systems": "systems_95"
       },
       "locked": {
         "lastModified": 1701680307,
@@ -4995,7 +4995,7 @@
     },
     "flake-utils_97": {
       "inputs": {
-        "systems": "systems_97"
+        "systems": "systems_96"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -5013,7 +5013,7 @@
     },
     "flake-utils_98": {
       "inputs": {
-        "systems": "systems_98"
+        "systems": "systems_97"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -5031,7 +5031,7 @@
     },
     "flake-utils_99": {
       "inputs": {
-        "systems": "systems_99"
+        "systems": "systems_98"
       },
       "locked": {
         "lastModified": 1689068808,
@@ -5461,11 +5461,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-tMjGB/YA9UzHcPCHyY1w737VoivQux1LapKaoPaIjFc=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/git",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/git",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/git",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/git",
         "type": "path"
       }
     },
@@ -5494,12 +5494,12 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-aiwGubNsM3iPVH/00qvlnp7hQXwbsCTXtrDk2cXi8Kg=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/gnome",
+        "narHash": "sha256-tz7Y8DJNQf6o1abv3Fqjz/LKUbhstk8gpabasNgcY2E=",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/gnome",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/gnome",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/gnome",
         "type": "path"
       }
     },
@@ -5510,11 +5510,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1712093955,
-        "narHash": "sha256-94I0sXz6fiVBvUAk2tg6t3UpM5rOImj4JTSTNFbg64s=",
+        "lastModified": 1712390667,
+        "narHash": "sha256-ebq+fJZfobqpsAdGDGpxNWSySbQejRwW9cdiil6krCo=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "80546b220e95a575c66c213af1b09fe255299438",
+        "rev": "b787726a8413e11b074cde42704b4af32d95545c",
         "type": "github"
       },
       "original": {
@@ -5818,7 +5818,10 @@
     },
     "hyprcursor": {
       "inputs": {
-        "hyprlang": "hyprlang",
+        "hyprlang": [
+          "hyprland",
+          "hyprlang"
+        ],
         "nixpkgs": [
           "hyprland",
           "nixpkgs"
@@ -5829,11 +5832,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1711466786,
-        "narHash": "sha256-sArxGyUBiCA1in+q6t0QqT+ZJiZ1PyBp7cNPKLmREM0=",
+        "lastModified": 1712339458,
+        "narHash": "sha256-j8pv3tL2EFLGuvFoO64dHWD8YzNvD77hRb4EEx5ADgE=",
         "owner": "hyprwm",
         "repo": "hyprcursor",
-        "rev": "d3876f34779cc03ee51e4aafc0d00a4f187c7544",
+        "rev": "981b6617822dadc40246a6c70194d02dfc12e4c6",
         "type": "github"
       },
       "original": {
@@ -5844,7 +5847,7 @@
     },
     "hyprcursor_2": {
       "inputs": {
-        "hyprlang": "hyprlang_3",
+        "hyprlang": "hyprlang_2",
         "nixpkgs": [
           "myFlakes",
           "ansible-flake",
@@ -5878,18 +5881,18 @@
       "inputs": {
         "hyprcursor": "hyprcursor",
         "hyprland-protocols": "hyprland-protocols",
-        "hyprlang": "hyprlang_2",
+        "hyprlang": "hyprlang",
         "nixpkgs": "nixpkgs_3",
-        "systems": "systems_5",
+        "systems": "systems_4",
         "wlroots": "wlroots",
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1712153309,
-        "narHash": "sha256-Z9FdgPjkUeH3GXoXaN5LrVHytckRA53k6rmiQdOaRm4=",
+        "lastModified": 1712426363,
+        "narHash": "sha256-+beqmDbH0kGwAl7inNz+Llc3OKxpkuJ7KHUTOtvOnjM=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "91061a2084f4b3b2f64c955b4d02b8f5c94541be",
+        "rev": "ff114cf6f9f45b2ccc5eed95a95738b7c1a61003",
         "type": "github"
       },
       "original": {
@@ -5959,9 +5962,9 @@
       "inputs": {
         "hyprcursor": "hyprcursor_2",
         "hyprland-protocols": "hyprland-protocols_2",
-        "hyprlang": "hyprlang_4",
+        "hyprlang": "hyprlang_3",
         "nixpkgs": "nixpkgs_6",
-        "systems": "systems_11",
+        "systems": "systems_10",
         "wlroots": "wlroots_2",
         "xdph": "xdph_2"
       },
@@ -5984,17 +5987,19 @@
       "inputs": {
         "nixpkgs": [
           "hyprland",
-          "hyprcursor",
           "nixpkgs"
         ],
-        "systems": "systems_4"
+        "systems": [
+          "hyprland",
+          "systems"
+        ]
       },
       "locked": {
-        "lastModified": 1709914708,
-        "narHash": "sha256-bR4o3mynoTa1Wi4ZTjbnsZ6iqVcPGriXp56bZh5UFTk=",
+        "lastModified": 1711671891,
+        "narHash": "sha256-C/Wwsy/RLxHP1axFFl+AnwJRWfd8gxDKKoa8nt8Qk3c=",
         "owner": "hyprwm",
         "repo": "hyprlang",
-        "rev": "a685493fdbeec01ca8ccdf1f3655c044a8ce2fe2",
+        "rev": "c1402612146ba06606ebf64963a02bc1efe11e74",
         "type": "github"
       },
       "original": {
@@ -6006,31 +6011,6 @@
     "hyprlang_2": {
       "inputs": {
         "nixpkgs": [
-          "hyprland",
-          "nixpkgs"
-        ],
-        "systems": [
-          "hyprland",
-          "systems"
-        ]
-      },
-      "locked": {
-        "lastModified": 1711250455,
-        "narHash": "sha256-LSq1ZsTpeD7xsqvlsepDEelWRDtAhqwetp6PusHXJRo=",
-        "owner": "hyprwm",
-        "repo": "hyprlang",
-        "rev": "b3e430f81f3364c5dd1a3cc9995706a4799eb3fa",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hyprwm",
-        "repo": "hyprlang",
-        "type": "github"
-      }
-    },
-    "hyprlang_3": {
-      "inputs": {
-        "nixpkgs": [
           "myFlakes",
           "ansible-flake",
           "nixos-configs",
@@ -6038,7 +6018,7 @@
           "hyprcursor",
           "nixpkgs"
         ],
-        "systems": "systems_10"
+        "systems": "systems_9"
       },
       "locked": {
         "lastModified": 1709914708,
@@ -6054,7 +6034,7 @@
         "type": "github"
       }
     },
-    "hyprlang_4": {
+    "hyprlang_3": {
       "inputs": {
         "nixpkgs": [
           "myFlakes",
@@ -6178,11 +6158,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-4Evg/dK/jqfFdCxIUPoKnTrdhEEvdRhiKow4hJrlNnE=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/jetporch",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/jetporch",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/jetporch",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/jetporch",
         "type": "path"
       }
     },
@@ -6253,11 +6233,11 @@
     "jovian-nixos": {
       "flake": false,
       "locked": {
-        "lastModified": 1711231487,
-        "narHash": "sha256-dRdFjStMA7GeuD/V4vzKblzuHwxMPgzEboRleVdZlUM=",
+        "lastModified": 1712296875,
+        "narHash": "sha256-Cmyer1n39J5IucCiyy84kf1XLr1Gdz/i5HKbzzEOQYM=",
         "ref": "development",
-        "rev": "1171169117f63f1de9ef2ea36efd8dcf377c6d5a",
-        "revCount": 700,
+        "rev": "9b0e8712f1a9e5569036b227d539b745fcf54aad",
+        "revCount": 705,
         "type": "git",
         "url": "https://github.com/Jovian-Experiments/Jovian-NixOS"
       },
@@ -6513,11 +6493,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-QaEmf/1uzswGOTxoFWYlAX3R4MG9vSYcFuXTbQ/WiSs=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/lima",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/lima",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/lima",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/lima",
         "type": "path"
       }
     },
@@ -6614,11 +6594,11 @@
         "wezterm-flake": "wezterm-flake_10"
       },
       "locked": {
-        "lastModified": 1711996783,
-        "narHash": "sha256-7kB6bOP/BvbYrNjUH6BrfTb0t4uIjpR2XBzTmqsK4lM=",
+        "lastModified": 1712434830,
+        "narHash": "sha256-Cxv+T65m6JkfJtVZ/0kEl+0pe7iTSR/hjV4IfbalmnI=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "3f326a3bac569c6b63be8354db65548bef355687",
+        "rev": "8e637a58b17b4d4f68649f7b337dc01490e07ef2",
         "type": "github"
       },
       "original": {
@@ -8145,11 +8125,11 @@
         "rust-overlay": "rust-overlay_9"
       },
       "locked": {
-        "lastModified": 1711325419,
-        "narHash": "sha256-dKZUWMB4py9rhefu1lsrCrwksK4WX/dtW8Ma807KyPA=",
+        "lastModified": 1712279577,
+        "narHash": "sha256-Bwn4rmQi2L2iX6g3ycQMA4baE3zgPHAO0xPBpr2T4/k=",
         "owner": "tpwrules",
         "repo": "nixos-apple-silicon",
-        "rev": "93e85575f63b32b9996676513d95288fc1c87ca9",
+        "rev": "d47afc3f0f8b3078c818da8609c41340af61a2ec",
         "type": "github"
       },
       "original": {
@@ -8626,11 +8606,11 @@
     },
     "nixos-hardware_9": {
       "locked": {
-        "lastModified": 1711352745,
-        "narHash": "sha256-luvqik+i3HTvCbXQZgB6uggvEcxI9uae0nmrgtXJ17U=",
+        "lastModified": 1712324865,
+        "narHash": "sha256-+BatEWd4HlMeK7Ora+gYIkarjxFVCg9oKrIeybHIIX4=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "9a763a7acc4cfbb8603bb0231fec3eda864f81c0",
+        "rev": "f3b959627bca46a9f7052b8fbc464b8323e68c2c",
         "type": "github"
       },
       "original": {
@@ -9158,11 +9138,11 @@
     },
     "nixpkgs-lts_9": {
       "locked": {
-        "lastModified": 1712026416,
-        "narHash": "sha256-N/3VR/9e1NlN49p7kCiATiEY6Tzdo+CbrAG8kqCQKcI=",
+        "lastModified": 1712388808,
+        "narHash": "sha256-9ogU4c3vUmuMDoRlbQCeq3OKx0XJmgHcLZ4XywJNYWI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "080a4a27f206d07724b88da096e27ef63401a504",
+        "rev": "fe4295b9ecd88764c1abf6179e03b1a828ca0e9a",
         "type": "github"
       },
       "original": {
@@ -9270,11 +9250,11 @@
     },
     "nixpkgs-stable_6": {
       "locked": {
-        "lastModified": 1712156406,
-        "narHash": "sha256-QKlz1VL3pPSRIUEfBNKPelVgCdZVaOWgwQcQQnWc8Mc=",
+        "lastModified": 1712428060,
+        "narHash": "sha256-XIwFfQSyZ+TQvgAHwh6pUL9NKVlo9PLmxECy6HesK4w=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "200c7edf79c2a79525f55179eda5a4df70adff1f",
+        "rev": "be5b6c66ecdda7e0fdb6ae877f8e5b64943c93e4",
         "type": "github"
       },
       "original": {
@@ -9348,17 +9328,17 @@
     },
     "nixpkgs_103": {
       "locked": {
-        "lastModified": 1711163522,
-        "narHash": "sha256-YN/Ciidm+A0fmJPWlHBGvVkcarYWSC+s3NTPk/P+q3c=",
+        "lastModified": 1712163089,
+        "narHash": "sha256-Um+8kTIrC19vD4/lUCN9/cU9kcOsD1O1m+axJqQPyMM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "44d0940ea560dee511026a53f0e2e2cde489b4d4",
+        "rev": "fd281bd6b7d3e32ddfa399853946f782553163b5",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "44d0940ea560dee511026a53f0e2e2cde489b4d4",
+        "rev": "fd281bd6b7d3e32ddfa399853946f782553163b5",
         "type": "github"
       }
     },
@@ -9380,11 +9360,11 @@
     },
     "nixpkgs_105": {
       "locked": {
-        "lastModified": 1712026416,
-        "narHash": "sha256-N/3VR/9e1NlN49p7kCiATiEY6Tzdo+CbrAG8kqCQKcI=",
+        "lastModified": 1712388808,
+        "narHash": "sha256-9ogU4c3vUmuMDoRlbQCeq3OKx0XJmgHcLZ4XywJNYWI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "080a4a27f206d07724b88da096e27ef63401a504",
+        "rev": "fe4295b9ecd88764c1abf6179e03b1a828ca0e9a",
         "type": "github"
       },
       "original": {
@@ -9725,11 +9705,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1711523803,
-        "narHash": "sha256-UKcYiHWHQynzj6CN/vTcix4yd1eCu1uFdsuarupdCQQ=",
+        "lastModified": 1712163089,
+        "narHash": "sha256-Um+8kTIrC19vD4/lUCN9/cU9kcOsD1O1m+axJqQPyMM=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "2726f127c15a4cc9810843b96cad73c7eb39e443",
+        "rev": "fd281bd6b7d3e32ddfa399853946f782553163b5",
         "type": "github"
       },
       "original": {
@@ -10870,11 +10850,11 @@
     },
     "nixpkgs_96": {
       "locked": {
-        "lastModified": 1711703276,
-        "narHash": "sha256-iMUFArF0WCatKK6RzfUJknjem0H9m4KgorO/p3Dopkk=",
+        "lastModified": 1712163089,
+        "narHash": "sha256-Um+8kTIrC19vD4/lUCN9/cU9kcOsD1O1m+axJqQPyMM=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d8fe5e6c92d0d190646fb9f1056741a229980089",
+        "rev": "fd281bd6b7d3e32ddfa399853946f782553163b5",
         "type": "github"
       },
       "original": {
@@ -11210,11 +11190,11 @@
     },
     "nur_9": {
       "locked": {
-        "lastModified": 1712158812,
-        "narHash": "sha256-2o7HYFsdUvmXsL0vRb2OVqxyNWsxSd11U1AOWb0H8XI=",
+        "lastModified": 1712428321,
+        "narHash": "sha256-40fqfcw4pKhzko/YbpPJ6rlSeT8aEvh5UVrJxFFcS6Y=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "ddfca238450636d8eb531885841f3d3ee72bfbd5",
+        "rev": "a4d91cb8f7ed9663e222dc585b232381668e1bdd",
         "type": "github"
       },
       "original": {
@@ -11262,11 +11242,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-C3sxepteL7hvM9q3XMD0wW/GKobf7p1vsXMQzilVba0=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/nushell",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/nushell",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/nushell",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/nushell",
         "type": "path"
       }
     },
@@ -11564,11 +11544,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-m20YSnOOqd/09sbvdE1lGi72iuulcwIFpSiq945VusE=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/1password",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/1password",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/1password",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/1password",
         "type": "path"
       }
     },
@@ -12576,11 +12556,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-Y/me91jKs20AAtAMwVezybMyZ+tNF/K/28geqyMCVBA=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/st",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/st",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/st",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/st",
         "type": "path"
       }
     },
@@ -12983,16 +12963,16 @@
     },
     "systems_11": {
       "locked": {
-        "lastModified": 1689347949,
-        "narHash": "sha256-12tWmuL2zgBgZkdoB6qXZsgJEH9LR3oUgpaQq2RbI80=",
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
         "owner": "nix-systems",
-        "repo": "default-linux",
-        "rev": "31732fcf5e8fea42e59c2488ad31a0e651500f68",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
         "type": "github"
       },
       "original": {
         "owner": "nix-systems",
-        "repo": "default-linux",
+        "repo": "default",
         "type": "github"
       }
     },
@@ -14241,21 +14221,6 @@
         "type": "github"
       }
     },
-    "systems_186": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
     "systems_19": {
       "locked": {
         "lastModified": 1681028828,
@@ -14768,16 +14733,16 @@
     },
     "systems_5": {
       "locked": {
-        "lastModified": 1689347949,
-        "narHash": "sha256-12tWmuL2zgBgZkdoB6qXZsgJEH9LR3oUgpaQq2RbI80=",
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
         "owner": "nix-systems",
-        "repo": "default-linux",
-        "rev": "31732fcf5e8fea42e59c2488ad31a0e651500f68",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
         "type": "github"
       },
       "original": {
         "owner": "nix-systems",
-        "repo": "default-linux",
+        "repo": "default",
         "type": "github"
       }
     },
@@ -15428,16 +15393,16 @@
     },
     "systems_9": {
       "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "lastModified": 1689347949,
+        "narHash": "sha256-12tWmuL2zgBgZkdoB6qXZsgJEH9LR3oUgpaQq2RbI80=",
         "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "repo": "default-linux",
+        "rev": "31732fcf5e8fea42e59c2488ad31a0e651500f68",
         "type": "github"
       },
       "original": {
         "owner": "nix-systems",
-        "repo": "default",
+        "repo": "default-linux",
         "type": "github"
       }
     },
@@ -15646,12 +15611,12 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-Dix8xyAxFl0ckCMRlJvi1Fwt0s8nrM17+FmfeKFBihI=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/tmux",
+        "narHash": "sha256-hod3dtg9LwdyVOBP7r1+o2MkwAk1wahp6JmMFrLPrCA=",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/tmux",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/tmux",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/tmux",
         "type": "path"
       }
     },
@@ -15973,7 +15938,7 @@
     },
     "utils_2": {
       "inputs": {
-        "systems": "systems_9"
+        "systems": "systems_8"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -15991,7 +15956,7 @@
     },
     "utils_3": {
       "inputs": {
-        "systems": "systems_14"
+        "systems": "systems_13"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -16108,11 +16073,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-fBJtkhidBvrCRNZBWes7GdDZwRvpfz2gxk5aSR0JHio=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/vim",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/vim",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/vim",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/vim",
         "type": "path"
       }
     },
@@ -16519,11 +16484,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-Mmsawv/uFclFPcN5NdlxCeimqL6ByQXNC+/K/oAkNXs=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/vimb",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/vimb",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/vimb",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/vimb",
         "type": "path"
       }
     },
@@ -16886,11 +16851,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-TI2FsgatT08+zznq7IZeQgjZfEHlGIptGvNbEcDrx/4=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/vscode",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/vscode",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/vscode",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/vscode",
         "type": "path"
       }
     },
@@ -17177,11 +17142,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-A6UKDezPBX7Ndbb1+e/WDbLXSPMXzKRyB0XM38VRqNg=",
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/wezterm",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/wezterm",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/mh893hvcpmdh5b5qzmbysnqnwipmy4fw-source/wezterm",
+        "path": "/nix/store/aaiwmn3sm8vs7q0xz6cxvy21d2zjl81b-source/wezterm",
         "type": "path"
       }
     },

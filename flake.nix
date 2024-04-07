@@ -60,6 +60,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     attic.url = "github:zhaofengli/attic";
+    nixos-x13s.url = "git+https://codeberg.org/adamcstephens/nixos-x13s";
   };
 
   outputs = inputs@{ self,
@@ -97,6 +98,7 @@
     arch = if pkgs.lib.hasInfix "aarch64" "${system}" then "aarch64" else "x86_64";
     linuxSystem = "${arch}-linux";
     in {
+    formatter = pkgs.alejandra;
     # macos targets
     packages.darwinConfigurations = {
       "macbook-air" = darwin.lib.darwinSystem {
@@ -150,18 +152,32 @@
           ./nixos/hosts/xps/configuration.nix
         ];
       };
-      nixos-pixelbook = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      nixos-thinkpad = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
         specialArgs = inputs;
         modules = [
-          nixos-hardware.nixosModules.google-pixelbook
+          inputs.nixos-x13s.nixosModules.default
           /etc/nixos/hardware-configuration.nix
-          ./nixos/console.nix
+          ./nixos/desktop.nix
           {
-            networking.hostName = "nixos-pixelbook";
+            nixos-x13s.enable = true;
+            nixos-x13s.kernel = "jhovold";
+            specialisation = {
+              mainline.configuration.nixos-x13s.kernel = "jhovold";
+            };
+            nix.settings = {
+              substituters = [
+                "https://nixos-x13s.cachix.org"
+              ];
+              trusted-public-keys = [
+                "nixos-x13s.cachix.org-1:SzroHbidolBD3Sf6UusXp12YZ+a5ynWv0RtYF0btFos="
+              ];
+            };
+
+
+            networking.hostName = "nixos-thinkpad";
             # Bootloader
             boot.loader.systemd-boot.enable = true;
-            boot.loader.efi.canTouchEfiVariables = false;
             # Enable networking
             networking.networkmanager.enable = true;
             # Set your time zone.
@@ -169,10 +185,6 @@
             # Select internationalisation properties.
             i18n.defaultLocale = "en_US.utf8";
             system.stateVersion = "24.05";
-            # System specific packages
-            environment.systemPackages = with pkgs; [
-              spotify-player
-            ];
           }
         ];
       };

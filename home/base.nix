@@ -111,6 +111,7 @@ in {
     unzip
     vdirsyncer
     zip
+    myVim
     myTmux # For non-nix use-cases
     myFish # For non-nix use-cases
     #myVM

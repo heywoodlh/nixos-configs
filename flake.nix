@@ -174,7 +174,6 @@
               ];
             };
 
-
             networking.hostName = "nixos-thinkpad";
             # Bootloader
             boot.loader.systemd-boot.enable = true;
@@ -184,6 +183,12 @@
             time.timeZone = "America/Denver";
             # Select internationalisation properties.
             i18n.defaultLocale = "en_US.utf8";
+
+            # Fingerprint
+            services.fprintd.enable = true;
+            services.fprintd.tod.enable = true;
+            services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
+
             system.stateVersion = "24.05";
           }
         ];

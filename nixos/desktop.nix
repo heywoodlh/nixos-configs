@@ -198,7 +198,7 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = "${tmux}/bin/tmux";
+    shell = "${pkgs.bash}/bin/bash";
     # users.users.<name>.icon not a NixOS option
     # made possible with ./roles/desktop/user-icon.nix
     icon = builtins.fetchurl {

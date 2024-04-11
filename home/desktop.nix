@@ -228,11 +228,16 @@ in {
     # Should match my vscode flake extension list
     extensions = with pkgs.vscode-extensions; [
       arcticicestudio.nord-visual-studio-code
+      coder.coder-remote
       eamodio.gitlens
       github.copilot
       jnoortheen.nix-ide
       mkhl.direnv
+      ms-azuretools.vscode-docker
+      ms-kubernetes-tools.vscode-kubernetes-tools
       ms-python.python
+      ms-vscode-remote.remote-containers
+      ms-vscode-remote.remote-ssh
       timonwong.shellcheck
       vscodevim.vim
     ];

@@ -7,6 +7,7 @@ let
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
   myVim = myFlakes.packages.${system}.vim;
+  myGit = myFlakes.packages.${system}.git;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
     export SOCKS_SERVER="nix-nvidia:1080"
     exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
@@ -112,6 +113,7 @@ in {
     vdirsyncer
     zip
     myVim
+    myGit
     myTmux # For non-nix use-cases
     myFish # For non-nix use-cases
     #myVM

@@ -225,11 +225,14 @@ in {
 
   programs.vscode = {
     enable = true;
+    #enableUpdateCheck = false; # do not enable, overrides settings.json
+    #enableExtensionUpdateCheck = false; # do not enable, overrides settings.json
     # Should match my vscode flake extension list
     extensions = with pkgs.vscode-extensions; [
       arcticicestudio.nord-visual-studio-code
       coder.coder-remote
       eamodio.gitlens
+      github.codespaces
       github.copilot
       jnoortheen.nix-ide
       mkhl.direnv

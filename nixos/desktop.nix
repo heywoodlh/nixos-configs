@@ -95,11 +95,6 @@ in {
     interfaces.tailscale0.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
   };
 
-  # Exclude root from displayManager
-  services.xserver.displayManager.hiddenUsers = [
-    "root"
-  ];
-
   # Enable Tailscale
   services.tailscale.enable = true;
 

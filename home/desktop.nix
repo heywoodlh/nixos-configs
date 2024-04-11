@@ -213,10 +213,35 @@ let
       settings = browser-settings;
     };
   };
+  vscodeSettingsDir = if pkgs.stdenv.isDarwin then
+    "Library/Application Support/Code/User"
+  else
+    ".config/Code/User";
+  vscodeSettings = builtins.readFile myFlakes.packages.${system}.vscode-settings;
 in {
   home.packages = [
     pkgs.mdp
   ];
+
+  programs.vscode = {
+    enable = true;
+    # Should match my vscode flake extension list
+    extensions = with pkgs.vscode-extensions; [
+      arcticicestudio.nord-visual-studio-code
+      eamodio.gitlens
+      github.copilot
+      jnoortheen.nix-ide
+      mkhl.direnv
+      ms-python.python
+      timonwong.shellcheck
+      vscodevim.vim
+    ];
+  };
+
+  home.file."${vscodeSettingsDir}/settings.json" = {
+    enable = true;
+    text = vscodeSettings;
+  };
 
   # Firefox/Mullvad Browser Browser configuration
   programs.${browser} = firefox-config;

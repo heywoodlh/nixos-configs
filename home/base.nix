@@ -186,6 +186,7 @@ in {
       default = INBOX
       copy-to = Sent
       from = Spencer Heywood <l.spencer.heywood@protonmail.com>
+
     '';
   };
   programs.aerc = {
@@ -195,6 +196,9 @@ in {
       filters = {
         "text/html" = "${aerc-html-filter}/bin/html";
         "text/plain" = "${pkgs.coreutils}/bin/fold -w 80";
+      };
+      hooks = {
+        "aerc-startup" = "aerc :terminal ${pkgs.gomuks}/bin/gomuks && aerc :next-tab && aerc :terminal ${pkgs.tut}/bin/tut && aerc :next-tab && aerc :terminal ${pkgs.newsboat}/bin/newsboat && aerc :next-tab && aerc :terminal ${myFish}/bin/fish && aerc :next-tab";
       };
     };
   };
@@ -335,4 +339,15 @@ in {
       default_command = "list --sort created_at --no-reverse"
     '';
   };
+
+  # aerc wrapper
+  home.file."bin/aerc" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env fish
+      op-unlock
+      ${pkgs.aerc}/bin/aerc "$argv"
+    '';
+  };
+
 }

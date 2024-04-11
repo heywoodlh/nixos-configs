@@ -244,6 +244,45 @@ in {
       timonwong.shellcheck
       vscodevim.vim
     ];
+    keybindings = [
+      {
+        key = "ctrl+t";
+        command = "workbench.action.terminal.toggleTerminal";
+      }
+      {
+        key = "ctrl+w h";
+        command = "workbench.action.focusLeftGroup";
+      }
+      {
+        key = "ctrl+w l";
+        command = "workbench.action.focusRightGroup";
+      }
+      {
+        key = "ctrl+w j";
+        command = "workbench.action.focusBelowGroup";
+      }
+      {
+        key = "ctrl+w k";
+        command = "workbench.action.focusAboveGroup";
+      }
+      {
+        key = "ctrl+w s";
+        command = "workbench.action.splitEditorDown";
+      }
+      {
+        key = "ctrl+w v";
+        command = "workbench.action.splitEditorRight";
+      }
+      {
+        key = "g a";
+        command = "git.stage";
+        when = "editorTextFocus";
+      }
+      {
+        key = "ctrl+w w";
+        command = "workbench.action.focusNextPart";
+      }
+    ];
   };
 
   home.file."${vscodeSettingsDir}/settings.json" = {

@@ -167,10 +167,10 @@
             };
             nix.settings = {
               substituters = [
-                "https://nixos-x13s.cachix.org"
+                "https://heywoodlh-nixos-x13s.cachix.org"
               ];
               trusted-public-keys = [
-                "nixos-x13s.cachix.org-1:SzroHbidolBD3Sf6UusXp12YZ+a5ynWv0RtYF0btFos="
+                "heywoodlh-nixos-x13s.cachix.org-1:nittOYRA74tbzQ1s92ZQbN61ecxo7Ld16LK3g+CPPSE="
               ];
             };
 

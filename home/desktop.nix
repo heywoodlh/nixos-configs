@@ -282,6 +282,15 @@ in {
         key = "ctrl+w w";
         command = "workbench.action.focusNextPart";
       }
+      {
+        key = "ctrl+n";
+        command = "workbench.action.toggleSidebarVisibility";
+      }
+      {
+        key = "ctrl+a shift+\\";
+        command = "workbench.action.terminal.split";
+        when = "terminalFocus";
+      }
     ];
   };
 

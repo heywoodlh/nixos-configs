@@ -276,7 +276,7 @@ in {
       {
         key = "g a";
         command = "git.stage";
-        when = "editorTextFocus";
+        when = "vim.mode == 'Normal' && !terminalFocus";
       }
       {
         key = "ctrl+w w";

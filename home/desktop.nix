@@ -217,88 +217,16 @@ let
     "Library/Application Support/Code/User"
   else
     ".config/Code/User";
-  vscodeSettings = builtins.readFile myFlakes.packages.${system}.vscode-settings;
+  code-reset = pkgs.writeShellScriptBin "code-reset" ''
+    rm -rf ~/.vscode ~/Documents/Code ${vscodeSettingsDir}
+  '';
+  myVscode = myFlakes.packages.${system}.vscode;
 in {
   home.packages = [
+    code-reset
     pkgs.mdp
+    myVscode
   ];
-
-  programs.vscode = {
-    enable = true;
-    #enableUpdateCheck = false; # do not enable, overrides settings.json
-    #enableExtensionUpdateCheck = false; # do not enable, overrides settings.json
-    # Should match my vscode flake extension list
-    extensions = with pkgs.vscode-extensions; [
-      arcticicestudio.nord-visual-studio-code
-      coder.coder-remote
-      eamodio.gitlens
-      github.codespaces
-      github.copilot
-      jnoortheen.nix-ide
-      mkhl.direnv
-      ms-azuretools.vscode-docker
-      ms-kubernetes-tools.vscode-kubernetes-tools
-      ms-python.python
-      ms-vscode-remote.remote-containers
-      ms-vscode-remote.remote-ssh
-      timonwong.shellcheck
-      vscodevim.vim
-      tailscale.vscode-tailscale
-    ];
-    keybindings = [
-      {
-        key = "ctrl+t";
-        command = "workbench.action.terminal.toggleTerminal";
-      }
-      {
-        key = "ctrl+w h";
-        command = "workbench.action.focusLeftGroup";
-      }
-      {
-        key = "ctrl+w l";
-        command = "workbench.action.focusRightGroup";
-      }
-      {
-        key = "ctrl+w j";
-        command = "workbench.action.focusBelowGroup";
-      }
-      {
-        key = "ctrl+w k";
-        command = "workbench.action.focusAboveGroup";
-      }
-      {
-        key = "ctrl+w s";
-        command = "workbench.action.splitEditorDown";
-      }
-      {
-        key = "ctrl+w v";
-        command = "workbench.action.splitEditorRight";
-      }
-      {
-        key = "g a";
-        command = "git.stage";
-        when = "vim.mode == 'Normal' && !terminalFocus";
-      }
-      {
-        key = "ctrl+w w";
-        command = "workbench.action.focusNextPart";
-      }
-      {
-        key = "ctrl+n";
-        command = "workbench.action.toggleSidebarVisibility";
-      }
-      {
-        key = "ctrl+a shift+\\";
-        command = "workbench.action.terminal.split";
-        when = "terminalFocus";
-      }
-    ];
-  };
-
-  home.file."${vscodeSettingsDir}/settings.json" = {
-    enable = true;
-    text = vscodeSettings;
-  };
 
   # Firefox/Mullvad Browser Browser configuration
   programs.${browser} = firefox-config;

@@ -243,6 +243,7 @@ in {
       ms-vscode-remote.remote-ssh
       timonwong.shellcheck
       vscodevim.vim
+      tailscale.vscode-tailscale
     ];
     keybindings = [
       {

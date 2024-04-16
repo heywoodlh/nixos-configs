@@ -9,7 +9,7 @@
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
-      url = "github:LnL7/nix-darwin/master";
+      url = "github:wegank/nix-darwin/mddoc-remove"; #TODO: https://github.com/LnL7/nix-darwin/issues/933
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon";

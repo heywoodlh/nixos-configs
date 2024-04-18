@@ -189,8 +189,13 @@
             services.fprintd.tod.enable = true;
             services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
 
-            # Waydroid
-            virtualisation.waydroid.enable = true;
+            # Network manager modemmanager setup
+            networking.networkmanager.fccUnlockScripts = [
+              {
+                id = "105b:e0c3";
+                path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/105b";
+              }
+            ];
 
             environment.systemPackages = with pkgs; [
               webcord

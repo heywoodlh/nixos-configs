@@ -78,6 +78,7 @@ in {
   services.xserver.displayManager.gdm = {
     enable = true;
   };
+  boot.tmp.cleanOnBoot = true;
 
   # Enable hyprland
   #programs.hyprland = {

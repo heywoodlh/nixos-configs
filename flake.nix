@@ -197,6 +197,9 @@
               }
             ];
 
+            # Android
+            virtualisation.waydroid.enable = true;
+
             environment.systemPackages = with pkgs; [
               webcord
             ];

@@ -73,7 +73,7 @@ in {
 
     # Custom stuff
     # Focus follows mouse
-    yabai -m config focus_follows_mouse autofocus
+    #yabai -m config focus_follows_mouse autofocus
     # Disable shadows
     yabai -m config window_shadow off
 
@@ -85,8 +85,9 @@ in {
     yabai -m rule --add app="/usr/local/bin/pinentry-mac" manage=off
     yabai -m rule --add app="/opt/homebrew/bin/pinentry-mac" manage=off
     yabai -m rule --add app="pinentry-mac" manage=off
-    yabai -m rule --add app="^System Preferences$" manage=off
     yabai -m rule --add app="/Applications/Secretive.app/Contents/MacOS/Secretive" manage=off
+    yabai -m rule --add app="^System Settings$" manage=off
+    yabai -m rule --add app="^1Password$" manage=off
   '';
 
   services.skhd = {

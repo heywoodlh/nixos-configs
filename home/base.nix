@@ -22,17 +22,17 @@ let
   '';
   vimTodoAdd = pkgs.writeScriptBin "todo-vim" ''
     output="$(${pkgs.coreutils}/bin/printf "Summary: \n\n#Example Date:$(${pkgs.coreutils}/bin/date "+%Y-%m-%d %H:%M")\nDue: " | EDITOR='${myVim}/bin/vim' ${pkgs.moreutils}/bin/vipe)"
-    summary="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep 'Summary:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2 | ${pkgs.findutils}/bin/xargs)"
+    summary="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep 'Summary:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2 | ${pkgs.findutils}/bin/xargs | ${pkgs.gnused}/bin/sed 's/  / /g')"
     date="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep 'Due:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2 | ${pkgs.findutils}/bin/xargs)"
     if [ -n "$summary" ]
     then
       if [[ -n $date ]]
       then
         datearg="--due $date"
+        ${todomanWrapper}/bin/todo new "$datearg" "$summary"
       else
-        datearg=""
+        ${todomanWrapper}/bin/todo new "$summary"
       fi
-      ${todomanWrapper}/bin/todo new "$datearg" "$summary"
     fi
   '';
   newsboat_browser_config = if pkgs.stdenv.isDarwin then ''

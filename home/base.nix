@@ -128,11 +128,6 @@ in {
     nur.overlay
   ];
 
-  programs.password-store = {
-    enable = true;
-    package = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
-  };
-
   home.file."tmp/.placeholder.txt" = {
     text = "";
   };

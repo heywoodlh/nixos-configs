@@ -4,10 +4,6 @@ let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   myTmux = myFlakes.packages.${system}.tmux;
-  passOtp = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
-  icloudPass = pkgs.writeShellScriptBin "pass" ''
-    PASSWORD_STORE_DIR="${homeDir}/Library/Mobile Documents/com~apple~CloudDocs/password-store" ${passOtp}/bin/pass $@
-  '';
 in {
   imports = [
     ./base.nix
@@ -35,7 +31,6 @@ in {
     pkgs.m-cli
     pkgs.mas
     pkgs.pinentry_mac
-    icloudPass
   ];
 
   home.shellAliases = {

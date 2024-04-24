@@ -49,10 +49,14 @@ let
     ${pkgs._1password}/bin/op --account my "$@"
   '';
   op-backup-script = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/d6ec630f54d38f8262b10f68bafd200b42aac197/backup.sh";
-    sha256 = "sha256:1lhf1jp0787nxd1hk3jhnb7ricgs4g18p9b0881d8mm06yymi0yq";
+    url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/c938124eff5dddd3aad226a5a5a6ae65441211b7/backup.sh";
+    sha256 = "sha256:12cbni566245m513r2w8lng11gzbl148mlnlscwzwbkxhpacwz9d";
   };
   op-backup-dir = if pkgs.stdenv.isDarwin then
+    "${homeDir}/Library/Mobile\\ Documents/com~apple~CloudDocs/password-store"
+  else
+    "${homeDir}/.password-store";
+  op-backup-dir-no-format = if pkgs.stdenv.isDarwin then
     "${homeDir}/Library/Mobile Documents/com~apple~CloudDocs/password-store"
   else
     "${homeDir}/.password-store";
@@ -76,6 +80,10 @@ let
   '';
   otp = pkgs.writeShellScriptBin "otp" ''
     ${op-otp} | ${pkgs.tmux}/bin/tmux loadb -
+  '';
+  passOtp = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
+  myPass = pkgs.writeShellScriptBin "pass" ''
+    PASSWORD_STORE_DIR="${op-backup-dir-no-format}" ${passOtp}/bin/pass $@
   '';
 in {
   home.stateVersion = "23.11";
@@ -133,6 +141,7 @@ in {
     password
     otp
     op-backup
+    myPass
   ];
 
   # Import nur as nixpkgs.overlays

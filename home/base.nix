@@ -168,18 +168,18 @@ in {
     text = ''
       [fastmail]
       source = imaps://heywoodlh%40heywoodlh.io@imap.fastmail.com:993
-      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/44abj6tnhmrjdhv6potivbc5by/password'
+      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/3qaxsqbv5dski4wqswxapc7qoi/password'
       outgoing = smtps://heywoodlh%40heywoodlh.io@smtp.fastmail.com:465
-      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/44abj6tnhmrjdhv6potivbc5by/password'
+      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/3qaxsqbv5dski4wqswxapc7qoi/password'
       default = INBOX
       copy-to = Sent
       from = Spencer Heywood <heywoodlh@heywoodlh.io>
 
       [protonmail]
       source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143
-      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/ryivzwmpoawrujyggsdi42jtqe/password'
+      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/6fqlleymphwgzsvqp7jfsucz4m/password'
       outgoing = smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25
-      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/ryivzwmpoawrujyggsdi42jtqe/password'
+      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/6fqlleymphwgzsvqp7jfsucz4m/password'
       default = INBOX
       copy-to = Sent
       from = Spencer Heywood <l.spencer.heywood@protonmail.com>
@@ -193,9 +193,6 @@ in {
       filters = {
         "text/html" = "${aerc-html-filter}/bin/html";
         "text/plain" = "${pkgs.coreutils}/bin/fold -w 80";
-      };
-      hooks = {
-        "aerc-startup" = "aerc :terminal ${pkgs.gomuks}/bin/gomuks && aerc :next-tab && aerc :terminal ${pkgs.tut}/bin/tut && aerc :next-tab && aerc :terminal ${pkgs.newsboat}/bin/newsboat && aerc :next-tab && aerc :terminal ${myFish}/bin/fish && aerc :next-tab";
       };
     };
   };
@@ -320,7 +317,7 @@ in {
       item_types = ["VTODO"]
       url = "https://caldav.fastmail.com"
       username = "heywoodlh@heywoodlh.io"
-      password.fetch = ["shell", "${homeDir}/bin/op-wrapper.sh item get '44abj6tnhmrjdhv6potivbc5by' --fields label=password"]
+      password.fetch = ["shell", "${homeDir}/bin/op-wrapper.sh item get '3qaxsqbv5dski4wqswxapc7qoi' --fields label=password"]
     '';
   };
 

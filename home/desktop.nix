@@ -208,7 +208,18 @@ let
       ];
       isDefault = true;
       name = "home-manager";
-      search.default = "DuckDuckGo";
+      search = {
+        engines = {
+          "kagi" = {
+            urls = [{ template = "https://kagi.com/search?q={searchTerms}"; }];
+            definedAliases = [ "@k" ];
+            iconUpdateURL = "https://kagi.com/favicon.ico";
+            updateInterval = 24 * 60 * 60 * 1000; # every day
+          };
+        };
+        default = "kagi";
+        privateDefault = "kagi";
+      };
       userChrome = userChrome;
       settings = browser-settings;
     };

@@ -48,6 +48,17 @@ let
     env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
     ${pkgs._1password}/bin/op --account my "$@"
   '';
+  op-backup-script = builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/d6ec630f54d38f8262b10f68bafd200b42aac197/backup.sh";
+    sha256 = "sha256:1lhf1jp0787nxd1hk3jhnb7ricgs4g18p9b0881d8mm06yymi0yq";
+  };
+  op-backup-dir = if pkgs.stdenv.isDarwin then
+    "${homeDir}/Library/Mobile Documents/com~apple~CloudDocs/password-store"
+  else
+    "${homeDir}/.password-store";
+  op-backup = pkgs.writeShellScriptBin "op-backup" ''
+    bash ${op-backup-script} l.spencer.heywood@protonmail.com ${op-backup-dir}
+  '';
   op-base = ''
     id="$(${op-wrapper} item list | grep -vE '^ID' | ${pkgs.fzf}/bin/fzf --reverse | awk '{print $1}')"
     [[ -z "$id" ]] && exit 0 # exit if no selection was made
@@ -121,6 +132,7 @@ in {
     vimTodoAdd
     password
     otp
+    op-backup
   ];
 
   # Import nur as nixpkgs.overlays

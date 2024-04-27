@@ -1,13 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   services.xrdp = {
     enable = true;
     openFirewall = true;
-    defaultWindowManager = "gnome-remote-desktop";
+    defaultWindowManager = "${pkgs.gnome.gnome-remote-desktop}/bin/gnome-remote-desktop";
   };
-
-  environment.systemPackages = with pkgs; [
-    gnome.gnome-remote-desktop
-  ];
+  services.xserver.displayManager.gdm.wayland = lib.mkForce false;
 }

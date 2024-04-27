@@ -213,9 +213,7 @@
         specialArgs = inputs;
         modules = [
           /etc/nixos/hardware-configuration.nix
-          ./nixos/desktop.nix
-          ./nixos/roles/remote-access/sshd.nix
-          ./nixos/roles/security/sshd-monitor.nix
+          ./nixos/server.nix
           {
             networking.hostName = "nixos-oryx-pro";
             # System76 stuff
@@ -239,19 +237,28 @@
               driSupport = true;
               driSupport32Bit = true;
             };
-            # Tell Xorg to use the nvidia driver (also valid for Wayland)
-            services.xserver.videoDrivers = ["nvidia"];
             hardware.nvidia = {
               modesetting.enable = true;
               open = false;
               nvidiaSettings = true;
               package = pkgs.linuxKernel.packages.linux_xanmod_stable.nvidia_x11;
             };
-            # autologin for RDP
-            services.xserver.displayManager.autoLogin.user = "heywoodlh";
-            networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
-              3389
-            ];
+            services.openssh = {
+
+              extraConfig = ''
+                HostKeyAlgorithms +ssh-rsa
+                PubkeyAcceptedKeyTypes +ssh-rsa
+              '';
+              settings = {
+                PasswordAuthentication = pkgs.lib.mkForce true;
+                Macs = [
+                  "hmac-sha2-512-etm@openssh.com"
+                  "hmac-sha2-256-etm@openssh.com"
+                  "umac-128-etm@openssh.com"
+                  "hmac-sha2-256"
+                ];
+              };
+            };
           }
         ];
       };

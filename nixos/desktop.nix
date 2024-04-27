@@ -212,6 +212,7 @@ in {
   # Desktop packages
   environment.systemPackages = [
     pkgs.busybox
+    pkgs.lsof
     pkgs.libimobiledevice # for iPhone
     pkgs.idevicerestore # for iPhone
     pkgs.ifuse

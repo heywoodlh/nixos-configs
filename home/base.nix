@@ -179,7 +179,7 @@ in {
     enable = true;
     executable = true;
     text = ''
-      ${homeDir}/bin/op-wrapper.sh read 'op://Personal/uwxs2btf3eoweg4phzag2hfkge/private_key' | ${pkgs.openssh}/bin/ssh-add -t 4h -
+      ${homeDir}/bin/op-wrapper.sh read 'op://Personal/rlt3q545cf5a4r4arhnb4h5qmi/private_key' | ${pkgs.openssh}/bin/ssh-add -t 4h -
     '';
   };
 

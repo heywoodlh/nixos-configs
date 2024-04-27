@@ -52,6 +52,7 @@ in {
     ];
   };
 
+
   # Packages to install on entire system
   environment.systemPackages = [
     pkgs.ansible
@@ -102,6 +103,13 @@ in {
     shell = "${pkgs.bash}/bin/bash";
   };
 
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      ls -l /run/user/$(id -u)/ssh-agent &>/dev/null && export SSH_AUTH_SOCK=/run/user/$(id -u)/ssh-agent
+    '';
+  };
+
   # Set home-manager configs for username
   home-manager = {
     extraSpecialArgs = {
@@ -112,6 +120,7 @@ in {
         ../home/linux.nix
         ../home/linux/no-desktop.nix
       ];
+      services.ssh-agent.enable = true;
       home.file."bin/nixos-switch" = {
         enable = true;
         executable = true;

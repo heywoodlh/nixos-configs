@@ -76,7 +76,6 @@
   services.k3s = {
     role = "server";
     extraFlags = toString [
-      "--tls-san=nix-nvidia.tailscale"
       "--tls-san=nix-nvidia"
       "--tls-san=100.108.77.60"
     ];

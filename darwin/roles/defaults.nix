@@ -3,6 +3,9 @@
 let
   system = pkgs.system;
 in {
+  imports = [
+    ./binary-cache.nix
+  ];
   #package config
   nixpkgs.config.allowUnfree = true;
   # nix configuration

@@ -13,6 +13,7 @@ let
 in {
   imports = [
     home-manager.nixosModule
+    ./base.nix
     ./roles/remote-access/sshd.nix
     ./roles/security/sshd-monitor.nix
     ./roles/tailscale.nix
@@ -27,31 +28,6 @@ in {
     # Import nur as nixpkgs.overlays
     nur.overlay
   ];
-
-  # Allow non-free applications to be installed
-  nixpkgs.config.allowUnfree = true;
-
-  # So that `nix search` works
-  nix.extraOptions = ''
-    extra-experimental-features = nix-command flakes
-  '';
-  # Automatically optimize store for better storage
-  nix.settings = {
-    auto-optimise-store = true;
-    trusted-users = [
-      "heywoodlh"
-    ];
-    substituters = [
-      "http://100.108.77.60:5000" # nix-nvidia
-      "https://nix-community.cachix.org"
-      "https://cache.nixos.org/"
-    ];
-    trusted-public-keys = [
-      "binarycache.heywoodlh.io:hT9E35rju+9L2CE/SDGUsytJtIZJfqVma7B7cp7Jym4="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
-  };
-
 
   # Packages to install on entire system
   environment.systemPackages = [

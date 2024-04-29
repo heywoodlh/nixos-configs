@@ -1,9 +1,22 @@
-{ config, pkgs, lib, home-manager, nur, myFlakes, mullvad-browser-home-manager, choose-nixpkgs, spicetify, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, mullvad-browser-home-manager, choose-nixpkgs, spicetify, darwin, attic, ... }:
 
 
 let
   hostname = "mac-mini";
   username = "heywoodlh";
+  system = pkgs.system;
+  atticClient = attic.packages.${system}.attic-client;
+  darwinRebuild = darwin.packages.${system}.darwin-rebuild;
+  populateCache = pkgs.writeShellScriptBin "nix-darwin-cache-populate" ''
+    rm -rf /tmp/nixos-configs
+    ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /tmp/nixos-configs
+    cd /tmp/nixos-configs
+    # Desktop
+    ${darwinRebuild}/bin/darwin-rebuild build --flake .#${hostname} --impure
+    ${atticClient}/bin/attic push nixos ./result
+    ${atticClient}/bin/attic push nix-darwin ./result
+    rm -rf /tmp/nixos-configs
+  '';
 in {
   imports = [
     ../roles/m1.nix
@@ -13,7 +26,6 @@ in {
     ../roles/network.nix
     ../roles/sketchybar.nix
     ../../home/darwin/settings.nix
-    ../roles/binary-cache.nix
   ];
 
   # Define user settings
@@ -60,6 +72,12 @@ in {
       "vmware-fusion"
       "zoom"
     ];
+  };
+
+  # Populate cache
+  launchd.daemons.cache-populate = {
+    command = "${populateCache}/bin/nix-darwin-cache-populate";
+    serviceConfig.StartInterval = 86400; # run once a day
   };
 
   system.defaults.alf.globalstate = lib.mkForce 0;

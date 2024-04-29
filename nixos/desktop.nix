@@ -13,6 +13,7 @@ let
 in {
   imports = [
     home-manager.nixosModules.home-manager
+    ./base.nix
     ./roles/desktop/user-icon.nix
     ./roles/virtualization/libvirt.nix
   ];
@@ -33,21 +34,11 @@ in {
 
   nix.settings = {
     sandbox = true;
-    # Automatically optimize store for better storage
-    auto-optimise-store = true;
     substituters = [
       #"https://hyprland.cachix.org"
-      "http://100.108.77.60:5000" # nix-nvidia
-      "https://nix-community.cachix.org"
-      "https://cache.nixos.org/"
-    ];
-    trusted-users = [
-      "heywoodlh"
     ];
     trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-      "binarycache.heywoodlh.io:hT9E35rju+9L2CE/SDGUsytJtIZJfqVma7B7cp7Jym4=" # nix-nvidia
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
 
@@ -176,8 +167,6 @@ in {
   users.extraGroups.disk.members = [ "heywoodlh" ];
   users.extraGroups.video.members = [ "heywoodlh" ];
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
   # Allow x86 packages to be installed on aarch64
   nixpkgs.config.allowUnsupportedSystem = true;
 

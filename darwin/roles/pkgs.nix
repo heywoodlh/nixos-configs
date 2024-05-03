@@ -15,12 +15,6 @@ in {
 
   nix.settings = {
     auto-optimise-store = false; # Breaks things
-    substituters = [
-      "http://mac-mini:8080/nix-darwin"
-    ];
-    trusted-public-keys = [
-      "nix-darwin:zqwtaTJFoluKxoYMF6FZXHIzGtPeuKbv7TQZscovOP0="
-    ];
   };
 
   #homebrew packages

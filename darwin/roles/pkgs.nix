@@ -48,6 +48,7 @@ in {
     casks = [
       "1password"
       "android-platform-tools"
+      "arc"
       "blockblock"
       "cursorcerer"
       "firefox"

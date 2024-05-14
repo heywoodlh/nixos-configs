@@ -9,7 +9,7 @@
     ../../roles/monitoring/syslog-ng/server.nix
     ../../roles/monitoring/syslog-ng/client.nix
     ../../roles/gaming/minecraft-bedrock.nix
-    ../../roles/monitoring/graylog.nix
+    #../../roles/monitoring/graylog.nix
     ../../roles/containers/k3s.nix
     ../../roles/remote-access/guacamole.nix
     ../../roles/security/fleetdm.nix

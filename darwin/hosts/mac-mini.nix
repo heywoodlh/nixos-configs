@@ -3,41 +3,15 @@
 
 let
   hostname = "nix-mac-mini";
-  username = "heywoodlh";
 in {
   imports = [
+    ../roles/base.nix
     ../roles/defaults.nix
     ../roles/pkgs.nix
     ../roles/yabai.nix
     ../roles/network.nix
     ../roles/sketchybar.nix
     ../../home/darwin/settings.nix
-  ];
-
-  # Define user settings
-  users.users.${username} = import ../roles/user.nix {
-    inherit config;
-    inherit pkgs;
-  };
-
-  # Home-Manager config
-  home-manager = {
-    extraSpecialArgs = {
-      inherit myFlakes;
-    };
-    # Set home-manager configs for username
-    users.${username} = { ... }: {
-      imports = [
-        (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
-        ../../home/darwin.nix
-      ];
-    };
-  };
-
-  # Extra homebrew packages for this host
-  homebrew.brews = [
-    "libheif" # mautrix-imessage
-    "libolm" # mautrix-imessage
   ];
 
   # Set hostname

@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, mullvad-browser-home-manager, myFlakes, ... }:
+{ config, pkgs, home-manager, nur, mullvad-browser-home-manager, myFlakes, arcwtf, edge-frfox, ... }:
 
 let
   system = pkgs.system;
@@ -8,6 +8,10 @@ let
   noproxies = "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net";
   socksProxy = "nix-nvidia.barn-banana.ts.net";
   socksPort = 1080;
+  firefoxsvg = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/bmFtZQ/edge-frfox/b1146cf31900fc8d1f424339c321f686b5ea5594/chrome/icons/firefox.svg";
+    hash = "sha256-x0BBTpBm1PPFHMGn0Wo2wukbrUjWaDrs3E1Xd78Py2A=";
+  };
   common-firefox-settings = {
     # Settings in all Firefox derivatives
     "browser.compactmode.show" = true; # enable compact bar
@@ -108,7 +112,7 @@ let
       list-style-image: none !important;
     }
   '';
-  userChrome = ''
+  oldUserChrome = ''
     /* * Do not remove the @namespace line -- it's required for correct functioning */
     /* set default namespace to XUL */
     @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
@@ -151,6 +155,47 @@ let
       display: none;
     }
     ${linuxUserChrome}
+  '';
+  userChrome = ''
+    /* ArcWTF main files */
+    @import url("${edge-frfox}/icons/icons.css");
+    @import url("${arcwtf}/toolbar/tabbar.css");
+    @import url("${arcwtf}/toolbar/navbar.css");
+    @import url("${arcwtf}/toolbar/personalbar.css");
+    @import url("${arcwtf}/toolbar/findbar.css");
+    @import url("${arcwtf}/toolbar/urlbar.css");
+    @import url("${arcwtf}/global/colors.css");
+    @import url("${arcwtf}/global/popup.css");
+    @import url("${arcwtf}/global/browser.css");
+    @import url("${arcwtf}/global/tree.css");
+
+    /* Tweaks */
+    @import url("${arcwtf}/global/tweaks.css");
+    @import url("${arcwtf}/tweaks/hide-tabs-bar.css");
+    @import url("${arcwtf}/tweaks/extensions.css");
+    @import url("${arcwtf}/tweaks/sidebar.css");
+    @import url("${arcwtf}/tweaks/popup-search.css");
+
+    /* Enable translucency on browser toolbars. (MacOS only) */
+    /**/@import url("${arcwtf}/tweaks/mac-translucent.css") (-moz-bool-pref: "uc.tweak.mac-translucent");/**/
+
+    /* Import custom stylesheet instead of modifying the theme files. */
+    @import url("${arcwtf}/custom.css");
+
+    /* Replacing Userchrome Toggle icon with Arc sidebar icon */
+    :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="userchrome-toggle@joolee.nl"] .toolbarbutton-icon { list-style-image: url(${arcwtf}/icons/userchrome-toggle.svg); }
+
+    /* My overrides */
+    #urlbar #urlbar-input {text-align: left !important}
+
+    /* Remove Back button when there's nothing to go Back to */
+    #back-button[disabled="true"] { display: none; }
+
+    /* Remove Forward button when there's nothing to go Forward to */
+    #forward-button[disabled="true"] { display: none; }
+
+    /* Remove Home button (never use it) */
+    #home-button { display: none; }
   '';
   firefox-config = {
     enable = true;
@@ -196,7 +241,6 @@ let
       # View extensions here: https://github.com/nix-community/nur-combined/blob/master/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
         darkreader
-        floccus
         gnome-shell-integration
         kristofferhagen-nord-theme
         multi-account-containers
@@ -204,6 +248,7 @@ let
         onepassword-password-manager
         privacy-badger
         redirector
+        sidebery
         ublock-origin
         vimium
       ];
@@ -242,4 +287,17 @@ in {
 
   # Firefox/Mullvad Browser Browser configuration
   programs.${browser} = firefox-config;
+
+  # Arc configuration
+  programs.chromium = {
+    enable = pkgs.stdenv.isDarwin;
+    package = pkgs.arc-browser;
+    extensions = [
+      { id = "dbepggeogbaibhgnhhndojpepiihcmeb"; } # vimium
+      { id = "aeblfdkhhhdcdjpifhhbdiojplfjncoa"; } # 1password
+      { id = "ocgpenflpmgnfapjedencafcfakcekcd"; } # redirector
+      { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # dark reader
+      { id = "hjdoplcnndgiblooccencgcggcoihigg"; } # terms of service; didn't read
+    ];
+  };
 }

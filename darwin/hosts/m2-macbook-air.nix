@@ -3,9 +3,9 @@
 
 let
   hostname = "macbook-air";
-  username = "heywoodlh";
 in {
   imports = [
+    ../roles/base.nix
     ../roles/m1.nix
     ../roles/defaults.nix
     ../roles/pkgs.nix
@@ -14,34 +14,6 @@ in {
     ../roles/sketchybar.nix
     ../../home/darwin/settings.nix
   ];
-
-  # Define user settings
-  users.users.${username} = import ../roles/user.nix {
-    inherit config;
-    inherit pkgs;
-  };
-
-  # Home-Manager config
-  home-manager = {
-    extraSpecialArgs = {
-      inherit myFlakes;
-      inherit choose-nixpkgs;
-    };
-    # Set home-manager configs for username
-    users.${username} = { ... }: {
-      imports = [
-        (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
-        ../../home/darwin.nix
-        ../../home/roles/atuin.nix
-      ];
-      home.packages = with pkgs; [
-        moonlight-qt
-        spicetify.packages.aarch64-darwin.nord
-        virt-manager
-        utm
-      ];
-    };
-  };
 
   # Set hostname
   networking.hostName = "${hostname}";
@@ -63,6 +35,10 @@ in {
       "Screens 5: VNC Remote Desktop" = 1663047912;
     };
   };
+  home-manager.users.heywoodlh.home.packages = with pkgs; [
+    moonlight-qt
+    spicetify.packages.${system}.nord
+  ];
 
   system.stateVersion = 4;
 }

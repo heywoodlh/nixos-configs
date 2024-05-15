@@ -97,6 +97,22 @@
         "type": "path"
       }
     },
+    "arcwtf": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1710730149,
+        "narHash": "sha256-gyJiIVnyZOYVX6G3m4SSbsb7K9g4zKZWlrHphEIQwsY=",
+        "owner": "KiKaraage",
+        "repo": "ArcWTF",
+        "rev": "bb6f2b7ef7e3d201e23d86bf8636e5d0ea4bd68b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "KiKaraage",
+        "repo": "ArcWTF",
+        "type": "github"
+      }
+    },
     "asahi-widevine": {
       "flake": false,
       "locked": {
@@ -656,6 +672,22 @@
         "owner": "LnL7",
         "ref": "master",
         "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
+    "edge-frfox": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1713446558,
+        "narHash": "sha256-MYaSEjBryKeW9piYp/j58Y8nq6RQRXqRxXgCWfwjWsQ=",
+        "owner": "bmFtZQ",
+        "repo": "edge-frfox",
+        "rev": "b1146cf31900fc8d1f424339c321f686b5ea5594",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bmFtZQ",
+        "repo": "edge-frfox",
         "type": "github"
       }
     },
@@ -11654,11 +11686,13 @@
     },
     "root": {
       "inputs": {
+        "arcwtf": "arcwtf",
         "attic": "attic",
         "choose-nixpkgs": "choose-nixpkgs",
         "cosmic-session": "cosmic-session",
         "dark-wallpaper": "dark-wallpaper",
         "darwin": "darwin",
+        "edge-frfox": "edge-frfox",
         "flake-utils": "flake-utils_3",
         "flatpaks": "flatpaks",
         "home-manager": "home-manager",

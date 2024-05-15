@@ -1,9 +1,8 @@
-{ config, pkgs, lib, home-manager, nur, myFlakes, mullvad-browser-home-manager, choose-nixpkgs, spicetify, darwin, attic, ... }:
+{ config, pkgs, lib, home-manager, nur, spicetify, darwin, attic, ... }:
 
 
 let
   hostname = "mac-mini";
-  username = "heywoodlh";
   system = pkgs.system;
   atticClient = attic.packages.${system}.attic-client;
   darwinRebuild = darwin.packages.${system}.darwin-rebuild;
@@ -19,6 +18,7 @@ let
   '';
 in {
   imports = [
+    ../roles/base.nix
     ../roles/m1.nix
     ../roles/defaults.nix
     ../roles/pkgs.nix
@@ -27,33 +27,6 @@ in {
     ../roles/sketchybar.nix
     ../../home/darwin/settings.nix
   ];
-
-  # Define user settings
-  users.users.${username} = import ../roles/user.nix {
-    inherit config;
-    inherit pkgs;
-  };
-
-  # Home-Manager config
-  home-manager = {
-    extraSpecialArgs = {
-      inherit myFlakes;
-      inherit choose-nixpkgs;
-    };
-    # Set home-manager configs for username
-    users.${username} = { ... }: {
-      imports = [
-        (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
-        ../../home/darwin.nix
-        ../../home/roles/atuin.nix
-      ];
-      home.packages = with pkgs; [
-        moonlight-qt
-        spicetify.packages.aarch64-darwin.nord
-        utm
-      ];
-    };
-  };
 
   # Set hostname
   networking.hostName = "${hostname}";
@@ -73,6 +46,11 @@ in {
       "zoom"
     ];
   };
+
+  home-manager.users.heywoodlh.home.packages = with pkgs; [
+    moonlight-qt
+    spicetify.packages.${system}.nord
+  ];
 
   # Populate cache
   launchd.daemons.cache-populate = {

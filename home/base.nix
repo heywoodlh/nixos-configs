@@ -156,6 +156,9 @@ in {
   home.file."share/redirector.json" = {
     text = import ./share/redirector.json.nix;
   };
+  home.file."share/vimium-options.json" = {
+    text = import ./share/vimium-options.json.nix;
+  };
 
   # 1Password CLI wrapper
   home.file."bin/op-wrapper.sh" = {

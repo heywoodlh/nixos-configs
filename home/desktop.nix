@@ -278,6 +278,7 @@ let
     rm -rf ~/.vscode ~/Documents/Code ${vscodeSettingsDir}
   '';
   myVscode = myFlakes.packages.${system}.vscode;
+  arc-settings = ./share/arc-browser.plist;
 in {
   home.packages = [
     code-reset
@@ -288,16 +289,11 @@ in {
   # Firefox/Mullvad Browser Browser configuration
   programs.${browser} = firefox-config;
 
-  # Arc configuration
-  programs.chromium = {
-    enable = pkgs.stdenv.isDarwin;
-    package = pkgs.arc-browser;
-    extensions = [
-      { id = "dbepggeogbaibhgnhhndojpepiihcmeb"; } # vimium
-      { id = "aeblfdkhhhdcdjpifhhbdiojplfjncoa"; } # 1password
-      { id = "ocgpenflpmgnfapjedencafcfakcekcd"; } # redirector
-      { id = "eimadpbcbfnmbkopoojfekhnkhdbieeh"; } # dark reader
-      { id = "hjdoplcnndgiblooccencgcggcoihigg"; } # terms of service; didn't read
-    ];
-  };
+  # post-install jobs for MacOS or Linux
+  home.activation = if pkgs.stdenv.isDarwin then {
+    # configure arc on macos
+    arcConfiguration = ''
+      /usr/bin/plutil -convert binary1 ${arc-settings} -o ~/Library/Preferences/company.thebrowser.Browser.plist
+    '';
+  } else {};
 }

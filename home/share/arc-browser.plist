@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+  <key>DefaultSearchProviderEnabled</key>
+  <true/>
+  <key>DefaultSearchProviderName</key>
+  <string>kagi</string>
+  <key>DefaultSearchProviderSearchURL</key>
+  <string>https://kagi.com/search?q={searchTerms}</string>
+  <key>DefaultSearchProviderSuggestURL</key>
+  <string>https://kagi.com/search?q={searchTerms}</string>
+
+  <key>ExtensionInstallForcelist</key>
+  <array>
+    <string>dbepggeogbaibhgnhhndojpepiihcmeb;https://clients2.google.com/service/update2/crx</string> <!--Vimium-->
+    <string>aeblfdkhhhdcdjpifhhbdiojplfjncoa;https://clients2.google.com/service/update2/crx</string> <!--1Password-->
+    <string>eimadpbcbfnmbkopoojfekhnkhdbieeh;https://clients2.google.com/service/update2/crx</string> <!--Dark Reader-->
+    <string>hjdoplcnndgiblooccencgcggcoihigg;https://clients2.google.com/service/update2/crx</string> <!--Terms of Service; Didn't Read-->
+    <string>cdglnehniifkbagbbombnjghhcihifij;https://clients2.google.com/service/update2/crx</string> <!--Kagi Search for Chrome-->
+    <string>ocgpenflpmgnfapjedencafcfakcekcd;https://clients2.google.com/service/update2/crx</string> <!--Redirector-->
+  </array>
+
+  <key>arcMaxDisabledByOrgPolicy</key>
+  <true/>
+
+  <key>PasswordManagerEnabled</key>
+  <false/>
+
+  <key>ManagedBookmarks</key>
+  <array>
+    <dict>
+      <key>toplevel_name</key>
+      <string>nix-managed</string>
+    </dict>
+    <dict>
+      <key>children</key>
+      <array>
+        <dict>
+          <key>name</key>
+          <string>nixos nixpkgs search</string>
+          <key>url</key>
+          <string>https://search.nixos.org</string>
+        </dict>
+        <dict>
+          <key>name</key>
+          <string>nixos options search</string>
+          <key>url</key>
+          <string>https://search.nixos.org/options</string>
+        </dict>
+        <dict>
+          <key>name</key>
+          <string>nix-darwin configuration options</string>
+          <key>url</key>
+          <string>https://daiderd.com/nix-darwin/manual/index.html#sec-options</string>
+        </dict>
+        <dict>
+          <key>name</key>
+          <string>home-manager configuration options</string>
+          <key>url</key>
+          <string>https://nix-community.github.io/home-manager/options.xhtml</string>
+        </dict>
+      </array>
+      <key>name</key>
+      <string>nixos</string>
+    </dict>
+    <dict>
+      <key>name</key>
+      <string>heywoodlh.io</string>
+      <key>url</key>
+      <string>https://heywoodlh.io</string>
+    </dict>
+  </array>
+
+</dict>
+</plist>

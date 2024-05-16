@@ -81,10 +81,10 @@ let
   otp = pkgs.writeShellScriptBin "otp" ''
     ${op-otp} | ${pkgs.tmux}/bin/tmux loadb -
   '';
-  passOtp = pkgs.pass.withExtensions (exts: [ exts.pass-otp ]);
   myPass = pkgs.writeShellScriptBin "pass" ''
-    PASSWORD_STORE_DIR="${op-backup-dir-no-format}" ${passOtp}/bin/pass $@
-  '';
+    export PASSWORD_STORE_DIR="${op-backup-dir-no-format}"
+    ${pkgs.pass.withExtensions (exts: [ exts.pass-otp ])}/bin/pass $@
+    '';
 in {
   home.stateVersion = "23.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -141,8 +141,13 @@ in {
     password
     otp
     op-backup
-    myPass
   ];
+
+  # Enable password-store
+  programs.password-store = {
+    enable = true;
+    package = myPass;
+  };
 
   # Import nur as nixpkgs.overlays
   nixpkgs.overlays = [

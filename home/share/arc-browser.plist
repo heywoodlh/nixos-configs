@@ -25,6 +25,11 @@
   <key>arcMaxDisabledByOrgPolicy</key>
   <true/>
 
+  <key>URLBlocklist</key>
+  <array>
+    <string>releases.arc.net</string>
+  </array>
+
   <key>PasswordManagerEnabled</key>
   <false/>
 

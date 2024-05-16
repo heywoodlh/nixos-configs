@@ -4,8 +4,6 @@
   light-wallpaper, dark-wallpaper,
   snowflake,
   mullvad-browser-home-manager,
-  arcwtf,
-  edge-frfox,
   ... }:
 
 let
@@ -230,8 +228,6 @@ in {
       inherit light-wallpaper;
       inherit dark-wallpaper;
       inherit snowflake;
-      inherit arcwtf;
-      inherit edge-frfox;
     };
     users.heywoodlh = { ... }: {
       imports = [

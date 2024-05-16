@@ -61,14 +61,6 @@
     };
     attic.url = "github:zhaofengli/attic";
     nixos-x13s.url = "git+https://codeberg.org/adamcstephens/nixos-x13s";
-    arcwtf = {
-      url = "github:KiKaraage/ArcWTF";
-      flake = false;
-    };
-    edge-frfox = {
-      url = "github:bmFtZQ/edge-frfox";
-      flake = false;
-    };
   };
 
   outputs = inputs@{ self,
@@ -97,8 +89,6 @@
                       choose-nixpkgs,
                       cosmic-session,
                       attic,
-                      arcwtf,
-                      edge-frfox,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

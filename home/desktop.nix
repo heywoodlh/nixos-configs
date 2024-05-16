@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, mullvad-browser-home-manager, myFlakes, arcwtf, edge-frfox, ... }:
+{ config, pkgs, home-manager, nur, mullvad-browser-home-manager, myFlakes, ... }:
 
 let
   system = pkgs.system;
@@ -112,7 +112,7 @@ let
       list-style-image: none !important;
     }
   '';
-  oldUserChrome = ''
+  userChrome = ''
     /* * Do not remove the @namespace line -- it's required for correct functioning */
     /* set default namespace to XUL */
     @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
@@ -155,47 +155,6 @@ let
       display: none;
     }
     ${linuxUserChrome}
-  '';
-  userChrome = ''
-    /* ArcWTF main files */
-    @import url("${edge-frfox}/icons/icons.css");
-    @import url("${arcwtf}/toolbar/tabbar.css");
-    @import url("${arcwtf}/toolbar/navbar.css");
-    @import url("${arcwtf}/toolbar/personalbar.css");
-    @import url("${arcwtf}/toolbar/findbar.css");
-    @import url("${arcwtf}/toolbar/urlbar.css");
-    @import url("${arcwtf}/global/colors.css");
-    @import url("${arcwtf}/global/popup.css");
-    @import url("${arcwtf}/global/browser.css");
-    @import url("${arcwtf}/global/tree.css");
-
-    /* Tweaks */
-    @import url("${arcwtf}/global/tweaks.css");
-    @import url("${arcwtf}/tweaks/hide-tabs-bar.css");
-    @import url("${arcwtf}/tweaks/extensions.css");
-    @import url("${arcwtf}/tweaks/sidebar.css");
-    @import url("${arcwtf}/tweaks/popup-search.css");
-
-    /* Enable translucency on browser toolbars. (MacOS only) */
-    /**/@import url("${arcwtf}/tweaks/mac-translucent.css") (-moz-bool-pref: "uc.tweak.mac-translucent");/**/
-
-    /* Import custom stylesheet instead of modifying the theme files. */
-    @import url("${arcwtf}/custom.css");
-
-    /* Replacing Userchrome Toggle icon with Arc sidebar icon */
-    :is(.webextension-browser-action, .eom-addon-button)[data-extensionid="userchrome-toggle@joolee.nl"] .toolbarbutton-icon { list-style-image: url(${arcwtf}/icons/userchrome-toggle.svg); }
-
-    /* My overrides */
-    #urlbar #urlbar-input {text-align: left !important}
-
-    /* Remove Back button when there's nothing to go Back to */
-    #back-button[disabled="true"] { display: none; }
-
-    /* Remove Forward button when there's nothing to go Forward to */
-    #forward-button[disabled="true"] { display: none; }
-
-    /* Remove Home button (never use it) */
-    #home-button { display: none; }
   '';
   firefox-config = {
     enable = true;

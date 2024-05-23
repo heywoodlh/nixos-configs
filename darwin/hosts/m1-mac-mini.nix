@@ -39,6 +39,7 @@ in {
     ];
     casks = [
       "discord"
+      "docker"
       "microsoft-remote-desktop"
       "screens"
       "signal"

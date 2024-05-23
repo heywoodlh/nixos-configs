@@ -9,6 +9,7 @@ let
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   myTmux = myFlakes.packages.${system}.tmux;
   myVim = myFlakes.packages.${system}.vim;
+  myHelix = myFlakes.packages.${system}.helix;
   myGit = myFlakes.packages.${system}.git;
 in {
   imports = [
@@ -52,6 +53,7 @@ in {
     pkgs.python310Packages.pip
     pkgs.unzip
     myVim
+    myHelix
     pkgs.wireguard-tools
     pkgs.zsh
   ];

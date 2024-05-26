@@ -160,8 +160,11 @@
           /etc/nixos/hardware-configuration.nix
           ./nixos/desktop.nix
           {
-            nixos-x13s.enable = true;
-            nixos-x13s.kernel = "jhovold";
+            nixos-x13s = {
+              enable = true;
+              kernel = "jhovold";
+              bluetoothMac = "02:68:b3:29:da:98";
+            };
             specialisation = {
               mainline.configuration.nixos-x13s.kernel = "jhovold";
             };
@@ -196,9 +199,6 @@
                 path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/105b";
               }
             ];
-
-            # Android
-            virtualisation.waydroid.enable = true;
 
             environment.systemPackages = with pkgs; [
               webcord

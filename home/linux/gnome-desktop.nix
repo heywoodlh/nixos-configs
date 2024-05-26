@@ -16,13 +16,13 @@ in {
     gnomeExtensions.caffeine
     gnomeExtensions.gnome-bedtime
     gnomeExtensions.gsconnect
+    gnomeExtensions.hide-cursor
     gnomeExtensions.just-perfection
     gnomeExtensions.night-theme-switcher
     #gnomeExtensions.paperwm
     gnomeExtensions.pop-shell
     gnomeExtensions.tray-icons-reloaded
     #pop-launcher
-    gnomeExtensions.switcher
     pkgs.epiphany
   ];
 

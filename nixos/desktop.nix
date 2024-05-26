@@ -267,4 +267,7 @@ in {
     dates = "daily";
     options = "--delete-older-than 7d";
   };
+
+  # Thunderbolt 3
+  services.hardware.bolt.enable = true;
 }

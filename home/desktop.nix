@@ -83,9 +83,7 @@ let
     "browser.sessionstore.restore_pinned_tabs_on_demand" = false;
   };
   browser-settings = common-firefox-settings // firefox-settings;
-  linuxUserChrome = if pkgs.stdenv.isDarwin then
-  ""
-  else
+  osSpecificUserChrome = if pkgs.stdenv.isDarwin then "" else
   ''
     /* Linux stuff to keep GNOME system theme */
     .titlebar-min {
@@ -154,7 +152,19 @@ let
     .tab-icon-image {
       display: none;
     }
-    ${linuxUserChrome}
+
+    /* Thanks <redacted> */
+    /* Hide titlebar */
+    #titlebar {
+      visibility: collapse;
+    }
+
+    /* Hide sidebar */
+    #sidebar-header {
+      visibility: collapse !important;
+    } 
+
+    ${osSpecificUserChrome}
   '';
   firefox-config = {
     enable = true;
@@ -207,6 +217,7 @@ let
         privacy-badger
         redirector
         side-view
+        sidebery
         ublock-origin
         vimium
       ];

@@ -138,5 +138,14 @@
   };
   environment.systemPackages = with pkgs; [ docker runc ];
 
+  services = {
+    syncthing = {
+      enable = true;
+      user = "heywoodlh";
+      dataDir = "/home/heywoodlh/Sync";
+      configDir = "/home/heywoodlh/.config/syncthing";
+    };
+  };
+
   system.stateVersion = "23.11";
 }

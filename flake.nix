@@ -282,10 +282,10 @@
           }
         ];
       };
-      nix-wsl = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      nixos-wsl = nixpkgs.lib.nixosSystem {
+        system = "${system}";
         specialArgs = inputs;
-        modules = [ ./nixos/hosts/nix-wsl/configuration.nix ];
+        modules = [ ./nixos/hosts/wsl.nix ];
       };
       nixos-arm64-vm = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";

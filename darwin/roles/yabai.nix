@@ -22,7 +22,8 @@ let
 
     if echo "''${selection}" | grep -q ".app"
     then
-      open -a "''${selection}"
+      app_name=$(basename "''${selection}" .app)
+      osascript -e "tell application \"''${app_name}\" to activate"
     else
       binary="$(which ''${selection})" && exec ''${binary}
     fi

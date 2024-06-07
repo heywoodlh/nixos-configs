@@ -6,13 +6,11 @@ let
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
-  myHelix = myFlakes.packages.${system}.helix;
 in {
   #nix packages
   environment.systemPackages = [
     atticClient
     linuxBuilderSsh
-    myHelix
   ];
 
   nix.settings = {

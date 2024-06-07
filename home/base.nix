@@ -7,7 +7,6 @@ let
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
   myVim = myFlakes.packages.${system}.vim;
-  myHelix = myFlakes.packages.${system}.helix;
   myGit = myFlakes.packages.${system}.git;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
     export SOCKS_SERVER="nix-nvidia:1080"
@@ -133,7 +132,6 @@ in {
     vdirsyncer
     zip
     myVim
-    myHelix
     myGit
     myTmux # For non-nix use-cases
     myFish # For non-nix use-cases

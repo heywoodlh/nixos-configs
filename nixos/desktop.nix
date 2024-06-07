@@ -208,7 +208,6 @@ in {
     pkgs.usbutils
     myFlakes.packages.${system}.tmux
     myFlakes.packages.${system}.vim
-    myFlakes.packages.${system}.helix
   ];
 
   # Disable wait-online service for Network Manager

@@ -28,7 +28,7 @@
     osquery-fix-nixpkgs = {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
-    hyprland.url = "github:hyprwm/Hyprland/main";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
     jovian-nixos = {
       url = "git+https://github.com/Jovian-Experiments/Jovian-NixOS?ref=development";
@@ -59,7 +59,7 @@
       url = "github:pop-os/cosmic-session";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    attic.url = "github:zhaofengli/attic";
+    attic.url = "github:zhaofengli/attic/6eabc3f02fae3683bffab483e614bebfcd476b21";
     nixos-x13s.url = "git+https://codeberg.org/adamcstephens/nixos-x13s";
   };
 

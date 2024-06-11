@@ -35,7 +35,7 @@ in {
   nix.settings = {
     sandbox = true;
     substituters = [
-      #"https://hyprland.cachix.org"
+      "https://hyprland.cachix.org"
     ];
     trusted-public-keys = [
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
@@ -72,13 +72,13 @@ in {
   boot.tmp.cleanOnBoot = true;
 
   # Enable hyprland
-  #programs.hyprland = {
-  #  enable = true;
-  #  xwayland.enable = true;
-  #};
-  #services.xserver.displayManager.defaultSession = "hyprland";
-  #security.pam.services.swaylock.text = "auth include login";
-  #hardware.brillo.enable = true;
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+  services.displayManager.defaultSession = "hyprland";
+  security.pam.services.swaylock.text = "auth include login";
+  hardware.brillo.enable = true;
 
   # Enable kde connect
   programs.kdeconnect.enable = true;
@@ -238,8 +238,8 @@ in {
         ../home/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.default
         (import myFlakes.packages.${system}.gnome-dconf)
-        #hyprland.homeManagerModules.default
-        #../home/linux/hyprland.nix
+        hyprland.homeManagerModules.default
+        ../home/linux/hyprland.nix
       ];
       home.packages = [
         myFlakes.packages.${system}.git

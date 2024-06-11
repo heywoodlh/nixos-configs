@@ -3,7 +3,6 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  myWezterm = myFlakes.packages.${system}.wezterm;
 in {
   home.packages = with pkgs; [
     acpi
@@ -60,7 +59,7 @@ in {
     enable = true;
     settings = {
       main = {
-        terminal = "${pkgs.wezterm}/bin/wezterm";
+        terminal = "${pkgs.gnome.gnome-terminal}/bin/gnome-terminal";
         layer = "overlay";
         width = 45;
         lines = 5;
@@ -211,22 +210,6 @@ in {
       Terminal=false
       Type=Application
       Keywords=hyprland;monitor
-      Icon=nix-snowflake
-      Categories=Utility;
-    '';
-  };
-
-  # Wezterm desktop file
-  home.file.".local/share/applications/wezterm.desktop" = {
-    enable = true;
-    text = ''
-      [Desktop Entry]
-      Name=Wezterm
-      GenericName=terminal
-      Exec=${myWezterm}/bin/wezterm
-      Terminal=false
-      Type=Application
-      Keywords=terminal
       Icon=nix-snowflake
       Categories=Utility;
     '';
@@ -397,20 +380,18 @@ in {
     enable = true;
     extraConfig = ''
       # Fix blurry X11 apps, hidpi
-      exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 24c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
-      xwayland {
-        force_zero_scaling = true
-      }
-      env = GDK_SCALE, 2
+      #exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 24c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
+      #xwayland {
+      #  force_zero_scaling = true
+      #}
+      #env = GDK_SCALE, 2
       env = XCURSOR_SIZE, 24
       env = NIXOS_OZONE_WL, 1
 
       general {
         col.active_border = 81a1c1ff
         no_border_on_floating = yes
-        cursor_inactive_timeout = 3 # Hide mouse after 3 seconds of inactivity
         no_focus_fallback = true
-        no_cursor_warps = true
       }
 
       # Apps to start on login
@@ -419,8 +400,8 @@ in {
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
       exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
-      # Start wezterm in special workspace so I can toggle it
-      exec-once = [workspace special:terminal] ${myWezterm}/bin/wezterm
+      # Start gnome-terminal in special workspace so I can toggle it
+      #exec-once = [workspace special:terminal] ${pkgs.gnome.gnome-terminal}/bin/gnome-terminal
       # Animations
       animations {
         enabled = yes
@@ -470,8 +451,8 @@ in {
       # General Keybindings
       $mainMod = SUPER
       # Terminal
-      bind = $mainMod, Return, exec, ${myWezterm}/bin/wezterm
-      bind = CTRL_ALT, t, exec, ${myWezterm}/bin/wezterm
+      bind = $mainMod, Return, exec, ${pkgs.gnome.gnome-terminal}/bin/gnome-terminal
+      bind = CTRL_ALT, t, exec, ${pkgs.gnome.gnome-terminal}/bin/gnome-terminal
       bind = CTRL, grave, togglespecialworkspace, terminal
       # 1Password
       bind = CTRL_SUPER, s, exec, ${homeDir}/bin/1password-toggle.sh
@@ -524,6 +505,11 @@ in {
       bind = $mainMod, bracketright, workspace, r+1
       bind = CTRL_SHIFT, bracketleft, focusmonitor, left
       bind = CTRL_SHIFT, bracketright, focusmonitor, right
+
+      # Cursor
+      cursor {
+        inactive_timeout = 3
+      }
     '';
     xwayland = {
       enable = true;

@@ -95,6 +95,10 @@ in {
     '';
   };
 
+  home.activation.gnome-extensions = ''
+    ${pkgs.gnome-extensions-cli}/bin/gext install "openbar@neuromorph"
+  '';
+
   # Now managed by my gnome flake
   # Only Home-Manager-specific settings should live here
   #dconf.settings = {

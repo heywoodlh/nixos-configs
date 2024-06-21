@@ -16,7 +16,7 @@ let
   startFbterm = pkgs.writeShellScriptBin "start-fbterm" ''
     eval $(${pkgs.openssh}/bin/ssh-agent)
     export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
-    /run/wrappers/bin/fbterm
+    TERM=screen-256color exec /run/wrappers/bin/fbterm
   '';
   pbcopy = pkgs.writeShellScriptBin "pbcopy" ''
     stdin=$(${pkgs.coreutils}/bin/cat)
@@ -88,44 +88,6 @@ in {
   services.xserver.xkb = {
     layout = "us";
     variant = "";
-  };
-
-  # Enable CUPS to print documents.
-  services.printing = {
-    enable = true;
-    drivers = [ pkgs.hplipWithPlugin ];
-  };
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true; # For wifi printers
-  };
-  # For scanning documents
-  hardware.sane = {
-    enable = true;
-    extraBackends = [ pkgs.hplipWithPlugin ];
-  };
-  users.extraGroups.lp.members = [ "heywoodlh" ];
-  users.extraGroups.scanner.members = [ "heywoodlh" ];
-
-  # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-  ## Bluetooth
-  hardware.bluetooth = {
-    enable = true;
-    settings = {
-      # Necessary for Airpods
-      General = { ControllerMode = "dual"; } ;
-    };
   };
 
   # Android debugging
@@ -236,7 +198,7 @@ in {
         enable = true;
         text = ''
           font-names=JetBrainsMono Nerd Font
-          font-size=26
+          font-size=14
           #font-width=
           #font-height=
 

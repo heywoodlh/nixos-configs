@@ -356,6 +356,9 @@
             # Select internationalisation properties.
             i18n.defaultLocale = "en_US.utf8";
             system.stateVersion = "24.05";
+            # Assume VMWare
+            virtualisation.vmware.guest.enable = true;
+            console.earlySetup = true;
           }
         ];
       };

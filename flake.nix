@@ -342,7 +342,7 @@
         specialArgs = inputs;
         modules = [
           /etc/nixos/hardware-configuration.nix
-          ./nixos/console.nix
+          ./nixos/desktop.nix
           ./nixos/roles/remote-access/sshd.nix
           {
             networking.hostName = "nixos-dev";

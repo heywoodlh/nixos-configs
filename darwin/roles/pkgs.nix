@@ -63,6 +63,7 @@ in {
       "lulu"
       "oversight"
       "reikey"
+      "remoteviewer"
       "rustdesk"
       "secretive"
       "shortcat"

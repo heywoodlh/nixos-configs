@@ -30,6 +30,7 @@ in {
       "coder"
       "flyctl"
       "pinentry-mac"
+      "spice-gtk"
       "watch"
       "zsh"
     ];

@@ -3,7 +3,7 @@
 
 {
   imports = [
-    ./roles/nixos/cache-client.nix
+    #./roles/nixos/cache-client.nix
   ];
   # So that `nix search` works
   nix.extraOptions = ''

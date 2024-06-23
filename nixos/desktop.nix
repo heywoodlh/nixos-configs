@@ -229,6 +229,7 @@ in {
       inherit dark-wallpaper;
       inherit snowflake;
     };
+    backupFileExtension = ".bak";
     users.heywoodlh = { ... }: {
       imports = [
         (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)

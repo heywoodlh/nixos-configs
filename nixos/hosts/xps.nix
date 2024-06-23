@@ -5,17 +5,12 @@
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-      ../../desktop.nix
+      ../laptop.nix
     ];
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # Setup keyfile
-  #boot.initrd.secrets = {
-  #  "/crypto_keyfile.bin" = null;
-  #};
 
   networking.hostName = "nixos-xps"; # Define your hostname.
 
@@ -51,6 +46,12 @@
   services.fprintd.tod.enable = true;
   services.fprintd.tod.driver = lib.mkForce pkgs.libfprint-2-tod1-goodix;
 
+  # Hard limits for Nix
+  nix.settings = {
+    cores = 4;
+    max-jobs = 4;
+  };
+
   # Set version of NixOS to target
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 }

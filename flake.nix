@@ -149,7 +149,7 @@
         specialArgs = inputs;
         modules = [
           nixos-hardware.nixosModules.dell-xps-13-9310
-          ./nixos/hosts/xps/configuration.nix
+          ./nixos/hosts/xps.nix
         ];
       };
       nixos-thinkpad = nixpkgs.lib.nixosSystem {

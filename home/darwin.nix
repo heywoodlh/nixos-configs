@@ -37,18 +37,6 @@ in {
     ls = "ls --color";
   };
 
-  home.file."bin/darwin-switch" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      export PATH="/run/current-system/sw/bin:$PATH"
-      [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
-      git -C ~/opt/nixos-configs pull origin master --rebase
-      darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname)
-    '';
-  };
-
   home.file."Pictures/wallpaper.png" = {
     enable = true;
     source = ../wallpapers/nord-apple.png;

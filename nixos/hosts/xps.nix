@@ -52,6 +52,8 @@
     max-jobs = 4;
   };
 
+  services.fwupd.enable = true;
+
   # Set version of NixOS to target
   system.stateVersion = "24.05";
 }

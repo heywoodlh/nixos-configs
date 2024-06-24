@@ -4,6 +4,7 @@
   light-wallpaper, dark-wallpaper,
   snowflake,
   mullvad-browser-home-manager,
+  openbar-nixpkgs,
   ... }:
 
 let
@@ -228,6 +229,7 @@ in {
       inherit light-wallpaper;
       inherit dark-wallpaper;
       inherit snowflake;
+      inherit openbar-nixpkgs;
     };
     backupFileExtension = ".bak";
     users.heywoodlh = { ... }: {
@@ -267,6 +269,9 @@ in {
     dates = "daily";
     options = "--delete-older-than 7d";
   };
+
+  # Enable ergodox ez/moonlander keyboard tools
+  hardware.keyboard.zsa.enable = true;
 
   # Thunderbolt 3
   services.hardware.bolt.enable = true;

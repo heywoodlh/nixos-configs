@@ -1,4 +1,4 @@
-{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
+{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, light-wallpaper, dark-wallpaper, openbar-nixpkgs, ... }:
 
 let
   system = pkgs.system;
@@ -7,6 +7,7 @@ let
   myFish = myFlakes.packages.${system}.fish;
   myWezterm = myFlakes.packages.${system}.wezterm;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
+  openbar-pkgs = openbar-nixpkgs.legacyPackages.${system};
 in {
   home.packages = with gnome-pkgs; [
     gnome.dconf-editor
@@ -24,6 +25,7 @@ in {
     gnomeExtensions.tray-icons-reloaded
     #pop-launcher
     pkgs.epiphany
+    openbar-pkgs.gnomeExtensions.open-bar
   ];
 
   # Enable unclutter
@@ -94,10 +96,6 @@ in {
       }
     '';
   };
-
-  home.activation.gnome-extensions = ''
-    ${pkgs.gnome-extensions-cli}/bin/gext install "openbar@neuromorph"
-  '';
 
   # Now managed by my gnome flake
   # Only Home-Manager-specific settings should live here

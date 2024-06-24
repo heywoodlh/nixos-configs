@@ -61,6 +61,7 @@
     };
     attic.url = "github:zhaofengli/attic/6eabc3f02fae3683bffab483e614bebfcd476b21";
     nixos-x13s.url = "git+https://codeberg.org/adamcstephens/nixos-x13s";
+    openbar-nixpkgs.url = "github:heywoodlh/nixpkgs/openbar-init";
   };
 
   outputs = inputs@{ self,
@@ -89,6 +90,7 @@
                       choose-nixpkgs,
                       cosmic-session,
                       attic,
+                      openbar-nixpkgs,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

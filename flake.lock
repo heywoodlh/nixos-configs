@@ -5836,11 +5836,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1719164993,
-        "narHash": "sha256-FABhTnL6CBNrvsHVrEXWYoH+zrNfA4yPmgorQupUSZo=",
+        "lastModified": 1719266290,
+        "narHash": "sha256-YR0sRb4MpwoI1f/NOO1iLensdroExHVs1U4C8ake9jY=",
         "ref": "refs/heads/main",
-        "rev": "8a68199a0ceb2894a5d9cc300961c38123ac0312",
-        "revCount": 4879,
+        "rev": "4dd2b5902e770eeaf84820eccfebb5451aedb6a5",
+        "revCount": 4881,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland"
@@ -11172,11 +11172,11 @@
     },
     "nur_9": {
       "locked": {
-        "lastModified": 1719249443,
-        "narHash": "sha256-pVxxDqPu+BIABdLiHgAyq2KPTOJFKF85XpFW3JNjkoE=",
+        "lastModified": 1719271960,
+        "narHash": "sha256-DjGdPmj6asbFXgbFOIlAYlRTHrXmBIYgR+GppA863Ck=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "5759f55f61b31cca0bf3bf0c0aaf876bb06aee05",
+        "rev": "37476ffd9bad58898cfd35fe8c6b342a7cc5d614",
         "type": "github"
       },
       "original": {
@@ -11534,6 +11534,22 @@
         "type": "path"
       }
     },
+    "openbar-nixpkgs": {
+      "locked": {
+        "lastModified": 1719272524,
+        "narHash": "sha256-v7ep58koeaB1fA6irc9ur2gIuf30x9McVdpMA7ltDKo=",
+        "owner": "heywoodlh",
+        "repo": "nixpkgs",
+        "rev": "b947a674d11f91a44baf37fd6cc9bf849b9f1f01",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "openbar-init",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "osquery-fix-nixpkgs": {
       "locked": {
         "lastModified": 1690997355,
@@ -11703,6 +11719,7 @@
         "nixpkgs-lts": "nixpkgs-lts_9",
         "nixpkgs-stable": "nixpkgs-stable_6",
         "nur": "nur_9",
+        "openbar-nixpkgs": "openbar-nixpkgs",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs_9",
         "snowflake": "snowflake_2",
         "spicetify": "spicetify_9",

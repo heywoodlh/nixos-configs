@@ -15,6 +15,7 @@
     ../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
     ../../roles/nixos/cache.nix
+    ../../roles/remote-access/wireguard-server.nix
     #../../roles/dev/vscode.nix # many things don't work with non-standard Nix paths
   ];
 
@@ -45,7 +46,6 @@
   # Make sure opengl is enabled
   hardware.opengl = {
     enable = true;
-    driSupport = true;
     driSupport32Bit = true;
   };
 
@@ -136,7 +136,7 @@
     enable = true;
     enableNvidia = true;
   };
-  environment.systemPackages = with pkgs; [ docker runc ];
+  environment.systemPackages = with pkgs; [ docker runc cloudflared ];
 
   services = {
     syncthing = {
@@ -145,6 +145,7 @@
       dataDir = "/home/heywoodlh/Sync";
       configDir = "/home/heywoodlh/.config/syncthing";
     };
+    cloudflared.enable = true;
   };
 
   system.stateVersion = "23.11";

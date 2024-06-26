@@ -21,6 +21,7 @@ in {
     ../roles/base.nix
     ../roles/m1.nix
     ../roles/defaults.nix
+    ../roles/binary-cache.nix
     ../roles/pkgs.nix
     ../roles/yabai.nix
     ../roles/network.nix

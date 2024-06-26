@@ -2,7 +2,6 @@
 
 let
   system = pkgs.system;
-  atticClient = attic.packages.${system}.attic-client;
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
@@ -15,7 +14,6 @@ let
 in {
   #nix packages
   environment.systemPackages = [
-    atticClient
     linuxBuilderSsh
     darwinSwitch
   ];

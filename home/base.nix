@@ -204,6 +204,7 @@ in {
       default = INBOX
       copy-to = Sent
       from = Spencer Heywood <heywoodlh@heywoodlh.io>
+      aliases = *@heywoodlh.io
 
       [protonmail]
       source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143

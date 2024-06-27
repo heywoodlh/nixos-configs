@@ -96,20 +96,20 @@ in {
     package =  pkgs.skhd;
     skhdConfig = ''
       # focus window
-      alt - j : yabai -m window --focus west
-      alt - k : yabai -m window --focus south
-      alt - i : yabai -m window --focus north
-      alt - l : yabai -m window --focus east
+      ctrl - j : yabai -m window --focus west
+      ctrl - k : yabai -m window --focus south
+      ctrl - i : yabai -m window --focus north
+      ctrl - l : yabai -m window --focus east
       # swap window
-      shift + alt - j : yabai -m window --swap west
-      shift + alt - k : yabai -m window --swap south
-      shift + alt - i : yabai -m window --swap north
-      shift + alt - l : yabai -m window --swap east
+      shift + cmd - j : yabai -m window --swap west
+      shift + cmd - k : yabai -m window --swap south
+      shift + cmd - i : yabai -m window --swap north
+      shift + cmd - l : yabai -m window --swap east
       # move window
-      shift + cmd - j : yabai -m window --warp west
-      shift + cmd - k : yabai -m window --warp south
-      shift + cmd - i : yabai -m window --warp north
-      shift + cmd - l : yabai -m window --warp east
+      shift + alt - j : yabai -m window --warp west
+      shift + alt - k : yabai -m window --warp south
+      shift + alt - i : yabai -m window --warp north
+      shift + alt - l : yabai -m window --warp east
       # balance size of windows
       shift + alt - 0 : yabai -m space --balance
       # make floating window fill screen

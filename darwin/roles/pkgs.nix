@@ -32,8 +32,6 @@ in {
       "bash"
       "choose-gui"
       "cliclick"
-      "coder"
-      "flyctl"
       "pinentry-mac"
       "spice-gtk"
       "watch"
@@ -54,7 +52,6 @@ in {
     casks = [
       "1password"
       "android-platform-tools"
-      "arc"
       "blockblock"
       "cursorcerer"
       "firefox"

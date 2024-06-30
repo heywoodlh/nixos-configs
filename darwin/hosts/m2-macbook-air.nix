@@ -26,6 +26,7 @@ in {
     casks = [
       "diffusionbee"
       "discord"
+      "docker"
       "microsoft-remote-desktop"
       "signal"
       "vmware-fusion"

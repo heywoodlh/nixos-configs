@@ -25,6 +25,10 @@
     ];
   };
 
+  environment.systemPackages = with pkgs; [
+    gptfdisk
+  ];
+
   # Allow non-free applications to be installed
   nixpkgs.config.allowUnfree = true;
 }

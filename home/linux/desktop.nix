@@ -3,18 +3,9 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  myVimb = myFlakes.packages.${system}.vimb;
   myWezterm = myFlakes.packages.${system}.wezterm;
   browserBin = if system == "aarch64-linux" then "${pkgs.bash}/bin/bash -c 'MESA_GL_VERSION_OVERRIDE=3.3 MESA_GLSL_VERSION_OVERRIDE=330 MESA_GLES_VERSION_OVERRIDE=3.1 MOZ_ENABLE_WAYLAND=1 ${pkgs.firefox}/bin/firefox'" else "${pkgs.mullvad-browser}/bin/mullvad-browser";
 in {
-  # Webcord Nord theme
-  home.file.".config/WebCord/Themes/nordic.theme.css" = {
-    source = builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/orblazer/discord-nordic/bfd1da7e7a9a4291cd8f8c3dffc6a93dfc3d39d7/nordic.theme.css";
-      sha256 = "sha256:13q4ijdpzxc4r9423s51hhcc8wzw3901cafqpnyqxn69vr2xnzrc";
-    };
-  };
-
   # Flatpak support
   services.flatpak = {
     enableModule = true;
@@ -67,46 +58,11 @@ in {
     pkgs.virt-manager
     pkgs.xclip
     pkgs.xdotool
-    myVimb
   ];
 
   home.shellAliases = {
     open = "xdg-open";
     captive-portal = "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
-  };
-
-  # Webcord nord config
-  home.file.".local/share/applications/webcord-nord.desktop" = {
-    enable = true;
-    text = ''
-      [Desktop Entry]
-      Name=Configure WebCord (Nord)
-      GenericName=discord
-      Comment=Configure WebCord to use Nordic theme
-      Exec=${pkgs.webcord}/bin/webcord --add-css-theme ${homeDir}/.config/WebCord/Themes/nordic.theme.css
-      Terminal=false
-      Type=Application
-      Keywords=webcord;discord;
-      Icon=${snowflake}
-      Categories=Utility;
-    '';
-  };
-
-  # Webcord nord config
-  home.file.".local/share/applications/vimb.desktop" = {
-    enable = true;
-    text = ''
-      [Desktop Entry]
-      Name=Vimb
-      GenericName=browser
-      Comment=Browse the web
-      Exec=${myVimb}/bin/vimb
-      Terminal=false
-      Type=Application
-      Keywords=browser;vimb;internet;
-      Icon=${snowflake}
-      Categories=Utility;
-    '';
   };
 
   # Start 1Password minimized

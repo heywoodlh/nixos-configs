@@ -99,6 +99,10 @@ in {
 
   # Now managed by my gnome flake
   # Only Home-Manager-specific settings should live here
-  #dconf.settings = {
-  #};
+  dconf.settings = {
+    "org/gnome/desktop/background" = {
+      picture-uri = lib.mkForce "${homeDir}/.wallpaper.png";
+      picture-uri-dark = lib.mkForce "${homeDir}/.wallpaper.png";
+    };
+  };
 }

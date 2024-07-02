@@ -26,19 +26,13 @@
   # Configuration for this machine
   home-manager.users.heywoodlh = {
     imports = [
-      (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
+      ../../home/roles/discord.nix
     ];
     home.packages = with pkgs; [
       signal-desktop
       spicetify.packages.x86_64-linux.nord-text
-      webcord
       zoom-us
     ];
-    programs.mullvad-browser = {
-      profiles.home-manager = {
-        search.default = lib.mkForce "Mullvad Leta";
-      };
-    };
   };
 
   # Fingerprint
@@ -48,8 +42,8 @@
 
   # Hard limits for Nix
   nix.settings = {
-    cores = 4;
-    max-jobs = 4;
+    cores = 2;
+    max-jobs = 2;
   };
 
   services.fwupd.enable = true;

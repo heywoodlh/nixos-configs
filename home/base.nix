@@ -375,4 +375,15 @@ in {
     '';
   };
 
+  # lima NixOS wrapper
+  home.file."bin/nixos.sh" = {
+    executable = true;
+    text = ''
+      #!/usr/bin/env fish
+      nix run "github:heywoodlh/flakes?dir=nixos-lima#runVm"
+    '';
+  };
+
+
+
 }

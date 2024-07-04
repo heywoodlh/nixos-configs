@@ -115,6 +115,18 @@
           }
         ];
       };
+      "m1-macbook-pro" = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = inputs;
+        modules = [
+          ./darwin/hosts/m1-macbook-pro.nix
+          {
+            environment.systemPackages = [
+              myFlakes.packages.${system}.vim
+            ];
+          }
+        ];
+      };
       "mac-mini" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs;

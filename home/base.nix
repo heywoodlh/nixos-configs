@@ -85,6 +85,7 @@ let
     export PASSWORD_STORE_DIR="${op-backup-dir-no-format}"
     ${pkgs.pass.withExtensions (exts: [ exts.pass-otp ])}/bin/pass $@
     '';
+  limaTemplate = ./share/ubuntu.yaml;
 in {
   home.stateVersion = "23.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -375,12 +376,18 @@ in {
     '';
   };
 
-  # lima NixOS wrapper
-  home.file."bin/nixos.sh" = {
+  # lima wrapper
+  home.file."bin/linux.sh" = {
     executable = true;
     text = ''
-      #!/usr/bin/env fish
-      nix run "github:heywoodlh/flakes?dir=nixos-lima#runVm"
+      #!/usr/bin/env bash
+      if [[ -e ~/.lima/default ]]
+      then
+        ${pkgs.lima}/bin/limactl start default
+      else
+        ${pkgs.lima}/bin/limactl start --name=default ${limaTemplate}
+      fi
+      ${pkgs.lima}/bin/limactl start-at-login default
     '';
   };
 

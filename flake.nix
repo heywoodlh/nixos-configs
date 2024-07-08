@@ -355,28 +355,39 @@
         system = "${linuxSystem}";
         specialArgs = inputs;
         modules = [
-          /etc/nixos/hardware-configuration.nix
-          ./nixos/desktop.nix
-          ./nixos/roles/remote-access/sshd.nix
+          ./nixos/vm.nix
           {
             networking.hostName = "nixos-dev";
-            # Bootloader
-            boot.loader.systemd-boot.enable = true;
-            boot.loader.efi.canTouchEfiVariables = false;
-            # Enable networking
-            networking.networkmanager.enable = true;
-            # Set your time zone.
-            time.timeZone = "America/Denver";
-            # Select internationalisation properties.
-            i18n.defaultLocale = "en_US.utf8";
-            system.stateVersion = "24.05";
-            # Assume VMWare
+          }
+        ];
+      };
+      # VMWare VM for running on workstations
+      nixos-vmware = nixpkgs.lib.nixosSystem {
+        system = "${linuxSystem}";
+        specialArgs = inputs;
+        modules = [
+          ./nixos/vm.nix
+          {
+            networking.hostName = "nixos-dev-vmware";
             virtualisation.vmware.guest.enable = true;
             console.earlySetup = true;
           }
         ];
       };
-
+      # UTM VM for running on MacOS
+      nixos-utm = nixpkgs.lib.nixosSystem {
+        system = "${linuxSystem}";
+        specialArgs = inputs;
+        modules = [
+          ./nixos/vm.nix
+          (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
+          {
+            networking.hostName = "nixos-dev-utm";
+            services.qemuGuest.enable = true;
+            virtualisation.rosetta.enable = pkgs.stdenv.hostPlatform.isAarch64;
+          }
+        ];
+      };
       # Used in CI
       nixos-desktop-intel = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

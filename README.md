@@ -24,12 +24,38 @@ To install a NixOS configuration, let's assume the `nixos-desktop-intel` output,
 sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-desktop-intel
 ```
 
-### MacOS:
+<details>
 
-To install a MacOS configuration, let's assume the `macos-desktop-intel` output, do the following:
+For VMs, use the NixOS graphical installer.
+
+#### VMWare VMs:
 
 ```
-darwin-rebuild switch --flake github:heywoodlh/nixos-configs#macos-desktop-intel
+sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-vmware --impure
+```
+
+#### UTM VMs:
+
+Use the following settings when setting up the VM:
+
+Virtualize > Use Apple Virtualization > Enable Rosetta (x86_64 Emulation)
+
+Use the `copy-to-ram` install option, then run through the graphical installer.
+
+After the install, run the following command:
+
+```
+sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-utm --impure
+```
+
+</details>
+
+### MacOS:
+
+To install a MacOS configuration, let's assume the `m3-macbook-pro` output, do the following:
+
+```
+nix run "github:LNL7/nix-darwin#packages.aarch64-darwin.darwin-rebuild" -- switch --flake github:heywoodlh/nixos-configs#m3-macbook-pro --impure
 ```
 
 

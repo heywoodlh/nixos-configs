@@ -2,7 +2,7 @@
 
 
 let
-  hostname = "m1-macbook-pro";
+  hostname = "m3-macbook-pro";
 in {
   imports = [
     ../roles/base.nix

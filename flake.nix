@@ -368,7 +368,7 @@
         modules = [
           ./nixos/vm.nix
           {
-            networking.hostName = "nixos-dev-vmware";
+            networking.hostName = "nixos-vmware";
             virtualisation.vmware.guest.enable = true;
             console.earlySetup = true;
           }
@@ -382,7 +382,7 @@
           ./nixos/vm.nix
           (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
           {
-            networking.hostName = "nixos-dev-utm";
+            networking.hostName = "nixos-utm";
             services.qemuGuest.enable = true;
             virtualisation.rosetta.enable = pkgs.stdenv.hostPlatform.isAarch64;
           }

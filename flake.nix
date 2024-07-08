@@ -115,11 +115,11 @@
           }
         ];
       };
-      "m1-macbook-pro" = darwin.lib.darwinSystem {
+      "m3-macbook-pro" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs;
         modules = [
-          ./darwin/hosts/m1-macbook-pro.nix
+          ./darwin/hosts/m3-macbook-pro.nix
           {
             environment.systemPackages = [
               myFlakes.packages.${system}.vim

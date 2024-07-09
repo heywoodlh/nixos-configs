@@ -44,7 +44,7 @@ in {
     pkgs.acpi
     pkgs.arch-install-scripts
     pkgs.flatpak
-    pkgs.gnome.gnome-screenshot
+    pkgs.gnome-screenshot
     pkgs.guake
     pkgs.inotify-tools
     pkgs.jetbrains-mono

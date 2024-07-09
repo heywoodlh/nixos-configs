@@ -10,10 +10,10 @@ let
   openbar-pkgs = openbar-nixpkgs.legacyPackages.${system};
 in {
   home.packages = with gnome-pkgs; [
-    gnome.dconf-editor
+    dconf-editor
     gnome.gnome-boxes
-    gnome.gnome-terminal
-    gnome.gnome-tweaks
+    gnome-terminal
+    gnome-tweaks
     gnomeExtensions.caffeine
     gnomeExtensions.gnome-bedtime
     gnomeExtensions.gsconnect

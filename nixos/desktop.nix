@@ -9,7 +9,10 @@
 
 let
   system = pkgs.system;
-  pkgs-backports = nixpkgs-backports.legacyPackages.${system};
+  pkgs-backports = import nixpkgs-backports {
+    inherit system;
+    config.allowUnfree = true;
+  };
   tmux = myFlakes.packages.${system}.tmux;
 in {
   imports = [
@@ -100,7 +103,7 @@ in {
   # Enable CUPS to print documents.
   services.printing = {
     enable = true;
-    drivers = [ pkgs.hplipWithPlugin ];
+    drivers = [ pkgs-backports.hplipWithPlugin ];
   };
   services.avahi = {
     enable = true;
@@ -110,7 +113,7 @@ in {
   # For scanning documents
   hardware.sane = {
     enable = true;
-    extraBackends = [ pkgs.hplipWithPlugin ];
+    extraBackends = [ pkgs-backports.hplipWithPlugin ];
   };
   users.extraGroups.lp.members = [ "heywoodlh" ];
   users.extraGroups.scanner.members = [ "heywoodlh" ];

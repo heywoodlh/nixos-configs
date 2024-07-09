@@ -369,7 +369,10 @@
           ./nixos/vm.nix
           {
             networking.hostName = "nixos-vmware";
-            virtualisation.vmware.guest.enable = true;
+            virtualisation.vmware.guest = {
+              enable = true;
+              headless = true; # vmware tools not available for ARM64
+            };
             console.earlySetup = true;
           }
         ];

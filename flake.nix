@@ -5,8 +5,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     myFlakes.url = "github:heywoodlh/flakes";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/release-23.11";
-    nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.05";
+    nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.11";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
       url = "github:LnL7/nix-darwin";

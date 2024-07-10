@@ -123,22 +123,6 @@ in {
     '';
   };
 
-  home.file.".local/share/applications/spotify.desktop" = {
-    enable = system == "aarch64-linux";
-    text = ''
-      [Desktop Entry]
-      Name=Spotify
-      GenericName=music
-      Comment=Listen to Spotify
-      Exec=${myFlakes.packages.aarch64-linux.chromium-widevine}/bin/chromium --app=https://open.spotify.com
-      Terminal=false
-      Type=Application
-      Keywords=music;
-      Icon=${snowflake}
-      Categories=Music;
-    '';
-  };
-
   # 1Password GUI settings
   home.file.".config/1Password/settings/settings.json" = {
     text = ''

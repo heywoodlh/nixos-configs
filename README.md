@@ -30,9 +30,28 @@ For VMs, use the NixOS graphical installer.
 
 #### VMWare VMs:
 
+Then run the install on the virtual machine:
+
 ```
 sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-vmware --impure
 ```
+
+Make the following settings changes to the VM in VMWare Fusion:
+
+Display:
+  - [x] Accelerate 3D Graphics
+    - Shared graphics memory => maximum
+  - [x] Use full resolution for Retina display
+
+Keyboard and Mouse:
+  - Disable all host keybindings
+
+Remove the Camera and Sound devices
+
+Sharing:
+  - [x] Enable Shared Folders
+    - Add MacOS `$HOME`
+
 
 #### UTM VMs:
 
@@ -57,7 +76,6 @@ To install a MacOS configuration, let's assume the `m3-macbook-pro` output, do t
 ```
 nix run "github:LNL7/nix-darwin#packages.aarch64-darwin.darwin-rebuild" -- switch --flake github:heywoodlh/nixos-configs#m3-macbook-pro --impure
 ```
-
 
 ### Other Linux distributions:
 

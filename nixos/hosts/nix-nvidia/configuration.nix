@@ -15,7 +15,7 @@
     ../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
     ../../roles/nixos/cache.nix
-    ../../roles/remote-access/wireguard-server.nix
+    #../../roles/remote-access/wireguard-server.nix
     ../../roles/home-automation/homebridge.nix
     #../../roles/dev/vscode.nix # many things don't work with non-standard Nix paths
   ];

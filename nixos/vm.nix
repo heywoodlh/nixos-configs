@@ -30,10 +30,10 @@
   # Disable bluetooth
   hardware.bluetooth.enable = lib.mkForce false;
 
-  # Disable self-hosted Nix caches
-  # Don't want Tailscale to be forced in VM
-  # (Tailscale should be installed on host)
-  nix.settings.substituters = lib.mkForce [];
+  programs.ssh.extraConfig = ''
+    CanonicalizeHostname yes
+    CanonicalDomains barn-banana.ts.net
+  '';
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";

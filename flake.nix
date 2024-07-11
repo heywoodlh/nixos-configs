@@ -7,6 +7,7 @@
     myFlakes.url = "github:heywoodlh/flakes";
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.05";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.11";
+    nixpkgs-vmware-aarch64.url = "github:heywoodlh/nixpkgs/aarch64-vmware-guest";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
       url = "github:LnL7/nix-darwin";
@@ -70,6 +71,7 @@
                       nixpkgs-stable,
                       nixpkgs-backports,
                       nixpkgs-lts,
+                      nixpkgs-vmware-aarch64,
                       nixos-wsl,
                       darwin,
                       home-manager,
@@ -369,10 +371,7 @@
           ./nixos/vm.nix
           {
             networking.hostName = "nixos-vmware";
-            virtualisation.vmware.guest = {
-              enable = true;
-              headless = pkgs.stdenv.hostPlatform.isAarch64; # vmware tools not available for ARM64
-            };
+            virtualisation.vmware.guest.enable = true;
             console.earlySetup = true;
             # Increase font size for high resolution on Macs
             home-manager.users.heywoodlh.dconf.settings = {
@@ -382,6 +381,10 @@
               };
             };
             services.tailscale.enable = pkgs.lib.mkForce false;
+            imports = [
+              (nixpkgs-vmware-aarch64 + "/nixos/modules/virtualisation/vmware-guest.nix")
+            ];
+            disabledModules = ["virtualisation/vmware-guest.nix"];
           }
         ];
       };

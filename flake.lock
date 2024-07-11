@@ -5458,11 +5458,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1720646128,
-        "narHash": "sha256-BivO5yIQukDlJL+1875Sqf3GuOPxZDdA48dYDi3PkL8=",
+        "lastModified": 1720734513,
+        "narHash": "sha256-neWQ8eNtLTd+YMesb7WjKl1SVCbDyCm46LUgP/g/hdo=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "c085b984ff2808bf322f375b10fea5a415a9c43d",
+        "rev": "90ae324e2c56af10f20549ab72014804a3064c7f",
         "type": "github"
       },
       "original": {
@@ -5836,11 +5836,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1720708843,
-        "narHash": "sha256-3MbEpYFxaA5XEIBAHm3JJtvX327EpsbITgvoTelWRbU=",
+        "lastModified": 1720731503,
+        "narHash": "sha256-Qlm0IRnOrI64RW/SEvW9rA1ytVvPS1CsVvRataNvStI=",
         "ref": "refs/heads/main",
-        "rev": "9ff83f4aa97269bf26381a84501d0b19f1926961",
-        "revCount": 4916,
+        "rev": "e728e56cbc6af0a9be1276b2cf8e019a894016e7",
+        "revCount": 4917,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland"
@@ -9261,6 +9261,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-vmware-aarch64": {
+      "locked": {
+        "lastModified": 1720736644,
+        "narHash": "sha256-Qc1612GnB6p421Fa8WUEXgHr0/h/NAMp6miwnBok2Gk=",
+        "owner": "heywoodlh",
+        "repo": "nixpkgs",
+        "rev": "af5e4abd9b77cbd1a0831d61f4a88214ce75b1a1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "aarch64-vmware-guest",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_10": {
       "locked": {
         "lastModified": 1684570954,
@@ -11718,6 +11734,7 @@
         "nixpkgs-backports": "nixpkgs-backports_9",
         "nixpkgs-lts": "nixpkgs-lts_9",
         "nixpkgs-stable": "nixpkgs-stable_6",
+        "nixpkgs-vmware-aarch64": "nixpkgs-vmware-aarch64",
         "nur": "nur_9",
         "openbar-nixpkgs": "openbar-nixpkgs",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs_9",

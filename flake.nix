@@ -388,6 +388,23 @@
           }
         ];
       };
+      nixos-gaming = nixpkgs.lib.nixosSystem {
+        system = "${linuxSystem}";
+        specialArgs = inputs;
+        modules = [
+          ./nixos/server.nix
+          ./nixos/roles/gaming/palworld.nix
+          /etc/nixos/hardware-configuration.nix
+          {
+            networking.hostName = "nixos-gaming";
+            boot.loader = {
+              systemd-boot.enable = true;
+              efi.canTouchEfiVariables = true;
+            };
+            system.stateVersion = "24.05";
+          }
+        ];
+      };
       # UTM VM for running on MacOS
       nixos-utm = nixpkgs.lib.nixosSystem {
         system = "${linuxSystem}";

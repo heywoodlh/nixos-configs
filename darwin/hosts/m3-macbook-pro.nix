@@ -24,6 +24,7 @@ in {
       "neofetch"
     ];
     casks = [
+      "beeper"
       "diffusionbee"
       "discord"
       "docker"

@@ -170,26 +170,20 @@ in {
   # 1Password CLI wrapper
   home.file."bin/op-wrapper.sh" = {
     executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
-      ${pkgs._1password}/bin/op --account my "$@"
-    '';
+    source = op-wrapper;
   };
 
   home.file."bin/op" = {
     enable = true;
     executable = true;
-    text = ''
-      ${homeDir}/bin/op-wrapper.sh $@
-    '';
+    source = op-wrapper;
   };
 
   home.file."bin/ssh-unlock" = {
     enable = true;
     executable = true;
     text = ''
-      ${homeDir}/bin/op-wrapper.sh read 'op://Personal/rlt3q545cf5a4r4arhnb4h5qmi/private_key' | ${pkgs.openssh}/bin/ssh-add -t 4h -
+      ${op-wrapper} read 'op://Personal/rlt3q545cf5a4r4arhnb4h5qmi/private_key' | ${pkgs.openssh}/bin/ssh-add -t 4h -
     '';
   };
 
@@ -199,9 +193,9 @@ in {
     text = ''
       [fastmail]
       source = imaps://heywoodlh%40heywoodlh.io@imap.fastmail.com:993
-      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/3qaxsqbv5dski4wqswxapc7qoi/password'
+      source-cred-cmd = ${op-wrapper} read 'op://Personal/3qaxsqbv5dski4wqswxapc7qoi/password'
       outgoing = smtps://heywoodlh%40heywoodlh.io@smtp.fastmail.com:465
-      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/3qaxsqbv5dski4wqswxapc7qoi/password'
+      outgoing-cred-cmd = ${op-wrapper} read 'op://Personal/3qaxsqbv5dski4wqswxapc7qoi/password'
       default = INBOX
       copy-to = Sent
       from = Spencer Heywood <heywoodlh@heywoodlh.io>
@@ -209,9 +203,9 @@ in {
 
       [protonmail]
       source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143
-      source-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/6fqlleymphwgzsvqp7jfsucz4m/password'
+      source-cred-cmd = ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'
       outgoing = smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25
-      outgoing-cred-cmd = ${homeDir}/bin/op-wrapper.sh read 'op://Personal/6fqlleymphwgzsvqp7jfsucz4m/password'
+      outgoing-cred-cmd = ${op-wrapper} read 'op://Personal/6fqlleymphwgzsvqp7jfsucz4m/password'
       default = INBOX
       copy-to = Sent
       from = Spencer Heywood <l.spencer.heywood@protonmail.com>
@@ -233,9 +227,9 @@ in {
     enable = true;
     extraConfig = ''
       urls-source "miniflux"
-      miniflux-url "https://feeds.heywoodlh.io"
+      miniflux-url "http://miniflux"
       miniflux-login "heywoodlh"
-      miniflux-passwordeval "${homeDir}/bin/op-wrapper.sh read 'op://Kubernetes/3jdvjlmc67dfngycergck6ikxq/password'"
+      miniflux-passwordeval "${op-wrapper} read 'op://Kubernetes/3jdvjlmc67dfngycergck6ikxq/password'"
 
       # general settings
       auto-reload yes
@@ -349,7 +343,7 @@ in {
       item_types = ["VTODO"]
       url = "https://caldav.fastmail.com"
       username = "heywoodlh@heywoodlh.io"
-      password.fetch = ["shell", "${homeDir}/bin/op-wrapper.sh item get '3qaxsqbv5dski4wqswxapc7qoi' --fields label=password"]
+      password.fetch = ["shell", "${op-wrapper} item get '3qaxsqbv5dski4wqswxapc7qoi' --fields label=password"]
     '';
   };
 

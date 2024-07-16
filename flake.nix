@@ -133,8 +133,11 @@
         ];
       };
 
+      # https://github.com/NixOS/nixpkgs/issues/293510
+      cleanEval = pkgs.lib.filterAttrsRecursive (n: v: n != "_module") eval;
+
       optionsDoc = pkgs.nixosOptionsDoc {
-        inherit (eval) options;
+        inherit (cleanEval) options;
       };
     in {
       formatter = pkgs.alejandra;

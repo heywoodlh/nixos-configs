@@ -1,5 +1,8 @@
 pre-commit:
   commands:
-    gitleaks:
+    gen-docs:
       run: |
-        gitleaks detect --verbose --redact
+        nix build .#docs
+        cp -f ./result docs/options.md
+        git add ./docs/options.md
+        git update-index --add ./docs/options.md

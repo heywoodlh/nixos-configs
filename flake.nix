@@ -103,28 +103,43 @@
       linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
       darwinSystem = "${arch}-darwin";
       darwinStateVersion = 4;
+      darwinModules.heywoodlh.darwin = ./darwin/modules/default.nix;
 
       darwinConfig = machineType: myHostname: extraConf: darwin.lib.darwinSystem {
         system = "${darwinSystem}";
         specialArgs = inputs;
         modules = [
+          darwinModules.heywoodlh.darwin
           ./darwin/roles/base.nix
           ./darwin/roles/defaults.nix
           ./darwin/roles/pkgs.nix
           ./darwin/roles/network.nix
-          ./darwin/roles/yabai.nix
-          ./darwin/roles/sketchybar.nix
           ./home/darwin/settings.nix
           extraConf
           {
             networking.hostName = myHostname;
+            heywoodlh.darwin.sketchybar.enable = true;
+            heywoodlh.darwin.yabai.enable = true;
+
             system.stateVersion = darwinStateVersion;
           }
         ] ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
       };
+
+      eval = pkgs.lib.evalModules {
+        specialArgs = { inherit pkgs; };
+        modules = [
+          darwinModules.heywoodlh.darwin { config._module.check = false; }
+        ];
+      };
+
+      optionsDoc = pkgs.nixosOptionsDoc {
+        inherit (eval) options;
+      };
     in {
       formatter = pkgs.alejandra;
-
+      # custom nix-darwin modules
+      darwinModules.heywoodlh.darwin = self.darwinModules.heywoodlh.darwin;
       # macos targets
       packages.darwinConfigurations = {
         # Invoke darwinConfig like this:
@@ -202,7 +217,7 @@
                   "heywoodlh-nixos-x13s.cachix.org-1:nittOYRA74tbzQ1s92ZQbN61ecxo7Ld16LK3g+CPPSE="
                 ];
               };
-  
+
               networking.hostName = "nixos-thinkpad";
               # Bootloader
               boot.loader.systemd-boot.enable = true;
@@ -212,12 +227,12 @@
               time.timeZone = "America/Denver";
               # Select internationalisation properties.
               i18n.defaultLocale = "en_US.utf8";
-  
+
               # Fingerprint
               services.fprintd.enable = true;
               services.fprintd.tod.enable = true;
               services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
-  
+
               # Network manager modemmanager setup
               networking.networkmanager.fccUnlockScripts = [
                 {
@@ -225,11 +240,11 @@
                   path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/105b";
                 }
               ];
-  
+
               environment.systemPackages = with pkgs; [
                 webcord
               ];
-  
+
               system.stateVersion = "24.05";
             }
           ];
@@ -539,6 +554,15 @@
           modules = [ ./nixos/droid.nix ];
           home-manager-path = home-manager.outPath;
         };
+      };
+      packages.docs = pkgs.runCommand "options-doc.md" {} ''
+        cat ${optionsDoc.optionsCommonMark} > $out
+      '';
+      devShell = pkgs.mkShell {
+        name = "nixos-configs devShell";
+        buildInputs = with pkgs; [
+          lefthook
+        ];
       };
     }
   );

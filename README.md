@@ -6,6 +6,47 @@ NixOS configs are here: [./nixos](./nixos)
 
 Nix on Darwin configs are here: [./darwin](./darwin)
 
+## Using custom modules
+
+My custom modules expose a `heywoodlh` configuration parameter. Here's an incomplete example snippet for using my modules in a flake:
+
+```
+{
+  description = "heywoodlh nix config";
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    darwin.url = "github:LnL7/nix-darwin/master";
+    heywoodlh-configs.url = "/Users/heywoodlh/opt/nixos-configs";
+  };
+
+  outputs = inputs@{ self, nixpkgs, darwin, heywoodlh-configs, ... }: {
+
+    darwinConfigurations = let
+      heywoodlh-darwin-modules = (heywoodlh-configs + "/darwin/modules/default.nix");
+    in {
+      "my-macbook" = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = inputs;
+        modules = [
+
+          heywoodlh-darwin-modules
+
+          {
+            networking.hostName = "my-macbook";
+
+            heywoodlh.darwin.sketchybar.enable = true;
+            heywoodlh.darwin.yabai.enable = true;
+            system.stateVersion = 4;
+          }
+        ];
+      };
+    };
+  };
+}
+```
+
+Documentation for module options can be viewed here: [options.md](./docs/options.md)
+
 ## How to Use
 
 Check out the outputs for this flake with this command:

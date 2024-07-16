@@ -21,8 +21,6 @@ in {
     enable = true;
     executable = true;
     text = ''
-      #!/usr/bin/env bash
-      osascript -e "display notification \"$(system_profiler SPPowerDataType | grep Charging -A1 | head -2 | awk '{$1=$1};1')\""
     '';
   };
 

@@ -4,8 +4,5 @@ pre-commit:
       run: |
         nix build .#docs
         cp -f ./result docs/options.md
-        chmod +w ./docs/options.md
-        sed -iE 's|file://||g' ./docs/options.md # remove "file://"
-        sed -iE 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/darwin\/modules|g' ./docs/options.md # remove "/nix/store # fix darwin modules path
         git add ./docs/options.md
         git update-index --add ./docs/options.md

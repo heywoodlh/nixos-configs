@@ -13,7 +13,7 @@ boolean
 ` false `
 
 *Declared by:*
- - [/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/sketchybar\.nix](/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/sketchybar.nix)
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/sketchybar\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/sketchybar.nix)
 
 
 
@@ -34,7 +34,7 @@ boolean
 ` false `
 
 *Declared by:*
- - [/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai\.nix](/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai.nix)
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
 
 
 
@@ -55,7 +55,7 @@ string
 ` "" `
 
 *Declared by:*
- - [/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai\.nix](/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai.nix)
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
 
 
 
@@ -76,6 +76,6 @@ string
 ` "" `
 
 *Declared by:*
- - [/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai\.nix](/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai.nix)
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
 
 

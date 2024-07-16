@@ -559,7 +559,7 @@
         };
       };
       packages.docs = pkgs.runCommand "options-doc.md" {} ''
-        cat ${optionsDoc.optionsCommonMark} > $out
+        cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/nixos\/modules|g' > $out
       '';
       devShell = pkgs.mkShell {
         name = "nixos-configs devShell";

@@ -267,7 +267,6 @@
                 package = pkgs.linuxKernel.packages.linux_xanmod_stable.nvidia_x11;
               };
               services.openssh = {
-  
                 extraConfig = ''
                   HostKeyAlgorithms +ssh-rsa
                   PubkeyAcceptedKeyTypes +ssh-rsa
@@ -293,6 +292,7 @@
             ./nixos/server.nix
             ./nixos/roles/media/plex.nix
             ./nixos/roles/monitoring/iperf.nix
+            ./nixos/roles/home-automation/homebridge.nix
             {
               networking.hostName = "nixos-mac-mini";
               system.stateVersion = "24.05";

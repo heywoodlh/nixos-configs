@@ -132,6 +132,9 @@
         # hardwareType can currently be "macbook" or "mac-mini"
         "m3-macbook-pro" = darwinConfig "macbook" "m3-macbook-pro" {
           homebrew = {
+            brews = [
+              "libolm"
+            ];
             casks = [
               "beeper"
               "diffusionbee"

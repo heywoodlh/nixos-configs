@@ -40,8 +40,6 @@
         autoStart = true;
         environment = {
           GRAYLOG_IS_MASTER = "true";
-          GRAYLOG_PASSWORD_SECRET = builtins.readFile /opt/graylog/secret.txt;
-          GRAYLOG_ROOT_PASSWORD_SHA2 = builtins.readFile /opt/graylog/pass.txt;
           GRAYLOG_HTTP_EXTERNAL_URI = "http://nix-nvidia.tailscale:9000/";
           GRAYLOG_ELASTICSEARCH_HOSTS = "http://localhost:9200";
           GRAYLOG_MONGODB_URI = "mongodb://localhost:27017/graylog";

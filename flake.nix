@@ -292,7 +292,6 @@
             ./nixos/server.nix
             ./nixos/roles/media/plex.nix
             ./nixos/roles/monitoring/iperf.nix
-            ./nixos/roles/home-automation/homebridge.nix
             {
               networking.hostName = "nixos-mac-mini";
               system.stateVersion = "24.05";

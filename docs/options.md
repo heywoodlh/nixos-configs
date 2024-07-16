@@ -13,7 +13,7 @@ boolean
 ` false `
 
 *Declared by:*
- - [/nix/store/1s6qdwblwpdw381h6kkxdb9v91x434bm-source/darwin/modules/sketchybar\.nix](file:///nix/store/1s6qdwblwpdw381h6kkxdb9v91x434bm-source/darwin/modules/sketchybar.nix)
+ - [/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/sketchybar\.nix](/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/sketchybar.nix)
 
 
 
@@ -34,7 +34,7 @@ boolean
 ` false `
 
 *Declared by:*
- - [/nix/store/1s6qdwblwpdw381h6kkxdb9v91x434bm-source/darwin/modules/yabai\.nix](file:///nix/store/1s6qdwblwpdw381h6kkxdb9v91x434bm-source/darwin/modules/yabai.nix)
+ - [/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai\.nix](/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai.nix)
 
 
 
@@ -55,7 +55,7 @@ string
 ` "" `
 
 *Declared by:*
- - [/nix/store/1s6qdwblwpdw381h6kkxdb9v91x434bm-source/darwin/modules/yabai\.nix](file:///nix/store/1s6qdwblwpdw381h6kkxdb9v91x434bm-source/darwin/modules/yabai.nix)
+ - [/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai\.nix](/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai.nix)
 
 
 
@@ -76,6 +76,6 @@ string
 ` "" `
 
 *Declared by:*
- - [/nix/store/1s6qdwblwpdw381h6kkxdb9v91x434bm-source/darwin/modules/yabai\.nix](file:///nix/store/1s6qdwblwpdw381h6kkxdb9v91x434bm-source/darwin/modules/yabai.nix)
+ - [/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai\.nix](/nix/store/kdhfn01f207l0p3m42f0ij4vfllllkvw-source/darwin/modules/yabai.nix)
 
 

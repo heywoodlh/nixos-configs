@@ -1,14 +1,21 @@
 { config, pkgs, ... }:
 
 {
-  networking.firewall.allowedTCPPorts = [
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
     8581
+    8081
+    1883
+    9001
   ];
+
+  system.activationScripts.mkMqttNet = ''
+    ${pkgs.docker}/bin/docker network ls | grep -iq mqtt || ${pkgs.docker}/bin/docker network create mqtt
+  '';
 
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
-      serge = {
+      homebridge = {
         image = "docker.io/homebridge/homebridge:2024-06-27";
         autoStart = true;
         volumes = [
@@ -16,11 +23,48 @@
         ];
         extraOptions = [
           "--network=host"
+        ];
+      };
+      zigbee2mqtt = {
+        image = "docker.io/koenkk/zigbee2mqtt:1.39.0";
+        autoStart = true;
+        ports = [
+          "8081:8080"
+        ];
+        volumes = [
+          "/opt/zigbee2mqtt:/app/data"
+          "/run/udev:/run/udev:ro"
+        ];
+        environment = {
+          TZ = "America/Denver";
+        };
+        extraOptions = [
           "--privileged"
-          "--cap-add=NET_ADMIN"
-          "--cap-add=NET_RAW"
-          "--cap-add=SYS_ADMIN"
           "--device=/dev/ttyUSB0"
+          "--network=mqtt"
+        ];
+      };
+      mqtt = {
+        image = "docker.io/eclipse-mosquitto:2.0.18";
+        autoStart = true;
+        cmd = [
+          "mosquitto"
+          "-c"
+          "/mosquitto-no-auth.conf"
+        ];
+        ports = [
+          "1883:1883"
+          "9001:9001"
+        ];
+        volumes = [
+          "/opt/mqtt:/app/data"
+          "/run/udev:/run/udev:ro"
+        ];
+        environment = {
+          TZ = "America/Denver";
+        };
+        extraOptions = [
+          "--network=mqtt"
         ];
       };
     };

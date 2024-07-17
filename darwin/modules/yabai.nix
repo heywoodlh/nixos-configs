@@ -130,10 +130,10 @@ in {
       package =  pkgs.skhd;
       skhdConfig = ''
         # focus window
-        ctrl - j : yabai -m window --focus west
-        ctrl - k : yabai -m window --focus south
-        ctrl - i : yabai -m window --focus north
-        ctrl - l : yabai -m window --focus east
+        ctrl + cmd - j : yabai -m window --focus west
+        ctrl + cmd - k : yabai -m window --focus south
+        ctrl + cmd - i : yabai -m window --focus north
+        ctrl + cmd - l : yabai -m window --focus east
         # swap window
         shift + cmd - j : yabai -m window --swap west
         shift + cmd - k : yabai -m window --swap south

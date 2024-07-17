@@ -158,6 +158,7 @@
               "diffusionbee"
               "discord"
               "docker"
+              "moonlight"
               "signal"
               "vmware-fusion"
               "zoom"

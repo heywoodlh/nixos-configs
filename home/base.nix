@@ -385,6 +385,21 @@ in {
     '';
   };
 
-
-
+  # nostui wrapper
+  home.file."bin/nostui" = let
+    configDir = if pkgs.stdenv.isDarwin then
+    "${homeDir}/Library/Application Support/io.0m1.nostui"
+    else "${homeDir}/.config/nostui";
+  in {
+    executable = true;
+    text = ''
+      #!/usr/bin/env fish
+      if ! test -e "${configDir}"/config.json
+        mkdir -p "${configDir}"
+        op-unlock
+        ${op-wrapper} item get ttqmeotpae3h77q7mh7dqdxy4u --fields config | sed 's/""/"/g' | sed 's/^"{/{/g' | sed 's/}"$/}/g' > "${configDir}"/config.json
+      end
+      nix run "github:heywoodlh/nixpkgs/nostui-init#nostui" -- $argv
+    '';
+  };
 }

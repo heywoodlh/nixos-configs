@@ -8,6 +8,7 @@ in {
   imports = [
     ./base.nix
     ./desktop.nix
+    ./modules/default.nix
   ];
 
   nix = {
@@ -38,17 +39,6 @@ in {
   home.file."Pictures/wallpaper.png" = {
     enable = true;
     source = ../wallpapers/nord-apple.png;
-  };
-
-  home.file."bin/create-docker" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      ${pkgs.lima}/bin/limactl list | grep default | grep -q Running || ${pkgs.lima}/bin/limactl start --name=default template://docker # Start/create default lima instance if not running/created
-      ${pkgs.docker-client}/bin/docker context create lima-default --docker "host=unix:///Users/heywoodlh/.lima/default/sock/docker.sock"
-      ${pkgs.docker-client}/bin/docker context use lima-default
-    '';
   };
 
   home.file."bin/choose-launcher.zsh" = {
@@ -104,5 +94,11 @@ in {
     aerc-link = ''
       ln -s ${homeDir}/.config/aerc ${homeDir}/Library/Preferences/aerc &>/dev/null || true
     '';
+  };
+
+  # Run Lima VM always in background
+  heywoodlh.home.lima = {
+    enable = true;
+    enableDocker = true;
   };
 }

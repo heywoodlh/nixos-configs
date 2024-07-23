@@ -147,6 +147,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    system.defaults.NSGlobalDomain._HIHideMenuBar = true; # Disable menu bar
     services.sketchybar = {
       enable = true;
       extraPackages = with pkgs; [

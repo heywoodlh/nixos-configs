@@ -79,3 +79,45 @@ string
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
 
 
+
+## heywoodlh\.home\.lima\.enable
+
+
+
+Run a Lima VM as a service\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima.nix)
+
+
+
+## heywoodlh\.home\.lima\.enableDocker
+
+
+
+Enable Lima VM Docker context\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima.nix)
+
+

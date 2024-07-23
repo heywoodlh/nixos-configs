@@ -148,6 +148,11 @@ in {
 
   config = mkIf cfg.enable {
     system.defaults.NSGlobalDomain._HIHideMenuBar = true; # Disable menu bar
+    homebrew = {
+      casks = [
+        "font-jetbrains-mono-nerd-font"
+      ];
+    };
     services.sketchybar = {
       enable = true;
       extraPackages = with pkgs; [

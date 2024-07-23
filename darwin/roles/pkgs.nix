@@ -53,8 +53,6 @@ in {
       "blockblock"
       "cursorcerer"
       "firefox"
-      "font-droid-sans-mono-for-powerline"
-      "font-iosevka-nerd-font"
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"
       "hiddenbar"

@@ -159,7 +159,6 @@
               "beeper"
               "diffusionbee"
               "discord"
-              "docker"
               "moonlight"
               "signal"
               "vmware-fusion"

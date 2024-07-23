@@ -8,7 +8,6 @@ in {
   imports = [
     ./base.nix
     ./desktop.nix
-    ./modules/default.nix
   ];
 
   nix = {

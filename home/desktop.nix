@@ -265,4 +265,7 @@ in {
       /usr/bin/plutil -convert binary1 ${arc-settings} -o ~/Library/Preferences/company.thebrowser.Browser.plist
     '';
   } else {};
+
+  # Add my custom docker executables
+  #heywoodlh.home.dockerBins.enable = true;
 }

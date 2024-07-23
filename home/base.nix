@@ -87,7 +87,7 @@ let
     '';
   limaTemplate = ./share/ubuntu.yaml;
 in {
-  home.stateVersion = "23.11";
+  home.stateVersion = "24.05";
   home.enableNixpkgsReleaseCheck = false;
   nix = {
     package = pkgs.nix;
@@ -95,6 +95,10 @@ in {
       experimental-features = nix-command flakes
     '';
   };
+
+  imports = [
+    ./modules/default.nix
+  ];
 
   # Packages I need installed on every system
   home.packages = with pkgs; [

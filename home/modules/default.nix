@@ -3,5 +3,6 @@
 {
   imports = [
     ./lima.nix
+    ./docker.nix
   ];
 }

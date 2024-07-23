@@ -267,5 +267,5 @@ in {
   } else {};
 
   # Add my custom docker executables
-  #heywoodlh.home.dockerBins.enable = true;
+  heywoodlh.home.dockerBins.enable = true;
 }

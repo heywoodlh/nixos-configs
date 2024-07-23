@@ -80,6 +80,27 @@ string
 
 
 
+## heywoodlh\.home\.dockerBins\.enable
+
+
+
+Add heywoodlh docker executables to home\.packages\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker.nix)
+
+
+
 ## heywoodlh\.home\.lima\.enable
 
 

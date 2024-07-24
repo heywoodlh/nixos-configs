@@ -254,17 +254,14 @@
             }
           ];
         };
-        nixos-oryx-pro = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+        nixos-usb = nixpkgs.lib.nixosSystem {
+          system = "${system}";
           specialArgs = inputs;
           modules = [
-            /etc/nixos/hardware-configuration.nix
-            ./nixos/server.nix
+            (nixpkgs + "/nixos/modules/profiles/all-hardware.nix")
+            ./nixos/desktop.nix
             {
-              networking.hostName = "nixos-oryx-pro";
-              # System76 stuff
-              hardware.system76.enableAll = true;
-              services.system76-scheduler.enable = true;
+              networking.hostName = "nixos-usb";
               # Bootloader
               boot.loader.systemd-boot.enable = true;
               boot.loader.efi.canTouchEfiVariables = false;
@@ -275,35 +272,6 @@
               # Select internationalisation properties.
               i18n.defaultLocale = "en_US.utf8";
               system.stateVersion = "24.05";
-              # Nvidia
-              boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_stable;
-              # Make sure opengl is enabled
-              hardware.opengl = {
-                enable = true;
-                driSupport = true;
-                driSupport32Bit = true;
-              };
-              hardware.nvidia = {
-                modesetting.enable = true;
-                open = false;
-                nvidiaSettings = true;
-                package = pkgs.linuxKernel.packages.linux_xanmod_stable.nvidia_x11;
-              };
-              services.openssh = {
-                extraConfig = ''
-                  HostKeyAlgorithms +ssh-rsa
-                  PubkeyAcceptedKeyTypes +ssh-rsa
-                '';
-                settings = {
-                  PasswordAuthentication = pkgs.lib.mkForce true;
-                  Macs = [
-                    "hmac-sha2-512-etm@openssh.com"
-                    "hmac-sha2-256-etm@openssh.com"
-                    "umac-128-etm@openssh.com"
-                    "hmac-sha2-256"
-                  ];
-                };
-              };
             }
           ];
         };

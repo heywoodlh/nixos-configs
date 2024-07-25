@@ -4,7 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
-    myFlakes.url = "github:heywoodlh/flakes";
+    myFlakes = {
+      url = "github:heywoodlh/flakes";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.05";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.11";
     nixpkgs-vmware-aarch64.url = "github:heywoodlh/nixpkgs/aarch64-vmware-guest";
@@ -259,6 +262,7 @@
           specialArgs = inputs;
           modules = [
             (nixpkgs + "/nixos/modules/profiles/all-hardware.nix")
+            /etc/nixos/hardware-configuration.nix
             ./nixos/desktop.nix
             {
               networking.hostName = "nixos-usb";

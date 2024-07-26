@@ -193,70 +193,6 @@
             ./nixos/hosts/macbook/configuration.nix
           ];
         };
-        nixos-xps = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            nixos-hardware.nixosModules.dell-xps-13-9310
-            ./nixos/hosts/xps.nix
-          ];
-        };
-        nixos-thinkpad = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          specialArgs = inputs;
-          modules = [
-            inputs.nixos-x13s.nixosModules.default
-            /etc/nixos/hardware-configuration.nix
-            ./nixos/desktop.nix
-            {
-              nixos-x13s = {
-                enable = true;
-                kernel = "jhovold";
-                bluetoothMac = "02:68:b3:29:da:98";
-              };
-              specialisation = {
-                mainline.configuration.nixos-x13s.kernel = "jhovold";
-              };
-              nix.settings = {
-                substituters = [
-                  "https://heywoodlh-nixos-x13s.cachix.org"
-                ];
-                trusted-public-keys = [
-                  "heywoodlh-nixos-x13s.cachix.org-1:nittOYRA74tbzQ1s92ZQbN61ecxo7Ld16LK3g+CPPSE="
-                ];
-              };
-
-              networking.hostName = "nixos-thinkpad";
-              # Bootloader
-              boot.loader.systemd-boot.enable = true;
-              # Enable networking
-              networking.networkmanager.enable = true;
-              # Set your time zone.
-              time.timeZone = "America/Denver";
-              # Select internationalisation properties.
-              i18n.defaultLocale = "en_US.utf8";
-
-              # Fingerprint
-              services.fprintd.enable = true;
-              services.fprintd.tod.enable = true;
-              services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
-
-              # Network manager modemmanager setup
-              networking.networkmanager.fccUnlockScripts = [
-                {
-                  id = "105b:e0c3";
-                  path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/105b";
-                }
-              ];
-
-              environment.systemPackages = with pkgs; [
-                webcord
-              ];
-
-              system.stateVersion = "24.05";
-            }
-          ];
-        };
         nixos-usb = nixpkgs.lib.nixosSystem {
           system = "${system}";
           specialArgs = inputs;
@@ -350,6 +286,18 @@
             {
               networking.hostName = "nixos-lima-vm";
               system.stateVersion = "24.05";
+            }
+          ];
+        };
+        # Console
+        nixos-console = nixpkgs.lib.nixosSystem {
+          system = "${linuxSystem}";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/console.nix
+            /etc/nixos/hardware.nix
+            {
+              networking.hostName = "nixos-console";
             }
           ];
         };

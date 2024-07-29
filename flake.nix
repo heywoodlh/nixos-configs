@@ -302,6 +302,22 @@
             }
           ];
         };
+        # MicroPC
+        nixos-p8 = nixpkgs.lib.nixosSystem {
+          system = "${linuxSystem}";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/console.nix
+            ./nixos/hosts/p8.nix
+            ./nixos/roles/remote-access/sshd.nix
+            {
+              networking.hostName = "nixos-p8";
+              boot.kernelParams = [
+                "fbconsole=rotate:1"
+              ];
+            }
+          ];
+        };
         # Dev VM for running on workstations
         nixos-dev = nixpkgs.lib.nixosSystem {
           system = "${linuxSystem}";

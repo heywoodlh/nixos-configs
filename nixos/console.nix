@@ -22,12 +22,19 @@ let
     stdin=$(${pkgs.coreutils}/bin/cat)
     ${pkgs.coreutils}/bin/printf "%s" "$stdin" | ${pkgs.tmux}/bin/tmux loadb -
   '';
+  wifi = pkgs.writeShellScriptBin "wifi" ''
+    ${pkgs.networkmanager}/bin/nmtui $@
+  '';
 in {
   imports = [
     home-manager.nixosModules.home-manager
     ./roles/desktop/user-icon.nix
     ./roles/virtualization/libvirt.nix
   ];
+
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   home-manager.useGlobalPkgs = true;
 
@@ -165,6 +172,7 @@ in {
     battpop
     timepop
     pbcopy
+    wifi
   ];
 
   # Disable wait-online service for Network Manager

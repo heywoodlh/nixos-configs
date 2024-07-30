@@ -71,8 +71,8 @@
 
   outputs = inputs@{ self,
                       nixpkgs,
-                      myFlakes,
                       nixpkgs-stable,
+                      myFlakes,
                       nixpkgs-backports,
                       nixpkgs-lts,
                       nixpkgs-vmware-aarch64,
@@ -307,14 +307,31 @@
           system = "${linuxSystem}";
           specialArgs = inputs;
           modules = [
-            ./nixos/console.nix
+            ./nixos/desktop.nix
             ./nixos/hosts/p8.nix
             ./nixos/roles/remote-access/sshd.nix
             {
               networking.hostName = "nixos-p8";
-              boot.kernelParams = [
-                "fbconsole=rotate:1"
+              boot.initrd.clevis.enable = true;
+              environment.systemPackages = with pkgs; [
+                clevis
               ];
+              # Use the systemd-boot EFI boot loader.
+              boot.loader.systemd-boot.enable = true;
+              boot.loader.efi.canTouchEfiVariables = true;
+              boot.kernelParams = [
+                "i915.force_probe=46d1"
+              ];
+              home-manager.users.heywoodlh.imports = [
+                ./home/roles/gnome-terminal-fullscreen.nix
+              ];
+              # Yubikey support
+              boot.initrd.luks.yubikeySupport = true;
+              security.pam.yubico = {
+                enable = true;
+                mode = "challenge-response";
+                id = [ "22698293" ];
+              };
             }
           ];
         };

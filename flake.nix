@@ -220,10 +220,11 @@
           system = "aarch64-linux";
           specialArgs = inputs;
           modules = [
-            ./nixos/hosts/m1-mac-mini/configuration.nix
+            ./nixos/hosts/m1-mac-mini.nix
             ./nixos/server.nix
             ./nixos/roles/media/plex.nix
             ./nixos/roles/monitoring/iperf.nix
+            ./nixos/roles/nixos/asahi.nix
             {
               networking.hostName = "nixos-mac-mini";
               system.stateVersion = "24.05";
@@ -233,6 +234,15 @@
                 fsType = "ext4";
                 options = [ "rw" "relatime" ];
               };
+              # Bootloader.
+              boot.loader.systemd-boot.enable = true;
+              boot.loader.efi.canTouchEfiVariables = false;
+              # Enable networking
+              networking.networkmanager.enable = true;
+              # Set your time zone.
+              time.timeZone = "America/Denver";
+              # Select internationalisation properties.
+              i18n.defaultLocale = "en_US.utf8";
             }
           ];
         };

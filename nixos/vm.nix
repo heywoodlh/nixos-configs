@@ -19,7 +19,6 @@
   time.timeZone = "America/Denver";
 
   # Disable sound
-  sound.enable = lib.mkForce false;
   services.pipewire = {
     enable = lib.mkForce false;
     alsa.enable = lib.mkForce false;

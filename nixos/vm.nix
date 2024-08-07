@@ -34,6 +34,13 @@
     CanonicalDomains barn-banana.ts.net
   '';
 
+  home-manager.users.heywoodlh.dconf.settings = {
+    "org/gnome/shell/extensions/caffeine" = {
+      toggle-state = true;
+      user-enabled = true;
+    };
+  };
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
   system.stateVersion = "24.05";

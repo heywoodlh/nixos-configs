@@ -1,6 +1,7 @@
 { config, pkgs, lib, home-manager,
   nur, hyprland, nixpkgs-backports,
-  nixpkgs-lts, myFlakes, flatpaks,
+  nixpkgs-stable, nixpkgs-lts,
+  myFlakes, flatpaks,
   light-wallpaper, dark-wallpaper,
   snowflake,
   mullvad-browser-home-manager,
@@ -74,6 +75,16 @@ in {
     enable = true;
   };
   boot.tmp.cleanOnBoot = true;
+
+  # Enable Sway (home-manager config manages details)
+  #programs.sway = {
+  #  enable = true;
+  #  wrapperFeatures = {
+  #    base = true;
+  #    gtk = true;
+  #  };
+  #  xwayland.enable = true;
+  #};
 
   # Enable hyprland
   #programs.hyprland = {
@@ -229,6 +240,7 @@ in {
     extraSpecialArgs = {
       inherit myFlakes;
       inherit nixpkgs-lts;
+      inherit nixpkgs-stable;
       inherit light-wallpaper;
       inherit dark-wallpaper;
       inherit snowflake;

@@ -4,5 +4,6 @@
   imports = [
     ./lima.nix
     ./docker.nix
+    ./sway.nix
   ];
 }

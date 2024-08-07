@@ -366,13 +366,6 @@
               networking.hostName = "nixos-vmware";
               virtualisation.vmware.guest.enable = true;
               console.earlySetup = true;
-              # Increase font size for high resolution on Macs
-              home-manager.users.heywoodlh.dconf.settings = {
-                "apps/guake/style/font".style = pkgs.lib.mkForce "JetBrains Mono 18";
-                "org/gnome/terminal/legacy/profiles:/:3797f158-f495-4609-995f-286da69c8d86" = {
-                  font = pkgs.lib.mkForce "JetBrains Mono NL 18";
-                };
-              };
               services.tailscale.enable = pkgs.lib.mkForce false;
               imports = [
                 (nixpkgs-vmware-aarch64 + "/nixos/modules/virtualisation/vmware-guest.nix")

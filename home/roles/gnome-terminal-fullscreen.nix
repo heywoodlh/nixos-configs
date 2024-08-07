@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, snowflake, ... }:
 
 let
   homeDir = config.home.homeDirectory;
 in {
-  home.file.".config/autostart/gnome-terminal-fullscreen.desktop" = {
+  home.file.".local/share/applications/gnome-terminal-fullscreen.desktop" = {
     enable = true;
     text = ''
       [Desktop Entry]
@@ -11,7 +11,7 @@ in {
       Exec=gnome-terminal --full-screen
       Terminal=false
       Type=Application
-      Icon=${homeDir}/.icons/snowflake.png
+      Icon=${snowflake}
       Categories=Utility;
     '';
   };

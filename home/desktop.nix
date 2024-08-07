@@ -268,4 +268,10 @@ in {
 
   # Add my custom docker executables
   heywoodlh.home.dockerBins.enable = true;
+
+  # Enable Sway on Linux
+  #heywoodlh.home.sway.enable = pkgs.stdenv.isLinux;
+  #wayland.windowManager.sway.extraConfig = pkgs.lib.optionalString pkgs.stdenv.isLinux ''
+  #  exec ${pkgs._1password}/bin/1password --silent
+  #'';
 }

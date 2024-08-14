@@ -11688,6 +11688,22 @@
         "type": "github"
       }
     },
+    "qutebrowser": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1723557834,
+        "narHash": "sha256-0C/7GapBm6P/aqRMz6hEz4OQmyy6HEsxJmuF0IljwLA=",
+        "owner": "qutebrowser",
+        "repo": "qutebrowser",
+        "rev": "f3459a8f145e26ff398cf7fa0ec91187e87066f0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "qutebrowser",
+        "repo": "qutebrowser",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "attic": "attic",
@@ -11714,6 +11730,7 @@
         "nixpkgs-vmware-aarch64": "nixpkgs-vmware-aarch64",
         "nur": "nur_9",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs_9",
+        "qutebrowser": "qutebrowser",
         "snowflake": "snowflake_2",
         "spicetify": "spicetify_9",
         "ssh-keys": "ssh-keys_9",

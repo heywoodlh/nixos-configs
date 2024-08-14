@@ -2,8 +2,9 @@
 
 {
   imports = [
-    ./lima.nix
     ./docker.nix
+    ./lima.nix
+    ./qutebrowser.nix
     ./sway.nix
   ];
 }

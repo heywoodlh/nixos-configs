@@ -122,6 +122,11 @@ in {
       yabai -m rule --add app="^System Settings$" manage=off
       yabai -m rule --add app="^1Password$" manage=off
 
+      # Allow Yabai to work with qutebrowser without decorations
+      yabai -m rule --add app="^qutebrowser$" title!="^$" role="AXWindow" subrole="AXDialog" manage=on
+      # Don't manage mpv
+      yabai -m rule --add app="^mpv$" manage=off
+
       ${cfg.extraYabaiConfig}
     '';
 

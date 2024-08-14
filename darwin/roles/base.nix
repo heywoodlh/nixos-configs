@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, mullvad-browser-home-manager, myFlakes, ts-warp-nixpkgs, ... }:
+{ config, pkgs, home-manager, mullvad-browser-home-manager, myFlakes, ts-warp-nixpkgs, qutebrowser, ... }:
 {
   # Define user settings
   users.users.heywoodlh = import ../roles/user.nix {
@@ -11,6 +11,7 @@
     extraSpecialArgs = {
       inherit myFlakes;
       inherit ts-warp-nixpkgs;
+      inherit qutebrowser;
     };
     # Set home-manager configs for heywoodlh
     users.heywoodlh = { ... }: {

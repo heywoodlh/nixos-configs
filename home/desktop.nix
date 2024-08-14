@@ -269,9 +269,22 @@ in {
   # Add my custom docker executables
   heywoodlh.home.dockerBins.enable = true;
 
-  # Enable Sway on Linux
-  #heywoodlh.home.sway.enable = pkgs.stdenv.isLinux;
-  #wayland.windowManager.sway.extraConfig = pkgs.lib.optionalString pkgs.stdenv.isLinux ''
-  #  exec ${pkgs._1password}/bin/1password --silent
-  #'';
+  # My qutebrowser config
+  heywoodlh.home.qutebrowser = {
+    enable = true;
+    enable1Pass = false;
+  };
+  # (less generic config goes here)
+  programs.qutebrowser = {
+    searchEngines.DEFAULT = "https://kagi.com/search?q={}";
+    settings = {
+      url.start_pages = ["https://kagi.com"];
+    };
+    aliases = {
+      set-proxy = "set content.proxy socks://nix-nvidia:1080/";
+      unset-proxy = "set content.proxy ''";
+      set-tor = "set content.proxy socks://tor:1080/";
+      unset-tor = "set content.proxy ''";
+    };
+  };
 }

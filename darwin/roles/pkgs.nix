@@ -60,6 +60,7 @@ in {
       "knockknock"
       "lulu"
       "oversight"
+      "qutebrowser"
       "reikey"
       "remoteviewer"
       "rustdesk"

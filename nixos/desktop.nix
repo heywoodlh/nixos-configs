@@ -5,7 +5,7 @@
   light-wallpaper, dark-wallpaper,
   snowflake,
   mullvad-browser-home-manager,
-  ts-warp-nixpkgs,
+  ts-warp-nixpkgs, qutebrowser,
   ... }:
 
 let
@@ -245,6 +245,7 @@ in {
       inherit dark-wallpaper;
       inherit snowflake;
       inherit ts-warp-nixpkgs;
+      inherit qutebrowser;
     };
     backupFileExtension = ".bak";
     users.heywoodlh = { ... }: {

@@ -66,6 +66,10 @@
     attic.url = "github:zhaofengli/attic/6eabc3f02fae3683bffab483e614bebfcd476b21";
     nixos-x13s.url = "git+https://codeberg.org/adamcstephens/nixos-x13s";
     ts-warp-nixpkgs.url = "github:heywoodlh/nixpkgs/ts-warp-init";
+    qutebrowser = {
+      url = "github:qutebrowser/qutebrowser";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ self,
@@ -95,6 +99,7 @@
                       cosmic-session,
                       attic,
                       ts-warp-nixpkgs,
+                      qutebrowser,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -170,10 +175,15 @@
               "Screens 5: VNC Remote Desktop" = 1663047912;
             };
           };
-          home-manager.users.heywoodlh.home.packages = with pkgs; [
-            moonlight-qt
-            spicetify.packages.${system}.nord
-          ];
+          home-manager.users.heywoodlh = {
+            home.packages = with pkgs; [
+              moonlight-qt
+              spicetify.packages.${system}.nord
+            ];
+            programs.qutebrowser.settings = {
+              content.proxy = "socks://nix-nvidia:1080/";
+            };
+          };
         };
 
         "mac-mini" = darwinConfig "mac-mini" "mac-mini" {

@@ -59,14 +59,13 @@
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
       flake = false;
     };
-    choose-nixpkgs.url = "github:heywoodlh/nixpkgs/b0025018535256ce462b4aa2e39677eb110d38b2";
     cosmic-session = {
       url = "github:pop-os/cosmic-session";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     attic.url = "github:zhaofengli/attic/6eabc3f02fae3683bffab483e614bebfcd476b21";
     nixos-x13s.url = "git+https://codeberg.org/adamcstephens/nixos-x13s";
-    openbar-nixpkgs.url = "github:heywoodlh/nixpkgs/openbar-init";
+    ts-warp-nixpkgs.url = "github:heywoodlh/nixpkgs/ts-warp-init";
   };
 
   outputs = inputs@{ self,
@@ -93,10 +92,9 @@
                       light-wallpaper,
                       snowflake,
                       hyprland,
-                      choose-nixpkgs,
                       cosmic-session,
                       attic,
-                      openbar-nixpkgs,
+                      ts-warp-nixpkgs,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {

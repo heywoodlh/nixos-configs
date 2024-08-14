@@ -223,22 +223,6 @@
         "type": "github"
       }
     },
-    "choose-nixpkgs_2": {
-      "locked": {
-        "lastModified": 1707960632,
-        "narHash": "sha256-MOhrESejMIKbmXhh7DlqgSpuDBWt0dOFBm8kZP+dmYg=",
-        "owner": "heywoodlh",
-        "repo": "nixpkgs",
-        "rev": "b0025018535256ce462b4aa2e39677eb110d38b2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "heywoodlh",
-        "repo": "nixpkgs",
-        "rev": "b0025018535256ce462b4aa2e39677eb110d38b2",
-        "type": "github"
-      }
-    },
     "chromium-widevine-flake": {
       "inputs": {
         "asahi-widevine": "asahi-widevine",
@@ -8166,7 +8150,7 @@
     "nixos-configs": {
       "inputs": {
         "attic": "attic_2",
-        "choose-nixpkgs": "choose-nixpkgs_2",
+        "choose-nixpkgs": "choose-nixpkgs",
         "cosmic-session": "cosmic-session_2",
         "dark-wallpaper": "dark-wallpaper_2",
         "darwin": "darwin_2",
@@ -11560,22 +11544,6 @@
         "type": "path"
       }
     },
-    "openbar-nixpkgs": {
-      "locked": {
-        "lastModified": 1719870283,
-        "narHash": "sha256-VfQ9oiBxp6AeC22XkLDqpTiGKiXcq7Fdvar5JQBFkJA=",
-        "owner": "heywoodlh",
-        "repo": "nixpkgs",
-        "rev": "85a1f6807b23fcd5b91fe26eee483f05d4dfee26",
-        "type": "github"
-      },
-      "original": {
-        "owner": "heywoodlh",
-        "ref": "openbar-init",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "osquery-fix-nixpkgs": {
       "locked": {
         "lastModified": 1690997355,
@@ -11723,7 +11691,6 @@
     "root": {
       "inputs": {
         "attic": "attic",
-        "choose-nixpkgs": "choose-nixpkgs",
         "cosmic-session": "cosmic-session",
         "dark-wallpaper": "dark-wallpaper",
         "darwin": "darwin",
@@ -11746,11 +11713,11 @@
         "nixpkgs-stable": "nixpkgs-stable_5",
         "nixpkgs-vmware-aarch64": "nixpkgs-vmware-aarch64",
         "nur": "nur_9",
-        "openbar-nixpkgs": "openbar-nixpkgs",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs_9",
         "snowflake": "snowflake_2",
         "spicetify": "spicetify_9",
-        "ssh-keys": "ssh-keys_9"
+        "ssh-keys": "ssh-keys_9",
+        "ts-warp-nixpkgs": "ts-warp-nixpkgs"
       }
     },
     "rust-analyzer-src": {
@@ -15898,6 +15865,22 @@
       "original": {
         "path": "/nix/store/31bciwp0npgk056sg7n7x1jhwvn8qmry-source/tmux",
         "type": "path"
+      }
+    },
+    "ts-warp-nixpkgs": {
+      "locked": {
+        "lastModified": 1723580506,
+        "narHash": "sha256-kKAnFsZVpMtAQb3FpU4aUZFZOIC/iMRgpS+lh0Xtyp8=",
+        "owner": "heywoodlh",
+        "repo": "nixpkgs",
+        "rev": "9ac3941caca13e78594e42aa58280b2d9557b757",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "ts-warp-init",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "utils": {

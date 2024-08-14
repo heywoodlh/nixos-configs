@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, myFlakes, ... }:
+{ config, pkgs, home-manager, nur, myFlakes, ts-warp-nixpkgs, ... }:
 
 let
   system = pkgs.system;
@@ -84,8 +84,30 @@ let
   myPass = pkgs.writeShellScriptBin "pass" ''
     export PASSWORD_STORE_DIR="${op-backup-dir-no-format}"
     ${pkgs.pass.withExtensions (exts: [ exts.pass-otp ])}/bin/pass $@
-    '';
+  '';
   limaTemplate = ./share/ubuntu.yaml;
+  tor-proxychains-conf = pkgs.writeText "proxychains.conf" ''
+    strict_chain
+    proxy_dns
+    quiet_mode
+    remote_dns_subnet 224
+    tcp_read_time_out 15000
+    tcp_connect_time_out 8000
+    localnet 127.0.0.0/255.0.0.0
+    [ProxyList]
+    socks5 tor.barn-banana.ts.net 1080
+  '';
+  ts-warp = ts-warp-nixpkgs.legacyPackages.${system}.ts-warp;
+  ts-warp-pf = ./share/ts-warp_pf.conf;
+  ts-warp-ini = ./share/ts-warp.ini;
+  incognito = if pkgs.stdenv.isDarwin then pkgs.writeShellScriptBin "incognito" ''
+    test -d /usr/local/etc || sudo mkdir -p /usr/local/etc
+    test -f /usr/local/etc/ts-warp_pf.conf || sudo cp ${ts-warp-pf} /usr/local/etc/ts-warp_pf.conf
+    test -f /usr/local/etc/ts-warp.ini || sudo cp ${ts-warp-ini} /usr/local/etc/ts-warp.ini
+    sudo ${ts-warp}/etc/ts-warp.sh start
+  '' else pkgs.writeShellScriptBin "incognito" ''
+    ${pkgs.proxychains-ng}/bin/proxychains4 -f ${tor-proxychains-conf} ${myFish}/bin/fish --private
+  '';
 in {
   home.stateVersion = "24.05";
   home.enableNixpkgsReleaseCheck = false;
@@ -126,6 +148,7 @@ in {
     lima
     mosh
     nixos-rebuild
+    nixfmt-rfc-style
     nmap
     openssl
     pciutils
@@ -147,6 +170,7 @@ in {
     password
     otp
     op-backup
+    incognito
   ];
 
   # Enable password-store
@@ -322,6 +346,7 @@ in {
       function vultr-unlock
         export VULTR_API_KEY="$(op read 'op://Personal/biw7pdtbal7zj66gu6ylaavgui/api_key')"
       end
+
     '';
   };
 

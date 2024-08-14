@@ -1,4 +1,4 @@
-{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, light-wallpaper, dark-wallpaper, openbar-nixpkgs, ... }:
+{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
 
 let
   system = pkgs.system;
@@ -7,7 +7,6 @@ let
   myFish = myFlakes.packages.${system}.fish;
   myWezterm = myFlakes.packages.${system}.wezterm;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
-  openbar-pkgs = openbar-nixpkgs.legacyPackages.${system};
 in {
   home.packages = with gnome-pkgs; [
     dconf-editor
@@ -25,7 +24,7 @@ in {
     gnomeExtensions.tray-icons-reloaded
     gnomeExtensions.switcher
     pkgs.epiphany
-    openbar-pkgs.gnomeExtensions.open-bar
+    gnomeExtensions.open-bar
   ];
 
   # Enable unclutter

@@ -282,9 +282,9 @@ in {
     };
     aliases = {
       set-proxy = "set content.proxy socks://nix-nvidia:1080/";
-      unset-proxy = "set content.proxy ''";
+      unset-proxy = "config-unset content.proxy";
       set-tor = "set content.proxy socks://tor:1080/";
-      unset-tor = "set content.proxy ''";
+      unset-tor = "config-unset content.proxy";
     };
   };
 }

@@ -6,6 +6,11 @@
     inherit pkgs;
   };
 
+  # Allow olm for gomuks until issues are resolved
+  nixpkgs.config.permittedInsecurePackages = [
+    "olm-3.2.16"
+  ];
+
   # Home-Manager config
   home-manager = {
     extraSpecialArgs = {

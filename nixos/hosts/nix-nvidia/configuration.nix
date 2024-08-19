@@ -151,5 +151,8 @@
   # allow building ARM64 things
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-  system.stateVersion = "23.11";
+  programs.bash.interactiveShellInit = ''
+    export FORCE_TMUX_STATUS = "true";
+  '';
+  system.stateVersion = "24.11";
 }

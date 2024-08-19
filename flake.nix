@@ -104,7 +104,9 @@
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
-        config.allowUnfree = true;
+        config = {
+          allowUnfree = true;
+        };
       };
       arch = pkgs.stdenv.hostPlatform.uname.processor;
       linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder

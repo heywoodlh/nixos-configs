@@ -5,7 +5,13 @@
   imports = [
     #./roles/nixos/cache-client.nix
   ];
-  # So that `nix search` works
+
+  # Allow olm for gomuks until issues are resolved
+  nixpkgs.config.permittedInsecurePackages = [
+    "olm-3.2.16"
+  ];
+
+  # Enable flakes
   nix.extraOptions = ''
     extra-experimental-features = nix-command flakes
   '';

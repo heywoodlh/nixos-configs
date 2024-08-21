@@ -80,6 +80,27 @@ string
 
 
 
+## heywoodlh\.home\.applications
+
+
+
+List of custom applications to create\.
+
+
+
+*Type:*
+list of attribute set of string
+
+
+
+*Default:*
+` [ ] `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/applications\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/applications.nix)
+
+
+
 ## heywoodlh\.home\.dockerBins\.enable
 
 

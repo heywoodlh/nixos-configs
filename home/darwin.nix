@@ -100,4 +100,11 @@ in {
     enable = true;
     enableDocker = true;
   };
+
+  heywoodlh.home.applications = [
+    {
+      name = "virt-manager";
+      command = "${pkgs.virt-manager}/bin/virt-manager";
+    }
+  ];
 }

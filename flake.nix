@@ -180,7 +180,12 @@
           home-manager.users.heywoodlh = {
             home.packages = with pkgs; [
               moonlight-qt
-              spicetify.packages.${system}.nord
+            ];
+            heywoodlh.home.applications = [
+              {
+                name = "Spotify";
+                command = "${spicetify.packages.${system}.nord}/bin/spotify";
+              }
             ];
             programs.qutebrowser.settings = {
               content.proxy = "socks://nix-nvidia:1080/";

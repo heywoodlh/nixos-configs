@@ -15,6 +15,7 @@ in {
     linux-builder = {
       enable = true;
       package = pkgs.darwin.linux-builder;
+      ephemeral = true; # Wipe on every reboot
     };
   };
   services.activate-system.enable = true;

@@ -70,6 +70,13 @@
       url = "github:qutebrowser/qutebrowser";
       flake = false;
     };
+    dev-container = {
+      url = "github:heywoodlh/dockerfiles?dir=dev";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        myFlakes.follows = "myFlakes";
+      };
+    };
   };
 
   outputs = inputs@{ self,
@@ -100,6 +107,7 @@
                       attic,
                       ts-warp-nixpkgs,
                       qutebrowser,
+                      dev-container,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -150,6 +158,17 @@
       optionsDoc = pkgs.nixosOptionsDoc {
         inherit (cleanEval) options;
       };
+
+      myDevContainer = dev-container.packages.${linuxSystem}.dockerImage;
+      anonScript = pkgs.writeShellScriptBin "anon" ''
+        ${pkgs.docker-client}/bin/docker image ls | grep -q 'heywoodlh/dev' || ${pkgs.docker-client}/bin/docker load -i ${myDevContainer}
+        ${pkgs.docker-client}/bin/docker network ls | grep -i socks-anon || ${pkgs.docker-client}/bin/docker network create socks-anon
+        ${pkgs.docker-client}/bin/docker ps -a | grep -q tor-socks-proxy && ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
+        ${pkgs.docker-client}/bin/docker run -d --name=tor-socks-proxy --network=socks-anon docker.io/heywoodlh/tor-socks-proxy:latest
+        ${pkgs.docker-client}/bin/docker run --network=socks-anon -it --rm -e SSH_TTY=true -e http_proxy="socks://tor-socks-proxy:9150" -e https_proxy="socks://tor-socks-proxy:9150" -e all_proxy="socks://tor-socks-proxy:9150" -e no_proxy="localhost,127.0.0.1,100.64.0.0/10,.barn-banana.ts.net" heywoodlh/dev:latest
+        ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
+        ${pkgs.docker-client}/bin/docker network rm -f socks-anon
+      '';
     in {
       formatter = pkgs.alejandra;
       # custom nix-darwin modules
@@ -168,7 +187,6 @@
               "beeper"
               "diffusionbee"
               "discord"
-              "moonlight"
               "signal"
               "vmware-fusion"
               "zoom"
@@ -179,12 +197,16 @@
           };
           home-manager.users.heywoodlh = {
             home.packages = with pkgs; [
-              moonlight-qt
+              anonScript
             ];
             heywoodlh.home.applications = [
               {
                 name = "Spotify";
                 command = "${spicetify.packages.${system}.nord}/bin/spotify";
+              }
+              {
+                name = "Moonlight";
+                command = "${pkgs.moonlight-qt}/bin/moonlight";
               }
             ];
             programs.qutebrowser.settings = {

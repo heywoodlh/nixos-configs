@@ -311,7 +311,16 @@
         nix-nvidia = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = inputs;
-          modules = [ ./nixos/hosts/nix-nvidia/configuration.nix ];
+          modules = [
+            ./nixos/hosts/nix-nvidia/configuration.nix
+            {
+              home-manager.users.heywoodlh = {
+                home.packages = with pkgs; [
+                  anonScript
+                ];
+              };
+            }
+          ];
         };
         nix-drive = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";

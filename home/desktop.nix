@@ -271,11 +271,12 @@ in {
 
   # My qutebrowser config
   heywoodlh.home.qutebrowser = {
-    enable = true;
+    enable = false;
     enable1Pass = false;
   };
   # (less generic config goes here)
   programs.qutebrowser = {
+    enable = false;
     searchEngines.DEFAULT = "https://kagi.com/search?q={}";
     settings = {
       url.start_pages = ["https://kagi.com"];

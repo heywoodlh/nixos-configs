@@ -68,7 +68,6 @@ in {
       "shortcat"
       "syncthing"
       "tailscale"
-      "utm"
     ];
     masApps = {
       DaisyDisk = 411643860;

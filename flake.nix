@@ -77,6 +77,7 @@
         myFlakes.follows = "myFlakes";
       };
     };
+    zen-browser.url = "github:heywoodlh/flakes?dir=zen-browser";
   };
 
   outputs = inputs@{ self,
@@ -108,6 +109,7 @@
                       ts-warp-nixpkgs,
                       qutebrowser,
                       dev-container,
+                      zen-browser,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -169,6 +171,7 @@
         ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
         ${pkgs.docker-client}/bin/docker network rm -f socks-anon
       '';
+        my-zen-browser = zen-browser.packages.${system}.zen-browser;
     in {
       formatter = pkgs.alejandra;
       # custom nix-darwin modules
@@ -207,6 +210,13 @@
               {
                 name = "Moonlight";
                 command = "${pkgs.moonlight-qt}/bin/moonlight";
+              }
+              {
+                name = "Zen Browser";
+                command = ''
+                  mkdir -p ~/Documents/zen
+                  ${my-zen-browser}/bin/zen --profile ~/Documents/zen/Profiles/main
+                '';
               }
             ];
             programs.qutebrowser.settings = {
@@ -563,9 +573,12 @@
           home-manager-path = home-manager.outPath;
         };
       };
-      packages.docs = pkgs.runCommand "options-doc.md" {} ''
-        cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/nixos\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/home\/modules|g' > $out
-      '';
+      packages = {
+        docs = pkgs.runCommand "options-doc.md" {} ''
+          cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/nixos\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/home\/modules|g' > $out
+        '';
+      };
+
       devShell = pkgs.mkShell {
         name = "nixos-configs devShell";
         buildInputs = with pkgs; [

@@ -42,7 +42,7 @@
     nur.url = "github:nix-community/NUR";
     spicetify.url = "gitlab:heywoodlh/spicetify-nix/macos-updates-fix";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    flatpaks.url = "github:GermanBread/declarative-flatpak/stable";
+    flatpaks.url = "github:GermanBread/declarative-flatpak/stable-v3";
     nix-on-droid = {
       url = "github:nix-community/nix-on-droid/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -3,7 +3,7 @@
 
 {
   imports = [
-    ../../desktop.nix
+    ../desktop.nix
     nixos-wsl.nixosModules.wsl
   ];
 

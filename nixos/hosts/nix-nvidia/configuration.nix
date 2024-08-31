@@ -154,5 +154,13 @@
   programs.bash.interactiveShellInit = ''
     export FORCE_TMUX_STATUS = "true";
   '';
+
+  services.cron = {
+    enable = true;
+    systemCronJobs = [
+      "5 4 * * *      root    shutdown -r now"
+    ];
+  };
+
   system.stateVersion = "24.11";
 }

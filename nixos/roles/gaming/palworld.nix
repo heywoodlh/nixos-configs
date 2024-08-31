@@ -15,7 +15,7 @@
     backend = "docker";
     containers = {
       palworld = {
-        image = "docker.io/thijsvanloef/palworld-server-docker:v0.38";
+        image = "docker.io/thijsvanloef/palworld-server-docker:v0.39";
         autoStart = true;
         ports = [
           "25575:25575"

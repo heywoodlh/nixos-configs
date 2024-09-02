@@ -36,4 +36,11 @@ in {
   programs.bash.interactiveShellInit = ''
     [ -z $TMUX ] && { ${tmux}/bin/tmux && exit;}
   '';
+
+  # Start ssh-agent manually if on ssh
+  home-manager.users.heywoodlh.home.file.".config/fish/machine.fish" = {
+    text = ''
+      test -n $SSH_CONNECTION && eval (ssh-agent -c) &> /dev/null
+    '';
+  };
 }

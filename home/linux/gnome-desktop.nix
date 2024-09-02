@@ -10,7 +10,7 @@ let
 in {
   home.packages = with gnome-pkgs; [
     dconf-editor
-    gnome.gnome-boxes
+    gnome-boxes
     gnome-terminal
     gnome-tweaks
     gnomeExtensions.caffeine

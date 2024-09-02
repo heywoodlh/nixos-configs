@@ -9,7 +9,7 @@ in {
   # Flatpak support
   services.flatpak = {
     enableModule = true;
-    target-dir = "${homeDir}/.local/share/flatpak";
+    flatpak-dir = "${homeDir}/.local/share/flatpak";
     remotes = {
       "flathub" = "https://dl.flathub.org/repo/flathub.flatpakrepo";
       "flathub-beta" = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";

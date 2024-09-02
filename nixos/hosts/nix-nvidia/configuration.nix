@@ -11,7 +11,6 @@
     ../../roles/gaming/minecraft-bedrock.nix
     #../../roles/monitoring/graylog.nix
     ../../roles/containers/k3s.nix
-    ../../roles/remote-access/guacamole.nix
     ../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
     ../../roles/nixos/cache.nix
@@ -45,9 +44,9 @@
   boot.kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_xanmod_stable;
   nixpkgs.config.allowUnfree = true;
   # Make sure opengl is enabled
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   # Tell Xorg to use the nvidia driver (also valid for Wayland)
@@ -102,6 +101,7 @@
 
   # Forward port 1080 to tailscale interface to mullvad
   networking = {
+    nftables.enable = lib.mkForce false;
     firewall = {
       enable = true;
       allowedUDPPorts = [
@@ -133,10 +133,8 @@
   hardware.bluetooth.powerOnBoot = true;
 
   # Nvidia container settings
-  virtualisation.docker = {
-    enable = true;
-    enableNvidia = true;
-  };
+  virtualisation.docker.enable = true;
+  hardware.nvidia-container-toolkit.enable =  true;
   environment.systemPackages = with pkgs; [ docker runc cloudflared ];
 
   services = {

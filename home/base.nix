@@ -119,6 +119,15 @@ in {
     '';
   };
 
+  # Home-Manager specific nixpkgs config
+  nixpkgs.config = {
+    allowUnfree = true;
+    # Allow olm for gomuks until issues are resolved
+    permittedInsecurePackages = [
+      "olm-3.2.16"
+    ];
+  };
+
   imports = [
     ./modules/default.nix
   ];

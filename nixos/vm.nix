@@ -29,6 +29,7 @@
   # Disable bluetooth
   hardware.bluetooth.enable = lib.mkForce false;
 
+  # Append ts net to SSH
   programs.ssh.extraConfig = ''
     CanonicalizeHostname yes
     CanonicalDomains barn-banana.ts.net
@@ -40,6 +41,9 @@
       user-enabled = true;
     };
   };
+
+  # Enable SPICE guest agent
+  services.spice-vdagentd.enable = true;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";

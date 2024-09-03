@@ -532,7 +532,10 @@
                     then
                       EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-22.05"
                     fi
-                    ## TODO: Support Ubuntu 24.04 when released
+                    if [[ "$version" == "24.04" ]]
+                    then
+                      EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-24.05"
+                    fi
                   fi
                   nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" --impure $EXTRA_ARGS
                 '';

@@ -11,7 +11,6 @@
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.11";
-    nixpkgs-vmware-aarch64.url = "github:heywoodlh/nixpkgs/aarch64-vmware-guest";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
       url = "github:LnL7/nix-darwin";
@@ -86,7 +85,6 @@
                       myFlakes,
                       nixpkgs-backports,
                       nixpkgs-lts,
-                      nixpkgs-vmware-aarch64,
                       nixos-wsl,
                       darwin,
                       home-manager,
@@ -423,10 +421,6 @@
               virtualisation.vmware.guest.enable = true;
               console.earlySetup = true;
               services.tailscale.enable = pkgs.lib.mkForce false;
-              imports = [
-                (nixpkgs-vmware-aarch64 + "/nixos/modules/virtualisation/vmware-guest.nix")
-              ];
-              disabledModules = ["virtualisation/vmware-guest.nix"];
             }
           ];
         };

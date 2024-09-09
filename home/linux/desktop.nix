@@ -16,7 +16,8 @@ in {
       "gnome-nightly" = "https://nightly.gnome.org/gnome-nightly.flatpakrepo";
     };
     packages = [
-      #"gnome-nightly:app/org.gnome.Epiphany.Devel//master"
+      "flathub:app/io.github.zen_browser.zen/x86_64/stable"
+      "gnome-nightly:app/org.gnome.Epiphany.Devel//master"
     ];
   };
 

@@ -22,7 +22,7 @@ in {
     #gnomeExtensions.paperwm
     gnomeExtensions.pop-shell
     gnomeExtensions.tray-icons-reloaded
-    gnomeExtensions.switcher
+    gnomeExtensions.search-light
     pkgs.epiphany
     gnomeExtensions.open-bar
   ];

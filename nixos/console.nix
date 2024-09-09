@@ -202,58 +202,6 @@ in {
           /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
         '';
       };
-      home.file.".config/fbterm/fbtermrc" = {
-        enable = true;
-        text = ''
-          font-names=JetBrainsMono Nerd Font
-          font-size=14
-          #font-width=
-          #font-height=
-
-          # terminal palette consists of 256 colors (0-255)
-          # 0 = black, 1 = red, 2 = green, 3 = brown, 4 = blue, 5 = magenta, 6 = cyan, 7 = white
-          # 8-15 are brighter versions of 0-7
-          # 16-231 is 6x6x6 color cube
-          # 232-255 is grayscale
-          # Nord theme, from https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/kitty/nord.conf
-          color-0=3B4252
-          color-1=BF616A
-          color-2=A3BE8C
-          color-3=EBCB8B
-          color-4=81A1C1
-          color-5=B48EAD
-          color-6=88C0D0
-          color-7=E5E9F0
-          color-8=4C566A
-          color-9=BF616A
-          color-10=A3BE8C
-          color-11=EBCB8B
-          color-12=81A1C1
-          color-13=B48EAD
-          color-14=8FBCBB
-          color-15=ECEFF4
-          color-foreground=D8DEE9
-          color-background=2E3440
-
-          history-lines=0
-          text-encodings=
-
-          # cursor shape: 0 = underline, 1 = block
-          # cursor flash interval in milliseconds, 0 means disable flashing
-          cursor-shape=1
-          cursor-interval=500
-
-          # additional ascii chars considered as part of a word while auto-selecting text, except ' ', 0-9, a-z, A-Z
-          word-chars=._-
-
-          # change the clockwise orientation angle of screen display
-          # available values: 0 = 0 degree, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
-          screen-rotate=0
-
-          # specify the favorite input method program to run
-          input-method=
-        '';
-      };
     };
   };
 

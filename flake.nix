@@ -169,7 +169,6 @@
         ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
         ${pkgs.docker-client}/bin/docker network rm -f socks-anon
       '';
-        my-zen-browser = zen-browser.packages.${system}.zen-browser;
     in {
       formatter = pkgs.alejandra;
       # custom nix-darwin modules
@@ -208,13 +207,6 @@
               {
                 name = "Moonlight";
                 command = "${pkgs.moonlight-qt}/bin/moonlight";
-              }
-              {
-                name = "Zen Browser";
-                command = ''
-                  mkdir -p ~/Documents/zen
-                  ${my-zen-browser}/bin/zen --profile ~/Documents/zen/Profiles/main
-                '';
               }
             ];
             programs.qutebrowser.settings = {

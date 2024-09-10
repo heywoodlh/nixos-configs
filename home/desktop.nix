@@ -248,6 +248,7 @@ let
   '';
   myVscode = myFlakes.packages.${system}.vscode;
   arc-settings = ./share/arc-browser.plist;
+  myZenBrowser = myFlakes.packages.${system}.zen-browser;
 in {
   home.packages = [
     code-reset
@@ -274,7 +275,7 @@ in {
     enable = false;
     enable1Pass = false;
   };
-  # (less generic config goes here)
+  # (less generic qutebrowser config goes here)
   programs.qutebrowser = {
     enable = false;
     searchEngines.DEFAULT = "https://kagi.com/search?q={}";
@@ -288,4 +289,14 @@ in {
       unset-tor = "config-unset content.proxy";
     };
   };
+
+  # zen-browser
+  heywoodlh.home.applications = [
+    {
+      name = "Zen Browser";
+      command = ''
+        ${myZenBrowser}/bin/zen
+      '';
+    }
+  ];
 }

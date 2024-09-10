@@ -50,7 +50,6 @@ in
   home-manager = {
     config = ./roles/droid/home.nix;
     backupFileExtension = "hm-bak";
-    useGlobalPkgs = true;
   };
   system.stateVersion = "23.05";
 }

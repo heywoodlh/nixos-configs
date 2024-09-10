@@ -477,6 +477,14 @@
             ./home/linux/gnome-desktop.nix
             (import myFlakes.packages.${system}.gnome-dconf)
             {
+              # Home-Manager specific nixpkgs config
+              nixpkgs.config = {
+                allowUnfree = true;
+                # Allow olm for gomuks until issues are resolved
+                permittedInsecurePackages = [
+                  "olm-3.2.16"
+                ];
+              };
               home = {
                 username = "heywoodlh";
                 homeDirectory = "/home/heywoodlh";
@@ -538,6 +546,14 @@
             ./home/linux.nix
             ./home/linux/no-desktop.nix
             {
+              # Home-Manager specific nixpkgs config
+              nixpkgs.config = {
+                allowUnfree = true;
+                # Allow olm for gomuks until issues are resolved
+                permittedInsecurePackages = [
+                  "olm-3.2.16"
+                ];
+              };
               home = {
                 username = "heywoodlh";
                 homeDirectory = "/home/heywoodlh";

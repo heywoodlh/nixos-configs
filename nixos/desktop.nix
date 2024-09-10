@@ -23,8 +23,6 @@ in {
     ./roles/virtualization/libvirt.nix
   ];
 
-  home-manager.useGlobalPkgs = true;
-
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
     nur.overlay
@@ -271,6 +269,13 @@ in {
           [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
           git -C ~/opt/nixos-configs pull origin master
           /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
+        '';
+      };
+      home.file.".config/fish/machine.fish" = {
+        enable = true;
+        text = ''
+          # Always set 1password agent on NixOS desktops
+          test -e ~/.1password/agent.sock && export SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
         '';
       };
     };

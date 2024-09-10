@@ -1,9 +1,9 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, ... }:
+{ config, pkgs, lib, stdenv, nur, ... }:
 
 {
   imports = [
-    #./roles/nixos/cache-client.nix
+    ./roles/virtualization/multiarch.nix
   ];
 
   # Allow olm for gomuks until issues are resolved
@@ -35,6 +35,19 @@
     gptfdisk
   ];
 
+  # Enable appimage
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
+
   # Allow non-free applications to be installed
   nixpkgs.config.allowUnfree = true;
+
+  home-manager = {
+    useGlobalPkgs = true;
+    extraSpecialArgs = {
+      inherit nur;
+    };
+  };
 }

@@ -7,5 +7,6 @@
     ./qutebrowser.nix
     ./sway.nix
     ./applications.nix
+    ./linux-autostart.nix
   ];
 }

@@ -101,6 +101,27 @@ list of attribute set of string
 
 
 
+## heywoodlh\.home\.autostart
+
+
+
+List of custom applications to autostart\.
+
+
+
+*Type:*
+list of attribute set of string
+
+
+
+*Default:*
+` [ ] `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/linux-autostart\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/linux-autostart.nix)
+
+
+
 ## heywoodlh\.home\.dockerBins\.enable
 
 

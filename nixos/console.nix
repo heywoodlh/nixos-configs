@@ -36,8 +36,6 @@ in {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  home-manager.useGlobalPkgs = true;
-
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
     nur.overlay

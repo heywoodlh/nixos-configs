@@ -248,7 +248,8 @@ let
   '';
   myVscode = myFlakes.packages.${system}.vscode;
   arc-settings = ./share/arc-browser.plist;
-  myZenBrowser = myFlakes.packages.${system}.zen-browser;
+  myZenBrowser = if system == "aarch64-linux" then "${pkgs.firefox}/bin/firefox"
+  else "${myFlakes.packages.${system}.zen-browser}/bin/zen";
 in {
   home.packages = [
     code-reset
@@ -295,7 +296,7 @@ in {
     {
       name = "Zen Browser";
       command = ''
-        ${myZenBrowser}/bin/zen
+        ${myZenBrowser}
       '';
     }
   ];

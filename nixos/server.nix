@@ -22,8 +22,6 @@ in {
     ./roles/monitoring/osqueryd.nix
   ];
 
-  home-manager.useGlobalPkgs = true;
-
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
     nur.overlay

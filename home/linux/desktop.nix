@@ -125,33 +125,25 @@ in {
   };
 
   # 1Password GUI settings
+  # Updated Sept. 10, 2024
   home.file.".config/1Password/settings/settings.json" = {
     text = ''
       {
         "version": 1,
-        "ui.routes.lastUsedRoute": "{\"type\":\"ItemDetail\",\"content\":{\"itemListRoute\":{\"unlockedRoute\":{\"collectionUuid\":\"UTCG7LWIBNC7LHEM5OSPMN7J64\"},\"itemListType\":{\"type\":\"Category\",\"content\":\"114\"},\"category\":null,\"sortBehavior\":null},\"itemId\":\"1CB\"}}",
-        "security.authenticatedUnlock.enabled": true,
-        "sshAgent.storeKeyTitles": true,
-        "sshAgent.storeSshKeyTitlesResponseGiven": true,
         "sshAgent.enabled": true,
-        "keybinds.open": "",
-        "keybinds.quickAccess": "",
-        "app.theme": "dark",
-        "appearance.interfaceDensity": "compact",
         "developers.cliSharedLockState.enabled": true,
-        "app.useHardwareAcceleration": true,
+        "app.keepInTray": true,
+        "security.authenticatedUnlock.enabled": true,
+        "browsers.extension.enabled": true,
         "authTags": {
-          "app.useHardwareAcceleration": "QroNuMzaoNSAt92MMVg6Od7R1nRiyKx+yNsJjrkITy0",
-          "developers.cliSharedLockState.enabled": "BENLWIG69/EFYJWyUrsTvfcCGGi6VZpT/pCsbt1fIdE",
-          "keybinds.open": "J2ZIPrxfDVulvqV10I0DSxDAeCeKdPrnA8VN5QQhccQ",
-          "keybinds.quickAccess": "DrO+203uZNRbp50aXYKsA9HUEKj6lLKwlmS1+uR8YS8",
-          "security.authenticatedUnlock.enabled": "af75cCzvjtC4tmat7GMO3X8gw7EGbMzF1A9iNVTzlNg",
-          "sshAgent.enabled": "BnZKtIeW3NcF4eo/9EvXSP4drNb8HYijf5PL2tK4SXA",
-          "sshAgent.storeKeyTitles": "fuN25iiDAt1/G7H2KFgu+3Yi+38WWWrz1ZEtiysgyVk",
-          "sshAgent.storeSshKeyTitlesResponseGiven": "Q4RomTjUe69OBCBWnyZD0St1F3psDo/+u/GX9hfoF8I",
-          "ui.routes.lastUsedRoute": "8XGr1Jjakozu4u73yri5yQEvNvtQhc0hxnqn3fZP2O4"
-          }
-      }'';
+          "app.keepInTray": "dEgsSYYRe6HRJBb3Yt70XkKSGrO7QW/qsDy78zrmvv0",
+          "browsers.extension.enabled": "MaBrlHeABV9gub1TCmOPx72JzyBqiyNGMnLx1/YMw/8",
+          "developers.cliSharedLockState.enabled": "VaG8Ag8PnQcqreE4U4pl9jhfJ03BFxl/M1mcA44/bmg",
+          "security.authenticatedUnlock.enabled": "BfvCuyEH1oH5/jIl7MNisrJ0nWjlLTGM4rGA9pF95Cg",
+          "sshAgent.enabled": "foKNdypQUDimc/DcKt5mUeg2lhd6e5vlS8V8zf1ZU1g"
+        }
+      }
+    '';
   };
 
   # Enable fontconfig

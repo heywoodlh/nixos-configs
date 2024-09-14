@@ -16,6 +16,7 @@
     ../../roles/nixos/cache.nix
     #../../roles/remote-access/wireguard-server.nix
     ../../roles/home-automation/homebridge.nix
+    ../../roles/monitoring/ntfy-signal.nix
     #../../roles/dev/vscode.nix # many things don't work with non-standard Nix paths
   ];
 

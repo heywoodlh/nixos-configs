@@ -77,6 +77,7 @@
       };
     };
     zen-browser.url = "github:heywoodlh/flakes?dir=zen-browser";
+    signal-ntfy.url = "github:heywoodlh/signal-ntfy-mirror";
   };
 
   outputs = inputs@{ self,
@@ -108,6 +109,7 @@
                       qutebrowser,
                       dev-container,
                       zen-browser,
+                      signal-ntfy,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {

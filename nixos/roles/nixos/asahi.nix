@@ -25,4 +25,14 @@
   boot.extraModprobeConfig = ''
     options hid_apple swap_fn_leftctrl=1
   '';
+
+  nix.settings = {
+    sandbox = true;
+    substituters = [
+      "https://ceon.cachix.org"
+    ];
+    trusted-public-keys = [
+      "ceon.cachix.org-1:xdD8jN8QNCi0QMvL+3N7YxEbrAtf6rzClqTAaeYFl64="
+    ];
+  };
 }

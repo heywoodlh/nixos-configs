@@ -89,14 +89,13 @@ in {
     backend = "docker";
     containers = {
       tautulli = {
-        image = "docker.io/linuxserver/tautulli:2.13.4";
+        image = "docker.io/linuxserver/tautulli:2.14.3";
         autoStart = true;
-        ports = ["8181:8181"];
         volumes = [
           "/opt/tautulli/config:/config"
           "/opt/tautulli/scripts:/scripts"
-          "/etc/resolv.conf:/etc/resolv.conf:ro"
         ];
+        extraOptions = [ "--network=host" ]; # For tailscale/ntfy.sh to work
       };
       openaudible = {
         image = "docker.io/heywoodlh/openaudible:2024_02";

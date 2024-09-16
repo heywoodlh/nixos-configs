@@ -10,7 +10,6 @@ let
   extensionsToggle = pkgs.writeShellScript "toggle-extensions.sh" ''
     # Wait for gnome to be started fully
     sleep 10
-    ${pkgs.gnome-extensions-cli}/bin/gext disable search-light@icedman.github.com && ${pkgs.gnome-extensions-cli}/bin/gext enable search-light@icedman.github.com
     ${pkgs.gnome-extensions-cli}/bin/gext disable openbar@neuromorph && ${pkgs.gnome-extensions-cli}/bin/gext enable openbar@neuromorph
   '';
 in {
@@ -28,7 +27,6 @@ in {
     #gnomeExtensions.paperwm
     gnomeExtensions.pop-shell
     gnomeExtensions.tray-icons-reloaded
-    gnomeExtensions.search-light
     pkgs.epiphany
     gnomeExtensions.open-bar
   ];

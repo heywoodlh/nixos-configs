@@ -233,6 +233,13 @@
             ./nixos/hosts/macbook/configuration.nix
           ];
         };
+        nixos-xps = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/hosts/xps-13/configuration.nix
+          ];
+        };
         nixos-usb = nixpkgs.lib.nixosSystem {
           system = "${system}";
           specialArgs = inputs;

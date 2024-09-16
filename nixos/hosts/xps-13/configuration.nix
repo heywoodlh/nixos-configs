@@ -1,11 +1,11 @@
 # Config specific to Dell XPS 13
-{ config, pkgs, lib, spicetify, mullvad-browser-home-manager, ... }:
+{ config, pkgs, lib, spicetify, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
-      ../laptop.nix
+      ./hardware-configuration.nix
+      ../../laptop.nix
     ];
 
   # Bootloader

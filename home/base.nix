@@ -346,9 +346,12 @@ in {
     enable = true;
     text = ''
       function vultr-unlock
-        export VULTR_API_KEY="$(op read 'op://Personal/biw7pdtbal7zj66gu6ylaavgui/api_key')"
+        export VULTR_API_KEY="$(${op-wrapper} read 'op://Personal/biw7pdtbal7zj66gu6ylaavgui/api_key')"
       end
 
+      function github-unlock
+        set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh/personal-access-token --fields=password)"
+      end
     '';
   };
 

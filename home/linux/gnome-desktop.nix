@@ -107,11 +107,11 @@ in {
       picture-uri = lib.mkForce "${homeDir}/.wallpaper.png";
       picture-uri-dark = lib.mkForce "${homeDir}/.wallpaper.png";
     };
-    #"org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7" = {
-    #  binding = lib.mkForce "<Control>grave";
-    #  command = lib.mkForce "${pkgs.guake}/bin/guake";
-    #  name = lib.mkForce "guake";
-    #};
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7" = {
+      binding = lib.mkForce "<Control>grave";
+      command = lib.mkForce "${pkgs.guake}/bin/guake";
+      name = lib.mkForce "guake";
+    };
   };
 
   # 

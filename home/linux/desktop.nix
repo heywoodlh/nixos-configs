@@ -127,6 +127,7 @@ in {
   # 1Password GUI settings
   # Updated Sept. 10, 2024
   home.file.".config/1Password/settings/settings.json" = {
+    enable = false; # unreliable on different distros
     text = ''
       {
         "version": 1,

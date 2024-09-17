@@ -47,7 +47,7 @@ in {
 
   # Networking
   networking = {
-    nftables.enable = true;
+    #nftables.enable = true;
     networkmanager.enable = true;
   };
 

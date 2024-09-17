@@ -5,6 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.05";
+    nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     myFlakes = {
       url = "github:heywoodlh/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -83,6 +84,7 @@
   outputs = inputs@{ self,
                       nixpkgs,
                       nixpkgs-stable,
+                      nixpkgs-pam-lid-fix,
                       myFlakes,
                       nixpkgs-backports,
                       nixpkgs-lts,

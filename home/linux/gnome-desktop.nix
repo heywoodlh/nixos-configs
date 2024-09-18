@@ -7,11 +7,6 @@ let
   myFish = myFlakes.packages.${system}.fish;
   myWezterm = myFlakes.packages.${system}.wezterm;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
-  extensionsToggle = pkgs.writeShellScript "toggle-extensions.sh" ''
-    # Wait for gnome to be started fully
-    sleep 10
-    ${pkgs.gnome-extensions-cli}/bin/gext disable openbar@neuromorph && ${pkgs.gnome-extensions-cli}/bin/gext enable openbar@neuromorph
-  '';
 in {
   home.packages = with gnome-pkgs; [
     dconf-editor
@@ -22,13 +17,11 @@ in {
     gnomeExtensions.gnome-bedtime
     gnomeExtensions.gsconnect
     gnomeExtensions.hide-cursor
-    gnomeExtensions.just-perfection
     gnomeExtensions.night-theme-switcher
-    #gnomeExtensions.paperwm
     gnomeExtensions.pop-shell
     gnomeExtensions.tray-icons-reloaded
     pkgs.epiphany
-    gnomeExtensions.open-bar
+    gnomeExtensions.just-perfection
   ];
 
   # Enable unclutter
@@ -113,18 +106,4 @@ in {
       name = lib.mkForce "guake";
     };
   };
-
-  # 
-  heywoodlh.home.autostart = [
-    # Toggle extensions on login
-    {
-      name = "toggle-extensions";
-      command = "${extensionsToggle}";
-    }
-  ];
-
-  # Toggle extensions on rebuild
-  home.activation.extensionToggle = ''
-    ${extensionsToggle}
-  '';
 }

@@ -300,4 +300,12 @@ in {
       '';
     }
   ];
+
+  # assume 1password for all users on workstation
+  programs.ssh.extraConfig = let
+    agentSock = if pkgs.stdenv.isDarwin then
+    "${homeDir}/Library/Application/1Password/agent.sock" else "${homeDir}/.1password/agent.sock";
+  in ''
+    IdentityAgent ${agentSock}
+  '';
 }

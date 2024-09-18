@@ -299,4 +299,9 @@ in {
 
   # Thunderbolt 3
   services.hardware.bolt.enable = true;
+
+  # Assume use of 1Password agent for all users on workstations
+  programs.ssh.extraConfig = ''
+    IdentityAgent /home/heywoodlh/.1password/agent.sock
+  '';
 }

@@ -21,12 +21,16 @@ in {
     end
   '';
 
-  # So that `nix search` works
-  nix = lib.mkForce {
-    package = pkgs.nix;
-    extraOptions = ''
-      extra-experimental-features = nix-command flakes
-    '';
+  nix = {
+    settings = let 
+      foreignLinuxBuilder = if pkgs.system == "x86_64-linux" then
+        "ssh://heywoodlh@nixos-mac-mini aarch64-linux" else
+        "ssh://heywoodlh@nix-nvidia x86_64-linux";
+    in {
+      # Before you can use these, run the following command:
+      # sudo -E ssh heywoodlh@nix-nvidia; sudo -E ssh heywoodlh@nixos-mac-mini; sudo -E ssh heywoodlh@mac-mini; sudo -E ssh heywoodlh@macos-intel-vm
+      builders = "${foreignLinuxBuilder} ; ssh://heywoodlh@macos-intel-vm x86_64-darwin ; ssh://heywoodlh@mac-mini aarch64-darwin ;";
+    };
   };
 
   # Proxychains wrapper

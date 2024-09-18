@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, myFlakes, ts-warp-nixpkgs, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, ts-warp-nixpkgs, ... }:
 
 let
   system = pkgs.system;
@@ -113,7 +113,7 @@ in {
   home.stateVersion = "24.05";
   home.enableNixpkgsReleaseCheck = false;
   nix = {
-    package = pkgs.nix;
+    package = lib.mkForce pkgs.nix;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';

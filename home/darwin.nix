@@ -10,13 +10,6 @@ in {
     ./desktop.nix
   ];
 
-  nix = {
-    package = lib.mkForce pkgs.nix;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-  };
-
   home.file."bin/battpop.sh" = {
     enable = true;
     executable = true;
@@ -107,4 +100,16 @@ in {
       command = "${pkgs.virt-manager}/bin/virt-manager";
     }
   ];
+
+  nix = {
+    settings = let
+      foreignDarwinBuilder = if pkgs.system == "aarch64-darwin" then
+        "ssh://heywoodlh@macos-intel-vm x86_64-darwin" else
+        "ssh://heywoodlh@mac-mini aarch64-darwin";
+    in {
+      # Before you can use these, run the following command:
+      # sudo -E ssh heywoodlh@nix-nvidia; sudo -E ssh heywoodlh@nixos-mac-mini; sudo -E ssh heywoodlh@mac-mini; sudo -E ssh heywoodlh@macos-intel-vm
+      builders = "${foreignDarwinBuilder} ; ssh://heywoodlh@nix-nvidia x86_64-linux ; ssh://heywoodlh@nixos-mac-mini aarch64-linux ;";
+    };
+  };
 }

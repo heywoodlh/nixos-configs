@@ -55,6 +55,11 @@ in {
         '';
       }
     ];
+    dconf.settings = {
+      "org/gnome/desktop/remote-desktop/rdp" = {
+        screen-share-mode = "extend";
+      };
+    };
   };
 
   # System packages
@@ -96,18 +101,8 @@ in {
   };
   users.users.heywoodlh.extraGroups = [ "tss" ];
 
-  # Clevis
-  # Reference commands:
-  # disk=/dev/nvme0n1p2
-  # echo -n Enter LUKS password:
-  # read -s LUKSKEY
-  # echo ""
-  # sudo mkdir -p /opt
-  # echo -n "$LUKSKEY" | sudo nix run nixpkgs#clevis -- encrypt tpm2 '{}' | sudo tee /opt/nvme0n1p2.jwe
-  #boot.initrd.clevis = {
-  #  enable = true;
-  #  devices."luks-1f9aebb9-ab34-4cac-85e9-7bad7cacd502".secretFile = "/opt/nvme0n1p2.jwe";
-  #};
+  # For mobile devices to RDP
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 3389 ];
 
   # Set version of NixOS to target
   system.stateVersion = "24.05";

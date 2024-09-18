@@ -94,7 +94,10 @@ in {
   #hardware.brillo.enable = true;
 
   # Enable kde connect
-  programs.kdeconnect.enable = true;
+  programs.kdeconnect = {
+    enable = true;
+    package = pkgs.gnomeExtensions.gsconnect;
+  };
   networking.firewall = {
     interfaces.tailscale0.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
     interfaces.tailscale0.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];

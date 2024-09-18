@@ -78,6 +78,10 @@
       };
     };
     signal-ntfy.url = "github:heywoodlh/signal-ntfy-mirror";
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self,
@@ -110,6 +114,7 @@
                       qutebrowser,
                       dev-container,
                       signal-ntfy,
+                      lanzaboote,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {

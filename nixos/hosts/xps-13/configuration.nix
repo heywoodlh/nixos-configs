@@ -1,5 +1,5 @@
 # Config specific to Dell XPS 13
-{ config, pkgs, nixpkgs-stable, nixpkgs-pam-lid-fix, lib, spicetify, ... }:
+{ config, pkgs, nixpkgs-stable, nixpkgs-pam-lid-fix, lib, spicetify, lanzaboote, ... }:
 
 let
   system = pkgs.system;
@@ -18,10 +18,11 @@ in {
       ../../laptop.nix
       "${nixpkgs-pam-lid-fix}/nixos/modules/security/pam.nix"
       "${nixpkgs-pam-lid-fix}/nixos/modules/services/security/fprintd.nix"
+      lanzaboote.nixosModules.lanzaboote
     ];
 
   # Bootloader
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.enable = false; # using lanzaboote
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos-xps"; # Define your hostname.
@@ -49,6 +50,13 @@ in {
     ];
   };
 
+  # System packages
+  environment.systemPackages = with pkgs; [
+    #clevis
+    lanzaboote
+    sbctl
+  ];
+
   # Fingerprint
   services.fprintd = {
     enable = true;
@@ -64,7 +72,35 @@ in {
     max-jobs = 2;
   };
 
+  # Firmware updates
   services.fwupd.enable = true;
+
+  # Automate LUKS decryption with TPM2 with this command:
+  # sudo systemd-cryptenroll --wipe-slot tpm2 --tpm2-device auto --tpm2-with-pin=no --tpm2-pcrs "7" /dev/nvme0n1p2
+  boot.initrd.systemd.enable = true;
+  boot.initrd.systemd.enableTpm2 = true;
+  security.tpm2.enable = true;
+  security.tpm2.pkcs11.enable = true;
+  security.tpm2.tctiEnvironment.enable = true;
+  # Secure boot
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/etc/secureboot";
+  };
+  users.users.heywoodlh.extraGroups = [ "tss" ];
+
+  # Clevis
+  # Reference commands:
+  # disk=/dev/nvme0n1p2
+  # echo -n Enter LUKS password:
+  # read -s LUKSKEY
+  # echo ""
+  # sudo mkdir -p /opt
+  # echo -n "$LUKSKEY" | sudo nix run nixpkgs#clevis -- encrypt tpm2 '{}' | sudo tee /opt/nvme0n1p2.jwe
+  #boot.initrd.clevis = {
+  #  enable = true;
+  #  devices."luks-1f9aebb9-ab34-4cac-85e9-7bad7cacd502".secretFile = "/opt/nvme0n1p2.jwe";
+  #};
 
   # Set version of NixOS to target
   system.stateVersion = "24.05";

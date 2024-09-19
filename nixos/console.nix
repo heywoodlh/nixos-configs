@@ -27,6 +27,7 @@ let
   '';
 in {
   imports = [
+    ./base.nix
     home-manager.nixosModules.home-manager
     ./roles/desktop/user-icon.nix
     ./roles/virtualization/libvirt.nix
@@ -190,16 +191,6 @@ in {
       home.packages = [
         myFlakes.packages.${system}.git
       ];
-      home.file."bin/nixos-switch" = {
-        enable = true;
-        executable = true;
-        text = ''
-          #!/usr/bin/env bash
-          [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
-          git -C ~/opt/nixos-configs pull origin master
-          /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
-        '';
-      };
     };
   };
 

@@ -528,7 +528,6 @@
                 text = ''
                   #!/usr/bin/env bash
                   git clone https://github.com/heywoodlh/nixos-configs ~/opt/nixos-configs &>/dev/null || true
-                  git -C ~/opt/nixos-configs pull origin master --rebase
                   ## OS-specific support (mostly, Ubuntu vs anything else)
                   ## Anything else will use nixpkgs-unstable
                   EXTRA_ARGS=""

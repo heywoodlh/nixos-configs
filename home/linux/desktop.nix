@@ -4,7 +4,6 @@ let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   myWezterm = myFlakes.packages.${system}.wezterm;
-  browserBin = if system == "aarch64-linux" then "${pkgs.bash}/bin/bash -c 'MESA_GL_VERSION_OVERRIDE=3.3 MESA_GLSL_VERSION_OVERRIDE=330 MESA_GLES_VERSION_OVERRIDE=3.1 MOZ_ENABLE_WAYLAND=1 ${pkgs.firefox}/bin/firefox'" else "${pkgs.mullvad-browser}/bin/mullvad-browser";
 in {
   # Flatpak support
   services.flatpak = {
@@ -16,7 +15,6 @@ in {
       "gnome-nightly" = "https://nightly.gnome.org/gnome-nightly.flatpakrepo";
     };
     packages = [
-      "flathub:app/io.github.zen_browser.zen/x86_64/stable"
       "gnome-nightly:app/org.gnome.Epiphany.Devel//master"
     ];
   };
@@ -91,23 +89,7 @@ in {
     };
   };
 
-  # Mullvad desktop file
-  home.file.".local/share/applications/mullvad-browser.desktop" = {
-    enable = true;
-    text = ''
-      [Desktop Entry]
-      Name=Mullvad Browser
-      GenericName=browser
-      Comment=Browse the web
-      Exec=${browserBin}
-      Terminal=false
-      Type=Application
-      Keywords=browser;internet;
-      Icon=${snowflake}
-      Categories=Utility;
-    '';
-  };
-
+  # Chromium widevine for ARM64
   home.file.".local/share/applications/chromium-browser.desktop" = {
     enable = system == "aarch64-linux";
     text = ''

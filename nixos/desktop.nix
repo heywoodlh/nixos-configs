@@ -264,16 +264,6 @@ in {
       home.packages = [
         myFlakes.packages.${system}.git
       ];
-      home.file."bin/nixos-switch" = {
-        enable = true;
-        executable = true;
-        text = ''
-          #!/usr/bin/env bash
-          [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
-          git -C ~/opt/nixos-configs pull origin master
-          /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
-        '';
-      };
       home.file.".config/fish/machine.fish" = {
         enable = true;
         text = ''

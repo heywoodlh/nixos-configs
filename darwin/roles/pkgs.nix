@@ -8,7 +8,7 @@ let
   pkgs-darwin = darwin.packages.${system};
   darwinSwitch = pkgs.writeShellScriptBin "darwin-switch" ''
     [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
-    ${pkgs.git}/bin/git -C ~/opt/nixos-configs pull origin master --rebase
+    #${pkgs.git}/bin/git -C ~/opt/nixos-configs pull origin master --rebase
     ${pkgs-darwin.darwin-rebuild}/bin/darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname)
   '';
 in {
@@ -67,7 +67,7 @@ in {
       "secretive"
       "shortcat"
       "syncthing"
-      "tailscale"
+      "zen-browser"
     ];
     masApps = {
       DaisyDisk = 411643860;

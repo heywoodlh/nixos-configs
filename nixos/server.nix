@@ -95,16 +95,6 @@ in {
         ../home/linux/no-desktop.nix
       ];
       services.ssh-agent.enable = true;
-      home.file."bin/nixos-switch" = {
-        enable = true;
-        executable = true;
-        text = ''
-          #!/usr/bin/env bash
-          [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
-          git -C ~/opt/nixos-configs pull origin master
-          /run/wrappers/bin/sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname) --impure $@
-        '';
-      };
     };
   };
 

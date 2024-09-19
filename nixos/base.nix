@@ -33,6 +33,10 @@
 
   environment.systemPackages = with pkgs; [
     gptfdisk
+    (pkgs.writeShellScriptBin "nixos-switch" ''
+    [[ -d ~/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs
+    ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname)
+    '')
   ];
 
   # Enable appimage

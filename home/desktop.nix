@@ -248,8 +248,6 @@ let
   '';
   myVscode = myFlakes.packages.${system}.vscode;
   arc-settings = ./share/arc-browser.plist;
-  myZenBrowser = if system == "aarch64-linux" then "${pkgs.firefox}/bin/firefox"
-  else "${myFlakes.packages.${system}.zen-browser}/bin/zen";
 in {
   home.packages = [
     code-reset
@@ -290,16 +288,6 @@ in {
       unset-tor = "config-unset content.proxy";
     };
   };
-
-  # zen-browser
-  heywoodlh.home.applications = [
-    {
-      name = "Zen Browser";
-      command = ''
-        ${myZenBrowser}
-      '';
-    }
-  ];
 
   # assume 1password for all users on workstation
   programs.ssh.extraConfig = let

@@ -18,6 +18,14 @@ in {
       ephemeral = true; # Wipe on every reboot
     };
   };
+
+  system.activationScripts.chownLinuxBuilderKey = {
+    enable = true;
+    text = ''
+      chown 501 /etc/nix/builder_ed25519 || true
+    '';
+  };
+
   services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   programs.nix-index.enable = true;

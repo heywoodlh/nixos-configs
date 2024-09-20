@@ -32,5 +32,6 @@
     Host *
       SendEnv LANG LC_*
     IdentityAgent /Users/heywoodlh/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
+    Include /etc/ssh/ssh_config.d/*
   '';
 }

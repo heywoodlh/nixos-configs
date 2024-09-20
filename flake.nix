@@ -166,16 +166,16 @@
         inherit (cleanEval) options;
       };
 
-      myDevContainer = dev-container.packages.${linuxSystem}.dockerImage;
-      anonScript = pkgs.writeShellScriptBin "anon" ''
-        ${pkgs.docker-client}/bin/docker image ls | grep -q 'heywoodlh/dev' || ${pkgs.docker-client}/bin/docker load -i ${myDevContainer}
-        ${pkgs.docker-client}/bin/docker network ls | grep -i socks-anon || ${pkgs.docker-client}/bin/docker network create socks-anon
-        ${pkgs.docker-client}/bin/docker ps -a | grep -q tor-socks-proxy && ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
-        ${pkgs.docker-client}/bin/docker run -d --name=tor-socks-proxy --network=socks-anon docker.io/heywoodlh/tor-socks-proxy:latest
-        ${pkgs.docker-client}/bin/docker run --network=socks-anon -it --rm -e SSH_TTY=true -e http_proxy="socks://tor-socks-proxy:9150" -e https_proxy="socks://tor-socks-proxy:9150" -e all_proxy="socks://tor-socks-proxy:9150" -e no_proxy="localhost,127.0.0.1,100.64.0.0/10,.barn-banana.ts.net" heywoodlh/dev:latest
-        ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
-        ${pkgs.docker-client}/bin/docker network rm -f socks-anon
-      '';
+      #myDevContainer = dev-container.packages.${linuxSystem}.dockerImage;
+      #anonScript = pkgs.writeShellScriptBin "anon" ''
+      #  ${pkgs.docker-client}/bin/docker image ls | grep -q 'heywoodlh/dev' || ${pkgs.docker-client}/bin/docker load -i ${myDevContainer}
+      #  ${pkgs.docker-client}/bin/docker network ls | grep -i socks-anon || ${pkgs.docker-client}/bin/docker network create socks-anon
+      #  ${pkgs.docker-client}/bin/docker ps -a | grep -q tor-socks-proxy && ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
+      #  ${pkgs.docker-client}/bin/docker run -d --name=tor-socks-proxy --network=socks-anon docker.io/heywoodlh/tor-socks-proxy:latest
+      #  ${pkgs.docker-client}/bin/docker run --network=socks-anon -it --rm -e SSH_TTY=true -e http_proxy="socks://tor-socks-proxy:9150" -e https_proxy="socks://tor-socks-proxy:9150" -e all_proxy="socks://tor-socks-proxy:9150" -e no_proxy="localhost,127.0.0.1,100.64.0.0/10,.barn-banana.ts.net" heywoodlh/dev:latest
+      #  ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
+      #  ${pkgs.docker-client}/bin/docker network rm -f socks-anon
+      #'';
     in {
       formatter = pkgs.alejandra;
       # custom nix-darwin modules
@@ -203,9 +203,9 @@
             };
           };
           home-manager.users.heywoodlh = {
-            home.packages = with pkgs; [
-              anonScript
-            ];
+            #home.packages = with pkgs; [
+              #anonScript
+            #];
             heywoodlh.home.applications = [
               {
                 name = "Spotify";

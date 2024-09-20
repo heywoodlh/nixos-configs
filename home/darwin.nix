@@ -103,13 +103,14 @@ in {
 
   nix = {
     settings = let
-      foreignDarwinBuilder = if pkgs.system == "aarch64-darwin" then
-        "ssh://heywoodlh@macos-intel-vm x86_64-darwin" else
-        "ssh://heywoodlh@mac-mini aarch64-darwin";
+      # only have foreign arch because $(arch)-linux is covered by linux-builder
+      myBuilders = if pkgs.system == "aarch64-darwin" then
+        "ssh://heywoodlh@macos-intel-vm x86_64-darwin ; ssh://heywoodlh@nix-nvidia x86_64-linux ; ssh://builder@linux-builder aarch64-linux" else
+        "ssh://heywoodlh@mac-mini aarch64-darwin ; ssh://heywoodlh@nixos-mac-mini aarch64-linux ; ssh://builder@linux-builder x86_64-linux";
     in {
       # Before you can use these, run the following command:
       # sudo -E ssh heywoodlh@nix-nvidia; sudo -E ssh heywoodlh@nixos-mac-mini; sudo -E ssh heywoodlh@mac-mini; sudo -E ssh heywoodlh@macos-intel-vm
-      builders = "${foreignDarwinBuilder} ; ssh://heywoodlh@nix-nvidia x86_64-linux ; ssh://heywoodlh@nixos-mac-mini aarch64-linux ;";
+      builders = "${myBuilders}";
     };
   };
 }

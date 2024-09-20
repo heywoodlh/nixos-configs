@@ -141,6 +141,7 @@ in {
     gnumake
     gnused
     gomuks
+    #helix-gpt
     htop
     inetutils
     jq
@@ -148,6 +149,7 @@ in {
     libarchive
     lima
     mosh
+    myHelix
     nixos-rebuild
     nixfmt-rfc-style
     nmap
@@ -163,7 +165,6 @@ in {
     zip
     myVim
     myGit
-    myHelix
     myTmux # For non-nix use-cases
     myFish # For non-nix use-cases
     #myVM
@@ -436,4 +437,40 @@ in {
       nix run "github:heywoodlh/nixpkgs/nostui-init#nostui" -- $argv
     '';
   };
+
+  # Helix configuration
+  #programs.helix = {
+  #  enable = true;
+  #  package = myHelix;
+  #  languages = {
+  #    language-server.gpt = {
+  #      command = "helix-gpt";
+  #      environment = {
+  #        HANDLER = "codeium";
+  #      };
+  #    };
+  #    language = [
+  #      {
+  #        name = "bash";
+  #        language-servers = [ "bash-language-server" "gpt" ];
+  #      }
+  #      {
+  #        name = "nix";
+  #        language-servers = [ "nil" "nixd" "gpt" ];
+  #      }
+  #      {
+  #        name = "python";
+  #        language-servers = [ "ruff" "jedi" "pylsp" "gpt" ];
+  #      }
+  #      {
+  #        name = "fish";
+  #        language-servers = [ "gpt" ];
+  #      }
+  #      {
+  #        name = "swift";
+  #        language-servers = [ "sourcekit-lsp" "gpt" ];
+  #      }
+  #    ];
+  #  };
+  #};
 }

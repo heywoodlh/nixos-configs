@@ -20,6 +20,7 @@ in {
     ./roles/monitoring/syslog-ng/client.nix
     ./roles/monitoring/node-exporter.nix
     ./roles/monitoring/osqueryd.nix
+    ./roles/backups/tarsnap.nix
   ];
 
   nixpkgs.overlays = [

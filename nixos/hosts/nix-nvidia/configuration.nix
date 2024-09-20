@@ -161,5 +161,10 @@
     ];
   };
 
+  # Exclude Documents folder in Tarsnap
+  services.tarsnap.archives.nixos.excludes = [
+    "/home/heywoodlh/Documents"
+  ];
+
   system.stateVersion = "24.11";
 }

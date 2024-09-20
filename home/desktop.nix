@@ -162,7 +162,7 @@ let
     /* Hide sidebar */
     #sidebar-header {
       visibility: collapse !important;
-    } 
+    }
 
     ${osSpecificUserChrome}
   '';
@@ -253,6 +253,7 @@ in {
     code-reset
     pkgs.mdp
     myVscode
+    pkgs.tarsnap
   ];
 
   # Firefox/Mullvad Browser Browser configuration

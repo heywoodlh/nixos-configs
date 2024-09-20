@@ -327,13 +327,6 @@
           specialArgs = inputs;
           modules = [
             ./nixos/hosts/nix-nvidia/configuration.nix
-            {
-              home-manager.users.heywoodlh = {
-                home.packages = with pkgs; [
-                  anonScript
-                ];
-              };
-            }
           ];
         };
         nix-drive = nixpkgs.lib.nixosSystem {

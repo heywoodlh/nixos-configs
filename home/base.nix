@@ -109,6 +109,15 @@ let
   '' else pkgs.writeShellScriptBin "incognito" ''
     ${pkgs.proxychains-ng}/bin/proxychains4 -f ${tor-proxychains-conf} ${myFish}/bin/fish --private
   '';
+  tarsnap-key-backup = pkgs.writeShellScriptBin "tarsnap-key-backup.sh" ''
+    hosts=("nix-drive" "nix-nvidia" "nixos-gaming" "nixos-mac-mini")
+    op_item="fp5jsqodjv3gzlwtlgojays7qe"
+
+    for host in "''${hosts[@]}"
+    do
+      ssh heywoodlh@$host "sudo cp /root/tarsnap.key /home/heywoodlh/tarsnap.key; sudo chown -R heywoodlh /home/heywoodlh/tarsnap.key" && scp heywoodlh@$host:/home/heywoodlh/tarsnap.key $host && ssh heywoodlh@$host "rm /home/heywoodlh/tarsnap.key" && op-wrapper.sh item edit fp5jsqodjv3gzlwtlgojays7qe "$host[file]=$host" && rm $host
+    done
+  '';
 in {
   home.stateVersion = "24.05";
   home.enableNixpkgsReleaseCheck = false;
@@ -158,6 +167,7 @@ in {
     pwgen
     python3
     screen
+    tarsnap-key-backup
     tcpdump
     tree
     unzip

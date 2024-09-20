@@ -7,9 +7,13 @@ let
       --user tarsnap@heywoodlh.io \
       --machine $(hostname)
   '';
+  tarsnapList = pkgs.writeShellScriptBin "tarsnap-list-archives.sh" ''
+    sudo tarsnap --list-archives --keyfile /root/tarsnap.key --cachedir /var/cache/tarsnap/nixos-archive
+  '';
 in {
   environment.systemPackages = with pkgs; [
     tarsnap
+    tarsnapList
     tarsnapSetup
   ];
   services.tarsnap = {

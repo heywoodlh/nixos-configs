@@ -6,3 +6,6 @@ pre-commit:
         cp -f ./result docs/options.md
         git add ./docs/options.md
         git update-index --add ./docs/options.md
+    gitleaks:
+      run: |
+        gitleaks detect --verbose --redact

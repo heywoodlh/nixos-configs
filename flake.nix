@@ -123,6 +123,12 @@
           allowUnfree = true;
         };
       };
+      stable-pkgs = import nixpkgs-stable {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
       arch = pkgs.stdenv.hostPlatform.uname.processor;
       linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
       darwinSystem = "${arch}-darwin";
@@ -594,6 +600,7 @@
         name = "nixos-configs devShell";
         buildInputs = with pkgs; [
           lefthook
+          stable-pkgs.gitleaks # bug in pkgs.gitleaks currently
         ];
       };
     }

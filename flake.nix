@@ -149,9 +149,14 @@
           extraConf
           {
             networking.hostName = myHostname;
-            heywoodlh.darwin.sketchybar.enable = true;
-            heywoodlh.darwin.yabai.enable = true;
-            heywoodlh.darwin.stage-manager.enable = true;
+            heywoodlh.darwin = {
+              sketchybar.enable = true;
+              yabai = {
+                enable = true;
+                homebrew = true;
+              };
+              stage-manager.enable = true;
+            };
 
             system.stateVersion = darwinStateVersion;
           }

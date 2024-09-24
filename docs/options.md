@@ -101,6 +101,27 @@ string
 
 
 
+## heywoodlh\.darwin\.yabai\.homebrew
+
+
+
+Use Yabai and SKHD from Homebrew and not Nixpkgs\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
+
+
+
 ## heywoodlh\.home\.applications
 
 

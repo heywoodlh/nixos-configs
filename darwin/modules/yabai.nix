@@ -34,6 +34,13 @@ let
   battpop = pkgs.writeShellScriptBin "battpop.sh" ''
     osascript -e "display notification \"$(system_profiler SPPowerDataType | grep Charging -A1 | head -2 | awk '{$1=$1};1')\""
   '';
+  brew-path = if pkgs.stdenv.isAarch64 then "/opt/homebrew/bin" else "/usr/local/bin";
+  yabai-brew = pkgs.writeShellScriptBin "yabai" ''
+    exec ${brew-path}/yabai $@
+  '';
+  skhd-brew = pkgs.writeShellScriptBin "skhd" ''
+    exec ${brew-path}/skhd $@
+  '';
 in {
   options = {
     heywoodlh.darwin.yabai = {
@@ -41,6 +48,13 @@ in {
         default = false;
         description = ''
           Enable heywoodlh Yabai and SKHD for keyboard shortcuts and window tiling.
+        '';
+        type = types.bool;
+      };
+      homebrew = mkOption {
+        default = false;
+        description = ''
+          Use Yabai and SKHD from Homebrew and not Nixpkgs.
         '';
         type = types.bool;
       };
@@ -62,77 +76,89 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.yabai.enable = true;
-    services.yabai.package = pkgs.yabai;
-    services.yabai.enableScriptingAddition = false;
-    services.yabai.extraConfig = ''
-      yabai -m config window_placement             first_child
-      yabai -m config window_topmost               off
-      yabai -m config window_opacity               off
-      yabai -m config window_opacity_duration      0.0
-      yabai -m config window_shadow                on
-      yabai -m config window_border                off
-      yabai -m config window_border_width          4
-      yabai -m config active_window_border_color   0xff775759
-      yabai -m config normal_window_border_color   0xff505050
-      yabai -m config active_window_opacity        1.0
-      yabai -m config normal_window_opacity        0.90
-      yabai -m config split_ratio                  0.50
-      yabai -m config auto_balance                 off
-      yabai -m config mouse_modifier               fn
-      yabai -m config mouse_action1                move
-      yabai -m config mouse_action2                resize
+    homebrew = mkIf cfg.homebrew {
+      enable = true;
+      taps = [
+        "koekeishiya/formulae"
+      ];
+      brews = [
+        "koekeishiya/formulae/yabai"
+        "koekeishiya/formulae/skhd"
+      ];
+    };
+    services.yabai = {
+      enable = true;
+      package = if cfg.homebrew == true then yabai-brew else pkgs.yabai;
+      enableScriptingAddition = false;
+      extraConfig = ''
+        yabai -m config window_placement             first_child
+        yabai -m config window_topmost               off
+        yabai -m config window_opacity               off
+        yabai -m config window_opacity_duration      0.0
+        yabai -m config window_shadow                on
+        yabai -m config window_border                off
+        yabai -m config window_border_width          4
+        yabai -m config active_window_border_color   0xff775759
+        yabai -m config normal_window_border_color   0xff505050
+        yabai -m config active_window_opacity        1.0
+        yabai -m config normal_window_opacity        0.90
+        yabai -m config split_ratio                  0.50
+        yabai -m config auto_balance                 off
+        yabai -m config mouse_modifier               fn
+        yabai -m config mouse_action1                move
+        yabai -m config mouse_action2                resize
 
-      yabai -m config layout                       bsp
-      yabai -m config top_padding                  10
-      yabai -m config external_bar                 all:30:0
-      yabai -m config bottom_padding               10
-      yabai -m config left_padding                 20
-      yabai -m config right_padding                20
-      yabai -m config window_gap                   10
+        yabai -m config layout                       bsp
+        yabai -m config top_padding                  10
+        yabai -m config external_bar                 all:30:0
+        yabai -m config bottom_padding               10
+        yabai -m config left_padding                 20
+        yabai -m config right_padding                20
+        yabai -m config window_gap                   10
 
-      yabai -m signal --add event=window_destroyed \
-        action="''\'''${functions[focus_under_cursor]}"
-      yabai -m signal --add event=window_minimized \
-        action="''\'''${functions[focus_under_cursor]}"
-      yabai -m signal --add event=application_hidden \
-        action="''\'''${functions[focus_under_cursor]}"
+        yabai -m signal --add event=window_destroyed \
+          action="''\'''${functions[focus_under_cursor]}"
+        yabai -m signal --add event=window_minimized \
+          action="''\'''${functions[focus_under_cursor]}"
+        yabai -m signal --add event=application_hidden \
+          action="''\'''${functions[focus_under_cursor]}"
 
-      function focus_under_cursor {
-        if yabai -m query --windows --space |
-            jq -er 'map(select(.focused == 1)) | length == 0' >/dev/null; then
-          yabai -m window --focus mouse 2>/dev/null || true
-        fi
-      }
+        function focus_under_cursor {
+          if yabai -m query --windows --space |
+              jq -er 'map(select(.focused == 1)) | length == 0' >/dev/null; then
+            yabai -m window --focus mouse 2>/dev/null || true
+          fi
+        }
 
-      # Custom stuff
-      # Focus follows mouse
-      #yabai -m config focus_follows_mouse autofocus
-      # Disable shadows
-      yabai -m config window_shadow off
+        # Custom stuff
+        # Focus follows mouse
+        #yabai -m config focus_follows_mouse autofocus
+        # Disable shadows
+        yabai -m config window_shadow off
 
-      ## Unmanaged apps
-      yabai -m rule --add app="/usr/local/bin/choose" manage=off
-      yabai -m rule --add app="/opt/homebrew/bin/choose" manage=off
-      yabai -m rule --add app="choose" manage=off
-      yabai -m rule --add app="/usr/local/bin/pinentry-mac" manage=off
-      yabai -m rule --add app="/opt/homebrew/bin/pinentry-mac" manage=off
-      yabai -m rule --add app="pinentry-mac" manage=off
-      yabai -m rule --add app="/Applications/Secretive.app/Contents/MacOS/Secretive" manage=off
-      yabai -m rule --add app="^System Settings$" manage=off
-      yabai -m rule --add app="^1Password$" manage=off
+        ## Unmanaged apps
+        yabai -m rule --add app="/usr/local/bin/choose" manage=off
+        yabai -m rule --add app="/opt/homebrew/bin/choose" manage=off
+        yabai -m rule --add app="choose" manage=off
+        yabai -m rule --add app="/usr/local/bin/pinentry-mac" manage=off
+        yabai -m rule --add app="/opt/homebrew/bin/pinentry-mac" manage=off
+        yabai -m rule --add app="pinentry-mac" manage=off
+        yabai -m rule --add app="/Applications/Secretive.app/Contents/MacOS/Secretive" manage=off
+        yabai -m rule --add app="^System Settings$" manage=off
+        yabai -m rule --add app="^1Password$" manage=off
 
-      # Allow Yabai to work with qutebrowser without decorations
-      yabai -m rule --add app="^qutebrowser$" title!="^$" role="AXWindow" subrole="AXDialog" manage=on
-      # Don't manage mpv
-      yabai -m rule --add app="^mpv$" manage=off
+        # Allow Yabai to work with qutebrowser without decorations
+        yabai -m rule --add app="^qutebrowser$" title!="^$" role="AXWindow" subrole="AXDialog" manage=on
+        # Don't manage mpv
+        yabai -m rule --add app="^mpv$" manage=off
 
-      ${cfg.extraYabaiConfig}
-    '';
+        ${cfg.extraYabaiConfig}
+      '';
+    };
 
     services.skhd = {
       enable = true;
-      package =  pkgs.skhd;
+      package = if cfg.homebrew == true then skhd-brew else pkgs.skhd;
       skhdConfig = ''
         # focus window
         ctrl + cmd - j : yabai -m window --focus west

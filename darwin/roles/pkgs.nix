@@ -67,6 +67,7 @@ in {
       "secretive"
       "shortcat"
       "syncthing"
+      "tabby"
       "zen-browser"
     ];
     masApps = {

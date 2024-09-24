@@ -99,7 +99,16 @@ in {
       name = "virt-manager";
       command = "${pkgs.virt-manager}/bin/virt-manager";
     }
+    {
+      name = "tabby-background-start";
+      command = "/Applications/Tabby.app/Contents/MacOS/Tabby --hidden";
+    }
   ];
+
+  home.file."Library/Application\ Support/tabby/config.yaml" = {
+    enable = true;
+    source = ./tabby/config.yaml;
+  };
 
   nix = {
     settings = let

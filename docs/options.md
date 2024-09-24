@@ -17,6 +17,27 @@ boolean
 
 
 
+## heywoodlh\.darwin\.stage-manager\.enable
+
+
+
+Enable heywoodlh Stage Manager config\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/stage-manager\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/stage-manager.nix)
+
+
+
 ## heywoodlh\.darwin\.yabai\.enable
 
 

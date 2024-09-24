@@ -150,7 +150,8 @@
           {
             networking.hostName = myHostname;
             heywoodlh.darwin.sketchybar.enable = true;
-            heywoodlh.darwin.yabai.enable = true;
+            #heywoodlh.darwin.yabai.enable = true;
+            heywoodlh.darwin.stage-manager.enable = true;
 
             system.stateVersion = darwinStateVersion;
           }

@@ -4,6 +4,9 @@ let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   myWezterm = myFlakes.packages.${system}.wezterm;
+  captive-portal = pkgs.writeShellScriptBin "captive-portal" ''
+   ${pkgs.xdg-utils}/bin/xdg-open "http://$(${pkgs.iproute2}/bin/ip --oneline route get 1.1.1.1 | ${pkgs.gawk}/bin/awk '{print $3}')"
+  '';
 in {
   # Flatpak support
   services.flatpak = {
@@ -57,11 +60,11 @@ in {
     pkgs.virt-manager
     pkgs.xclip
     pkgs.xdotool
+    captive-portal
   ];
 
   home.shellAliases = {
     open = "xdg-open";
-    captive-portal = "xdg-open http://$(ip --oneline route get 1.1.1.1 | awk '{print $3}')";
   };
 
   # Start 1Password minimized

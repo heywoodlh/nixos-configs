@@ -164,7 +164,17 @@
   # Exclude Documents folder in Tarsnap
   services.tarsnap.archives.nixos.excludes = [
     "/home/heywoodlh/Documents"
+    "/opt/fauxpilot"
+    "/opt/graylog"
+    "/opt/nfcapd"
+    "/opt/open-webui"
+    "/opt/protonmail-bridge"
+    "/opt/serge"
   ];
+
+  # Resolve too many open files error
+  # https://discourse.nixos.org/t/unable-to-fix-too-many-open-files-error/27094/7
+  systemd.extraConfig = "DefaultLimitNOFILE=2048"; # defaults to 1024 if unset
 
   system.stateVersion = "24.11";
 }

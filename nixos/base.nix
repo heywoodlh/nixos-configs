@@ -38,7 +38,7 @@
     (pkgs.writeShellScriptBin "nixos-switch" ''
     [[ -d /home/heywoodlh/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /home/heywoodlh/opt/nixos-configs
     sudo chown -R heywoodlh /home/heywoodlh/opt/nixos-configs
-    sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake /home/heywoodlh/opt/nixos-configs#$(hostname) --impure
+    sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake /home/heywoodlh/opt/nixos-configs#$(hostname) $@
     '')
   ];
 

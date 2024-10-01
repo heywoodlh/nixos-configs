@@ -34,4 +34,17 @@
     IdentityAgent /Users/heywoodlh/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
     Include /etc/ssh/ssh_config.d/*
   '';
+
+  nix.settings = {
+    substituters = [
+      "https://nix-community.cachix.org"
+      "http://attic.barn-banana.ts.net/nixos"
+      "https://heywoodlh-helix.cachix.org"
+    ];
+    trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "nixos:ZffGHlb0Ng3oXu8cLT9msyOB/datC4r+/K9nImONIec="
+      "heywoodlh-helix.cachix.org-1:qHDV95nI/wX9pidAukzMzgeok1415rgjMAXinDsbb7M="
+    ];
+  };
 }

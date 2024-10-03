@@ -25,5 +25,6 @@ in {
   systemd.services = {
     ssh-notifications-mirror = mk-systemd-service { name = "ssh-notifications"; };
     plex-notifications-mirror = mk-systemd-service { name = "plex-notifications"; };
+    uptime-notifications-mirror = mk-systemd-service { name = "uptime-notifications"; };
   };
 }

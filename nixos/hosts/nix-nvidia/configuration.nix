@@ -137,7 +137,12 @@
   # Nvidia container settings
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable =  true;
-  environment.systemPackages = with pkgs; [ docker runc cloudflared ];
+  environment.systemPackages = with pkgs; [
+    cloudflared
+    docker
+    nfdump
+    runc
+  ];
 
   services = {
     syncthing = {

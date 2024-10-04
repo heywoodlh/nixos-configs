@@ -36,12 +36,6 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 
-    # Enable auto upgrade
-  system.autoUpgrade = {
-    enable = true;
-    flake = "github:heywoodlh/nixos-configs#nix-nvidia";
-  };
-
   # Enable Nvidia driver
   boot.kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_xanmod_stable;
   nixpkgs.config.allowUnfree = true;
@@ -177,6 +171,9 @@
   # Resolve too many open files error
   # https://discourse.nixos.org/t/unable-to-fix-too-many-open-files-error/27094/7
   systemd.extraConfig = "DefaultLimitNOFILE=2048"; # defaults to 1024 if unset
+
+  # Enable CI/CD
+  services.comin.enable = true;
 
   system.stateVersion = "24.11";
 }

@@ -82,6 +82,10 @@
       url = "github:nix-community/lanzaboote/v0.4.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    comin = {
+      url = "github:nlewo/comin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self,
@@ -115,6 +119,7 @@
                       dev-container,
                       signal-ntfy,
                       lanzaboote,
+                      comin,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {

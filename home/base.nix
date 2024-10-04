@@ -154,6 +154,9 @@ in {
     htop
     inetutils
     jq
+    k9s
+    kubectl
+    kubernetes-helm
     lefthook
     libarchive
     lima

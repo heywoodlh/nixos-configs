@@ -151,10 +151,6 @@
   # allow building ARM64 things
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-  programs.bash.interactiveShellInit = ''
-    export FORCE_TMUX_STATUS = "true";
-  '';
-
   services.cron = {
     enable = true;
     systemCronJobs = [

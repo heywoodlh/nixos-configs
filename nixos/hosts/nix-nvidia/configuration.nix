@@ -174,6 +174,4 @@
 
   # Enable CI/CD
   services.comin.enable = true;
-
-  system.stateVersion = "24.11";
 }

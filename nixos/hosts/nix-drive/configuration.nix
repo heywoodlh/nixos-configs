@@ -40,5 +40,6 @@
     "--device=/dev/sda"
   ];
 
-  system.stateVersion = "23.05";
+  # Enable CI/CD
+  services.comin.enable = true;
 }

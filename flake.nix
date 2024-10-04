@@ -280,7 +280,6 @@
               time.timeZone = "America/Denver";
               # Select internationalisation properties.
               i18n.defaultLocale = "en_US.utf8";
-              system.stateVersion = "24.05";
             }
           ];
         };
@@ -295,7 +294,6 @@
             ./nixos/roles/nixos/asahi.nix
             {
               networking.hostName = "nixos-mac-mini";
-              system.stateVersion = "24.05";
               # Virtual machine media
               fileSystems."/media/virtual-machines" = {
                 device = "/dev/disk/by-uuid/2fa5a6c4-b938-4853-844d-c85a77ae33e7";
@@ -354,16 +352,6 @@
           specialArgs = inputs;
           modules = [ ./nixos/hosts/nixos-arm64-test/configuration.nix ];
         };
-        nix-precision = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [ ./nixos/hosts/nix-precision/configuration.nix ];
-        };
-        nixos-matrix = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [ ./nixos/hosts/nixos-matrix/configuration.nix ];
-        };
         nix-nvidia = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = inputs;
@@ -376,11 +364,6 @@
           specialArgs = inputs;
           modules = [ ./nixos/hosts/nix-drive/configuration.nix ];
         };
-        nix-backups = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [ ./nixos/hosts/nix-backups/configuration.nix ];
-        };
         nixos-lima-vm = nixpkgs.lib.nixosSystem {
           system = "${linuxSystem}";
           specialArgs = inputs;
@@ -391,7 +374,6 @@
             ./nixos/server.nix
             {
               networking.hostName = "nixos-lima-vm";
-              system.stateVersion = "24.05";
             }
           ];
         };
@@ -471,14 +453,13 @@
           modules = [
             ./nixos/server.nix
             ./nixos/roles/gaming/palworld.nix
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/hardware-configuration/nixos-gaming.nix
             {
               networking.hostName = "nixos-gaming";
               boot.loader = {
                 systemd-boot.enable = true;
                 efi.canTouchEfiVariables = true;
               };
-              system.stateVersion = "24.05";
             }
           ];
         };

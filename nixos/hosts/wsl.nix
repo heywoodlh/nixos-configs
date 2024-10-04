@@ -15,9 +15,7 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 
-  # Set version of NixOS to target
-  system.stateVersion = "24.05";
-
+  # WSL settings
   wsl = {
     enable = true;
     wslConf.automount.root = "/mnt";

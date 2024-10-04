@@ -31,6 +31,4 @@ in {
     enable = true;
     flake = "github:heywoodlh/nixos-configs#${hostname}";
   };
-
-  system.stateVersion = "24.05";
 }

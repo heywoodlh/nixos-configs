@@ -54,7 +54,4 @@
       };
     };
   };
-
-  # Set version of NixOS to target
-  system.stateVersion = "24.05";
 }

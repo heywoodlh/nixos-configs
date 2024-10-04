@@ -1,5 +1,5 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, lib, stdenv, nur, ... }:
+{ config, pkgs, lib, stdenv, nur, nixosVersion, ... }:
 
 {
   imports = [
@@ -66,4 +66,6 @@
       '';
     };
   };
+  # NixOS version
+  system.stateVersion = "24.11";
 }

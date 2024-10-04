@@ -103,7 +103,4 @@ in {
 
   # For mobile devices to RDP
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 3389 ];
-
-  # Set version of NixOS to target
-  system.stateVersion = "24.05";
 }

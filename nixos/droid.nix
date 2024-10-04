@@ -11,6 +11,9 @@ let
   myGit = myFlakes.packages.${system}.git;
 in
 {
+  imports = [
+    ./base.nix
+  ];
   user.shell = "${myTmux}/bin/tmux";
   nix.extraOptions = ''
     experimental-features = nix-command flakes
@@ -51,5 +54,4 @@ in
     config = ./roles/droid/home.nix;
     backupFileExtension = "hm-bak";
   };
-  system.stateVersion = "23.05";
 }

@@ -6,6 +6,7 @@
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.05";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
+    nixpkgs-wazuh-agent.url = "github:V3ntus/nixpkgs/wazuh-agent";
     myFlakes = {
       url = "github:heywoodlh/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -92,6 +93,7 @@
                       nixpkgs,
                       nixpkgs-stable,
                       nixpkgs-pam-lid-fix,
+                      nixpkgs-wazuh-agent,
                       myFlakes,
                       nixpkgs-backports,
                       nixpkgs-lts,

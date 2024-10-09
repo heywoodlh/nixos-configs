@@ -1,9 +1,12 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, lib, stdenv, nur, nixosVersion, ... }:
+{ config, pkgs, lib, stdenv, nur, nixpkgs-wazuh-agent, ... }:
 
-{
+let
+  wazuhPkg = pkgs.callPackage ./pkgs/wazuh.nix {};
+in {
   imports = [
     ./roles/virtualization/multiarch.nix
+    "${nixpkgs-wazuh-agent}/nixos/modules/services/security/wazuh/wazuh.nix"
   ];
 
   # Allow olm for gomuks until issues are resolved
@@ -66,6 +69,16 @@
       '';
     };
   };
+
+  # Wazuh configuration
+  services.wazuh = {
+    package = wazuhPkg;
+    agent = {
+      enable = true;
+      managerIP = "wazuh.barn-banana.ts.net";
+    };
+  };
+
   # NixOS version
   system.stateVersion = "24.11";
 }

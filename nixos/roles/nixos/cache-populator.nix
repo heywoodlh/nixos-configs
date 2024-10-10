@@ -49,6 +49,9 @@ in {
       set -eu
       ${populateCache}/bin/nixos-cache-populate
     '';
+    path = with pkgs; [
+      git
+    ];
     serviceConfig = {
       Type = "oneshot";
       User = "root";

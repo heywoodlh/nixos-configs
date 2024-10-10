@@ -38,12 +38,12 @@
   nix.settings = {
     substituters = [
       "https://nix-community.cachix.org"
-      "http://attic.barn-banana.ts.net/nixos"
+      "http://attic.barn-banana.ts.net/nix-darwin"
       "https://heywoodlh-helix.cachix.org"
     ];
     trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "nixos:ZffGHlb0Ng3oXu8cLT9msyOB/datC4r+/K9nImONIec="
+      "nix-darwin:qESxKY7Cmom/KKKD/3mmmajoQL7fvZ/VfDaodZMXPNM=" # attic
       "heywoodlh-helix.cachix.org-1:qHDV95nI/wX9pidAukzMzgeok1415rgjMAXinDsbb7M="
     ];
   };

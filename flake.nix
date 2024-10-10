@@ -455,7 +455,7 @@
           modules = [
             ./nixos/server.nix
             ./nixos/roles/gaming/palworld.nix
-            ./nixos/hosts/hardware-configuration/nixos-gaming.nix
+            ./nixos/hosts/nixos-gaming.nix
             {
               networking.hostName = "nixos-gaming";
               boot.loader = {

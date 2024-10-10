@@ -11,6 +11,7 @@ let
   myTmux = myFlakes.packages.${system}.tmux;
   myVim = myFlakes.packages.${system}.vim;
   myGit = myFlakes.packages.${system}.git;
+  myHelix = myFlakes.packages.${system}.helix;
 in {
   imports = [
     home-manager.nixosModule
@@ -52,9 +53,11 @@ in {
     pkgs.python310
     pkgs.python310Packages.pip
     pkgs.unzip
-    myVim
     pkgs.wireguard-tools
     pkgs.zsh
+    myVim
+    myHelix
+    myTmux
   ];
 
   # Enable Docker

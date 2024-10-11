@@ -101,6 +101,14 @@ in {
   };
   users.users.heywoodlh.extraGroups = [ "tss" ];
 
+  # Hardware accelerated graphics
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+    ];
+  };
+
   # For mobile devices to RDP
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 3389 ];
 }

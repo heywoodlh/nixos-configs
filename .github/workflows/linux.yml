@@ -28,23 +28,23 @@ jobs:
       uses: cachix/install-nix-action@v27
       with:
         nix_path: nixpkgs=channel:nixpkgs-unstable
+        extra_nix_config: |
+          extra-substituters = http://100.69.64.103/nixos
+          extra-trusted-public-keys = nixos:ZffGHlb0Ng3oXu8cLT9msyOB/datC4r+/K9nImONIec=
 
     - name: Setup Nix Magic Cache
       uses: DeterminateSystems/magic-nix-cache-action@main
 
     - name: Build Linux outputs
       run: |
-        USER=docker nix run nixpkgs#cachix -- use heywoodlh-helix
-        # Configure attic cache
-        if ! grep 100.69.64.103 /etc/nix/nix.conf
-        then
-          echo "extra-substituters = http://100.69.64.103/nixos" | sudo tee -a /etc/nix/nix.conf
-          echo "extra-trusted-public-keys = nixos:ZffGHlb0Ng3oXu8cLT9msyOB/datC4r+/K9nImONIec=" | sudo tee -a /etc/nix/nix.conf
-        fi
-        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop-intel
-        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server-intel
-        nix build .#homeConfigurations.heywoodlh.activationPackage --impure
-        nix build .#homeConfigurations.heywoodlh-server.activationPackage --impure
+        sudo -s /bin/bash -- <<EOF
+          source /home/docker/.nix-profile/etc/profile.d/nix.sh
+          USER=root /home/docker/.nix-profile/bin/nix run nixpkgs#cachix -- use heywoodlh-helix
+          /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop-intel
+          /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server-intel
+          /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh.activationPackage --impure
+          /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh-server.activationPackage --impure
+        EOF
 
   build-linux-arm64-env:
     name: Build Linux outputs
@@ -57,20 +57,20 @@ jobs:
       uses: cachix/install-nix-action@v27
       with:
         nix_path: nixpkgs=channel:nixpkgs-unstable
+        extra_nix_config: |
+          extra-substituters = http://100.69.64.103/nixos
+          extra-trusted-public-keys = nixos:ZffGHlb0Ng3oXu8cLT9msyOB/datC4r+/K9nImONIec=
 
     - name: Setup Nix Magic Cache
       uses: DeterminateSystems/magic-nix-cache-action@main
 
     - name: Build Linux outputs
       run: |
-        USER=docker nix run nixpkgs#cachix -- use heywoodlh-helix
-        # Configure attic cache
-        if ! grep 100.69.64.103 /etc/nix/nix.conf
-        then
-          echo "extra-substituters = http://100.69.64.103/nixos" | sudo tee -a /etc/nix/nix.conf
-          echo "extra-trusted-public-keys = nixos:ZffGHlb0Ng3oXu8cLT9msyOB/datC4r+/K9nImONIec=" | sudo tee -a /etc/nix/nix.conf
-        fi
-        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-arm64-test
-        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-mac-mini
-        nix build .#homeConfigurations.heywoodlh.activationPackage --impure
-        nix build .#homeConfigurations.heywoodlh-server.activationPackage --impure
+        sudo -s /bin/bash -- <<EOF
+          source /home/docker/.nix-profile/etc/profile.d/nix.sh
+          USER=root /home/docker/.nix-profile/bin/nix run nixpkgs#cachix -- use heywoodlh-helix
+          /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-arm64-test
+          /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-mac-mini
+          /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh.activationPackage --impure
+          /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh-server.activationPackage --impure
+        EOF

@@ -51,7 +51,7 @@ in {
       {
         name = "Rustdesk";
         command = ''
-          bash -c "SHELL='/run/current-system/sw/bin/bash' /nix/store/n1imnqnc23yk5rvvcvmzp3r95zl0hb5i-rustdesk-1.3.0/bin/rustdesk"
+          bash -c "SHELL='/run/current-system/sw/bin/bash' ${pkgs.rustdesk-flutter}/bin/rustdesk"
         '';
       }
     ];

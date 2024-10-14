@@ -13,11 +13,24 @@ in {
     ];
   };
 
+  # Duo for MFA
+  security.duosec = {
+    pam.enable = true;
+    ssh.enable = true;
+    host = "api-cb5d3f60.duosecurity.com";
+    autopush = true;
+    secretKeyFile = "/root/duo.key";
+    integrationKey = "DI677924DNVV70FMD1DA";
+  };
+
   services.openssh = {
     enable = true;
     sftpServerExecutable = "internal-sftp";
     settings.PermitRootLogin = "prohibit-password";
     settings.PasswordAuthentication = false;
+    extraConfig = pkgs.lib.optionalString config.security.duosec.ssh.enable ''
+      ForceCommand /usr/bin/env login_duo
+    '';
   };
 
   environment.systemPackages = with pkgs; [

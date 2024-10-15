@@ -100,11 +100,16 @@ in {
   };
   networking.firewall = {
     interfaces.tailscale0.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
-    interfaces.tailscale0.allowedUDPPortRanges = [  { from = 1714; to = 1764; } ];
+    interfaces.tailscale0.allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
   };
 
   # Enable Tailscale
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    extraSetFlags = [
+      "--accept-routes"
+    ];
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {

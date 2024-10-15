@@ -162,7 +162,6 @@
                 enable = true;
                 homebrew = true;
               };
-              stage-manager.enable = true;
             };
 
             system.stateVersion = darwinStateVersion;

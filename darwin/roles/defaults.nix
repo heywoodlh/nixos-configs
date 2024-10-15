@@ -79,9 +79,9 @@ in {
     };
     # Apple firewall config:
     alf = {
-      globalstate = 0; #Disabled until https://www.reddit.com/r/MacOS/comments/1fihlge/comment/lnngp9n
+      globalstate = 2;
       loggingenabled = 0;
-      stealthenabled = 0; #Disabled until https://www.reddit.com/r/MacOS/comments/1fihlge/comment/lnngp9n
+      stealthenabled = 1;
     };
     loginwindow = {
       GuestEnabled = false;

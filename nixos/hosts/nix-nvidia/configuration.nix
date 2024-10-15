@@ -174,4 +174,9 @@
 
   # Enable CI/CD
   services.comin.enable = true;
+
+  # Route mullvad through Tailscale
+  services.tailscale.extraSetFlags = [
+    "--advertise-routes=10.64.0.1/32"
+  ];
 }

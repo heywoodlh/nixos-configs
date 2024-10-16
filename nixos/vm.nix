@@ -14,7 +14,17 @@
 
   # Enable networking
   networking = {
-    networkmanager.enable = true;
+    networkmanager = {
+      enable = true;
+      # Prefer tailscale dns
+      insertNameservers = [
+        "100.100.100.100"
+      ];
+    };
+    resolvconf.extraConfig = ''
+      prepend_nameservers=100.100.100.100
+      search_domains=barn-banana.ts.net
+    '';
     hosts = {
       "100.69.64.103" = [
         "attic"
@@ -37,12 +47,7 @@
   # Disable bluetooth
   hardware.bluetooth.enable = lib.mkForce false;
 
-  # Append ts net to SSH
-  programs.ssh.extraConfig = ''
-    CanonicalizeHostname yes
-    CanonicalDomains barn-banana.ts.net
-  '';
-
+  # Enable caffeine
   home-manager.users.heywoodlh.dconf.settings = {
     "org/gnome/shell/extensions/caffeine" = {
       toggle-state = true;

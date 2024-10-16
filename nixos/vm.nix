@@ -13,7 +13,15 @@
   boot.loader.efi.canTouchEfiVariables = false;
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking = {
+    networkmanager.enable = true;
+    hosts = {
+      "100.69.64.103" = [
+        "attic"
+        "attic.barn-banana.ts.net"
+      ];
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "America/Denver";

@@ -22,7 +22,7 @@ in {
   '';
 
   nix = {
-    settings = let 
+    settings = let
       foreignLinuxBuilder = if pkgs.system == "x86_64-linux" then
         "ssh://heywoodlh@nixos-mac-mini aarch64-linux" else
         "ssh://heywoodlh@nix-nvidia x86_64-linux";
@@ -72,6 +72,12 @@ allowedSignersFile = ${signersFile}
       [ProxyList]
       socks5 100.108.77.60 1080
     '';
+  };
+
+  # Gnupg settings
+  services.gpg-agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-curses;
   };
 
   # FBTerm config

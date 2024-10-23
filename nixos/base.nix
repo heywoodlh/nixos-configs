@@ -79,6 +79,12 @@ in {
     };
   };
 
+  # Enable gnupg agent
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-curses;
+  };
+
   # NixOS version
   system.stateVersion = "24.11";
 }

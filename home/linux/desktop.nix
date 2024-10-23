@@ -54,7 +54,6 @@ in {
     pkgs.libnotify #(notify-send)
     pkgs.nixos-install-tools
     pkgs.nordic
-    pkgs.pinentry-rofi
     pkgs.rofi
     pkgs.tailscale
     pkgs.virt-manager

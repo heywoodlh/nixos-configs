@@ -80,15 +80,15 @@
   # Enable mullvad wireguard
   networking.wg-quick.interfaces = {
     mullvad = {
-      address = [ "10.69.133.48/32" ];
+      address = [ "10.73.97.192/32" ];
       privateKeyFile = "/root/wgkey";
       listenPort = 51820;
 
       peers = [
         {
-          publicKey = "ioipHdOYhc4nVsQKghmJy/vvnMI38VLLFNZXWgxxOx8=";
+          publicKey = "sSoow0tFfqSrZIUhFRaGsTvwQsUTe33RA/9PLn93Cno=";
           allowedIPs = [ "10.64.0.1/24" ];
-          endpoint = "69.4.234.139:51820";
+          endpoint = "69.4.234.9:51820";
           persistentKeepalive = 25;
         }
       ];

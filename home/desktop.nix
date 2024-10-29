@@ -297,4 +297,7 @@ in {
   in ''
     IdentityAgent ${agentSock}
   '';
+
+  # Enable syncthing
+  services.syncthing.enable = true;
 }

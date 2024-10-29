@@ -291,6 +291,7 @@
             ./nixos/hosts/m1-mac-mini.nix
             ./nixos/server.nix
             ./nixos/roles/media/plex.nix
+            ./nixos/roles/media/youtube.nix
             ./nixos/roles/monitoring/iperf.nix
             ./nixos/roles/nixos/asahi.nix
             {

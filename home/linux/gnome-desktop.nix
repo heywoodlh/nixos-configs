@@ -3,7 +3,7 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  myTmux = myFlakes.packages.${system}.tmux;
+  myZellij = myFlakes.packages.${system}.zellij;
   myFish = myFlakes.packages.${system}.fish;
   myWezterm = myFlakes.packages.${system}.wezterm;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};

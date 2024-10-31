@@ -1,4 +1,4 @@
-{ myTmux, }:
+{ myZellij, }:
 
 ''
 <?xml version="1.0" encoding="UTF-8"?>
@@ -427,7 +427,7 @@ Paste</string>
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
-			<string>${myTmux}/bin/tmux</string>
+			<string>${myZellij}/bin/zellij</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Alpha Component</key>
@@ -1218,7 +1218,7 @@ Paste</string>
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
-			<string>${myTmux}/bin/tmux</string>
+			<string>${myZellij}/bin/zellij</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Alpha Component</key>

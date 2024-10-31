@@ -3,7 +3,7 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  myTmux = myFlakes.packages.${system}.tmux;
+  myZellij = myFlakes.packages.${system}.zellij;
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
   myVim = myFlakes.packages.${system}.vim;
@@ -46,8 +46,8 @@ let
   then "Library/Application Support/gomuks/keybindings.yaml"
   else ".config/gomuks/keybindings.yaml";
   op-wrapper = pkgs.writeShellScript "op-wrapper.sh" ''
-    env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password}/bin/op signin) && export OP_SESSION
-    ${pkgs._1password}/bin/op --account my "$@"
+    env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password-cli}/bin/op signin) && export OP_SESSION
+    ${pkgs._1password-cli}/bin/op --account my "$@"
   '';
   op-backup-script = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/c938124eff5dddd3aad226a5a5a6ae65441211b7/backup.sh";
@@ -77,10 +77,10 @@ let
     ${op-wrapper} item get "$id" --otp || true
   '';
   password = pkgs.writeShellScriptBin "password" ''
-    ${op-password} | ${pkgs.tmux}/bin/tmux loadb -
+    ${op-password}
   '';
   otp = pkgs.writeShellScriptBin "otp" ''
-    ${op-otp} | ${pkgs.tmux}/bin/tmux loadb -
+    ${op-otp}
   '';
   myPass = pkgs.writeShellScriptBin "pass" ''
     export PASSWORD_STORE_DIR="${op-backup-dir-no-format}"
@@ -146,7 +146,7 @@ in {
 
   # Packages I need installed on every system
   home.packages = with pkgs; [
-    _1password
+    _1password-cli
     act
     bind
     coreutils
@@ -172,7 +172,6 @@ in {
     lefthook
     libarchive
     lima
-    mosh
     myHelix
     nixos-rebuild
     nixfmt-rfc-style
@@ -190,7 +189,7 @@ in {
     zip
     myVim
     myGit
-    myTmux # For non-nix use-cases
+    myZellij # For non-nix use-cases
     myFish # For non-nix use-cases
     #myVM
     todomanWrapper

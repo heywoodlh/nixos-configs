@@ -48,6 +48,7 @@ let
     "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
     "browser.urlbar.suggest.quicksuggest.sponsored" = false;
     "browser.urlbar.suggest.topsites" = false;
+    "browser.urlbar.suggest.history" = true;
     "experiments.activeExperiment" = false;
     "experiments.enabled" = false;
     "experiments.supported" = false;

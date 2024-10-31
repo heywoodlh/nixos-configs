@@ -8,7 +8,7 @@
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  myTmux = myFlakes.packages.${system}.tmux;
+  myZellij = myFlakes.packages.${system}.zellij;
   myVim = myFlakes.packages.${system}.vim;
   myGit = myFlakes.packages.${system}.git;
   myHelix = myFlakes.packages.${system}.helix;
@@ -57,7 +57,7 @@ in {
     pkgs.zsh
     myVim
     myHelix
-    myTmux
+    myZellij
   ];
 
   # Enable Docker
@@ -98,7 +98,6 @@ in {
     users.heywoodlh = { ... }: {
       imports = [
         ../home/linux.nix
-        ../home/linux/no-desktop.nix
       ];
       services.ssh-agent.enable = true;
     };

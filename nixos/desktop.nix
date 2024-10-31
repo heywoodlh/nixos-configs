@@ -14,7 +14,6 @@ let
     inherit system;
     config.allowUnfree = true;
   };
-  tmux = myFlakes.packages.${system}.tmux;
 in {
   imports = [
     home-manager.nixosModules.home-manager
@@ -227,7 +226,8 @@ in {
     pkgs.idevicerestore # for iPhone
     pkgs.ifuse
     pkgs.usbutils
-    myFlakes.packages.${system}.tmux
+    myFlakes.packages.${system}.zellij
+    myFlakes.packages.${system}.helix
     myFlakes.packages.${system}.vim
   ];
 

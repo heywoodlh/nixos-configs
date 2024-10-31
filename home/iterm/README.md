@@ -22,7 +22,7 @@ chmod +w *.plist *.json
    `~/.config/iterm2/iterm2-profiles.json` to `com.googlecode.iterm2.plist.nix`
    and `iterm2-profiles.json.nix` in `home/iterm2`
 
-6. Replace `tmux` executables in nix files with `${myTmux}/bin/tmux`
+6. Replace `zellij` executables in nix files with `${myZellij}/bin/zellij`
 
 7. Remove writable config files:
 

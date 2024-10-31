@@ -1,8 +1,12 @@
-{ config, pkgs, ssh-keys, myFlakes, ... }:
+{ config, pkgs, nixpkgs-stable, ssh-keys, myFlakes, ... }:
 
 let
   system = pkgs.system;
-  tmux = myFlakes.packages.${system}.tmux;
+  stable-pkgs = import nixpkgs-stable {
+    inherit system;
+    config.allowUnfree = true;
+  };
+  myZellij = myFlakes.packages.${system}.zellij;
 in {
   networking.firewall = {
     enable = true;
@@ -25,7 +29,6 @@ in {
 
   services.openssh = {
     enable = true;
-    sftpServerExecutable = "internal-sftp";
     settings.PermitRootLogin = "prohibit-password";
     settings.PasswordAuthentication = false;
     extraConfig = pkgs.lib.optionalString config.security.duosec.ssh.enable ''
@@ -33,7 +36,7 @@ in {
     '';
   };
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with stable-pkgs; [
     mosh
   ];
 
@@ -47,7 +50,18 @@ in {
   };
 
   programs.bash.interactiveShellInit = ''
-    [ -z $TMUX ] && { ${tmux}/bin/tmux new-session \; send-keys "tmux Space set Space -g Space status Space off Space && Space clear" C-m && exit;}
+    # Start zellij
+    if [[ -z "$ZELLIJ" ]] && [[ $- =~ i ]] && [[ -n "$SSH_TTY" ]]
+    then
+        if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]
+        then
+            ${myZellij}/bin/zellij --layout compact attach -c
+            exit
+        else
+            ${myZellij}/bin/zellij --layout compact
+            exit
+        fi
+    fi
   '';
 
   # Start ssh-agent manually if on ssh

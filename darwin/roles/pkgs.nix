@@ -32,6 +32,7 @@ in {
       "bash"
       "choose-gui"
       "cliclick"
+      "mosh"
       "pinentry-mac"
       "spice-gtk"
       "watch"

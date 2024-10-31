@@ -34,7 +34,7 @@
   };
 
   # Ensure Tmux status bar isn't turned off
-  programs.bash.interactiveShellInit = lib.mkForce "";
+  #programs.bash.interactiveShellInit = lib.mkForce "";
 
   # Set your time zone.
   time.timeZone = "America/Denver";

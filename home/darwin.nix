@@ -3,7 +3,7 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  myTmux = myFlakes.packages.${system}.tmux;
+  myZellij = myFlakes.packages.${system}.zellij;
 in {
   imports = [
     ./base.nix
@@ -56,10 +56,10 @@ in {
   };
 
   home.file.".config/iterm2/iterm2-profiles.json" = {
-    text = import ./iterm/iterm2-profiles.nix { inherit myTmux; };
+    text = import ./iterm/iterm2-profiles.nix { inherit myZellij; };
   };
   home.file.".config/iterm2/com.googlecode.iterm2.plist" = {
-    text = import ./iterm/com.googlecode.iterm2.plist.nix { inherit myTmux; };
+    text = import ./iterm/com.googlecode.iterm2.plist.nix { inherit myZellij; };
   };
   home.file.".config/iterm2/README.md" = {
     source = ./iterm/README.md;

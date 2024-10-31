@@ -6,7 +6,7 @@
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  tmux = myFlakes.packages.${system}.tmux;
+  myZellij = myFlakes.packages.${system}.zellij;
   battpop = pkgs.writeShellScriptBin "battpop" ''
     ${pkgs.acpi}/bin/acpi -b | ${pkgs.gnugrep}/bin/grep -Eo [0-9]+%
   '';
@@ -18,10 +18,10 @@ let
     export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
     TERM=screen-256color exec /run/wrappers/bin/fbterm
   '';
-  pbcopy = pkgs.writeShellScriptBin "pbcopy" ''
-    stdin=$(${pkgs.coreutils}/bin/cat)
-    ${pkgs.coreutils}/bin/printf "%s" "$stdin" | ${pkgs.tmux}/bin/tmux loadb -
-  '';
+  #pbcopy = pkgs.writeShellScriptBin "pbcopy" ''
+  #  stdin=$(${pkgs.coreutils}/bin/cat)
+  #  ${pkgs.coreutils}/bin/printf "%s" "$stdin" | ${pkgs.tmux}/bin/tmux loadb -
+  #'';
   wifi = pkgs.writeShellScriptBin "wifi" ''
     ${pkgs.networkmanager}/bin/nmtui $@
   '';
@@ -147,7 +147,7 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = "${tmux}/bin/tmux";
+    shell = "${myZellij}/bin/zellij";
     homeMode = "755";
   };
 
@@ -166,11 +166,11 @@ in {
     pkgs.browsh
     pkgs.firefox # for browsh
     pkgs.w3m
-    myFlakes.packages.${system}.tmux
+    myFlakes.packages.${system}.zellij
     myFlakes.packages.${system}.vim
     battpop
     timepop
-    pbcopy
+    #pbcopy
     wifi
   ];
 

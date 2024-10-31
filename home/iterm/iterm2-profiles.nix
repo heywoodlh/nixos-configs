@@ -1,4 +1,4 @@
-{ myTmux }:
+{ myZellij }:
 
 ''
 {
@@ -379,7 +379,7 @@
   },
   "Space" : -1,
   "HotKey Window AutoHides" : true,
-  "Command" : "${myTmux}/bin/tmux",
+  "Command" : "${myZellij}/bin/zellij",
   "Terminal Type" : "xterm-256color",
   "Horizontal Spacing" : 1,
   "Tab Color" : {
@@ -820,7 +820,7 @@
   },
   "Space" : 0,
   "HotKey Window AutoHides" : false,
-  "Command" : "${myTmux}/bin/tmux",
+  "Command" : "${myZellij}/bin/zellij",
   "Terminal Type" : "xterm-256color",
   "Horizontal Spacing" : 1,
   "Tab Color" : {

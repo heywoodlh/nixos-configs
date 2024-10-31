@@ -1,8 +1,13 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, lib, stdenv, nur, nixpkgs-wazuh-agent, ... }:
+{ config, pkgs, nixpkgs-stable, lib, stdenv, nur, nixpkgs-wazuh-agent, ... }:
 
 let
+  system = pkgs.system;
   wazuhPkg = pkgs.callPackage ./pkgs/wazuh.nix {};
+  stable-pkgs = import nixpkgs-stable {
+    inherit system;
+    config.allowUnfree = true;
+  };
 in {
   imports = [
     ./roles/virtualization/multiarch.nix
@@ -36,13 +41,15 @@ in {
     ];
   };
 
-  environment.systemPackages = with pkgs; [
+  # Stable, system-wide packages
+  environment.systemPackages = with stable-pkgs; [
     gptfdisk
     (pkgs.writeShellScriptBin "nixos-switch" ''
     [[ -d /home/heywoodlh/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /home/heywoodlh/opt/nixos-configs
     sudo chown -R heywoodlh /home/heywoodlh/opt/nixos-configs
     sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake /home/heywoodlh/opt/nixos-configs#$(hostname) $@
     '')
+    mosh
   ];
 
   # Enable appimage

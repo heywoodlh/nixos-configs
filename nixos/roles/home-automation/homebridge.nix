@@ -16,7 +16,7 @@
     backend = "docker";
     containers = {
       homebridge = {
-        image = "docker.io/homebridge/homebridge:2024-06-27";
+        image = "docker.io/homebridge/homebridge:2024-10-25";
         autoStart = true;
         volumes = [
           "/opt/homebridge:/homebridge"
@@ -26,7 +26,7 @@
         ];
       };
       zigbee2mqtt = {
-        image = "docker.io/koenkk/zigbee2mqtt:1.39.0";
+        image = "docker.io/koenkk/zigbee2mqtt:1.41.0";
         autoStart = true;
         ports = [
           "8081:8080"
@@ -45,7 +45,7 @@
         ];
       };
       mqtt = {
-        image = "docker.io/eclipse-mosquitto:2.0.18";
+        image = "docker.io/eclipse-mosquitto:2.0.20";
         autoStart = true;
         cmd = [
           "mosquitto"

@@ -9,10 +9,11 @@ let
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
 in {
   home.packages = with gnome-pkgs; [
-    dconf-editor
-    gnome-boxes
-    gnome-terminal
-    gnome-tweaks
+    # Fallback to old name if undefined (i.e. on Ubuntu LTS)
+    (if (builtins.hasAttr "dconf-editor" gnome-pkgs) then gnome-pkgs.dconf-editor else gnome.dconf-editor)
+    (if (builtins.hasAttr "gnome-boxes" gnome-pkgs) then gnome-pkgs.gnome-boxes else gnome.gnome-boxes)
+    (if (builtins.hasAttr "gnome-terminal" gnome-pkgs) then gnome-pkgs.gnome-terminal else gnome.gnome-terminal)
+    (if (builtins.hasAttr "gnome-tweaks" gnome-pkgs) then gnome-pkgs.gnome-tweaks else gnome.gnome-tweaks)
     gnomeExtensions.caffeine
     gnomeExtensions.gnome-bedtime
     gnomeExtensions.gsconnect

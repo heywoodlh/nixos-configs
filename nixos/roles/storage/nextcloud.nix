@@ -3,9 +3,11 @@
 {
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 80 ];
 
+  services.postgresql.package = pkgs.postgresql_14;
+
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud28;
+    package = pkgs.nextcloud29;
     # Caching
     configureRedis = true;
     hostName = "drive.heywoodlh.io";

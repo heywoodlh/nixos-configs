@@ -291,6 +291,9 @@ in {
     };
   };
 
+  # Enable Marp
+  heywoodlh.home.marp.enable = true;
+
   # assume 1password for all users on workstation
   programs.ssh.extraConfig = let
     agentSock = if pkgs.stdenv.isDarwin then

@@ -8,5 +8,6 @@
     ./sway.nix
     ./applications.nix
     ./linux-autostart.nix
+    ./marp.nix
   ];
 }

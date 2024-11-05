@@ -227,6 +227,27 @@ boolean
 
 
 
+## heywoodlh\.home\.marp\.enable
+
+
+
+Enable heywoodlh marp configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/marp\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/marp.nix)
+
+
+
 ## heywoodlh\.home\.qutebrowser\.enable
 
 

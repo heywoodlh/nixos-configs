@@ -38,19 +38,18 @@ jobs:
     - name: Build Linux outputs
       run: |
         sudo -s /bin/bash -- <<EOF
-          source /home/docker/.nix-profile/etc/profile.d/nix.sh
+          source /home/docker/.nix-profile/etc/profile.d/nix-daemon.sh
           USER=root /home/docker/.nix-profile/bin/nix run nixpkgs#cachix -- use heywoodlh-helix
-          nix build "github:zhaofengli/attic#attic-client"
-          which attic &> /dev/null || nix profile install "github:zhaofengli/attic#attic-client"
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix build "github:zhaofengli/attic#attic-client"
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
           /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop-intel
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
           /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server-intel
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
           /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh.activationPackage --impure
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
           /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh-server.activationPackage --impure
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
         EOF
 
   build-linux-arm64-env:
@@ -74,17 +73,16 @@ jobs:
     - name: Build Linux outputs
       run: |
         sudo -s /bin/bash -- <<EOF
-          source /home/docker/.nix-profile/etc/profile.d/nix.sh
+          source /home/docker/.nix-profile/etc/profile.d/nix-daemon.sh
           USER=root /home/docker/.nix-profile/bin/nix run nixpkgs#cachix -- use heywoodlh-helix
-          nix build "github:zhaofengli/attic#attic-client"
-          which attic &> /dev/null || nix profile install "github:zhaofengli/attic#attic-client"
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix build "github:zhaofengli/attic#attic-client"
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
           /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-arm64-test
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
           /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-mac-mini
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
           /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh.activationPackage --impure
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
           /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh-server.activationPackage --impure
-          attic push nixos ./result
+          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
         EOF

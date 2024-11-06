@@ -130,6 +130,38 @@ let
     done
     rm /tmp/duo.key
   '';
+  docker-compose-txt = pkgs.writeText "docker-compose.yml" ''
+    services:
+      ubuntu:
+        image: docker.io/ubuntu
+        #build: .
+        restart: unless-stopped
+        #network_mode: host
+        ports:
+          - "5000:5000"
+        volumes:
+          - ./code:/code
+        environment:
+          - SOMEVAR="true"
+        #depends_on:
+          #redis:
+        #networks:
+          #- mynet
+      #redis:
+        #image: docker.io/redis
+        #restart: unless-stopped
+        #networks:
+          #- mynet
+
+    #networks:
+      #mynet:
+  '';
+  docker-compose-gen = pkgs.writeShellScriptBin "docker-compose-gen.sh" ''
+    [[ -z $1 ]] && printf "Please provide filename.\nUsage: $0 docker-compose.yml\nExiting.\n" && exit 0
+    set -ex
+    cp ${docker-compose-txt} "$1"
+    [[ -f "$1" ]] && chmod +w "$1"
+  '';
 in {
   home.stateVersion = "24.05";
   home.enableNixpkgsReleaseCheck = false;
@@ -151,6 +183,7 @@ in {
     bind
     coreutils
     curl
+    docker-compose-gen
     dos2unix
     file
     findutils

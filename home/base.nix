@@ -405,7 +405,7 @@ in {
     enable = true;
     text = ''
       function vultr-unlock
-        export VULTR_API_KEY="$(${op-wrapper} read 'op://Personal/biw7pdtbal7zj66gu6ylaavgui/api_key')"
+        export VULTR_API_KEY="$(${op-wrapper} read 'op://Personal/dr4b7omthk7nmwkzbe3nwkrhka/api_key')"
       end
 
       function github-unlock

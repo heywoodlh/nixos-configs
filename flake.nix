@@ -41,7 +41,7 @@
       flake = false;
     };
     nur.url = "github:nix-community/NUR";
-    spicetify.url = "gitlab:heywoodlh/spicetify-nix/macos-updates-fix";
+    spicetify.url = "gitlab:kylesferrazza/spicetify-nix";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flatpaks.url = "github:GermanBread/declarative-flatpak/stable-v3";
     nix-on-droid = {
@@ -261,6 +261,13 @@
           specialArgs = inputs;
           modules = [
             ./nixos/hosts/xps-13/configuration.nix
+          ];
+        };
+        nixos-zenbook = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/hosts/zenbook-14/configuration.nix
           ];
         };
         nixos-usb = nixpkgs.lib.nixosSystem {

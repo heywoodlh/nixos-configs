@@ -17256,16 +17256,15 @@
         "spicetify-themes-alindl": "spicetify-themes-alindl_11"
       },
       "locked": {
-        "lastModified": 1712158759,
-        "narHash": "sha256-SlVvxKTHqc6IfXFUx+yxqPNwFzpsSaXyQI5NcFighBo=",
-        "owner": "heywoodlh",
+        "lastModified": 1731539152,
+        "narHash": "sha256-kOXtdTsR5VCtGRP+Vx5bqBg1H57pdgO4E8HP0+T5wEM=",
+        "owner": "kylesferrazza",
         "repo": "spicetify-nix",
-        "rev": "18a31968e7e9d90d19e4b9de8f03d9fda746901d",
+        "rev": "f52ebedd6bda0ac60ddb128f233b92abec5f2591",
         "type": "gitlab"
       },
       "original": {
-        "owner": "heywoodlh",
-        "ref": "macos-updates-fix",
+        "owner": "kylesferrazza",
         "repo": "spicetify-nix",
         "type": "gitlab"
       }

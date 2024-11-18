@@ -3,7 +3,6 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  myZellij = myFlakes.packages.${system}.zellij;
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
   myVim = myFlakes.packages.${system}.vim;
@@ -222,7 +221,7 @@ in {
     zip
     myVim
     myGit
-    myZellij # For non-nix use-cases
+    myFlakes.packages.${system}.tmux
     myFish # For non-nix use-cases
     #myVM
     todomanWrapper

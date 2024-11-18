@@ -6,7 +6,7 @@ let
     inherit system;
     config.allowUnfree = true;
   };
-  myZellij = myFlakes.packages.${system}.zellij;
+  tmux = myFlakes.packages.${system}.tmux;
 in {
   networking.firewall = {
     enable = true;
@@ -50,18 +50,7 @@ in {
   };
 
   programs.bash.interactiveShellInit = ''
-    # Start zellij
-    if [[ -z "$ZELLIJ" ]] && [[ $- =~ i ]] && [[ -n "$SSH_TTY" ]]
-    then
-        if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]
-        then
-            ${myZellij}/bin/zellij --layout compact attach -c
-            exit
-        else
-            ${myZellij}/bin/zellij --layout compact
-            exit
-        fi
-    fi
+    [ -z $TMUX ] && { ${tmux}/bin/tmux new-session \; send-keys "tmux Space set Space -g Space status Space off Space && Space clear" C-m && exit;}
   '';
 
   # Start ssh-agent manually if on ssh

@@ -45,6 +45,6 @@ profiles:
   - type: local
     options:
       env: {}
-      command: /Users/heywoodlh/.nix-profile/bin/zellij
+      command: /Users/heywoodlh/.nix-profile/bin/tmux
     name: tmux
     id: local:custom:tmux:e8a36b9e-a7ac-413c-acaa-be19320b1328

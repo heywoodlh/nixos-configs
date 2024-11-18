@@ -6,7 +6,6 @@
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  myZellij = myFlakes.packages.${system}.zellij;
   battpop = pkgs.writeShellScriptBin "battpop" ''
     ${pkgs.acpi}/bin/acpi -b | ${pkgs.gnugrep}/bin/grep -Eo [0-9]+%
   '';
@@ -147,7 +146,7 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = "${myZellij}/bin/zellij";
+    shell = "${myFlakes.packages.${system}.tmux}/bin/tmux";
     homeMode = "755";
   };
 
@@ -166,7 +165,7 @@ in {
     pkgs.browsh
     pkgs.firefox # for browsh
     pkgs.w3m
-    myFlakes.packages.${system}.zellij
+    myFlakes.packages.${system}.tmux
     myFlakes.packages.${system}.vim
     battpop
     timepop

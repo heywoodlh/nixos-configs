@@ -7,14 +7,13 @@ let
   port = 8022;
   system = pkgs.system;
   myVim = myFlakes.packages.${system}.vim;
-  myZellij = myFlakes.packages.${system}.zellij;
   myGit = myFlakes.packages.${system}.git;
 in
 {
   imports = [
     ./base.nix
   ];
-  user.shell = "${myZellij}/bin/zellij";
+  user.shell = "${myFlakes.packages.${system}.tmux}/bin/tmux";
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';

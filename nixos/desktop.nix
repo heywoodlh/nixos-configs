@@ -224,9 +224,10 @@ in {
     pkgs.lsof
     pkgs.libimobiledevice # for iPhone
     pkgs.idevicerestore # for iPhone
+    pkgs.gnome-screenshot
     pkgs.ifuse
     pkgs.usbutils
-    myFlakes.packages.${system}.zellij
+    myFlakes.packages.${system}.tmux
     myFlakes.packages.${system}.helix
     myFlakes.packages.${system}.vim
   ];
@@ -275,6 +276,11 @@ in {
           # Always set 1password agent on NixOS desktops
           test -e ~/.1password/agent.sock && export SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
         '';
+      };
+      dconf.settings = {
+        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
+          command = lib.mkForce "${pkgs.gnome-screenshot}/bin/gnome-screenshot -acf";
+        };
       };
     };
   };

@@ -8,7 +8,6 @@
 let
   system = pkgs.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  myZellij = myFlakes.packages.${system}.zellij;
   myVim = myFlakes.packages.${system}.vim;
   myGit = myFlakes.packages.${system}.git;
   myHelix = myFlakes.packages.${system}.helix;
@@ -57,7 +56,6 @@ in {
     pkgs.zsh
     myVim
     myHelix
-    myZellij
   ];
 
   # Enable Docker

@@ -38,6 +38,7 @@ in {
 
   environment.systemPackages = with stable-pkgs; [
     mosh
+    tmux
   ];
 
   users.users.heywoodlh = {

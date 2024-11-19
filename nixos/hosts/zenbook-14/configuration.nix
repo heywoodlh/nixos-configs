@@ -91,4 +91,12 @@ in {
       intel-media-driver
     ];
   };
+
+  # Fingerprint reader support
+  services.fprintd = {
+    enable = true;
+    package = stable-pkgs.fprintd-tod;
+    tod.enable = true;
+    tod.driver = lib.mkForce stable-pkgs.libfprint-2-tod1-goodix;
+  };
 }

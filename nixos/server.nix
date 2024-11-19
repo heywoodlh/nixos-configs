@@ -84,7 +84,6 @@ in {
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      ls -l /run/user/$(id -u)/ssh-agent &>/dev/null && export SSH_AUTH_SOCK=/run/user/$(id -u)/ssh-agent
     '';
   };
 
@@ -97,7 +96,6 @@ in {
       imports = [
         ../home/linux.nix
       ];
-      services.ssh-agent.enable = true;
     };
   };
 

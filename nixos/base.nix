@@ -1,9 +1,8 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, nixpkgs-stable, lib, stdenv, nur, nixpkgs-wazuh-agent, ... }:
+{ config, pkgs, nixpkgs-stable, lib, stdenv, nur, ... }:
 
 let
   system = pkgs.system;
-  wazuhPkg = pkgs.callPackage ./pkgs/wazuh.nix {};
   stable-pkgs = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
@@ -11,7 +10,6 @@ let
 in {
   imports = [
     ./roles/virtualization/multiarch.nix
-    "${nixpkgs-wazuh-agent}/nixos/modules/services/security/wazuh/wazuh.nix"
   ];
 
   # Allow olm for gomuks until issues are resolved
@@ -74,15 +72,6 @@ in {
           ${pkgs.docker-client}/bin/docker context use rootless
         fi
       '';
-    };
-  };
-
-  # Wazuh configuration
-  services.wazuh = {
-    package = wazuhPkg;
-    agent = {
-      enable = true;
-      managerIP = "wazuh.barn-banana.ts.net";
     };
   };
 

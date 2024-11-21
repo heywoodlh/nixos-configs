@@ -2,7 +2,6 @@
 
 {
   imports = [
-    /etc/nixos/hardware-configuration.nix
     ./desktop.nix
     ./roles/remote-access/sshd.nix
     ./roles/dev/gnome-guest.nix

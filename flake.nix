@@ -464,6 +464,7 @@
           system = "${linuxSystem}";
           specialArgs = inputs;
           modules = [
+            /etc/nixos/hardware-configuration.nix
             ./nixos/vm.nix
             {
               networking.hostName = "nixos-dev";
@@ -475,10 +476,25 @@
           system = "${linuxSystem}";
           specialArgs = inputs;
           modules = [
+            /etc/nixos/hardware-configuration.nix
             ./nixos/vm.nix
             {
               networking.hostName = "nixos-vmware";
               virtualisation.vmware.guest.enable = true;
+              console.earlySetup = true;
+              services.tailscale.enable = pkgs.lib.mkForce false;
+            }
+          ];
+        };
+        # Orbstack VM for running on workstations
+        nixos-orb = nixpkgs.lib.nixosSystem {
+          system = "${linuxSystem}";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/hosts/orbstack/configuration.nix
+            ./nixos/vm.nix
+            {
+              networking.hostName = "nixos-orb";
               console.earlySetup = true;
               services.tailscale.enable = pkgs.lib.mkForce false;
             }

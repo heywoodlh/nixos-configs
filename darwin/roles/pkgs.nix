@@ -61,6 +61,7 @@ in {
       "knockknock"
       "lulu"
       "oversight"
+      "orbstack"
       "qutebrowser"
       "reikey"
       "remoteviewer"

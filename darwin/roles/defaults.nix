@@ -26,7 +26,6 @@ in {
     '';
   };
 
-  services.activate-system.enable = true;
   services.nix-daemon.enable = true;
   programs.nix-index.enable = true;
 

@@ -327,6 +327,7 @@
             ./nixos/roles/media/youtube.nix
             ./nixos/roles/monitoring/iperf.nix
             ./nixos/roles/nixos/asahi.nix
+            ./nixos/roles/storage/nfs-media.nix
             #proxmoxConfig
             {
               networking.hostName = "nixos-mac-mini";
@@ -346,30 +347,6 @@
               # Select internationalisation properties.
               i18n.defaultLocale = "en_US.utf8";
               users.users.heywoodlh.linger = true;
-              systemd.user = let
-                # OpenAudible VM
-                startLima = pkgs.writeShellScriptBin "amd64-vm.sh" ''
-                  ${pkgs.lima}/bin/limactl start amd64-vm
-                '';
-              in {
-                services.amd64-vm = {
-                  enable = true;
-                  description = "Run Lima amd64-vm VM in background.";
-                  wantedBy = [ "multi-user.target" ];
-                  serviceConfig = {
-                    ExecStart = "${startLima}/bin/amd64-vm.sh";
-                    Type = "oneshot";
-                  };
-                };
-                timers."amd64-vm" = {
-                  enable = true;
-                  wantedBy = [ "timers.target" ];
-                  timerConfig = {
-                    OnCalendar = "*:0/1"; # Re-run every minute
-                    Unit = "amd64-vm.service";
-                  };
-                };
-              };
             }
           ];
         };

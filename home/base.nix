@@ -8,6 +8,7 @@ let
   myVim = myFlakes.packages.${system}.vim;
   myHelix = myFlakes.packages.${system}.helix;
   myGit = myFlakes.packages.${system}.git;
+  myKubectl = myFlakes.packages.${system}.kubectl;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
     export SOCKS_SERVER="nix-nvidia:1080"
     exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
@@ -199,7 +200,6 @@ in {
     inetutils
     jq
     k9s
-    kubectl
     kubernetes-helm
     lefthook
     libarchive
@@ -221,6 +221,7 @@ in {
     zip
     myVim
     myGit
+    myKubectl
     myFlakes.packages.${system}.tmux
     myFish # For non-nix use-cases
     #myVM

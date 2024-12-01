@@ -473,7 +473,11 @@
             {
               networking.hostName = "nixos-orb";
               console.earlySetup = true;
-              services.tailscale.enable = pkgs.lib.mkForce false;
+              services.syncthing.enable = pkgs.lib.mkForce false;
+              home-manager.users.heywoodlh = {
+                # Disable syncthing because it interferes with host
+                services.syncthing.enable = pkgs.lib.mkForce false;
+              };
             }
           ];
         };

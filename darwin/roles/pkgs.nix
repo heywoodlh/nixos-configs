@@ -61,16 +61,11 @@ in {
       "knockknock"
       "lulu"
       "oversight"
-      "orbstack"
-      "qutebrowser"
       "reikey"
       "remoteviewer"
       "rustdesk"
-      "secretive"
       "shortcat"
       "syncthing"
-      "tabby"
-      "zen-browser"
     ];
     masApps = {
       DaisyDisk = 411643860;

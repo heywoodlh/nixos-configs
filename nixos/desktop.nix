@@ -24,7 +24,7 @@ in {
 
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
-    nur.overlay
+    nur.overlays.default
   ];
 
   boot = {
@@ -195,8 +195,8 @@ in {
     checkReversePath = "loose";
   };
 
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" "JetBrainsMono" ]; })
+  fonts.packages = with pkgs.nerd-fonts; [
+    jetbrains-mono
   ];
 
   users.users.heywoodlh = {
@@ -228,7 +228,6 @@ in {
     pkgs.ifuse
     pkgs.usbutils
     myFlakes.packages.${system}.tmux
-    myFlakes.packages.${system}.helix
     myFlakes.packages.${system}.vim
   ];
 
@@ -262,7 +261,7 @@ in {
         ../home/desktop.nix # base desktop.nix
         ../home/linux/desktop.nix # linux-specific desktop.nix
         ../home/linux/gnome-desktop.nix
-        flatpaks.homeManagerModules.default
+        flatpaks.homeManagerModules.declarative-flatpak
         (import myFlakes.packages.${system}.gnome-dconf)
         #hyprland.homeManagerModules.default
         #../home/linux/hyprland.nix

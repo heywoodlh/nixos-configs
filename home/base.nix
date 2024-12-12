@@ -6,8 +6,8 @@ let
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
   myVim = myFlakes.packages.${system}.vim;
-  myHelix = myFlakes.packages.${system}.helix;
   myGit = myFlakes.packages.${system}.git;
+  myJujutsu = myFlakes.packages.${system}.jujutsu;
   myKubectl = myFlakes.packages.${system}.kubectl;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
     export SOCKS_SERVER="nix-nvidia:1080"
@@ -163,7 +163,7 @@ let
     [[ -f "$1" ]] && chmod +w "$1"
   '';
 in {
-  home.stateVersion = "24.05";
+  home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
   nix = {
     package = lib.mkForce pkgs.nix;
@@ -194,8 +194,8 @@ in {
     gnupg
     gnumake
     gnused
+    go
     gomuks
-    #helix-gpt
     htop
     inetutils
     jq
@@ -204,7 +204,6 @@ in {
     lefthook
     libarchive
     lima
-    myHelix
     nixos-rebuild
     nixfmt-rfc-style
     nmap
@@ -221,6 +220,7 @@ in {
     zip
     myVim
     myGit
+    myJujutsu
     myKubectl
     myFlakes.packages.${system}.tmux
     myFish # For non-nix use-cases
@@ -242,7 +242,7 @@ in {
 
   # Import nur as nixpkgs.overlays
   nixpkgs.overlays = [
-    nur.overlay
+    nur.overlays.default
   ];
 
   home.file."tmp/.placeholder.txt" = {
@@ -478,57 +478,21 @@ in {
     '';
   };
 
-  # nostui wrapper
-  home.file."bin/nostui" = let
-    configDir = if pkgs.stdenv.isDarwin then
-    "${homeDir}/Library/Application Support/io.0m1.nostui"
-    else "${homeDir}/.config/nostui";
-  in {
-    executable = true;
-    text = ''
-      #!/usr/bin/env fish
-      if ! test -e "${configDir}"/config.json
-        mkdir -p "${configDir}"
-        op-unlock
-        ${op-wrapper} item get ttqmeotpae3h77q7mh7dqdxy4u --fields config | sed 's/""/"/g' | sed 's/^"{/{/g' | sed 's/}"$/}/g' > "${configDir}"/config.json
-      end
-      nix run "github:heywoodlh/nixpkgs/nostui-init#nostui" -- $argv
-    '';
-  };
+  # Jujutsu config
+  # Configs not specified here are in my jujutsu flake
+  home.file.".config/jujutsu/config.toml".text = let
+    osConf = if pkgs.stdenv.isDarwin then ''
+      # optional, but recommended
+      # not setting on Linux because it's not needed
+      [signing.backends.ssh]
+      program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+    '' else "";
+  in ''
+    [signing]
+    sign-all = true
+    backend = "ssh"
+    key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCYn+7oSNHXN3qqDDidw42Vv7fDS0iEpYqaa0wCXRPBlfWAnD81f6dxj/QPGfZtxpl9jvk7nAKpE7RVUvQiJzUC2VM3Bw/4ucT+xliEHo3oesMQQa1AT70VPTbP5PdU7oUpgQWLq39j9XHno2YPJ/WWtuOl/UTjY6IDokkAmNmvft/jqqkiwSkGMmw68qrLFEM7+rNwJV5cXKvvpB6Gqc7qnbJmk1TZ1MRGW5eLjP9ofDqiyoLbnTm7Dw3iHn40GgTcnv5CWGpa0vrKnnLEGrgRB7kR/pyvfsjapkHz0PDvuinQov+MgJfV8B8PHdPC94dsS0DEWJplxhYojtsYa1VZy5zTEMNWICz1QG1yKHN1JQtpbEreHG6DVYvqwnKvK/XN5yiEeiamhD2oKnSh36PexIR0h0AAPO29Ln+anqpRlqJ0nET2CNS04e0vpV4VDJrG6BnyGUQ6CCo7THSq97F4Ne0nY9fpYu5WTFTCh1tTm+nSey0fP/xk22oINl/41VTI/Vk5pNQuuhHUvQupJHw9cD74aKzRddwvgfuAQjPlEuxxsqgFTltTiPF6lZQNeoMIc1OMCRsnl1xNqIepnb7Q5O1CGq+BqtOWh3G4/SPQI5ZUIkOAZegsnPpGWYMrRd7s6LJn5LrBYaY6IvRxmpGOig3tjOUy3fqk7coyTeJXmQ=="
 
-  # Helix configuration
-  #programs.helix = {
-  #  enable = true;
-  #  package = myHelix;
-  #  languages = {
-  #    language-server.gpt = {
-  #      command = "helix-gpt";
-  #      environment = {
-  #        HANDLER = "codeium";
-  #      };
-  #    };
-  #    language = [
-  #      {
-  #        name = "bash";
-  #        language-servers = [ "bash-language-server" "gpt" ];
-  #      }
-  #      {
-  #        name = "nix";
-  #        language-servers = [ "nil" "nixd" "gpt" ];
-  #      }
-  #      {
-  #        name = "python";
-  #        language-servers = [ "ruff" "jedi" "pylsp" "gpt" ];
-  #      }
-  #      {
-  #        name = "fish";
-  #        language-servers = [ "gpt" ];
-  #      }
-  #      {
-  #        name = "swift";
-  #        language-servers = [ "sourcekit-lsp" "gpt" ];
-  #      }
-  #    ];
-  #  };
-  #};
+    ${osConf}
+  '';
 }

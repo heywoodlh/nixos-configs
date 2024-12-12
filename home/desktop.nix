@@ -253,7 +253,6 @@ in {
   home.packages = [
     code-reset
     pkgs.mdp
-    myVscode
     pkgs.tarsnap
   ];
 

@@ -30,12 +30,10 @@ in {
     substituters = [
       "https://nix-community.cachix.org"
       "http://attic.barn-banana.ts.net/nixos"
-      "https://heywoodlh-helix.cachix.org"
     ];
     trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E=" # attic
-      "heywoodlh-helix.cachix.org-1:qHDV95nI/wX9pidAukzMzgeok1415rgjMAXinDsbb7M="
     ];
   };
 

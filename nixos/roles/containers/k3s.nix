@@ -11,7 +11,10 @@ in {
     enable = true;
     role = "server";
   };
-  environment.systemPackages = [ stable-pkgs.k3s ];
+  environment.systemPackages = [
+    stable-pkgs.k3s
+    stable-pkgs.nfs-utils
+  ];
   systemd.services.k3s.path = with stable-pkgs; [
     ipset
     openiscsi

@@ -41,8 +41,8 @@ in {
   ];
 
   # add nerd fonts
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" ]; })
+  fonts.packages = with pkgs.nerd-fonts; [
+    jetbrains-mono
   ];
 
   #system-defaults.nix
@@ -109,7 +109,7 @@ in {
     };
     CustomUserPreferences = {
       "NSGlobalDomain" = {
-        "AppleSpacesSwitchOnActivate" = 1; # Automatically refocus spaces on app switch
+        "AppleSpacesSwitchOnActivate" = 0; # Disable refocus spaces on app switch
       };
       "com.googlecode.iterm2" = {
         "PrefsCustomFolder" = "~/.config/iterm2";

@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
-    nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     nixpkgs-wazuh-agent.url = "github:V3ntus/nixpkgs/wazuh-agent";
     myFlakes = {
@@ -12,7 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
-    nixpkgs-backports.url = "github:nixos/nixpkgs/release-23.11";
+    nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.05";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
       url = "github:LnL7/nix-darwin";
@@ -71,13 +71,6 @@
       url = "github:qutebrowser/qutebrowser";
       flake = false;
     };
-    dev-container = {
-      url = "github:heywoodlh/dockerfiles?dir=dev";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        myFlakes.follows = "myFlakes";
-      };
-    };
     signal-ntfy.url = "github:heywoodlh/signal-ntfy-mirror";
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.1";
@@ -120,7 +113,6 @@
                       attic,
                       ts-warp-nixpkgs,
                       qutebrowser,
-                      dev-container,
                       signal-ntfy,
                       lanzaboote,
                       comin,
@@ -534,7 +526,7 @@
           inherit pkgs;
           modules = [
             (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
-            flatpaks.homeManagerModules.default
+            flatpaks.homeManagerModules.declarative-flatpak
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config

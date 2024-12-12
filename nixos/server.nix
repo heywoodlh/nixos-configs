@@ -11,7 +11,6 @@ let
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   myVim = myFlakes.packages.${system}.vim;
   myGit = myFlakes.packages.${system}.git;
-  myHelix = myFlakes.packages.${system}.helix;
   wazuhPkg = pkgs.callPackage ./pkgs/wazuh.nix {};
 in {
   imports = [
@@ -30,7 +29,7 @@ in {
 
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
-    nur.overlay
+    nur.overlays.default
   ];
 
   # Packages to install on entire system
@@ -58,7 +57,6 @@ in {
     pkgs.wireguard-tools
     pkgs.zsh
     myVim
-    myHelix
   ];
 
   # Wazuh configuration

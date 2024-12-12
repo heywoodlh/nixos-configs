@@ -38,7 +38,7 @@ in {
 
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
-    nur.overlay
+    nur.overlays.default
   ];
 
   boot = {
@@ -138,8 +138,8 @@ in {
     checkReversePath = "loose";
   };
 
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "Iosevka" "JetBrainsMono" ]; })
+  fonts.packages = with pkgs.nerd-fonts; [
+    jetbrains-mono
   ];
 
   users.users.heywoodlh = {
@@ -185,7 +185,7 @@ in {
     users.heywoodlh = { ... }: {
       imports = [
         ../home/linux.nix
-        flatpaks.homeManagerModules.default
+        flatpaks.homeManagerModules.declarative-flatpak
       ];
       home.packages = [
         myFlakes.packages.${system}.git

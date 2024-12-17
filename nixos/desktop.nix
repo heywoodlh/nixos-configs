@@ -281,6 +281,8 @@ in {
           command = lib.mkForce "${pkgs.gnome-screenshot}/bin/gnome-screenshot -acf";
         };
       };
+      # symlink 1password agent socket
+      home.file.".ssh/agent.sock".source = "/home/heywoodlh/.1password/agent.sock";
     };
   };
 

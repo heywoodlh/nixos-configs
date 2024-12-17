@@ -70,6 +70,11 @@ in {
           ${pkgs.docker-client}/bin/docker context use rootless
         fi
       '';
+      home.file.".ssh/config".text = ''
+        # User-wide SSH config for nix builders
+        Host nix-nvidia nixos-mac-mini macos-intel-vm mac-mini
+          IdentityAgent /home/heywoodlh/.ssh/agent.sock
+      '';
     };
   };
 
@@ -78,6 +83,12 @@ in {
     enable = true;
     pinentryPackage = pkgs.pinentry-curses;
   };
+
+  programs.ssh.extraConfig = ''
+    # System-wide SSH config for nix builders
+    Host nix-nvidia nixos-mac-mini macos-intel-vm mac-mini
+      IdentityAgent /home/heywoodlh/.ssh/agent.sock
+  '';
 
   # NixOS version
   system.stateVersion = "24.11";

@@ -118,15 +118,25 @@ let
       ssh heywoodlh@$host "sudo cp /root/tarsnap.key /home/heywoodlh/tarsnap.key; sudo chown -R heywoodlh /home/heywoodlh/tarsnap.key" && scp heywoodlh@$host:/home/heywoodlh/tarsnap.key $host && ssh heywoodlh@$host "rm /home/heywoodlh/tarsnap.key" && op-wrapper.sh item edit fp5jsqodjv3gzlwtlgojays7qe "$host[file]=$host" && rm $host
     done
   '';
-  duo-key-setup = pkgs.writeShellScriptBin "duo-key-setup.sh" ''
+  duo-key-self-setup = pkgs.writeShellScriptBin "duo-key-setup.sh" ''
+    op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key > /tmp/duo.key
+    op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key > /tmp/duo-integration.key
+    chmod 600 /tmp/duo*.key
+    sudo mv /tmp/duo*.key /root/
+    sudo chown -R root:root /root/duo*.key
+  '';
+  duo-key-remote-setup = pkgs.writeShellScriptBin "duo-key-remote-setup.sh" ''
     hosts=("nix-drive" "nix-nvidia" "nixos-gaming" "nixos-mac-mini")
     op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key > /tmp/duo.key
+    op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key > /tmp/duo-integration.key
     chmod 600 /tmp/duo.key
+    chmod 600 /tmp/duo-integration.key
     for host in "''${hosts[@]}"
     do
       scp /tmp/duo.key heywoodlh@$host:/tmp/duo.key
       scp /tmp/duo-integration.key heywoodlh@$host:/tmp/duo-integration.key
       ssh heywoodlh@$host "sudo mv /tmp/duo.key /root/duo.key; sudo chown -R root:root /root/duo.key; sudo chmod 600 /root/duo.key"
+      ssh heywoodlh@$host "sudo mv /tmp/duo-integration.key /root/duo-integration.key; sudo chown -R root:root /root/duo-integration.key; sudo chmod 600 /root/duo-integration.key"
     done
     rm /tmp/duo.key
   '';
@@ -231,7 +241,8 @@ in {
     otp
     op-backup
     incognito
-    duo-key-setup
+    duo-key-self-setup
+    duo-key-remote-setup
   ];
 
   # Enable password-store

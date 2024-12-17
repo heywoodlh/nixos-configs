@@ -5652,7 +5652,7 @@
     },
     "flake-utils_255": {
       "inputs": {
-        "systems": "systems_244"
+        "systems": "systems_245"
       },
       "locked": {
         "lastModified": 1710146030,
@@ -5670,7 +5670,7 @@
     },
     "flake-utils_256": {
       "inputs": {
-        "systems": "systems_245"
+        "systems": "systems_246"
       },
       "locked": {
         "lastModified": 1705309234,
@@ -12528,6 +12528,22 @@
         "type": "github"
       }
     },
+    "nixos-stable": {
+      "locked": {
+        "lastModified": 1734323986,
+        "narHash": "sha256-m/lh6hYMIWDYHCAsn81CDAiXoT3gmxXI9J987W5tZrE=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "394571358ce82dff7411395829aa6a3aad45b907",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat_10",
@@ -16427,6 +16443,27 @@
         "type": "path"
       }
     },
+    "nvidia-patch": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-backports"
+        ],
+        "utils": "utils_8"
+      },
+      "locked": {
+        "lastModified": 1733940028,
+        "narHash": "sha256-WI4YDWvk3s3gUnt0cyt0USoTpUTEeEYm+EyQCCvrLvQ=",
+        "owner": "icewind1991",
+        "repo": "nvidia-patch-nixos",
+        "rev": "91dd42b7a201b0e2b6c588faf70ffc09cd7b4a16",
+        "type": "github"
+      },
+      "original": {
+        "owner": "icewind1991",
+        "repo": "nvidia-patch-nixos",
+        "type": "github"
+      }
+    },
     "op-flake": {
       "inputs": {
         "flake-utils": "flake-utils_97",
@@ -16764,6 +16801,29 @@
         "type": "github"
       }
     },
+    "plasma-manager": {
+      "inputs": {
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1733858086,
+        "narHash": "sha256-h2BDIDKiqgMpA6E+mu0RgMGy3FeM6k+EuJ9xgOQ1+zw=",
+        "owner": "nix-community",
+        "repo": "plasma-manager",
+        "rev": "7e2010249529931a3848054d5ff0dbf24675ab68",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "plasma-manager",
+        "type": "github"
+      }
+    },
     "poetry2nix": {
       "inputs": {
         "flake-utils": "flake-utils_236",
@@ -16881,7 +16941,7 @@
         "flake-compat": "flake-compat_52",
         "nixpkgs-stable": "nixpkgs-stable_11",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "utils": "utils_8"
+        "utils": "utils_9"
       },
       "locked": {
         "lastModified": 1731979904,
@@ -16991,6 +17051,7 @@
         "nix-on-droid": "nix-on-droid_4",
         "nixos-apple-silicon": "nixos-apple-silicon_11",
         "nixos-hardware": "nixos-hardware_11",
+        "nixos-stable": "nixos-stable",
         "nixos-wsl": "nixos-wsl_11",
         "nixos-x13s": "nixos-x13s_2",
         "nixpkgs": "nixpkgs_135",
@@ -17000,7 +17061,9 @@
         "nixpkgs-stable": "nixpkgs-stable_10",
         "nixpkgs-wazuh-agent": "nixpkgs-wazuh-agent_2",
         "nur": "nur_11",
+        "nvidia-patch": "nvidia-patch",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs_11",
+        "plasma-manager": "plasma-manager",
         "proxmox-nixos": "proxmox-nixos",
         "qutebrowser": "qutebrowser_2",
         "signal-ntfy": "signal-ntfy_2",
@@ -20985,6 +21048,21 @@
         "type": "github"
       }
     },
+    "systems_246": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "systems_25": {
       "locked": {
         "lastModified": 1681028828,
@@ -22977,6 +23055,24 @@
     "utils_8": {
       "inputs": {
         "systems": "systems_243"
+      },
+      "locked": {
+        "lastModified": 1710146030,
+        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "utils_9": {
+      "inputs": {
+        "systems": "systems_244"
       },
       "locked": {
         "lastModified": 1710146030,

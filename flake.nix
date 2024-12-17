@@ -5,6 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.11";
+    nixos-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     nixpkgs-wazuh-agent.url = "github:V3ntus/nixpkgs/wazuh-agent";
     myFlakes = {
@@ -82,6 +83,15 @@
     };
     #proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
     proxmox-nixos.url = "github:heywoodlh/proxmox-nixos";
+    nvidia-patch = {
+      url = "github:icewind1991/nvidia-patch-nixos";
+      inputs.nixpkgs.follows = "nixpkgs-backports";
+    };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
   outputs = inputs@{ self,
@@ -117,6 +127,8 @@
                       lanzaboote,
                       comin,
                       proxmox-nixos,
+                      nvidia-patch,
+                      plasma-manager,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -286,6 +298,13 @@
           specialArgs = inputs;
           modules = [
             ./nixos/hosts/zenbook-14/configuration.nix
+          ];
+        };
+        nixos-zalman = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/hosts/zalman/configuration.nix
           ];
         };
         nixos-usb = nixpkgs.lib.nixosSystem {

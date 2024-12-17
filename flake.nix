@@ -82,6 +82,15 @@
     };
     #proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
     proxmox-nixos.url = "github:heywoodlh/proxmox-nixos";
+    nvidia-patch = {
+      url = "github:icewind1991/nvidia-patch-nixos";
+      inputs.nixpkgs.follows = "nixpkgs-backports";
+    };
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
   outputs = inputs@{ self,
@@ -117,6 +126,8 @@
                       lanzaboote,
                       comin,
                       proxmox-nixos,
+                      nvidia-patch,
+                      plasma-manager,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -286,6 +297,13 @@
           specialArgs = inputs;
           modules = [
             ./nixos/hosts/zenbook-14/configuration.nix
+          ];
+        };
+        nixos-zalman = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/hosts/zalman/configuration.nix
           ];
         };
         nixos-usb = nixpkgs.lib.nixosSystem {

@@ -10,7 +10,7 @@
     ../../roles/monitoring/syslog-ng/client.nix
     ../../roles/gaming/minecraft-bedrock.nix
     #../../roles/monitoring/graylog.nix
-    ../../roles/containers/k3s.nix
+    ../../roles/containers/k3s-server.nix
     ../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
     ../../roles/nixos/cache.nix

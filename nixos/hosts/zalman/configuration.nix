@@ -40,6 +40,7 @@ in {
     exfatprogs
     spotify
     protontricks
+    nexusmods-app
   ];
 
   networking.firewall = {

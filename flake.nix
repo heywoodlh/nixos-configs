@@ -222,6 +222,40 @@
         "from=\"192.168.50.22\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH root@nix-nvidia"
       ];
     };
+    # shared config among darwin workstations
+    darwinWorkstationConfig = {
+      homebrew = {
+        brews = [
+          "libolm"
+        ];
+        casks = [
+          "beeper"
+          "diffusionbee"
+          "discord"
+          "signal"
+          "vmware-fusion"
+          "zoom"
+        ];
+        masApps = {
+          "Screens 5: VNC Remote Desktop" = 1663047912;
+        };
+      };
+      home-manager.users.heywoodlh = {
+        #home.packages = with pkgs; [
+          #anonScript
+        #];
+        heywoodlh.home.applications = [
+          {
+            name = "Spotify";
+            command = "${spicetify.packages.${system}.nord}/bin/spotify";
+          }
+          {
+            name = "Moonlight";
+            command = "${pkgs.moonlight-qt}/bin/moonlight";
+          }
+        ];
+      };
+    };
     in {
       formatter = pkgs.alejandra;
       # custom nix-darwin modules
@@ -232,42 +266,16 @@
         # "<hostname>" = darwinConfig "<hardwareType>" "<hostname>" { <extraAttrs> };
         # hardwareType can currently be "macbook" or "mac-mini"
         "m3-macbook-pro" = darwinConfig "macbook" "m3-macbook-pro" {
-          homebrew = {
-            brews = [
-              "libolm"
-            ];
-            casks = [
-              "beeper"
-              "diffusionbee"
-              "discord"
-              "signal"
-              "vmware-fusion"
-              "zoom"
-            ];
-            masApps = {
-              "Screens 5: VNC Remote Desktop" = 1663047912;
-            };
-          };
-          home-manager.users.heywoodlh = {
-            #home.packages = with pkgs; [
-              #anonScript
-            #];
-            heywoodlh.home.applications = [
-              {
-                name = "Spotify";
-                command = "${spicetify.packages.${system}.nord}/bin/spotify";
-              }
-              {
-                name = "Moonlight";
-                command = "${pkgs.moonlight-qt}/bin/moonlight";
-              }
-            ];
-            programs.qutebrowser.settings = {
-              content.proxy = "socks://nix-nvidia:1080/";
-            };
-          };
+          imports = [
+            darwinWorkstationConfig
+          ];
         };
-
+        "m1-mac-mini" = darwinConfig "mac-mini" "m1-mac-mini" {
+          imports = [
+            ./darwin/roles/mac-mini.nix
+            darwinWorkstationConfig
+          ];
+        };
         "mac-mini" = darwinConfig "mac-mini" "mac-mini" {
           imports = [
             ./darwin/roles/mac-mini.nix

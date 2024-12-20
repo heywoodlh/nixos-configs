@@ -72,7 +72,7 @@ in {
       '';
       home.file.".ssh/config".text = ''
         # User-wide SSH config for nix builders
-        Host nix-nvidia nixos-mac-mini macos-intel-vm mac-mini
+        Host nix-nvidia macos-intel-vm mac-mini
           IdentityAgent /home/heywoodlh/.ssh/agent.sock
       '';
     };
@@ -86,7 +86,7 @@ in {
 
   programs.ssh.extraConfig = ''
     # System-wide SSH config for nix builders
-    Host nix-nvidia nixos-mac-mini macos-intel-vm mac-mini
+    Host nix-nvidia macos-intel-vm mac-mini
       IdentityAgent /home/heywoodlh/.ssh/agent.sock
   '';
 

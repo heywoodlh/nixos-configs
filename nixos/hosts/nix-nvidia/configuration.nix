@@ -18,6 +18,11 @@
     ../../roles/home-automation/homebridge.nix
     ../../roles/monitoring/ntfy-signal.nix
     ../../roles/nixos/cache-populator.nix
+    ../../roles/media/plex.nix
+    ../../roles/media/youtube.nix
+    ../../roles/monitoring/iperf.nix
+    ../../roles/storage/nfs-media.nix
+    ../../roles/remote-access/cloudflared.nix
     #../../roles/dev/vscode.nix # many things don't work with non-standard Nix paths
   ];
 
@@ -132,7 +137,6 @@
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable =  true;
   environment.systemPackages = with pkgs; [
-    cloudflared
     docker
     nfdump
     runc
@@ -145,7 +149,6 @@
       dataDir = "/home/heywoodlh/Sync";
       configDir = "/home/heywoodlh/.config/syncthing";
     };
-    cloudflared.enable = true;
   };
   # allow building ARM64 things
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];

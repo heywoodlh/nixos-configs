@@ -17,8 +17,8 @@ let
     ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake .#nixos-arm64-test --impure
     ${atticClient}/bin/attic push nixos ./result
     ## Server
-    ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake .#nixos-mac-mini --impure
-    ${atticClient}/bin/attic push nixos ./result
+    #${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake .#nixos-mac-mini --impure
+    #${atticClient}/bin/attic push nixos ./result
     # x86_64 builds
     ## Desktop
     ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake .#nixos-desktop-intel --impure

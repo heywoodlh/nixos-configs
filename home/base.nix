@@ -110,7 +110,7 @@ let
     ${pkgs.proxychains-ng}/bin/proxychains4 -f ${tor-proxychains-conf} ${myFish}/bin/fish --private
   '';
   tarsnap-key-backup = pkgs.writeShellScriptBin "tarsnap-key-backup.sh" ''
-    hosts=("nix-drive" "nix-nvidia" "nixos-gaming" "nixos-mac-mini")
+    hosts=("nix-drive" "nix-nvidia" "nixos-gaming")
     op_item="fp5jsqodjv3gzlwtlgojays7qe"
 
     for host in "''${hosts[@]}"
@@ -126,7 +126,7 @@ let
     sudo chown -R root:root /root/duo*.key
   '';
   duo-key-remote-setup = pkgs.writeShellScriptBin "duo-key-remote-setup.sh" ''
-    hosts=("nix-drive" "nix-nvidia" "nixos-gaming" "nixos-mac-mini")
+    hosts=("nix-drive" "nix-nvidia" "nixos-gaming")
     op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key > /tmp/duo.key
     op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key > /tmp/duo-integration.key
     chmod 600 /tmp/duo.key

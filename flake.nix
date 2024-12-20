@@ -220,8 +220,6 @@
         "from=\"192.168.50.21\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoCHYi25JA+QueyDNph6aGM+xPyDub3SQ8kj8sSy66O6YC7OH/CfRz6btRHff1PB8jtwxD4QUBvWaRKpKZB/2rZ/4i7yMULhAJlZkKyqnLl5QAvRMc21x0OlCSCXMpSbdSOwvfOouXLGCbBXS4n5L8+jKwUfZ06eM6V901KilymqMJiCQjFgrc0thlwyFUl2ZFeu+/H/UzhhBPWrrVDDq+RWbX34cI/qJrcvW4PYZYVKFBUXWy575C7ouIgdjeh3dQYNcPX6kaN56g/VawmfUxEDZoGhTzhU5rX4DBxTnL9Cp+sQkDXKNTK+TBAmM4JNg0tQbUv05Wi4LUTKD0vN4b root@proxmox-oryx-pro"
         "from=\"100.108.77.60\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH root@nix-nvidia"
         "from=\"192.168.50.22\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH root@nix-nvidia"
-        "from=\"100.69.115.100\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKvlDF8X40/ASMEp2VsbmnKPb+E+OxEncnDn4biRhGGs root@nixos-mac-mini"
-        "from=\"192.168.50.5\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKvlDF8X40/ASMEp2VsbmnKPb+E+OxEncnDn4biRhGGs root@nixos-mac-mini"
       ];
     };
     in {
@@ -325,39 +323,6 @@
               time.timeZone = "America/Denver";
               # Select internationalisation properties.
               i18n.defaultLocale = "en_US.utf8";
-            }
-          ];
-        };
-        nixos-mac-mini = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/hosts/m1-mac-mini.nix
-            ./nixos/server.nix
-            ./nixos/roles/media/plex.nix
-            ./nixos/roles/media/youtube.nix
-            ./nixos/roles/monitoring/iperf.nix
-            ./nixos/roles/nixos/asahi.nix
-            ./nixos/roles/storage/nfs-media.nix
-            #proxmoxConfig
-            {
-              networking.hostName = "nixos-mac-mini";
-              # Virtual machine media
-              fileSystems."/media/virtual-machines" = {
-                device = "/dev/disk/by-uuid/2fa5a6c4-b938-4853-844d-c85a77ae33e7";
-                fsType = "ext4";
-                options = [ "rw" "relatime" ];
-              };
-              # Bootloader.
-              boot.loader.systemd-boot.enable = true;
-              boot.loader.efi.canTouchEfiVariables = false;
-              # Enable networking
-              networking.networkmanager.enable = true;
-              # Set your time zone.
-              time.timeZone = "America/Denver";
-              # Select internationalisation properties.
-              i18n.defaultLocale = "en_US.utf8";
-              users.users.heywoodlh.linger = true;
             }
           ];
         };

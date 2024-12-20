@@ -6,12 +6,21 @@ in {
   networking.firewall.allowedTCPPorts = [
     8081
     8181
-    3000 # Used by amd64-vm Lima VM
   ];
 
   boot.supportedFilesystems = [
     "btrfs"
   ];
+
+  fileSystems."/media/config" = {
+    device = "/dev/disk/by-uuid/2fa5a6c4-b938-4853-844d-c85a77ae33e7";
+    fsType = "ext4";
+    options = [
+      "rw"
+      "relatime"
+      "nofail"
+    ];
+  };
 
   fileSystems."/media/home-media/disk1" = {
     device = "/dev/disk/by-uuid/8f645e4b-0544-4ce9-8797-7dfe7f85df5a";
@@ -43,7 +52,7 @@ in {
   services.plex = {
     enable = true;
     openFirewall = true;
-    dataDir = "/opt/plex";
+    dataDir = "/media/config/services/plex";
     user = "media";
     extraPlugins = [
       (builtins.path {
@@ -61,29 +70,38 @@ in {
   services.lidarr = {
     enable = true;
     openFirewall = true;
-    dataDir = "/opt/lidarr";
+    dataDir = "/media/config/services/lidarr";
     user = "media";
   };
 
   services.radarr = {
     enable = true;
     openFirewall = true;
-    dataDir = "/opt/radarr";
+    dataDir = "/media/config/services/radarr";
     user = "media";
   };
 
   services.sonarr = {
     enable = true;
     openFirewall = true;
-    dataDir = "/opt/sonarr";
+    dataDir = "/media/config/services/sonarr";
     user = "media";
   };
 
-  services.sabnzbd = {
-    enable = true;
-    user = "media";
-    configFile = "/opt/sabnzbd/config.ini";
-  };
+  #services.sabnzbd = {
+  #  enable = true;
+  #  user = "media";
+  #  configFile = "/media/config/services/sabnzbd/config.ini";
+  #};
+
+  # https://github.com/NixOS/nixpkgs/issues/360592
+  nixpkgs.config.permittedInsecurePackages = [
+    "aspnetcore-runtime-6.0.36"
+    "aspnetcore-runtime-wrapped-6.0.36"
+    "dotnet-sdk-6.0.428"
+    "dotnet-sdk-wrapped-6.0.428"
+    "olm-3.2.16"
+  ];
 
   virtualisation.oci-containers = {
     backend = "docker";
@@ -92,26 +110,38 @@ in {
         image = "docker.io/linuxserver/tautulli:2.14.3";
         autoStart = true;
         volumes = [
-          "/opt/tautulli/config:/config"
-          "/opt/tautulli/scripts:/scripts"
+          "/media/config/services/tautulli/config:/config"
+          "/media/config/services/tautulli/scripts:/scripts"
         ];
         extraOptions = [ "--network=host" ]; # For tailscale/ntfy.sh to work
       };
-      # Using amd64-vm Lima VM instead
-      #openaudible = {
-      #  image = "docker.io/heywoodlh/openaudible:2024_08";
-      #  autoStart = true;
-      #  ports = ["3000:3000"];
-      #  environment = {
-      #    PGID = "995";
-      #    PUID = "995";
-      #  };
-      #  volumes = [
-      #    "/opt/openaudible:/config/OpenAudible"
-      #    "/opt/openaudible/desktop:/config/Desktop"
-      #    "/media/home-media/disk2/books:/media/home-media/disk2/books"
-      #  ];
-      #};
+      openaudible = {
+        image = "docker.io/openaudible/openaudible:latest";
+        autoStart = true;
+        ports = ["3005:3000"];
+        environment = {
+          PGID = "995";
+          PUID = "995";
+        };
+        volumes = [
+          "/media/config/services/openaudible:/config/OpenAudible"
+          "/media/config/services/openaudible/desktop:/config/Desktop"
+          "/media/home-media/disk2/books:/media/home-media/disk2/books"
+        ];
+      };
+      sabnzbd = {
+        image = "docker.io/linuxserver/sabnzbd:latest";
+        autoStart = true;
+        ports = ["8082:8081"];
+        environment = {
+          PGID = "995";
+          PUID = "995";
+        };
+        volumes = [
+          "/media/config/services/sabnzbd:/config/"
+          "/media/home-media:/media/home-media"
+        ];
+      };
     };
   };
 }

@@ -15,7 +15,7 @@ in {
     backend = "docker";
     containers = {
       metube = {
-        image = "ghcr.io/alexta69/metube";
+        image = "ghcr.io/alexta69/metube:2024-12-14";
         autoStart = true;
         volumes = [
           "/media/home-media/disk2/videos:/downloads"

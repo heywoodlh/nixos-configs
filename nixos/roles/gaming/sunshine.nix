@@ -2,9 +2,11 @@
 
 let
   system = pkgs.system;
+  # using pre-release for now
+  # (this URL is updated daily, so will break)
   sunshineExe = pkgs.fetchurl {
-    url = "https://github.com/LizardByte/Sunshine/releases/download/v0.23.1/sunshine.AppImage";
-    hash = "sha256-PP71pseSQ13eSrO2Unnx+YnCxXEG52Ep8myWE+W7zkM=";
+    url = "https://github.com/LizardByte/Sunshine/releases/download/v2024.1219.161129/sunshine.AppImage";
+    hash = "sha256-ygUnlahHEBnN2AHPmNTTtFjeZTvmvplr9P3r7tdJpok=";
   };
   # Using appimage over NixOS service
   # For some reason, NixOS+Sunshine won't properly figure out GPU configuration

@@ -2,6 +2,10 @@
 
 let
   system = pkgs.system;
+  resolv-conf = pkgs.writeText "resolv.conf" ''
+    nameserver 1.1.1.1
+    nameserver 1.0.0.1
+  '';
 in {
   networking.firewall.allowedTCPPorts = [
     8081
@@ -140,6 +144,7 @@ in {
         volumes = [
           "/media/config/services/sabnzbd:/config/"
           "/media/home-media:/media/home-media"
+          "${resolv-conf}:/etc/resolv.conf"
         ];
       };
     };

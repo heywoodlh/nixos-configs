@@ -66,6 +66,7 @@ in {
       "rustdesk"
       "shortcat"
       "syncthing"
+      "zen-browser"
     ];
     masApps = {
       DaisyDisk = 411643860;

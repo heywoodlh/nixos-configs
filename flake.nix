@@ -2,7 +2,7 @@
   description = "heywoodlh nix config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.follows = "nixos-cosmic/nixpkgs"; # using nixos-cosmic (regularly updated) for binary cache
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.11";
     nixos-stable.url = "github:nixos/nixpkgs/nixos-24.11";
@@ -61,9 +61,13 @@
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
       flake = false;
     };
-    cosmic-session = {
-      url = "github:pop-os/cosmic-session";
-      inputs.nixpkgs.follows = "nixpkgs";
+    nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
+    cosmic-manager = {
+      url = "github:HeitorAugustoLN/cosmic-manager";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
     };
     attic.url = "github:zhaofengli/attic/6eabc3f02fae3683bffab483e614bebfcd476b21";
     nixos-x13s.url = "git+https://codeberg.org/adamcstephens/nixos-x13s";
@@ -119,7 +123,8 @@
                       light-wallpaper,
                       snowflake,
                       hyprland,
-                      cosmic-session,
+                      nixos-cosmic,
+                      cosmic-manager,
                       attic,
                       ts-warp-nixpkgs,
                       qutebrowser,
@@ -518,6 +523,7 @@
           inherit pkgs;
           modules = [
             (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
+            cosmic-manager.homeManagerModules.cosmic-manager
             flatpaks.homeManagerModules.declarative-flatpak
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config

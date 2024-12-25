@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, myFlakes, snowflake, ... }:
+{ config, pkgs, home-manager, myFlakes, snowflake, dark-wallpaper, ... }:
 
 let
   system = pkgs.system;
@@ -7,7 +7,14 @@ let
   captive-portal = pkgs.writeShellScriptBin "captive-portal" ''
    ${pkgs.xdg-utils}/bin/xdg-open "http://$(${pkgs.iproute2}/bin/ip --oneline route get 1.1.1.1 | ${pkgs.gawk}/bin/awk '{print $3}')"
   '';
+  zen-wrapper = pkgs.writeShellScriptBin "zen" ''
+    ${pkgs.flatpak}/bin/flatpak list --user | grep -iq zen_browser || ${pkgs.flatpak}/bin/flatpak install --noninteractive --user flathub io.github.zen_browser.zen
+    ${pkgs.flatpak}/bin/flatpak run --user io.github.zen_browser.zen
+  '';
 in {
+  imports = [
+    ./cosmic-desktop.nix
+  ];
   # Flatpak support
   services.flatpak = {
     enableModule = true;
@@ -19,12 +26,18 @@ in {
     };
     packages = [
       "gnome-nightly:app/org.gnome.Epiphany.Devel//master"
+      "flathub:app/io.github.zen_browser.zen//master"
     ];
   };
 
   # Nix snowflake icon
   home.file.".icons/snowflake.png" = {
     source = snowflake;
+  };
+
+  # Nix wallpaper
+  home.file."Pictures/wallpaper.png" = {
+    source = dark-wallpaper;
   };
 
   # Berkeley Mono font installer
@@ -60,6 +73,7 @@ in {
     pkgs.xclip
     pkgs.xdotool
     captive-portal
+    zen-wrapper
   ];
 
   home.shellAliases = {
@@ -130,6 +144,13 @@ in {
       }
     '';
   };
+
+  heywoodlh.home.applications = [
+    {
+      name = "Zen Browser";
+      command = "${zen-wrapper}/bin/zen";
+    }
+  ];
 
   # Enable fontconfig
   fonts.fontconfig.enable = true;

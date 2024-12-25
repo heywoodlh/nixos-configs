@@ -3,7 +3,6 @@
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
-  #browser = if system == "aarch64-linux" then "firefox" else "mullvad-browser";
   browser = "firefox";
   noproxies = "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net";
   socksProxy = "10.64.0.1";
@@ -171,13 +170,11 @@ let
     enable = true;
     package = if pkgs.stdenv.isDarwin then
       pkgs.runCommand "firefox-0.0.0" { } "mkdir $out"
-    else
-      pkgs.firefox.override {
-        cfg = {
-          enableGnomeExtensions = true;
-        };
-      }
-    ;
+    else pkgs.firefox.override {
+      cfg = {
+        enableGnomeExtensions = true;
+      };
+    };
     profiles.home-manager = {
       search.force = true; # This is required so the build won't fail each time
       bookmarks = [

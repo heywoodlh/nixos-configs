@@ -6,6 +6,7 @@
   snowflake,
   mullvad-browser-home-manager,
   ts-warp-nixpkgs, qutebrowser,
+  cosmic-manager,
   ... }:
 
 let
@@ -20,6 +21,7 @@ in {
     ./base.nix
     ./roles/desktop/user-icon.nix
     ./roles/virtualization/libvirt.nix
+    ./roles/desktop/cosmic.nix
   ];
 
   nixpkgs.overlays = [
@@ -68,9 +70,7 @@ in {
 
   # Enable GNOME
   services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.displayManager.gdm = {
-    enable = true;
-  };
+  services.xserver.displayManager.gdm.enable = true;
   boot.tmp.cleanOnBoot = true;
 
   # Enable Sway (home-manager config manages details)
@@ -262,6 +262,7 @@ in {
         ../home/linux/desktop.nix # linux-specific desktop.nix
         ../home/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.declarative-flatpak
+        cosmic-manager.homeManagerModules.cosmic-manager
         (import myFlakes.packages.${system}.gnome-dconf)
         #hyprland.homeManagerModules.default
         #../home/linux/hyprland.nix
@@ -281,8 +282,6 @@ in {
           command = lib.mkForce "${pkgs.gnome-screenshot}/bin/gnome-screenshot -acf";
         };
       };
-      # symlink 1password agent socket
-      home.file.".ssh/agent.sock".source = "/home/heywoodlh/.1password/agent.sock";
     };
   };
 

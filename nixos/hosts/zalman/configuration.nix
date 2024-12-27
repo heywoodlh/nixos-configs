@@ -7,6 +7,7 @@
   snowflake,
   mullvad-browser-home-manager,
   ts-warp-nixpkgs, qutebrowser,
+  cosmic-manager,
   ... }:
 
 let
@@ -120,6 +121,7 @@ in {
         ../../../home/desktop.nix # base desktop.nix
         ../../../home/linux/desktop.nix # linux-specific desktop.nix
         flatpaks.homeManagerModules.declarative-flatpak
+        cosmic-manager.homeManagerModules.cosmic-manager
       ];
       home.packages = [
         rustdesk

@@ -73,8 +73,13 @@ in {
           whenSleepingEnter = "hybridSleep";
         };
       };
-      home.packages = [
+      home.packages = with pkgs; [
+        proton-caller
+        steamtinkerlaunch
         sunshine
+        wget # winetricks requires GNU wget
+        wine64
+        winetricks
       ];
       #heywoodlh.home.autostart = [
       #  {

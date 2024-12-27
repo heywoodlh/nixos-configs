@@ -162,4 +162,8 @@ in {
   };
 
   boot.tmp.cleanOnBoot = true;
+
+  boot.kernelParams = [
+    "split_lock_detect=off"
+  ];
 }

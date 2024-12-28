@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, myFlakes, snowflake, dark-wallpaper, ... }:
+{ config, pkgs, home-manager, myFlakes, snowflake, dark-wallpaper, ghostty, ... }:
 
 let
   system = pkgs.system;
@@ -74,6 +74,7 @@ in {
     pkgs.xdotool
     captive-portal
     zen-wrapper
+    ghostty.packages.${system}.default
   ];
 
   home.shellAliases = {

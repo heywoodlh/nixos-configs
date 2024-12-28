@@ -245,6 +245,7 @@ let
     rm -rf ~/.vscode ~/Documents/Code ${vscodeSettingsDir}
   '';
   myVscode = myFlakes.packages.${system}.vscode;
+  myTmux = myFlakes.packages.${system}.tmux;
   arc-settings = ./share/arc-browser.plist;
 in {
   home.packages = [
@@ -300,4 +301,22 @@ in {
 
   # Enable syncthing
   services.syncthing.enable = true;
+
+  # Using ghostty config file:
+  # ghostty failed to build on MacOS for some reason
+  home.file.".config/ghostty/config" = {
+    text = ''
+      font-family = ""
+      font-family = "JetBrains Mono"
+      theme = catppuccin-frappe
+      command = ${myTmux}/bin/tmux
+      window-decoration = false
+      # https://github.com/ghostty-org/ghostty/pull/3742
+      # quick-terminal-size = 80%
+
+      # quake mode; on MacOS give Ghostty accessibility permissions
+      keybind = global:ctrl+grave_accent=toggle_quick_terminal
+      quick-terminal-animation-duration = 0.1
+    '';
+  };
 }

@@ -96,6 +96,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    ghostty.url = "github:ghostty-org/ghostty";
   };
 
   outputs = inputs@{ self,
@@ -134,6 +135,7 @@
                       proxmox-nixos,
                       nvidia-patch,
                       plasma-manager,
+                      ghostty,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {

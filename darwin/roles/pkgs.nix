@@ -56,6 +56,7 @@ in {
       "firefox"
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"
+      "ghostty"
       "hiddenbar"
       "iterm2"
       "knockknock"

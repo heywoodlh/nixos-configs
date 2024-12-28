@@ -6,7 +6,7 @@
   snowflake,
   mullvad-browser-home-manager,
   ts-warp-nixpkgs, qutebrowser,
-  cosmic-manager,
+  cosmic-manager, ghostty,
   ... }:
 
 let
@@ -252,6 +252,7 @@ in {
       inherit snowflake;
       inherit ts-warp-nixpkgs;
       inherit qutebrowser;
+      inherit ghostty;
     };
     backupFileExtension = ".bak";
     users.heywoodlh = { ... }: {

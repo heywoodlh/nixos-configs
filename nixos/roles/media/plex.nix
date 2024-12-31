@@ -92,11 +92,11 @@ in {
     user = "media";
   };
 
-  #services.sabnzbd = {
-  #  enable = true;
-  #  user = "media";
-  #  configFile = "/media/config/services/sabnzbd/config.ini";
-  #};
+  services.sabnzbd = {
+    enable = true;
+    user = "media";
+    configFile = "/media/config/services/sabnzbd/config.ini";
+  };
 
   # https://github.com/NixOS/nixpkgs/issues/360592
   nixpkgs.config.permittedInsecurePackages = [
@@ -131,20 +131,6 @@ in {
           "/media/config/services/openaudible:/config/OpenAudible"
           "/media/config/services/openaudible/desktop:/config/Desktop"
           "/media/home-media/disk2/books:/media/home-media/disk2/books"
-        ];
-      };
-      sabnzbd = {
-        image = "docker.io/linuxserver/sabnzbd:latest";
-        autoStart = true;
-        ports = ["8082:8081"];
-        environment = {
-          PGID = "995";
-          PUID = "995";
-        };
-        volumes = [
-          "/media/config/services/sabnzbd:/config/"
-          "/media/home-media:/media/home-media"
-          "${resolv-conf}:/etc/resolv.conf"
         ];
       };
     };

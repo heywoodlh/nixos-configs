@@ -8,26 +8,26 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/fd525ccb-272f-49a5-9e3e-5c927fee69ef";
+    { device = "/dev/disk/by-uuid/b8f7ab63-69a3-454d-9784-dea34436dcfb";
       fsType = "ext4";
     };
 
-  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/611d9285-5c0c-4d7b-aaaa-ab3b724e7c48";
+  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/cd0bcb13-73ec-4050-892f-6b2be9571587";
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/1B82-3C00";
+    { device = "/dev/disk/by-uuid/784B-7DE3";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/fd6cf950-a715-451c-9f93-368dafeec86f"; }
+    [ { device = "/dev/disk/by-uuid/a14483c2-0453-4319-a648-403a330ff821"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -35,7 +35,6 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp0s13f0u2u4.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp1s0.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp2s0.useDHCP = lib.mkDefault true;
 

@@ -28,13 +28,8 @@ in {
   imports = [
     ./base.nix
     home-manager.nixosModules.home-manager
-    ./roles/desktop/user-icon.nix
     ./roles/virtualization/libvirt.nix
   ];
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
@@ -146,8 +141,8 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = "${myFlakes.packages.${system}.tmux}/bin/tmux";
     homeMode = "755";
+    shell = "${pkgs.bash}/bin/bash";
   };
 
   environment.homeBinInPath = true;

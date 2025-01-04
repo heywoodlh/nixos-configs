@@ -127,7 +127,7 @@ allowedSignersFile = ${signersFile}
 
       # change the clockwise orientation angle of screen display
       # available values: 0 = 0 degree, 1 = 90 degrees, 2 = 180 degrees, 3 = 270 degrees
-      screen-rotate=0
+      #screen-rotate=0
 
       # specify the favorite input method program to run
       input-method=

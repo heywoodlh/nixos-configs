@@ -2,12 +2,17 @@
   description = "heywoodlh nix config";
 
   inputs = {
-    nixpkgs.follows = "nixos-cosmic/nixpkgs"; # using nixos-cosmic (regularly updated) for binary cache
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.11";
     nixos-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     nixpkgs-wazuh-agent.url = "github:V3ntus/nixpkgs/wazuh-agent";
+    # identify possible nvidia versions here:
+    # https://github.com/icewind1991/nvidia-patch-nixos/blob/main/patch.json
+    # if errors encountered, search for commits with the previous version
+    # i.e. https://github.com/NixOS/nixpkgs/pulls?q=565.57.01
+    nixpkgs-nvidia.url = "github:nixos/nixpkgs/e718ed96ed39ece6433b965b1b1479b8878a29a3";
     myFlakes = {
       url = "github:heywoodlh/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -89,7 +94,7 @@
     proxmox-nixos.url = "github:heywoodlh/proxmox-nixos";
     nvidia-patch = {
       url = "github:icewind1991/nvidia-patch-nixos";
-      inputs.nixpkgs.follows = "nixpkgs-backports";
+      inputs.nixpkgs.follows = "nixpkgs-nvidia";
     };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";

@@ -1,25 +1,31 @@
-{ pkgs, nvidia-patch, nixpkgs-backports, ... }:
+{ pkgs, nvidia-patch, nixpkgs-nvidia, ... }:
 let
   system = pkgs.system;
-  pkgs-stable = import nixpkgs-backports {
+  pkgs-nvidia = import nixpkgs-nvidia {
     inherit system;
     config.allowUnfree = true;
     overlays = [ nvidia-patch.overlays.default ];
   };
-  package = pkgs-stable.linuxKernel.packages.linux_zen.nvidiaPackages.beta;
+  # possible versions for the package here: https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nvidia-x11/default.nix
+  package = pkgs-nvidia.linuxKernel.packages.linux_zen.nvidiaPackages.beta;
+  nvidiaVersion = package.version;
 in {
   hardware.graphics = {
     enable = true;
   };
   services.xserver.videoDrivers = ["nvidia"];
-  boot.kernelPackages = pkgs-stable.linuxKernel.packages.linux_zen;
+  boot.kernelPackages = pkgs-nvidia.linuxKernel.packages.linux_zen;
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = true;
     powerManagement.finegrained = false;
     open = false;
     nvidiaSettings = true;
-    package = pkgs-stable.nvidia-patch.patch-nvenc (pkgs-stable.nvidia-patch.patch-fbc package);
+    package = if builtins.hasAttr nvidiaVersion pkgs-nvidia.nvidia-patch-list.fbc
+    then
+      pkgs-nvidia.nvidia-patch.patch-nvenc (pkgs-nvidia.nvidia-patch.patch-fbc package)
+    else
+      throw "Nvidia package provided by nixpkgs does not have patch available for version ${nvidiaVersion}";
   };
 
   services.xserver.deviceSection = ''

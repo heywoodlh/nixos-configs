@@ -6,7 +6,7 @@
   snowflake,
   mullvad-browser-home-manager,
   ts-warp-nixpkgs, qutebrowser,
-  cosmic-manager, ghostty,
+  ghostty,
   ... }:
 
 let
@@ -21,7 +21,6 @@ in {
     ./base.nix
     ./roles/desktop/user-icon.nix
     ./roles/virtualization/libvirt.nix
-    ./roles/desktop/cosmic.nix
   ];
 
   nixpkgs.overlays = [
@@ -136,7 +135,7 @@ in {
 
   # Enable sound with pipewire.
   #sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -263,7 +262,6 @@ in {
         ../home/linux/desktop.nix # linux-specific desktop.nix
         ../home/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.declarative-flatpak
-        cosmic-manager.homeManagerModules.cosmic-manager
         (import myFlakes.packages.${system}.gnome-dconf)
         #hyprland.homeManagerModules.default
         #../home/linux/hyprland.nix

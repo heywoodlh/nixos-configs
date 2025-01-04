@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, myFlakes, snowflake, dark-wallpaper, ghostty, ... }:
+{ config, pkgs, home-manager, myFlakes, snowflake, dark-wallpaper, ... }:
 
 let
   system = pkgs.system;
@@ -12,9 +12,9 @@ let
     ${pkgs.flatpak}/bin/flatpak run --user io.github.zen_browser.zen
   '';
 in {
-  imports = [
-    ./cosmic-desktop.nix
-  ];
+  #imports = [
+    #./cosmic-desktop.nix
+  #];
   # Flatpak support
   services.flatpak = {
     enableModule = true;
@@ -72,9 +72,9 @@ in {
     pkgs.virt-manager
     pkgs.xclip
     pkgs.xdotool
+    pkgs.ghostty
     captive-portal
     zen-wrapper
-    ghostty.packages.${system}.default
   ];
 
   home.shellAliases = {

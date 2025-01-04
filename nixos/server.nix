@@ -60,14 +60,13 @@ in {
   ];
 
   # Wazuh configuration
-  services.wazuh = {
-    package = wazuhPkg;
-    agent = {
-      enable = true;
-      managerIP = "wazuh.barn-banana.ts.net";
-    };
-  };
-
+  #services.wazuh = {
+  #  package = wazuhPkg;
+  #  agent = {
+  #    enable = true;
+  #    managerIP = "wazuh.barn-banana.ts.net";
+  #  };
+  #};
 
   # Enable Docker
   virtualisation = {

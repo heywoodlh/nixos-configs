@@ -165,5 +165,6 @@ in {
 
   boot.kernelParams = [
     "split_lock_detect=off"
+    "mitigations=off"
   ];
 }

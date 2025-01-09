@@ -14,6 +14,9 @@ let
     ${pkgs.appimage-run}/bin/appimage-run ${sunshineExe} $@
   '';
 in {
+  imports = [
+    ./proton-ge.nix
+  ];
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true;

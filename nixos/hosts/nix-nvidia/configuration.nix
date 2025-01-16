@@ -135,10 +135,14 @@
 
   # Nvidia container settings
   virtualisation.docker.enable = true;
-  hardware.nvidia-container-toolkit.enable =  true;
+  hardware.nvidia-container-toolkit = {
+    enable =  true;
+    mount-nvidia-executables = true;
+  };
   environment.systemPackages = with pkgs; [
     docker
     nfdump
+    nvidia-container-toolkit
     runc
   ];
 

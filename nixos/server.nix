@@ -88,7 +88,7 @@ in {
     home = "/home/heywoodlh";
     description = "Spencer Heywood";
     extraGroups = [ "wheel" ];
-    shell = "${pkgs.bash}/bin/bash";
+    shell = pkgs.bashInteractive;
   };
 
   programs.fish = {

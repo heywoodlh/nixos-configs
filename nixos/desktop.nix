@@ -202,7 +202,7 @@ in {
     isNormalUser = true;
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
-    shell = "${pkgs.bash}/bin/bash";
+    shell = pkgs.bashInteractive;
     # users.users.<name>.icon not a NixOS option
     # made possible with ./roles/desktop/user-icon.nix
     icon = builtins.fetchurl {

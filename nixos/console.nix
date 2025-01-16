@@ -142,7 +142,7 @@ in {
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     homeMode = "755";
-    shell = "${pkgs.bash}/bin/bash";
+    shell = pkgs.bashInteractive;
   };
 
   environment.homeBinInPath = true;

@@ -7,7 +7,7 @@ let
     service="sshd.service"
 
     ### Pattern to match with `grep -E ...`
-    grep_regex_pattern='Failed password|Invalid verification code|Invalid user|Accepted publickey|Accepted password|Accepted keyboard-interactive'
+    grep_regex_pattern='Failed password|Invalid verification code|Invalid user|Accepted publickey|Accepted password|Accepted keyboard-interactive|Failed keyboard-interactive'
 
     ### Pattern to exclude with `grep -v -E ...`
     grep_exclude_regex_pattern='root from 100.126.114.23|root from 100.98.176.50|backups from 100.108.106.50'

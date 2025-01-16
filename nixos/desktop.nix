@@ -269,13 +269,6 @@ in {
       home.packages = [
         myFlakes.packages.${system}.git
       ];
-      home.file.".config/fish/machine.fish" = {
-        enable = true;
-        text = ''
-          # Always set 1password agent on NixOS desktops
-          test -e ~/.1password/agent.sock && export SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
-        '';
-      };
       dconf.settings = {
         "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
           command = lib.mkForce "${pkgs.gnome-screenshot}/bin/gnome-screenshot -acf";

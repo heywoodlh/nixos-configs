@@ -53,11 +53,4 @@ in {
   programs.bash.interactiveShellInit = ''
     [ -z $TMUX ] && { ${tmux}/bin/tmux new-session \; send-keys "tmux Space set Space -g Space status Space off Space && Space clear" C-m && exit;}
   '';
-
-  # Start ssh-agent manually if on ssh
-  home-manager.users.heywoodlh.home.file.".config/fish/machine.fish" = {
-    text = ''
-      test -n $SSH_CONNECTION && eval (ssh-agent -c) &> /dev/null
-    '';
-  };
 }

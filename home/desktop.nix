@@ -291,32 +291,6 @@ in {
   # Enable Marp
   heywoodlh.home.marp.enable = true;
 
-  # assume 1password for all users on workstation
-  programs.ssh.extraConfig = let
-    agentSock = if pkgs.stdenv.isDarwin then
-    "${homeDir}/Library/Application/1Password/agent.sock" else "${homeDir}/.1password/agent.sock";
-  in ''
-    IdentityAgent ${agentSock}
-  '';
-
   # Enable syncthing
   services.syncthing.enable = true;
-
-  # Using ghostty config file:
-  # ghostty failed to build on MacOS for some reason
-  home.file.".config/ghostty/config" = {
-    text = ''
-      font-family = ""
-      font-family = "JetBrains Mono"
-      theme = catppuccin-frappe
-      command = ${myTmux}/bin/tmux
-      window-decoration = false
-      # https://github.com/ghostty-org/ghostty/pull/3742
-      # quick-terminal-size = 80%
-
-      # quake mode; on MacOS give Ghostty accessibility permissions
-      keybind = global:ctrl+grave_accent=toggle_quick_terminal
-      quick-terminal-animation-duration = 0.1
-    '';
-  };
 }

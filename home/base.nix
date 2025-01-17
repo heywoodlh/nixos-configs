@@ -205,7 +205,6 @@ in {
     gnumake
     gnused
     go
-    gomuks
     htop
     inetutils
     jq

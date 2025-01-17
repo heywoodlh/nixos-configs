@@ -6,6 +6,7 @@ let
   myFish = myFlakes.packages.${system}.fish;
   myWezterm = myFlakes.packages.${system}.wezterm;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
+  myGhostty = myFlakes.packages.${system}.ghostty;
 in {
   home.packages = with gnome-pkgs; [
     # Fallback to old name if undefined (i.e. on Ubuntu LTS)
@@ -99,6 +100,16 @@ in {
     "org/gnome/desktop/background" = {
       picture-uri = lib.mkForce "${homeDir}/.wallpaper.png";
       picture-uri-dark = lib.mkForce "${homeDir}/.wallpaper.png";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+      binding = lib.mkForce "<Super>Return";
+      command = lib.mkForce "${myGhostty}/bin/ghostty";
+      name = lib.mkForce "ghostty-super";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+      binding = lib.mkForce "<Ctrl><Alt>t";
+      command = lib.mkForce "${myGhostty}/bin/ghostty";
+      name = lib.mkForce "ghostty ctrl_alt";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7" = {
       binding = lib.mkForce "<Control>grave";

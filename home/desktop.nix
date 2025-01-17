@@ -293,4 +293,10 @@ in {
 
   # Enable syncthing
   services.syncthing.enable = true;
+
+  # Ghostty config
+  home.file.".config/ghostty/config" = {
+    enable = true;
+    source = myFlakes.packages.${system}.ghostty-config;
+  };
 }

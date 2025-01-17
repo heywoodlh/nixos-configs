@@ -318,11 +318,11 @@
             ./nixos/hosts/zenbook-14/configuration.nix
           ];
         };
-        nixos-zalman = nixpkgs.lib.nixosSystem {
+        nixos-gaming-pc = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = inputs;
           modules = [
-            ./nixos/hosts/zalman/configuration.nix
+            ./nixos/hosts/gaming-pc/configuration.nix
           ];
         };
         nixos-usb = nixpkgs.lib.nixosSystem {

@@ -1,4 +1,4 @@
-# Config specific to my Zalman gaming PC
+# Config specific to my gaming PC
 { config, pkgs, lib, home-manager,
   nur, hyprland, nixpkgs-backports,
   nixpkgs-stable, nixpkgs-lts,
@@ -31,7 +31,7 @@ in {
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "ntfs" ];
 
-  networking.hostName = "nixos-zalman";
+  networking.hostName = "nixos-gaming-pc";
   networking.networkmanager.enable = true;
   time.timeZone = "America/Denver";
   i18n.defaultLocale = "en_US.utf8";
@@ -49,7 +49,7 @@ in {
     allowedUDPPorts = [ 5353 ];
   };
 
-  networking.interfaces.enp4s0.wakeOnLan.enable = true;
+  networking.interfaces.enp3s0.wakeOnLan.enable = true;
 
   # filesystems
   fileSystems = {

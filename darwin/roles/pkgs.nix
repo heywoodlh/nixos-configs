@@ -32,6 +32,7 @@ in {
       "bash"
       "choose-gui"
       "cliclick"
+      "gomuks"
       "mosh"
       "pinentry-mac"
       "spice-gtk"
@@ -47,6 +48,7 @@ in {
       "colindean/fonts-nonfree"
       "kidonng/malt"
       "aaronraimist/homebrew-tap"
+      "aaronraimist/tap"
     ];
     casks = [
       "1password"

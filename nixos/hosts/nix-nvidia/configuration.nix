@@ -23,6 +23,7 @@
     ../../roles/monitoring/iperf.nix
     ../../roles/storage/nfs-media.nix
     ../../roles/remote-access/cloudflared.nix
+    ../../roles/remote-access/wol.nix
     #../../roles/dev/vscode.nix # many things don't work with non-standard Nix paths
   ];
 

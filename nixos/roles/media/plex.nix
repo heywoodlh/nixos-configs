@@ -10,6 +10,7 @@ in {
   networking.firewall.allowedTCPPorts = [
     8081
     8181
+    8082
   ];
 
   boot.supportedFilesystems = [

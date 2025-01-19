@@ -356,10 +356,17 @@
           specialArgs = inputs;
           modules = [ ./nixos/hosts/nixos-arm64-vm/configuration.nix ];
         };
-        nixos-arm64-test = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
+        # generic build for CI
+        nixos-server = nixpkgs.lib.nixosSystem {
+          system = "${system}";
           specialArgs = inputs;
-          modules = [ ./nixos/hosts/nixos-arm64-test/configuration.nix ];
+          modules = [ ./nixos/hosts/nixos-build/server.nix ];
+        };
+        # generic build for CI
+        nixos-desktop = nixpkgs.lib.nixosSystem {
+          system = "${system}";
+          specialArgs = inputs;
+          modules = [ ./nixos/hosts/nixos-build/desktop.nix ];
         };
         nix-nvidia = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -483,20 +490,6 @@
               services.tailscale.enable = pkgs.lib.mkForce false;
             }
           ];
-        };
-        # Used in CI
-        nixos-desktop-intel = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/hosts/generic-intel/configuration.nix
-          ];
-        };
-        # Used in CI
-        nixos-server-intel = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [ ./nixos/hosts/generic-intel-server/configuration.nix ];
         };
       };
       # home-manager targets (non NixOS/MacOS, ideally Arch Linux)

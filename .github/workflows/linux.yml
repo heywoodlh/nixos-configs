@@ -18,71 +18,75 @@ on:
 
 jobs:
   build-linux-env:
-    name: Build Linux outputs
-    runs-on: [self-hosted, linux, x64]
+    name: Build Linux outputs (x86_64)
+    runs-on: [ubuntu-24.04]
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Login to Tailnet
+      uses: tailscale/github-action@v3
+      with:
+        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+        tags: tag:ci
 
     - name: Install Nix
       uses: cachix/install-nix-action@v27
       with:
         nix_path: nixpkgs=channel:nixpkgs-unstable
         extra_nix_config: |
-          extra-substituters = http://100.69.64.103/nixos
-          extra-trusted-public-keys = nixos:ZffGHlb0Ng3oXu8cLT9msyOB/datC4r+/K9nImONIec=
+          extra-substituters = http://attic/nixos
+          extra-trusted-public-keys = nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E=
 
     - name: Setup Nix Magic Cache
       uses: DeterminateSystems/magic-nix-cache-action@main
 
     - name: Build Linux outputs
+      shell: bash
+      env:
+        ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
       run: |
-        sudo -s /bin/bash -- <<EOF
-          source /home/docker/.nix-profile/etc/profile.d/nix-daemon.sh
-          USER=root /home/docker/.nix-profile/bin/nix run nixpkgs#cachix -- use heywoodlh-helix
-          /home/docker/.nix-profile/bin/nix build "github:zhaofengli/attic#attic-client"
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-          /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop-intel
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-          /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server-intel
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-          /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh.activationPackage --impure
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-          /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh-server.activationPackage --impure
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-        EOF
+        mkdir -p ~/.config/attic
+        printf "default-server = \"kube\"\n\n[servers.kube]\nendpoint = \"http://attic\"\ntoken = \"$ATTIC_TOKEN\"" > ~/.config/attic/config.toml
+        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server
+        nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop --impure
+        nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
 
   build-linux-arm64-env:
-    name: Build Linux outputs
-    runs-on: [self-hosted, linux, arm64]
+    name: Build Linux outputs (ARM64)
+    runs-on: [ubuntu-24.04-arm]
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Login to Tailnet
+      uses: tailscale/github-action@v3
+      with:
+        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+        tags: tag:ci
 
     - name: Install Nix
       uses: cachix/install-nix-action@v27
       with:
         nix_path: nixpkgs=channel:nixpkgs-unstable
         extra_nix_config: |
-          extra-substituters = http://100.69.64.103/nixos
-          extra-trusted-public-keys = nixos:ZffGHlb0Ng3oXu8cLT9msyOB/datC4r+/K9nImONIec=
+          extra-substituters = http://attic/nixos
+          extra-trusted-public-keys = nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E=
 
     - name: Setup Nix Magic Cache
       uses: DeterminateSystems/magic-nix-cache-action@main
 
     - name: Build Linux outputs
+      shell: bash
+      env:
+        ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
       run: |
-        sudo -s /bin/bash -- <<EOF
-          source /home/docker/.nix-profile/etc/profile.d/nix-daemon.sh
-          USER=root /home/docker/.nix-profile/bin/nix run nixpkgs#cachix -- use heywoodlh-helix
-          /home/docker/.nix-profile/bin/nix build "github:zhaofengli/attic#attic-client"
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-          /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-arm64-test
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-          /home/docker/.nix-profile/bin/nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-mac-mini
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-          /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh.activationPackage --impure
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-          /home/docker/.nix-profile/bin/nix build .#homeConfigurations.heywoodlh-server.activationPackage --impure
-          /home/docker/.nix-profile/bin/nix run "github:zhaofengli/attic#attic-client" -- push nixos ./result
-        EOF
+        mkdir -p ~/.config/attic
+        printf "default-server = \"kube\"\n\n[servers.kube]\nendpoint = \"http://attic\"\ntoken = \"$ATTIC_TOKEN\"" > ~/.config/attic/config.toml
+        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server
+        nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop --impure
+        nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result

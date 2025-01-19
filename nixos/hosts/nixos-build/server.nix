@@ -1,12 +1,12 @@
 { config, pkgs, ... }:
 
 let
-  hostname = "nixos-arm64-vm";
+  hostname = "nixos-server";
 in {
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../desktop.nix
+    ../../server.nix
   ];
 
   # Bootloader.
@@ -22,10 +22,4 @@ in {
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
-
-  # Enable auto upgrade
-  system.autoUpgrade = {
-    enable = true;
-    flake = "github:heywoodlh/nixos-configs#${hostname}";
-  };
 }

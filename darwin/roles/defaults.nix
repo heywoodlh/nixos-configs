@@ -109,7 +109,7 @@ in {
     };
     CustomUserPreferences = {
       "NSGlobalDomain" = {
-        "AppleSpacesSwitchOnActivate" = 0; # Disable refocus spaces on app switch
+        "AppleSpacesSwitchOnActivate" = 1; # Disabling this breaks Cmd+Tab
       };
       "com.googlecode.iterm2" = {
         "PrefsCustomFolder" = "~/.config/iterm2";

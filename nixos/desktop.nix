@@ -293,8 +293,11 @@ in {
   # Thunderbolt 3
   services.hardware.bolt.enable = true;
 
-  # Assume use of 1Password agent for all users on workstations
-  programs.ssh.extraConfig = ''
-    IdentityAgent /home/heywoodlh/.1password/agent.sock
-  '';
+  # Use seahorse ssh-agent
+  system.activationScripts.symlink-ssh-agent = {
+    text = ''
+      mkdir -p /home/heywoodlh/.ssh && chown -R heywoodlh /home/heywoodlh/.ssh
+      ln -s /run/user/1000/keyring/ssh /home/heywoodlh/.ssh/agent.sock
+    '';
+  };
 }

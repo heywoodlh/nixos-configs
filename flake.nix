@@ -524,7 +524,7 @@
               targets.genericLinux.enable = true;
               home.packages = [
                 pkgs.docker-client
-                (pkgs.nerdfonts.override { fonts = [ "Hack" "DroidSansMono" "JetBrainsMono" ]; })
+                pkgs.nerd-fonts.jetbrains-mono
                 myFlakes.packages.${system}.git
                 myFlakes.packages.${system}.vim
               ];

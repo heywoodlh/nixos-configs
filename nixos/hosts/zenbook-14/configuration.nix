@@ -42,6 +42,7 @@ in {
       moonlight-qt
       signal-desktop
       spicetify.packages.x86_64-linux.nord
+      webcord
       zoom-us
     ];
     heywoodlh.home.applications = [

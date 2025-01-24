@@ -38,10 +38,10 @@ in {
   nix.settings = {
     sandbox = true;
     substituters = [
-      #"https://hyprland.cachix.org"
+      "https://hyprland.cachix.org"
     ];
     trusted-public-keys = [
-      #"hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
     ];
   };
 
@@ -83,13 +83,13 @@ in {
   #};
 
   # Enable hyprland
-  #programs.hyprland = {
-  #  enable = true;
-  #  xwayland.enable = true;
-  #};
-  #services.displayManager.defaultSession = "hyprland";
-  #security.pam.services.swaylock.text = "auth include login";
-  #hardware.brillo.enable = true;
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
+  services.displayManager.defaultSession = "hyprland";
+  security.pam.services.swaylock.text = "auth include login";
+  hardware.brillo.enable = true;
 
   # Enable kde connect
   programs.kdeconnect = {
@@ -263,8 +263,8 @@ in {
         ../home/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.declarative-flatpak
         (import myFlakes.packages.${system}.gnome-dconf)
-        #hyprland.homeManagerModules.default
-        #../home/linux/hyprland.nix
+        hyprland.homeManagerModules.default
+        ../home/linux/hyprland.nix
       ];
       home.packages = [
         myFlakes.packages.${system}.git
@@ -297,7 +297,7 @@ in {
   system.activationScripts.symlink-ssh-agent = {
     text = ''
       mkdir -p /home/heywoodlh/.ssh && chown -R heywoodlh /home/heywoodlh/.ssh
-      ln -s /run/user/1000/keyring/ssh /home/heywoodlh/.ssh/agent.sock
+      ln -s /run/user/1000/keyring/ssh /home/heywoodlh/.ssh/agent.sock &> /dev/null || true
     '';
   };
 }

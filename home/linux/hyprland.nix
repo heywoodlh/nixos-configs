@@ -4,6 +4,10 @@ let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
 in {
+  imports = [
+    ./hyprland/office-monitors.nix
+  ];
+
   home.packages = with pkgs; [
     acpi
     bluetuith
@@ -59,7 +63,7 @@ in {
     enable = true;
     settings = {
       main = {
-        terminal = "${pkgs.gnome.gnome-terminal}/bin/gnome-terminal";
+        terminal = "${pkgs.ghostty}/bin/ghostty";
         layer = "overlay";
         width = 45;
         lines = 5;
@@ -148,7 +152,7 @@ in {
     executable = true;
     text = ''
     #!/usr/bin/env bash
-    ${pkgs.libnotify}/bin/notify-send $(${pkgs.acpi}/bin/acpi -b | grep -Eo [0-9]+%)
+    ${pkgs.libnotify}/bin/notify-send $(${pkgs.acpi}/bin/acpi -b | grep -Eo [0-9]+% | ${pkgs.coreutils}/bin/head -1)
     '';
   };
 
@@ -389,7 +393,7 @@ in {
       env = NIXOS_OZONE_WL, 1
 
       general {
-        col.active_border = 81a1c1ff
+        #col.active_border = 81a1c1ff
         no_border_on_floating = yes
         no_focus_fallback = true
       }
@@ -400,8 +404,9 @@ in {
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
       exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
-      # Start gnome-terminal in special workspace so I can toggle it
-      #exec-once = [workspace special:terminal] ${pkgs.gnome.gnome-terminal}/bin/gnome-terminal
+      # Start terminal in special workspace so I can toggle it
+      #exec-once = [workspace special:terminal] ${pkgs.ghostty}/bin/ghostty
+      workspace = special:terminal, on-created-empty:${pkgs.ghostty}/bin/ghostty --font-size=12
       # Animations
       animations {
         enabled = yes
@@ -432,10 +437,6 @@ in {
       windowrule = rounding 10, ^(1Password)$
       windowrule = rounding 10, ^(firefox)$
 
-      master {
-        new_is_master = true # https://wiki.hyprland.org/Configuring/Master-Layout
-      }
-
       # Gestures
       gestures {
         workspace_swipe = on
@@ -451,8 +452,8 @@ in {
       # General Keybindings
       $mainMod = SUPER
       # Terminal
-      bind = $mainMod, Return, exec, ${pkgs.gnome.gnome-terminal}/bin/gnome-terminal
-      bind = CTRL_ALT, t, exec, ${pkgs.gnome.gnome-terminal}/bin/gnome-terminal
+      bind = $mainMod, Return, exec, ${pkgs.ghostty}/bin/ghostty
+      bind = CTRL_ALT, t, exec, ${pkgs.ghostty}/bin/ghostty
       bind = CTRL, grave, togglespecialworkspace, terminal
       # 1Password
       bind = CTRL_SUPER, s, exec, ${homeDir}/bin/1password-toggle.sh

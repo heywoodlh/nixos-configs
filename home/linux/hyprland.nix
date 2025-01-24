@@ -382,6 +382,7 @@ in {
   # Hyprland
   wayland.windowManager.hyprland = {
     enable = true;
+    package = pkgs.hyprland; # use nixpkgs-provided hyprland
     extraConfig = ''
       # Fix blurry X11 apps, hidpi
       #exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 24c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2

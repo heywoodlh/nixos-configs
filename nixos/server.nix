@@ -94,6 +94,11 @@ in {
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
+      if not ${pkgs.ps}/bin/ps -fjH -u $USER | ${pkgs.gnugrep}/bin/grep ssh-agent | ${pkgs.gnugrep}/bin/grep -q "$HOME/.ssh/agent.sock" &> /dev/null
+        mkdir -p $HOME/.ssh
+        rm -f $HOME/.ssh/agent.sock &> /dev/null
+        eval (${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
+      end
     '';
   };
 

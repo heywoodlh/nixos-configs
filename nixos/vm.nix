@@ -5,6 +5,7 @@
     ./desktop.nix
     ./roles/remote-access/sshd.nix
     ./roles/dev/gnome-guest.nix
+    ./roles/desktop/hyprland.nix
   ];
 
   # Bootloader

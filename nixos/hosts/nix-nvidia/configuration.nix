@@ -62,10 +62,10 @@
   };
 
   # This drive seems to have issues
-  #fileSystems."/media/disk1" ={
-  #  device = "/dev/disk/by-uuid/01cc4cb8-4646-471c-969d-a8729570c564";
-  #  fsType = "btrfs";
-  #  options = [ "rw" "uid=1000" "rw" "relatime" "x-systemd.mount-timeout=5min" ];
+  #fileSystems."/media/data-ssd" ={
+  #  device = "/dev/disk/by-uuid/4445dc2a-ecab-4401-ac4c-b2c78a53644b";
+  #  fsType = "ext4";
+  #  options = [ "rw" "uid=1000" "rw" "nofail" "relatime" "x-systemd.mount-timeout=5min" ];
   #};
 
   # Prevent system from sleeping (for XRDP to work)
@@ -174,6 +174,7 @@
     "/opt/open-webui"
     "/opt/protonmail-bridge"
     "/opt/serge"
+    "/opt/ollama/models"
   ];
 
   # Resolve too many open files error
@@ -191,4 +192,32 @@
   services.tailscale.extraSetFlags = [
     "--advertise-routes=10.64.0.1/32"
   ];
+
+  users = {
+    groups.ollama = {
+      name = "ollama";
+      gid = 900;
+    };
+    users.ollama = {
+      isSystemUser = true;
+      uid = 900;
+      group = "ollama";
+      home  = "/opt/ollama";
+      description  = "Ollama user";
+    };
+  };
+
+  services.ollama = {
+    enable = true;
+    host = "100.108.77.60";
+    acceleration = "cuda";
+    home = "/opt/ollama";
+    models = "/opt/ollama/models";
+    loadModels = [
+      "deepseek-r1:8b"
+      "codellama:7b"
+      "deepseek-coder:6.7b"
+      "qwen2-math:7b"
+    ];
+  };
 }

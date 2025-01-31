@@ -424,6 +424,9 @@ in {
       end
 
       export OLLAMA_HOST="nix-nvidia.barn-banana.ts.net:11435"
+
+      # Config file that gets loaded very last
+      test -e ~/.config/fish/override.fish && source ~/.config/fish/override.fish || true
     '';
   };
 

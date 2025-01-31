@@ -217,6 +217,7 @@ in {
     nixfmt-rfc-style
     nmap
     openssl
+    ollama
     pciutils
     pwgen
     python3
@@ -421,6 +422,8 @@ in {
       function github-unlock
         set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh/personal-access-token --fields=password)"
       end
+
+      export OLLAMA_HOST="nix-nvidia.barn-banana.ts.net:11435"
     '';
   };
 

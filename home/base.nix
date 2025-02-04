@@ -423,7 +423,7 @@ in {
         set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh/personal-access-token --fields=password)"
       end
 
-      export OLLAMA_HOST="nix-nvidia.barn-banana.ts.net:11435"
+      export OLLAMA_HOST="nix-nvidia.barn-banana.ts.net:11434"
 
       # Config file that gets loaded very last
       test -e ~/.config/fish/override.fish && source ~/.config/fish/override.fish || true

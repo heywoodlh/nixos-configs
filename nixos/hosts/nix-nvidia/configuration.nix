@@ -220,6 +220,7 @@
       "codellama:7b"
       "deepseek-coder:6.7b"
       "qwen2-math:7b"
+      "llama3:8b"
     ];
   };
 }

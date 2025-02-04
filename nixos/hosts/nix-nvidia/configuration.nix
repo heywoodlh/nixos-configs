@@ -193,6 +193,8 @@
     "--advertise-routes=10.64.0.1/32"
   ];
 
+  systemd.services.ollama.serviceConfig.Restart = "always";
+
   users = {
     groups.ollama = {
       name = "ollama";

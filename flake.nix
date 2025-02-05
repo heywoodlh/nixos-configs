@@ -550,12 +550,18 @@
                   if grep -iq Ubuntu /etc/os-release
                   then
                     version="$(grep VERSION_ID /etc/os-release | cut -d'=' -f2 | tr -d '"')"
-                    ## Support for Ubuntu 22.04
-                    if [[ "$version" == "22.04" ]]
+                    ## Support for Ubuntu 22
+                    if echo "$version" | grep -qE '22'
                     then
                       EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-22.05"
                     fi
-                    if [[ "$version" == "24.04" ]]
+                    ## Support for Ubuntu 23
+                    if echo "$version" | grep -qE '23'
+                    then
+                      EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-23.05"
+                    fi
+                    ## Support for Ubuntu 24-25, TODO support 25 standalone after May 2025
+                    if echo "$version" | grep -q '24|25'
                     then
                       EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-24.05"
                     fi

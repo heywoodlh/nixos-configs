@@ -4,7 +4,7 @@ let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   browser = "firefox";
-  noproxies = "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net";
+  noproxies = "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net,.svc.cluster.local";
   socksProxy = "10.64.0.1";
   socksPort = 1080;
   firefoxsvg = pkgs.fetchurl {

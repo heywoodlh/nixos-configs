@@ -12,7 +12,7 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../laptop.nix
-      ../../roles/desktop/hyprland.nix
+      #../../roles/desktop/hyprland.nix
       lanzaboote.nixosModules.lanzaboote
     ];
 

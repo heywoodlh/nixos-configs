@@ -193,7 +193,7 @@
     "--advertise-routes=10.64.0.1/32"
   ];
 
-  systemd.services.ollama.serviceConfig.Restart = "always";
+  systemd.services.ollama.serviceConfig.Restart = lib.mkForce "always";
 
   users = {
     groups.ollama = {

@@ -61,12 +61,10 @@
     package = pkgs.linuxKernel.packages.linux_xanmod_stable.nvidia_x11;
   };
 
-  # This drive seems to have issues
-  #fileSystems."/media/data-ssd" ={
-  #  device = "/dev/disk/by-uuid/4445dc2a-ecab-4401-ac4c-b2c78a53644b";
-  #  fsType = "ext4";
-  #  options = [ "rw" "uid=1000" "rw" "nofail" "relatime" "x-systemd.mount-timeout=5min" ];
-  #};
+  fileSystems."/media/data-ssd" ={
+    device = "/dev/disk/by-uuid/ad1b8750-51fb-4270-b0c2-739276f30a95";
+    fsType = "ext4";
+  };
 
   # Prevent system from sleeping (for XRDP to work)
   systemd.targets.sleep.enable = false;
@@ -174,7 +172,6 @@
     "/opt/open-webui"
     "/opt/protonmail-bridge"
     "/opt/serge"
-    "/opt/ollama/models"
   ];
 
   # Resolve too many open files error

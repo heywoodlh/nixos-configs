@@ -19,7 +19,8 @@ in {
     gnomeExtensions.gsconnect
     gnomeExtensions.hide-cursor
     gnomeExtensions.night-theme-switcher
-    gnomeExtensions.pop-shell
+    gnomeExtensions.paperwm
+    gnomeExtensions.search-light
     gnomeExtensions.tray-icons-reloaded
     pkgs.epiphany
     gnomeExtensions.just-perfection

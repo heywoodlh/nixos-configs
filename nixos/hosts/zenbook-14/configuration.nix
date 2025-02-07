@@ -95,10 +95,8 @@ in {
   };
 
   # Fingerprint reader support
-  services.fprintd = {
-    enable = true;
-    package = stable-pkgs.fprintd-tod;
-    tod.enable = true;
-    tod.driver = lib.mkForce stable-pkgs.libfprint-2-tod1-goodix;
-  };
+  services.fprintd.enable = true;
+  services.fprintd.tod.enable = true;
+  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
+
 }

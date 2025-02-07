@@ -172,6 +172,7 @@
     "/opt/open-webui"
     "/opt/protonmail-bridge"
     "/opt/serge"
+    "/media/data-ssd/ollama"
   ];
 
   # Resolve too many open files error
@@ -190,34 +191,29 @@
     "--advertise-routes=10.64.0.1/32"
   ];
 
-  systemd.services.ollama.serviceConfig.Restart = lib.mkForce "always";
 
-  users = {
-    groups.ollama = {
-      name = "ollama";
-      gid = 900;
-    };
-    users.ollama = {
-      isSystemUser = true;
-      uid = 900;
-      group = "ollama";
-      home  = "/opt/ollama";
-      description  = "Ollama user";
+  virtualisation.oci-containers = let
+    resolvConf = pkgs.writeText "resolv.conf" ''
+      nameserver 1.1.1.1
+      nameserver 1.0.0.1
+    '';
+  in {
+    backend = "docker";
+    containers = {
+      ollama = {
+        image = "docker.io/ollama/ollama:0.5.8-rc10";
+        autoStart = true;
+        ports = [
+          "11434:11434"
+        ];
+        extraOptions = [ "--device=nvidia.com/gpu=all" ];
+        volumes = [
+          "/media/data-ssd/ollama:/root/.ollama"
+          "/etc/localtime:/etc/localtime:ro"
+          "${resolvConf}:/etc/resolv.conf:ro"
+        ];
+      };
     };
   };
 
-  services.ollama = {
-    enable = true;
-    host = "100.108.77.60";
-    acceleration = "cuda";
-    home = "/opt/ollama";
-    models = "/opt/ollama/models";
-    loadModels = [
-      "deepseek-r1:8b"
-      "codellama:7b"
-      "deepseek-coder:6.7b"
-      "qwen2-math:7b"
-      "llama3:8b"
-    ];
-  };
 }

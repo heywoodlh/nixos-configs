@@ -142,6 +142,7 @@
     docker
     nfdump
     nvidia-container-toolkit
+    nvtop
     runc
   ];
 

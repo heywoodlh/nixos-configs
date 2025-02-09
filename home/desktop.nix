@@ -21,6 +21,7 @@ let
     "network.proxy.socks" = socksProxy;
     "network.proxy.socks_port" = socksPort;
     "gfx.webrender.all" = true;
+    "browser.startup.page" = 3; # restore previous session
   };
   firefox-settings = if browser == "mullvad-browser"  then {
     # Mullvad Browser settings

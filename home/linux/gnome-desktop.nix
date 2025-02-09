@@ -101,15 +101,14 @@ in {
     "org/gnome/shell/extensions/paperwm".winprops = map builtins.toJSON [
         {
           "wm_class" = "Firefox";
-          "preferredWidth" = "80%";
           "spaceIndex" = 0;
         }
         {
-          "wm_class" = "1Password";
-          "scratch_layer" = true;
+          "wm_class" = "com.mitchellh.ghostty";
+          "preferredWidth" = "80%";
         }
         {
-          "wm_class" = "Guake";
+          "wm_class" = "1Password";
           "scratch_layer" = true;
         }
     ];

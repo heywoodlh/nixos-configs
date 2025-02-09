@@ -51,6 +51,6 @@ in {
   };
 
   programs.bash.interactiveShellInit = ''
-    [ -z $TMUX ] && { ${tmux}/bin/tmux new-session \; send-keys "tmux Space set Space -g Space status Space off Space && Space clear" C-m && exit;}
+    [ -z $TMUX ] && { ${tmux}/bin/tmux new-session -A -s main && exit;}
   '';
 }

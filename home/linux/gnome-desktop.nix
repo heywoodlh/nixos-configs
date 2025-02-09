@@ -105,7 +105,7 @@ in {
         }
         {
           "wm_class" = "com.mitchellh.ghostty";
-          "preferredWidth" = "80%";
+          "preferredWidth" = "100%";
         }
         {
           "wm_class" = "1Password";
@@ -131,6 +131,9 @@ in {
       binding = lib.mkForce "<Control>grave";
       command = lib.mkForce "${pkgs.guake}/bin/guake";
       name = lib.mkForce "guake";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
+      command = lib.mkForce "${pkgs.gnome-screenshot}/bin/gnome-screenshot -ac";
     };
   };
 }

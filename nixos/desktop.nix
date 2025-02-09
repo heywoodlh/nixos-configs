@@ -248,11 +248,6 @@ in {
       home.packages = [
         myFlakes.packages.${system}.git
       ];
-      dconf.settings = {
-        "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
-          command = lib.mkForce "${pkgs.gnome-screenshot}/bin/gnome-screenshot -acf";
-        };
-      };
     };
   };
 

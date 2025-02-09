@@ -98,6 +98,22 @@ in {
   # Now managed by my gnome flake
   # Only Home-Manager-specific settings should live here
   dconf.settings = {
+    "org/gnome/shell/extensions/paperwm".winprops = map builtins.toJSON [
+        {
+          "wm_class" = "Firefox";
+          "preferredWidth" = "80%";
+          "spaceIndex" = 0;
+        }
+        {
+          "wm_class" = "1Password";
+          "scratch_layer" = true;
+        }
+        {
+          "wm_class" = "Guake";
+          "scratch_layer" = true;
+        }
+    ];
+
     "org/gnome/desktop/background" = {
       picture-uri = lib.mkForce "${homeDir}/.wallpaper.png";
       picture-uri-dark = lib.mkForce "${homeDir}/.wallpaper.png";

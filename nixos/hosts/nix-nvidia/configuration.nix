@@ -81,6 +81,27 @@
     ];
   };
 
+  # Set up k3s for nvidia passthrough
+  # Reference: https://git.sr.ht/~goorzhel/nixos/tree/a806b38a14361e0eab2b1aca23f0b7d54e4c50f8/item/profiles/k3s/common/nvidia.nix#L37
+  systemd.services = {
+    nvidia-container-toolkit-cdi-generator = {
+      environment.LD_LIBRARY_PATH = "${config.hardware.nvidia.package}/lib";
+    };
+    k3s-containerd-setup = {
+      serviceConfig.Type = "oneshot";
+      requiredBy = ["k3s.service"];
+      before = ["k3s.service"];
+      script = ''
+        cat << EOF > /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+        {{ template "base" . }}
+
+        [plugins]
+        "io.containerd.grpc.v1.cri".enable_cdi = true
+        EOF
+      '';
+    };
+  };
+
   # Enable mullvad wireguard
   networking.wg-quick.interfaces = {
     mullvad = {
@@ -142,7 +163,7 @@
     docker
     nfdump
     nvidia-container-toolkit
-    nvtop
+    nvtopPackages.full
     runc
   ];
 

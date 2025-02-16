@@ -95,6 +95,10 @@ in {
     '';
   };
 
+  home.file."Pictures/screenshots/.placeholder.txt" = {
+    text = "";
+  };
+
   # Now managed by my gnome flake
   # Only Home-Manager-specific settings should live here
   dconf.settings = {
@@ -133,7 +137,7 @@ in {
       name = lib.mkForce "guake";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
-      command = lib.mkForce "${pkgs.gnome-screenshot}/bin/gnome-screenshot -ac";
+      command = lib.mkForce "${pkgs.bash}/bin/bash -c \"${pkgs.gnome-screenshot}/bin/gnome-screenshot -acf ${homeDir}/Pictures/screenshots/screenshot-$(${pkgs.coreutils}/bin/date +%Y-%m-%d_%H:%M:%S).png\"";
     };
   };
 }

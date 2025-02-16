@@ -40,6 +40,7 @@ in {
     ];
     home.packages = with pkgs; [
       beeper
+      gimp
       moonlight-qt
       signal-desktop
       spicetify.packages.x86_64-linux.nord

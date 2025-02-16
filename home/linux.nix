@@ -134,4 +134,5 @@ allowedSignersFile = ${signersFile}
       input-method=
     '';
   };
+  heywoodlh.home.dockerBins.enable = true;
 }

@@ -14,16 +14,31 @@ let
     fi
   '';
   docker-multiarch = pkgs.writeShellScriptBin "docker-multiarch" ''
-    ${docker-check} || exit 1
     # Enable multi-arch support
-    if ! ${pkgs.docker-client}/bin/docker buildx inspect --bootstrap | grep Platforms | grep -q 'linux/amd64'
+    if [[ $(uname) == "Linux" ]]
     then
-       ${pkgs.docker-client}/bin/docker run --privileged --rm tonistiigi/binfmt --install all
+      # nixos support
+      if ls -l /run/wrappers/bin/sudo &> /dev/null
+      then
+        sudo_bin=/run/wrappers/bin/sudo
+      else
+        sudo_bin=sudo
+      fi
+      exec "$sudo_bin" ${pkgs.docker-client}/bin/docker run --privileged --rm docker.io/tonistiigi/binfmt --install all
+    else
+      ${pkgs.docker-client}/bin/docker run --privileged --rm docker.io/tonistiigi/binfmt --install all
+    fi
+  '';
+  check-multiarch = pkgs.writeShellScript "check-multiarch" ''
+    ${docker-check} || exit 1
+    if ! ${pkgs.docker-client}/bin/docker buildx inspect --bootstrap | grep Platforms | grep 'linux/amd64' | grep -q 'linux/arm'
+    then
+      ${docker-multiarch}/bin/docker-multiarch || exit 1
     fi
   '';
   sniper = pkgs.writeShellScriptBin "sniper" ''
     # Ensure multiarch support
-    ${docker-multiarch}/bin/docker-multiarch || exit 1
+    ${check-multiarch} || exit 1
     mkdir -p ~/share/docker
     ${pkgs.git}/bin/git clone https://github.com/1N3/Sn1per ~/share/docker/sniper &>/dev/null || true
     ${pkgs.docker-client}/bin/docker compose --project-directory=$HOME/share/docker/sniper up

@@ -65,22 +65,23 @@ let
     bash ${op-backup-script} l.spencer.heywood@protonmail.com ${op-backup-dir}
   '';
   op-base = ''
+    env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password-cli}/bin/op signin)
     id="$(${op-wrapper} item list | grep -vE '^ID' | ${pkgs.fzf}/bin/fzf --reverse | awk '{print $1}')"
     [[ -z "$id" ]] && exit 0 # exit if no selection was made
   '';
   op-password = pkgs.writeShellScript "op-password" ''
     ${op-base}
-    ${op-wrapper} item get "$id" --fields label=password || true
+    ${op-wrapper} item get "$id" --fields label=password --reveal || true
   '';
   op-otp = pkgs.writeShellScript "op-otp" ''
     ${op-base}
     ${op-wrapper} item get "$id" --otp || true
   '';
-  password = pkgs.writeShellScriptBin "password" ''
-    ${op-password}
+  password = pkgs.writeShellScriptBin "passwords" ''
+    ${op-password} | ${pkgs.tmux}/bin/tmux loadb -
   '';
-  otp = pkgs.writeShellScriptBin "otp" ''
-    ${op-otp}
+  otp = pkgs.writeShellScriptBin "totp" ''
+    ${op-otp} | ${pkgs.tmux}/bin/tmux loadb -
   '';
   myPass = pkgs.writeShellScriptBin "pass" ''
     export PASSWORD_STORE_DIR="${op-backup-dir-no-format}"

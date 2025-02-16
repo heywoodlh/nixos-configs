@@ -64,8 +64,11 @@ let
   op-backup = pkgs.writeShellScriptBin "op-backup" ''
     bash ${op-backup-script} l.spencer.heywood@protonmail.com ${op-backup-dir}
   '';
-  op-base = ''
+  op-unlock = ''
     env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password-cli}/bin/op signin)
+  '';
+  op-base = ''
+    ${op-unlock}
     id="$(${op-wrapper} item list | grep -vE '^ID' | ${pkgs.fzf}/bin/fzf --reverse | awk '{print $1}')"
     [[ -z "$id" ]] && exit 0 # exit if no selection was made
   '';
@@ -416,6 +419,11 @@ in {
   home.file.".config/fish/config.fish" = {
     enable = true;
     text = ''
+      # Remove all 1Password session variables
+      function op-clear
+        set --erase (set | ${pkgs.gnugrep}/bin/grep "OP_SESSION_" | ${pkgs.coreutils}/bin/cut -d' ' -f1) &>/dev/null || true
+      end
+
       function vultr-unlock
         export VULTR_API_KEY="$(${op-wrapper} read 'op://Personal/dr4b7omthk7nmwkzbe3nwkrhka/api_key')"
       end
@@ -475,7 +483,7 @@ in {
     executable = true;
     text = ''
       #!/usr/bin/env fish
-      op-unlock
+      ${op-unlock}
       ${pkgs.aerc}/bin/aerc "$argv"
     '';
   };

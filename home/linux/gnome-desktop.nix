@@ -120,16 +120,6 @@ in {
       picture-uri = lib.mkForce "${homeDir}/.wallpaper.png";
       picture-uri-dark = lib.mkForce "${homeDir}/.wallpaper.png";
     };
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-      binding = lib.mkForce "<Super>Return";
-      command = lib.mkForce "${myGhostty}/bin/ghostty";
-      name = lib.mkForce "ghostty-super";
-    };
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
-      binding = lib.mkForce "<Ctrl><Alt>t";
-      command = lib.mkForce "${myGhostty}/bin/ghostty";
-      name = lib.mkForce "ghostty ctrl_alt";
-    };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7" = {
       binding = lib.mkForce "<Control>grave";
       command = lib.mkForce "${pkgs.guake}/bin/guake";

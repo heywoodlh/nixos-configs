@@ -11,7 +11,7 @@
     ../../roles/gaming/minecraft-bedrock.nix
     #../../roles/monitoring/graylog.nix
     ../../roles/containers/k3s-server.nix
-    ../../roles/security/fleetdm.nix
+    #../../roles/security/fleetdm.nix
     ../../roles/monitoring/osqueryd.nix
     ../../roles/nixos/cache.nix
     #../../roles/remote-access/wireguard-server.nix

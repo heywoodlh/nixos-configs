@@ -73,11 +73,18 @@
   systemd.targets.hybrid-sleep.enable = false;
 
   # K8s cluster
-  services.k3s = {
+  services.k3s = let
+    kubeletConf = pkgs.writeText "kubelet.conf" ''
+      apiVersion: kubelet.config.k8s.io/v1beta1
+      kind: KubeletConfiguration
+      maxPods: 250
+    '';
+  in {
     role = "server";
     extraFlags = toString [
       "--tls-san=nix-nvidia"
       "--tls-san=100.108.77.60"
+      "--kubelet-arg=config=${kubeletConf}"
     ];
   };
 

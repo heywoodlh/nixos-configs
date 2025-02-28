@@ -291,6 +291,11 @@
         "mac-mini" = darwinConfig "mac-mini" "mac-mini" {
           imports = [
             ./darwin/roles/mac-mini.nix
+            {
+              homebrew.casks = [
+                "windows-app"
+              ];
+            }
           ];
         };
       };

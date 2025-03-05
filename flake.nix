@@ -75,7 +75,6 @@
       };
     };
     attic.url = "github:zhaofengli/attic/6eabc3f02fae3683bffab483e614bebfcd476b21";
-    nixos-x13s.url = "github:BrainWart/x13s-nixos";
     ts-warp-nixpkgs.url = "github:heywoodlh/nixpkgs/ts-warp-init";
     qutebrowser = {
       url = "github:qutebrowser/qutebrowser";
@@ -309,11 +308,11 @@
             ./nixos/hosts/macbook/configuration.nix
           ];
         };
-        nixos-x13s = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
+        nixos-thinkpad = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
           specialArgs = inputs;
           modules = [
-            ./nixos/hosts/x13s/configuration.nix
+            ./nixos/hosts/x13/configuration.nix
           ];
         };
         nixos-zenbook = nixpkgs.lib.nixosSystem {

@@ -39,8 +39,8 @@ jobs:
           extra-substituters = http://attic/nixos
           extra-trusted-public-keys = nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E=
 
-    - name: Setup Nix Magic Cache
-      uses: DeterminateSystems/magic-nix-cache-action@main
+    - name: Free disk space
+      uses: jlumbroso/free-disk-space@main
 
     - name: Build Linux outputs
       shell: bash
@@ -76,8 +76,8 @@ jobs:
           extra-substituters = http://attic/nixos
           extra-trusted-public-keys = nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E=
 
-    - name: Setup Nix Magic Cache
-      uses: DeterminateSystems/magic-nix-cache-action@main
+    - name: Free disk space
+      uses: jlumbroso/free-disk-space@main
 
     - name: Build Linux outputs
       shell: bash

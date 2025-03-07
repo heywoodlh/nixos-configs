@@ -1,5 +1,5 @@
 # Config specific to Lenovo X13 Intel Gen 5
-{ config, pkgs, lib, spicetify, nixos-hardware, lanzaboote, ... }:
+{ config, pkgs, lib, nixos-hardware, lanzaboote, ... }:
 
 {
   imports =
@@ -69,6 +69,7 @@
       beeper
       gimp
       moonlight-qt
+      spot
       webcord
       zoom-us
     ];

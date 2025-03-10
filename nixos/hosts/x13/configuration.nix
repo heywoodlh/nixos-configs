@@ -1,7 +1,9 @@
 # Config specific to Lenovo X13 Intel Gen 5
-{ config, pkgs, lib, nixos-hardware, lanzaboote, ... }:
+{ config, pkgs, lib, nixos-hardware, spicetify, lanzaboote, ... }:
 
-{
+let
+  system = pkgs.system;
+in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -69,7 +71,7 @@
       beeper
       gimp
       moonlight-qt
-      spot
+      spicetify.packages.${system}.nord-text
       webcord
       zoom-us
     ];

@@ -47,7 +47,10 @@
       flake = false;
     };
     nur.url = "github:nix-community/NUR";
-    spicetify.url = "gitlab:kylesferrazza/spicetify-nix";
+    spicetify = {
+      url = "gitlab:kylesferrazza/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     flatpaks.url = "github:GermanBread/declarative-flatpak/stable-v3";
     nix-on-droid = {

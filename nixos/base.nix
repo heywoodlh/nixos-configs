@@ -1,8 +1,9 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, nixpkgs-stable, lib, stdenv, nur, ... }:
+{ config, pkgs, nixpkgs-stable, lib, nur, ... }:
 
 let
   system = pkgs.system;
+  stdenv = pkgs.stdenv;
   stable-pkgs = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
@@ -70,11 +71,6 @@ in {
           ${pkgs.docker-client}/bin/docker context use rootless
         fi
       '';
-      home.file.".ssh/config".text = ''
-        # User-wide SSH config for nix builders
-        Host nix-nvidia macos-intel-vm mac-mini
-          IdentityAgent /home/heywoodlh/.ssh/agent.sock
-      '';
     };
   };
 
@@ -84,9 +80,11 @@ in {
     pinentryPackage = pkgs.pinentry-curses;
   };
 
-  programs.ssh.extraConfig = ''
+  programs.ssh.extraConfig = let
+    altBuilder = if stdenv.isx86_64 then "ubuntu-arm64" else "";
+  in ''
     # System-wide SSH config for nix builders
-    Host nix-nvidia macos-intel-vm mac-mini
+    Host mac-mini intel-mac-vm ${altBuilder}
       IdentityAgent /home/heywoodlh/.ssh/agent.sock
   '';
 

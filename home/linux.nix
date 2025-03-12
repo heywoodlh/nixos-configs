@@ -22,18 +22,6 @@ in {
     end
   '';
 
-  nix = {
-    settings = let
-      foreignLinuxBuilder = if pkgs.system == "x86_64-linux" then
-        "ssh://heywoodlh@ubuntu-arm64 aarch64-linux" else
-        "ssh://heywoodlh@nix-nvidia x86_64-linux";
-    in {
-      # Before you can use these, run the following command:
-      # sudo -E ssh heywoodlh@nix-nvidia; sudo -E ssh heywoodlh@ubuntu-arm64; sudo -E ssh heywoodlh@mac-mini; sudo -E ssh heywoodlh@macos-intel-vm
-      builders = "${foreignLinuxBuilder} ; ssh://heywoodlh@macos-intel-vm x86_64-darwin ; ssh://heywoodlh@mac-mini aarch64-darwin ;";
-    };
-  };
-
   # Proxychains wrapper
   home.file."bin/proxychains" = {
     executable = true;

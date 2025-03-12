@@ -109,17 +109,4 @@ in {
     enable = true;
     source = ./tabby/config.yaml;
   };
-
-  nix = {
-    settings = let
-      # only have foreign arch because $(arch)-linux is covered by linux-builder
-      myBuilders = if pkgs.system == "aarch64-darwin" then
-        "ssh://heywoodlh@macos-intel-vm x86_64-darwin ; ssh://heywoodlh@nix-nvidia x86_64-linux ; ssh://builder@linux-builder aarch64-linux" else
-        "ssh://heywoodlh@mac-mini aarch64-darwin ; ssh://heywoodlh@ubuntu-arm64 aarch64-linux ; ssh://builder@linux-builder x86_64-linux";
-    in {
-      # Before you can use these, run the following command:
-      # sudo -E ssh heywoodlh@nix-nvidia; sudo -E ssh heywoodlh@ubuntu-arm64; sudo -E ssh heywoodlh@mac-mini; sudo -E ssh heywoodlh@macos-intel-vm
-      builders = "${myBuilders}";
-    };
-  };
 }

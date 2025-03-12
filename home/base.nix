@@ -2,6 +2,7 @@
 
 let
   system = pkgs.system;
+  stdenv = pkgs.stdenv;
   homeDir = config.home.homeDirectory;
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
@@ -36,13 +37,13 @@ let
       fi
     fi
   '';
-  newsboat_browser_config = if pkgs.stdenv.isDarwin then ''
+  newsboat_browser_config = if stdenv.isDarwin then ''
     browser "open %u"
   ''
   else ''
     browser "${pkgs.xdg-utils}/bin/xdg-open %u"
   '';
-  gomuks_keybindings_file = if pkgs.stdenv.isDarwin
+  gomuks_keybindings_file = if stdenv.isDarwin
   then "Library/Application Support/gomuks/keybindings.yaml"
   else ".config/gomuks/keybindings.yaml";
   op-wrapper = pkgs.writeShellScript "op-wrapper.sh" ''
@@ -53,11 +54,11 @@ let
     url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/c938124eff5dddd3aad226a5a5a6ae65441211b7/backup.sh";
     sha256 = "sha256:12cbni566245m513r2w8lng11gzbl148mlnlscwzwbkxhpacwz9d";
   };
-  op-backup-dir = if pkgs.stdenv.isDarwin then
+  op-backup-dir = if stdenv.isDarwin then
     "${homeDir}/Library/Mobile\\ Documents/com~apple~CloudDocs/password-store"
   else
     "${homeDir}/.password-store";
-  op-backup-dir-no-format = if pkgs.stdenv.isDarwin then
+  op-backup-dir-no-format = if stdenv.isDarwin then
     "${homeDir}/Library/Mobile Documents/com~apple~CloudDocs/password-store"
   else
     "${homeDir}/.password-store";
@@ -105,7 +106,7 @@ let
   ts-warp = ts-warp-nixpkgs.legacyPackages.${system}.ts-warp;
   ts-warp-pf = ./share/ts-warp_pf.conf;
   ts-warp-ini = ./share/ts-warp.ini;
-  incognito = if pkgs.stdenv.isDarwin then pkgs.writeShellScriptBin "incognito" ''
+  incognito = if stdenv.isDarwin then pkgs.writeShellScriptBin "incognito" ''
     test -d /usr/local/etc || sudo mkdir -p /usr/local/etc
     test -f /usr/local/etc/ts-warp_pf.conf || sudo cp ${ts-warp-pf} /usr/local/etc/ts-warp_pf.conf
     test -f /usr/local/etc/ts-warp.ini || sudo cp ${ts-warp-ini} /usr/local/etc/ts-warp.ini
@@ -175,6 +176,30 @@ let
     set -ex
     cp ${docker-compose-txt} "$1"
     [[ -f "$1" ]] && chmod +w "$1"
+  '';
+  altDarwin = if system == "aarch64-darwin" then "ssh://heywoodlh@intel-mac-vm x86_64-darwin" else "ssh://heywoodlh@mac-mini aarch64-darwin"; # MacOS builder on opposite arch
+  altLinux = if system == "x86_64-linux" then "ssh://heywoodlh@ubuntu-arm64 aarch64-linux" else "ssh://heywoodlh@nix-nvidia x86_64-linux"; # Linux builder on opposite arch
+  altBuilder = if stdenv.isDarwin then "${altLinux}" else "${altDarwin}";
+  myBuilders = if stdenv.isDarwin then "ssh://heywoodlh@nix-nvidia x86_64-linux ; ssh://builder@linux-builder aarch64-linux ; ${altDarwin}" else "ssh://heywoodlh@mac-mini aarch64-darwin ; ssh://heywoodlh@intel-mac-vm x86_64-darwin ; ${altLinux}";
+  builder-pop = pkgs.writeShellScriptBin "builders.sh" ''
+    set -ex
+    # Shell script to populate SSH host keys
+    ssh heywoodlh@nix-nvidia true
+    ssh heywoodlh@mac-mini true
+    ssh heywoodlh@ubuntu-arm64 true
+    ssh heywoodlh@intel-mac-vm true
+
+    # Populate to root user
+    sudo -E ssh heywoodlh@nix-nvidia true
+    sudo -E ssh heywoodlh@mac-mini true
+    sudo -E ssh heywoodlh@ubuntu-arm64 true
+    sudo -E ssh heywoodlh@intel-mac-vm true
+  '';
+  remote-nix = pkgs.writeShellScriptBin "nix.sh" ''
+    ${pkgs.nix}/bin/nix --builders "${myBuilders}" $@
+  '';
+  remote-nixos-rebuild = pkgs.writeShellScriptBin "nixos-rebuild.sh" ''
+    ${pkgs.nixos-rebuild}/bin/nixos-rebuild --builders "${myBuilders}" $@
   '';
 in {
   home.stateVersion = "24.11";
@@ -247,6 +272,9 @@ in {
     incognito
     duo-key-self-setup
     duo-key-remote-setup
+    builder-pop
+    remote-nix
+    remote-nixos-rebuild
   ];
 
   # Enable password-store
@@ -506,7 +534,7 @@ in {
   # Jujutsu config
   # Configs not specified here are in my jujutsu flake
   home.file.".config/jujutsu/config.toml".text = let
-    osConf = if pkgs.stdenv.isDarwin then ''
+    osConf = if stdenv.isDarwin then ''
       # optional, but recommended
       # not setting on Linux because it's not needed
       [signing.backends.ssh]
@@ -520,4 +548,16 @@ in {
 
     ${osConf}
   '';
+
+  home.file.".ssh/config".text = let
+    # Lazy: assume I'm either on Apple Silicon MacOS or Intel Linux
+    altBuilder = if stdenv.isLinux then "ubuntu-arm64" else "intel-mac-vm";
+    authSock = if stdenv.isLinux then "/home/heywoodlh/.ssh/agent.sock" else "${homeDir}/Library/Mobile\\ Documents/com~apple~CloudDocs/password-store"; # always assume 1password on MacOS
+    builders = if stdenv.isLinux then "mac-mini intel-mac-vm ${altBuilder}" else "nix-nvidia ubuntu-arm64 ${altBuilder}";
+  in ''
+    # User-wide SSH config for nix builders
+      Host ${builders}
+        IdentityAgent ${authSock}
+  '';
+  nix.settings.builders = myBuilders;
 }

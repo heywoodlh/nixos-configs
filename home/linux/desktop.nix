@@ -8,8 +8,15 @@ let
    ${pkgs.xdg-utils}/bin/xdg-open "http://$(${pkgs.iproute2}/bin/ip --oneline route get 1.1.1.1 | ${pkgs.gawk}/bin/awk '{print $3}')"
   '';
   zen-wrapper = pkgs.writeShellScriptBin "zen" ''
-    ${pkgs.flatpak}/bin/flatpak list --user | grep -iq zen_browser || ${pkgs.flatpak}/bin/flatpak install --noninteractive --user flathub io.github.zen_browser.zen
-    ${pkgs.flatpak}/bin/flatpak run --user io.github.zen_browser.zen
+    set -ex
+    ${pkgs.flatpak}/bin/flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || ${pkgs.libnotify}/bin/notify-send "Failed to add flathub repo"
+    if ! ${pkgs.flatpak}/bin/flatpak list --user | grep -iq app.zen_browser.zen
+    then
+      ${pkgs.libnotify}/bin/notify-send "Installing Zen Browser flatpak"
+      ${pkgs.flatpak}/bin/flatpak install --noninteractive --user flathub app.zen_browser.zen || ${pkgs.libnotify}/bin/notify-send "Failed to install zen"
+      ${pkgs.libnotify}/bin/notify-send "Installed Zen Browser flatpak"
+    fi
+    ${pkgs.flatpak}/bin/flatpak run --user app.zen_browser.zen || ${pkgs.libnotify}/bin/notify-send "Failed to launch Zen Browser"
   '';
 in {
   #imports = [

@@ -1,16 +1,22 @@
 # Config specific to Lenovo X13 Intel Gen 5
-{ config, pkgs, lib, nixos-hardware, spicetify, lanzaboote, ... }:
+{ config, pkgs, lib, nixpkgs-pam-lid-fix, nixos-hardware, spicetify, lanzaboote, ... }:
 
 let
   system = pkgs.system;
 in {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ../../desktop.nix
-      nixos-hardware.nixosModules.lenovo-thinkpad-x13
-      lanzaboote.nixosModules.lanzaboote
-    ];
+  disabledModules = [
+    "security/pam.nix"
+    "services/security/fprintd.nix"
+  ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ../../laptop.nix
+    "${nixpkgs-pam-lid-fix}/nixos/modules/security/pam.nix"
+    "${nixpkgs-pam-lid-fix}/nixos/modules/services/security/fprintd.nix"
+    nixos-hardware.nixosModules.lenovo-thinkpad-x13
+    lanzaboote.nixosModules.lanzaboote
+  ];
 
   networking.hostName = "nixos-thinkpad";
   # Bootloader -- using lanzaboote
@@ -58,9 +64,14 @@ in {
   };
 
   # Fingerprint
-  services.fprintd.enable = true;
-  services.fprintd.tod.enable = true;
-  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
+  services.fprintd = {
+    enable = true;
+    authSkipLidClose = true; # do not use fingerprint on lid close
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-goodix;
+    };
+  };
 
   # Configuration for this machine
   home-manager.users.heywoodlh = {

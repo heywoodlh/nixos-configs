@@ -160,7 +160,6 @@
       arch = pkgs.stdenv.hostPlatform.uname.processor;
       linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
       darwinSystem = "${arch}-darwin";
-      darwinStateVersion = 4;
       darwinModules.heywoodlh.darwin = ./darwin/modules/default.nix;
       homeModules.heywoodlh.home = ./home/modules/default.nix;
 
@@ -184,8 +183,7 @@
                 homebrew = true;
               };
             };
-
-            system.stateVersion = darwinStateVersion;
+            system.stateVersion = 6;
           }
         ] ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
       };

@@ -26,7 +26,6 @@ in {
     '';
   };
 
-  services.nix-daemon.enable = true;
   programs.nix-index.enable = true;
 
   environment.shells = with pkgs; [
@@ -127,5 +126,5 @@ in {
   '';
 
   # Use touch ID for sudo auth
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 }

@@ -7,7 +7,7 @@ on:
     paths:
     - darwin/**
     - .github/workflows/darwin.yml
-    - roles/**
+    - home/**
     - '!darwin/**.md'
     - '!**.md'
   workflow_dispatch:

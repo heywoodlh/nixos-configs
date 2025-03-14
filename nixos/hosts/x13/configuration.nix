@@ -1,9 +1,13 @@
 # Config specific to Lenovo X13 Intel Gen 5
-{ config, pkgs, lib, nixpkgs-pam-lid-fix, nixpkgs-fprintd-fix, nixos-hardware, spicetify, lanzaboote, ... }:
+{ config, pkgs, lib, nixpkgs-pam-lid-fix, nixpkgs-stable, nixpkgs-fprintd-fix, nixos-hardware, spicetify, lanzaboote, ... }:
 
 let
   system = pkgs.system;
   fprintd-fix-pkgs = import nixpkgs-fprintd-fix {
+    inherit system;
+    config.allowUnfree = true;
+  };
+  stable-pkgs = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
   };
@@ -94,13 +98,13 @@ in {
       webcord
       zoom-us
     ];
-    #heywoodlh.home.applications = [
-    #  {
-    #    name = "Rustdesk";
-    #    command = ''
-    #      bash -c "SHELL='/run/current-system/sw/bin/bash' ${pkgs.rustdesk-flutter}/bin/rustdesk"
-    #    '';
-    #  }
-    #];
+    heywoodlh.home.applications = [
+      {
+        name = "Rustdesk";
+        command = ''
+          bash -c "SHELL='/run/current-system/sw/bin/bash' ${stable-pkgs.rustdesk-flutter}/bin/rustdesk"
+        '';
+      }
+    ];
   };
 }

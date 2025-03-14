@@ -13365,11 +13365,11 @@
     },
     "nixpkgs-pam-lid-fix_2": {
       "locked": {
-        "lastModified": 1726616633,
-        "narHash": "sha256-z/JILB4PA3pYyS8lerUHAykBSMtxWZhm+Y4OcPPwMFc=",
+        "lastModified": 1741919166,
+        "narHash": "sha256-2ARmtLgw6mrimrVgaJigPEPuDEBd95q35HxrKT5jeBc=",
         "owner": "heywoodlh",
         "repo": "nixpkgs",
-        "rev": "cfe07442930e7cfaa0ab60b3d8b9b4afbe86a7f6",
+        "rev": "c0fede9190c159811b8e7293aa8f995b74a8538e",
         "type": "github"
       },
       "original": {

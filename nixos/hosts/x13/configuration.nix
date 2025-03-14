@@ -66,7 +66,10 @@ in {
   # Fingerprint
   services.fprintd = {
     enable = true;
-    authSkipLidClose = true; # do not use fingerprint on lid close
+    lid = {
+      authSkipLidClose = true; # do not use fingerprint on lid close
+      path = "/proc/acpi/button/lid/LID/state";
+    };
     tod = {
       enable = true;
       driver = pkgs.libfprint-2-tod1-goodix;

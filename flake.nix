@@ -7,6 +7,7 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.11";
     nixos-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
+    nixpkgs-fprintd-fix.url = "github:pineapplehunter/nixpkgs/libfprint-tod/fix-build-failure";
     nixpkgs-wazuh-agent.url = "github:V3ntus/nixpkgs/wazuh-agent";
     # identify possible nvidia versions here:
     # https://github.com/icewind1991/nvidia-patch-nixos/blob/main/patch.json
@@ -85,7 +86,7 @@
     };
     signal-ntfy.url = "github:heywoodlh/signal-ntfy-mirror";
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.1";
+      url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     comin = {
@@ -110,6 +111,7 @@
                       nixpkgs,
                       nixpkgs-stable,
                       nixpkgs-pam-lid-fix,
+                      nixpkgs-fprintd-fix,
                       nixpkgs-wazuh-agent,
                       myFlakes,
                       nixpkgs-backports,

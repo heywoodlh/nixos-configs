@@ -1,15 +1,22 @@
 # Config specific to Lenovo X13 Intel Gen 5
-{ config, pkgs, lib, nixpkgs-pam-lid-fix, nixpkgs-stable, nixpkgs-fprintd-fix, nixos-hardware, spicetify, lanzaboote, ... }:
+{ config, pkgs, lib, nixpkgs-pam-lid-fix, nixpkgs-stable, nixos-hardware, spicetify, lanzaboote, ... }:
 
 let
   system = pkgs.system;
-  fprintd-fix-pkgs = import nixpkgs-fprintd-fix {
-    inherit system;
-    config.allowUnfree = true;
-  };
   stable-pkgs = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
+  };
+  fprint-fix = final: prev: {
+    # can be removed when https://github.com/NixOS/nixpkgs/pull/389711 is merged
+    libfprint = prev.libfprint.overrideAttrs (oldAttrs: {
+      buildInputs = oldAttrs.buildInputs ++ [ prev.nss ];
+    });
+  };
+  fixups-pkgs = import nixpkgs-stable {
+    inherit system;
+    config.allowUnfree = true;
+    nixpkgs.overlays = [ fprint-fix ];
   };
 in {
   disabledModules = [
@@ -24,6 +31,10 @@ in {
     "${nixpkgs-pam-lid-fix}/nixos/modules/services/security/fprintd.nix"
     nixos-hardware.nixosModules.lenovo-thinkpad-x13
     lanzaboote.nixosModules.lanzaboote
+  ];
+
+  nixpkgs.overlays = [
+    fprint-fix
   ];
 
   networking.hostName = "nixos-thinkpad";
@@ -80,9 +91,9 @@ in {
     };
     tod = {
       enable = true;
-      driver = fprintd-fix-pkgs.libfprint-2-tod1-goodix;
+      driver = fixups-pkgs.libfprint-2-tod1-goodix;
     };
-    package = fprintd-fix-pkgs.fprintd-tod;
+    package = fixups-pkgs.fprintd-tod;
   };
 
   # Configuration for this machine

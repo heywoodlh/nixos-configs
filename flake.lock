@@ -13123,22 +13123,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-fprintd-fix": {
-      "locked": {
-        "lastModified": 1741918887,
-        "narHash": "sha256-vbVTT+2holgA4t6n6eVyTC6YwVxGOLS9sdRiRegtJpw=",
-        "owner": "pineapplehunter",
-        "repo": "nixpkgs",
-        "rev": "9f9f51f10007131b1d7c94a2072264b0c1e0f52d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "pineapplehunter",
-        "ref": "libfprint-tod/fix-build-failure",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1719876945,
@@ -17190,7 +17174,6 @@
         "nixos-wsl": "nixos-wsl_11",
         "nixpkgs": "nixpkgs_137",
         "nixpkgs-backports": "nixpkgs-backports_11",
-        "nixpkgs-fprintd-fix": "nixpkgs-fprintd-fix",
         "nixpkgs-lts": "nixpkgs-lts_11",
         "nixpkgs-nvidia": "nixpkgs-nvidia",
         "nixpkgs-pam-lid-fix": "nixpkgs-pam-lid-fix_2",

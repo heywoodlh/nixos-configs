@@ -9,7 +9,7 @@
       text = ''
         set -ex
 
-        targetmac="80:FA:5B:68:F5:04"
+        targetmac="54:BF:64:96:0B:C6"
         targetip="192.168.50.255"
         targetport="9"
 

@@ -25,7 +25,7 @@
       search_domains=barn-banana.ts.net
     '';
     hosts = {
-      "100.69.64.103" = [
+      "100.65.244.115" = [
         "attic"
         "attic.barn-banana.ts.net"
       ];

@@ -82,7 +82,9 @@ in {
     pkgs.ghostty
     captive-portal
     zen-wrapper
-  ];
+  ] ++ (if system == "aarch64-linux" then [
+    myFlakes.packages.aarch64-linux.chromium-widevine
+  ] else []);
 
   home.shellAliases = {
     open = "xdg-open";

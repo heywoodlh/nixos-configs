@@ -1,6 +1,5 @@
 { config, pkgs, lib, home-manager,
-  nur, nixpkgs-backports,
-  nixpkgs-stable, nixpkgs-lts,
+  nur, nixpkgs-stable, nixpkgs-lts,
   myFlakes, flatpaks,
   light-wallpaper, dark-wallpaper,
   snowflake,
@@ -11,7 +10,7 @@
 
 let
   system = pkgs.system;
-  pkgs-backports = import nixpkgs-backports {
+  pkgs-stable = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
   };
@@ -99,7 +98,7 @@ in {
   # Enable CUPS to print documents.
   services.printing = {
     enable = true;
-    drivers = [ pkgs-backports.hplipWithPlugin ];
+    drivers = [ pkgs-stable.hplipWithPlugin ];
   };
   services.avahi = {
     enable = true;
@@ -109,7 +108,7 @@ in {
   # For scanning documents
   hardware.sane = {
     enable = true;
-    extraBackends = [ pkgs-backports.hplipWithPlugin ];
+    extraBackends = [ pkgs-stable.hplipWithPlugin ];
   };
   users.extraGroups.lp.members = [ "heywoodlh" ];
   users.extraGroups.scanner.members = [ "heywoodlh" ];
@@ -158,7 +157,7 @@ in {
   # Virtualization
   virtualisation = {
     docker.rootless = {
-      package = pkgs-backports.docker;
+      package = pkgs-stable.docker;
       enable = true;
       setSocketVariable = true;
     };

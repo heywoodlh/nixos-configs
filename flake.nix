@@ -437,6 +437,26 @@
               virtualisation.vmware.guest.enable = true;
               console.earlySetup = true;
               services.tailscale.enable = pkgs.lib.mkForce false;
+              fileSystems."/shared" = {
+                device = ".host:/";
+                fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse"; # "fuse.${pkgs.open-vm-tools}/bin/vmhgfs-fuse" does not work
+                options = [
+                  "allow_other"
+                  "auto_unmount"
+                  "defaults"
+                  "gid=1000"
+                  "uid=1000"
+                  "umask=0022"
+                ];
+              };
+              home-manager.users.heywoodlh = {
+                home.file.".gitconfig" = {
+                  text = ''
+                    [safe]
+                    directory = "/shared/*";
+                  '';
+                };
+              };
             }
           ];
         };

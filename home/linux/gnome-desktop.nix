@@ -23,6 +23,7 @@ in {
     gnomeExtensions.tray-icons-reloaded
     pkgs.epiphany
     gnomeExtensions.just-perfection
+    gnomeExtensions.space-bar
   ];
 
   # Enable unclutter

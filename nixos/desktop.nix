@@ -95,21 +95,15 @@ in {
     variant = "";
   };
 
-  # Enable CUPS to print documents.
-  services.printing = {
-    enable = true;
-    drivers = [ pkgs-stable.hplipWithPlugin ];
-  };
+  services.printing.enable = true;
+
   services.avahi = {
     enable = true;
     nssmdns4 = true;
     openFirewall = true; # For wifi printers
   };
   # For scanning documents
-  hardware.sane = {
-    enable = true;
-    extraBackends = [ pkgs-stable.hplipWithPlugin ];
-  };
+  hardware.sane.enable = true;
   users.extraGroups.lp.members = [ "heywoodlh" ];
   users.extraGroups.scanner.members = [ "heywoodlh" ];
 

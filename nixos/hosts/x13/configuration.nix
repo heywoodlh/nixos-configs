@@ -24,9 +24,9 @@ in {
     "services/security/fprintd.nix"
   ];
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../laptop.nix
+    ../../roles/hardware/printers.nix
     "${nixpkgs-pam-lid-fix}/nixos/modules/security/pam.nix"
     "${nixpkgs-pam-lid-fix}/nixos/modules/services/security/fprintd.nix"
     nixos-hardware.nixosModules.lenovo-thinkpad-x13

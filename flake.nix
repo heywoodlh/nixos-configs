@@ -432,6 +432,7 @@
           modules = [
             /etc/nixos/hardware-configuration.nix
             ./nixos/vm.nix
+            ./nixos/roles/hardware/printers.nix
             {
               networking.hostName = "nixos-vmware";
               virtualisation.vmware.guest.enable = true;

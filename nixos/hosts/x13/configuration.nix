@@ -96,6 +96,8 @@ in {
     package = fixups-pkgs.fprintd-tod;
   };
 
+  programs.steam.enable = true;
+
   # Configuration for this machine
   home-manager.users.heywoodlh = {
     imports = [

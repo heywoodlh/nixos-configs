@@ -552,12 +552,12 @@ in {
   home.file.".ssh/config".text = let
     # Lazy: assume I'm either on Apple Silicon MacOS or Intel Linux
     altBuilder = if stdenv.isLinux then "ubuntu-arm64" else "intel-mac-vm";
-    authSock = if stdenv.isLinux then "/home/heywoodlh/.ssh/agent.sock" else "${homeDir}/Library/Mobile\\ Documents/com~apple~CloudDocs/password-store"; # always assume 1password on MacOS
+    authSock = if stdenv.isLinux then "${homeDir}/.ssh/agent.sock" else "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"; # always assume 1password on MacOS
     builders = if stdenv.isLinux then "mac-mini intel-mac-vm ${altBuilder}" else "nix-nvidia ubuntu-arm64 ${altBuilder}";
   in ''
     # User-wide SSH config for nix builders
       Host ${builders}
-        IdentityAgent ${authSock}
+        IdentityAgent "${authSock}"
   '';
   nix.settings.builders = myBuilders;
 }

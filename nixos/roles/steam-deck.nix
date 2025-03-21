@@ -3,7 +3,6 @@
 {
   imports = [
     (jovian-nixos + "/modules")
-    home-manager.nixosModule
   ];
 
   jovian = {

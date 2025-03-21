@@ -1,8 +1,6 @@
 { config, pkgs, home-manager, ... }:
 
 {
-  imports = [ home-manager.nixosModule ];
-
   networking.firewall = {
     allowedTCPPorts = [ 3389 ];
   };

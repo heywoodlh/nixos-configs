@@ -1,5 +1,5 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, nixpkgs-stable, lib, nur, nix, ... }:
+{ config, pkgs, nixpkgs-stable, lib, nur, nix, home-manager, ... }:
 
 let
   system = pkgs.system;
@@ -12,6 +12,7 @@ in {
   imports = [
     ./roles/virtualization/multiarch.nix
     nix.nixosModules.default
+    home-manager.nixosModules.home-manager
   ];
 
   nix.package = nix.packages.${system}.default;

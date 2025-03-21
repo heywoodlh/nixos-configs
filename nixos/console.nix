@@ -27,7 +27,6 @@ let
 in {
   imports = [
     ./base.nix
-    home-manager.nixosModules.home-manager
     ./roles/virtualization/libvirt.nix
   ];
 

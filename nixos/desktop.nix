@@ -16,7 +16,6 @@ let
   };
 in {
   imports = [
-    home-manager.nixosModules.home-manager
     ./base.nix
     ./roles/desktop/user-icon.nix
     ./roles/virtualization/libvirt.nix

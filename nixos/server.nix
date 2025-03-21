@@ -14,7 +14,6 @@ let
   wazuhPkg = pkgs.callPackage ./pkgs/wazuh.nix {};
 in {
   imports = [
-    home-manager.nixosModule
     comin.nixosModules.comin
     ./base.nix
     ./roles/remote-access/sshd.nix

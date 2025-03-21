@@ -35,9 +35,14 @@ jobs:
       uses: DeterminateSystems/nix-installer-action@main
       with:
         determinate: true
-        extra_args: |
-          --extra-substituters "http://attic/nixos"
-          --extra-trusted-public-keys "nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E="
+
+    - name: Set up binary cache
+      run: |
+        sudo tee -a /etc/nix/nix.conf > /dev/null <<EOF
+        extra-substituters = http://attic/nixos
+        extra-trusted-public-keys = nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E=
+        EOF
+
 
     - name: Build macos-desktop output
       env:

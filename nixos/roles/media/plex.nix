@@ -86,6 +86,13 @@ in {
     user = "media";
   };
 
+  services.readarr = {
+    enable = true;
+    openFirewall = true;
+    dataDir = "/media/config/services/readarr";
+    user = "media";
+  };
+
   services.sonarr = {
     enable = true;
     openFirewall = true;

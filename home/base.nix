@@ -457,7 +457,7 @@ in {
       end
 
       function github-unlock
-        set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh/personal-access-token --fields=password)"
+        set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh/personal-access-token --fields=password --reveal)"
       end
 
       export OLLAMA_HOST="nix-nvidia.barn-banana.ts.net:11434"

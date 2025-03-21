@@ -1,5 +1,5 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, nixpkgs-stable, lib, nur, ... }:
+{ config, pkgs, nixpkgs-stable, lib, nur, nix, ... }:
 
 let
   system = pkgs.system;
@@ -11,7 +11,10 @@ let
 in {
   imports = [
     ./roles/virtualization/multiarch.nix
+    nix.nixosModules.default
   ];
+
+  nix.package = nix.packages.${system}.default;
 
   # Allow olm for gomuks until issues are resolved
   nixpkgs.config.permittedInsecurePackages = [

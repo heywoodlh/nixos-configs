@@ -13,6 +13,7 @@
     # if errors encountered, search for commits with the previous version
     # i.e. https://github.com/NixOS/nixpkgs/pulls?q=565.57.01
     nixpkgs-nvidia.url = "github:nixos/nixpkgs/e718ed96ed39ece6433b965b1b1479b8878a29a3";
+    nix.url = "github:DeterminateSystems/nix/40a2f6c08f8a93ccdebfa2df7eb36c748210c255";
     myFlakes = {
       url = "github:heywoodlh/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -143,6 +144,7 @@
                       nvidia-patch,
                       plasma-manager,
                       ghostty,
+                      nix,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -168,6 +170,7 @@
         specialArgs = inputs;
         modules = [
           darwinModules.heywoodlh.darwin
+          nix.darwinModules.default
           ./darwin/roles/base.nix
           ./darwin/roles/defaults.nix
           ./darwin/roles/pkgs.nix
@@ -517,6 +520,7 @@
         heywoodlh = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
+            nix.homeModules.default
             (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
             cosmic-manager.homeManagerModules.cosmic-manager
             flatpaks.homeManagerModules.declarative-flatpak
@@ -597,6 +601,7 @@
         heywoodlh-server = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
+            nix.homeModules.default
             ./home/linux.nix
             ./home/linux/no-desktop.nix
             {

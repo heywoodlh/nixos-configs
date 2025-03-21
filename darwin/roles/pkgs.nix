@@ -32,7 +32,7 @@ in {
       "bash"
       "choose-gui"
       "cliclick"
-      "gomuks"
+      "aaronraimist/tap/gomuks"
       "mosh"
       "pinentry-mac"
       "spice-gtk"
@@ -43,7 +43,6 @@ in {
       cask_args appdir: "~/Applications"
     '';
     taps = [
-      "homebrew/services"
       "amar1729/formulae"
       "colindean/fonts-nonfree"
       "kidonng/malt"
@@ -64,7 +63,6 @@ in {
       "lulu"
       "mullvad-browser"
       "oversight"
-      "reikey"
       "remoteviewer"
       "rustdesk"
       "shortcat"

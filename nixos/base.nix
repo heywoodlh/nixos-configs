@@ -15,8 +15,6 @@ in {
     home-manager.nixosModules.home-manager
   ];
 
-  nix.package = nix.packages.${system}.default;
-
   # Allow olm for gomuks until issues are resolved
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"

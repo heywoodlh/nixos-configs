@@ -283,6 +283,11 @@
         "m3-macbook-pro" = darwinConfig "macbook" "m3-macbook-pro" {
           imports = [
             darwinWorkstationConfig
+            {
+              homebrew.casks = [
+                "steam"
+              ];
+            }
           ];
         };
         "m1-mac-mini" = darwinConfig "mac-mini" "m1-mac-mini" {

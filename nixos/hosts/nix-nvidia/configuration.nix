@@ -20,6 +20,7 @@
     ../../roles/nixos/cache-populator.nix
     ../../roles/media/plex.nix
     ../../roles/media/youtube.nix
+    ../../roles/media/ebook2audiobook.nix
     ../../roles/monitoring/iperf.nix
     ../../roles/storage/nfs-media.nix
     ../../roles/remote-access/cloudflared.nix

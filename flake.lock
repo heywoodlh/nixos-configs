@@ -10,15 +10,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-fKLbgShwsedE+korZq67/EerWabmglwyAsFcddA3E60=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/ansible",
+        "path": "./ansible",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/ansible",
+        "path": "./ansible",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "ansible-flake_2": {
       "inputs": {
@@ -398,15 +399,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-/lxrpstAZfkFy13PWltuxjic1jYK0JgVGHP9D29ODK8=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/chromium-widevine",
+        "path": "./chromium-widevine",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/chromium-widevine",
+        "path": "./chromium-widevine",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "cloudflared-helm": {
       "flake": false,
@@ -1358,15 +1360,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-8DaBLoIC6jnXBpoIvpDm2eqfKNYQ483GPTTB+OH6Tak=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/fish",
+        "path": "./fish",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/fish",
+        "path": "./fish",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "fish-flake_12": {
       "inputs": {
@@ -7307,15 +7310,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-pWaxMw0cH6TTf8f/BKaOdGxAj0myTRyL4UOFw1R2L84=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/git",
+        "path": "./git",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/git",
+        "path": "./git",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "git-flake_12": {
       "inputs": {
@@ -7859,15 +7863,16 @@
         "vim-ime": "vim-ime_2"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-qsJUhKc60NOpvnvKSajq2P4d+ByZNIVL7JA5cQ5ea0Q=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/gnome",
+        "path": "./gnome",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/gnome",
+        "path": "./gnome",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "hack": {
       "flake": false,
@@ -7968,15 +7973,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-0PtpJJv+eWKCISHfld/ST9GYr67GeaTWiSMq86bY75A=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/helix",
+        "path": "./helix",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/helix",
+        "path": "./helix",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "helix-src": {
       "inputs": {
@@ -9305,15 +9311,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-4Evg/dK/jqfFdCxIUPoKnTrdhEEvdRhiKow4hJrlNnE=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/jetporch",
+        "path": "./jetporch",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/jetporch",
+        "path": "./jetporch",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "jetporch-nixpkgs": {
       "locked": {
@@ -9592,15 +9599,16 @@
         "toml-merge": "toml-merge"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-1/IS3Fi+Ni6AtxhU0STrqraQzlD7T0/G0GP6mSMDr1c=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/jj",
+        "path": "./jj",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/jj",
+        "path": "./jj",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "kasmweb": {
       "flake": false,
@@ -9666,15 +9674,16 @@
         "wazuh": "wazuh"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-Z09lCfCpaW5SwwpfD3XSt2rINyH7nY0i2tWkWDfNZIA=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/kube",
+        "path": "./kube",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/kube",
+        "path": "./kube",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "lacros": {
       "flake": false,
@@ -9893,15 +9902,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-pkZyU9xDld1w1/dpaNV8Ec2aYqz2QtjAUewxi9ITlMs=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/nixos-lima",
+        "path": "./nixos-lima",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/nixos-lima",
+        "path": "./nixos-lima",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "minecraft-helm": {
       "flake": false,
@@ -10053,11 +10063,11 @@
         "zen-browser-flake": "zen-browser-flake_2"
       },
       "locked": {
-        "lastModified": 1742583767,
-        "narHash": "sha256-mGpUQDcqYKCjcxWRBGVlDOZEvOvoDhxaL+69NTUExck=",
+        "lastModified": 1743052956,
+        "narHash": "sha256-hoIumhKAEGU4sDGc4Cw/bWj2Mtszh9jZMYucHQq/MPU=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "53500ce9a67f95238c29680da4ed069d8f8f0b61",
+        "rev": "f809c68f2341cd8eb7232eae96148ddcb52d9529",
         "type": "github"
       },
       "original": {
@@ -16410,15 +16420,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-C3sxepteL7hvM9q3XMD0wW/GKobf7p1vsXMQzilVba0=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/nushell",
+        "path": "./nushell",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/nushell",
+        "path": "./nushell",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "nushell-flake_2": {
       "inputs": {
@@ -16788,15 +16799,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-ruzIygbgq9+k7o720jyIUHOlgnqno0Dsa+yw+SXX1ig=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/1password",
+        "path": "./1password",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/1password",
+        "path": "./1password",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "op-scripts": {
       "inputs": {
@@ -17215,15 +17227,16 @@
         "nord-qutebrowser": "nord-qutebrowser_2"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-3beTKmL4cpcSnObhP++ECOSjifM/lOh0Gm46N73cP8g=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/qutebrowser",
+        "path": "./qutebrowser",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/qutebrowser",
+        "path": "./qutebrowser",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "qutebrowser_2": {
       "flake": false,
@@ -18546,15 +18559,16 @@
         "nixpkgs": "nixpkgs_127"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-INWaIarRR/JFCoKR6PkgN2elLUG9MHQbOSAB/D837v8=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/st",
+        "path": "./st",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/st",
+        "path": "./st",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "st-flake_2": {
       "inputs": {
@@ -22487,15 +22501,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-X3p/Ahvj4sER+kJtkSlj2Lf71CtXZUO8PeaaPfdxm+8=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/tabby",
+        "path": "./tabby",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/tabby",
+        "path": "./tabby",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "tailscale": {
       "inputs": {
@@ -23091,15 +23106,16 @@
         "source-code-pro": "source-code-pro"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-JbO4QUM/JCt/bCfZa0TXwrdpLzjxoZrfDtovBkiAYDg=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/ttyd-nerd",
+        "path": "./ttyd-nerd",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/ttyd-nerd",
+        "path": "./ttyd-nerd",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "utils": {
       "inputs": {
@@ -23359,15 +23375,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-trezFeBoP0s9nT3AJdeNSBBY2eR3Fo7gXcrKE/rVFeY=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/vim",
+        "path": "./vim",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/vim",
+        "path": "./vim",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "vim-flake_2": {
       "inputs": {
@@ -23866,15 +23883,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-Mmsawv/uFclFPcN5NdlxCeimqL6ByQXNC+/K/oAkNXs=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/vimb",
+        "path": "./vimb",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/vimb",
+        "path": "./vimb",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "vscode-config": {
       "inputs": {
@@ -24323,15 +24341,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-6U7krvdN0XoFq9Q8QWt9ySs0LE215ppOnc19FQnfJdg=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/vscode",
+        "path": "./vscode",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/vscode",
+        "path": "./vscode",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "vscode-flake_2": {
       "inputs": {
@@ -24721,15 +24740,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-HAO9Q0GDw429TEglWpfZHDy9mt9PSwTaN1HvMwGxdxY=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/wezterm",
+        "path": "./wezterm",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/wezterm",
+        "path": "./wezterm",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "wezterm-flake_2": {
       "inputs": {
@@ -25306,15 +25326,16 @@
         "zen-browser": "zen-browser_2"
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-ci4BwkqkhUtqaX9kshp2BjEQa0Ez2JSN7dC9RvxzQl8=",
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/zen-browser",
+        "path": "./zen-browser",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/b5pjmfdwzhlfgmanyywfw157ih0kxw4q-source/zen-browser",
+        "path": "./zen-browser",
         "type": "path"
-      }
+      },
+      "parent": [
+        "myFlakes"
+      ]
     },
     "zen-browser_2": {
       "inputs": {

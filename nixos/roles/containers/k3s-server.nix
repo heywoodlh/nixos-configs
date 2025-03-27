@@ -14,13 +14,21 @@ in {
       maxPods: 250
     '';
   in {
-    package = pkgs.k3s_1_32;
+    package = pkgs.k3s.override {
+      overrideBundleAttrs = {
+        src = pkgs.fetchgit {
+          url = "https://github.com/k3s-io/k3s";
+          rev = "7837d29269970088eaa019a2d7e61ecdfb68d985";
+          sha256 = "sha256-8voWwI3dWzG3E8TJet0m+TcMialM16AZA1/fMPH/DnY=";
+        };
+        vendorHash = "sha256-Wgla9Cyq5U9Q0xs/C/iyAMwHkIug7ernl7w5mn3gSco=";
+      };
+    };
     enable = true;
     role = "server";
     clusterInit = false;
     extraFlags = toString ([
       "--kubelet-arg=config=${kubeletConf}"
-      "--docker"
       "--kube-controller-manager-arg=node-cidr-mask-size=16"
       "--cluster-cidr 10.42.0.0/16"
       "--service-cidr=10.43.0.0/16"

@@ -5,7 +5,7 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../server.nix
-    ../../roles/virtualization/libvirt.nix
+    #../../roles/virtualization/libvirt.nix
     ../../roles/monitoring/syslog-ng/server.nix
     ../../roles/monitoring/syslog-ng/client.nix
     ../../roles/gaming/minecraft-bedrock.nix
@@ -204,7 +204,6 @@
   services.tailscale.extraSetFlags = [
     "--advertise-routes=10.64.0.1/32"
   ];
-
 
   virtualisation.oci-containers = let
     resolvConf = pkgs.writeText "resolv.conf" ''

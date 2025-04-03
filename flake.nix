@@ -105,6 +105,11 @@
       inputs.home-manager.follows = "home-manager";
     };
     ghostty.url = "github:ghostty-org/ghostty";
+    cart = {
+      url = "github:heywoodlh/cart";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nix-darwin.follows = "darwin";
+    };
   };
 
   outputs = inputs@{ self,
@@ -145,6 +150,7 @@
                       plasma-manager,
                       ghostty,
                       nix,
+                      cart,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -178,6 +184,9 @@
           ./home/darwin/settings.nix
           extraConf
           {
+            imports = [
+              "${cart}/darwin.nix"
+            ];
             networking.hostName = myHostname;
             heywoodlh.darwin = {
               sketchybar.enable = true;
@@ -284,6 +293,21 @@
           imports = [
             darwinWorkstationConfig
             {
+              cart = {
+                enable = true;
+                user = "heywoodlh";
+                package = cart.packages.${system}.cart;
+                applications = [
+                  {
+                    url = "https://github.com/utmapp/UTM/releases/download/v4.6.4/UTM.dmg";
+                    hash = "aad86726152b15a3e963cf778a0b0dfd8e818736b381aed2699d974a18845427";
+                  }
+                  {
+                    url = "https://github.com/podman-desktop/podman-desktop/releases/download/v1.17.2/podman-desktop-1.17.2-universal.dmg";
+                    hash = "d73c81a859f5792329818893736b28f8dd8a5243cca41c8573ed7c2095f69182";
+                  }
+                ];
+              };
               homebrew.casks = [
                 "steam"
               ];
@@ -294,6 +318,23 @@
           imports = [
             ./darwin/roles/mac-mini.nix
             darwinWorkstationConfig
+            {
+              cart = {
+                enable = true;
+                user = "heywoodlh";
+                package = cart.packages.${system}.cart;
+                applications = [
+                  {
+                    url = "https://github.com/utmapp/UTM/releases/download/v4.6.4/UTM.dmg";
+                    hash = "aad86726152b15a3e963cf778a0b0dfd8e818736b381aed2699d974a18845427";
+                  }
+                  {
+                    url = "https://github.com/podman-desktop/podman-desktop/releases/download/v1.17.2/podman-desktop-1.17.2-universal.dmg";
+                    hash = "d73c81a859f5792329818893736b28f8dd8a5243cca41c8573ed7c2095f69182";
+                  }
+                ];
+              };
+            }
           ];
         };
         "mac-mini" = darwinConfig "mac-mini" "mac-mini" {

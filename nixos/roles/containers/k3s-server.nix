@@ -14,16 +14,7 @@ in {
       maxPods: 250
     '';
   in {
-    package = pkgs.k3s.override {
-      overrideBundleAttrs = {
-        src = pkgs.fetchgit {
-          url = "https://github.com/k3s-io/k3s";
-          rev = "7837d29269970088eaa019a2d7e61ecdfb68d985";
-          sha256 = "sha256-8voWwI3dWzG3E8TJet0m+TcMialM16AZA1/fMPH/DnY=";
-        };
-        vendorHash = "sha256-Wgla9Cyq5U9Q0xs/C/iyAMwHkIug7ernl7w5mn3gSco=";
-      };
-    };
+    package = pkgs.k3s_1_32;
     enable = true;
     role = "server";
     clusterInit = false;

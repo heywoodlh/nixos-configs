@@ -50,8 +50,7 @@ in {
     pkgs.lsof
     pkgs.nix-index
     pkgs.patchelf
-    pkgs.python310
-    pkgs.python310Packages.pip
+    pkgs.python3
     pkgs.unzip
     pkgs.wireguard-tools
     pkgs.zsh

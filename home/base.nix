@@ -446,7 +446,23 @@ in {
   # config.fish
   home.file.".config/fish/config.fish" = {
     enable = true;
-    text = ''
+    text = let
+      atuinConfig = pkgs.writeText "" ''
+        auto_sync = true
+        update_check = true
+        sync_address = "http://atuin:8888"
+        enter_accept = false
+      '';
+      atuinConfigDir = pkgs.stdenv.mkDerivation {
+        name = "atuinConfigDir";
+        builder = pkgs.bash;
+        args = [ "-c" "${pkgs.coreutils}/bin/mkdir -p $out/atuin; ${pkgs.coreutils}/bin/cp ${atuinConfig} $out/atuin/config.toml;" ];
+      };
+    in ''
+      set -g PATH "${pkgs.atuin}/bin" $PATH
+      set -gx ATUIN_CONFIG_DIR "${atuinConfigDir}/atuin"
+      ${pkgs.atuin}/bin/atuin init fish --disable-up-arrow | source
+
       # Remove all 1Password session variables
       function op-clear
         set --erase (set | ${pkgs.gnugrep}/bin/grep "OP_SESSION_" | ${pkgs.coreutils}/bin/cut -d' ' -f1) &>/dev/null || true

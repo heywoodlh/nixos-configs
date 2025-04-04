@@ -25,7 +25,6 @@
       imports = [
         (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
         ../../home/darwin.nix
-        ../../home/roles/atuin.nix
       ];
     };
   };

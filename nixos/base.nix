@@ -1,5 +1,5 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, nixpkgs-stable, lib, nur, nix, home-manager, ... }:
+{ config, pkgs, determinate-nix, nixpkgs-stable, lib, nur, home-manager, ... }:
 
 let
   system = pkgs.system;
@@ -11,7 +11,7 @@ let
 in {
   imports = [
     ./roles/virtualization/multiarch.nix
-    nix.nixosModules.default
+    determinate-nix.nixosModules.default
     home-manager.nixosModules.home-manager
   ];
 
@@ -20,32 +20,37 @@ in {
     "olm-3.2.16"
   ];
 
-  # Enable flakes
-  nix.extraOptions = ''
-    extra-experimental-features = nix-command flakes
-  '';
-  # Automatically optimize store for better storage
-  nix.settings = {
-    auto-optimise-store = true;
-    trusted-users = [
-      "heywoodlh"
-    ];
-    substituters = [
-      "https://nix-community.cachix.org"
-      "http://attic.barn-banana.ts.net/nixos"
-    ];
-    trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E=" # attic
-    ];
+  nix = {
+    package = pkgs.lib.mkForce determinate-nix.packages.${system}.default;
+    extraOptions = ''
+      extra-experimental-features = nix-command flakes
+    '';
+    settings = {
+      auto-optimise-store = true;
+      trusted-users = [
+        "heywoodlh"
+      ];
+      substituters = [
+        "https://nix-community.cachix.org"
+        "http://attic.barn-banana.ts.net/nixos"
+      ];
+      trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E=" # attic
+      ];
+    };
   };
 
   # Stable, system-wide packages
-  environment.systemPackages = with stable-pkgs; [
+  environment.systemPackages = with stable-pkgs; let
+    nixPkg = determinate-nix.packages.${system}.default;
+  in [
     gptfdisk
     (pkgs.writeShellScriptBin "nixos-switch" ''
-    [[ -d /home/heywoodlh/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /home/heywoodlh/opt/nixos-configs
-    sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake /home/heywoodlh/opt/nixos-configs#$(hostname) $@
+      extra_args=""
+      [[ -d /home/heywoodlh/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /home/heywoodlh/opt/nixos-configs
+      [[ -d /home/heywoodlh/opt/flakes ]] && extra_args="--override-input myFlakes /home/heywoodlh/opt/flakes"
+      sudo ${nixPkg}/bin/nix run nixpkgs#nixos-rebuild -- switch --flake /home/heywoodlh/opt/nixos-configs#$(hostname) $extra_args $@
     '')
     mosh
   ];
@@ -63,6 +68,7 @@ in {
     useGlobalPkgs = true;
     extraSpecialArgs = {
       inherit nur;
+      inherit determinate-nix;
     };
     users.heywoodlh = { ... }: {
       home.activation.docker-rootless-context = ''

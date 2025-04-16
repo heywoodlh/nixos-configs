@@ -13,7 +13,7 @@
     # if errors encountered, search for commits with the previous version
     # i.e. https://github.com/NixOS/nixpkgs/pulls?q=565.57.01
     nixpkgs-nvidia.url = "github:nixos/nixpkgs/e718ed96ed39ece6433b965b1b1479b8878a29a3";
-    nix.url = "github:DeterminateSystems/nix/40a2f6c08f8a93ccdebfa2df7eb36c748210c255";
+    determinate-nix.url = "github:DeterminateSystems/nix/v2.28.1";
     myFlakes = {
       url = "github:heywoodlh/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -149,7 +149,7 @@
                       nvidia-patch,
                       plasma-manager,
                       ghostty,
-                      nix,
+                      determinate-nix,
                       cart,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
@@ -176,7 +176,7 @@
         specialArgs = inputs;
         modules = [
           darwinModules.heywoodlh.darwin
-          nix.darwinModules.default
+          determinate-nix.darwinModules.default
           ./darwin/roles/base.nix
           ./darwin/roles/defaults.nix
           ./darwin/roles/pkgs.nix
@@ -561,12 +561,38 @@
         };
       };
       # home-manager targets (non NixOS/MacOS, ideally Arch Linux)
-      packages.homeConfigurations = {
+      packages.homeConfigurations = let
+        homeSwitch = ''
+          ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs ~/opt/nixos-configs &>/dev/null || true
+          ## OS-specific support (mostly, Ubuntu vs anything else)
+          ## Anything else will use nixpkgs-unstable
+          EXTRA_ARGS=""
+          if ${pkgs.gnugrep}/bin/grep -iq Ubuntu /etc/os-release
+          then
+            version="$(${pkgs.gnugrep}/bin/grep VERSION_ID /etc/os-release | ${pkgs.coreutils}/bin/cut -d'=' -f2 | ${pkgs.coreutils}/bin/tr -d '"')"
+            ## Support for Ubuntu 22
+            if echo "$version" | ${pkgs.gnugrep}/bin/grep -qE '22'
+            then
+              EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-22.05"
+            fi
+            ## Support for Ubuntu 23
+            if echo "$version" | ${pkgs.gnugrep}/bin/grep -qE '23'
+            then
+              EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-23.05"
+            fi
+            ## Support for Ubuntu 24-25, TODO support 25 standalone after May 2025
+            if echo "$version" | ${pkgs.gnugrep}/bin/grep -q '24|25'
+            then
+              EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-24.05"
+            fi
+          fi
+        '';
+      in {
         # Used in CI
         heywoodlh = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            nix.homeModules.default
+            determinate-nix.homeModules.default
             (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
             cosmic-manager.homeManagerModules.cosmic-manager
             flatpaks.homeManagerModules.declarative-flatpak
@@ -612,30 +638,8 @@
                 executable = true;
                 text = ''
                   #!/usr/bin/env bash
-                  git clone https://github.com/heywoodlh/nixos-configs ~/opt/nixos-configs &>/dev/null || true
-                  ## OS-specific support (mostly, Ubuntu vs anything else)
-                  ## Anything else will use nixpkgs-unstable
-                  EXTRA_ARGS=""
-                  if grep -iq Ubuntu /etc/os-release
-                  then
-                    version="$(grep VERSION_ID /etc/os-release | cut -d'=' -f2 | tr -d '"')"
-                    ## Support for Ubuntu 22
-                    if echo "$version" | grep -qE '22'
-                    then
-                      EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-22.05"
-                    fi
-                    ## Support for Ubuntu 23
-                    if echo "$version" | grep -qE '23'
-                    then
-                      EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-23.05"
-                    fi
-                    ## Support for Ubuntu 24-25, TODO support 25 standalone after May 2025
-                    if echo "$version" | grep -q '24|25'
-                    then
-                      EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-24.05"
-                    fi
-                  fi
-                  nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" --impure $EXTRA_ARGS
+                  ${homeSwitch}
+                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
                 '';
               };
             }
@@ -647,7 +651,7 @@
         heywoodlh-server = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            nix.homeModules.default
+            determinate-nix.homeModules.default
             ./home/linux.nix
             ./home/linux/no-desktop.nix
             {
@@ -671,6 +675,15 @@
               fonts.fontconfig.enable = true;
               targets.genericLinux.enable = true;
               programs.home-manager.enable = true;
+              home.file."bin/home-switch" = {
+                enable = true;
+                executable = true;
+                text = ''
+                  #!/usr/bin/env bash
+                  ${homeSwitch}
+                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" $EXTRA_ARGS --impure $@
+                '';
+              };
             }
           ];
           extraSpecialArgs = inputs;

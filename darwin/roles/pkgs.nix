@@ -61,7 +61,6 @@ in {
       "iterm2"
       "knockknock"
       "lulu"
-      "mullvad-browser"
       "oversight"
       "remoteviewer"
       "rustdesk"

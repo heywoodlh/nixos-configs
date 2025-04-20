@@ -335,11 +335,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1743977362,
-        "narHash": "sha256-RGLfe4yjgDeCU0ia39IOaPaGgRu0CRkh02JHn8cexFQ=",
+        "lastModified": 1743990697,
+        "narHash": "sha256-v6Tk3l1+rzVFeCM8+Cd0GnlPM+pAtuzHPCwDH2Z26H8=",
         "owner": "heywoodlh",
         "repo": "cart",
-        "rev": "fe347c86fddc178cc058cda0b647da2e334662f5",
+        "rev": "29561833d7e290b7bd4906c11c1c0316d467b66c",
         "type": "github"
       },
       "original": {
@@ -8337,11 +8337,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1742569620,
-        "narHash": "sha256-igC2cu+cPRB3E4QwKR+vGagyAtoyB+DrmWwDKm8jkaw=",
+        "lastModified": 1745184749,
+        "narHash": "sha256-sBBtnaOTQCdtWp3PBGG0fwTcylqa/jKK9PMxe60mNLE=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "8a68f18e96bcab13e4f97bece61e6602298a3141",
+        "rev": "b71ca269615b0837724dac13358a2f0d6816d372",
         "type": "github"
       },
       "original": {
@@ -9994,6 +9994,9 @@
     "mullvad-browser-home-manager": {
       "inputs": {
         "nixpkgs": [
+          "myFlakes",
+          "ansible-flake",
+          "nixos-configs",
           "nixpkgs"
         ]
       },
@@ -10018,6 +10021,9 @@
           "myFlakes",
           "ansible-flake",
           "nixos-configs",
+          "myFlakes",
+          "ansible-flake",
+          "nixos-configs",
           "nixpkgs"
         ]
       },
@@ -10037,33 +10043,6 @@
       }
     },
     "mullvad-browser-home-manager_3": {
-      "inputs": {
-        "nixpkgs": [
-          "myFlakes",
-          "ansible-flake",
-          "nixos-configs",
-          "myFlakes",
-          "ansible-flake",
-          "nixos-configs",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1710476603,
-        "narHash": "sha256-z2Xb/qbR1s+o2HMnIi/pKu7nezfK3c2vdXFkhA7MNGo=",
-        "owner": "heywoodlh",
-        "repo": "home-manager",
-        "rev": "d888df6fe4f064ea38e930a215235b392f75b478",
-        "type": "github"
-      },
-      "original": {
-        "owner": "heywoodlh",
-        "ref": "mullvad-browser-support",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
-    "mullvad-browser-home-manager_4": {
       "inputs": {
         "nixpkgs": [
           "myFlakes",
@@ -12113,7 +12092,7 @@
         "jovian-nixos": "jovian-nixos_2",
         "lanzaboote": "lanzaboote_2",
         "light-wallpaper": "light-wallpaper_2",
-        "mullvad-browser-home-manager": "mullvad-browser-home-manager_2",
+        "mullvad-browser-home-manager": "mullvad-browser-home-manager",
         "myFlakes": "myFlakes_2",
         "nix-on-droid": "nix-on-droid_3",
         "nixos-apple-silicon": "nixos-apple-silicon_9",
@@ -12194,7 +12173,7 @@
         "hyprland": "hyprland_3",
         "jovian-nixos": "jovian-nixos_3",
         "light-wallpaper": "light-wallpaper_3",
-        "mullvad-browser-home-manager": "mullvad-browser-home-manager_3",
+        "mullvad-browser-home-manager": "mullvad-browser-home-manager_2",
         "myFlakes": "myFlakes_3",
         "nix-on-droid": "nix-on-droid_2",
         "nixos-apple-silicon": "nixos-apple-silicon_7",
@@ -12231,7 +12210,7 @@
         "flatpaks": "flatpaks_4",
         "home-manager": "home-manager_5",
         "jovian-nixos": "jovian-nixos_4",
-        "mullvad-browser-home-manager": "mullvad-browser-home-manager_4",
+        "mullvad-browser-home-manager": "mullvad-browser-home-manager_3",
         "myFlakes": "myFlakes_4",
         "nix-on-droid": "nix-on-droid",
         "nixos-apple-silicon": "nixos-apple-silicon_5",
@@ -17313,7 +17292,6 @@
         "jovian-nixos": "jovian-nixos",
         "lanzaboote": "lanzaboote",
         "light-wallpaper": "light-wallpaper",
-        "mullvad-browser-home-manager": "mullvad-browser-home-manager",
         "myFlakes": "myFlakes",
         "nix-on-droid": "nix-on-droid_4",
         "nixos-apple-silicon": "nixos-apple-silicon_11",

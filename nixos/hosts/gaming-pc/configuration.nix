@@ -5,7 +5,6 @@
   myFlakes, flatpaks,
   light-wallpaper, dark-wallpaper,
   snowflake,
-  mullvad-browser-home-manager,
   ts-warp-nixpkgs, qutebrowser,
   cosmic-manager,
   ... }:

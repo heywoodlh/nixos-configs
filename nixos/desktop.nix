@@ -3,7 +3,6 @@
   myFlakes, flatpaks,
   light-wallpaper, dark-wallpaper,
   snowflake,
-  mullvad-browser-home-manager,
   ts-warp-nixpkgs, qutebrowser,
   ghostty,
   ... }:
@@ -229,7 +228,6 @@ in {
     backupFileExtension = ".bak";
     users.heywoodlh = { ... }: {
       imports = [
-        (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
         ../home/linux.nix
         ../home/desktop.nix # base desktop.nix
         ../home/linux/desktop.nix # linux-specific desktop.nix

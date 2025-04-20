@@ -1,4 +1,4 @@
-{ config, pkgs, determinate-nix, home-manager, mullvad-browser-home-manager, myFlakes, nur, ts-warp-nixpkgs, qutebrowser, ghostty, ... }:
+{ config, pkgs, determinate-nix, home-manager, myFlakes, nur, ts-warp-nixpkgs, qutebrowser, ghostty, ... }:
 
 let
   system = pkgs.system;
@@ -28,7 +28,6 @@ in {
     # Set home-manager configs for heywoodlh
     users.heywoodlh = { ... }: {
       imports = [
-        (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
         ../../home/darwin.nix
       ];
     };

@@ -34,10 +34,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mullvad-browser-home-manager = {
-      url = "github:heywoodlh/home-manager/mullvad-browser-support";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #mullvad-browser-home-manager = {
+    #  url = "github:heywoodlh/home-manager/mullvad-browser-support";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     osquery-fix-nixpkgs = {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
@@ -123,7 +123,7 @@
                       nixos-wsl,
                       darwin,
                       home-manager,
-                      mullvad-browser-home-manager,
+                      #mullvad-browser-home-manager,
                       jovian-nixos,
                       nur,
                       flake-utils,
@@ -177,16 +177,22 @@
         modules = [
           darwinModules.heywoodlh.darwin
           determinate-nix.darwinModules.default
+          home-manager.darwinModules.home-manager
           ./darwin/roles/base.nix
           ./darwin/roles/defaults.nix
           ./darwin/roles/pkgs.nix
           ./darwin/roles/network.nix
-          ./home/darwin/settings.nix
           extraConf
           {
             imports = [
               "${cart}/darwin.nix"
-            ];
+             ];
+             # Import nur as nixpkgs.overlays
+             nixpkgs.overlays = [
+               nur.overlays.default
+             ];
+             home-manager.useGlobalPkgs = true;
+
             networking.hostName = myHostname;
             heywoodlh.darwin = {
               sketchybar.enable = true;
@@ -593,7 +599,7 @@
           inherit pkgs;
           modules = [
             determinate-nix.homeModules.default
-            (mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
+            #(mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
             cosmic-manager.homeManagerModules.cosmic-manager
             flatpaks.homeManagerModules.declarative-flatpak
             ./home/linux.nix
@@ -608,6 +614,9 @@
                 # Allow olm for gomuks until issues are resolved
                 permittedInsecurePackages = [
                   "olm-3.2.16"
+                ];
+                overlays = [
+                  nur.overlays.default
                 ];
               };
               home = {
@@ -661,6 +670,9 @@
                 # Allow olm for gomuks until issues are resolved
                 permittedInsecurePackages = [
                   "olm-3.2.16"
+                ];
+                overlays = [
+                  nur.overlays.default
                 ];
               };
               home = {

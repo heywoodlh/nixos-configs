@@ -282,11 +282,6 @@ in {
     package = myPass;
   };
 
-  # Import nur as nixpkgs.overlays
-  nixpkgs.overlays = [
-    nur.overlays.default
-  ];
-
   home.file."tmp/.placeholder.txt" = {
     text = "";
   };

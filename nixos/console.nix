@@ -42,23 +42,6 @@ in {
     initrd.verbose = false;
   };
 
-  nix.settings = {
-    sandbox = true;
-    auto-optimise-store = true;
-    substituters = [
-      "http://100.108.77.60:5000" # nix-nvidia
-      "https://nix-community.cachix.org"
-      "https://cache.nixos.org/"
-    ];
-    trusted-users = [
-      "heywoodlh"
-    ];
-    trusted-public-keys = [
-      "binarycache.heywoodlh.io:hT9E35rju+9L2CE/SDGUsytJtIZJfqVma7B7cp7Jym4=" # nix-nvidia
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
-  };
-
   # Enable greetd+fbterm
   security.wrappers.fbterm = {
     owner = "root";

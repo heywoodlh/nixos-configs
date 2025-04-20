@@ -173,6 +173,7 @@
   services.cron = {
     enable = true;
     systemCronJobs = [
+      "4 4 * * 7      root    'rm -rf /var/lib/cni/networks/cbr0/"
       "5 4 * * *      root    shutdown -r now"
     ];
   };

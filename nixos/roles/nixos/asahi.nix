@@ -28,7 +28,7 @@
 
   nix.settings = {
     sandbox = true;
-    substituters = [
+    extra-substituters = [
       "https://ceon.cachix.org"
     ];
     trusted-public-keys = [

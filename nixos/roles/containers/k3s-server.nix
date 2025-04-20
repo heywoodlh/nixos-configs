@@ -26,6 +26,7 @@ in {
     ] ++ pkgs.lib.optionals (config.networking.hostName == "nix-nvidia") [
       "--tls-san=nix-nvidia"
       "--tls-san=100.108.77.60"
+      "--node-ip=192.168.1.22" # If you change this, make sure to run the k3s up command with --cluster-reset
     ]);
   };
   environment.systemPackages = [

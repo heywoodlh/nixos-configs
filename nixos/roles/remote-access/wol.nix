@@ -5,16 +5,16 @@ let
     set -ex
 
     targetmac="10:FF:E0:4E:A7:A9" # corsair
-    targetip="192.168.50.255"
+    targetip="192.168.1.255"
     targetport="9"
 
-    ${pkgs.wakeonlan}/bin/wakeonlan -i 192.168.50.255 -p $targetport $targetmac
+    ${pkgs.wakeonlan}/bin/wakeonlan -i $targetip -p $targetport $targetmac
   '';
   wakeOryx = pkgs.writeShellScriptBin "wake-oryx.sh" ''
     set -ex
 
     targetmac="54:BF:64:96:06:32" # precision
-    targetip="192.168.50.255"
+    targetip="192.168.1.255"
     targetport="9"
 
     ${pkgs.wakeonlan}/bin/wakeonlan -i $targetip -p $targetport $targetmac

@@ -315,16 +315,17 @@ in {
     executable = true;
     text = ''
       if ! ${pkgs.ps}/bin/ps -fjH -u $USER | ${pkgs.gnugrep}/bin/grep ssh-agent | ${pkgs.gnugrep}/bin/grep -q "$HOME/.ssh/agent.sock" &> /dev/null
+      then
           mkdir -p $HOME/.ssh
           rm -f $HOME/.ssh/agent.sock &> /dev/null
-          eval (${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
+          eval $(${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
       else
           # Start ssh-agent if old process exists but socket file is gone
           if ! test -e $HOME/.ssh/agent.sock
           then
             # Kill old ssh-agent process
             ${pkgs.procps}/bin/pkill -9 ssh-agent &> /dev/null || true
-            eval (${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
+            eval $(${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
           fi
       fi
 

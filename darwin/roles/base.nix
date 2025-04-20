@@ -44,13 +44,13 @@ in {
   nix = {
     package = pkgs.lib.mkForce nixPkg;
     settings = {
-      substituters = [
+      extra-substituters = [
         "https://nix-community.cachix.org"
         "http://attic.barn-banana.ts.net/nix-darwin"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "nix-darwin:So8WZjJEaRb7LAm9t3cCIMS+d1C5Pu+fG1TkhOnKdYs=" # attic
+        "nix-darwin:iDh77oS0PRmAJ+NMqECp7HzvA0ycgKd/kqjMz2wQJeU=" # attic
       ];
     };
   };

@@ -15,7 +15,7 @@ in {
       {
         name = "hp_officejet_5258";
         location = "office";
-        deviceUri = "ipp://192.168.50.122/ipp/print";
+        deviceUri = "ipp://192.168.1.31/ipp/print";
         model = "everywhere";
       }
     ];

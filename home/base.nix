@@ -350,7 +350,7 @@ in {
       source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143
       source-cred-cmd = ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'
       outgoing = smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25
-      outgoing-cred-cmd = ${op-wrapper} read 'op://Personal/6fqlleymphwgzsvqp7jfsucz4m/password'
+      outgoing-cred-cmd = ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'
       default = INBOX
       copy-to = Sent
       from = Spencer Heywood <l.spencer.heywood@protonmail.com>

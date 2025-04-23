@@ -215,7 +215,7 @@
     backend = "docker";
     containers = {
       ollama = {
-        image = "docker.io/ollama/ollama:0.5.8-rc10";
+        image = "docker.io/ollama/ollama:0.6.6";
         autoStart = true;
         ports = [
           "11434:11434"

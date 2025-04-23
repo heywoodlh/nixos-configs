@@ -585,4 +585,34 @@ in {
         IdentityAgent "${authSock}"
   '';
   nix.settings.builders = myBuilders;
+
+  home.file.".config/vim/vimrc" = {
+    text = ''
+      lua << EOF
+        local llm = require('llm')
+        llm.setup({
+          lsp = {
+            bin_path = "${pkgs.llm-ls}/bin/llm-ls",
+          },
+          model = "starcoder2:7b",
+          backend = "ollama",
+          url = "http://nix-nvidia.barn-banana.ts.net:11434",
+          request_body = {
+            temperature = 0.2,
+            top_p = 0.95,
+            system = "Complete the given code without explanation. Respond only with the code. Do not place the code in markdown. Do not place the code in markdown. Fill in the middle requests will be used.",
+          },
+          fim = {
+            enabled = true,
+          },
+          debounce_ms = 150,
+          enable_suggestions_on_startup = false,
+          enable_suggestions_on_files = '*.sh,*.fish,*.zsh,*.go,*.nix,*.py,*.lua,*.java,*.js,*.jsx,*.ts,*.tsx,*.html,*.css,*.scss,*.json,*.yaml,*.yml,*.toml',
+          context_window = 10240,
+          accept_keymap = "<Tab>",
+          dismiss_keymap = "<S-Tab>",
+        })
+      EOF
+    '';
+  };
 }

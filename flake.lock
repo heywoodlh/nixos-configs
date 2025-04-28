@@ -10104,11 +10104,11 @@
         "zen-browser-flake": "zen-browser-flake_2"
       },
       "locked": {
-        "lastModified": 1745453250,
-        "narHash": "sha256-+xzFi0SXntLhWCLw/o25bV86Txlvio6lnyBX7oLql8E=",
+        "lastModified": 1745773498,
+        "narHash": "sha256-1yFdsTzvAcmC/iZlIIsitPUCMdAqVArKjiyA0ATfUO0=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "5f7a6fc5e3cc155abb0982a25b731c2e35f9e285",
+        "rev": "e6e86fa06496d2f072fb672202bdfa72e65e5754",
         "type": "github"
       },
       "original": {

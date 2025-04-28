@@ -587,7 +587,9 @@ in {
   nix.settings.builders = myBuilders;
 
   home.file.".config/vim/vimrc" = {
-    text = ''
+    text = let
+      ollama = "http://nix-nvidia.barn-banana.ts.net:11434";
+    in ''
       lua << EOF
         local llm = require('llm')
         llm.setup({
@@ -596,7 +598,7 @@ in {
           },
           model = "starcoder2:7b",
           backend = "ollama",
-          url = "http://nix-nvidia.barn-banana.ts.net:11434",
+          url = "${ollama}",
           request_body = {
             temperature = 0.2,
             top_p = 0.95,
@@ -611,6 +613,44 @@ in {
           context_window = 10240,
           accept_keymap = "<Tab>",
           dismiss_keymap = "<S-Tab>",
+        })
+
+        require("codecompanion").setup({
+          strategies = {
+            chat = {
+              adapter = "ollama",
+            },
+            inline = {
+              adapter = "ollama",
+            },
+          },
+          adapters = {
+            ollama = function()
+              return require("codecompanion.adapters").extend("ollama", {
+                env = {
+                  url = "${ollama}",
+                },
+                headers = {
+                  ["Content-Type"] = "application/json",
+                },
+                parameters = {
+                  sync = true,
+                },
+                schema = {
+                  model = {
+                    default = "llama3:8b",
+                  },
+               },
+              })
+            end,
+            openai = function()
+              return require("codecompanion.adapters").extend("openai", {
+                env = {
+                  api_key = "cmd:${op-wrapper} read 'op://Personal/wnnzk4qgffnymdqdhbmzgruquq/api-key' --no-newline",
+                },
+              })
+            end,
+          },
         })
       EOF
     '';

@@ -4,6 +4,12 @@ let
   system = pkgs.system;
   stable-pkgs = nixpkgs-stable.legacyPackages.${system};
 in {
+  services.cron = {
+    enable = true;
+    systemCronJobs = [
+      "0 * * * *      root    echo '' > /var/log/audit/audit.log"
+    ];
+  };
   services.monit = {
     enable = true;
     config = ''
@@ -14,6 +20,13 @@ in {
         if SPACE usage > 80% then alert
     '';
   };
+  security.auditd.enable = true;
+  security.audit = {
+    enable = true;
+    rules = [
+      "-a exit,always -F arch=b64 -S execve"
+    ];
+  };
   services.syslog-ng = {
     enable = true;
     package = stable-pkgs.syslogng;
@@ -22,24 +35,37 @@ in {
         syslog("syslog.barn-banana.ts.net" transport("tcp") port("1514"));
       };
 
-      filter f_ssh {
-        program("sshd");
+      source system {
+        system();
+        internal();
       };
 
-      log {
-        source(system);
-        source(monit);
-        filter(f_ssh);
-        destination(syslog_ng);
+      filter f_ssh {
+        program("sshd");
       };
 
       source monit {
         file("/var/log/monit.log" follow-freq(1) flags(no-parse));
       };
 
-      source system {
-        system();
-        internal();
+      source audit {
+        file("/var/log/audit/audit.log");
+      };
+
+      log {
+        source(system);
+        filter(f_ssh);
+        destination(syslog_ng);
+      };
+
+      log {
+        source(audit);
+        destination(syslog_ng);
+      };
+
+      log {
+        source(monit);
+        destination(syslog_ng);
       };
     '';
   };

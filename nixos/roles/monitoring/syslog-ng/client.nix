@@ -4,15 +4,22 @@ let
   system = pkgs.system;
   stable-pkgs = nixpkgs-stable.legacyPackages.${system};
 in {
+  services.monit = {
+    enable = true;
+    config = ''
+      set daemon 30
+      set log /var/log/monit.log
+
+      check device var with path /
+        if SPACE usage > 80% then alert
+    '';
+  };
   services.syslog-ng = {
     enable = true;
     package = stable-pkgs.syslogng;
     extraConfig = ''
-      destination nix_nvidia_syslog_ng {
-        syslog("nix-nvidia.barn-banana.ts.net" transport("tcp") port("1514"));
-      };
-      destination nix_nvidia_graylog {
-        syslog("nix-nvidia.barn-banana.ts.net" transport("tcp") port("514"));
+      destination syslog_ng {
+        syslog("syslog.barn-banana.ts.net" transport("tcp") port("1514"));
       };
 
       filter f_ssh {
@@ -23,8 +30,7 @@ in {
         source(system);
         source(monit);
         filter(f_ssh);
-        destination(nix_nvidia_syslog_ng);
-        destination(nix_nvidia_graylog);
+        destination(syslog_ng);
       };
 
       source monit {

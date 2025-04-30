@@ -262,6 +262,7 @@
           "beeper"
           "diffusionbee"
           "discord"
+          "legcord"
           "signal"
           "vmware-fusion"
           "zoom"

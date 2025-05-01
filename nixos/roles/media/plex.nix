@@ -124,6 +124,7 @@ in {
         volumes = [
           "/media/config/services/tautulli/config:/config"
           "/media/config/services/tautulli/scripts:/scripts"
+          "${resolv-conf}:/etc/resolv.conf"
         ];
         extraOptions = [ "--network=host" ]; # For tailscale/ntfy.sh to work
       };

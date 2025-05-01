@@ -308,4 +308,14 @@ in {
     enable = true;
     source = myFlakes.packages.${system}.ghostty-config;
   };
+
+  # Logbash wrapper
+  home.file.".config/fish/config.fish" = {
+    enable = true;
+    text = ''
+      function logbash
+        kubectl exec -it -n monitoring $(kubectl get pods -A | grep -i logbash | awk '{print $2}') -- logbash $argv
+      end
+    '';
+  };
 }

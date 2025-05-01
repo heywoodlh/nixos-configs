@@ -697,6 +697,15 @@
                   ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" $EXTRA_ARGS --impure $@
                 '';
               };
+              # Logbash wrapper
+              home.file.".config/fish/config.fish" = {
+                enable = true;
+                text = ''
+                  function logbash
+                    kubectl exec -it -n monitoring $(kubectl get pods -A | grep -i logbash | awk '{print $2}') -- logbash $argv
+                  end
+                '';
+              };
             }
           ];
           extraSpecialArgs = inputs;

@@ -594,6 +594,7 @@
             fi
           fi
         '';
+        nixPkg = determinate-nix.packages.${system}.default;
       in {
         # Used in CI
         heywoodlh = home-manager.lib.homeManagerConfiguration {
@@ -649,7 +650,7 @@
                 text = ''
                   #!/usr/bin/env bash
                   ${homeSwitch}
-                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
+                  ${nixPkg}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
                 '';
               };
             }
@@ -694,7 +695,7 @@
                 text = ''
                   #!/usr/bin/env bash
                   ${homeSwitch}
-                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" $EXTRA_ARGS --impure $@
+                  ${nixPkg}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" $EXTRA_ARGS --impure $@
                 '';
               };
               # Logbash wrapper

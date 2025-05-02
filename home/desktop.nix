@@ -314,7 +314,7 @@ in {
     enable = true;
     text = ''
       function logbash
-        kubectl exec -it -n monitoring $(kubectl get pods -A | grep -i logbash | awk '{print $2}') -- logbash $argv
+        kubectl exec -it -n monitoring $(kubectl get pods -n monitoring | grep -i logbash | head -1 | awk '{print $1}') -- logbash $argv
       end
     '';
   };

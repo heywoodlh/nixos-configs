@@ -487,6 +487,10 @@ in {
 
       export OLLAMA_HOST="nix-nvidia.barn-banana.ts.net:11434"
 
+      function lnav
+        kubectl exec -it -n monitoring $(kubectl get pods -n monitoring | grep -i lnav | head -1 | awk '{print $1}') -- env TERM="screen-256color" lnav /logs $argv
+      end
+
       # Config file that gets loaded very last
       test -e ~/.config/fish/override.fish && source ~/.config/fish/override.fish || true
     '';
@@ -655,4 +659,32 @@ in {
       EOF
     '';
   };
+  heywoodlh.home.docker-credential-1password.enable = true;
+  home.file.".docker/config.json".text = if pkgs.stdenv.isDarwin then ''
+    {
+        "auths": {
+            "docker.io": {},
+            "ghcr.io": {}
+        },
+        "credsStore": "1password",
+        "credHelpers": {
+            "docker.io": "1password",
+            "ghcr.io": "1password"
+        },
+        "currentContext": "docker-lima"
+    }
+  '' else ''
+    {
+        "auths": {
+            "docker.io": {},
+            "ghcr.io": {}
+        },
+        "credsStore": "1password",
+        "credHelpers": {
+            "docker.io": "1password",
+            "ghcr.io": "1password"
+        },
+        "currentContext": "rootless"
+    }
+  '';
 }

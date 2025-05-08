@@ -39,21 +39,13 @@ in {
       ../../../home/roles/discord.nix
     ];
     home.packages = with pkgs; [
-      beeper
+      stable-pkgs.beeper
       gimp
       moonlight-qt
-      signal-desktop
       spicetify.packages.x86_64-linux.nord
-      webcord
+      stable-pkgs.legcord
+      stable-pkgs.rustdesk
       zoom-us
-    ];
-    heywoodlh.home.applications = [
-      {
-        name = "Rustdesk";
-        command = ''
-          bash -c "SHELL='/run/current-system/sw/bin/bash' ${pkgs.rustdesk-flutter}/bin/rustdesk"
-        '';
-      }
     ];
   };
 

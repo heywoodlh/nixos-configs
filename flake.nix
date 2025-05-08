@@ -358,25 +358,11 @@
 
       # nixos targets
       packages.nixosConfigurations = {
-        nixos-thinkpad = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/hosts/x13/configuration.nix
-          ];
-        };
         nixos-zenbook = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = inputs;
           modules = [
             ./nixos/hosts/zenbook-14/configuration.nix
-          ];
-        };
-        nixos-gaming-pc = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/hosts/gaming-pc/configuration.nix
           ];
         };
         nixos-usb = nixpkgs.lib.nixosSystem {
@@ -460,15 +446,6 @@
             }
           ];
         };
-        # MicroPC
-        nixos-micropc = nixpkgs.lib.nixosSystem {
-          system = "${linuxSystem}";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/hosts/micropc/configuration.nix
-            #./nixos/roles/remote-access/usb-gadget.nix
-          ];
-        };
         # Dev VM for running on workstations
         nixos-dev = nixpkgs.lib.nixosSystem {
           system = "${linuxSystem}";
@@ -513,24 +490,6 @@
                     directory = "/shared/*";
                   '';
                 };
-              };
-            }
-          ];
-        };
-        # Orbstack VM for running on workstations
-        nixos-orb = nixpkgs.lib.nixosSystem {
-          system = "${linuxSystem}";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/hosts/orbstack/configuration.nix
-            ./nixos/vm.nix
-            {
-              networking.hostName = "nixos-orb";
-              console.earlySetup = true;
-              services.syncthing.enable = pkgs.lib.mkForce false;
-              home-manager.users.heywoodlh = {
-                # Disable syncthing because it interferes with host
-                services.syncthing.enable = pkgs.lib.mkForce false;
               };
             }
           ];

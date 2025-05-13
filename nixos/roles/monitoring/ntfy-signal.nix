@@ -34,6 +34,6 @@ in {
     ssh-notifications-mirror = mk-systemd-service { name = "ssh-notifications"; };
     plex-notifications-mirror = mk-systemd-service { name = "plex-notifications"; };
     uptime-notifications-mirror = mk-systemd-service { name = "uptime-notifications"; };
-    wazuh-notifications-mirror = mk-systemd-service { name = "wazuh-notifications"; };
+    security-notifications-mirror = mk-systemd-service { name = "security-notifications"; };
   };
 }

@@ -188,6 +188,9 @@
     "/opt/protonmail-bridge"
     "/opt/serge"
     "/media/data-ssd/ollama"
+    "/opt/syncthing/mac-mini-vm"
+    "/opt/syncthing/clone-hero-songs"
+    "/opt/syncthing/nixpkgs"
   ];
 
   # Resolve too many open files error

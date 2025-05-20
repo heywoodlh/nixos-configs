@@ -213,14 +213,10 @@ let
       # View extensions here: https://github.com/nix-community/nur-combined/blob/master/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
       extensions.packages = with nur-pkgs.repos.rycee.firefox-addons; [
         darkreader
-        gnome-shell-integration
         kristofferhagen-nord-theme
         multi-account-containers
-        onepassword-password-manager
+        #onepassword-password-manager <- install via Firefox extensions, seems to break when using nixpkgs' provided app
         privacy-badger
-        redirector
-        side-view
-        sidebery
         ublock-origin
         vimium
       ];

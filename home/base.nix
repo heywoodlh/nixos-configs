@@ -660,31 +660,31 @@ in {
     '';
   };
   heywoodlh.home.docker-credential-1password.enable = true;
-  home.file.".docker/config.json".text = if pkgs.stdenv.isDarwin then ''
-    {
-        "auths": {
-            "docker.io": {},
-            "ghcr.io": {}
-        },
-        "credsStore": "1password",
-        "credHelpers": {
-            "docker.io": "1password",
-            "ghcr.io": "1password"
-        },
-        "currentContext": "docker-lima"
-    }
-  '' else ''
-    {
-        "auths": {
-            "docker.io": {},
-            "ghcr.io": {}
-        },
-        "credsStore": "1password",
-        "credHelpers": {
-            "docker.io": "1password",
-            "ghcr.io": "1password"
-        },
-        "currentContext": "rootless"
-    }
-  '';
+  #home.file.".docker/config.json".text = if pkgs.stdenv.isDarwin then ''
+  #  {
+  #      "auths": {
+  #          "docker.io": {},
+  #          "ghcr.io": {}
+  #      },
+  #      "credsStore": "1password",
+  #      "credHelpers": {
+  #          "docker.io": "1password",
+  #          "ghcr.io": "1password"
+  #      },
+  #      "currentContext": "docker-lima"
+  #  }
+  #'' else ''
+  #  {
+  #      "auths": {
+  #          "docker.io": {},
+  #          "ghcr.io": {}
+  #      },
+  #      "credsStore": "1password",
+  #      "credHelpers": {
+  #          "docker.io": "1password",
+  #          "ghcr.io": "1password"
+  #      },
+  #      "currentContext": "rootless"
+  #  }
+  #'';
 }

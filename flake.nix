@@ -4,8 +4,8 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
-    nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.11";
-    nixos-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.05";
+    nixos-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     nixpkgs-wazuh-agent.url = "github:V3ntus/nixpkgs/wazuh-agent";
     # identify possible nvidia versions here:
@@ -19,7 +19,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
-    nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.05";
+    nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
       url = "github:LnL7/nix-darwin";

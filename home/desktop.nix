@@ -83,6 +83,17 @@ let
     "toolkit.telemetry.unifiedIsOptIn" = false;
     "toolkit.telemetry.updatePing.enabled" = false;
     "browser.sessionstore.restore_pinned_tabs_on_demand" = false;
+    "sidebar.verticalTabs" = true;
+    "sidebar.revamp" = true;
+    "sidebar.visibility" = "expand-on-hover";
+    "sidebar.backupState" = {
+      "panelOpen" = true;
+      "launcherWidth" = 35;
+      "launcherExpanded" = false;
+      "launcherVisible" = true;
+    };
+    "sidebar.main.tools" = "aichat";
+    "sidebar.position_start" = true;
   };
   browser-settings = common-firefox-settings // firefox-settings;
   osSpecificUserChrome = if pkgs.stdenv.isDarwin then "" else
@@ -214,7 +225,6 @@ let
       extensions.packages = with nur-pkgs.repos.rycee.firefox-addons; [
         darkreader
         facebook-container
-        google-container
         kristofferhagen-nord-theme
         multi-account-containers
         #onepassword-password-manager <- install via Firefox extensions, seems to break when using nixpkgs' provided app

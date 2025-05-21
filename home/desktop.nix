@@ -213,6 +213,8 @@ let
       # View extensions here: https://github.com/nix-community/nur-combined/blob/master/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
       extensions.packages = with nur-pkgs.repos.rycee.firefox-addons; [
         darkreader
+        facebook-container
+        google-container
         kristofferhagen-nord-theme
         multi-account-containers
         #onepassword-password-manager <- install via Firefox extensions, seems to break when using nixpkgs' provided app

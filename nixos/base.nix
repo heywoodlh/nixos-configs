@@ -50,7 +50,7 @@ in {
       extra_args=""
       [[ -d /home/heywoodlh/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /home/heywoodlh/opt/nixos-configs
       [[ -d /home/heywoodlh/opt/flakes ]] && extra_args="--override-input myFlakes /home/heywoodlh/opt/flakes"
-      sudo ${nixPkg}/bin/nix run nixpkgs#nixos-rebuild -- switch --flake /home/heywoodlh/opt/nixos-configs#$(hostname) $extra_args $@
+      sudo ${nixPkg}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- switch --flake /home/heywoodlh/opt/nixos-configs#$(hostname) $extra_args $@
     '')
     mosh
   ];

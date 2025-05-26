@@ -241,7 +241,7 @@ in {
     lefthook
     libarchive
     lima
-    nixos-rebuild
+    nixos-rebuild-ng
     nixfmt-rfc-style
     nmap
     openssl

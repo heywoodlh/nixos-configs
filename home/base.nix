@@ -201,6 +201,9 @@ let
   remote-nixos-rebuild = pkgs.writeShellScriptBin "nixos-rebuild.sh" ''
     ${pkgs.nixos-rebuild}/bin/nixos-rebuild --builders "${myBuilders}" $@
   '';
+  system-fetch = pkgs.writeShellScriptBin "neofetch" ''
+    ${pkgs.leaf}/bin/leaf $@
+  '';
 in {
   home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -274,6 +277,7 @@ in {
     builder-pop
     remote-nix
     remote-nixos-rebuild
+    system-fetch
   ];
 
   # Enable password-store

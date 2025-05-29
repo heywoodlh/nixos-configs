@@ -118,16 +118,17 @@ in {
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
-      tautulli = {
-        image = "docker.io/linuxserver/tautulli:2.14.3";
-        autoStart = true;
-        volumes = [
-          "/media/config/services/tautulli/config:/config"
-          "/media/config/services/tautulli/scripts:/scripts"
-          "${resolv-conf}:/etc/resolv.conf"
-        ];
-        extraOptions = [ "--network=host" ]; # For tailscale/ntfy.sh to work
-      };
+      # using Kubernetes for tautulli
+      #tautulli = {
+      #  image = "docker.io/linuxserver/tautulli:2.14.3";
+      #  autoStart = true;
+      #  volumes = [
+      #    "/media/config/services/tautulli/config:/config"
+      #    "/media/config/services/tautulli/scripts:/scripts"
+      #    "${resolv-conf}:/etc/resolv.conf"
+      #  ];
+      #  extraOptions = [ "--network=host" ]; # For tailscale/ntfy.sh to work
+      #};
       openaudible = {
         image = "docker.io/openaudible/openaudible:latest";
         autoStart = true;

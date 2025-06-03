@@ -55,6 +55,7 @@ in {
       "android-platform-tools"
       "blockblock"
       "cursorcerer"
+      "docker"
       "firefox"
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"

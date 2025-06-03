@@ -73,35 +73,35 @@ in {
   };
 
   services.lidarr = {
-    enable = true;
+    enable = false; # running in Kubernetes
     openFirewall = true;
     dataDir = "/media/config/services/lidarr";
     user = "media";
   };
 
   services.radarr = {
-    enable = true;
+    enable = false; # running in Kubernetes
     openFirewall = true;
     dataDir = "/media/config/services/radarr";
     user = "media";
   };
 
   services.readarr = {
-    enable = true;
+    enable = false; # running in Kubernetes
     openFirewall = true;
     dataDir = "/media/config/services/readarr";
     user = "media";
   };
 
   services.sonarr = {
-    enable = true;
+    enable = false; # running in Kubernetes
     openFirewall = true;
     dataDir = "/media/config/services/sonarr";
     user = "media";
   };
 
   services.sabnzbd = {
-    enable = true;
+    enable = false; # running in Kubernetes
     user = "media";
     configFile = "/media/config/services/sabnzbd/config.ini";
   };

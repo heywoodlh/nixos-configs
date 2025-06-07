@@ -265,6 +265,7 @@
           "legcord"
           "signal"
           "vmware-fusion"
+          "windows-app"
           "zoom"
         ];
         masApps = {

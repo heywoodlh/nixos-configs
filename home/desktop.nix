@@ -23,6 +23,7 @@ let
     "network.proxy.socks_port" = socksPort;
     "gfx.webrender.all" = true;
     "browser.startup.page" = 3; # restore previous session
+    "extensions.autoDisableScopes" = 0; # enable auto-loading of extensions
   };
   firefox-settings = if browser == "mullvad-browser"  then {
     # Mullvad Browser settings
@@ -222,20 +223,34 @@ let
         ];
       };
       # View extensions here: https://github.com/nix-community/nur-combined/blob/master/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
-      extensions.packages = with nur-pkgs.repos.rycee.firefox-addons; [
+      extensions.packages = let
+        nur-pkgs = import nur {
+          inherit pkgs;
+          nurpkgs = pkgs;
+        };
+        myFirefoxExtensions = pkgs.callPackage ./pkgs/firefox-addons/. { };
+      in with nur-pkgs.repos.rycee.firefox-addons; [
         darkreader
         facebook-container
         kristofferhagen-nord-theme
         multi-account-containers
+        mullvad # https://github.com/nix-community/nur-combined/blob/0b1bfae0cf152df7a77fe9f56beccf7fa450003e/repos/rycee/pkgs/firefox-addons/default.nix#L93-L107
         #onepassword-password-manager <- install via Firefox extensions, seems to break when using nixpkgs' provided app
         privacy-badger
         ublock-origin
         vimium
+        myFirefoxExtensions.heywoodlh-container
       ];
       isDefault = true;
       name = "home-manager";
       search = {
         engines = {
+          "leta" = {
+            urls = [{ template = "https://leta.mullvad.net/search?q={searchTerms}"; }];
+            definedAliases = [ "@l" ];
+            icon = "https://leta.mullvad.net/mullvad-vpn-logo.svg";
+            updateInterval = 24 * 60 * 60 * 1000; # every day
+          };
           "kagi" = {
             urls = [{ template = "https://kagi.com/search?q={searchTerms}"; }];
             definedAliases = [ "@k" ];
@@ -243,8 +258,8 @@ let
             updateInterval = 24 * 60 * 60 * 1000; # every day
           };
         };
-        default = "kagi";
-        privateDefault = "kagi";
+        default = "leta";
+        privateDefault = "leta";
       };
       userChrome = userChrome;
       settings = browser-settings;
@@ -260,10 +275,6 @@ let
   myVscode = myFlakes.packages.${system}.vscode;
   myTmux = myFlakes.packages.${system}.tmux;
   arc-settings = ./share/arc-browser.plist;
-  nur-pkgs = import nur {
-    inherit pkgs;
-    nurpkgs = pkgs;
-  };
 in {
   home.packages = [
     code-reset

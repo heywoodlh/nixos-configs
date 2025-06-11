@@ -242,6 +242,7 @@ in {
     k9s
     kubernetes-helm
     lefthook
+    less
     libarchive
     lima
     nixos-rebuild-ng

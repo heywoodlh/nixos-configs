@@ -1,9 +1,10 @@
-{ config, pkgs, lib, home-manager, nur, myFlakes, ts-warp-nixpkgs, ... }:
+{ config, attic, pkgs, lib, home-manager, nur, myFlakes, ts-warp-nixpkgs, ... }:
 
 let
   system = pkgs.system;
   stdenv = pkgs.stdenv;
   homeDir = config.home.homeDirectory;
+  atticClient = attic.packages.${system}.attic-client;
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
   myVim = myFlakes.packages.${system}.vim;
@@ -279,6 +280,7 @@ in {
     remote-nix
     remote-nixos-rebuild
     system-fetch
+    atticClient
   ];
 
   # Enable password-store

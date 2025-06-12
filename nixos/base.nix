@@ -1,5 +1,5 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, determinate-nix, nixpkgs-stable, lib, nur, home-manager, ... }:
+{ config, pkgs, attic, determinate-nix, nixpkgs-stable, lib, nur, home-manager, ... }:
 
 let
   system = pkgs.system;
@@ -69,6 +69,7 @@ in {
     extraSpecialArgs = {
       inherit nur;
       inherit determinate-nix;
+      inherit attic;
     };
     users.heywoodlh = { ... }: {
       home.activation.docker-rootless-context = ''

@@ -7,7 +7,7 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.05";
     nixos-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
-    nixpkgs-wazuh-agent.url = "github:V3ntus/nixpkgs/wazuh-agent";
+    nixpkgs-apple-containers.url = "github:xiaoxiangmoe/nixpkgs/container";
     # identify possible nvidia versions here:
     # https://github.com/icewind1991/nvidia-patch-nixos/blob/main/patch.json
     # if errors encountered, search for commits with the previous version
@@ -116,7 +116,7 @@
                       nixpkgs,
                       nixpkgs-stable,
                       nixpkgs-pam-lid-fix,
-                      nixpkgs-wazuh-agent,
+                      nixpkgs-apple-containers,
                       myFlakes,
                       nixpkgs-backports,
                       nixpkgs-lts,

@@ -3,7 +3,6 @@
   myFlakes,
   nixpkgs-backports,
   comin,
-  nixpkgs-wazuh-agent,
   ... }:
 
 let
@@ -11,7 +10,6 @@ let
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   myVim = myFlakes.packages.${system}.vim;
   myGit = myFlakes.packages.${system}.git;
-  wazuhPkg = pkgs.callPackage ./pkgs/wazuh.nix {};
 in {
   imports = [
     comin.nixosModules.comin
@@ -23,7 +21,6 @@ in {
     ./roles/monitoring/node-exporter.nix
     ./roles/monitoring/osqueryd.nix
     ./roles/backups/tarsnap.nix
-    "${nixpkgs-wazuh-agent}/nixos/modules/services/security/wazuh/wazuh.nix"
   ];
 
   nixpkgs.overlays = [

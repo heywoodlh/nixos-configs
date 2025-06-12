@@ -12992,6 +12992,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-apple-containers": {
+      "locked": {
+        "lastModified": 1749723905,
+        "narHash": "sha256-UjmQjcTkpOJmqThrEGpwfUvMDzk89aAP3oAellzi4bk=",
+        "owner": "xiaoxiangmoe",
+        "repo": "nixpkgs",
+        "rev": "01105d00215940854a956a5d0b680f71d1c95f01",
+        "type": "github"
+      },
+      "original": {
+        "owner": "xiaoxiangmoe",
+        "ref": "container",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-backports": {
       "locked": {
         "lastModified": 1701184375,
@@ -13723,22 +13739,6 @@
       }
     },
     "nixpkgs-wazuh-agent": {
-      "locked": {
-        "lastModified": 1718920843,
-        "narHash": "sha256-V9056GIhNVjhK3E1NZ5Kq0cpr1SFZslS+clhPQ+p9Hs=",
-        "owner": "V3ntus",
-        "repo": "nixpkgs",
-        "rev": "afd9f2909e54a1aaa87b9af04e17ce1f6eeaff7d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "V3ntus",
-        "ref": "wazuh-agent",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-wazuh-agent_2": {
       "locked": {
         "lastModified": 1718920843,
         "narHash": "sha256-V9056GIhNVjhK3E1NZ5Kq0cpr1SFZslS+clhPQ+p9Hs=",
@@ -17300,12 +17300,12 @@
         "nixos-stable": "nixos-stable",
         "nixos-wsl": "nixos-wsl_11",
         "nixpkgs": "nixpkgs_137",
+        "nixpkgs-apple-containers": "nixpkgs-apple-containers",
         "nixpkgs-backports": "nixpkgs-backports_11",
         "nixpkgs-lts": "nixpkgs-lts_11",
         "nixpkgs-nvidia": "nixpkgs-nvidia",
         "nixpkgs-pam-lid-fix": "nixpkgs-pam-lid-fix_2",
         "nixpkgs-stable": "nixpkgs-stable_11",
-        "nixpkgs-wazuh-agent": "nixpkgs-wazuh-agent_2",
         "nur": "nur_11",
         "nvidia-patch": "nvidia-patch",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs_11",

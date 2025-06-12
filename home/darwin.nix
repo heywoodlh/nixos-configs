@@ -19,7 +19,6 @@ in {
   };
 
   home.packages = [
-    pkgs.docker-client
     pkgs.m-cli
     pkgs.mas
     pkgs.pinentry_mac
@@ -92,8 +91,8 @@ in {
 
   # Run Lima VM always in background
   heywoodlh.home.lima = {
-    enable = true;
-    enableDocker = true;
+    enable = false;
+    enableDocker = false;
   };
 
   heywoodlh.home.applications = [

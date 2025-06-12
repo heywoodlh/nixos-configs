@@ -1,7 +1,8 @@
-{ config, pkgs, attic, myFlakes, darwin, ... }:
+{ config, pkgs, attic, myFlakes, darwin, nixpkgs-apple-containers, ... }:
 
 let
   system = pkgs.system;
+  container = nixpkgs-apple-containers.legacyPackages.${system}.container;
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
@@ -11,11 +12,20 @@ let
     #${pkgs.git}/bin/git -C ~/opt/nixos-configs pull origin master --rebase
     ${pkgs-darwin.darwin-rebuild}/bin/darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname)
   '';
+  dockerWrapper = pkgs.writeShellScriptBin "docker" ''
+    # Docker compatibility wrapper
+    [ $1 == "ps" ] && subcommand="list"
+    [ -z $subcommand ] && subcommand="$1"
+    shift
+    ${container}/bin/container $subcommand $@
+  '';
 in {
   #nix packages
   environment.systemPackages = [
+    container
     linuxBuilderSsh
     darwinSwitch
+    dockerWrapper
   ];
 
   nix.settings = {
@@ -55,7 +65,6 @@ in {
       "android-platform-tools"
       "blockblock"
       "cursorcerer"
-      "docker"
       "firefox"
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"

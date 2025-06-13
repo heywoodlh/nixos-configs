@@ -239,7 +239,7 @@ let
         privacy-badger
         ublock-origin
         vimium
-        myFirefoxExtensions.heywoodlh-container
+        #myFirefoxExtensions.heywoodlh-container
       ];
       isDefault = true;
       name = "home-manager";

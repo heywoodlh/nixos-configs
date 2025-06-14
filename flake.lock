@@ -17316,7 +17316,8 @@
         "snowflake": "snowflake_3",
         "spicetify": "spicetify_11",
         "ssh-keys": "ssh-keys_11",
-        "ts-warp-nixpkgs": "ts-warp-nixpkgs_2"
+        "ts-warp-nixpkgs": "ts-warp-nixpkgs_2",
+        "x270-fingerprint-driver": "x270-fingerprint-driver"
       }
     },
     "rust-analyzer-src": {
@@ -25159,6 +25160,26 @@
         "repo": "wlroots",
         "rev": "50eae512d9cecbf0b3b1898bb1f0b40fa05fe19b",
         "type": "gitlab"
+      }
+    },
+    "x270-fingerprint-driver": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-stable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1734692513,
+        "narHash": "sha256-3QEzFFrkXLj/JgZGoLaxq/pPkflSXfBOP10bXL8/Niw=",
+        "owner": "ahbnr",
+        "repo": "nixos-06cb-009a-fingerprint-sensor",
+        "rev": "3678b193efa1e06aab86058aecee18ddaa8878d2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ahbnr",
+        "repo": "nixos-06cb-009a-fingerprint-sensor",
+        "type": "github"
       }
     },
     "xdph": {

@@ -20,6 +20,10 @@
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
     };
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
+    x270-fingerprint-driver = {
+      url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
       url = "github:LnL7/nix-darwin";
@@ -151,6 +155,7 @@
                       ghostty,
                       determinate-nix,
                       cart,
+                      x270-fingerprint-driver,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -364,6 +369,13 @@
           specialArgs = inputs;
           modules = [
             ./nixos/hosts/zenbook-14/configuration.nix
+          ];
+        };
+        nixos-thinkpad = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/hosts/thinkpad-x270/configuration.nix
           ];
         };
         nixos-usb = nixpkgs.lib.nixosSystem {

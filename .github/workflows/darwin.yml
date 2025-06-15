@@ -12,6 +12,7 @@ on:
     - home/base.nix
     - '!darwin/**.md'
     - '!**.md'
+    - flake.lock
   workflow_dispatch:
   schedule:
   - cron: "0 0 * * Sat"

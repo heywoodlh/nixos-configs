@@ -1272,16 +1272,16 @@
     "elastic-cloud": {
       "flake": false,
       "locked": {
-        "lastModified": 1731347671,
-        "narHash": "sha256-N0rOV+kPAj7YjDG5N0tbUlR7r8DdWGv23F/eOyaFs2g=",
+        "lastModified": 1744034019,
+        "narHash": "sha256-6Z/TC1XLUww/VBpWQCTGOxo5em8vE7rUYb88FDl/kCI=",
         "owner": "elastic",
         "repo": "cloud-on-k8s",
-        "rev": "61f99ee53895d7b03db7018bd14e2de85e76811d",
+        "rev": "89a41511a4bc8fdb4770cf1da60c37b8b8232b6d",
         "type": "github"
       },
       "original": {
         "owner": "elastic",
-        "ref": "2.15",
+        "ref": "v3.0.0",
         "repo": "cloud-on-k8s",
         "type": "github"
       }
@@ -10104,11 +10104,11 @@
         "zen-browser-flake": "zen-browser-flake_2"
       },
       "locked": {
-        "lastModified": 1745773498,
-        "narHash": "sha256-1yFdsTzvAcmC/iZlIIsitPUCMdAqVArKjiyA0ATfUO0=",
+        "lastModified": 1750002242,
+        "narHash": "sha256-AlTEkQpdE28fQRyMBoFu1+ptpIVXkvw2BBXkER83IDs=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "e6e86fa06496d2f072fb672202bdfa72e65e5754",
+        "rev": "b6ce31af21a88c50f93a335fc9fc28ba14cb720b",
         "type": "github"
       },
       "original": {

@@ -14,6 +14,7 @@ on:
     - '!nixos/**.md'
     - '!home/**.md'
     - '!**.md'
+    - flake.lock
   workflow_dispatch:
   schedule:
   - cron: "0 0 * * Sat"

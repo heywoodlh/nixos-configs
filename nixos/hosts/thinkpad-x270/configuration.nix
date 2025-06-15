@@ -13,6 +13,7 @@ in {
       ./hardware-configuration.nix
       ../../laptop.nix
       #../../roles/desktop/hyprland.nix
+      ../../roles/desktop/xfce.nix
       lanzaboote.nixosModules.lanzaboote
       nixos-hardware.nixosModules.lenovo-thinkpad-x270
       x270-fingerprint-driver.nixosModules."06cb-009a-fingerprint-sensor"

@@ -56,6 +56,17 @@ in {
     executable = true;
   };
 
+  home.file.".zshenv" = {
+    text = ''
+      # Managed with home-manager, check `~/opt/nixos-configs/home/darwin.nix`
+      # Start Tmux on ssh (i.e. ensure Terminal.app does not use tmux for testing tmux-less environment)
+      if [[ ''${SSH_TTY} ]]
+      then
+          [ -z $TMUX ] && { ${myTmux}/bin/tmux new-session && exit;}
+      fi
+    '';
+  };
+
   home.file.".config/iterm2/iterm2-profiles.json" = {
     text = import ./iterm/iterm2-profiles.nix { inherit myTmux; };
   };

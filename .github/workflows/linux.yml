@@ -6,8 +6,11 @@ on:
     - 'master'
     paths:
     - nixos/**
-    - home/**
     - .github/workflows/linux.yml
+    - home/linux.nix
+    - home/desktop.nix
+    - home/base.nix
+    - home/linux/**
     - '!nixos/**.md'
     - '!home/**.md'
     - '!**.md'

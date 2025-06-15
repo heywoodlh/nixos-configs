@@ -10,7 +10,6 @@ let
   myVim = myFlakes.packages.${system}.vim;
   myGit = myFlakes.packages.${system}.git;
   myJujutsu = myFlakes.packages.${system}.jujutsu;
-  myKubectl = myFlakes.packages.${system}.kubectl;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
     export SOCKS_SERVER="nix-nvidia:1080"
     exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
@@ -241,6 +240,7 @@ in {
     inetutils
     jq
     k9s
+    kubectl
     kubernetes-helm
     lefthook
     less
@@ -264,7 +264,6 @@ in {
     myVim
     myGit
     myJujutsu
-    myKubectl
     myFlakes.packages.${system}.tmux
     myFish # For non-nix use-cases
     #myVM
@@ -312,26 +311,25 @@ in {
     source = op-wrapper;
   };
 
-  home.file."bin/ssh-unlock" = {
-    enable = true;
-    executable = true;
+  home.file.".config/fish/machine.fish" = {
     text = ''
-      if ! ${pkgs.ps}/bin/ps -fjH -u $USER | ${pkgs.gnugrep}/bin/grep ssh-agent | ${pkgs.gnugrep}/bin/grep -q "$HOME/.ssh/agent.sock" &> /dev/null
-      then
-          mkdir -p $HOME/.ssh
-          rm -f $HOME/.ssh/agent.sock &> /dev/null
-          eval $(${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
-      else
-          # Start ssh-agent if old process exists but socket file is gone
-          if ! test -e $HOME/.ssh/agent.sock
-          then
-            # Kill old ssh-agent process
-            ${pkgs.procps}/bin/pkill -9 ssh-agent &> /dev/null || true
+      function ssh-unlock
+        set -gx SSH_AUTH_SOCK "$HOME/.ssh/agent.sock"
+        if ! ${pkgs.ps}/bin/ps -fjH -u $USER | ${pkgs.gnugrep}/bin/grep ssh-agent | ${pkgs.gnugrep}/bin/grep -q "$HOME/.ssh/agent.sock" &> /dev/null
+            mkdir -p $HOME/.ssh
+            rm -f $HOME/.ssh/agent.sock &> /dev/null
             eval $(${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
-          fi
-      fi
-
-      ${op-wrapper} read 'op://Personal/rlt3q545cf5a4r4arhnb4h5qmi/private_key' | ${pkgs.openssh}/bin/ssh-add -t 4h -
+        else
+            # Start ssh-agent if old process exists but socket file is gone
+            # Or if SSH_AUTH_SOCK != $HOME/.ssh/agent.sock
+            if ! test -e $HOME/.ssh/agent.sock || [[ "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent.sock" ]]
+              # Kill old ssh-agent process
+              ${pkgs.procps}/bin/pkill -9 ssh-agent &> /dev/null || true
+              eval $(${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
+            end
+        end
+        ${op-wrapper} read 'op://Personal/rlt3q545cf5a4r4arhnb4h5qmi/private_key' | ${pkgs.openssh}/bin/ssh-add -t 4h -
+      end
     '';
   };
 

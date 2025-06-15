@@ -44,14 +44,17 @@ in {
   # Stable, system-wide packages
   environment.systemPackages = with stable-pkgs; let
     nixPkg = determinate-nix.packages.${system}.default;
+    myNixosSwitch = pkgs.writeShellScriptBin "nixos-switch" ''
+      [[ -d /home/heywoodlh/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /home/heywoodlh/opt/nixos-configs
+      sudo ${nixPkg}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- switch --flake /home/heywoodlh/opt/nixos-configs#$(hostname) $@
+    '';
+    myNixosSwitchWithFlakes = pkgs.writeShellScriptBin "nixos-switch-with-flakes" ''
+      ${myNixosSwitch}/bin/nixos-switch --override-input myFlakes /home/heywoodlh/opt/flakes $@
+    '';
   in [
     gptfdisk
-    (pkgs.writeShellScriptBin "nixos-switch" ''
-      extra_args=""
-      [[ -d /home/heywoodlh/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /home/heywoodlh/opt/nixos-configs
-      [[ -d /home/heywoodlh/opt/flakes ]] && extra_args="--override-input myFlakes /home/heywoodlh/opt/flakes"
-      sudo ${nixPkg}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- switch --flake /home/heywoodlh/opt/nixos-configs#$(hostname) $extra_args $@
-    '')
+    myNixosSwitch
+    myNixosSwitchWithFlakes
     mosh
   ];
 

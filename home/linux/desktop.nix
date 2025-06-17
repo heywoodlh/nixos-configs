@@ -19,12 +19,13 @@ let
     ${pkgs.flatpak}/bin/flatpak run --user app.zen_browser.zen || ${pkgs.libnotify}/bin/notify-send "Failed to launch Zen Browser"
   '';
 in {
-  #imports = [
-    #./cosmic-desktop.nix
-  #];
+  imports = [
+    ./xfce.nix
+    ./gnome-desktop.nix
+  ];
   # Flatpak support
   services.flatpak = {
-    enableModule = true;
+    enableModule = false;
     flatpakDir = "${homeDir}/.local/share/flatpak";
     remotes = {
       "flathub" = "https://dl.flathub.org/repo/flathub.flatpakrepo";

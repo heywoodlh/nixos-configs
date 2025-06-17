@@ -7,6 +7,26 @@ let
     inherit system;
     config.allowUnfree = true;
   };
+  cpuThrottleFix = pkgs.writeShellScript "cpu-throttle-fix.sh" ''
+    # https://superuser.com/a/1525797
+    sleep 3 # Wait for system to settle
+    # Determine CPU capabilities
+    MAX_CPU=$(${pkgs.linuxKernel.packages.linux_xanmod_stable.cpupower}/bin/cpupower frequency-info -l | ${pkgs.coreutils}/bin/tail -n1 | ${pkgs.coreutils}/bin/cut -d' ' -f2)
+
+    # Disable "BD PROCHOT"
+    ${pkgs.msr-tools}/bin/wrmsr -a 0x1FC 262238;
+
+    # Set and apply frequencies
+    ${pkgs.linuxKernel.packages.linux_xanmod_stable.cpupower}/bin/cpupower frequency-set \
+      -d $(expr $MAX_CPU / 2) \
+      -u $MAX_CPU \
+      -r \
+      -g performance;
+  '';
+  # For manually running
+  cpuThrottleFixWrapper = pkgs.writeShellScriptBin "cpu-throttle-fix-wrapper" ''
+    sudo ${cpuThrottleFix}
+  '';
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -22,8 +42,8 @@ in {
   # Bootloader
   boot.loader.systemd-boot.enable = false; # using lanzaboote
   boot.loader.efi.canTouchEfiVariables = true;
-  hardware.enableRedistributableFirmware = true; # enable firmware for ARC GPU
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest; # use latest kernel for ARC GPU
+  hardware.enableRedistributableFirmware = true; # enable firmware
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_stable;
 
   networking.hostName = "nixos-thinkpad"; # Define your hostname.
 
@@ -54,6 +74,7 @@ in {
     #clevis
     lanzaboote
     sbctl
+    cpuThrottleFixWrapper
   ];
 
   # Hard limits for Nix
@@ -85,6 +106,26 @@ in {
     extraPackages = with pkgs; [
       intel-media-driver
     ];
+  };
+
+  services.acpid = {
+    enable = true;
+    acEventCommands = ''
+      # Ensure CPU is always at maximum performance
+      ${cpuThrottleFix}
+    '';
+  };
+
+  # Run CPU throttle fix on boot
+  systemd.services.cpu-throttle-fix = {
+    wantedBy = [ "multi-user.target" ];
+    enable = true;
+    serviceConfig = {
+      User = "root";
+      Group = "root";
+      Type = "oneshot";
+    };
+    script = "${cpuThrottleFix}";
   };
 
   # Fingerprint reader support

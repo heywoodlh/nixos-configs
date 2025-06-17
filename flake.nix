@@ -579,7 +579,6 @@
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config
-            ./home/linux/gnome-desktop.nix
             (import myFlakes.packages.${system}.gnome-dconf)
             {
               # Home-Manager specific nixpkgs config

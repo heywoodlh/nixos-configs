@@ -231,7 +231,6 @@ in {
         ../home/linux.nix
         ../home/desktop.nix # base desktop.nix
         ../home/linux/desktop.nix # linux-specific desktop.nix
-        ../home/linux/gnome-desktop.nix
         flatpaks.homeManagerModules.declarative-flatpak
         (import myFlakes.packages.${system}.gnome-dconf)
       ];

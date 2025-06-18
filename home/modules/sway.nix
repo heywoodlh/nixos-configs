@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixpkgs-stable, snowflake, dark-wallpaper, ... }:
+{ config, lib, pkgs, nixpkgs-stable, dark-wallpaper, ... }:
 
 with lib;
 
@@ -10,6 +10,7 @@ with lib;
 let
   cfg = config.heywoodlh.home.sway;
   system = pkgs.system;
+  snowflake = ../../assets/nixos-snowflake.png;
   pkgs-stable = nixpkgs-stable.legacyPackages.${system};
   homeDir = config.home.homeDirectory;
   # Screenshot scripts

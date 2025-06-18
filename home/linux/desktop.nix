@@ -1,8 +1,9 @@
-{ config, pkgs, home-manager, myFlakes, snowflake, dark-wallpaper, ... }:
+{ config, pkgs, home-manager, myFlakes, dark-wallpaper, ... }:
 
 let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
+  snowflake = ../../assets/nixos-snowflake.png;
   myWezterm = myFlakes.packages.${system}.wezterm;
   captive-portal = pkgs.writeShellScriptBin "captive-portal" ''
    ${pkgs.xdg-utils}/bin/xdg-open "http://$(${pkgs.iproute2}/bin/ip --oneline route get 1.1.1.1 | ${pkgs.gawk}/bin/awk '{print $3}')"

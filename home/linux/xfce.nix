@@ -154,10 +154,7 @@ let
     	width: 60%;
     }
   '';
-  snowflake = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
-    hash = "sha256-0Ni0KWk8QlhfXIPXyRUo8566a4VYHbMcAD90g5QvpF0=";
-  };
+  snowflake = ../../assets/nixos-snowflake.png;
 in {
   xfconf.settings = {
     # xfconf-query --channel xfce4-keyboard-shortcuts --list --verbose
@@ -210,7 +207,7 @@ in {
       "plugins/plugin-1/button-icon" = "${snowflake}";
       "plugins/plugin-1/show-button-title" = false;
       "plugins/plugin-2" = "separator";
-      "plugins/plugin-2/expand" = true;
+      "plugins/plugin-2/expand" = false;
       "plugins/plugin-2/style" = 0;
       "plugins/plugin-3" = "tasklist";
       "plugins/plugin-3/grouping" = 1;
@@ -259,6 +256,14 @@ in {
       name = "Guake";
       command = "${pkgs.guake}/bin/guake --hide";
     }
+    {
+      name = "Caffeine";
+      command = "${pkgs.caffeine-ng}/bin/caffeine";
+    }
+  ];
+
+  home.packages = with pkgs; [
+    caffeine-ng
   ];
 
   home.activation = {

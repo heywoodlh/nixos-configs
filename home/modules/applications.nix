@@ -5,10 +5,7 @@ with lib;
 let
   cfg = config.heywoodlh.home.applications;
   system = pkgs.system;
-  snowflake = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
-    hash = "sha256-0Ni0KWk8QlhfXIPXyRUo8566a4VYHbMcAD90g5QvpF0=";
-  };
+  snowflake = ../../assets/nixos-snowflake.png;
   icnsDir = ./icns;
   renameIcns = name: pkgs.stdenv.mkDerivation {
     name = "icns-renamed-${name}";

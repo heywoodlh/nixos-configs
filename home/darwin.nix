@@ -31,7 +31,7 @@ in {
 
   home.file."Pictures/wallpaper.png" = {
     enable = true;
-    source = ../wallpapers/nord-apple.png;
+    source = ../assets/nord-apple.png;
   };
 
   home.file."bin/choose-launcher.zsh" = {
@@ -102,8 +102,8 @@ in {
 
   # Run Lima VM always in background
   heywoodlh.home.lima = {
-    enable = false;
-    enableDocker = false;
+    enable = true;
+    enableDocker = true;
   };
 
   heywoodlh.home.applications = [

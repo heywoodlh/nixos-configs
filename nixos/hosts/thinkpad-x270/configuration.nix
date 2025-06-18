@@ -132,13 +132,22 @@ in {
   #services.fprintd.enable = true;
   #services.fprintd.tod.enable = true;
   # https://github.com/ahbnr/nixos-06cb-009a-fingerprint-sensor/blob/24.11/SETUP-24.11.md#setup-based-on-fprintd-and-bingchs-driver
-  #services."06cb-009a-fingerprint-sensor" = {
-  #  enable = true;
-  #  backend = "python-validity";
-  #};
+  # First, enable the python-validity service below, then run:
+  #   ```
+  #   systemctl stop python3-validity
+  #   validity-sensors-firmware
+  #   systemctl start python3-validity
+  #   fprintd-enroll
+  #   fprintd-enroll -f "right-middle-finger"
+  #   ```
+  # Then disable the python-validity service below and enable the libfprint-tod service below.
+  services."06cb-009a-fingerprint-sensor" = {
+    enable = true;
+    backend = "python-validity";
+  };
   #services."06cb-009a-fingerprint-sensor" = {
   #  enable = true;
   #  backend = "libfprint-tod";
-  #  calib-data-file = ./calib-data.bin;
+  #  calib-data-file = /var/lib/python-validity/calib-data.bin;
   #};
 }

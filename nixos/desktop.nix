@@ -2,7 +2,6 @@
   nur, nixpkgs-stable, nixpkgs-lts,
   myFlakes, flatpaks,
   light-wallpaper, dark-wallpaper,
-  snowflake,
   ts-warp-nixpkgs, qutebrowser,
   ghostty,
   ... }:
@@ -220,7 +219,6 @@ in {
       inherit nixpkgs-stable;
       inherit light-wallpaper;
       inherit dark-wallpaper;
-      inherit snowflake;
       inherit ts-warp-nixpkgs;
       inherit qutebrowser;
       inherit ghostty;

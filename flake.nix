@@ -21,8 +21,8 @@
     };
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     x270-fingerprint-driver = {
-      url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor/25.05";
+      inputs.nixpkgs.follows = "nixos-stable";
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
@@ -68,10 +68,6 @@
     };
     light-wallpaper = {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/wallpapers/nix-wallpaper-simple-light-gray.png";
-      flake = false;
-    };
-    snowflake = {
-      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png";
       flake = false;
     };
     nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
@@ -139,7 +135,6 @@
                       nix-on-droid,
                       dark-wallpaper,
                       light-wallpaper,
-                      snowflake,
                       hyprland,
                       nixos-cosmic,
                       cosmic-manager,
@@ -266,7 +261,6 @@
         casks = [
           "beeper"
           "diffusionbee"
-          "discord"
           "legcord"
           "signal"
           "vmware-fusion"

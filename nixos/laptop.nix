@@ -13,7 +13,7 @@ in {
 
   system.activationScripts = {
     powerSaver = ''
-      ${pkgs.power-profiles-daemon}/bin/powerprofilesctl set power-saver
+      ${pkgs.power-profiles-daemon}/bin/powerprofilesctl set power-saver &>/dev/null || true
     '';
   };
 }

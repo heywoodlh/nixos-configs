@@ -16809,7 +16809,6 @@
         "proxmox-nixos": "proxmox-nixos",
         "qutebrowser": "qutebrowser_2",
         "signal-ntfy": "signal-ntfy_2",
-        "snowflake": "snowflake_3",
         "spicetify": "spicetify_11",
         "ssh-keys": "ssh-keys_11",
         "ts-warp-nixpkgs": "ts-warp-nixpkgs_2",
@@ -17230,18 +17229,6 @@
       }
     },
     "snowflake_2": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-gXkYyt7uTGkrXAK6AoVYg5EEBlGdPqhceHJcmUryaM0=",
-        "type": "file",
-        "url": "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/logo/white.png"
-      }
-    },
-    "snowflake_3": {
       "flake": false,
       "locked": {
         "narHash": "sha256-gXkYyt7uTGkrXAK6AoVYg5EEBlGdPqhceHJcmUryaM0=",
@@ -24494,19 +24481,20 @@
     "x270-fingerprint-driver": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixos-stable"
         ]
       },
       "locked": {
-        "lastModified": 1734692513,
-        "narHash": "sha256-3QEzFFrkXLj/JgZGoLaxq/pPkflSXfBOP10bXL8/Niw=",
+        "lastModified": 1748793996,
+        "narHash": "sha256-DVOoP3ZH6f1EAg5YyqOvzFnDWbzyYNeYUiZX4Lrmm4g=",
         "owner": "ahbnr",
         "repo": "nixos-06cb-009a-fingerprint-sensor",
-        "rev": "3678b193efa1e06aab86058aecee18ddaa8878d2",
+        "rev": "86e1f4d73c56464be715007d65ec5063391b433a",
         "type": "github"
       },
       "original": {
         "owner": "ahbnr",
+        "ref": "25.05",
         "repo": "nixos-06cb-009a-fingerprint-sensor",
         "type": "github"
       }

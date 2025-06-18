@@ -12,20 +12,12 @@ let
     #${pkgs.git}/bin/git -C ~/opt/nixos-configs pull origin master --rebase
     ${pkgs-darwin.darwin-rebuild}/bin/darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname)
   '';
-  dockerWrapper = pkgs.writeShellScriptBin "docker" ''
-    # Docker compatibility wrapper
-    [ $1 == "ps" ] && subcommand="list"
-    [ -z $subcommand ] && subcommand="$1"
-    shift
-    ${container}/bin/container $subcommand $@
-  '';
 in {
   #nix packages
   environment.systemPackages = [
     container
     linuxBuilderSsh
     darwinSwitch
-    dockerWrapper
   ];
 
   nix.settings = {

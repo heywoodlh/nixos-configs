@@ -4,5 +4,8 @@
   networking = {
     knownNetworkServices = ["Wi-Fi" "Bluetooth PAN" "Thunderbolt Bridge"];
   };
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    overrideLocalDns = true;
+  };
 }

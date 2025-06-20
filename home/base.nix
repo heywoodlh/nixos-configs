@@ -322,7 +322,7 @@ in {
         else
             # Start ssh-agent if old process exists but socket file is gone
             # Or if SSH_AUTH_SOCK != $HOME/.ssh/agent.sock
-            if ! test -e $HOME/.ssh/agent.sock || [[ "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent.sock" ]]
+            if ! test -e $HOME/.ssh/agent.sock || test "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent.sock"
               # Kill old ssh-agent process
               ${pkgs.procps}/bin/pkill -9 ssh-agent &> /dev/null || true
               eval $(${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true

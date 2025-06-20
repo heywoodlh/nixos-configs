@@ -14007,22 +14007,6 @@
         "type": "github"
       }
     },
-    "nixpkgs_137": {
-      "locked": {
-        "lastModified": 1726142289,
-        "narHash": "sha256-Jks8O42La+nm5AMTSq/PvM5O+fUAhIy0Ce1QYqLkyZ4=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "280db3decab4cbeb22a4599bd472229ab74d25e1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs_14": {
       "locked": {
         "lastModified": 1700390070,
@@ -17200,7 +17184,9 @@
     "signal-ntfy_2": {
       "inputs": {
         "flake-utils": "flake-utils_248",
-        "nixpkgs": "nixpkgs_137"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1727994984,

@@ -6,7 +6,10 @@ in {
   networking.firewall.allowedTCPPorts = [ 6443 ];
   # https://docs.k3s.io/installation/requirements#networking
   networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 6443 2379 2380 8472 10250 51820 51821 5001 ];
-  networking.firewall.trustedInterfaces = [ "tailscale0" ]; # for clustering
+  networking.firewall.trustedInterfaces = [
+    "cni+"
+    "tailscale0" # for clustering
+  ];
   services.k3s = let
     kubeletConf = pkgs.writeText "kubelet.conf" ''
       apiVersion: kubelet.config.k8s.io/v1beta1

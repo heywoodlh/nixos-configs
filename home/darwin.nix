@@ -19,6 +19,7 @@ in {
   };
 
   home.packages = [
+    pkgs.fleetctl
     pkgs.m-cli
     pkgs.mas
     pkgs.pinentry_mac

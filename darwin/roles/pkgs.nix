@@ -69,7 +69,6 @@ in {
       "remoteviewer"
       "rustdesk"
       "shortcat"
-      "syncthing"
     ];
     masApps = {
       DaisyDisk = 411643860;

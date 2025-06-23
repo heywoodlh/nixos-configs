@@ -207,6 +207,9 @@
   # Route mullvad through Tailscale
   services.tailscale.extraSetFlags = [
     "--advertise-routes=10.64.0.1/32"
+    "--accept-routes"
+    "--accept-dns"
+    "--stateful-filtering"
   ];
 
   virtualisation.oci-containers = let

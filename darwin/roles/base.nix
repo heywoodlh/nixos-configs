@@ -54,4 +54,21 @@ in {
       ];
     };
   };
+
+  system.activationScripts.postActivation.text = let
+    version = "1.43.0";
+  in ''
+    if [[ ! -e /opt/orbit/ ]]
+    then
+      if ${pkgs.curl}/bin/curl --silent -LI http://files.barn-banana.ts.net &>/dev/null
+      then
+        echo "Connected to Tailnet, installing Fleet package..."
+        ${pkgs.curl}/bin/curl --silent -L 'http://files.barn-banana.ts.net/fleet/fleet-osquery-${version}.pkg' -o /tmp/fleet-osquery.pkg
+        sudo installer -pkg /tmp/fleet-osquery.pkg -target /
+        echo "Fleet package installed successfully."
+      fi
+    else
+      echo "Fleet is already installed. Skipping."
+    fi
+  '';
 }

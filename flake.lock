@@ -9802,11 +9802,11 @@
         "zen-browser-flake": "zen-browser-flake_2"
       },
       "locked": {
-        "lastModified": 1750007905,
-        "narHash": "sha256-GI3XtBzqI2kQVc/zQvlGHF+2AQUSrn21u6eRwr9gM90=",
+        "lastModified": 1750797468,
+        "narHash": "sha256-5jEC9oP8sRX2e9ayqykSa9327apebzDrdX+iBDStqq8=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "d03e48aedf3adc5138cbae23690ef192417f00f8",
+        "rev": "44158897c67af576d30878638a49fa3396051daa",
         "type": "github"
       },
       "original": {

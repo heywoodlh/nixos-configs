@@ -185,6 +185,7 @@
           ./darwin/roles/defaults.nix
           ./darwin/roles/pkgs.nix
           ./darwin/roles/network.nix
+          ./darwin/roles/posture.nix
           extraConf
           {
             imports = [
@@ -197,6 +198,7 @@
              home-manager.useGlobalPkgs = true;
 
             networking.hostName = myHostname;
+            networking.computerName = myHostname;
             heywoodlh.darwin = {
               sketchybar.enable = true;
               yabai = {

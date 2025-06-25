@@ -1,7 +1,10 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Disable firewall to allow SSH, VNC
-  system.defaults.alf.globalstate = lib.mkForce 0;
-  system.defaults.alf.stealthenabled = lib.mkForce 0;
+
+  system.defaults.CustomSystemPreferences = {
+    "com.apple.SoftwareUpdate" = {
+      AutomaticallyInstallMacOSUpdates = lib.mkForce false; # disable updates on mac-mini for reboots to not break ssh access, i.e. getting stuck at login screen
+    };
+  };
 }

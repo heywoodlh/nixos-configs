@@ -10,7 +10,7 @@ let
   darwinSwitch = pkgs.writeShellScriptBin "darwin-switch" ''
     [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
     #${pkgs.git}/bin/git -C ~/opt/nixos-configs pull origin master --rebase
-    ${pkgs-darwin.darwin-rebuild}/bin/darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname)
+    /usr/bin/sudo ${pkgs-darwin.darwin-rebuild}/bin/darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname)
   '';
 in {
   #nix packages

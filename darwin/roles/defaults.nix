@@ -75,12 +75,6 @@ in {
       TrackpadThreeFingerDrag = false; # Disable three finger drag
       Dragging = true;
     };
-    # Apple firewall config:
-    alf = {
-      globalstate = 2;
-      loggingenabled = 0;
-      stealthenabled = 1;
-    };
     loginwindow = {
       GuestEnabled = false;
       DisableConsoleAccess = true;

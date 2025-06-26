@@ -12,7 +12,7 @@
     #../../roles/monitoring/graylog.nix
     ../../roles/containers/k3s-server.nix
     #../../roles/security/fleetdm.nix
-    ../../roles/monitoring/osqueryd.nix
+    ../../roles/monitoring/osquery.nix
     ../../roles/nixos/cache.nix
     #../../roles/remote-access/wireguard-server.nix
     ../../roles/home-automation/homebridge.nix
@@ -39,9 +39,6 @@
 
   # Set your time zone.
   time.timeZone = "America/Denver";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.utf8";
 
   # Enable Nvidia driver
   boot.kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_xanmod_stable;

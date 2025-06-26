@@ -12,9 +12,6 @@
   # Set your time zone.
   time.timeZone = "America/Denver";
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.utf8";
-
   # WSL settings
   wsl = {
     enable = true;

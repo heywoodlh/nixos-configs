@@ -99,6 +99,8 @@ in {
       IdentityAgent /home/heywoodlh/.ssh/agent.sock
   '';
 
+  i18n.defaultLocale = "en_US.UTF-8";
+
   # NixOS version
   system.stateVersion = "24.11";
 }

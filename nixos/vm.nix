@@ -59,7 +59,4 @@
 
   # Enable SPICE guest agent
   services.spice-vdagentd.enable = true;
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.utf8";
 }

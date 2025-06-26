@@ -1,23 +1,17 @@
-{ lib, config, pkgs, osquery-fix-nixpkgs, ... }:
+{ lib, config, pkgs, ... }:
 
-let
-  secret = pkgs.fetchurl {
-    url = "http://100.113.9.57:9080/secret.txt";
-    sha256 = "sha256-foUAIXGl1IpTc2i0gKARz7HKPxUNo0uEBvE/jRvc6co=";
-  };
-  cert = pkgs.fetchurl {
-    url = "http://100.113.9.57:9080/fleet.pem";
-    sha256 = "sha256-n6wRM5SXALOaJNwXsyc29tED2OnjwQzNk/Z5yckCqLU=";
-  };
-  system = pkgs.system;
-in {
+{
   services.osquery = {
-    enable = false; # Until openssl is fixed
+    enable = true;
     flags = {
+      # Setup certs and secrets with these commands:
+      # sudo mkdir -p /opt/osquery
+      # sudo curl http://files.barn-banana.ts.net/fleet/fleet.pem -o /opt/osquery/fleet.pem
+      # sudo curl http://files.barn-banana.ts.net/fleet/secret.txt -o /opt/osquery/secret.txt
+      tls_server_certs = "/opt/osquery/fleet.pem";
+      enroll_secret_path = "/opt/osquery/secret.txt";
       tls_hostname = "fleet.heywoodlh.io";
-      tls_server_certs = "${cert}";
       host_identifier = "instance";
-      enroll_secret_path = "${secret}";
       enroll_tls_endpoint = "/api/osquery/enroll";
       config_plugin = "tls";
       config_tls_endpoint = "/api/v1/osquery/config";

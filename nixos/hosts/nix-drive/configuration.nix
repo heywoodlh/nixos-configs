@@ -20,9 +20,6 @@
   # Set your time zone.
   time.timeZone = "America/Denver";
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.utf8";
-
   # Enable auto upgrade
   system.autoUpgrade = {
     enable = true;

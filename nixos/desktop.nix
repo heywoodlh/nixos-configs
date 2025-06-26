@@ -1,6 +1,6 @@
 { config, pkgs, lib, home-manager,
   nur, nixpkgs-stable, nixpkgs-lts,
-  myFlakes, flatpaks,
+  myFlakes,
   light-wallpaper, dark-wallpaper,
   ts-warp-nixpkgs, qutebrowser,
   ghostty,
@@ -229,7 +229,6 @@ in {
         ../home/linux.nix
         ../home/desktop.nix # base desktop.nix
         ../home/linux/desktop.nix # linux-specific desktop.nix
-        flatpaks.homeManagerModules.declarative-flatpak
         (import myFlakes.packages.${system}.gnome-dconf)
       ];
       home.packages = [

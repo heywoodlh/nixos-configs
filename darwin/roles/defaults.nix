@@ -1,4 +1,4 @@
-{ config, pkgs, myFlakes, ... }:
+{ config, pkgs, myFlakes, determinate-nix, ... }:
 
 let
   system = pkgs.system;
@@ -16,6 +16,19 @@ in {
       enable = true;
       package = pkgs.darwin.linux-builder;
       ephemeral = true; # Wipe on every reboot
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+      config = {
+        environment.systemPackages = [
+          myFlakes.packages.aarch64-linux.vim
+        ];
+        nix = {
+          package = determinate-nix.packages.aarch64-linux.default;
+          settings.experimental-features = [ "nix-command" "flakes" ];
+        };
+      };
     };
   };
 
@@ -121,4 +134,17 @@ in {
 
   # Use touch ID for sudo auth
   security.pam.services.sudo_local.touchIdAuth = true;
+
+  # Enable firewall
+  networking.applicationFirewall = {
+    enable = true;
+    enableStealthMode = true;
+    blockAllIncoming = true;
+    allowSignedApp = true;
+    allowSigned = true;
+  };
+
+  system.activationScripts.postActivation.text = ''
+    /usr/sbin/spctl --master-enable # Enable Gatekeeper
+  '';
 }

@@ -57,7 +57,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    flatpaks.url = "github:GermanBread/declarative-flatpak/stable-v3";
     nix-on-droid = {
       url = "github:nix-community/nix-on-droid/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -134,7 +133,6 @@
                       nixos-hardware,
                       ssh-keys,
                       osquery-fix-nixpkgs,
-                      flatpaks,
                       nix-on-droid,
                       dark-wallpaper,
                       light-wallpaper,
@@ -185,7 +183,6 @@
           ./darwin/roles/defaults.nix
           ./darwin/roles/pkgs.nix
           ./darwin/roles/network.nix
-          ./darwin/roles/posture.nix
           extraConf
           {
             imports = [
@@ -574,7 +571,6 @@
             determinate-nix.homeModules.default
             #(mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
             cosmic-manager.homeManagerModules.cosmic-manager
-            flatpaks.homeManagerModules.declarative-flatpak
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config

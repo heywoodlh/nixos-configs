@@ -1,6 +1,6 @@
 { config, pkgs, lib, home-manager,
   nur, hyprland, nixpkgs-backports,
-  nixpkgs-lts, myFlakes, flatpaks,
+  nixpkgs-lts, myFlakes,
   ... }:
 
 let
@@ -162,7 +162,6 @@ in {
     users.heywoodlh = { ... }: {
       imports = [
         ../home/linux.nix
-        flatpaks.homeManagerModules.declarative-flatpak
       ];
       home.packages = [
         myFlakes.packages.${system}.git

@@ -3,11 +3,7 @@
 {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox.override {
-      cfg = {
-        enableGnomeExtensions = true;
-      };
-    };
+    package = pkgs.firefox;
     profiles.default = {
       search.force = true; # This is required so the build won't fail each time
       bookmarks = import ./modules/bookmarks.nix;

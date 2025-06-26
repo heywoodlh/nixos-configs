@@ -10,5 +10,6 @@
     ./linux-autostart.nix
     ./marp.nix
     ./1password-docker-helper.nix
+    ./darwin-defaults.nix
   ];
 }

@@ -180,26 +180,24 @@ let
   altDarwin = if system == "aarch64-darwin" then "ssh://heywoodlh@intel-mac-vm x86_64-darwin" else "ssh://heywoodlh@mac-mini aarch64-darwin"; # MacOS builder on opposite arch
   altLinux = if system == "x86_64-linux" then "ssh://heywoodlh@ubuntu-arm64 aarch64-linux" else "ssh://heywoodlh@nix-nvidia x86_64-linux"; # Linux builder on opposite arch
   altBuilder = if stdenv.isDarwin then "${altLinux}" else "${altDarwin}";
-  myBuilders = if stdenv.isDarwin then "ssh://heywoodlh@nix-nvidia x86_64-linux ; ssh://builder@linux-builder aarch64-linux ; ${altDarwin}" else "ssh://heywoodlh@mac-mini aarch64-darwin ; ssh://heywoodlh@intel-mac-vm x86_64-darwin ; ${altLinux}";
+  myBuilders = if stdenv.isDarwin then "ssh://heywoodlh@nix-nvidia x86_64-linux ; ssh://builder@linux-builder aarch64-linux ; ${altDarwin}" else "ssh://heywoodlh@mac-mini aarch64-darwin ; ${altLinux}";
   builder-pop = pkgs.writeShellScriptBin "builders.sh" ''
     set -ex
     # Shell script to populate SSH host keys
     ssh heywoodlh@nix-nvidia true
     ssh heywoodlh@mac-mini true
     ssh heywoodlh@ubuntu-arm64 true
-    ssh heywoodlh@intel-mac-vm true
 
     # Populate to root user
     sudo -E ssh heywoodlh@nix-nvidia true
     sudo -E ssh heywoodlh@mac-mini true
     sudo -E ssh heywoodlh@ubuntu-arm64 true
-    sudo -E ssh heywoodlh@intel-mac-vm true
   '';
   remote-nix = pkgs.writeShellScriptBin "nix.sh" ''
     ${pkgs.nix}/bin/nix --builders "${myBuilders}" $@
   '';
-  remote-nixos-rebuild = pkgs.writeShellScriptBin "nixos-rebuild.sh" ''
-    ${pkgs.nixos-rebuild}/bin/nixos-rebuild --builders "${myBuilders}" $@
+  macos-nixos-rebuild = pkgs.writeShellScriptBin "nixos-rebuild" ''
+    nix run github:thiagokokada/nixpkgs/0f6624e21a7300a11029507e7c6638a7689ff5a5#nixos-rebuild-ng -- --build-host "builder@linux-builder" $@
   '';
   system-fetch = pkgs.writeShellScriptBin "neofetch" ''
     ${pkgs.leaf}/bin/leaf $@
@@ -277,9 +275,10 @@ in {
     duo-key-remote-setup
     builder-pop
     remote-nix
-    remote-nixos-rebuild
     system-fetch
     atticClient
+  ] ++ lib.optionals stdenv.isDarwin [
+    macos-nixos-rebuild
   ];
 
   # Enable password-store

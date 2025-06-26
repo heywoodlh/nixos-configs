@@ -1,16 +1,14 @@
-{ config, pkgs, attic, myFlakes, darwin, nixpkgs-apple-containers, ... }:
+{ config, determinate-nix, pkgs, attic, myFlakes, darwin, nixpkgs-apple-containers, ... }:
 
 let
   system = pkgs.system;
+  nixPkg = determinate-nix.packages.${system}.default;
   container = nixpkgs-apple-containers.legacyPackages.${system}.container;
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
-  pkgs-darwin = darwin.packages.${system};
   darwinSwitch = pkgs.writeShellScriptBin "darwin-switch" ''
-    [[ -d ~/opt/nixos-configs ]] || git clone https://github.com/heywoodlh/nixos-configs
-    #${pkgs.git}/bin/git -C ~/opt/nixos-configs pull origin master --rebase
-    /usr/bin/sudo ${pkgs-darwin.darwin-rebuild}/bin/darwin-rebuild switch --flake ~/opt/nixos-configs#$(hostname)
+    /usr/bin/sudo darwin-rebuild switch --flake $HOME/opt/nixos-configs#$(hostname)
   '';
 in {
   #nix packages

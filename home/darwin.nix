@@ -113,4 +113,5 @@ in {
       command = "${pkgs.virt-manager}/bin/virt-manager";
     }
   ];
+  heywoodlh.home.darwin.defaults.enable = true;
 }

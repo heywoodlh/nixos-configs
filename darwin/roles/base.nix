@@ -9,11 +9,15 @@ in {
     inherit config;
     inherit pkgs;
   };
+  system.primaryUser = "heywoodlh";
 
   # Allow olm for gomuks until issues are resolved
-  nixpkgs.config.permittedInsecurePackages = [
-    "olm-3.2.16"
-  ];
+  nixpkgs = {
+    hostPlatform.system = "aarch64-darwin";
+    config.permittedInsecurePackages = [
+      "olm-3.2.16"
+    ];
+  };
 
   # Home-Manager config
   home-manager = {

@@ -604,7 +604,7 @@ in {
           lsp = {
             bin_path = "${pkgs.llm-ls}/bin/llm-ls",
           },
-          model = "starcoder2:7b",
+          model = "deepseek-coder:6.7b",
           backend = "ollama",
           url = "${ollama}",
           request_body = {

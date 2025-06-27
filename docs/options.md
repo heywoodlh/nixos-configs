@@ -164,6 +164,111 @@ list of attribute set of string
 
 
 
+## heywoodlh\.home\.darwin\.defaults\.enable
+
+
+
+Configure MacOS defaults\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+
+
+
+## heywoodlh\.home\.darwin\.defaults\.privacy
+
+
+
+Configure MacOS defaults for better privacy\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+
+
+
+## heywoodlh\.home\.darwin\.defaults\.security
+
+
+
+Configure MacOS defaults for better security\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+
+
+
+## heywoodlh\.home\.darwin\.defaults\.ux
+
+
+
+Configure MacOS defaults for a better UX\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+
+
+
+## heywoodlh\.home\.docker-credential-1password\.enable
+
+
+
+Install 1password credential helper and configure docker client to use it\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/1password-docker-helper\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/1password-docker-helper.nix)
+
+
+
 ## heywoodlh\.home\.dockerBins\.enable
 
 

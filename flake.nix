@@ -262,10 +262,7 @@
         ];
         casks = [
           "beeper"
-          "diffusionbee"
           "legcord"
-          "signal"
-          "vmware-fusion"
           "windows-app"
           "zoom"
         ];

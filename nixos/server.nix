@@ -26,6 +26,7 @@ in {
     # Import nur as nixpkgs.overlays
     nur.overlays.default
   ];
+  boot.plymouth.enable = false;
 
   # Packages to install on entire system
   environment.systemPackages = [

@@ -196,15 +196,88 @@ let
   remote-nix = pkgs.writeShellScriptBin "nix.sh" ''
     ${pkgs.nix}/bin/nix --builders "${myBuilders}" $@
   '';
-  macos-nixos-rebuild = pkgs.writeShellScriptBin "nixos-rebuild" ''
-    nix run github:thiagokokada/nixpkgs/0f6624e21a7300a11029507e7c6638a7689ff5a5#nixos-rebuild-ng -- --build-host "builder@linux-builder" $@
-  '';
   system-fetch = pkgs.writeShellScriptBin "neofetch" ''
     ${pkgs.leaf}/bin/leaf $@
+  '';
+  test-linux = pkgs.writeText "test-linux.sh" ''
+    #!/usr/bin/env -S nix shell "github:nixos/nixpkgs/nixpkgs-unstable#bash" "github:DeterminateSystems/nix" "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" --command bash
+    cd /tmp
+    set -e
+    # Home-Manager
+    if echo "$targets" | grep -q 'home-manager'
+    then
+      printf "\nTesting Home-Manager build\n"
+      nix build "/tmp/nixos-configs#homeConfigurations.heywoodlh.activationPackage" --impure || echo "Failed to build home-manager"
+      echo "$targets" | grep -q 'skip-cache' || nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+      rm -f result
+    fi
+    # Desktop
+    if echo "$targets" | grep -q 'nixos-desktop'
+    then
+      printf "\nTesting NixOS Desktop build\n"
+      nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-desktop" --impure
+      echo "$targets" | grep -q 'skip-cache' || nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+      rm -f result
+    fi
+    # Server
+    if echo "$targets" | grep -q 'nixos-server'
+    then
+      printf "\nTesting NixOS Server build\n"
+      nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-server"
+      echo "$targets" | grep -q 'skip-cache' || nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+      rm -f result
+    fi
+  '';
+  test-darwin = pkgs.writeText "test-darwin.sh" ''
+    #!/usr/bin/env -S nix shell "github:nixos/nixpkgs/nixpkgs-unstable#bash" "github:DeterminateSystems/nix" --command bash
+    cd /tmp
+    printf "\nTesting Nix-Darwin build\n"
+    nix build /tmp/nixos-configs#darwinConfigurations.mac-mini.system
+    nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nix-darwin ./result
+    rm -f result
+  '';
+  nixos-configs-test = pkgs.writeShellScriptBin "nixos-configs.sh" ''
+    [[ "$1" == "--help" ]] && echo "Usage: $0 [home-manager nixos-desktop nixos-server darwin] [--skip-cache]" && exit 0
+    [[ -n "$1" ]] && targets="$@"
+    [[ -z "$targets" ]] && targets="home-manager nixos-desktop nixos-server darwin"
+    if ! echo "$targets" | ${pkgs.gnugrep}/bin/grep -qE 'home-manager|nixos-desktop|nixos-server|darwin'
+    then
+      echo "No valid targets specified. Please specify at least one of: home-manager, nixos-desktop, nixos-server, darwin -- or omit all arguments."
+      exit 1
+    fi
+    # Script to test nixos-configs
+    nixos_configs="$HOME/opt/nixos-configs"
+    # Fallback to git repository if local repo not found
+    [[ ! -d "$nixos_configs" ]] && rm -rf /tmp/nixos-configs && ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /tmp/nixos-configs && nixos_configs="/tmp/nixos-configs"
+    set -e
+    # Test linux
+    if echo "$targets" | ${pkgs.gnugrep}/bin/grep -qE 'home-manager|nixos-desktop|nixos-server'
+    then
+      for server in "dev.barn-banana.ts.net" "ubuntu-arm64.barn-banana.ts.net"
+      do
+        ${pkgs.openssh}/bin/ssh heywoodlh@''${server} sudo rm -rf /tmp/nixos-configs || echo "Failed to remove existing nixos-configs from ''${server}"
+        echo "Copying nixos-configs to ''${server}"
+        ${pkgs.openssh}/bin/scp -r ''${nixos_configs} heywoodlh@''${server}:/tmp/nixos-configs &>/dev/null || echo "Failed to copy nixos-configs to ''${server}"
+        ${pkgs.openssh}/bin/ssh heywoodlh@''${server} sudo rm -f /tmp/test-linux.sh
+        ${pkgs.openssh}/bin/scp ${test-linux} heywoodlh@''${server}:/tmp/test-linux.sh
+        ${pkgs.openssh}/bin/ssh heywoodlh@''${server} "export targets=\"$targets\" && bash /tmp/test-linux.sh"
+      done
+    fi
+
+    # Test macOS
+    if echo "$targets" | ${pkgs.gnugrep}/bin/grep -qE 'darwin'
+    then
+      ${pkgs.openssh}/bin/ssh heywoodlh@mac-mini.barn-banana.ts.net sudo rm -rf /tmp/nixos-configs || echo "Failed to remove existing nixos-configs from mac-mini"
+      ${pkgs.openssh}/bin/scp -r ''${nixos_configs} heywoodlh@mac-mini.barn-banana.ts.net:/tmp/nixos-configs &>/dev/null || echo "Failed to copy nixos-configs to mac-mini"
+      ${pkgs.openssh}/bin/ssh heywoodlh@mac-mini.barn-banana.ts.net sudo rm -f /tmp/test-darwin.sh
+      ${pkgs.openssh}/bin/scp ${test-darwin} heywoodlh@mac-mini.barn-banana.ts.net:/tmp/test-darwin.sh
+      ${pkgs.openssh}/bin/ssh heywoodlh@mac-mini.barn-banana.ts.net "export targets=\"$targets\" && zsh /tmp/test-darwin.sh"
+    fi
   '';
 in {
   home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
+
   nix = {
     extraOptions = ''
       experimental-features = nix-command flakes
@@ -277,8 +350,7 @@ in {
     remote-nix
     system-fetch
     atticClient
-  ] ++ lib.optionals stdenv.isDarwin [
-    macos-nixos-rebuild
+    nixos-configs-test
   ];
 
   # Enable password-store

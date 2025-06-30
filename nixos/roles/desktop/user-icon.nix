@@ -27,7 +27,7 @@ in
     };
   };
 
-  config = lib.mkIf config.services.xserver.displayManager.gdm.enable {
+  config = lib.mkIf config.services.displayManager.gdm.enable {
     boot.postBootCommands = with lib; strings.concatStrings bootCommands;
   };
 }

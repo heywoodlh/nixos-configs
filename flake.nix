@@ -279,10 +279,6 @@
         #];
         heywoodlh.home.applications = [
           {
-            name = "Spotify";
-            command = "${spicetify.packages.${system}.nord}/bin/spotify";
-          }
-          {
             name = "Moonlight";
             command = "${pkgs.moonlight-qt}/bin/moonlight";
           }

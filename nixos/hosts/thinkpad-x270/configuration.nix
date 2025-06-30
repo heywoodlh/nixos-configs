@@ -1,5 +1,5 @@
 # Config specific to Thinkpad X270
-{ config, pkgs, nixpkgs-stable, lib, spicetify, lanzaboote, nixos-hardware, x270-fingerprint-driver, ... }:
+{ config, pkgs, nixpkgs-stable, lib, lanzaboote, nixos-hardware, x270-fingerprint-driver, ... }:
 
 let
   system = pkgs.system;
@@ -34,6 +34,7 @@ in {
       ../../laptop.nix
       #../../roles/desktop/hyprland.nix
       ../../roles/desktop/xfce.nix
+      ../../roles/monitoring/osquery.nix
       lanzaboote.nixosModules.lanzaboote
       nixos-hardware.nixosModules.lenovo-thinkpad-x270
       x270-fingerprint-driver.nixosModules."06cb-009a-fingerprint-sensor"
@@ -59,7 +60,6 @@ in {
       stable-pkgs.beeper
       gimp
       moonlight-qt
-      spicetify.packages.x86_64-linux.nord
       stable-pkgs.legcord
       stable-pkgs.rustdesk
       zoom-us
@@ -123,6 +123,39 @@ in {
       Type = "oneshot";
     };
     script = "${cpuThrottleFix}";
+  };
+
+  # To get ICCID, enable below for modemmanager to run in debug mode and then run the following command:
+  # mmcli -m 0 --command AT^ICCID
+  systemd.services.ModemManager = {
+    enable = true;
+    wantedBy = ["multi-user.target" "network.target"];
+    # For debugging
+    serviceConfig.ExecStart = ["" "${pkgs.modemmanager}/sbin/ModemManager --debug"];
+  };
+
+  # Get IMEI with this command: mmcli -m 0 | grep -i imei
+  # Get ICCID with this command: mmcli --sim 0 | grep -i iccid
+  networking.modemmanager.fccUnlockScripts = [
+    rec {
+      id = "1199:9079";
+      path = "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/${id}";
+    }
+  ];
+
+  systemd.paths.setup_wwan = {
+    wantedBy = [ "ModemManager.service" "network.target" ];
+    pathConfig.PathExists = "/dev/cdc-wdm0";
+  };
+  systemd.services.setup_wwan = {
+    script = ''
+      ${pkgs.libqmi}/bin/qmicli -p -d /dev/cdc-wdm0 --device-open-mbim --dms-set-fcc-authentication
+    '';
+    before = [ "ModemManager.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
   };
 
   # Fingerprint reader support

@@ -54,8 +54,8 @@ in {
   #};
 
   # Enable GNOME
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
   boot.tmp.cleanOnBoot = true;
 
   # Enable Sway (home-manager config manages details)
@@ -192,8 +192,6 @@ in {
   environment.systemPackages = [
     pkgs.busybox
     pkgs.lsof
-    pkgs.libimobiledevice # for iPhone
-    pkgs.idevicerestore # for iPhone
     pkgs.gnome-screenshot
     pkgs.ifuse
     pkgs.usbutils

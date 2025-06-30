@@ -24,20 +24,6 @@ in {
     ./xfce.nix
     ./gnome-desktop.nix
   ];
-  # Flatpak support
-  services.flatpak = {
-    enableModule = false;
-    flatpakDir = "${homeDir}/.local/share/flatpak";
-    remotes = {
-      "flathub" = "https://dl.flathub.org/repo/flathub.flatpakrepo";
-      "flathub-beta" = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";
-      "gnome-nightly" = "https://nightly.gnome.org/gnome-nightly.flatpakrepo";
-    };
-    packages = [
-      "gnome-nightly:app/org.gnome.Epiphany.Devel//master"
-      "flathub:app/io.github.zen_browser.zen//master"
-    ];
-  };
 
   # Nix snowflake icon
   home.file.".icons/snowflake.png" = {

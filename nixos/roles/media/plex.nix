@@ -15,17 +15,15 @@ in {
 
   boot.supportedFilesystems = [
     "btrfs"
+    "zfs"
   ];
 
-  fileSystems."/media/config" = {
-    device = "/dev/disk/by-uuid/2fa5a6c4-b938-4853-844d-c85a77ae33e7";
-    fsType = "ext4";
-    options = [
-      "rw"
-      "relatime"
-      "nofail"
-    ];
-  };
+  # Mountpoint configured via: `sudo zfs set mountpoint=/media/config services_pool/config`
+  boot.zfs.extraPools = [ "services_pool" ];
+  #fileSystems."/media/config" = {
+  #  device = "services_pool/config";
+  #  fsType = "zfs";
+  #};
 
   fileSystems."/media/home-media/disk1" = {
     device = "/dev/disk/by-uuid/8f645e4b-0544-4ce9-8797-7dfe7f85df5a";

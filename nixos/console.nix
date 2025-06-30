@@ -134,8 +134,6 @@ in {
 
   environment.systemPackages = [
     pkgs.busybox
-    pkgs.libimobiledevice # for iPhone
-    pkgs.idevicerestore # for iPhone
     pkgs.ifuse
     pkgs.usbutils
     pkgs.fbterm

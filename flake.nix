@@ -294,7 +294,7 @@
         # Invoke darwinConfig like this:
         # "<hostname>" = darwinConfig "<hardwareType>" "<hostname>" { <extraAttrs> };
         # hardwareType can currently be "macbook" or "mac-mini"
-        "m3-macbook-pro" = darwinConfig "macbook" "m3-macbook-pro" {
+        "m4-macbook-air" = darwinConfig "macbook" "m4-macbook-air" {
           imports = [
             darwinWorkstationConfig
             {

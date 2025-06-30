@@ -112,10 +112,10 @@ sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-utm --imp
 
 ### MacOS:
 
-To install a MacOS configuration, let's assume the `m3-macbook-pro` output, do the following:
+To install a MacOS configuration, let's assume the `m4-macbook-air` output, do the following:
 
 ```
-nix run "github:LNL7/nix-darwin#packages.aarch64-darwin.darwin-rebuild" -- switch --flake github:heywoodlh/nixos-configs#m3-macbook-pro --impure
+nix run "github:LNL7/nix-darwin#packages.aarch64-darwin.darwin-rebuild" -- switch --flake github:heywoodlh/nixos-configs#m4-macbook-air --impure
 ```
 
 ### Other Linux distributions:

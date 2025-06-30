@@ -13,11 +13,10 @@ in {
       ];
     };
     linux-builder = {
-      enable = true;
+      enable = false; # Disable Linux builder -- transition to something more consistent
       package = pkgs.darwin.linux-builder;
       ephemeral = true; # Wipe on every reboot
       systems = [
-        "x86_64-linux"
         "aarch64-linux"
       ];
       config = {

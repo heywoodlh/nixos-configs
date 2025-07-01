@@ -112,10 +112,17 @@ sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-utm --imp
 
 ### MacOS:
 
+First, install Nix normally (not Determinate Nix):
+
+```
+sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install)
+```
+
 To install a MacOS configuration, let's assume the `m4-macbook-air` output, do the following:
 
 ```
-nix run "github:LNL7/nix-darwin#packages.aarch64-darwin.darwin-rebuild" -- switch --flake github:heywoodlh/nixos-configs#m4-macbook-air --impure
+sudo rm -rf /etc/ssh/ssh_config # conflicts with a file in nix-darwin
+sudo nix run "github:LNL7/nix-darwin#packages.aarch64-darwin.darwin-rebuild" -- switch --flake github:heywoodlh/nixos-configs#m4-macbook-air --impure
 ```
 
 ### Other Linux distributions:

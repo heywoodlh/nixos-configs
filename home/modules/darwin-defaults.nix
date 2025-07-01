@@ -114,8 +114,9 @@ in {
       /usr/bin/defaults -currentHost write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 31 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>115</integer><integer>1</integer><integer>1179648</integer></array><key>type</key><string>standard</string></dict></dict>"
 
       # Use CMD + [ and CMD + ] to navigate between spaces
-      /usr/bin/defaults -currentHost write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>91</integer><integer>33</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>"
-      /usr/bin/defaults -currentHost write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 80 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>91</integer><integer>33</integer><integer>1179648</integer></array><key>type</key><string>standard</string></dict></dict>"
+      # Disabled because this is seemingly unreliable
+      #/usr/bin/defaults -currentHost write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>91</integer><integer>33</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>"
+      #/usr/bin/defaults -currentHost write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 80 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>91</integer><integer>33</integer><integer>1179648</integer></array><key>type</key><string>standard</string></dict></dict>"
 
       # Prevent iTunes from launching when pressing the media keys on the keyboard
       /bin/launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist &> /dev/null || true
@@ -142,6 +143,8 @@ in {
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "1341174415" -bool "false"
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "device" -bool "false"
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "auto_opt_in" -bool "false"
+      # Disable Apple Intelligence Report
+      /usr/bin/defaults -currentHost write com.apple.AppleIntelligenceReport "reportDuration" -int 0
 
       # Disable Siri
       /usr/bin/defaults -currentHost write com.apple.assistant.support "Assistant Enabled" -bool false

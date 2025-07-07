@@ -124,6 +124,10 @@ in {
       # Disable the warning before emptying the Trash
       /usr/bin/defaults -currentHost write com.apple.finder WarnOnEmptyTrash -bool false
 
+      # Make symlink to iCloud Drive
+      mkdir -p ${homeDir}/mnt
+      ls -l "${homeDir}/Library/Mobile Documents/com~apple~CloudDocs" &>/dev/null && ln -s "${homeDir}/Library/Mobile Documents/com~apple~CloudDocs" "${homeDir}/mnt/icloud-drive" &>/dev/null || true
+
       # Restart Finder
       /usr/bin/killall Finder &>/dev/null || true
 

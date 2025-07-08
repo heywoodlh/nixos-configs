@@ -1,4 +1,4 @@
-{ config, attic, pkgs, lib, home-manager, nur, myFlakes, ts-warp-nixpkgs, ... }:
+{ config, attic, pkgs, lib, home-manager, nur, myFlakes, ... }:
 
 let
   system = pkgs.system;
@@ -102,17 +102,6 @@ let
     localnet 127.0.0.0/255.0.0.0
     [ProxyList]
     socks5 tor.barn-banana.ts.net 1080
-  '';
-  ts-warp = ts-warp-nixpkgs.legacyPackages.${system}.ts-warp;
-  ts-warp-pf = ./share/ts-warp_pf.conf;
-  ts-warp-ini = ./share/ts-warp.ini;
-  incognito = if stdenv.isDarwin then pkgs.writeShellScriptBin "incognito" ''
-    test -d /usr/local/etc || sudo mkdir -p /usr/local/etc
-    test -f /usr/local/etc/ts-warp_pf.conf || sudo cp ${ts-warp-pf} /usr/local/etc/ts-warp_pf.conf
-    test -f /usr/local/etc/ts-warp.ini || sudo cp ${ts-warp-ini} /usr/local/etc/ts-warp.ini
-    sudo ${ts-warp}/etc/ts-warp.sh start
-  '' else pkgs.writeShellScriptBin "incognito" ''
-    ${pkgs.proxychains-ng}/bin/proxychains4 -f ${tor-proxychains-conf} ${myFish}/bin/fish --private
   '';
   tarsnap-key-backup = pkgs.writeShellScriptBin "tarsnap-key-backup.sh" ''
     hosts=("nix-drive" "nix-nvidia" "nixos-gaming")
@@ -274,6 +263,9 @@ let
       ${pkgs.openssh}/bin/ssh heywoodlh@mac-mini.barn-banana.ts.net "export targets=\"$targets\" && zsh /tmp/test-darwin.sh"
     fi
   '';
+  youtube-dl-mp3 = pkgs.writeShellScriptBin "youtube-dl-mp3" ''
+    ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#yt-dlp" -- -t mp3 "$@"
+  '';
 in {
   home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -343,7 +335,6 @@ in {
     password
     otp
     op-backup
-    incognito
     duo-key-self-setup
     duo-key-remote-setup
     builder-pop
@@ -351,6 +342,7 @@ in {
     system-fetch
     atticClient
     nixos-configs-test
+    youtube-dl-mp3
   ];
 
   # Enable password-store

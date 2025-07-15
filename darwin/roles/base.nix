@@ -1,4 +1,4 @@
-{ config, pkgs, determinate-nix, home-manager, myFlakes, nur, ts-warp-nixpkgs, qutebrowser, ghostty, attic, ... }:
+{ config, pkgs, determinate-nix, home-manager, myFlakes, nur, ts-warp-nixpkgs, qutebrowser, ghostty, attic, iamb-home-manager, ... }:
 
 let
   system = pkgs.system;
@@ -29,6 +29,7 @@ in {
       inherit nur;
       inherit determinate-nix;
       inherit attic;
+      inherit iamb-home-manager;
     };
     # Set home-manager configs for heywoodlh
     users.heywoodlh = { ... }: {

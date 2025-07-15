@@ -2062,6 +2062,27 @@
         "type": "github"
       }
     },
+    "iamb-home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1752613699,
+        "narHash": "sha256-BMgFtvUOAM1JYZmbrzQWtHvPIeFK2iBjhEsaplBDrU8=",
+        "owner": "heywoodlh",
+        "repo": "home-manager",
+        "rev": "13ea0d9a5f493925e14fe9a1eb1bdbf481e4ec9e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "iamb-macos-settings-support",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "iosevka": {
       "flake": false,
       "locked": {
@@ -3822,6 +3843,7 @@
         "ghostty": "ghostty",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
+        "iamb-home-manager": "iamb-home-manager",
         "jovian-nixos": "jovian-nixos",
         "lanzaboote": "lanzaboote",
         "light-wallpaper": "light-wallpaper",

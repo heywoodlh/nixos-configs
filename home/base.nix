@@ -1,4 +1,4 @@
-{ config, attic, pkgs, lib, home-manager, nur, myFlakes, ... }:
+{ config, attic, pkgs, lib, home-manager, nur, myFlakes, iamb-home-manager, modulesPath, ... }:
 
 let
   system = pkgs.system;
@@ -276,8 +276,13 @@ in {
     '';
   };
 
+  disabledModules = [
+    "programs/iamb.nix"
+  ];
+
   imports = [
     ./modules/default.nix
+    "${iamb-home-manager}/modules/programs/iamb.nix"
   ];
 
   # Packages I need installed on every system
@@ -657,6 +662,20 @@ in {
         IdentityAgent "${authSock}"
   '';
   nix.settings.builders = myBuilders;
+
+  programs.iamb = {
+    enable = true;
+    settings = {
+      default_profile = "beeper";
+      profiles.beeper = {
+        user_id = "@heywoodlh:beeper.com";
+        url = "https://matrix.beeper.com";
+      };
+      settings = {
+        notifications.enabled = false;
+      };
+    };
+  };
 
   home.file.".config/vim/vimrc" = {
     text = let

@@ -83,11 +83,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1743990697,
-        "narHash": "sha256-v6Tk3l1+rzVFeCM8+Cd0GnlPM+pAtuzHPCwDH2Z26H8=",
+        "lastModified": 1752698726,
+        "narHash": "sha256-OE83GMFJWw3QzyQ8XKmSaqHXWkKLNxgaLq656wrS4aM=",
         "owner": "heywoodlh",
         "repo": "cart",
-        "rev": "29561833d7e290b7bd4906c11c1c0316d467b66c",
+        "rev": "5e2d81eaf32a2a7bb0e305176d547e1fd029c234",
         "type": "github"
       },
       "original": {
@@ -2311,11 +2311,11 @@
         "zen-browser-flake": "zen-browser-flake"
       },
       "locked": {
-        "lastModified": 1751242096,
-        "narHash": "sha256-fVP9nbAFRbXoAKESUmIFsT1Zts8T6AouzCb+YhUEYyk=",
+        "lastModified": 1752766919,
+        "narHash": "sha256-mE5eWaQ2P2g1YUxBi2cPo3/3+c3AonyM+O1e+tGvLow=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "3009349c9ba0e6a831c7cad05f1a4aac3b0fb1df",
+        "rev": "f843594170afacfaee06051d784b7c1f54d45cab",
         "type": "github"
       },
       "original": {

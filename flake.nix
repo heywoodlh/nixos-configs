@@ -336,8 +336,8 @@
                     hash = "aad86726152b15a3e963cf778a0b0dfd8e818736b381aed2699d974a18845427";
                   }
                   {
-                    url = "https://github.com/podman-desktop/podman-desktop/releases/download/v1.17.2/podman-desktop-1.17.2-universal.dmg";
-                    hash = "d73c81a859f5792329818893736b28f8dd8a5243cca41c8573ed7c2095f69182";
+                    url = "https://github.com/ibrahimcetin/reins/releases/download/v1.3.0/Reins-macOS.dmg";
+                    hash = "8db9f87297f2b474f81cc07326304a4e4144465b31cfb0713aef4900cbdecb5a";
                   }
                 ];
               };

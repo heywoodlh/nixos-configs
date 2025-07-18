@@ -266,6 +266,7 @@ let
   youtube-dl-mp3 = pkgs.writeShellScriptBin "youtube-dl-mp3" ''
     ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#yt-dlp" -- -t mp3 "$@"
   '';
+  ollamaUrl = "http://nix-nvidia.barn-banana.ts.net:11434";
 in {
   home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -317,8 +318,9 @@ in {
     nixos-rebuild-ng
     nixfmt-rfc-style
     nmap
-    openssl
     ollama
+    opencode
+    openssl
     pciutils
     pwgen
     python3
@@ -677,75 +679,100 @@ in {
     };
   };
 
-  home.file.".config/vim/vimrc" = {
-    text = let
-      ollama = "http://nix-nvidia.barn-banana.ts.net:11434";
-    in ''
-      lua << EOF
-        local llm = require('llm')
-        llm.setup({
-          lsp = {
-            bin_path = "${pkgs.llm-ls}/bin/llm-ls",
-          },
-          model = "mistral:7b",
-          backend = "ollama",
-          url = "${ollama}",
-          request_body = {
-            temperature = 0.2,
-            top_p = 0.95,
-            system = "Complete the given code without explanation. Respond only with the code. Do not place the code in markdown. Do not place the code in markdown. Fill in the middle requests will be used.",
-          },
-          fim = {
-            enabled = true,
-          },
-          debounce_ms = 150,
-          enable_suggestions_on_startup = false,
-          enable_suggestions_on_files = '*.sh,*.fish,*.zsh,*.go,*.nix,*.py,*.lua,*.java,*.js,*.jsx,*.ts,*.tsx,*.html,*.css,*.scss,*.json,*.yaml,*.yml,*.toml',
-          context_window = 10240,
-          accept_keymap = "<Tab>",
-          dismiss_keymap = "<S-Tab>",
-        })
+  home.file.".config/vim/vimrc".text = ''
+    lua << EOF
+      local llm = require('llm')
+      llm.setup({
+        lsp = {
+          bin_path = "${pkgs.llm-ls}/bin/llm-ls",
+        },
+        model = "mistral:7b",
+        backend = "ollama",
+        url = "${ollamaUrl}",
+        request_body = {
+          temperature = 0.2,
+          top_p = 0.95,
+          system = "Complete the given code without explanation. Respond only with the code. Do not place the code in markdown. Do not place the code in markdown. Fill in the middle requests will be used.",
+        },
+        fim = {
+          enabled = true,
+        },
+        debounce_ms = 150,
+        enable_suggestions_on_startup = false,
+        enable_suggestions_on_files = '*.sh,*.fish,*.zsh,*.go,*.nix,*.py,*.lua,*.java,*.js,*.jsx,*.ts,*.tsx,*.html,*.css,*.scss,*.json,*.yaml,*.yml,*.toml',
+        context_window = 10240,
+        accept_keymap = "<Tab>",
+        dismiss_keymap = "<S-Tab>",
+      })
 
-        require("codecompanion").setup({
-          strategies = {
-            chat = {
-              adapter = "ollama",
-            },
-            inline = {
-              adapter = "ollama",
-            },
+      require("codecompanion").setup({
+        strategies = {
+          chat = {
+            adapter = "ollama",
           },
-          adapters = {
-            ollama = function()
-              return require("codecompanion.adapters").extend("ollama", {
-                env = {
-                  url = "${ollama}",
-                },
-                headers = {
-                  ["Content-Type"] = "application/json",
-                },
-                parameters = {
-                  sync = true,
-                },
-                schema = {
-                  model = {
-                    default = "llama3:8b",
-                  },
-               },
-              })
-            end,
-            openai = function()
-              return require("codecompanion.adapters").extend("openai", {
-                env = {
-                  api_key = "cmd:${op-wrapper} read 'op://Personal/wnnzk4qgffnymdqdhbmzgruquq/api-key' --no-newline",
-                },
-              })
-            end,
+          inline = {
+            adapter = "ollama",
           },
-        })
-      EOF
-    '';
+        },
+        adapters = {
+          ollama = function()
+            return require("codecompanion.adapters").extend("ollama", {
+              env = {
+                url = "${ollamaUrl}",
+              },
+              headers = {
+                ["Content-Type"] = "application/json",
+              },
+              parameters = {
+                sync = true,
+              },
+              schema = {
+                model = {
+                  default = "llama3:8b",
+                },
+             },
+            })
+          end,
+          openai = function()
+            return require("codecompanion.adapters").extend("openai", {
+              env = {
+                api_key = "cmd:${op-wrapper} read 'op://Personal/wnnzk4qgffnymdqdhbmzgruquq/api-key' --no-newline",
+              },
+            })
+          end,
+        },
+      })
+    EOF
+  '';
+
+  home.file.".config/opencode/opencode.json".text = builtins.toJSON {
+    "$schema" = "https://opencode.ai/config.json";
+    theme = "nord";
+    model = "ollama/mistral:7b";
+    provider = {
+      ollama = {
+        npm = "@ai-sdk/openai-compatible";
+        options = {
+          baseURL = "${ollamaUrl}/v1";
+        };
+        models = {
+          "mistral:7b" = {
+            name = "mistral";
+          };
+          "llama3:8b" = {
+            name = "llama3";
+          };
+          "deepseek-coder:6.7b" = {
+            name = "deepseek-coder";
+          };
+        };
+      };
+    };
   };
+
+  # Ripgrep executable for opencode
+  home.file.".local/share/opencode/bin/rg".source = "${pkgs.ripgrep}/bin/rg";
+
   heywoodlh.home.docker-credential-1password.enable = true;
   #home.file.".docker/config.json".text = if pkgs.stdenv.isDarwin then ''
   #  {

@@ -687,7 +687,7 @@ in {
           lsp = {
             bin_path = "${pkgs.llm-ls}/bin/llm-ls",
           },
-          model = "deepseek-coder:6.7b",
+          model = "mistral:7b",
           backend = "ollama",
           url = "${ollama}",
           request_body = {

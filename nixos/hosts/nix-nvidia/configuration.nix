@@ -1,6 +1,16 @@
 { config, pkgs, lib, ... }:
 
-{
+let
+  ollama_pull = pkgs.writeShellScriptBin "ollama-pull" ''
+    models=("llama3:8b" "deepseek-coder:6.7b" "mistral:7b" "gemma3:4b" "qwen3:8b")
+    # Pull existing models
+    ${pkgs.ollama}/bin/ollama list | awk '{print $1}' | xargs -I {} ${pkgs.ollama}/bin/ollama pull "{}"
+    for model in "''${models[@]}"
+    do
+      ${pkgs.ollama}/bin/ollama pull "''${model}"
+    done
+  '';
+in {
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -157,6 +167,7 @@
   };
   environment.systemPackages = with pkgs; [
     docker
+    ollama_pull
     nfdump
     nvidia-container-toolkit
     nvtopPackages.full
@@ -178,6 +189,7 @@
     enable = true;
     systemCronJobs = [
       "3 4 * * 7      root    rm -rf /var/lib/cni/networks/cbr0/"
+      "0 0 * * *      root    ${ollama_pull}/bin/ollama-pull"
       "5 4 * * 7      root    shutdown -r now"
     ];
   };
@@ -225,7 +237,7 @@
     backend = "docker";
     containers = {
       ollama = {
-        image = "docker.io/ollama/ollama:0.6.6";
+        image = "docker.io/ollama/ollama:0.9.6";
         autoStart = true;
         ports = [
           "11434:11434"
@@ -239,5 +251,4 @@
       };
     };
   };
-
 }

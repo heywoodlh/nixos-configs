@@ -21,7 +21,7 @@ let
   '';
 in {
   imports = [
-    ./xfce.nix
+    #./xfce.nix
     ./gnome-desktop.nix
   ];
 

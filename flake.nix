@@ -391,6 +391,28 @@
             }
           ];
         };
+        family-mac-mini = nixpkgs.lib.nixosSystem {
+          system = "${system}";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/hosts/family-mac-mini/hardware-configuration.nix
+            ./nixos/desktop.nix
+            ./nixos/roles/remote-access/sshd.nix
+            ./nixos/family.nix
+            ./nixos/roles/monitoring/osquery.nix
+            {
+              networking.hostName = "family-mac-mini";
+              # Bootloader
+              boot.loader.systemd-boot.enable = true;
+              boot.loader.efi.canTouchEfiVariables = false;
+              # Enable networking
+              networking.networkmanager.enable = true;
+              # Set your time zone.
+              time.timeZone = "America/Denver";
+            }
+          ];
+        };
+
         nixos-wsl = nixpkgs.lib.nixosSystem {
           system = "${system}";
           specialArgs = inputs;

@@ -391,7 +391,17 @@
             }
           ];
         };
-        family-mac-mini = nixpkgs.lib.nixosSystem {
+        family-mac-mini = let
+          intel-cpu-pkgs = import nixpkgs-stable {
+            inherit system;
+            config = {
+              allowUnfree = true;
+              permittedInsecurePackages = [
+                "intel-media-sdk-23.2.2"
+              ];
+            };
+          };
+        in nixpkgs.lib.nixosSystem {
           system = "${system}";
           specialArgs = inputs;
           modules = [
@@ -409,6 +419,17 @@
               networking.networkmanager.enable = true;
               # Set your time zone.
               time.timeZone = "America/Denver";
+              nixpkgs.config.
+              # Intel hardware acceleration
+              hardware.graphics = {
+                enable = true;
+                extraPackages = with pkgs; [
+                  intel-vaapi-driver
+                  libvdpau-va-gl
+                  intel-cpu-pkgs.intel-media-sdk
+                ];
+              };
+              environment.sessionVariables.LIBVA_DRIVER_NAME = "i965";
             }
           ];
         };

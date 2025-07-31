@@ -31,9 +31,7 @@ in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../laptop.nix
-      #../../roles/desktop/hyprland.nix
-      ../../roles/desktop/xfce.nix
+      ../../console.nix
       ../../roles/monitoring/osquery.nix
       lanzaboote.nixosModules.lanzaboote
       nixos-hardware.nixosModules.lenovo-thinkpad-x270

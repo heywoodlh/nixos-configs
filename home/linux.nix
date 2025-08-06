@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, ... }:
+{ config, pkgs, lib, home-manager, browsh, ... }:
 
 let
   homeDir = config.home.homeDirectory;
@@ -7,6 +7,14 @@ let
   '';
   cpuspeed = pkgs.writeShellScriptBin "cpuspeed" ''
     sudo ${pkgs.dmidecode}/bin/dmidecode -t processor | ${pkgs.gnugrep}/bin/grep -i mhz
+  '';
+  system = pkgs.system;
+  myProxychains = pkgs.writeShellScriptBin "proxychains" ''
+    ${pkgs.proxychains-ng}/bin/proxychains4 "$@"
+  '';
+  browshPkg = browsh.packages.${system}.default;
+  myBrowsh = pkgs.writeShellScriptBin "browsh" ''
+    ${myProxychains}/bin/proxychains ${browshPkg}/bin/browsh $@
   '';
 in {
   imports = [
@@ -17,6 +25,8 @@ in {
     gomuks
     libvirt
     cpuspeed
+    myBrowsh
+    myProxychains
   ];
 
   home.file.".config/fish/config.fish".text = ''
@@ -25,15 +35,6 @@ in {
       op-unlock && $aerc_bin $argv
     end
   '';
-
-  # Proxychains wrapper
-  home.file."bin/proxychains" = {
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      ${pkgs.proxychains-ng}/bin/proxychains4 "$@"
-    '';
-  };
 
   home.file.".config/git/config" = {
     text = ''

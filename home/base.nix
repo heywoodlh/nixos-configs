@@ -267,6 +267,14 @@ let
     ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#yt-dlp" -- -t mp3 "$@"
   '';
   ollamaUrl = "http://nix-nvidia.barn-banana.ts.net:11434";
+  carbonyl = pkgs.writeShellScriptBin "carbonyl" ''
+    ${pkgs.docker}/bin/docker volume create carbonyl &>/dev/null || true
+    ${pkgs.docker}/bin/docker run --rm -it -v carbonyl:/carbonyl/data docker.io/fathyb/carbonyl $@
+  '';
+  attic-setup = pkgs.writeShellScriptBin "attic-setup" ''
+    mkdir -p ~/.config/attic
+    ${op-wrapper} read 'op://Kubernetes/za3oirjkd6ehdlnzvisb445hga/normal-config' > ~/.config/attic/config.toml
+  '';
 in {
   home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -290,7 +298,9 @@ in {
   home.packages = with pkgs; [
     _1password-cli
     act
+    attic-setup
     bind
+    carbonyl
     coreutils
     curl
     docker-compose-gen
@@ -802,4 +812,8 @@ in {
   #      "currentContext": "rootless"
   #  }
   #'';
+
+  home.file.".config/browsh/config.toml".text = ''
+    default_search_engine_base = "https://leta.mullvad.net/search?q="
+  '';
 }

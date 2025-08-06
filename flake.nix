@@ -116,6 +116,7 @@
       url = "github:dagger/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    browsh.url = "github:heywoodlh/flakes?dir=browsh";
   };
 
   outputs = inputs@{ self,
@@ -157,6 +158,7 @@
                       cart,
                       x270-fingerprint-driver,
                       dagger,
+                      browsh,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {

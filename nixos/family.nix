@@ -378,6 +378,7 @@ in {
             localhost
             .code.org
             safe.duckduckgo.com
+            external-content.duckduckgo.com
             .apple.com
             .plex.tv
             .animalia.bio

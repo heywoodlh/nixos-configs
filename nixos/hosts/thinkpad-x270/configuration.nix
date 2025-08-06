@@ -70,6 +70,7 @@ in {
     lanzaboote
     sbctl
     cpuThrottleFixWrapper
+    spotifyd
   ];
 
   # Hard limits for Nix
@@ -178,4 +179,6 @@ in {
   #  backend = "libfprint-tod";
   #  calib-data-file = /var/lib/python-validity/calib-data.bin;
   #};
+
+  services.spotifyd.enable = true;
 }

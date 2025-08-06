@@ -12,7 +12,7 @@ let
   timepop = pkgs.writeShellScriptBin "timepop" ''
     ${pkgs.coreutils}/bin/date "+%T"
   '';
-  shell = "${myFlakes.packages.${system}.tmux}/bin/tmux -2";
+  shell = "${myFlakes.packages.${system}.tmux}/bin/tmux";
   startFbterm = pkgs.writeShellScriptBin "start-fbterm" ''
     eval $(${pkgs.openssh}/bin/ssh-agent)
     export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
@@ -54,7 +54,7 @@ in {
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.greetd}/bin/agreety --cmd ${startFbterm}/bin/start-fbterm";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --theme 'border=magenta;text=cyan;prompt=white;time=white;action=blue;button=yellow;container=black;input=white' --cmd ${startFbterm}/bin/start-fbterm";
       };
     };
   };
@@ -138,7 +138,6 @@ in {
     pkgs.ifuse
     pkgs.usbutils
     pkgs.fbterm
-    pkgs.browsh
     pkgs.firefox # for browsh
     pkgs.w3m
     myFlakes.packages.${system}.tmux
@@ -178,7 +177,6 @@ in {
         # 8-15 are brighter versions of 0-7
         # 16-231 is 6x6x6 color cube
         # 232-255 is grayscale
-        # Nord theme, from https://github.com/mbadolato/iTerm2-Color-Schemes/blob/master/kitty/nord.conf
         color-0=3B4252
         color-1=BF616A
         color-2=A3BE8C
@@ -195,8 +193,8 @@ in {
         color-13=B48EAD
         color-14=8FBCBB
         color-15=ECEFF4
-        color-foreground=D8DEE9
-        color-background=2E3440
+        color-background=234
+        color-foreground=189
 
         history-lines=0
         text-encodings=
@@ -217,8 +215,11 @@ in {
         input-method=
       '';
 
-      #home.file.".config/fish/machine.fish".text = ''
-      #'';
+      home.file.".config/fish/machine.fish".text = ''
+        tmux set -g status-style "bg=default" &>/dev/null
+        tmux set-option -g status-right-style "bg=default" &>/dev/null
+        tmux set-option -g status-left-style "bg=default" &>/dev/null
+      '';
     };
   };
 

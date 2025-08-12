@@ -11,6 +11,7 @@ let
 in {
   imports = [
     ./roles/virtualization/multiarch.nix
+    ./roles/nixos/attic.nix
     determinate-nix.nixosModules.default
     home-manager.nixosModules.home-manager
   ];
@@ -32,11 +33,9 @@ in {
       ];
       extra-substituters = [
         "https://nix-community.cachix.org"
-        "http://attic.barn-banana.ts.net/nixos"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "nixos:pU2PdLt/QaDk8nec7lcy8DgsM96NTJ1bAOSs+jdoECc=" # attic
       ];
     };
   };

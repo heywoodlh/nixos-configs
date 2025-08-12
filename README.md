@@ -59,15 +59,23 @@ For some reason, the `darwinConfigurations` outputs aren't shown properly, so yo
 
 ### NixOS:
 
-To install a NixOS configuration, let's assume the `nixos-desktop-intel` output, do the following:
+To install a NixOS configuration, let's assume the `nixos-desktop-intel` output, go through the NixOS graphical installer and then run the following commands:
+
+```
+# Initial config to setup Attic cache, enable Tailscale and enable unconfigured Neovim
+sudo nixos-rebuild switch --impure --flake github:heywoodlh/nixos-configs#nixos-init
+
+# Tailscale for Attic cache
+sudo tailscale up --qr --advertise-tags="tag:adminworkstation"
+```
+
+Then deploy the desired configuration:
 
 ```
 sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-desktop-intel
 ```
 
 <details>
-
-For VMs, use the NixOS graphical installer.
 
 #### VMWare VMs:
 
@@ -100,7 +108,7 @@ Use the following settings when setting up the VM:
 
 Virtualize > Use Apple Virtualization > Enable Rosetta (x86_64 Emulation)
 
-Use the `copy-to-ram` install option, then run through the graphical installer.
+> On older UTM installations, use the `copy-to-ram` install option, then run through the graphical installer.
 
 After the install, run the following command:
 

@@ -117,6 +117,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     browsh.url = "github:heywoodlh/flakes?dir=browsh";
+    omarchy = {
+        url = "github:henrysipp/omarchy-nix";
+        inputs.nixpkgs.follows = "nixpkgs";
+        inputs.home-manager.follows = "home-manager";
+    };
   };
 
   outputs = inputs@{ self,
@@ -159,6 +164,7 @@
                       x270-fingerprint-driver,
                       dagger,
                       browsh,
+                      omarchy,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -436,6 +442,28 @@
           ];
         };
 
+        # generic build for initial setup
+        nixos-init = nixpkgs.lib.nixosSystem {
+          system = "${system}";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/roles/nixos/attic.nix
+            /etc/nixos/hardware.nix
+            /etc/nixos/configuration.nix
+            {
+              programs.neovim = {
+                enable = true;
+                vimAlias = true;
+                viAlias = true;
+              };
+              environment.systemPackages = with pkgs; [
+                nano
+                msedit
+              ];
+              services.tailscale.enable = true;
+            }
+          ];
+        };
         nixos-wsl = nixpkgs.lib.nixosSystem {
           system = "${system}";
           specialArgs = inputs;
@@ -571,7 +599,6 @@
               networking.hostName = "nixos-utm";
               services.qemuGuest.enable = true;
               virtualisation.rosetta.enable = pkgs.stdenv.hostPlatform.isAarch64;
-              services.tailscale.enable = pkgs.lib.mkForce false;
             }
           ];
         };

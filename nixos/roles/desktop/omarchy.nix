@@ -1,11 +1,13 @@
-{ config, pkgs, home-manager, omarchy, ... }:
+{ config, pkgs, lib, home-manager, omarchy, ... }:
 
 {
   imports = [
     omarchy.nixosModules.default
   ];
 
-  _1password-gui.polkitPolicyOwners = ["heywoodlh"];
+  services.displayManager.defaultSession = lib.mkForce "hyprland";
+
+  programs._1password-gui.polkitPolicyOwners = lib.mkForce ["heywoodlh"];
 
   # https://github.com/henrysipp/omarchy-nix/blob/main/config.nix
   omarchy = {

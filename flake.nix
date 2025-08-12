@@ -588,7 +588,20 @@
             }
           ];
         };
-        # UTM VM for running on MacOS
+        # Mac Mini NixOS VM in UTM
+        nixos-mac-mini = nixpkgs.lib.nixosSystem {
+          system = "${linuxSystem}";
+          specialArgs = inputs;
+          modules = [
+            ./nixos/vm.nix
+            (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
+            {
+              networking.hostName = "nixos-mac-mini";
+              services.qemuGuest.enable = true;
+            }
+          ];
+        };
+        # Generic UTM VM for running on any Mac
         nixos-utm = nixpkgs.lib.nixosSystem {
           system = "${linuxSystem}";
           specialArgs = inputs;

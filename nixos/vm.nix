@@ -24,12 +24,6 @@
       prepend_nameservers=100.100.100.100
       search_domains=barn-banana.ts.net
     '';
-    hosts = {
-      "100.65.244.115" = [
-        "attic"
-        "attic.barn-banana.ts.net"
-      ];
-    };
   };
 
   # Ensure Tmux status bar isn't turned off

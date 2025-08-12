@@ -448,7 +448,7 @@
           specialArgs = inputs;
           modules = [
             ./nixos/roles/nixos/attic.nix
-            /etc/nixos/hardware.nix
+            /etc/nixos/hardware-configuration.nix
             /etc/nixos/configuration.nix
             {
               programs.neovim = {
@@ -607,6 +607,7 @@
           specialArgs = inputs;
           modules = [
             ./nixos/vm.nix
+            /etc/nixos/hardware-configuration.nix
             (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
             {
               networking.hostName = "nixos-utm";

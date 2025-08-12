@@ -457,8 +457,9 @@
                 viAlias = true;
               };
               environment.systemPackages = with pkgs; [
-                nano
+                git
                 msedit
+                nano
               ];
               services.tailscale.enable = true;
             }

@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, myFlakes, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, ... }:
 
 let
   system = pkgs.system;

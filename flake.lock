@@ -4134,15 +4134,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1753716797,
-        "narHash": "sha256-1Wc1CRDxWcv1t7nusSV3fG+TdfZEon21wqAtpQ2vYg8=",
-        "owner": "henrysipp",
+        "lastModified": 1755039546,
+        "narHash": "sha256-hm8VrafxMr2ySsVG5inYkKvVGRSjLt0bOMceyyVATYA=",
+        "owner": "heywoodlh",
         "repo": "omarchy-nix",
-        "rev": "9adcae932c0d76fa9e5adab1d37316accd2cdcd8",
+        "rev": "b451bb390feddabd5d910e96aa9b285d349f70db",
         "type": "github"
       },
       "original": {
-        "owner": "henrysipp",
+        "owner": "heywoodlh",
+        "ref": "arm64-support",
         "repo": "omarchy-nix",
         "type": "github"
       }

@@ -613,7 +613,6 @@
             {
               networking.hostName = "nixos-utm";
               services.qemuGuest.enable = true;
-              virtualisation.rosetta.enable = pkgs.stdenv.hostPlatform.isAarch64;
             }
           ];
         };

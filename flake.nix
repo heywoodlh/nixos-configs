@@ -179,6 +179,7 @@
           allowUnfree = true;
         };
       };
+      lib = pkgs.lib;
       arch = pkgs.stdenv.hostPlatform.uname.processor;
       linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
       darwinSystem = "${arch}-darwin";
@@ -200,12 +201,12 @@
           {
             imports = [
               "${cart}/darwin.nix"
-             ];
-             # Import nur as nixpkgs.overlays
-             nixpkgs.overlays = [
-               nur.overlays.default
-             ];
-             home-manager.useGlobalPkgs = true;
+            ];
+            # Import nur as nixpkgs.overlays
+            nixpkgs.overlays = [
+              nur.overlays.default
+            ];
+            home-manager.useGlobalPkgs = true;
 
             networking.hostName = myHostname;
             networking.computerName = myHostname;
@@ -334,6 +335,12 @@
             ./darwin/roles/mac-mini.nix
             darwinWorkstationConfig
             {
+              # Firewall needs to be lenient for VNC/SSH
+              networking.applicationFirewall = {
+                enable = lib.mkForce false;
+                blockAllIncoming = lib.mkForce false;
+                enableStealthMode = lib.mkForce false;
+              };
               cart = {
                 enable = true;
                 user = "heywoodlh";

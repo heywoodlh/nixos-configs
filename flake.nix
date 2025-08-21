@@ -551,7 +551,6 @@
           modules = [
             /etc/nixos/hardware-configuration.nix
             ./nixos/vm.nix
-            ./nixos/roles/hardware/printers.nix
             {
               networking.hostName = "nixos-vmware";
               virtualisation.vmware.guest.enable = true;
@@ -576,6 +575,13 @@
                     directory = "/shared/*";
                   '';
                 };
+                wayland.windowManager.hyprland.extraConfig = ''
+                  env = XCURSOR_SIZE, 24
+                  env = WLR_NO_HARDWARE_CURSORS,1
+                  monitor= ,2560x1600@60,auto,1.666667
+                  # Login apps
+                  exec-once = ${pkgs.systemd}/bin/systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep inf
+                '';
               };
             }
           ];

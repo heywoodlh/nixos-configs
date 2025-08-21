@@ -212,7 +212,7 @@ in {
   # Resolve too many open files error
   # https://discourse.nixos.org/t/unable-to-fix-too-many-open-files-error/27094/7
   # https://askubuntu.com/a/1451118
-  systemd.extraConfig = "DefaultLimitNOFILE=2048"; # defaults to 1024 if unset
+  systemd.settings.Manager.DefaultLimitNOFILE = 2048; # defaults to 1024 if unset
   boot.kernel.sysctl = {
     "fs.inotify.max_user_instances" = 1024;
   };

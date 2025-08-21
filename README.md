@@ -95,7 +95,7 @@ Display:
 Keyboard and Mouse:
   - Disable all host keybindings
 
-Remove the Camera and Sound devices
+> Note to self: the below is required or else the VM will fail to start
 
 Sharing:
   - [x] Enable Shared Folders

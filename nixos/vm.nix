@@ -4,7 +4,6 @@
   imports = [
     ./desktop.nix
     ./roles/remote-access/sshd.nix
-    ./roles/desktop/omarchy.nix
   ];
 
   # Bootloader
@@ -44,10 +43,19 @@
   hardware.bluetooth.enable = lib.mkForce false;
 
   # Enable caffeine
-  home-manager.users.heywoodlh.dconf.settings = {
-    "org/gnome/shell/extensions/caffeine" = {
-      toggle-state = true;
-      user-enabled = true;
+  home-manager.users.heywoodlh = {
+    wayland.windowManager.hyprland.extraConfig = ''
+      env = XCURSOR_SIZE, 24
+      env = WLR_NO_HARDWARE_CURSORS,1
+      monitor= ,2560x1600@60,auto,1.666667
+      # Login apps
+      exec-once = ${pkgs.systemd}/bin/systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep inf
+    '';
+    dconf.settings = {
+      "org/gnome/shell/extensions/caffeine" = {
+        toggle-state = true;
+        user-enabled = true;
+      };
     };
   };
 

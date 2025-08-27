@@ -8,8 +8,7 @@ in {
   ];
 
   # Omarchy-nix uses greetd
-  services.greetd.enable = lib.mkForce false;
-  services.displayManager.defaultSession = "hyprland-uwsm";
+  services.displayManager.gdm.enable = lib.mkForce false;
   programs.hyprland.withUWSM = true;
 
   programs._1password-gui.polkitPolicyOwners = lib.mkForce ["heywoodlh"];
@@ -93,9 +92,8 @@ in {
         '';
       };
 
-
       wayland.windowManager.hyprland.extraConfig = ''
-        env = NIXOS_OZONE_WL, 1
+        env = NIXOS_OZONE_WL,1
         # Guake-like terminal on Hyprland
         workspace = special:terminal, on-created-empty:${pkgs.gnome-terminal}/bin/gnome-terminal
         # Remap Caps Lock as Super key

@@ -555,7 +555,6 @@
               networking.hostName = "nixos-vmware";
               virtualisation.vmware.guest.enable = true;
               console.earlySetup = true;
-              services.tailscale.enable = pkgs.lib.mkForce false;
               fileSystems."/shared" = {
                 device = ".host:/";
                 fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse"; # "fuse.${pkgs.open-vm-tools}/bin/vmhgfs-fuse" does not work
@@ -575,13 +574,6 @@
                     directory = "/shared/*";
                   '';
                 };
-                wayland.windowManager.hyprland.extraConfig = ''
-                  env = XCURSOR_SIZE, 24
-                  env = WLR_NO_HARDWARE_CURSORS,1
-                  monitor= ,2560x1600@60,auto,1.666667
-                  # Login apps
-                  exec-once = ${pkgs.systemd}/bin/systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep inf
-                '';
               };
             }
           ];

@@ -9,7 +9,7 @@ in {
 
   # Omarchy-nix uses greetd
   services.greetd.enable = lib.mkForce false;
-  services.displayManager.defaultSession = "hyprland";
+  services.displayManager.defaultSession = "hyprland-uwsm";
   programs.hyprland.withUWSM = true;
 
   programs._1password-gui.polkitPolicyOwners = lib.mkForce ["heywoodlh"];

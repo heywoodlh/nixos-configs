@@ -4,6 +4,7 @@
   imports = [
     ./desktop.nix
     ./roles/remote-access/sshd.nix
+    ./roles/desktop/omarchy.nix
   ];
 
   # Bootloader

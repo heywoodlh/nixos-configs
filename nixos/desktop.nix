@@ -16,7 +16,6 @@ in {
   imports = [
     ./base.nix
     ./roles/desktop/user-icon.nix
-    ./roles/desktop/omarchy.nix
     ./roles/virtualization/libvirt.nix
   ];
 

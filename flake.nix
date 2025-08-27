@@ -118,7 +118,7 @@
     };
     browsh.url = "github:heywoodlh/flakes?dir=browsh";
     omarchy = {
-        url = "github:heywoodlh/omarchy-nix/arm64-support";
+        url = "github:henrysipp/omarchy-nix";
         inputs.nixpkgs.follows = "nixpkgs";
         inputs.home-manager.follows = "home-manager";
     };

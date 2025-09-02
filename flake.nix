@@ -14,10 +14,15 @@
     # i.e. https://github.com/NixOS/nixpkgs/pulls?q=565.57.01
     nixpkgs-nvidia.url = "github:nixos/nixpkgs/e718ed96ed39ece6433b965b1b1479b8878a29a3";
     determinate-nix.url = "github:DeterminateSystems/nix/v2.28.1";
+    vicinae-nix = {
+      url = "github:TomRomeo/vicinae-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     myFlakes = {
       url = "github:heywoodlh/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
+      inputs.vicinae-nix.follows = "vicinae-nix";
     };
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     x270-fingerprint-driver = {
@@ -118,9 +123,9 @@
     };
     browsh.url = "github:heywoodlh/flakes?dir=browsh";
     omarchy = {
-        url = "github:henrysipp/omarchy-nix";
-        inputs.nixpkgs.follows = "nixpkgs";
-        inputs.home-manager.follows = "home-manager";
+      url = "github:henrysipp/omarchy-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
   };
 
@@ -165,6 +170,7 @@
                       dagger,
                       browsh,
                       omarchy,
+                      vicinae-nix,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {

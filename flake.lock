@@ -1515,6 +1515,24 @@
         "type": "github"
       }
     },
+    "flake-utils_48": {
+      "inputs": {
+        "systems": "systems_48"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "flake-utils_5": {
       "inputs": {
         "systems": "systems_4"
@@ -1795,6 +1813,10 @@
           "nixpkgs-stable"
         ],
         "nordic": "nordic",
+        "vicinae-nix": [
+          "myFlakes",
+          "vicinae-nix"
+        ],
         "vim-flake": [
           "myFlakes",
           "vim-flake"
@@ -2708,7 +2730,7 @@
           "nixpkgs"
         ],
         "nixpkgs-stable": [
-          "nixpkgs-stable"
+          "nixpkgs"
         ],
         "nushell-flake": "nushell-flake_2",
         "op-flake": "op-flake",
@@ -2716,6 +2738,9 @@
         "st-flake": "st-flake_2",
         "tabby-flake": "tabby-flake",
         "ttyd-flake": "ttyd-flake",
+        "vicinae-nix": [
+          "vicinae-nix"
+        ],
         "vim-flake": "vim-flake_2",
         "vimb-flake": "vimb-flake",
         "vscode-flake": "vscode-flake_2",
@@ -2723,11 +2748,11 @@
         "zen-browser-flake": "zen-browser-flake"
       },
       "locked": {
-        "lastModified": 1752766919,
-        "narHash": "sha256-mE5eWaQ2P2g1YUxBi2cPo3/3+c3AonyM+O1e+tGvLow=",
+        "lastModified": 1756421258,
+        "narHash": "sha256-J93+dWDXIm8bpAsxrkz2phYLLkkX7BCMvMnpKralp7s=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "f843594170afacfaee06051d784b7c1f54d45cab",
+        "rev": "f0281b38bfc8ee1565dd986399a66ccec0f11526",
         "type": "github"
       },
       "original": {
@@ -4399,6 +4424,7 @@
         "spicetify": "spicetify_2",
         "ssh-keys": "ssh-keys_2",
         "ts-warp-nixpkgs": "ts-warp-nixpkgs",
+        "vicinae-nix": "vicinae-nix",
         "x270-fingerprint-driver": "x270-fingerprint-driver"
       }
     },
@@ -5328,6 +5354,21 @@
         "type": "github"
       }
     },
+    "systems_48": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "systems_5": {
       "locked": {
         "lastModified": 1689347949,
@@ -5578,6 +5619,27 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "vicinae-nix": {
+      "inputs": {
+        "flake-utils": "flake-utils_48",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1756547894,
+        "narHash": "sha256-iu0pzPv3ArB8m9H4rH7bFMjRspA5thRV6kp9fVLagZc=",
+        "owner": "TomRomeo",
+        "repo": "vicinae-nix",
+        "rev": "5eea3c1f5d10abc074b27c65a38b1ca3b9a8adeb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "TomRomeo",
+        "repo": "vicinae-nix",
         "type": "github"
       }
     },

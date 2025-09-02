@@ -215,7 +215,7 @@ let
           }
         ];
       };
-      # View extensions here: https://github.com/nix-community/nur-combined/blob/master/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
+      # View extensions here: https://github.com/nix-community/nur-combined/blob/main/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
       extensions.packages = let
         nur-pkgs = import nur {
           inherit pkgs;

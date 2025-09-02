@@ -4,6 +4,7 @@
   light-wallpaper, dark-wallpaper,
   ts-warp-nixpkgs, qutebrowser,
   ghostty,
+  vicinae-nix,
   ... }:
 
 let
@@ -220,6 +221,7 @@ in {
       inherit ts-warp-nixpkgs;
       inherit qutebrowser;
       inherit ghostty;
+      inherit vicinae-nix;
     };
     backupFileExtension = ".bak";
     users.heywoodlh = { ... }: {

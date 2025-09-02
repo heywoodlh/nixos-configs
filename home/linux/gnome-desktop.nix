@@ -1,4 +1,4 @@
-{ config, pkgs, nixpkgs-lts, lib, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
+{ config, pkgs, lib, nixpkgs-lts, vicinae-nix, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
 
 let
   system = pkgs.system;
@@ -7,6 +7,8 @@ let
   myWezterm = myFlakes.packages.${system}.wezterm;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
   myGhostty = myFlakes.packages.${system}.ghostty;
+  myGnomeExtensionsInstaller = myFlakes.packages.${system}.gnome-install-extensions;
+  vicinaePkg = vicinae-nix.packages.${system}.default;
 in {
   home.packages = with gnome-pkgs; [
     # Fallback to old name if undefined (i.e. on Ubuntu LTS)
@@ -14,16 +16,8 @@ in {
     (if (builtins.hasAttr "gnome-boxes" gnome-pkgs) then gnome-pkgs.gnome-boxes else gnome.gnome-boxes)
     (if (builtins.hasAttr "gnome-terminal" gnome-pkgs) then gnome-pkgs.gnome-terminal else gnome.gnome-terminal)
     (if (builtins.hasAttr "gnome-tweaks" gnome-pkgs) then gnome-pkgs.gnome-tweaks else gnome.gnome-tweaks)
-    gnomeExtensions.caffeine
-    gnomeExtensions.gnome-bedtime
-    gnomeExtensions.gsconnect
-    gnomeExtensions.hide-cursor
-    gnomeExtensions.night-theme-switcher
-    gnomeExtensions.search-light
-    gnomeExtensions.tray-icons-reloaded
     pkgs.epiphany
-    gnomeExtensions.just-perfection
-    gnomeExtensions.space-bar
+    gnome-extensions-cli
   ];
 
   # Enable unclutter
@@ -35,6 +29,14 @@ in {
       "ignore-scrolling"
     ];
   };
+
+  heywoodlh.home.autostart = [
+    {
+      name = "Vicinae";
+      command = "${vicinaePkg}/bin/vicinae server";
+    }
+  ];
+
 
   home.file.".config/pop-shell/config.json" = {
     enable = true;
@@ -99,24 +101,14 @@ in {
     text = "";
   };
 
+  # Install extensions with gnome-extensions-cli so I have more control
+  home.activation.install-gnome-extensions = ''
+    ${myGnomeExtensionsInstaller}/bin/gnome-ext-install
+  '';
+
   # Now managed by my gnome flake
   # Only Home-Manager-specific settings should live here
   dconf.settings = {
-    "org/gnome/shell/extensions/paperwm".winprops = map builtins.toJSON [
-        {
-          "wm_class" = "Firefox";
-          "spaceIndex" = 0;
-        }
-        {
-          "wm_class" = "com.mitchellh.ghostty";
-          "preferredWidth" = "100%";
-        }
-        {
-          "wm_class" = "1Password";
-          "scratch_layer" = true;
-        }
-    ];
-
     "org/gnome/desktop/background" = {
       picture-uri = lib.mkForce "${homeDir}/.wallpaper.png";
       picture-uri-dark = lib.mkForce "${homeDir}/.wallpaper.png";

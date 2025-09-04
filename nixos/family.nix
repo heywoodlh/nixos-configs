@@ -387,6 +387,8 @@ in {
             .kids.nationalgeographic.com
             .inaturalist.org
             .coolmathgames.com
+            .crunchlabs.com
+            .cdn.shopify.com
           '';
         in [
           "${squid-conf}:/etc/squid/squid.conf"

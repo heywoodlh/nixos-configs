@@ -45,6 +45,16 @@ in {
     ];
   };
 
+  fileSystems."/media/home-media/disk3" = {
+    device = "/dev/disk/by-uuid/ac098647-fb71-497f-89ac-8015224e1288";
+    fsType = "btrfs";
+    options = [
+      "defaults"
+      "space_cache=v2"
+      "nofail"
+    ];
+  };
+
   users.groups.media = {};
   users.users.media = {
     group = "media";

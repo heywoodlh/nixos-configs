@@ -604,7 +604,7 @@ in {
       item_types = ["VTODO"]
       url = "https://caldav.fastmail.com"
       username = "heywoodlh@heywoodlh.io"
-      password.fetch = ["shell", "${op-wrapper} item get '3qaxsqbv5dski4wqswxapc7qoi' --fields label=password"]
+      password.fetch = ["shell", "${op-wrapper} item get '3qaxsqbv5dski4wqswxapc7qoi' --fields label=password --reveal"]
     '';
   };
 

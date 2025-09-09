@@ -51,8 +51,8 @@ in {
   time.timeZone = "America/Denver";
 
   # Enable ZFS
-  boot.extraModulePackages = [ pkgs.linuxKernel.packages.linux_xanmod_stable.zfs_2_2 ];
-  boot.zfs.package = pkgs.zfs_2_2;
+  boot.extraModulePackages = [ pkgs.linuxKernel.packages.linux_xanmod_stable.zfs_unstable ];
+  boot.zfs.package = pkgs.zfs_unstable;
   boot.supportedFilesystems = [ "zfs" ];
   systemd.services.zfs-mount.enable = false; # Disable systemd service for ZFS mount, use Filesystems option instead
   networking.hostId = "fd838b2e"; # Set a unique host ID for ZFS

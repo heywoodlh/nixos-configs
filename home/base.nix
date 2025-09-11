@@ -726,31 +726,33 @@ in {
           },
         },
         adapters = {
-          ollama = function()
-            return require("codecompanion.adapters").extend("ollama", {
-              env = {
-                url = "${ollamaUrl}",
-              },
-              headers = {
-                ["Content-Type"] = "application/json",
-              },
-              parameters = {
-                sync = true,
-              },
-              schema = {
-                model = {
-                  default = "llama3:8b",
+          http = {
+            ollama = function()
+              return require("codecompanion.adapters").extend("ollama", {
+                env = {
+                  url = "${ollamaUrl}",
                 },
-             },
-            })
-          end,
-          openai = function()
-            return require("codecompanion.adapters").extend("openai", {
-              env = {
-                api_key = "cmd:${op-wrapper} read 'op://Personal/wnnzk4qgffnymdqdhbmzgruquq/api-key' --no-newline",
-              },
-            })
-          end,
+                headers = {
+                  ["Content-Type"] = "application/json",
+                },
+                parameters = {
+                  sync = true,
+                },
+                schema = {
+                  model = {
+                    default = "llama3:8b",
+                  },
+               },
+              })
+            end,
+            openai = function()
+              return require("codecompanion.adapters").extend("openai", {
+                env = {
+                  api_key = "cmd:${op-wrapper} read 'op://Personal/wnnzk4qgffnymdqdhbmzgruquq/api-key' --no-newline",
+                },
+              })
+            end,
+          }
         },
       })
     EOF

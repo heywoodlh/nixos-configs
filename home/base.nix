@@ -1,4 +1,4 @@
-{ config, attic, pkgs, lib, home-manager, nur, myFlakes, iamb-home-manager, modulesPath, ... }:
+{ config, attic, pkgs, lib, home-manager, nur, myFlakes, iamb-home-manager, modulesPath, hexstrike-ai, ... }:
 
 let
   system = pkgs.system;
@@ -275,6 +275,7 @@ let
     mkdir -p ~/.config/attic
     ${op-wrapper} read 'op://Kubernetes/za3oirjkd6ehdlnzvisb445hga/normal-config' > ~/.config/attic/config.toml
   '';
+  hexstrike-ai-mcp = hexstrike-ai.packages.${system}.hexstrike-ai-mcp;
 in {
   home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -717,6 +718,23 @@ in {
       })
 
       require("codecompanion").setup({
+        extensions = {
+          history = {
+            enabled = true,
+          },
+          mcphub = {
+            callback = "mcphub.extensions.codecompanion",
+            opts = {
+              make_tools = true,
+              show_server_tools_in_chat = true,
+              add_mcp_prefix_to_tool_names = false,
+              show_result_in_chat = true,
+              format_tool = nil,
+              make_vars = true,
+              make_slash_commands = true,
+            }
+          },
+        },
         strategies = {
           chat = {
             adapter = "ollama",
@@ -756,6 +774,22 @@ in {
         },
       })
     EOF
+  '';
+
+  home.file.".config/mcphub/servers.json".text = ''
+    {
+      "servers": {
+        "hexstrike": {
+          "type": "stdio",
+          "command": "${hexstrike-ai-mcp}/bin/hexstrike_mcp.py",
+          "args": [
+            "--server",
+            "http://nix-nvidia.barn-banana.ts.net:8888"
+          ]
+        }
+      },
+      "inputs": []
+    }
   '';
 
   home.file.".config/opencode/opencode.json".text = builtins.toJSON {

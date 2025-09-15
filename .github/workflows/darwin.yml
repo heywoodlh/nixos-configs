@@ -17,6 +17,9 @@ on:
   schedule:
   - cron: "0 0 * * Sat"
 
+env:
+  HOSTNAME: github-actions-nixos-configs-darwin
+
 jobs:
   build-macos-env:
     name: Build macOS Nix env

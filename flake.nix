@@ -18,11 +18,16 @@
       url = "github:TomRomeo/vicinae-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mcphub = {
+      url = "github:ravitemer/mcphub.nvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     myFlakes = {
       url = "github:heywoodlh/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
       inputs.vicinae-nix.follows = "vicinae-nix";
+      inputs.mcphub.follows = "mcphub";
     };
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     x270-fingerprint-driver = {
@@ -123,6 +128,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    hexstrike-ai = {
+      url = "github:heywoodlh/hexstrike-ai/nix-flake-init";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self,
@@ -166,6 +175,7 @@
                       browsh,
                       omarchy,
                       vicinae-nix,
+                      hexstrike-ai,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {

@@ -35,6 +35,7 @@ in {
     ../../roles/storage/nfs-media.nix
     ../../roles/remote-access/cloudflared.nix
     ../../roles/remote-access/wol.nix
+    ../../roles/security/hexstrike-ai.nix
     #../../roles/dev/vscode.nix # many things don't work with non-standard Nix paths
   ];
 

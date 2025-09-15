@@ -117,10 +117,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-darwin.follows = "darwin";
     };
-    dagger = {
-      url = "github:dagger/nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     browsh.url = "github:heywoodlh/flakes?dir=browsh";
     omarchy = {
       url = "github:henrysipp/omarchy-nix";
@@ -167,7 +163,6 @@
                       determinate-nix,
                       cart,
                       x270-fingerprint-driver,
-                      dagger,
                       browsh,
                       omarchy,
                       vicinae-nix,
@@ -786,9 +781,7 @@
 
       devShell = pkgs.mkShell {
         name = "nixos-configs devShell";
-        DAGGER_NO_NAG = 1;
         buildInputs = with pkgs; [
-          dagger.packages.${system}.dagger
           lefthook
           stable-pkgs.gitleaks # bug in pkgs.gitleaks currently
         ];

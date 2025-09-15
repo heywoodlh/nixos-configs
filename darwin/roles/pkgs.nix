@@ -7,15 +7,31 @@ let
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
-  darwinSwitch = pkgs.writeShellScriptBin "darwin-switch" ''
-    /usr/bin/sudo darwin-rebuild switch --flake $HOME/opt/nixos-configs#$(hostname)
+  darwinRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
+    [[ -d $HOME/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs $HOME/opt/nixos-configs
+    /usr/bin/sudo darwin-rebuild $1 --flake $HOME/opt/nixos-configs#$(hostname) ''${@:2}
+  '';
+  myDarwinSwitch = pkgs.writeShellScriptBin "darwin-switch" ''
+    ${darwinRebuildWrapper} switch $@
+  '';
+  myDarwinBoot = pkgs.writeShellScriptBin "darwin-boot" ''
+    ${darwinRebuildWrapper} boot $@
+  '';
+  myDarwinBuild = pkgs.writeShellScriptBin "darwin-build" ''
+    ${darwinRebuildWrapper} build $@
+  '';
+  myDarwinSwitchWithFlakes = pkgs.writeShellScriptBin "darwin-switch-with-flakes" ''
+    ${myDarwinSwitch}/bin/darwin-switch --override-input myFlakes $HOME/opt/flakes $@
   '';
 in {
   #nix packages
   environment.systemPackages = [
     container
     linuxBuilderSsh
-    darwinSwitch
+    myDarwinSwitch
+    myDarwinBoot
+    myDarwinBuild
+    myDarwinSwitchWithFlakes
   ];
 
   nix.settings = {

@@ -1,5 +1,5 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, attic, determinate-nix, nixpkgs-stable, lib, nur, home-manager, iamb-home-manager, browsh, hexstrike-ai, ... }:
+{ config, pkgs, attic, determinate-nix, nixpkgs-stable, lib, nur, home-manager, iamb-home-manager, browsh, hexstrike-ai, mcphub, ... }:
 
 let
   system = pkgs.system;
@@ -87,6 +87,7 @@ in {
       inherit iamb-home-manager;
       inherit browsh;
       inherit hexstrike-ai;
+      inherit mcphub;
     };
     users.heywoodlh = { ... }: {
       home.activation.docker-rootless-context = ''

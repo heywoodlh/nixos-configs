@@ -767,7 +767,7 @@
     "flake-parts_4": {
       "inputs": {
         "nixpkgs-lib": [
-          "mcphub",
+          "mcphub-nvim",
           "nixpkgs"
         ]
       },
@@ -2794,6 +2794,22 @@
       ]
     },
     "mcphub": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1755841689,
+        "narHash": "sha256-KakvXZf0vjdqzyT+LsAKHEr4GLICGXPmxl1hZ3tI7Yg=",
+        "owner": "ravitemer",
+        "repo": "mcp-hub",
+        "rev": "9c7670a4c341ed3cf738a6242c0fde1cea40bccf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ravitemer",
+        "repo": "mcp-hub",
+        "type": "github"
+      }
+    },
+    "mcphub-nvim": {
       "inputs": {
         "flake-parts": "flake-parts_4",
         "nixpkgs": [
@@ -2814,6 +2830,22 @@
         "type": "github"
       }
     },
+    "mcphub_2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1755841689,
+        "narHash": "sha256-KakvXZf0vjdqzyT+LsAKHEr4GLICGXPmxl1hZ3tI7Yg=",
+        "owner": "ravitemer",
+        "repo": "mcp-hub",
+        "rev": "9c7670a4c341ed3cf738a6242c0fde1cea40bccf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ravitemer",
+        "repo": "mcp-hub",
+        "type": "github"
+      }
+    },
     "myFlakes": {
       "inputs": {
         "chromium-widevine-flake": "chromium-widevine-flake",
@@ -2825,8 +2857,9 @@
         "jetporch-flake": "jetporch-flake",
         "jujutsu-flake": "jujutsu-flake",
         "lima-flake": "lima-flake",
-        "mcphub": [
-          "mcphub"
+        "mcphub": "mcphub_2",
+        "mcphub-nvim": [
+          "mcphub-nvim"
         ],
         "nixpkgs": [
           "nixpkgs"
@@ -2850,11 +2883,11 @@
         "zen-browser-flake": "zen-browser-flake"
       },
       "locked": {
-        "lastModified": 1757958559,
-        "narHash": "sha256-a9Ae+f71PsIVy6sLTqTpc/OH7+7VjkUuAkhtg3z3+VA=",
+        "lastModified": 1758044771,
+        "narHash": "sha256-bYeybktHhiluKcadS3a+3PbmT7o6lUKv818xwA9HHBE=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "36ca771b2b6087aa2eaae13ddf4992cef8fa3caa",
+        "rev": "d6cefa720476cdfce78f77bd18907d6c6e77fdd0",
         "type": "github"
       },
       "original": {
@@ -4540,6 +4573,7 @@
         "lanzaboote": "lanzaboote",
         "light-wallpaper": "light-wallpaper",
         "mcphub": "mcphub",
+        "mcphub-nvim": "mcphub-nvim",
         "myFlakes": "myFlakes",
         "nix-on-droid": "nix-on-droid",
         "nixos-apple-silicon": "nixos-apple-silicon_2",
@@ -5851,6 +5885,10 @@
         "mcphub": [
           "myFlakes",
           "mcphub"
+        ],
+        "mcphub-nvim": [
+          "myFlakes",
+          "mcphub-nvim"
         ],
         "nixpkgs": [
           "myFlakes",

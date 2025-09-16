@@ -17,9 +17,6 @@ on:
   schedule:
   - cron: "0 0 * * Sat"
 
-env:
-  HOSTNAME: github-actions-nixos-configs-darwin
-
 jobs:
   build-macos-env:
     name: Build macOS Nix env
@@ -30,6 +27,8 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Login to Tailnet
+      env:
+        HOSTNAME: github-actions-nixos-configs-darwin
       #uses: tailscale/github-action@v3
       uses: propelinc/tailscale-github-action@main
       with:

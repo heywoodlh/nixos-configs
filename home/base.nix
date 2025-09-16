@@ -717,6 +717,10 @@ in {
         dismiss_keymap = "<S-Tab>",
       })
 
+      require("mcphub").setup({
+        config = vim.fn.expand("~/.config/mcphub/servers.json"),
+      })
+
       require("codecompanion").setup({
         extensions = {
           history = {

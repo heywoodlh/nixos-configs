@@ -19,6 +19,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mcphub = {
+      url = "github:ravitemer/mcp-hub";
+      flake = false;
+    };
+    mcphub-nvim = {
       url = "github:ravitemer/mcphub.nvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -27,7 +31,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
       inputs.vicinae-nix.follows = "vicinae-nix";
-      inputs.mcphub.follows = "mcphub";
+      inputs.mcphub-nvim.follows = "mcphub-nvim";
     };
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     x270-fingerprint-driver = {

@@ -135,9 +135,7 @@ in {
   programs.seahorse.enable = true;
 
   services = {
-    logind = {
-      extraConfig = "RuntimeDirectorySize=10G";
-    };
+    logind.settings.Login.RuntimeDirectorySize = "10G";
     syncthing = {
       enable = true;
       user = "heywoodlh";

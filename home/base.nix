@@ -276,6 +276,9 @@ let
     ${op-wrapper} read 'op://Kubernetes/za3oirjkd6ehdlnzvisb445hga/normal-config' > ~/.config/attic/config.toml
   '';
   hexstrike-ai-mcp = hexstrike-ai.packages.${system}.hexstrike-ai-mcp;
+  myChat = pkgs.writeShellScriptBin "chat" ''
+    ${myVim}/bin/vim -c ":CodeCompanionChat" -c ":only"
+  '';
 in {
   home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -349,6 +352,7 @@ in {
     myFlakes.packages.${system}.tmux
     myFish # For non-nix use-cases
     #myVM
+    myChat
     todomanWrapper
     vimTodoAdd
     password
@@ -762,7 +766,7 @@ in {
                 },
                 schema = {
                   model = {
-                    default = "llama3:8b",
+                    default = "mistral:7b",
                   },
                },
               })

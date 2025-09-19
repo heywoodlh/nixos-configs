@@ -97,6 +97,15 @@ in {
           sha256 = "sha256-HgbPZdKZq3uT44n+4owjPajBbkEENexyPwkFuriiqU4=";
         };
       })
+      (builtins.path {
+        name = "YouTube-Agent.bundle";
+        path = pkgs.fetchFromGitHub {
+          owner = "ZeroQI";
+          repo = "YouTube-Agent.bundle";
+          rev = "e63f7a81b3493cf522a3d58276bc2ed117ed206c";
+          sha256 = "sha256-W1lY9uDqxkkKmxBDewQc/BOsZSK2CbKHRBTzTscR68Y=";
+        };
+      })
     ];
   };
 

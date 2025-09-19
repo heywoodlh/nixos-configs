@@ -2,7 +2,7 @@
 
 let
   ollama_pull = pkgs.writeShellScriptBin "ollama-pull" ''
-    models=("llama3:8b" "deepseek-coder:6.7b" "mistral:7b" "gemma3:4b" "qwen3:8b")
+    models=("llama3:8b" "llama3.1:8b" "deepseek-coder:6.7b" "mistral:7b" "gemma3:4b" "qwen3:8b")
     # Pull existing models
     ${pkgs.ollama}/bin/ollama list | awk '{print $1}' | xargs -I {} ${pkgs.ollama}/bin/ollama pull "{}"
     for model in "''${models[@]}"

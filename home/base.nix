@@ -702,7 +702,7 @@ in {
         lsp = {
           bin_path = "${pkgs.llm-ls}/bin/llm-ls",
         },
-        model = "mistral:7b",
+        model = "llama3.1:8b",
         backend = "ollama",
         url = "${ollamaUrl}",
         request_body = {
@@ -766,7 +766,7 @@ in {
                 },
                 schema = {
                   model = {
-                    default = "mistral:7b",
+                    default = "llama3.1:8b",
                   },
                },
               })

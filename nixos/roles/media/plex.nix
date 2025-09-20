@@ -82,7 +82,7 @@ in {
 
   services.plex = let
   in {
-    enable = true;
+    enable = false; # running in Kubernetes
     package = pkgs.customplex;
     openFirewall = true;
     dataDir = "/media/config/services/plex";

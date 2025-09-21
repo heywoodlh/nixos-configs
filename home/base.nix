@@ -576,7 +576,7 @@ in {
         set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh/personal-access-token --fields=password --reveal)"
       end
 
-      export OLLAMA_HOST="ollama.barn-banana.ts.net:11434"
+      export OLLAMA_HOST="${ollamaUrl}"
 
       function lnav
         kubectl exec -it -n monitoring $(kubectl get pods -n monitoring | grep -i lnav | head -1 | awk '{print $1}') -- env TERM="screen-256color" lnav /logs $argv
@@ -704,7 +704,7 @@ in {
         },
         model = "llama3.1:8b",
         backend = "ollama",
-        url = "${ollamaUrl}",
+        url = os.getenv("OLLAMA_HOST") or "${ollamaUrl}",
         request_body = {
           temperature = 0.2,
           top_p = 0.95,
@@ -756,7 +756,7 @@ in {
             ollama = function()
               return require("codecompanion.adapters").extend("ollama", {
                 env = {
-                  url = "${ollamaUrl}",
+                  url = os.getenv("OLLAMA_HOST") or "${ollamaUrl}",
                 },
                 headers = {
                   ["Content-Type"] = "application/json",

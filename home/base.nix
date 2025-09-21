@@ -266,7 +266,7 @@ let
   youtube-dl-mp3 = pkgs.writeShellScriptBin "youtube-dl-mp3" ''
     ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#yt-dlp" -- -t mp3 "$@"
   '';
-  ollamaUrl = "http://nix-nvidia.barn-banana.ts.net:11434";
+  ollamaUrl = "http://ollama.barn-banana.ts.net:11434";
   carbonyl = pkgs.writeShellScriptBin "carbonyl" ''
     ${pkgs.docker}/bin/docker volume create carbonyl &>/dev/null || true
     ${pkgs.docker}/bin/docker run --rm -it -v carbonyl:/carbonyl/data docker.io/fathyb/carbonyl $@
@@ -576,7 +576,7 @@ in {
         set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh/personal-access-token --fields=password --reveal)"
       end
 
-      export OLLAMA_HOST="nix-nvidia.barn-banana.ts.net:11434"
+      export OLLAMA_HOST="ollama.barn-banana.ts.net:11434"
 
       function lnav
         kubectl exec -it -n monitoring $(kubectl get pods -n monitoring | grep -i lnav | head -1 | awk '{print $1}') -- env TERM="screen-256color" lnav /logs $argv

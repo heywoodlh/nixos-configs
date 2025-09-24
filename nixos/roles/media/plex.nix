@@ -11,6 +11,7 @@ in {
     8081
     8181
     8082
+    32400 # running in Kubernetes, have to specify here because services.plex.enable = false
   ];
 
   boot.supportedFilesystems = [

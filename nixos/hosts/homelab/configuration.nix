@@ -191,4 +191,9 @@ in {
     "--accept-dns"
     "--stateful-filtering"
   ];
+
+  # Hack to enable i915 driver for Intel GPU (for Kubernetes)
+  services.xserver.videoDrivers = [
+    "i915"
+  ];
 }

@@ -55,24 +55,9 @@ retain	daily	7
 retain	weekly	4
 retain	monthly	6
 
-backup	root@nixos-matrix:/etc/	nixos-matrix/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nixos-matrix:/home/	nixos-matrix/
-backup	root@nixos-matrix:/opt/	nixos-matrix/
-backup	root@nixos-matrix:/root/	nixos-matrix/
-
-backup	root@nix-precision:/etc/	nix-precision/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-precision:/home/	nix-precision/
-backup	root@nix-precision:/opt/	nix-precision/
-backup	root@nix-precision:/root/	nix-precision/
-
-backup	root@nix-nvidia:/etc/	nix-nvidia/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-nvidia:/opt/	nix-nvidia/
-backup	root@nix-nvidia:/root/	nix-nvidia/
-
-backup	root@nix-drive:/etc/	nix-drive/	exclude=/etc/shadow,exclude=/etc/passwd
-backup	root@nix-drive:/home/	nix-drive/
-backup	root@nix-drive:/opt/	nix-drive/
-backup	root@nix-drive:/root/	nix-drive/
+backup	root@homelab:/etc/	homelab/	exclude=/etc/shadow,exclude=/etc/passwd
+backup	root@homelab:/opt/	homelab/
+backup	root@homelab:/root/	homelab/
 
 cmd_postexec	${chown_script}/bin/chown-rsnapshot
     '';

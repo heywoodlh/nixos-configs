@@ -46,7 +46,7 @@ in {
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.hostName = "nix-nvidia"; # Define your hostname
+  networking.hostName = "homelab"; # Define your hostname
 
   # Set your time zone.
   time.timeZone = "America/Denver";

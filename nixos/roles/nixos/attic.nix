@@ -6,7 +6,7 @@
       "http://attic.barn-banana.ts.net/nixos"
     ];
     trusted-public-keys = [
-      "nixos:pU2PdLt/QaDk8nec7lcy8DgsM96NTJ1bAOSs+jdoECc=" # attic
+      "nixos:4q9iokR56gpJfsHh0UKn9Hj1cPplvM879XVgnRstpNU=" # attic
     ];
   };
 }

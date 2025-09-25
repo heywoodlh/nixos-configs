@@ -26,10 +26,12 @@ in {
       "--kube-controller-manager-arg=node-cidr-mask-size=16"
       "--cluster-cidr 10.42.0.0/16"
       "--service-cidr=10.43.0.0/16"
-    ] ++ pkgs.lib.optionals (config.networking.hostName == "nix-nvidia") [
+    ] ++ pkgs.lib.optionals (config.networking.hostName == "homelab") [
+      "--tls-san=homelab"
       "--tls-san=nix-nvidia"
       "--tls-san=100.108.77.60"
-      "--node-ip=192.168.1.22" # If you change this, make sure to run the k3s up command with --cluster-reset
+      "--node-ip=192.168.1.22"
+      #"--cluster-reset" # If you change node hostname, uncomment this, rebuild, re-comment and then rebuild again -- completely resets the cluster (CATASTROPHIC DATA LOSS)
     ]);
   };
   environment.systemPackages = [

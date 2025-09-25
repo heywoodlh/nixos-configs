@@ -56,7 +56,7 @@ in {
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "nix-darwin:iDh77oS0PRmAJ+NMqECp7HzvA0ycgKd/kqjMz2wQJeU=" # attic
+        "nix-darwin:hBC1vKJgE6O9S5jiasCHUepCV/cBvUtPEtV2sumBF6A=" # attic
       ];
     };
   };

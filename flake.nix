@@ -279,8 +279,8 @@
         "from=\"192.168.50.20\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQClbyKk9D4dWDO2fCNV8KbT8HyUzCmmyfuly4fWZ2R78frVJRpkeDJ3N9Km+Pegi13uwaky0NMDF5t5xTACgS8Z+J3z6v+f93OF32n+FMiBEIs+91PzUs9iFvlLSyN9WbQ1dxgJKAnJkuFle4tK1simK+EbO2kvtsT5h3XdMI0lVlg4lIUhz8KO81OcQJ+MLzwqrxg/AN+6uLan5oav72cpXD4fB/lJnfn33awg5MklPg/BSYD5pY5EvPFmiwaFZzppD7nO3KLoWgT5ksX+fTxpeFlfP525u31lMaHYQZiwIFDzCPyVsocP1dlfny0j25Cz3ycFk8wGUswMRfi6/WSj root@proxmox-mac-mini"
         "from=\"100.79.151.6\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoCHYi25JA+QueyDNph6aGM+xPyDub3SQ8kj8sSy66O6YC7OH/CfRz6btRHff1PB8jtwxD4QUBvWaRKpKZB/2rZ/4i7yMULhAJlZkKyqnLl5QAvRMc21x0OlCSCXMpSbdSOwvfOouXLGCbBXS4n5L8+jKwUfZ06eM6V901KilymqMJiCQjFgrc0thlwyFUl2ZFeu+/H/UzhhBPWrrVDDq+RWbX34cI/qJrcvW4PYZYVKFBUXWy575C7ouIgdjeh3dQYNcPX6kaN56g/VawmfUxEDZoGhTzhU5rX4DBxTnL9Cp+sQkDXKNTK+TBAmM4JNg0tQbUv05Wi4LUTKD0vN4b root@proxmox-oryx-pro"
         "from=\"192.168.50.21\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoCHYi25JA+QueyDNph6aGM+xPyDub3SQ8kj8sSy66O6YC7OH/CfRz6btRHff1PB8jtwxD4QUBvWaRKpKZB/2rZ/4i7yMULhAJlZkKyqnLl5QAvRMc21x0OlCSCXMpSbdSOwvfOouXLGCbBXS4n5L8+jKwUfZ06eM6V901KilymqMJiCQjFgrc0thlwyFUl2ZFeu+/H/UzhhBPWrrVDDq+RWbX34cI/qJrcvW4PYZYVKFBUXWy575C7ouIgdjeh3dQYNcPX6kaN56g/VawmfUxEDZoGhTzhU5rX4DBxTnL9Cp+sQkDXKNTK+TBAmM4JNg0tQbUv05Wi4LUTKD0vN4b root@proxmox-oryx-pro"
-        "from=\"100.108.77.60\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH root@nix-nvidia"
-        "from=\"192.168.50.22\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH root@nix-nvidia"
+        "from=\"100.108.77.60\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH"
+        "from=\"192.168.50.22\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH"
       ];
     };
     # shared config among darwin workstations
@@ -509,11 +509,11 @@
           specialArgs = inputs;
           modules = [ ./nixos/hosts/nixos-build/desktop.nix ];
         };
-        nix-nvidia = nixpkgs.lib.nixosSystem {
+        homelab = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = inputs;
           modules = [
-            ./nixos/hosts/nix-nvidia/configuration.nix
+            ./nixos/hosts/homelab/configuration.nix
             #proxmoxConfig
           ];
         };

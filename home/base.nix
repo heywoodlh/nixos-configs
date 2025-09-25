@@ -11,7 +11,7 @@ let
   myGit = myFlakes.packages.${system}.git;
   myJujutsu = myFlakes.packages.${system}.jujutsu;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
-    export SOCKS_SERVER="nix-nvidia:1080"
+    export SOCKS_SERVER="homelab:1080"
     exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
       -T text/html \
       -cols $(${pkgs.ncurses}/bin/tput cols) \
@@ -104,7 +104,7 @@ let
     socks5 tor.barn-banana.ts.net 1080
   '';
   tarsnap-key-backup = pkgs.writeShellScriptBin "tarsnap-key-backup.sh" ''
-    hosts=("nix-drive" "nix-nvidia" "nixos-gaming")
+    hosts=("nix-drive" "homelab" "nixos-gaming")
     op_item="fp5jsqodjv3gzlwtlgojays7qe"
 
     for host in "''${hosts[@]}"
@@ -120,7 +120,7 @@ let
     sudo chown -R root:root /root/duo*.key
   '';
   duo-key-remote-setup = pkgs.writeShellScriptBin "duo-key-remote-setup.sh" ''
-    hosts=("nix-drive" "nix-nvidia" "nixos-gaming")
+    hosts=("nix-drive" "homelab" "nixos-gaming")
     op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key > /tmp/duo.key
     op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key > /tmp/duo-integration.key
     chmod 600 /tmp/duo.key
@@ -167,18 +167,18 @@ let
     [[ -f "$1" ]] && chmod +w "$1"
   '';
   altDarwin = if system == "aarch64-darwin" then "ssh://heywoodlh@intel-mac-vm x86_64-darwin" else "ssh://heywoodlh@mac-mini aarch64-darwin"; # MacOS builder on opposite arch
-  altLinux = if system == "x86_64-linux" then "ssh://heywoodlh@ubuntu-arm64 aarch64-linux" else "ssh://heywoodlh@nix-nvidia x86_64-linux"; # Linux builder on opposite arch
+  altLinux = if system == "x86_64-linux" then "ssh://heywoodlh@ubuntu-arm64 aarch64-linux" else "ssh://heywoodlh@homelab x86_64-linux"; # Linux builder on opposite arch
   altBuilder = if stdenv.isDarwin then "${altLinux}" else "${altDarwin}";
-  myBuilders = if stdenv.isDarwin then "ssh://heywoodlh@nix-nvidia x86_64-linux ; ssh://builder@linux-builder aarch64-linux ; ${altDarwin}" else "ssh://heywoodlh@mac-mini aarch64-darwin ; ${altLinux}";
+  myBuilders = if stdenv.isDarwin then "ssh://heywoodlh@homelab x86_64-linux ; ssh://builder@linux-builder aarch64-linux ; ${altDarwin}" else "ssh://heywoodlh@mac-mini aarch64-darwin ; ${altLinux}";
   builder-pop = pkgs.writeShellScriptBin "builders.sh" ''
     set -ex
     # Shell script to populate SSH host keys
-    ssh heywoodlh@nix-nvidia true
+    ssh heywoodlh@homelab true
     ssh heywoodlh@mac-mini true
     ssh heywoodlh@ubuntu-arm64 true
 
     # Populate to root user
-    sudo -E ssh heywoodlh@nix-nvidia true
+    sudo -E ssh heywoodlh@homelab true
     sudo -E ssh heywoodlh@mac-mini true
     sudo -E ssh heywoodlh@ubuntu-arm64 true
   '';
@@ -673,7 +673,7 @@ in {
     # Lazy: assume I'm either on Apple Silicon MacOS or Intel Linux
     altBuilder = if stdenv.isLinux then "ubuntu-arm64" else "intel-mac-vm";
     authSock = if stdenv.isLinux then "${homeDir}/.ssh/agent.sock" else "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"; # always assume 1password on MacOS
-    builders = if stdenv.isLinux then "mac-mini intel-mac-vm ${altBuilder}" else "nix-nvidia ubuntu-arm64 ${altBuilder}";
+    builders = if stdenv.isLinux then "mac-mini intel-mac-vm ${altBuilder}" else "homelab ubuntu-arm64 ${altBuilder}";
   in ''
     # User-wide SSH config for nix builders
       Host ${builders}
@@ -792,7 +792,7 @@ in {
           "command": "${hexstrike-ai-mcp}/bin/hexstrike_mcp.py",
           "args": [
             "--server",
-            "http://nix-nvidia.barn-banana.ts.net:8888"
+            "http://homelab.barn-banana.ts.net:8888"
           ]
         }
       },

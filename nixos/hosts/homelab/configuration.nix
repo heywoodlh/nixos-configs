@@ -51,6 +51,8 @@ in {
   # Set your time zone.
   time.timeZone = "America/Denver";
 
+  boot.kernelPackages = pkgs.linuxPackages_xanmod_stable;
+
   # Enable ZFS
   boot.extraModulePackages = [ pkgs.linuxKernel.packages.linux_xanmod_stable.zfs_unstable ];
   boot.zfs.package = pkgs.zfs_unstable;
@@ -58,23 +60,11 @@ in {
   systemd.services.zfs-mount.enable = false; # Disable systemd service for ZFS mount, use Filesystems option instead
   networking.hostId = "fd838b2e"; # Set a unique host ID for ZFS
 
-  # Enable Nvidia driver
-  boot.kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_xanmod_stable;
   nixpkgs.config.allowUnfree = true;
   # Make sure opengl is enabled
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-  };
-
-  # Tell Xorg to use the nvidia driver (also valid for Wayland)
-  services.xserver.videoDrivers = ["nvidia"];
-
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-    nvidiaSettings = true;
-    package = pkgs.linuxKernel.packages.linux_xanmod_stable.nvidia_x11;
   };
 
   fileSystems."/media/data-ssd" ={
@@ -87,27 +77,6 @@ in {
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
-
-  # Set up k3s for nvidia passthrough
-  # Reference: https://git.sr.ht/~goorzhel/nixos/tree/a806b38a14361e0eab2b1aca23f0b7d54e4c50f8/item/profiles/k3s/common/nvidia.nix#L37
-  systemd.services = {
-    nvidia-container-toolkit-cdi-generator = {
-      environment.LD_LIBRARY_PATH = "${config.hardware.nvidia.package}/lib";
-    };
-    #k3s-containerd-setup = {
-    #  serviceConfig.Type = "oneshot";
-    #  requiredBy = ["k3s.service"];
-    #  before = ["k3s.service"];
-    #  script = ''
-    #    cat << EOF > /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
-    #    {{ template "base" . }}
-
-    #    [plugins]
-    #    "io.containerd.grpc.v1.cri".enable_cdi = true
-    #    EOF
-    #  '';
-    #};
-  };
 
   # Enable mullvad wireguard
   networking.wg-quick.interfaces = {
@@ -160,17 +129,11 @@ in {
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  # Nvidia container settings
   virtualisation.docker.enable = true;
-  hardware.nvidia-container-toolkit = {
-    enable =  true;
-    mount-nvidia-executables = true;
-  };
   environment.systemPackages = with pkgs; [
     docker
     ollama_pull
     nfdump
-    nvidia-container-toolkit
     nvtopPackages.full
     runc
   ];
@@ -228,28 +191,4 @@ in {
     "--accept-dns"
     "--stateful-filtering"
   ];
-
-  virtualisation.oci-containers = let
-    resolvConf = pkgs.writeText "resolv.conf" ''
-      nameserver 1.1.1.1
-      nameserver 1.0.0.1
-    '';
-  in {
-    backend = "docker";
-    containers = {
-      ollama = {
-        image = "docker.io/ollama/ollama:0.9.6";
-        autoStart = true;
-        ports = [
-          "11434:11434"
-        ];
-        extraOptions = [ "--device=nvidia.com/gpu=all" ];
-        volumes = [
-          "/media/data-ssd/ollama:/root/.ollama"
-          "/etc/localtime:/etc/localtime:ro"
-          "${resolvConf}:/etc/resolv.conf:ro"
-        ];
-      };
-    };
-  };
 }

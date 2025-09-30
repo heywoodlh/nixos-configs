@@ -16,10 +16,6 @@
     CLUTTER_PAINT = "disable-dynamic-max-render-time";
   };
 
-  boot.extraModprobeConfig = ''
-    options hid_apple swap_fn_leftctrl=1
-  '';
-
   nix.settings = {
     extra-substituters = [
       "https://nixos-apple-silicon.cachix.org"

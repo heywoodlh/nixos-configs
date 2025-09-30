@@ -413,7 +413,7 @@
               boot.loader.efi.canTouchEfiVariables = false;
               networking.hostName = "nixos-m1-mac-mini";
             }
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/m1-mac-mini.nix
             ./nixos/desktop.nix
             ./nixos/roles/nixos/asahi.nix
           ];

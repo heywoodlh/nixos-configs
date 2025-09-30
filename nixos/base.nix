@@ -1,5 +1,5 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, attic, determinate-nix, nixpkgs-stable, lib, nur, home-manager, iamb-home-manager, browsh, hexstrike-ai, mcphub, ... }:
+{ config, pkgs, determinate-nix, nixpkgs-stable, lib, nur, home-manager, iamb-home-manager, browsh, hexstrike-ai, mcphub, ... }:
 
 let
   system = pkgs.system;
@@ -83,7 +83,6 @@ in {
     extraSpecialArgs = {
       inherit nur;
       inherit determinate-nix;
-      inherit attic;
       inherit iamb-home-manager;
       inherit browsh;
       inherit hexstrike-ai;

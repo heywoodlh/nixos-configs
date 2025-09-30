@@ -1,8 +1,8 @@
-{ config, pkgs, attic, ... }:
+{ config, pkgs, ... }:
 
 let
   system = pkgs.system;
-  atticClient = attic.packages.${system}.attic-client;
+  atticClient = pkgs.attic-client;
   configureCache = pkgs.writeShellScriptBin "nixos-cache-config" ''
     ${atticClient}/bin/attic cache create nixos
     ${atticClient}/bin/attic cache configure nixos --public

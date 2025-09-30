@@ -1,9 +1,9 @@
-{ config, pkgs, lib, attic, darwin, ... }:
+{ config, pkgs, lib, darwin, ... }:
 
 let
   system = pkgs.system;
-  atticServer = attic.packages.${system}.attic-server;
-  atticClient = attic.packages.${system}.attic-client;
+  atticServer = pkgs.attic-server;
+  atticClient = pkgs.attic-client;
   darwinRebuild = darwin.packages.${system}.darwin-rebuild;
   configureCache = pkgs.writeShellScriptBin "nix-darwin-cache-config" ''
     ${atticClient}/bin/attic cache create nix-darwin

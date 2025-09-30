@@ -1,10 +1,9 @@
-{ config, attic, pkgs, lib, home-manager, nur, myFlakes, iamb-home-manager, modulesPath, hexstrike-ai, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, iamb-home-manager, modulesPath, hexstrike-ai, ... }:
 
 let
   system = pkgs.system;
   stdenv = pkgs.stdenv;
   homeDir = config.home.homeDirectory;
-  atticClient = attic.packages.${system}.attic-client;
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
   myVim = myFlakes.packages.${system}.vim;
@@ -189,7 +188,7 @@ let
     ${pkgs.leaf}/bin/leaf $@
   '';
   test-linux = pkgs.writeText "test-linux.sh" ''
-    #!/usr/bin/env -S nix shell "github:nixos/nixpkgs/nixpkgs-unstable#bash" "github:DeterminateSystems/nix" "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" --command bash
+    #!/usr/bin/env -S nix shell "github:nixos/nixpkgs/nixpkgs-unstable#bash" "github:DeterminateSystems/nix" "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" --command bash
     cd /tmp
     set -e
     # Home-Manager
@@ -197,7 +196,7 @@ let
     then
       printf "\nTesting Home-Manager build\n"
       nix build "/tmp/nixos-configs#homeConfigurations.heywoodlh.activationPackage" --impure || echo "Failed to build home-manager"
-      echo "$targets" | grep -q 'skip-cache' || nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+      echo "$targets" | grep -q 'skip-cache' || nix run nixpkgs#attic-client -- push nixos ./result
       rm -f result
     fi
     # Desktop
@@ -205,7 +204,7 @@ let
     then
       printf "\nTesting NixOS Desktop build\n"
       nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-desktop" --impure
-      echo "$targets" | grep -q 'skip-cache' || nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+      echo "$targets" | grep -q 'skip-cache' || nix run "nixpkgs#attic-client" -- push nixos ./result
       rm -f result
     fi
     # Server
@@ -213,7 +212,7 @@ let
     then
       printf "\nTesting NixOS Server build\n"
       nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-server"
-      echo "$targets" | grep -q 'skip-cache' || nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+      echo "$targets" | grep -q 'skip-cache' || nix run "nixpkgs#attic-client" -- push nixos ./result
       rm -f result
     fi
   '';
@@ -222,7 +221,7 @@ let
     cd /tmp
     printf "\nTesting Nix-Darwin build\n"
     nix build /tmp/nixos-configs#darwinConfigurations.mac-mini.system
-    nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nix-darwin ./result
+    nix run "nixpkgs#attic-client" -- push nix-darwin ./result
     rm -f result
   '';
   nixos-configs-test = pkgs.writeShellScriptBin "nixos-configs.sh" ''
@@ -302,6 +301,7 @@ in {
   home.packages = with pkgs; [
     _1password-cli
     act
+    attic-client
     attic-setup
     bind
     carbonyl
@@ -363,7 +363,6 @@ in {
     builder-pop
     remote-nix
     system-fetch
-    atticClient
     nixos-configs-test
     youtube-dl-mp3
   ];

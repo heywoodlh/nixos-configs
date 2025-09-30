@@ -43,7 +43,10 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-apple-silicon.url = "github:tpwrules/nixos-apple-silicon";
+    nixos-apple-silicon = {
+      url = "github:nix-community/nixos-apple-silicon";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     ssh-keys = {
       url = "https://github.com/heywoodlh.keys";
       flake = false;
@@ -91,7 +94,6 @@
         home-manager.follows = "home-manager";
       };
     };
-    attic.url = "github:zhaofengli/attic/6eabc3f02fae3683bffab483e614bebfcd476b21";
     ts-warp-nixpkgs.url = "github:heywoodlh/nixpkgs/ts-warp-init";
     qutebrowser = {
       url = "github:qutebrowser/qutebrowser";
@@ -163,7 +165,6 @@
                       hyprland,
                       nixos-cosmic,
                       cosmic-manager,
-                      attic,
                       ts-warp-nixpkgs,
                       qutebrowser,
                       signal-ntfy,
@@ -402,6 +403,22 @@
             ./nixos/hosts/thinkpad-x270/configuration.nix
           ];
         };
+        nixos-m1-mac-mini = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = inputs;
+          modules = [
+            {
+              # Bootloader
+              boot.loader.systemd-boot.enable = true;
+              boot.loader.efi.canTouchEfiVariables = false;
+              networking.hostName = "nixos-m1-mac-mini";
+            }
+            /etc/nixos/hardware-configuration.nix
+            ./nixos/desktop.nix
+            ./nixos/roles/nixos/asahi.nix
+          ];
+        };
+
         nixos-usb = nixpkgs.lib.nixosSystem {
           system = "${system}";
           specialArgs = inputs;

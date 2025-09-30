@@ -1,4 +1,4 @@
-{ config, determinate-nix, pkgs, attic, myFlakes, darwin, nixpkgs-apple-containers, ... }:
+{ config, determinate-nix, pkgs, myFlakes, darwin, nixpkgs-apple-containers, ... }:
 
 let
   system = pkgs.system;

@@ -1,5 +1,5 @@
 # Configuration loaded for family systems
-{ config, pkgs, attic, determinate-nix, home-manager, nur, ... }:
+{ config, pkgs, determinate-nix, home-manager, nur, ... }:
 
 let
   system = pkgs.system;

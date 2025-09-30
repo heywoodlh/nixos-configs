@@ -63,4 +63,4 @@ jobs:
         printf "default-server = \"kube\"\n\n[servers.kube]\nendpoint = \"http://attic\"\ntoken = \"$ATTIC_TOKEN\"" > ~/.config/attic/config.toml
         # Build macos-desktop output
         nix build .#darwinConfigurations.mac-mini.system
-        nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nix-darwin ./result
+        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nix-darwin ./result

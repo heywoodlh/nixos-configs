@@ -1,4 +1,4 @@
-{ config, pkgs, determinate-nix, home-manager, myFlakes, nur, ts-warp-nixpkgs, qutebrowser, ghostty, attic, iamb-home-manager, hexstrike-ai, ... }:
+{ config, pkgs, determinate-nix, home-manager, myFlakes, nur, ts-warp-nixpkgs, qutebrowser, ghostty, iamb-home-manager, hexstrike-ai, ... }:
 
 let
   system = pkgs.system;
@@ -28,7 +28,6 @@ in {
       inherit ghostty;
       inherit nur;
       inherit determinate-nix;
-      inherit attic;
       inherit iamb-home-manager;
       inherit hexstrike-ai;
     };

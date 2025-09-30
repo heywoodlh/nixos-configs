@@ -60,9 +60,9 @@ jobs:
         mkdir -p ~/.config/attic
         printf "default-server = \"kube\"\n\n[servers.kube]\nendpoint = \"http://attic\"\ntoken = \"$ATTIC_TOKEN\"" > ~/.config/attic/config.toml
         nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server
-        nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
         nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop --impure
-        nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
 
   build-linux-arm64-env:
     name: Build Linux outputs (ARM64)
@@ -97,6 +97,6 @@ jobs:
         mkdir -p ~/.config/attic
         printf "default-server = \"kube\"\n\n[servers.kube]\nendpoint = \"http://attic\"\ntoken = \"$ATTIC_TOKEN\"" > ~/.config/attic/config.toml
         nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server
-        nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
         nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop --impure
-        nix run "github:zhaofengli/attic/47752427561f1c34debb16728a210d378f0ece36#attic-client" -- push nixos ./result
+        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result

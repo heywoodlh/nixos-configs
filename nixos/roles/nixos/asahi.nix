@@ -9,13 +9,7 @@
     allowUnsupportedSystem = true;
   };
 
-  hardware.asahi = {
-    enable = true;
-    withRust = true;
-    useExperimentalGPUDriver = true;
-    experimentalGPUInstallMode = "replace";
-    setupAsahiSound = false;
-  };
+  hardware.asahi.enable = true;
 
   environment.sessionVariables = rec {
     COGL_DEBUG = "sync-frame";
@@ -27,12 +21,11 @@
   '';
 
   nix.settings = {
-    sandbox = true;
     extra-substituters = [
-      "https://ceon.cachix.org"
+      "https://nixos-apple-silicon.cachix.org"
     ];
-    trusted-public-keys = [
-      "ceon.cachix.org-1:xdD8jN8QNCi0QMvL+3N7YxEbrAtf6rzClqTAaeYFl64="
+    extra-trusted-public-keys = [
+      "nixos-apple-silicon.cachix.org-1:8psDu5SA5dAD7qA0zMy5UT292TxeEPzIz8VVEr2Js20="
     ];
   };
 }

@@ -177,7 +177,6 @@ in {
         };
         volumes = [
           "/media/config/services/openaudible:/config/OpenAudible"
-          "/media/config/services/openaudible/desktop:/config/Desktop"
           "/media/home-media/disk2/books:/media/home-media/disk2/books"
           "${resolv-conf}:/etc/resolv.conf"
         ];

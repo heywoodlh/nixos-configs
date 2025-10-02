@@ -9,6 +9,7 @@ let
   myGhostty = myFlakes.packages.${system}.ghostty;
   myGnomeExtensionsInstaller = myFlakes.packages.${system}.gnome-install-extensions;
   vicinaePkg = vicinae-nix.packages.${system}.default;
+  myVicinae = myFlakes.packages.${system}.vicinae;
 in {
   home.packages = with gnome-pkgs; [
     # Fallback to old name if undefined (i.e. on Ubuntu LTS)
@@ -18,6 +19,7 @@ in {
     (if (builtins.hasAttr "gnome-tweaks" gnome-pkgs) then gnome-pkgs.gnome-tweaks else gnome.gnome-tweaks)
     pkgs.epiphany
     gnome-extensions-cli
+    gnomeExtensions.pop-shell
   ];
 
   # Enable unclutter
@@ -48,6 +50,9 @@ in {
           },
           {
             "class": "Rustdesk"
+          }
+          {
+            "class": "vicinae"
           }
         ],
         "skiptaskbarhidden": [],
@@ -120,6 +125,16 @@ in {
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4" = {
       command = lib.mkForce "${pkgs.bash}/bin/bash -c \"${pkgs.gnome-screenshot}/bin/gnome-screenshot -acf ${homeDir}/Pictures/screenshots/screenshot-$(${pkgs.coreutils}/bin/date +%Y-%m-%d_%H:%M:%S).png\"";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9" = {
+      binding = lib.mkForce "<Super>space";
+      command = lib.mkForce "${myVicinae}/bin/vicinae";
+      name = lib.mkForce "launcher";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10" = {
+      binding = lib.mkForce "<Ctrl><Shift>space";
+      command = lib.mkForce "${myVicinae}/bin/vicinae";
+      name = lib.mkForce "launcher-2";
     };
   };
 }

@@ -95,6 +95,7 @@ let
     };
     "sidebar.main.tools" = "aichat";
     "sidebar.position_start" = true;
+    "browser.newtabpage.activity-stream.showWeather" = false;
   };
   browser-settings = common-firefox-settings // firefox-settings;
   osSpecificUserChrome = if pkgs.stdenv.isDarwin then "" else

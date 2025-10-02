@@ -15,7 +15,7 @@
     nixpkgs-nvidia.url = "github:nixos/nixpkgs/e718ed96ed39ece6433b965b1b1479b8878a29a3";
     determinate-nix.url = "github:DeterminateSystems/nix/v2.28.1";
     vicinae-nix = {
-      url = "github:TomRomeo/vicinae-nix";
+      url = "github:vicinaehq/vicinae";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     mcphub = {
@@ -412,6 +412,7 @@
               boot.loader.systemd-boot.enable = true;
               boot.loader.efi.canTouchEfiVariables = false;
               networking.hostName = "nixos-m1-mac-mini";
+              time.timeZone = "America/Denver";
             }
             ./nixos/hosts/m1-mac-mini.nix
             ./nixos/desktop.nix

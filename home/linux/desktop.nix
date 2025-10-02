@@ -4,7 +4,6 @@ let
   system = pkgs.system;
   homeDir = config.home.homeDirectory;
   snowflake = ../../assets/nixos-snowflake.png;
-  myWezterm = myFlakes.packages.${system}.wezterm;
   captive-portal = pkgs.writeShellScriptBin "captive-portal" ''
    ${pkgs.xdg-utils}/bin/xdg-open "http://$(${pkgs.iproute2}/bin/ip --oneline route get 1.1.1.1 | ${pkgs.gawk}/bin/awk '{print $3}')"
   '';
@@ -19,6 +18,7 @@ let
     fi
     ${pkgs.flatpak}/bin/flatpak run --user app.zen_browser.zen || ${pkgs.libnotify}/bin/notify-send "Failed to launch Zen Browser"
   '';
+  myVicinae = myFlakes.packages.${system}.vicinae;
 in {
   imports = [
     #./xfce.nix
@@ -70,6 +70,7 @@ in {
     pkgs.ghostty
     captive-portal
     zen-wrapper
+    myVicinae
   ] ++ (if system == "aarch64-linux" then [
     myFlakes.packages.aarch64-linux.chromium-widevine
   ] else []);

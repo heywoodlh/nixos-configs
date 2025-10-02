@@ -2812,11 +2812,11 @@
         "zen-browser-flake": "zen-browser-flake"
       },
       "locked": {
-        "lastModified": 1759275514,
-        "narHash": "sha256-s/J2l1h1NiDZrKOj+YrljCcT19xhYerfk5k2NzCxMDU=",
+        "lastModified": 1759346045,
+        "narHash": "sha256-QAX62ysIoYtQ52N2EWr/zxo/WrGWcwO5WOZ8Q9TP4TQ=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "36250018c76fda025850a1c92a35161b04e7ff87",
+        "rev": "43202255446d13e2ec1b1b4a61abc4c8287cf3cd",
         "type": "github"
       },
       "original": {
@@ -5686,16 +5686,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1756547894,
-        "narHash": "sha256-iu0pzPv3ArB8m9H4rH7bFMjRspA5thRV6kp9fVLagZc=",
-        "owner": "TomRomeo",
-        "repo": "vicinae-nix",
-        "rev": "5eea3c1f5d10abc074b27c65a38b1ca3b9a8adeb",
+        "lastModified": 1759316433,
+        "narHash": "sha256-C9cC9nJdvoaPhvNkhRxmv/hti+AehHJh1XYjSElZtlk=",
+        "owner": "vicinaehq",
+        "repo": "vicinae",
+        "rev": "273b49bf6b74b993a001227419f40b91b6a9909e",
         "type": "github"
       },
       "original": {
-        "owner": "TomRomeo",
-        "repo": "vicinae-nix",
+        "owner": "vicinaehq",
+        "repo": "vicinae",
         "type": "github"
       }
     },

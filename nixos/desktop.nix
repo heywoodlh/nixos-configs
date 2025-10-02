@@ -173,6 +173,9 @@ in {
     description = "Spencer Heywood";
     extraGroups = [ "networkmanager" "wheel" "adbusers" ];
     shell = pkgs.bashInteractive;
+    packages = with pkgs; [
+      legcord
+    ];
     # users.users.<name>.icon not a NixOS option
     # made possible with ./roles/desktop/user-icon.nix
     icon = builtins.fetchurl {

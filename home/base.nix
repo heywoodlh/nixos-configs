@@ -278,6 +278,9 @@ let
   myChat = pkgs.writeShellScriptBin "chat" ''
     ${myVim}/bin/vim -c ":CodeCompanionChat" -c ":only"
   '';
+  myProxychains = pkgs.writeShellScriptBin "proxychains" ''
+    ${pkgs.proxychains-ng}/bin/proxychains4 -q "$@"
+  '';
 in {
   home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -365,6 +368,7 @@ in {
     system-fetch
     nixos-configs-test
     youtube-dl-mp3
+    myProxychains
   ];
 
   # Enable password-store
@@ -859,4 +863,22 @@ in {
   home.file.".config/browsh/config.toml".text = ''
     default_search_engine_base = "https://leta.mullvad.net/search?q="
   '';
+
+  # Proxychains configs
+  home.file.".proxychains/proxychains.conf" = {
+    enable = true;
+    text = ''
+      strict_chain
+      proxy_dns
+      quiet_mode
+      remote_dns_subnet 224
+      tcp_read_time_out 15000
+      tcp_connect_time_out 8000
+      localnet 127.0.0.0/255.0.0.0
+      [ProxyList]
+      socks5 100.115.177.85 1080
+    '';
+  };
+
+
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, browsh, ... }:
+{ config, pkgs, lib, home-manager, ... }:
 
 let
   homeDir = config.home.homeDirectory;
@@ -9,13 +9,6 @@ let
     sudo ${pkgs.dmidecode}/bin/dmidecode -t processor | ${pkgs.gnugrep}/bin/grep -i mhz
   '';
   system = pkgs.system;
-  myProxychains = pkgs.writeShellScriptBin "proxychains" ''
-    ${pkgs.proxychains-ng}/bin/proxychains4 "$@"
-  '';
-  browshPkg = browsh.packages.${system}.default;
-  myBrowsh = pkgs.writeShellScriptBin "browsh" ''
-    ${myProxychains}/bin/proxychains ${browshPkg}/bin/browsh $@
-  '';
 in {
   imports = [
     ./base.nix
@@ -25,8 +18,6 @@ in {
     gomuks
     libvirt
     cpuspeed
-    myBrowsh
-    myProxychains
   ];
 
   home.file.".config/fish/config.fish".text = ''
@@ -49,22 +40,6 @@ allowedSignersFile = ${signersFile}
 
 [commit]
   gpgsign = true
-    '';
-  };
-
-  # Proxychains configs
-  home.file.".proxychains/proxychains.conf" = {
-    enable = true;
-    text = ''
-      strict_chain
-      proxy_dns
-      quiet_mode
-      remote_dns_subnet 224
-      tcp_read_time_out 15000
-      tcp_connect_time_out 8000
-      localnet 127.0.0.0/255.0.0.0
-      [ProxyList]
-      socks5 100.108.77.60 1080
     '';
   };
 

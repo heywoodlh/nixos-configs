@@ -1,4 +1,4 @@
-{ config, pkgs, lib, nixpkgs-lts, vicinae-nix, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
+{ config, pkgs, lib, nixpkgs-stable, nixpkgs-lts, vicinae-nix, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
 
 let
   system = pkgs.system;
@@ -10,6 +10,10 @@ let
   myGnomeExtensionsInstaller = myFlakes.packages.${system}.gnome-install-extensions;
   vicinaePkg = vicinae-nix.packages.${system}.default;
   myVicinae = myFlakes.packages.${system}.vicinae;
+  pkgs-stable = import nixpkgs-stable {
+    inherit system;
+    config.allowUnfree = true;
+  };
 in {
   home.packages = with gnome-pkgs; [
     # Fallback to old name if undefined (i.e. on Ubuntu LTS)
@@ -19,7 +23,7 @@ in {
     (if (builtins.hasAttr "gnome-tweaks" gnome-pkgs) then gnome-pkgs.gnome-tweaks else gnome.gnome-tweaks)
     pkgs.epiphany
     gnome-extensions-cli
-    gnomeExtensions.pop-shell
+    pkgs-stable.gnomeExtensions.pop-shell
   ];
 
   # Enable unclutter
@@ -50,9 +54,12 @@ in {
           },
           {
             "class": "Rustdesk"
-          }
+          },
           {
-            "class": "vicinae"
+            "class": ".guake-wrapped"
+          },
+          {
+            "title": "Vicinae Launcher"
           }
         ],
         "skiptaskbarhidden": [],
@@ -114,6 +121,9 @@ in {
   # Now managed by my gnome flake
   # Only Home-Manager-specific settings should live here
   dconf.settings = {
+    "org/gnome/shell".enabled-extensions = [
+      "pop-shell@system76.com"
+    ];
     "org/gnome/desktop/background" = {
       picture-uri = lib.mkForce "${homeDir}/.wallpaper.png";
       picture-uri-dark = lib.mkForce "${homeDir}/.wallpaper.png";

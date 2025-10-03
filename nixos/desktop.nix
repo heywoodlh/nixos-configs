@@ -13,6 +13,12 @@ let
     inherit system;
     config.allowUnfree = true;
   };
+  # Overlay that replaces gnome-shell and gnome-session with the stable ones
+  # Because extensions are often broken with the latest gnome-shell
+  gnome-stable = (final: prev: {
+    gnome-shell  = pkgs-stable.gnome-shell;
+    gnome-session = pkgs-stable.gnome-session;
+  });
 in {
   imports = [
     ./base.nix
@@ -23,6 +29,7 @@ in {
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
     nur.overlays.default
+    gnome-stable
   ];
 
   boot = {

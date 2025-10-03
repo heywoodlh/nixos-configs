@@ -46,8 +46,16 @@ let
   then "Library/Application Support/gomuks/keybindings.yaml"
   else ".config/gomuks/keybindings.yaml";
   op-wrapper = pkgs.writeShellScript "op-wrapper.sh" ''
-    env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password-cli}/bin/op signin) && export OP_SESSION
-    ${pkgs._1password-cli}/bin/op --account my "$@"
+    mkdir -p ~/.1password
+    chmod 700 ~/.1password
+    [[ -e ~/.1password/session.sh ]] && export $(head -1 ~/.1password/session.sh)
+    # Check if we can't access the account
+    if ! ${pkgs._1password-cli}/bin/op --session="''${OP_SESSION}" account get &>/dev/null
+    then
+      [[ -e ~/.1password/session.sh ]] && rm ~/.1password/session.sh
+      env | grep -iqE "^OP_SESSION" || export OP_SESSION=$(${pkgs._1password-cli}/bin/op signin --raw) && echo "OP_SESSION=''${OP_SESSION}" > ~/.1password/session.sh
+    fi
+    ${pkgs._1password-cli}/bin/op --session="''${OP_SESSION}" --account my "$@"
   '';
   op-backup-script = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/c938124eff5dddd3aad226a5a5a6ae65441211b7/backup.sh";

@@ -31,7 +31,7 @@ in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../console.nix
+      ../../desktop.nix
       ../../roles/monitoring/osquery.nix
       lanzaboote.nixosModules.lanzaboote
       nixos-hardware.nixosModules.lenovo-thinkpad-x270
@@ -127,7 +127,7 @@ in {
   # To get ICCID, enable below for modemmanager to run in debug mode and then run the following command:
   # mmcli -m 0 --command AT^ICCID
   systemd.services.ModemManager = {
-    enable = true;
+    enable = false;
     wantedBy = ["multi-user.target" "network.target"];
     # For debugging
     serviceConfig.ExecStart = ["" "${pkgs.modemmanager}/sbin/ModemManager --debug"];
@@ -147,6 +147,7 @@ in {
     pathConfig.PathExists = "/dev/cdc-wdm0";
   };
   systemd.services.setup_wwan = {
+    enable = false;
     script = ''
       ${pkgs.libqmi}/bin/qmicli -p -d /dev/cdc-wdm0 --device-open-mbim --dms-set-fcc-authentication
     '';

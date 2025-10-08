@@ -41,6 +41,17 @@ in {
       name = "Vicinae";
       command = "${vicinaePkg}/bin/vicinae server";
     }
+    {
+      name = "Emote";
+      command = "${pkgs.emote}/bin/emote";
+    }
+  ];
+
+  heywoodlh.home.applications = [
+    {
+      name = "Emote";
+      command = "${pkgs.emote}/bin/emote";
+    }
   ];
 
 
@@ -57,6 +68,9 @@ in {
           },
           {
             "class": ".guake-wrapped"
+          },
+          {
+            "class": "emote"
           },
           {
             "title": "Vicinae Launcher"

@@ -100,6 +100,3 @@ jobs:
         nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
         nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop --impure
         nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
-        # Asahi NixOS
-        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-m1-mac-mini --impure
-        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result

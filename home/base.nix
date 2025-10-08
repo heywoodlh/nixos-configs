@@ -289,6 +289,12 @@ let
   myProxychains = pkgs.writeShellScriptBin "proxychains" ''
     ${pkgs.proxychains-ng}/bin/proxychains4 -q "$@"
   '';
+  wake-spencer-gaming-pc = pkgs.writeShellScriptBin "wake-spencer-gaming-pc.sh" ''
+    ${pkgs.openssh}/bin/ssh spencer-router /opt/public/wake-spencer-gaming.sh
+  '';
+  wake-sarah-gaming-pc = pkgs.writeShellScriptBin "wake-sarah-gaming-pc.sh" ''
+    ${pkgs.openssh}/bin/ssh spencer-router /opt/public/wake-sarah-gaming.sh
+  '';
 in {
   home.stateVersion = "24.11";
   home.enableNixpkgsReleaseCheck = false;
@@ -377,6 +383,8 @@ in {
     nixos-configs-test
     youtube-dl-mp3
     myProxychains
+    wake-spencer-gaming-pc
+    wake-sarah-gaming-pc
   ];
 
   # Enable password-store
@@ -887,6 +895,4 @@ in {
       socks5 100.115.177.85 1080
     '';
   };
-
-
 }

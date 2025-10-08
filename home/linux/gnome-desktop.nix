@@ -142,7 +142,7 @@ in {
       name = lib.mkForce "launcher";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10" = {
-      binding = lib.mkForce "<Ctrl><Shift>space";
+      binding = lib.mkForce "<Control>space";
       command = lib.mkForce "${myVicinae}/bin/vicinae";
       name = lib.mkForce "launcher-2";
     };

@@ -45,18 +45,8 @@ let
   gomuks_keybindings_file = if stdenv.isDarwin
   then "Library/Application Support/gomuks/keybindings.yaml"
   else ".config/gomuks/keybindings.yaml";
-  op-wrapper = pkgs.writeShellScript "op-wrapper.sh" ''
-    mkdir -p ~/.1password
-    chmod 700 ~/.1password
-    [[ -e ~/.1password/session.sh ]] && export $(head -1 ~/.1password/session.sh)
-    # Check if we can't access the account
-    if ! ${pkgs._1password-cli}/bin/op --session="''${OP_SESSION}" account get &>/dev/null
-    then
-      [[ -e ~/.1password/session.sh ]] && rm ~/.1password/session.sh
-      env | grep -iqE "^OP_SESSION" || export OP_SESSION=$(${pkgs._1password-cli}/bin/op signin --raw) && echo "OP_SESSION=''${OP_SESSION}" > ~/.1password/session.sh
-    fi
-    ${pkgs._1password-cli}/bin/op --session="''${OP_SESSION}" --account my "$@"
-  '';
+  op-wrapper = "${myFlakes.packages.${system}.op-wrapper}/bin/op-wrapper";
+  myOpWrapper = myFlakes.packages.${system}.op-wrapper;
   op-backup-script = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/c938124eff5dddd3aad226a5a5a6ae65441211b7/backup.sh";
     sha256 = "sha256:12cbni566245m513r2w8lng11gzbl148mlnlscwzwbkxhpacwz9d";
@@ -72,11 +62,7 @@ let
   op-backup = pkgs.writeShellScriptBin "op-backup" ''
     bash ${op-backup-script} l.spencer.heywood@protonmail.com ${op-backup-dir}
   '';
-  op-unlock = ''
-    env | grep -iqE "^OP_SESSION" || eval $(${pkgs._1password-cli}/bin/op signin)
-  '';
   op-base = ''
-    ${op-unlock}
     id="$(${op-wrapper} item list | grep -vE '^ID' | ${pkgs.fzf}/bin/fzf --reverse | awk '{print $1}')"
     [[ -z "$id" ]] && exit 0 # exit if no selection was made
   '';
@@ -385,6 +371,7 @@ in {
     myProxychains
     wake-spencer-gaming-pc
     wake-sarah-gaming-pc
+    myOpWrapper
   ];
 
   # Enable password-store
@@ -416,27 +403,54 @@ in {
     source = op-wrapper;
   };
 
-  home.file.".config/fish/machine.fish" = {
-    text = ''
-      function ssh-unlock
-        set -gx SSH_AUTH_SOCK "$HOME/.ssh/agent.sock"
-        if ! ${pkgs.ps}/bin/ps -fjH -u $USER | ${pkgs.gnugrep}/bin/grep ssh-agent | ${pkgs.gnugrep}/bin/grep -q "$HOME/.ssh/agent.sock" &> /dev/null
-            mkdir -p $HOME/.ssh
-            rm -f $HOME/.ssh/agent.sock &> /dev/null
+  home.file.".config/fish/machine.fish".text = ''
+    function ssh-unlock
+      set -gx SSH_AUTH_SOCK "$HOME/.ssh/agent.sock"
+      if ! ${pkgs.ps}/bin/ps -fjH -u $USER | ${pkgs.gnugrep}/bin/grep ssh-agent | ${pkgs.gnugrep}/bin/grep -q "$HOME/.ssh/agent.sock" &> /dev/null
+          mkdir -p $HOME/.ssh
+          rm -f $HOME/.ssh/agent.sock &> /dev/null
+          eval $(${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
+      else
+          # Start ssh-agent if old process exists but socket file is gone
+          # Or if SSH_AUTH_SOCK != $HOME/.ssh/agent.sock
+          if ! test -e $HOME/.ssh/agent.sock || test "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent.sock"
+            # Kill old ssh-agent process
+            ${pkgs.procps}/bin/pkill -9 ssh-agent &> /dev/null || true
             eval $(${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
-        else
-            # Start ssh-agent if old process exists but socket file is gone
-            # Or if SSH_AUTH_SOCK != $HOME/.ssh/agent.sock
-            if ! test -e $HOME/.ssh/agent.sock || test "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent.sock"
-              # Kill old ssh-agent process
-              ${pkgs.procps}/bin/pkill -9 ssh-agent &> /dev/null || true
-              eval $(${pkgs.openssh}/bin/ssh-agent -t 4h -c -a "$HOME/.ssh/agent.sock") &> /dev/null || true
-            end
-        end
-        ${op-wrapper} read 'op://Personal/rlt3q545cf5a4r4arhnb4h5qmi/private_key' | ${pkgs.openssh}/bin/ssh-add -t 4h -
+          end
       end
-    '';
-  };
+      ${op-wrapper} read 'op://Personal/rlt3q545cf5a4r4arhnb4h5qmi/private_key' | ${pkgs.openssh}/bin/ssh-add -t 4h -
+    end
+  '';
+
+  home.file.".kube/config".text = ''
+    apiVersion: v1
+    clusters:
+    - cluster:
+        insecure-skip-tls-verify: true
+        server: https://homelab.barn-banana.ts.net:6443
+      name: k3s
+    contexts:
+    - context:
+        cluster: k3s
+        user: k3s
+      name: k3s
+    current-context: k3s
+    kind: Config
+    preferences: {}
+    users:
+    - name: k3s
+      user:
+        exec:
+          apiVersion: client.authentication.k8s.io/v1beta1
+          command: ${op-wrapper}
+          args:
+          - read
+          - "op://Kubernetes/s5dqdxlxnvhvdnq4pbyzg22swa/user-data"
+          env: null
+          provideClusterInfo: false
+  '';
+
 
   # Aerc
   home.file.".config/aerc/accounts.conf" = {
@@ -649,8 +663,7 @@ in {
   home.file."bin/aerc" = {
     executable = true;
     text = ''
-      #!/usr/bin/env fish
-      ${op-unlock}
+      #!/${pkgs.fish}/bin/fish
       ${pkgs.aerc}/bin/aerc "$argv"
     '';
   };

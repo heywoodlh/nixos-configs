@@ -23,7 +23,20 @@ in {
   home.file.".config/fish/config.fish".text = ''
     function aerc
       set aerc_bin (which aerc)
+      test -e ~/.1password/session.sh && export (head -1 ~/.1password/session.sh)
       op-unlock && $aerc_bin $argv
+    end
+
+    function k9s
+      set k9s_bin (which k9s)
+      test -e ~/.1password/session.sh && export (head -1 ~/.1password/session.sh)
+      op-unlock && $k9s_bin $argv
+    end
+
+    function kubectl
+      set kubectl_bin (which kubectl)
+      test -e ~/.1password/session.sh && export (head -1 ~/.1password/session.sh)
+      op-unlock && $kubectl_bin $argv
     end
   '';
 

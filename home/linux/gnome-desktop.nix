@@ -127,10 +127,16 @@ in {
     text = "";
   };
 
-  # Install extensions with gnome-extensions-cli so I have more control
-  home.activation.install-gnome-extensions = ''
-    ${myGnomeExtensionsInstaller}/bin/gnome-ext-install
-  '';
+  home.activation = {
+    # Install extensions with gnome-extensions-cli so I have more control
+    install-gnome-extensions = ''
+      ${myGnomeExtensionsInstaller}/bin/gnome-ext-install
+    '';
+    # Kill vicinae if it's running to ensure new version is used
+    kill-vicinae = ''
+      ${pkgs.procps}/bin/pkill -9 vicinae &>/dev/null || true
+    '';
+  };
 
   # Now managed by my gnome flake
   # Only Home-Manager-specific settings should live here

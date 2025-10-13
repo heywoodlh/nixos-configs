@@ -33,6 +33,7 @@ in {
       ./hardware-configuration.nix
       ../../desktop.nix
       ../../roles/monitoring/osquery.nix
+      ../../roles/storage/icloud-sftp.nix
       lanzaboote.nixosModules.lanzaboote
       nixos-hardware.nixosModules.lenovo-thinkpad-x270
       x270-fingerprint-driver.nixosModules."06cb-009a-fingerprint-sensor"

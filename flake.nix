@@ -413,9 +413,6 @@
               boot.loader.efi.canTouchEfiVariables = false;
               networking.hostName = "nixos-m1-mac-mini";
               time.timeZone = "America/Denver";
-              users.users.heywoodlh.packages = with pkgs; [
-                rustdesk-flutter
-              ];
             }
             ./nixos/hosts/m1-mac-mini.nix
             ./nixos/desktop.nix

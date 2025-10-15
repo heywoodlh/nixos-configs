@@ -18,6 +18,17 @@ let
     fi
     ${pkgs.flatpak}/bin/flatpak run --user app.zen_browser.zen || ${pkgs.libnotify}/bin/notify-send "Failed to launch Zen Browser"
   '';
+  rustdesk-wrapper = pkgs.writeShellScriptBin "rustdesk" ''
+    set -ex
+    ${pkgs.flatpak}/bin/flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    if ! ${pkgs.flatpak}/bin/flatpak list --user | grep -iq com.rustdesk.RustDesk
+    then
+      ${pkgs.libnotify}/bin/notify-send "Installing RustDesk flatpak"
+      ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.rustdesk.RustDesk || ${pkgs.libnotify}/bin/notify-send "Failed to install RustDesk"
+      ${pkgs.libnotify}/bin/notify-send "Installed RustDesk flatpak"
+    fi
+    ${pkgs.flatpak}/bin/flatpak run --user com.rustdesk.RustDesk || ${pkgs.libnotify}/bin/notify-send "Failed to launch RustDesk"
+  '';
   myVicinae = myFlakes.packages.${system}.vicinae;
 in {
   imports = [
@@ -148,6 +159,10 @@ in {
     {
       name = "Zen Browser";
       command = "${zen-wrapper}/bin/zen";
+    }
+    {
+      name = "RustDesk";
+      command = "${rustdesk-wrapper}/bin/rustdesk";
     }
   ];
 

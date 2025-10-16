@@ -843,6 +843,9 @@ in {
           baseURL = "${ollamaUrl}/v1";
         };
         models = {
+          "gpt-oss:20b" = {
+            name = "gpt-oss";
+          };
           "mistral:7b" = {
             name = "mistral";
           };

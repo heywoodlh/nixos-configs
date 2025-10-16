@@ -45,6 +45,10 @@ let
           name = "coolmathgames";
           url = "https://coolmathgames.com";
         }
+        {
+          name = "ClassLink";
+          url = "https://launchpad.classlink.com/southsanpete#mybackpack";
+        }
       ];
       # Render bookmarks with buku
       bookmarksJson = pkgs.writeText "bookmarks.json" (builtins.toJSON bookmarks);
@@ -389,6 +393,16 @@ in {
             .coolmathgames.com
             .crunchlabs.com
             .cdn.shopify.com
+            .classlink.com
+            .ssanpete.org
+            .adobe.com
+            .mylexia.com
+            .tegrity.com
+            .typesy.com
+            .adobe.com
+            .adobeexchange.com
+            .adobe.io
+            .adobelogin.com
           '';
         in [
           "${squid-conf}:/etc/squid/squid.conf"

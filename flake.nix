@@ -34,10 +34,6 @@
       inputs.mcphub-nvim.follows = "mcphub-nvim";
     };
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
-    x270-fingerprint-driver = {
-      url = "github:ahbnr/nixos-06cb-009a-fingerprint-sensor/25.05";
-      inputs.nixpkgs.follows = "nixos-stable";
-    };
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
       url = "github:LnL7/nix-darwin";
@@ -176,7 +172,6 @@
                       ghostty,
                       determinate-nix,
                       cart,
-                      x270-fingerprint-driver,
                       browsh,
                       omarchy,
                       vicinae-nix,

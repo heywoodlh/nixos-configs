@@ -4464,8 +4464,7 @@
         "spicetify": "spicetify_2",
         "ssh-keys": "ssh-keys_2",
         "ts-warp-nixpkgs": "ts-warp-nixpkgs",
-        "vicinae-nix": "vicinae-nix",
-        "x270-fingerprint-driver": "x270-fingerprint-driver"
+        "vicinae-nix": "vicinae-nix"
       }
     },
     "rust-overlay": {
@@ -5924,27 +5923,6 @@
       "parent": [
         "myFlakes"
       ]
-    },
-    "x270-fingerprint-driver": {
-      "inputs": {
-        "nixpkgs": [
-          "nixos-stable"
-        ]
-      },
-      "locked": {
-        "lastModified": 1748793996,
-        "narHash": "sha256-DVOoP3ZH6f1EAg5YyqOvzFnDWbzyYNeYUiZX4Lrmm4g=",
-        "owner": "ahbnr",
-        "repo": "nixos-06cb-009a-fingerprint-sensor",
-        "rev": "86e1f4d73c56464be715007d65ec5063391b433a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ahbnr",
-        "ref": "25.05",
-        "repo": "nixos-06cb-009a-fingerprint-sensor",
-        "type": "github"
-      }
     },
     "xdph": {
       "inputs": {

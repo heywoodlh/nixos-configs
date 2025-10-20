@@ -1,5 +1,5 @@
 # Config specific to Thinkpad X270
-{ config, pkgs, nixpkgs-stable, lib, lanzaboote, nixos-hardware, x270-fingerprint-driver, ... }:
+{ config, pkgs, nixpkgs-stable, lib, lanzaboote, nixos-hardware, ... }:
 
 let
   system = pkgs.system;
@@ -27,6 +27,28 @@ let
   cpuThrottleFixWrapper = pkgs.writeShellScriptBin "cpu-throttle-fix-wrapper" ''
     sudo ${cpuThrottleFix}
   '';
+
+  libfprint-2-tod1-vfs0090-overlay = self: super:
+  {
+    libfprint-2-tod1-vfs0090 =
+      (super.libfprint-2-tod1-vfs0090.override {
+        libfprint-tod = super.libfprint-tod.overrideAttrs (old: rec {
+          version = "1.90.7+git20210222+tod1";
+          src = old.src.overrideAttrs {
+            rev = "v${version}";
+            outputHash = "0cj7iy5799pchyzqqncpkhibkq012g3bdpn18pfb19nm43svhn4j";
+            outputHashAlgo = "sha256";
+          };
+          buildInputs = (old.buildInputs or []) ++ [self.nss];
+          mesonFlags = [
+            "-Ddrivers=all"
+            "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
+          ];
+        });
+      })
+      .overrideAttrs
+      {meta.broken = false;};
+  };
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -36,8 +58,9 @@ in {
       ../../roles/storage/icloud-sftp.nix
       lanzaboote.nixosModules.lanzaboote
       nixos-hardware.nixosModules.lenovo-thinkpad-x270
-      x270-fingerprint-driver.nixosModules."06cb-009a-fingerprint-sensor"
     ];
+
+  nixpkgs.overlays = [ libfprint-2-tod1-vfs0090-overlay ];
 
   # Bootloader
   boot.loader.systemd-boot.enable = false; # using lanzaboote
@@ -160,27 +183,16 @@ in {
   };
 
   # Fingerprint reader support
-  #services.fprintd.enable = true;
-  #services.fprintd.tod.enable = true;
-  # https://github.com/ahbnr/nixos-06cb-009a-fingerprint-sensor/blob/24.11/SETUP-24.11.md#setup-based-on-fprintd-and-bingchs-driver
-  # First, enable the python-validity service below, then run:
-  #   ```
-  #   systemctl stop python3-validity
-  #   validity-sensors-firmware
-  #   systemctl start python3-validity
-  #   fprintd-enroll
-  #   fprintd-enroll -f "right-middle-finger"
-  #   ```
-  # Then disable the python-validity service below and enable the libfprint-tod service below.
-  services."06cb-009a-fingerprint-sensor" = {
+  services.fprintd = {
     enable = true;
-    backend = "python-validity";
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-vfs0090;
+    };
   };
-  #services."06cb-009a-fingerprint-sensor" = {
-  #  enable = true;
-  #  backend = "libfprint-tod";
-  #  calib-data-file = /var/lib/python-validity/calib-data.bin;
-  #};
+  security.pam.services.login.fprintAuth = lib.mkForce true;
+  security.pam.services.sudo.fprintAuth = true;
+  security.pam.services.gdm.fprintAuth = true;
 
   services.spotifyd.enable = true;
 }

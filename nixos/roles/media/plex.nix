@@ -167,20 +167,21 @@ in {
       #  ];
       #  extraOptions = [ "--network=host" ]; # For tailscale/ntfy.sh to work
       #};
-      openaudible = {
-        image = "docker.io/openaudible/openaudible:latest";
-        autoStart = true;
-        ports = ["3005:3000"];
-        environment = {
-          PGID = "995";
-          PUID = "995";
-        };
-        volumes = [
-          "/media/config/services/openaudible:/config/OpenAudible"
-          "/media/home-media/disk2/books:/media/home-media/disk2/books"
-          "${resolv-conf}:/etc/resolv.conf"
-        ];
-      };
+      # using Kubernetes for openaudible
+      #openaudible = {
+      #  image = "docker.io/openaudible/openaudible:latest";
+      #  autoStart = true;
+      #  ports = ["3005:3000"];
+      #  environment = {
+      #    PGID = "995";
+      #    PUID = "995";
+      #  };
+      #  volumes = [
+      #    "/media/config/services/openaudible:/config/OpenAudible"
+      #    "/media/home-media/disk2/books:/media/home-media/disk2/books"
+      #    "${resolv-conf}:/etc/resolv.conf"
+      #  ];
+      #};
     };
   };
 }

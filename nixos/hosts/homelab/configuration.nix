@@ -30,7 +30,6 @@ in {
     ../../roles/nixos/cache-populator.nix
     ../../roles/media/plex.nix
     ../../roles/media/youtube.nix
-    ../../roles/media/ebook2audiobook.nix
     ../../roles/monitoring/iperf.nix
     ../../roles/storage/nfs-media.nix
     ../../roles/remote-access/cloudflared.nix
@@ -196,4 +195,17 @@ in {
   services.xserver.videoDrivers = [
     "i915"
   ];
+
+  # Do not start k3s is media drives fail
+  systemd.services.k3s = let
+    mediaMounts = [
+      "media-data\\x2dssd.mount"
+      "media-home\\x2dmedia-disk1.mount"
+      "media-home\\x2dmedia-disk2.mount"
+      "media-home\\x2dmedia-disk3.mount"
+    ];
+  in {
+    after = mediaMounts;
+    requires = mediaMounts;
+  };
 }

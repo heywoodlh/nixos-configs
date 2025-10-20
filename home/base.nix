@@ -451,7 +451,6 @@ in {
           provideClusterInfo: false
   '';
 
-
   # Aerc
   home.file.".config/aerc/accounts.conf" = {
     enable = true;

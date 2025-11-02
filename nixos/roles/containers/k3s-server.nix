@@ -152,9 +152,13 @@ in {
       fixDns = pkgs.writeShellScript "k3s-fix-dns" ''
         until kubectl get nodes/homelab | grep -q Ready
         do
-          kubectl apply -f ${corednsConfigmap}
-          kubectl get -n kube-system pods | grep coredns | awk '{print $1}' | xargs kubectl -n kube-system delete pod
+            echo "Waiting for node to be Ready"
+            sleep 5
         done
+        echo "Node is ready, applying CoreDNS configmap"
+        kubectl apply -f ${corednsConfigmap}
+        echo "Restarting CoreDNS"
+        kubectl get -n kube-system pods | grep coredns | awk '{print $1}' | xargs kubectl -n kube-system delete pod
       '';
     in {
       enable = config.networking.hostName == "homelab";

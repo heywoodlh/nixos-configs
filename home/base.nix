@@ -533,7 +533,7 @@ in {
       main:
         'Ctrl+Down': next_room
         'Ctrl+Up': prev_room
-        'Ctrl+k': search_rooms
+        'Ctrl+Shift+k': search_rooms
         'Ctrl+Home': scroll_up
         'Ctrl+End': scroll_down
         'Ctrl+Enter': add_newline

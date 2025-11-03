@@ -1,7 +1,7 @@
 { config, pkgs, determinate-nix, home-manager, myFlakes, nur, ts-warp-nixpkgs, qutebrowser, ghostty, iamb-home-manager, hexstrike-ai, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   nixPkg = determinate-nix.packages.${system}.default;
 in {
   # Define user settings

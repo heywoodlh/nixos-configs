@@ -1,7 +1,7 @@
 { config, pkgs, nixpkgs-backports, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
 in {
   imports =
   [ # Include the results of the hardware scan.

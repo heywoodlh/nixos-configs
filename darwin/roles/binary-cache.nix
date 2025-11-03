@@ -1,7 +1,7 @@
 { config, pkgs, lib, darwin, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   atticServer = pkgs.attic-server;
   atticClient = pkgs.attic-client;
   darwinRebuild = darwin.packages.${system}.darwin-rebuild;

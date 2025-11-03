@@ -2,7 +2,7 @@
 { config, pkgs, nixpkgs-stable, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   stable-pkgs = nixpkgs-stable.legacyPackages.${system};
 in {
   networking.firewall.allowedTCPPorts = [ 6443 ];

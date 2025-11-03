@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.qutebrowser;
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
   qutebrowser-config = myFlakes.packages.${system}.qutebrowser-config;
 in {

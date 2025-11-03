@@ -1,7 +1,7 @@
 { config, pkgs, home-manager, myFlakes, dark-wallpaper, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
   snowflake = ../../assets/nixos-snowflake.png;
   captive-portal = pkgs.writeShellScriptBin "captive-portal" ''

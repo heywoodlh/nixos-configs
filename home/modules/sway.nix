@@ -9,7 +9,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.sway;
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   snowflake = ../../assets/nixos-snowflake.png;
   pkgs-stable = nixpkgs-stable.legacyPackages.${system};
   homeDir = config.home.homeDirectory;

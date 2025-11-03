@@ -1,6 +1,6 @@
 { pkgs, nvidia-patch, nixpkgs-nvidia, ... }:
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   pkgs-nvidia = import nixpkgs-nvidia {
     inherit system;
     config.allowUnfree = true;

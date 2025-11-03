@@ -1,7 +1,7 @@
 { config, pkgs, myFlakes, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
 in {
   home.file.".local/share/applications/spotify.desktop" = {

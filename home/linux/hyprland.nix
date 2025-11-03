@@ -1,7 +1,7 @@
 { config, pkgs, lib, home-manager, hyprland, myFlakes, dark-wallpaper, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
 in {
   imports = [

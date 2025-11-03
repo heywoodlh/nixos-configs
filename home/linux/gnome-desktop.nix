@@ -1,7 +1,7 @@
 { config, pkgs, lib, nixpkgs-stable, nixpkgs-lts, vicinae-nix, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
   myFish = myFlakes.packages.${system}.fish;
   myWezterm = myFlakes.packages.${system}.wezterm;

@@ -2,7 +2,7 @@
 { config, pkgs, nixpkgs-stable, lib, spicetify, lanzaboote, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   stable-pkgs = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
@@ -30,16 +30,37 @@ in {
   # Set your time zone
   time.timeZone = "America/Denver";
 
+  programs.steam = {
+    enable = true;
+    package = pkgs.steam.override {
+      extraPkgs =
+        p: with p; [
+          libkrb5
+          keyutils
+        ];
+
+      # Disable GPU for Steam to work with Intel Arc GPU
+      steam-unwrapped = pkgs.steam-unwrapped.overrideAttrs (oldAttrs: {
+        postInstall = ''
+          ${oldAttrs.postInstall or ""}
+
+          substituteInPlace $out/share/applications/steam.desktop \
+            --replace-fail "Exec=steam" "Exec=steam -cef-disable-gpu"
+        '';
+      });
+    };
+  };
   # Configuration for this machine
   home-manager.users.heywoodlh = {
     imports = [
       ../../../home/roles/discord.nix
     ];
+
     home.packages = with pkgs; [
-      stable-pkgs.beeper
       gimp
       moonlight-qt
-      spicetify.packages.x86_64-linux.nord
+      protonup-ng
+      stable-pkgs.beeper
       stable-pkgs.legcord
       stable-pkgs.rustdesk
       zoom-us
@@ -51,6 +72,7 @@ in {
     #clevis
     lanzaboote
     sbctl
+    yubikey-personalization
   ];
 
   # Hard limits for Nix
@@ -84,9 +106,6 @@ in {
     ];
   };
 
-  # Fingerprint reader support
-  services.fprintd.enable = true;
-  services.fprintd.tod.enable = true;
-  services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
-
+  # Yubikey support
+  services.udev.packages = [ pkgs.yubikey-personalization ];
 }

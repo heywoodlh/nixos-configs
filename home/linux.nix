@@ -8,7 +8,7 @@ let
   cpuspeed = pkgs.writeShellScriptBin "cpuspeed" ''
     sudo ${pkgs.dmidecode}/bin/dmidecode -t processor | ${pkgs.gnugrep}/bin/grep -i mhz
   '';
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
 in {
   imports = [
     ./base.nix

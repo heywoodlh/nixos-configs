@@ -1,7 +1,7 @@
 { config, pkgs, home-manager, nur, lib, myFlakes, determinate-nix, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   nixPkg = determinate-nix.packages.${system}.default;
   homeDir = config.home.homeDirectory;
   myTmux = myFlakes.packages.${system}.tmux;

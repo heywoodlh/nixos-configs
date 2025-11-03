@@ -1,7 +1,7 @@
 { config, pkgs, signal-ntfy, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   wrapper = pkgs.writeShellScript "ntfy-mirror" ''
     source /home/heywoodlh/.config/signal-cli/vars.sh
     ${signal-ntfy.packages.${system}.ntfy-mirror}/bin/main

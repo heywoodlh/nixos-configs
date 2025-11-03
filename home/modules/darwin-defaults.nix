@@ -5,7 +5,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.darwin.defaults;
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
 in {
   options = {

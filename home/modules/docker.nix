@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.dockerBins;
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
   docker-check = pkgs.writeShellScript "docker-check" ''
     # Ensure docker is running

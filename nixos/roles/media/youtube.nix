@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   resolvConf = pkgs.writeText "resolv.conf" ''
     nameserver 1.1.1.1
     nameserver 1.0.0.1

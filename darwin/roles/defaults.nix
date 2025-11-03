@@ -1,7 +1,7 @@
 { config, pkgs, myFlakes, determinate-nix, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
 in {
   #package config
   nixpkgs.config.allowUnfree = true;

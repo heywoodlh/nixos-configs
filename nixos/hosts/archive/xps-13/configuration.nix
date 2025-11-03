@@ -2,7 +2,7 @@
 { config, pkgs, nixpkgs-stable, nixpkgs-pam-lid-fix, lib, spicetify, lanzaboote, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   stable-pkgs = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;

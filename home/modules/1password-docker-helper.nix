@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.docker-credential-1password;
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   docker-helper = pkgs.writeShellScriptBin "docker-credential-1password" ''
     #https://github.com/xebia/docker-credential-1password/
     # ENVIRONMENT

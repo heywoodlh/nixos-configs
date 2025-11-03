@@ -2,7 +2,7 @@
 { config, pkgs, determinate-nix, nixpkgs-stable, lib, nur, home-manager, iamb-home-manager, browsh, hexstrike-ai, mcphub, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   stdenv = pkgs.stdenv;
   stable-pkgs = import nixpkgs-stable {
     inherit system;

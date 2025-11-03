@@ -13,10 +13,6 @@
   virtualisation.libvirtd = {
     enable = true;
     onBoot = "start";
-    qemu.ovmf = {
-      enable = true;
-      packages = [ pkgs.OVMFFull.fd ];
-    };
     qemu.swtpm.enable = true;
   };
 

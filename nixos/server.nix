@@ -6,7 +6,7 @@
   ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   myVim = myFlakes.packages.${system}.vim;
   myGit = myFlakes.packages.${system}.git;

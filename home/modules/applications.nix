@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.applications;
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   snowflake = ../../assets/nixos-snowflake.png;
   icnsDir = ./icns;
   renameIcns = name: pkgs.stdenv.mkDerivation {

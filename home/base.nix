@@ -1,7 +1,7 @@
 { config, pkgs, lib, home-manager, nur, myFlakes, iamb-home-manager, modulesPath, hexstrike-ai, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   stdenv = pkgs.stdenv;
   homeDir = config.home.homeDirectory;
   myFish = myFlakes.packages.${system}.fish;

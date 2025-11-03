@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.lima;
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
 
   limaArgs = if pkgs.stdenv.isDarwin then "--vm-type=vz" else "";

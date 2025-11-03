@@ -5,7 +5,7 @@ let
   sshdDirectory = "${config.user.home}/sshd";
   pathToPubKey = ssh-keys.outPath;
   port = 8022;
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   myVim = myFlakes.packages.${system}.vim;
   myGit = myFlakes.packages.${system}.git;
 in

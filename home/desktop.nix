@@ -1,7 +1,7 @@
 { config, pkgs, lib, home-manager, nur, myFlakes, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
   #browser = if system != "aarch64-linux" then "mullvad-browser" else "firefox";
   browser = "firefox";

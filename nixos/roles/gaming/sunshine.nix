@@ -1,7 +1,7 @@
 { config, lib, pkgs, home-manager, plasma-manager, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   # using pre-release for now
   # (this URL is updated daily, so will break)
   sunshineExe = pkgs.fetchurl {

@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.darwin.yabai;
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   choose = choose-nixpkgs.legacyPackages.${system}.choose-gui;
   choose-launcher-sh = pkgs.writeShellScriptBin "choose-launcher.sh" ''
     application_dirs="/Applications/ /System/Applications/ /System/Library/CoreServices/ /System/Applications/Utilities/"

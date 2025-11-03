@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
   snowflake = ../../assets/nixos-snowflake.png;
   discordIcon = builtins.fetchurl {

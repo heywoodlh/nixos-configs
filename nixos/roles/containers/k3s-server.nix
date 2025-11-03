@@ -1,7 +1,7 @@
 { config, pkgs, home-manager, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   lib = pkgs.lib;
 in {
   networking.firewall.allowedTCPPorts = [ 6443 ];

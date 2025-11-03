@@ -1,7 +1,7 @@
 { config, pkgs, lib, home-manager, omarchy, myFlakes, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
 in {
   imports = [
     omarchy.nixosModules.default

@@ -4,7 +4,7 @@
   ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   battpop = pkgs.writeShellScriptBin "battpop" ''
     ${pkgs.acpi}/bin/acpi -b | ${pkgs.gnugrep}/bin/grep -Eo [0-9]+%

@@ -1,7 +1,7 @@
 { config, determinate-nix, pkgs, myFlakes, darwin, nixpkgs-apple-containers, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   nixPkg = determinate-nix.packages.${system}.default;
   container = nixpkgs-apple-containers.legacyPackages.${system}.container;
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''

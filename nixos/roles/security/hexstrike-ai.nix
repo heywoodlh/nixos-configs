@@ -1,7 +1,7 @@
 { config, pkgs, hexstrike-ai, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   hexstrike-ai-pkg = hexstrike-ai.packages.${system}.hexstrike-ai-server;
   hexstrike-ai-container = pkgs.dockerTools.buildImage {
     name = "docker.io/heywoodlh/hexstrike-ai";

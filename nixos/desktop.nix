@@ -8,7 +8,7 @@
   ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   pkgs-stable = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;

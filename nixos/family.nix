@@ -2,7 +2,7 @@
 { config, pkgs, determinate-nix, home-manager, nur, ... }:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   stdenv = pkgs.stdenv;
   render-bookmarks = pkgs.stdenv.mkDerivation {
     name = "render-bookmarks";

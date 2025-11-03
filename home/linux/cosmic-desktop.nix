@@ -14,7 +14,7 @@
 # - [] super+[: left workspace
 # - [] ctrl+`: guake
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
 in {

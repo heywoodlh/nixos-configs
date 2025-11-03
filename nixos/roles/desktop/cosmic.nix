@@ -1,7 +1,7 @@
 { config, pkgs, lib, nixos-cosmic, ...}:
 
 let
-  system = pkgs.system;
+  system = pkgs.stdenv.hostPlatform.system;
 in {
   imports = [
     nixos-cosmic.nixosModules.default

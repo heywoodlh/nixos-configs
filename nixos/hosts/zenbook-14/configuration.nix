@@ -12,7 +12,7 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../laptop.nix
-      #../../roles/desktop/hyprland.nix
+      ../../roles/gaming/steam.nix
       lanzaboote.nixosModules.lanzaboote
     ];
 
@@ -30,32 +30,11 @@ in {
   # Set your time zone
   time.timeZone = "America/Denver";
 
-  programs.steam = {
-    enable = true;
-    package = pkgs.steam.override {
-      extraPkgs =
-        p: with p; [
-          libkrb5
-          keyutils
-        ];
-
-      # Disable GPU for Steam to work with Intel Arc GPU
-      steam-unwrapped = pkgs.steam-unwrapped.overrideAttrs (oldAttrs: {
-        postInstall = ''
-          ${oldAttrs.postInstall or ""}
-
-          substituteInPlace $out/share/applications/steam.desktop \
-            --replace-fail "Exec=steam" "Exec=steam -cef-disable-gpu"
-        '';
-      });
-    };
-  };
   # Configuration for this machine
   home-manager.users.heywoodlh = {
     imports = [
       ../../../home/roles/discord.nix
     ];
-
     home.packages = with pkgs; [
       gimp
       moonlight-qt

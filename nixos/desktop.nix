@@ -261,6 +261,8 @@ in {
   # Thunderbolt 3
   services.hardware.bolt.enable = true;
 
+  services.flatpak.enable = true;
+
   # Use seahorse ssh-agent
   system.activationScripts.symlink-ssh-agent = {
     text = ''

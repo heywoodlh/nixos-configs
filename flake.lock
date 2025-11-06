@@ -2812,11 +2812,11 @@
         "zen-browser-flake": "zen-browser-flake"
       },
       "locked": {
-        "lastModified": 1762369571,
-        "narHash": "sha256-DiNGJVQ/FtqhfDrqL5l0l5G70xQn4MIikARh9eK/UVg=",
+        "lastModified": 1762462063,
+        "narHash": "sha256-yQFCoxgZoz5gDHgtl655xD3kgxcQJT4R0hYpg05eWN0=",
         "owner": "heywoodlh",
         "repo": "flakes",
-        "rev": "71d454d8aeacb3e767e974c41d14ab33b21ede75",
+        "rev": "5edb3a1dcde01d6bd20b0c37aedfca5dd28a1498",
         "type": "github"
       },
       "original": {

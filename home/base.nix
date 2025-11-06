@@ -45,8 +45,8 @@ let
   gomuks_keybindings_file = if stdenv.isDarwin
   then "Library/Application Support/gomuks/keybindings.yaml"
   else ".config/gomuks/keybindings.yaml";
-  op-wrapper = "${myFlakes.packages.${system}.op-wrapper}/bin/op-wrapper";
   myOpWrapper = myFlakes.packages.${system}.op-wrapper;
+  op-wrapper = "${myOpWrapper}/bin/op-wrapper";
   op-backup-script = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/c938124eff5dddd3aad226a5a5a6ae65441211b7/backup.sh";
     sha256 = "sha256:12cbni566245m513r2w8lng11gzbl148mlnlscwzwbkxhpacwz9d";
@@ -276,13 +276,13 @@ let
     ${pkgs.proxychains-ng}/bin/proxychains4 -q "$@"
   '';
   wake-spencer-gaming-pc = pkgs.writeShellScriptBin "wake-spencer-gaming-pc.sh" ''
-    ${pkgs.openssh}/bin/ssh spencer-router /opt/public/wake-spencer-gaming.sh
+    ${pkgs.openssh}/bin/ssh spencer-router.barn-banana.ts.net /opt/public/wake-spencer-gaming.sh
   '';
   wake-sarah-gaming-pc = pkgs.writeShellScriptBin "wake-sarah-gaming-pc.sh" ''
-    ${pkgs.openssh}/bin/ssh spencer-router /opt/public/wake-sarah-gaming.sh
+    ${pkgs.openssh}/bin/ssh spencer-router.barn-banana.ts.net /opt/public/wake-sarah-gaming.sh
   '';
 in {
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
   home.enableNixpkgsReleaseCheck = false;
 
   nix = {
@@ -594,6 +594,11 @@ in {
       set -g PATH "${pkgs.atuin}/bin" $PATH
       set -gx ATUIN_CONFIG_DIR "${atuinConfigDir}/atuin"
       ${pkgs.atuin}/bin/atuin init fish --disable-up-arrow | source
+
+      # Delete invalid session.sh file if exists
+      if test -e $HOME/.1password/session.sh
+          ${pkgs.gnugrep}/bin/grep -iqE '^OP_SESSION' $HOME/.1password/session.sh || rm -f $HOME/.1password/session.sh
+      end
 
       # Remove all 1Password session variables
       function op-clear

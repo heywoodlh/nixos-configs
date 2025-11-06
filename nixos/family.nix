@@ -118,7 +118,7 @@ in {
   home-manager = {
     backupFileExtension = ".bak";
     users.family = { ... }: {
-      home.stateVersion = "24.11";
+      home.stateVersion = "25.05";
       home.activation.flatpak = ''
         echo "Installing Flatpaks..."
         ${pkgs.gnome-software}/bin/gnome-software --quit || true # kill gnome-software so flatpaks show up in search

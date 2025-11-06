@@ -29,8 +29,7 @@ jobs:
     - name: Login to Tailnet
       env:
         HOSTNAME: github-actions-nixos-configs-darwin
-      #uses: tailscale/github-action@v3
-      uses: propelinc/tailscale-github-action@main
+      uses: tailscale/github-action@v4.1.0
       with:
         oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
         oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}

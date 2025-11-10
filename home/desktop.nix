@@ -253,8 +253,8 @@ let
             updateInterval = 24 * 60 * 60 * 1000; # every day
           };
         };
-        default = "leta";
-        privateDefault = "leta";
+        default = "kagi";
+        privateDefault = "duckduckgo";
       };
       userChrome = userChrome;
       settings = browser-settings;

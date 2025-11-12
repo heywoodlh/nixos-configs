@@ -133,7 +133,6 @@ in {
     docker
     ollama_pull
     nfdump
-    nvtopPackages.full
     runc
   ];
 
@@ -169,7 +168,9 @@ in {
     "/media/data-ssd/ollama"
     "/opt/syncthing/mac-mini-vm"
     "/opt/syncthing/clone-hero-songs"
-    "/opt/syncthing/nixpkgs"
+    "/opt/syncthing/opt/nixpkgs"
+    "/opt/syncthing/gamma"
+    "/opt/syncthing/anomaly"
   ];
 
   # Resolve too many open files error

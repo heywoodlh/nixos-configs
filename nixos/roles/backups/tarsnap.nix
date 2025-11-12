@@ -62,6 +62,8 @@ in {
           ".cache"
           ".lima"
           ".local"
+          "anomaly"
+          "gamma"
         ];
       };
     };

@@ -1,7 +1,10 @@
 { config, pkgs, lib, ... }:
 
 {
-  programs.steam.enable = true;
+  programs.steam = {
+    enable = true;
+    protontricks.enable = true;
+  };
 
   # Add KDE for gaming
   services.desktopManager.plasma6.enable = true;

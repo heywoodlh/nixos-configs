@@ -6,3 +6,12 @@ roles/home-manager/linux.nix:generic-api-key:219
 roles/home-manager/linux.nix:generic-api-key:222
 roles/home-manager/linux.nix:generic-api-key:223
 roles/home-manager/linux/desktop.nix:curl-auth-user:46
+flakes/ansible/workstation/roles/users/files/1password-settings.json:generic-api-key:17
+flakes/1password/flake.nix:generic-api-key:38
+flakes/1password/flake.nix:generic-api-key:39
+flakes/1password/flake.nix:generic-api-key:42
+flakes/1password/flake.nix:generic-api-key:43
+flakes/ansible/workstation/roles/users/files/1password-settings.json:generic-api-key:18
+flakes/ansible/workstation/roles/users/files/1password-settings.json:generic-api-key:21
+flakes/ansible/workstation/roles/users/files/1password-settings.json:generic-api-key:22
+

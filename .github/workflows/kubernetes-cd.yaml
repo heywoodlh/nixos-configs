@@ -2,15 +2,15 @@ name: kubernetes cd
 
 on:
   workflow_dispatch:
-  #schedule:
-  #  - cron: "0 0 * * 2"
-  #push:
-  #  branches:
-  #    - master
-  #  paths:
-  #    - flakes/kube/**
-  #    - '!flakes/kube/**.md'
-  #    - .github/workflows/kubernetes-cd.yaml
+  schedule:
+    - cron: "0 0 * * 2"
+  push:
+    branches:
+      - master
+    paths:
+      - flakes/kube/**
+      - '!flakes/kube/**.md'
+      - .github/workflows/kubernetes-cd.yaml
 
 jobs:
   render-manifests:

@@ -1,0 +1,75 @@
+# Not managed with CI/CD
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: intel-nfd
+  namespace: argo
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/intel/intel-device-plugins-for-kubernetes.git
+    targetRevision: v0.34.0
+    path: deployments/nfd
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: intel-nfd-overlays
+  namespace: argo
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/intel/intel-device-plugins-for-kubernetes.git
+    targetRevision: v0.34.0
+    path: deployments/nfd/overlays/node-feature-rules
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: intel-gpu-daemonset
+  namespace: argo
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/intel/intel-device-plugins-for-kubernetes.git
+    targetRevision: v0.34.0
+    path: deployments/gpu_plugin/overlays/nfd_labeled_nodes
+    kustomize:
+      patches:
+      - target:
+          kind: DaemonSet
+          name: intel-gpu-plugin
+        patch: |
+          - op: add
+            path: /spec/template/spec/containers/0/args
+            value:
+              - -shared-dev-num=10
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+

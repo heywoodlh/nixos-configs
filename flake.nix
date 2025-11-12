@@ -27,7 +27,7 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     myFlakes = {
-      url = "github:heywoodlh/flakes";
+      url = ./flakes;
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
       inputs.vicinae-nix.follows = "vicinae-nix";
@@ -124,7 +124,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-darwin.follows = "darwin";
     };
-    browsh.url = "github:heywoodlh/flakes?dir=browsh";
+    browsh.url = ./flakes/browsh;
     omarchy = {
       url = "github:henrysipp/omarchy-nix";
       inputs.nixpkgs.follows = "nixpkgs";

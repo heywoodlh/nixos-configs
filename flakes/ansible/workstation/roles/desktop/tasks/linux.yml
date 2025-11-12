@@ -1,0 +1,68 @@
+---
+- name: install gnome and gdm
+  ansible.builtin.apt:
+    name:
+      - gdm3
+      - gnome-control-center
+      - gnome-shell
+      - network-manager
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: install firefox on debian derivatives that are not debian
+  ansible.builtin.apt:
+    name:
+      - firefox
+  when:
+    - ansible_os_family == 'Debian'
+    - ansible_distribution != 'Debian'
+
+- name: ensure ubuntu-desktop is installed on ubuntu
+  ansible.builtin.apt:
+    name:
+      - ubuntu-desktop
+  when:
+    - ansible_distribution == 'Ubuntu'
+
+- name: install firefox on debian
+  ansible.builtin.apt:
+    name:
+      - firefox-esr
+  when: ansible_distribution == 'Debian'
+
+- name: install gnome and gdm
+  community.general.pacman:
+    name:
+      - gdm
+      - gnome-control-center
+      - gnome-shell
+      - gnome-terminal
+      - firefox
+      - networkmanager
+    update_cache: yes
+  when: ansible_os_family == 'Archlinux'
+
+- name: enable gdm
+  ansible.builtin.systemd:
+    name: gdm
+    enabled: yes
+  when: ansible_os_family == 'Archlinux'
+
+- name: enable network manager
+  ansible.builtin.systemd:
+    name: NetworkManager.service
+    enabled: yes
+  when: ansible_os_family == 'Archlinux'
+
+- name: disable error reporting in ubuntu
+  ansible.builtin.replace:
+    path: /etc/default/apport
+    regexp: 'enabled=1'
+    replace: 'enabled=0'
+  when: ansible_distribution == 'Ubuntu'
+  register: disable_apport
+
+- name: kill apport
+  ansible.builtin.shell: "killall system-crash-notification"
+  when: ansible_distribution == 'Ubuntu'
+  ignore_errors: true

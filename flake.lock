@@ -124,20 +124,14 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "dir": "browsh",
-        "lastModified": 1754464223,
-        "narHash": "sha256-frPCS9giNLUL8ixDCtqvVQPe9p7UaHU+e7Rf+cAqCqY=",
-        "owner": "heywoodlh",
-        "repo": "flakes",
-        "rev": "45d8cf36099e18880ef712b82737e32d476ecdc8",
-        "type": "github"
+        "path": "flakes/browsh",
+        "type": "path"
       },
       "original": {
-        "dir": "browsh",
-        "owner": "heywoodlh",
-        "repo": "flakes",
-        "type": "github"
-      }
+        "path": "flakes/browsh",
+        "type": "path"
+      },
+      "parent": []
     },
     "cart": {
       "inputs": {
@@ -2812,18 +2806,14 @@
         "zen-browser-flake": "zen-browser-flake"
       },
       "locked": {
-        "lastModified": 1762462063,
-        "narHash": "sha256-yQFCoxgZoz5gDHgtl655xD3kgxcQJT4R0hYpg05eWN0=",
-        "owner": "heywoodlh",
-        "repo": "flakes",
-        "rev": "5edb3a1dcde01d6bd20b0c37aedfca5dd28a1498",
-        "type": "github"
+        "path": "flakes",
+        "type": "path"
       },
       "original": {
-        "owner": "heywoodlh",
-        "repo": "flakes",
-        "type": "github"
-      }
+        "path": "flakes",
+        "type": "path"
+      },
+      "parent": []
     },
     "myFlakes_2": {
       "inputs": {

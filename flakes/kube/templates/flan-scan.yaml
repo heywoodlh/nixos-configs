@@ -1,0 +1,123 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flan-ips
+  namespace: @namespace@
+data:
+  ips.txt: |-
+    192.168.1.0/24
+    10.43.0.0/16
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flan-scan
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "flan-scan"
+    tailscale.com/tags: "tag:http"
+spec:
+  selector:
+    app: flan-scan-http
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: flan-cleanup
+  namespace: @namespace@
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: flan-cleanup
+              image: docker.io/ubuntu:24.04
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/sh", "-c"]
+              args:
+                - find /shared/reports -type f -mtime +365 -exec rm -f {} \; ;
+              volumeMounts:
+                - mountPath: /shared/reports
+                  name: flan-scan-reports
+          restartPolicy: OnFailure
+          volumes:
+            - name: flan-scan-reports
+              hostPath:
+                path: @hostfolder@
+                type: Directory
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: flan-scan
+  namespace: @namespace@
+spec:
+  schedule: "30 0 * * Sun"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          hostNetwork: true
+          containers:
+            - name: flan-scan
+              image: "@image@"
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: format
+                  value: "html"
+              volumeMounts:
+                - name: flan-ips
+                  mountPath: /shared/ips.txt
+                  subPath: ips.txt
+                - mountPath: /shared/reports
+                  name: flan-scan-reports
+          restartPolicy: OnFailure
+          volumes:
+            - name: flan-scan-reports
+              hostPath:
+                path: @hostfolder@
+                type: Directory
+            - name: flan-ips
+              configMap:
+                name: flan-ips
+                items:
+                - key: ips.txt
+                  path: ips.txt
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flan-scan-http
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: flan-scan-http
+  template:
+    metadata:
+      labels:
+        app: flan-scan-http
+    spec:
+      containers:
+        - name: flan-scan
+          image: @http_image@
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: flan-scan-reports
+              mountPath: /web
+      volumes:
+        - name: flan-scan-reports
+          hostPath:
+            path: @hostfolder@
+            type: Directory

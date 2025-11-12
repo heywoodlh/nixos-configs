@@ -1,0 +1,203 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "fleetdm"
+  namespace: "monitoring"
+spec:
+  itemPath: "vaults/Kubernetes/items/3dsvyd5opjjrdyobc3e3cgwl2i"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleet
+  namespace: monitoring
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "fleetdm"
+    tailscale.com/tags: "tag:http"
+spec:
+  selector:
+    app: fleet
+  ports:
+  - name: http
+    port: 80
+    targetPort: 9080
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleet-mysql
+  namespace: monitoring
+spec:
+  selector:
+    app: fleet-mysql
+  ports:
+  - name: mysql
+    port: 3306
+    targetPort: 3306
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleet-redis
+  namespace: monitoring
+spec:
+  selector:
+    app: fleet-redis
+  ports:
+  - name: redis
+    port: 6379
+    targetPort: 6379
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fleet
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fleet
+  template:
+    metadata:
+      labels:
+        app: fleet
+    spec:
+      containers:
+      - name: fleet
+        image: docker.io/fleetdm/fleet:c62899e
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: fleet-certs
+          mountPath: /opt/fleet/certs
+        - name: logs
+          mountPath: /logs
+        env:
+        - name: FLEET_SERVER_ADDRESS
+          value: "0.0.0.0:9080"
+        - name: FLEET_MYSQL_USERNAME
+          value: root
+        - name: FLEET_MYSQL_DATABASE
+          value: fleet
+        - name: FLEET_MYSQL_ADDRESS
+          value: "fleet-mysql:3306"
+        - name: FLEET_REDIS_ADDRESS
+          value: "fleet-redis:6379"
+        - name: FLEET_SERVER_TLS
+          value: "false"
+        - name: FLEET_MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: fleetdm
+              key: MYSQL_PASSWORD
+        - name: FLEET_FILESYSTEM_MAX_SIZE
+          value: "4096" # 4GB
+        - name: FLEET_FILESYSTEM_ENABLE_LOG_COMPRESSION
+          value: "true"
+        - name: FLEET_FILESYSTEM_ENABLE_LOG_ROTATION
+          value: "true"
+        - name: FLEET_OSQUERY_RESULT_LOG_PLUGIN
+          value: "filesystem"
+        - name: FLEET_FILESYSTEM_RESULT_LOG_FILE
+          value: "/logs/result.log"
+        - name: FLEET_FILESYSTEM_AUDIT_LOG_FILE
+          value: "/logs/audit.log"
+        - name: FLEET_FILESYSTEM_STATUS_LOG_FILE
+          value: "/logs/status.log"
+        #- name: FLEET_MDM_APPLE_APNS_CERT
+        #  value: /opt/fleet/certs/fleet-mdm-apns.pem
+        #- name: FLEET_MDM_APPLE_APNS_KEY
+        #  value: /opt/fleet/certs/fleet-mdm-apns.key
+        #- name: FLEET_MDM_APPLE_SCEP_CERT
+        #  value: /opt/fleet/certs/fleet-mdm-apple-scep.crt
+        #- name: FLEET_MDM_APPLE_SCEP_KEY
+        #  value: /opt/fleet/certs/fleet-mdm-apple-scep.key
+        #- name: FLEET_MDM_APPLE_SCEP_CHALLENGE
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: fleetdm
+        #      key: FLEET_MDM_APPLE_SCEP_CHALLENGE
+      volumes:
+      - name: fleet-certs
+        hostPath:
+          path: /opt/fleet/certs
+      - name: logs
+        hostPath:
+          path: /media/data-ssd/syslog/fleet
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fleet-mysql
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fleet-mysql
+  template:
+    metadata:
+      labels:
+        app: fleet-mysql
+    spec:
+      containers:
+      - name: fleet-mysql
+        image: docker.io/mysql:8.4.6
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        env:
+        - name: MYSQL_DATABASE
+          value: fleet
+        - name: MYSQL_HOST
+          value: 0.0.0.0
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: fleetdm
+              key: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: fleetdm
+              key: MYSQL_PASSWORD
+      volumes:
+      - name: mysql-data
+        hostPath:
+          path: /opt/fleet/mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fleet-redis
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fleet-redis
+  template:
+    metadata:
+      labels:
+        app: fleet-redis
+    spec:
+      containers:
+      - name: fleet-redis
+        image: docker.io/redis:8.0-M02-alpine3.21
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: redis-data
+          mountPath: /var/lib/redis
+      volumes:
+      - name: redis-data
+        hostPath:
+          path: /opt/fleet/redis

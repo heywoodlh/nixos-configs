@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nixos-desktop-hd
+  namespace: kubevirt-vms
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Gi
+  storageClassName: local-path
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: nixos-desktop
+  namespace: kubevirt-vms
+spec:
+  runStrategy: RerunOnFailure
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: nixos-desktop
+    spec:
+      domain:
+        firmware:
+          bootloader:
+            efi:
+              persistent: true
+              secureBoot: false
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        cpu:
+          cores: 4
+        devices:
+          disks:
+          - cdrom:
+              bus: sata
+            name: cdromiso
+            bootOrder: 2
+          - disk:
+              bus: virtio
+            name: harddrive
+            bootOrder: 1
+          tpm:
+            persistent: true
+        machine:
+          type: q35
+        resources:
+          requests:
+            memory: 8G
+      volumes:
+      - name: cdromiso
+        hostDisk:
+          path: "/media/services/virtual-machines/iso/nixos-24.11-gnome.iso"
+          type: Disk
+      - name: harddrive
+        persistentVolumeClaim:
+          claimName: nixos-desktop-hd

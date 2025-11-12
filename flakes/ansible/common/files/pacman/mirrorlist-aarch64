@@ -1,0 +1,12 @@
+## Geo-IP based mirror selection and load balancing
+Server = http://mirror.archlinuxarm.org/$arch/$repo
+### United States
+## California
+Server = http://ca.us.mirror.archlinuxarm.org/$arch/$repo
+## Florida
+Server = http://fl.us.mirror.archlinuxarm.org/$arch/$repo
+## Illinois
+Server = http://il.us.mirror.archlinuxarm.org/$arch/$repo
+## New Jersey
+Server = http://nj.us.mirror.archlinuxarm.org/$arch/$repo
+

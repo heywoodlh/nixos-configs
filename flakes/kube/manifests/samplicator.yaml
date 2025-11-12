@@ -1,0 +1,203 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: samplicator
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: samplicator
+    app.kubernetes.io/instance: samplicator
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  namespace: monitoring
+  name: samplicator
+rules:
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["samplicator-conf"]
+  verbs: ["create", "update", "get", "patch"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  resourceNames: ["samplicator"]
+  verbs: ["get", "update", "patch"]
+- apiGroups: ["batch"]
+  resources: ["cronjobs", "jobs"]
+  verbs: ["get", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: samplicator
+  namespace: monitoring
+subjects:
+- kind: ServiceAccount
+  name: samplicator
+  namespace: monitoring
+roleRef:
+  kind: ClusterRole
+  name: samplicator
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: samplicator-conf
+  namespace: monitoring
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-options: Prune=false
+data:
+  samplicator.conf:
+---
+# Workaround for samplicator not being able to use hostnames
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: samplicator-dns-lookup
+  namespace: monitoring
+data:
+  update.sh: |-
+    #!/usr/bin/env ash
+    kubectl get configmaps/samplicator-conf -n monitoring -o "jsonpath={.data['samplicator\.conf']}" > /etc/samplicator.conf || true
+    rm -f /etc/samplicator.conf.new || true
+    # Lookup for nfcapd service
+    printf "127.0.0.1/255.255.255.255: $(dig +short nfcapd.monitoring.svc.cluster.local)/9995\n" | tee -a /etc/samplicator.conf.new
+    grep "$(dig +short nfcapd.monitoring.svc.cluster.local)/9995" -q /etc/samplicator.conf || touch /updated
+    # Lookup for filebeat service
+    printf "127.0.0.1/255.255.255.255: $(dig +short filebeat-netflow.monitoring.svc.cluster.local)/9995\n" | tee -a /etc/samplicator.conf.new
+    grep "$(dig +short filebeat-netflow.monitoring.svc.cluster.local)/9995" -q /etc/samplicator.conf || touch /updated
+    # End lookup services
+    test -e /updated && kubectl create configmap samplicator-conf --from-file=samplicator.conf=/etc/samplicator.conf.new -n monitoring -o yaml --dry-run | kubectl apply -f -
+    test -e /updated && kubectl rollout restart deployment samplicator -n monitoring
+    exit 0
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: samplicator-conf-updater
+  namespace: monitoring
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: samplicator
+          containers:
+            - name: samplicator-conf-updater
+              image: docker.io/heywoodlh/kubectl:v1.33.4
+              imagePullPolicy: IfNotPresent
+              command: [ "/bin/ash", "-c" ]
+              args: [
+                "/update.sh || true"
+              ]
+              volumeMounts:
+                - name: samplicator-dns-lookup
+                  mountPath: /update.sh
+                  subPath: update.sh
+          restartPolicy: OnFailure
+          volumes:
+            - name: samplicator-dns-lookup
+              configMap:
+                name: samplicator-dns-lookup
+                defaultMode: 0777
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: samplicator-init
+  namespace: monitoring
+data:
+  init.sh: |-
+    #!/usr/bin/env ash
+    kubectl delete job samplicator-conf-init -n monitoring || true
+    kubectl create job --from=cronjob/samplicator-conf-updater samplicator-conf-init -n monitoring
+    until kubectl get configmaps/samplicator-conf -n monitoring -o "jsonpath={.data['samplicator\.conf']}" | grep -q '127.0.0.1'
+    do
+      sleep 5
+    done
+    kubectl delete job samplicator-conf-init -n monitoring
+    exit 0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samplicator
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: samplicator
+    app.kubernetes.io/instance: samplicator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: samplicator
+      app.kubernetes.io/instance: samplicator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: samplicator
+        app.kubernetes.io/instance: samplicator
+    spec:
+      securityContext:
+        {}
+      serviceAccountName: samplicator
+      initContainers:
+        - name: conf-init
+          image: docker.io/heywoodlh/kubectl:v1.33.4
+          command: [ "/bin/ash", "-c" ]
+          args: [
+            "/init.sh || true"
+          ]
+          volumeMounts:
+            - name: samplicator-init
+              mountPath: /init.sh
+              subPath: init.sh
+      containers:
+        - name: samplicator
+          image: "docker.io/heywoodlh/samplicator:ceeb1d2-2025_04"
+          command: [ "/usr/local/bin/samplicate" ]
+          args: [ "-p", "9995", "-c", "/etc/samplicator.conf", "-S", "-d", "1" ]
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: netflow
+              containerPort: 9995
+              protocol: TCP
+          resources:
+            {}
+          volumeMounts:
+            - name: samplicator-conf
+              mountPath: /etc/samplicator.conf
+              subPath: samplicator.conf
+      volumes:
+        - name: samplicator-init
+          configMap:
+            name: samplicator-init
+            defaultMode: 0777
+        - name: samplicator-conf
+          configMap:
+            name: samplicator-conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: samplicator
+  name: samplicator
+  namespace: monitoring
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "samplicator"
+    tailscale.com/tags: "tag:nfcapd"
+spec:
+  ports:
+  - name: netflow
+    port: 9995
+    protocol: UDP
+    targetPort: netflow
+  selector:
+    app: samplicator
+  type: ClusterIP
+

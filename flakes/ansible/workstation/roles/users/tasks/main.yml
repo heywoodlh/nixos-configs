@@ -1,0 +1,36 @@
+---
+- name: create heywoodlh
+  ansible.builtin.user:
+    name: heywoodlh
+
+- name: remove sudo configuration from archinstall script if exists
+  ansible.builtin.lineinfile:
+    path: "{{ item }}"
+    state: absent
+    line: "heywoodlh ALL=(ALL) ALL"
+    validate: 'visudo -cf %s'
+  loop:
+  - /etc/sudoers
+  - /etc/sudoers.d/heywoodlh
+
+- name: get user home dir
+  shell: >
+    getent passwd heywoodlh | cut -d: -f6
+  changed_when: false
+  register: user_home
+
+- name: "create {{ user_home.stdout }}/bin"
+  ansible.builtin.file:
+    state: directory
+    path: "{{ user_home.stdout }}/bin"
+    owner: heywoodlh
+    mode: "0755"
+
+- name: "add ansible-switch script to {{ user_home.stdout }}/bin/ansible-switch"
+  ansible.builtin.copy:
+    src: "ansible-switch"
+    dest: "{{ user_home.stdout }}/bin/ansible-switch"
+    mode: "0700"
+  become_user: heywoodlh
+  become: true
+  ignore_errors: true # fails in docker

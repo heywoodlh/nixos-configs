@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfcapd
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nfcapd
+  template:
+    metadata:
+      labels:
+        app: nfcapd
+    spec:
+      hostname: nfcapd
+      containers:
+      - name: nfcapd
+        image: @image@
+        imagePullPolicy: Always
+        command: ["nfcapd"]
+        args:
+          [ "-w", "/flows", "-p", "9995", "-S", "2", "-B", "1024000" ]
+        ports:
+        - name: nfcapd
+          containerPort: 9995
+          protocol: UDP
+        volumeMounts:
+          - mountPath: /flows
+            name: flows
+        securityContext:
+          capabilities:
+            add:
+              - NET_ADMIN
+              - NET_RAW
+      volumes:
+        - name: flows
+          hostPath:
+            path: @hostfolder@
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nfcapd
+  name: nfcapd
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "nfcapd"
+    tailscale.com/tags: "tag:nfcapd"
+spec:
+  ports:
+  - name: web-ui
+    port: 9995
+    protocol: UDP
+    targetPort: nfcapd
+  selector:
+    app: nfcapd
+  type: ClusterIP

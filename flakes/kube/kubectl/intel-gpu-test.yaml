@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: intel-gpu-test
+  namespace: default
+spec:
+  containers:
+  - name: intel-gpu-test
+    image: docker.io/ubuntu:24.04
+    command: [ "/bin/bash", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ]
+    resources:
+      requests:
+        gpu.intel.com/i915: "1"
+      limits:
+        gpu.intel.com/i915: "1"

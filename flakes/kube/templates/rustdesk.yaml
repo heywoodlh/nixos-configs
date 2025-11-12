@@ -1,0 +1,83 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rustdesk
+  name: rustdesk
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: rustdesk
+  template:
+    metadata:
+      labels:
+        app: rustdesk
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+      - image: @image@
+        name: rustdesk-hbbs
+        command: ["hbbs"]
+        args: ["-r", "rustdesk-hbbr:21117"]
+        ports:
+        - name: rustdesk-hbbs-1
+          containerPort: 21115
+        - name: rustdesk-hbbs-2
+          containerPort: 21116
+        - name: rustdesk-hbbs-3
+          containerPort: 21116
+          protocol: "UDP"
+        volumeMounts:
+        - name: rustdesk-data
+          mountPath: /root/
+      - image: @image@
+        name: rustdesk-hbbr
+        command: ["hbbr"]
+        ports:
+        - name: rustdesk-hbbr-1
+          containerPort: 21117
+        volumeMounts:
+        - name: rustdesk-data
+          mountPath: /root/
+      volumes:
+      - name: rustdesk-data
+        hostPath:
+          path: @hostfolder@
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: rustdesk
+  name: rustdesk
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "rustdesk"
+    tailscale.com/tags: "tag:rustdesk"
+spec:
+  ports:
+  - name: rustdesk-hbbs-1
+    port: 21115
+    protocol: TCP
+    targetPort: 21115
+  - name: rustdesk-hbbs-2
+    port: 21116
+    protocol: TCP
+    targetPort: 21116
+  - name: rustdesk-hbbs-3
+    port: 21116
+    protocol: UDP
+    targetPort: 21116
+  - name: rustdesk-hbbr-1
+    port: 21117
+    protocol: TCP
+    targetPort: 21117
+  selector:
+    app: rustdesk
+  type: ClusterIP

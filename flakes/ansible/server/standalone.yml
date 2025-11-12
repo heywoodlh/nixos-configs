@@ -1,0 +1,6 @@
+# Playbook for standalone usage/testing
+---
+- hosts: localhost
+  tasks:
+  - name: import tasks/linux/main.yml
+    include_tasks: tasks/linux/main.yml

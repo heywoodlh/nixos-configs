@@ -1,0 +1,27 @@
+arch: "aarch64"
+
+images:
+  - location: "./imgs/nixos-aarch64.img"
+    arch: "aarch64"
+  - location: "./imgs/nixos-x86.img"
+    arch: "x86_64"
+
+cpus: 6
+
+mounts:
+- location: "~"
+  writable: true
+  9p:
+    # Try choosing "mmap" or "none" if you see a stability issue with the default "fscache".
+    cache: "mmap"
+- location: "/tmp/lima"
+  writable: true
+  9p:
+    cache: "mmap"
+
+mountType: "9p"
+
+containerd:
+  system: false
+  user: false
+

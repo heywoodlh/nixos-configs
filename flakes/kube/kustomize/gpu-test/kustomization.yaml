@@ -1,0 +1,51 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+helmCharts:
+- name: nvidia-device-plugin
+  repo: https://nvidia.github.io/k8s-device-plugin
+  version: 0.17.3
+  releaseName: nvdp
+  namespace: nvidia-device-plugin
+  includeCRDs: true
+  valuesInline:
+    runtimeClassName: nvidia
+---
+apiVersion: node.k8s.io/v1
+handler: nvidia
+kind: RuntimeClass
+metadata:
+  name: nvidia
+  labels:
+    app.kubernetes.io/component: gpu-operator
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gpu-test
+  labels:
+    app: gpu-test
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: gpu-test
+  template:
+    metadata:
+      labels:
+        app: gpu-test
+    spec:
+      restartPolicy: Always
+      runtimeClassName: nvidia
+      containers:
+      - name: gpu-test
+        image: nvidia/cuda:12.6.3-base-ubuntu22.04
+        command: ["nvidia-smi"]
+        env:
+          - name: NVIDIA_VISIBLE_DEVICES
+            value: all
+          - name: NVIDIA_DRIVER_CAPABILITIES
+            value: all

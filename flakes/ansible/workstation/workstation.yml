@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  vars_files:
+    - vars/packages.yml
+  become: true
+  roles:
+    - role: deps
+    - role: users
+    - role: desktop
+    - role: security
+  tasks:
+    - name: import archlinux tasks
+      include_tasks: ../common/tasks/archlinux.yml
+      when: ansible_os_family == "Archlinux"

@@ -1,0 +1,283 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: syslog-conf
+  namespace: @namespace@
+data:
+  # reminder, syslog-ng.conf breaks if you don't append a newline
+  syslog-ng.conf: |
+    @version: 4.2
+    @include "/config/conf.d/*.conf"
+
+  security.conf: |
+    destination ntfy {
+      http(
+        url("http://ntfy.default.svc.cluster.local/security-notifications")
+        method("POST")
+        user-agent("syslog-ng User Agent")
+        headers("Title: syslog-ng alert ${HOST}")
+        body("${ISODATE} ${MESSAGE}")
+      );
+    };
+
+    # All noteworthy ssh events
+    filter ssh_events {
+      message("(Failed password|Invalid verification code|Invalid user|Accepted publickey|Accepted password|Accepted keyboard-interactive|Failed keyboard-interactive).*");
+    };
+
+    # unifi ssh notifications
+    log {
+      source(unifi_remote);
+      filter(ssh_events);
+      destination(ntfy);
+    };
+
+  linux.conf: |
+    source linux_remote {
+      tcp(ip(0.0.0.0) port(1514));
+    };
+    destination linux_log {
+      file(
+        "/logs/linux/${YEAR}_${MONTH}_${DAY}.log"
+        create-dirs(yes)
+      );
+    };
+    log {
+      source(linux_remote);
+      destination(linux_log);
+    };
+
+  unifi.conf: |
+    source unifi_remote {
+      udp(ip(0.0.0.0) port(514));
+    };
+    destination unifi_log {
+      file(
+        "/logs/unifi/${YEAR}_${MONTH}_${DAY}.log"
+        create-dirs(yes)
+      );
+    };
+    log {
+      source(unifi_remote);
+      destination(unifi_log);
+    };
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: syslog
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: syslog
+  template:
+    metadata:
+      labels:
+        app: syslog
+    spec:
+      hostname: syslog
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: syslog
+        image: @image@
+        env:
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+          - name: LOG_TO_STDOUT
+            value: "true"
+        ports:
+          - name: syslog-0
+            containerPort: 514
+            protocol: UDP
+          - name: syslog-1
+            containerPort: 1514
+            protocol: TCP
+        volumeMounts:
+          - mountPath: /logs
+            name: logs
+          - name: syslog-conf
+            mountPath: /config/syslog-ng.conf
+            subPath: syslog-ng.conf
+          - name: syslog-conf-d
+            mountPath: /config/conf.d
+          - mountPath: /config
+            name: syslog-ng-config-dir # syslog-ng writes to /config a bunch to function
+      volumes:
+        - name: logs
+          hostPath:
+            path: @hostfolder@
+            type: Directory
+        - name: syslog-ng-config-dir
+          emptyDir:
+            sizeLimit: 1Gi
+        - name: syslog-conf
+          configMap:
+            name: syslog-conf
+            items:
+            - key: syslog-ng.conf
+              path: syslog-ng.conf
+        - name: syslog-conf-d
+          configMap:
+            name: syslog-conf
+            items:
+              - key: linux.conf
+                path: linux.conf
+              - key: unifi.conf
+                path: unifi.conf
+              - key: security.conf
+                path: security.conf
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: logs-cleanup
+  namespace: @namespace@
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: logs-cleanup
+              image: docker.io/ubuntu:24.04
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/sh", "-c"]
+              args:
+                - find /logs/linux -type f -mtime +7 -exec rm -f {} \; ;
+                - find /logs/unifi -type f -mtime +30 -exec rm -f {} \; ;
+              volumeMounts:
+                - name: logs
+                  mountPath: "/logs"
+          restartPolicy: OnFailure
+          volumes:
+            - name: logs
+              hostPath:
+                path: @hostfolder@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logbash
+  namespace: @namespace@
+data:
+  config.sh: |-
+    export linux_log_target="/logs/linux/*.log"
+    export unifi_log_target="/logs/unifi/*.log"
+    # Uncomment default_find_mime_time if you want logbash to default to only search for files modified within a certain time:
+    export default_find_mime_time='-1' ## Defaults to one day
+    # Uncomment for minor performance improvements in grep
+    export LC_ALL=C
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logbash
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logbash
+  template:
+    metadata:
+      labels:
+        app: logbash
+    spec:
+      hostname: logbash
+      containers:
+      - name: logbash
+        image: @logbash_image@
+        command: [ "bash", "-c" ]
+        args: [ "cp /config.sh /app/config.sh; sleep infinity" ]
+        env:
+          - name: LOGBASH_CONFIG
+            value: "/app/config.sh"
+        volumeMounts:
+          - mountPath: /logs
+            name: logs
+          - name: logbash-conf
+            mountPath: /config.sh
+            subPath: config.sh
+          - name: logbash-src
+            mountPath: /app
+      volumes:
+        - name: logs
+          hostPath:
+            path: @hostfolder@
+            type: Directory
+        - name: logbash-conf
+          configMap:
+            name: logbash
+            items:
+            - key: config.sh
+              path: config.sh
+        - name: logbash-src
+          hostPath:
+            path: /home/heywoodlh/opt/logbash
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lnav
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lnav
+  template:
+    metadata:
+      labels:
+        app: lnav
+    spec:
+      hostname: logs
+      containers:
+      - name: lnav
+        image: @lnav_image@
+        command: [ "bash", "-c" ]
+        args: [ "sleep infinity" ]
+        env:
+          - name: TERM
+            value: "xterm-256color"
+        volumeMounts:
+          - name: logs
+            mountPath: /logs
+      volumes:
+        - name: logs
+          hostPath:
+            path: @hostfolder@
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: syslog
+  name: syslog
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "syslog"
+    tailscale.com/tags: "tag:syslog"
+spec:
+  ports:
+    - name: syslog-0
+      port: 514
+      protocol: UDP
+      targetPort: syslog-0
+    - name: syslog-1
+      port: 1514
+      protocol: TCP
+      targetPort: syslog-1
+  selector:
+    app: syslog
+  type: ClusterIP

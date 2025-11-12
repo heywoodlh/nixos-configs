@@ -1,0 +1,58 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hashcat
+  namespace: security
+spec:
+  containers:
+    - image: docker.io/ubuntu:24.04
+      name: hashcat
+      command: [ "/bin/bash", "-c", "--" ]
+      args: [ "printf 'Welcome to the Hashcat container!\nHost directory /tmp/hashcat is mounted at /data\n' > /etc/motd; printf 'cat /etc/motd' > /root/.bashrc; apt update && apt install -y hashcat intel-opencl-icd; while true; do sleep 30; done;" ]
+      volumeMounts:
+        - name: tmp
+          mountPath: /data
+        - name: nix
+          mountPath: /nix
+        - name: home-nix
+          mountPath: /usr/local/bin
+        - name: run-nix
+          mountPath: /run/current-system
+        - name: etc-nix
+          mountPath: /etc/nix
+        - name: static
+          mountPath: /etc/static
+      env:
+        - name: PATH
+          value: /run/current-system/sw/bin:/usr/local/bin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      resources:
+        requests:
+          gpu.intel.com/i915: "1"
+        limits:
+          gpu.intel.com/i915: "1"
+  volumes:
+    - name: tmp
+      hostPath:
+        path: /tmp/hashcat
+        type: DirectoryOrCreate
+    - name: nix
+      hostPath:
+        path: /nix
+        type: Directory
+    - name: home-nix
+      hostPath:
+        path: /home/heywoodlh/.nix-profile
+        type: Directory
+    - name: run-nix
+      hostPath:
+        path: /run/current-system
+        type: Directory
+    - name: etc-nix
+      hostPath:
+        path: /etc/nix
+        type: Directory
+    - name: static
+      hostPath:
+        path: /etc/static
+        type: Directory

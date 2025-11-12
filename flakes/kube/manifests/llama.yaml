@@ -1,0 +1,179 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llama
+  namespace: default
+  labels:
+    app.kubernetes.io/name: llama
+    app.kubernetes.io/instance: llama
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "llama"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: llama
+      protocol: TCP
+      name: llama
+  selector:
+    app.kubernetes.io/name: llama
+    app.kubernetes.io/instance: llama
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: llama
+  namespace: default
+data:
+  config.yaml: |-
+    models:
+      "gpt-oss-20b":
+        cmd: |
+          /app/llama-server \
+          --port ${PORT} \
+          -m /models/gpt-oss-20b-Q4_K_M.gguf
+          --ctx-size 0 --jinja \
+          --device SYCL0
+        aliases:
+          - "gpt-oss:20b"
+        ttl: 600
+  # Example for compiling llama.cpp with Vulkan support
+  compile-llama.sh: |-
+    #!/bin/bash
+    if [ -e /opt/bin/llama-server ]
+    then
+      echo "/opt/bin/llama-server already exists, skipping download"
+      exit 0
+    else
+      export DEBIAN_FRONTEND=noninteractive
+      # See https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md#for-linux-users
+      # Dependencies
+      apt update && apt-get install -y build-essential curl wget gnupg cmake make gcc git libcurl4-openssl-dev
+      set -ex
+      # Install VulkanSDK, see https://vulkan.lunarg.com/doc/view/latest/linux/getting_started_ubuntu.html
+      wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | tee /etc/apt/trusted.gpg.d/lunarg.asc &>/dev/null
+      wget -qO /etc/apt/sources.list.d/lunarg-vulkan-noble.list http://packages.lunarg.com/vulkan/lunarg-vulkan-noble.list
+      apt update && apt install -y vulkan-sdk
+      # Download and compile llama.cpp
+      [[ -e /opt/llama-cpp ]] || git clone https://github.com/ggml-org/llama.cpp /opt/llama-cpp
+      cd /opt/llama-cpp
+      cmake -B build -DGGML_VULKAN=1
+      cmake --build build --config Release -j -v
+      cp -f /opt/llama-cpp/build/bin/* /opt/bin
+      cd /
+      rm -rf /opt/llama-cpp/
+    fi
+  download.sh: |-
+    #!/bin/ash
+    curl -C - -L https://huggingface.co/unsloth/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-Q4_K_M.gguf -o /models/gpt-oss-20b-Q4_K_M.gguf
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llama
+  namespace: default
+  labels:
+    app.kubernetes.io/name: llama
+    app.kubernetes.io/instance: llama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: llama
+      app.kubernetes.io/instance: llama
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: llama
+        app.kubernetes.io/instance: llama
+    spec:
+      securityContext:
+        runAsUser: 0
+        fsGroup: 1000
+      initContainers:
+        - name: llama-cli-builder
+          image: docker.io/ubuntu:24.04
+          command:
+            - "/compile-llama.sh"
+          volumeMounts:
+            - name: llama-bin
+              mountPath: /opt/bin
+            - name: llama-cli-builder
+              mountPath: /compile-llama.sh
+              subPath: compile-llama.sh
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+        - name: llama-model-downloader
+          image: docker.io/curlimages/curl
+          command:
+            - "/download.sh"
+          volumeMounts:
+            - name: llama-models
+              mountPath: /models
+            - name: llama-model-downloader
+              mountPath: /download.sh
+              subPath: download.sh
+      containers:
+        - name: llama
+          securityContext:
+            {}
+          image: "ghcr.io/mostlygeek/llama-swap:intel"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: llama
+              containerPort: 8080
+              protocol: TCP
+          args:
+            - "-config"
+            - "/app/config.yaml"
+          volumeMounts:
+            - name: llama-bin
+              mountPath: /opt/bin
+            - name: llama-models
+              mountPath: /models
+            - name: llama-config
+              mountPath: /app/config.yaml
+              subPath: config.yaml
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+          env:
+            - name: ZES_ENABLE_SYSMAN
+              value: "1"
+      volumes:
+      - name: llama-models
+        hostPath:
+          path: /media/data-ssd/llama
+          type: DirectoryOrCreate
+      - name: llama-bin
+        hostPath:
+          path: /media/data-ssd/llama/bin
+          type: DirectoryOrCreate
+      - name: llama-config
+        configMap:
+          name: llama
+          items:
+          - key: config.yaml
+            path: config.yaml
+      - name: llama-model-downloader
+        configMap:
+          name: llama
+          defaultMode: 0777
+          items:
+          - key: download.sh
+            path: download.sh
+      - name: llama-cli-builder
+        configMap:
+          name: llama
+          defaultMode: 0777
+          items:
+          - key: compile-llama.sh
+            path: compile-llama.sh

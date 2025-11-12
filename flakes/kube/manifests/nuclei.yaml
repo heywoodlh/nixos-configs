@@ -1,0 +1,200 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nuclei
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nuclei
+  namespace: nuclei
+  labels:
+    app.kubernetes.io/name: nuclei
+    app.kubernetes.io/instance: nuclei
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  namespace: nuclei
+  name: nuclei
+rules:
+- apiGroups: [""]
+  resources: ["services","namespaces"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nuclei
+  namespace: nuclei
+subjects:
+- kind: ServiceAccount
+  name: nuclei
+  namespace: nuclei
+roleRef:
+  kind: ClusterRole
+  name: nuclei
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nuclei-conf
+  namespace: nuclei
+data:
+  nuclei.conf: |-
+    interactsh-server: http://nuclei-interactsh # should match the name of interactsh.service.name
+    list: /targets/list.txt
+    # Headers to include with all HTTP request
+    #header:
+    #  - 'X-BugBounty-Hacker: h1/geekboy'
+    # Directory based template execution
+    #templates:
+    #  - cves/
+    #  - vulnerabilities/
+    #  - misconfiguration/
+    # Tags based template execution
+    #tags: exposures,cve
+    # Template Filters
+    #tags: exposures,cve
+    #author: geeknik,pikpikcu,dhiyaneshdk
+    #severity: critical,high,medium
+    # Template Allowlist
+    #include-tags: dos,fuzz # Tag based inclusion (allows overwriting nuclei-ignore list)
+    #include-templates: # Template based inclusion (allows overwriting nuclei-ignore list)
+      #- vulnerabilities/xxx
+      #- misconfiguration/xxxx
+    # Template Denylist
+    #exclude-tags: info # Tag based exclusion
+    #exclude-templates: # Template based exclusion
+      #- vulnerabilities/xxx
+      #- misconfiguration/xxxx
+    # Rate Limit configuration
+    #rate-limit: 500
+    #bulk-size: 50
+    #concurrency: 50
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nuclei-interactsh
+  namespace: nuclei
+  labels:
+    app.kubernetes.io/name: nuclei-interactsh
+    app.kubernetes.io/instance: nuclei
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: nuclei-interactsh
+    app.kubernetes.io/instance: nuclei
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nuclei-interactsh
+  namespace: nuclei
+  labels:
+    app.kubernetes.io/name: nuclei-interactsh
+    app.kubernetes.io/instance: nuclei
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nuclei-interactsh
+      app.kubernetes.io/instance: nuclei
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nuclei-interactsh
+        app.kubernetes.io/instance: nuclei
+    spec:
+      serviceAccountName: nuclei
+      containers:
+        - name: nuclei-interactsh
+          image: "docker.io/projectdiscovery/interactsh-server:v1.2.4"
+          imagePullPolicy: IfNotPresent
+          command: ["interactsh-server", "-skip-acme", "-d", "nuclei-interactsh"]
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  finalizers:
+  - onepassword.com/finalizer.secret
+  generation: 1
+  name: nuclei-api-key
+  namespace: nuclei
+spec:
+  itemPath: vaults/Kubernetes/items/xbvssj7tsijfysi2z6gpk75s6u
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nuclei
+  namespace: nuclei
+spec:
+  schedule: "0 15 * * Tue"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: nuclei
+          initContainers:
+            - name: nuclei-target-updater
+              image: "docker.io/heywoodlh/k8s-service-scanner:0.1.1"
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/bash", "-c"]
+              env:
+              - name: EXTRA_TARGETS
+                value: "192.168.1.0/24"
+              args: [
+                "/entrypoint | sort -u | tee /targets/list.txt"
+              ]
+              volumeMounts:
+                - name: nuclei-target-dir
+                  mountPath: /targets
+          containers:
+            - name: nuclei
+              image: "docker.io/heywoodlh/nuclei:v3.4.10"
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/ash", "-c"]
+              args: [
+                "nuclei -config=/config/nuclei.conf -iserver 'http://nuclei-interactsh' -auth=$(NUCLEI_API_KEY) -cloud-upload"
+              ]
+              env:
+                - name: NUCLEI_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: nuclei-api-key
+                      key: api_key
+              volumeMounts:
+                - name: nuclei-conf
+                  mountPath: /config/nuclei.conf
+                  subPath: nuclei.conf
+                - name: nuclei-target-dir
+                  mountPath: /targets
+          restartPolicy: OnFailure
+          volumes:
+            - name: nuclei-conf
+              configMap:
+                name: nuclei-conf
+            - name: nuclei-target-dir
+              emptyDir:
+                sizeLimit: 1Gi

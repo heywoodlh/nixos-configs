@@ -1,0 +1,142 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "redm"
+  namespace: "gaming"
+spec:
+  itemPath: "vaults/Kubernetes/items/yybucjio2rjhyn6ve2bkmni3i4"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redm-mysql
+  namespace: gaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redm-mysql
+  template:
+    metadata:
+      labels:
+        app: redm-mysql
+    spec:
+      containers:
+      - name: redm-mysql
+        image: docker.io/mariadb:10.11.2
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        env:
+        - name: MYSQL_DATABASE
+          value: redm
+        - name: MYSQL_HOST
+          value: 0.0.0.0
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redm
+              key: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redm
+              key: MYSQL_PASSWORD
+      volumes:
+      - name: mysql-data
+        hostPath:
+          path: /media/data-ssd/redm/db
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redm-mysql
+  namespace: gaming
+spec:
+  selector:
+    app: redm-mysql
+  ports:
+  - name: mysql
+    port: 3306
+    targetPort: 3306
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redm
+  name: redm
+  namespace: gaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redm
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: redm
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+        - name: redm
+          command: [ "/opt/cfx-server/run.sh" ]
+          image: docker.io/routmoute/fxserver:recommended
+          ports:
+            - containerPort: 30120
+              protocol: TCP
+            - containerPort: 30120
+              protocol: UDP
+            - containerPort: 40120
+              protocol: TCP
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /data
+              name: redm-data
+            - mountPath: /txData
+              name: redm-txdata
+      restartPolicy: Always
+      volumes:
+        - name: redm-data
+          hostPath:
+            path: /media/data-ssd/redm/data
+            type: DirectoryOrCreate
+        - name: redm-txdata
+          hostPath:
+            path: /media/data-ssd/redm/txdata
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redm
+  name: redm
+  namespace: gaming
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "redm"
+    tailscale.com/tags: "tag:redm,tag:http"
+spec:
+  ports:
+    - name: "redm-tcp"
+      port: 30120
+      targetPort: 30120
+    - name: "redm-udp"
+      port: 30120
+      protocol: UDP
+      targetPort: 30120
+    - name: "txadmin"
+      port: 80
+      targetPort: 40120
+  selector:
+    app: redm

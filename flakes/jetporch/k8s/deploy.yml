@@ -1,0 +1,69 @@
+- name: Setup Ubuntu k8s nodes
+  groups:
+    - k8s
+  tasks:
+    - !shell
+      name: Update apt cache
+      cmd: "apt update"
+      with:
+        sudo: root
+
+    - !shell
+      name: Install dependencies
+      cmd: "apt install -y {{ item }}"
+      with:
+        sudo: root
+        items:
+          - curl
+          - git
+          - bluetooth
+          - network-manager
+          - avahi-daemon
+          - mosh
+
+    - !shell
+      name: Install Tailscale
+      cmd: "curl https://tailscale.com/install.sh | bash"
+      with:
+        sudo: root
+
+    - !copy
+      name: Copy avahi-daemon config
+      src: avahi-daemon.conf
+      dest: /etc/avahi/avahi-daemon.conf
+
+    - !shell
+      name: Enable services
+      cmd: "systemctl enable --now {{ item }}"
+      with:
+        sudo: root
+        items:
+          - avahi-daemon.service
+          - bluetooth.service
+
+    - !shell
+      name: Add nix to PATH
+      cmd: ln -sf /nix/var/nix/profiles/default/bin/nix /usr/local/bin/nix || true
+      with:
+        sudo: root
+
+    - !shell
+      name: Add heywoodlh to sudoers
+      cmd: "{{ item }}"
+      with:
+        sudo: root
+        items:
+          - mkdir -p /etc/sudoers.d
+          - echo 'heywoodlh ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/heywoodlh
+
+    - !shell
+      name: Allow services through UFW and enable ufw
+      cmd: "{{ item }}"
+      with:
+        sudo: root
+        items:
+          - ufw allow ssh
+          - ufw allow from any to any port 5353 proto udp # Avahi
+          - ufw allow from any to any port 21063 proto tcp # Avahi
+          - ufw allow from any to any port 60000:60100 proto udp # Mosh
+          - ufw --force enable

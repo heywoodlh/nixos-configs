@@ -1,0 +1,67 @@
+---
+- name: gather facts
+  ansible.builtin.gather_facts:
+
+- name: proxmox tasks
+  block:
+    - name: check if /etc/pve directory exists
+      ansible.builtin.stat:
+        path: /etc/pve
+      register: pve_check
+
+    - name: include proxmox tasks
+      ansible.builtin.include_tasks: proxmox.yml
+      when: pve_check.stat.exists
+
+- name: unifi tasks
+  block:
+    - name: check if running on Unifi Dream Machine
+      ansible.builtin.stat:
+        path: /usr/bin/ubios-udapi-server
+      register: udm_check
+
+    - name: include unifi tasks
+      ansible.builtin.include_tasks: unifi.yml
+      when: udm_check.stat.exists
+
+- name: standard tasks
+  when: >
+    (ansible_os_family == "Debian") or
+    (ansible_os_family == "Archlinux") or
+    (ansible_os_family == "Alpine")
+  block:
+    - name: include deps tasks
+      ansible.builtin.include_tasks: deps.yml
+
+    - name: include nix tasks
+      ansible.builtin.include_tasks: ../../../common/nix.yml
+      when: not udm_check.stat.exists
+
+    - name: include config tasks
+      ansible.builtin.include_tasks: config.yml
+
+    - name: include security tasks
+      ansible.builtin.include_tasks: security.yml
+
+    - name: include users tasks
+      ansible.builtin.include_tasks: users.yml
+
+    - name: install node_exporter
+      when:
+        - ansible_os_family != "Alpine"
+        - ansible_os_family != "Archlinux"
+      ansible.builtin.include_role:
+        name: prometheus.prometheus.node_exporter
+
+    - name: miscellaneous tasks
+      ansible.builtin.include_tasks: misc.yml
+
+- name: nixos tasks
+  when:
+    - ansible_os_family == "NixOS"
+  block:
+    - name: include nixos tasks
+      ansible.builtin.include_tasks: nixos.yml
+
+- name: include host-specific tasks
+  ansible.builtin.include_tasks: hosts.yml

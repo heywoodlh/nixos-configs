@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "wazuh"
+    tailscale.com/tags: "tag:wazuh"
+  name: dashboard
+  namespace: wazuh
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "wazuh-indexer"
+    tailscale.com/tags: "tag:wazuh"
+  name: indexer
+  namespace: wazuh
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "wazuh-manager"
+    tailscale.com/tags: "tag:wazuh"
+  name: wazuh
+  namespace: wazuh
+spec:
+  selector:
+    node-type: wazuh
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "wazuh-cluster"
+    tailscale.com/tags: "tag:wazuh"
+  name: wazuh-cluster
+  namespace: wazuh
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "wazuh-workers"
+    tailscale.com/tags: "tag:wazuh"
+  name: wazuh-workers
+  namespace: wazuh
+spec:
+  selector:
+    node-type: wazuh

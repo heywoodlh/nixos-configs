@@ -1,0 +1,466 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "dev-password"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/boofeqmvt7vmcdqsyzczhiwqre"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-sshd-config
+  namespace: @namespace@
+data:
+  sshd_config: |-
+    Include /etc/ssh/sshd_config.d/*.conf
+    ListenAddress 0.0.0.0
+    KbdInteractiveAuthentication no
+    UsePAM yes
+    X11Forwarding yes
+    PrintMotd no
+    AcceptEnv LANG LC_*
+    Subsystem       sftp    /usr/lib/openssh/sftp-server
+    AuthorizedKeysCommand /keys.sh
+    AuthorizedKeysCommandUser nobody
+    PermitRootLogin prohibit-password
+    HostKey /etc/ssh/host_keys/ssh_host_rsa_key
+    PubkeyAuthentication yes
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-keys
+  namespace: @namespace@
+data:
+  keys.sh: |-
+    #!/usr/bin/env bash
+    mkdir -p -m 700 /home/heywoodlh/.ssh
+    [[ -e /home/heywoodlh/.ssh/authorized_keys ]] || curl -L --silent https://github.com/heywoodlh.keys -o /home/heywoodlh/.ssh/authorized_keys
+    chmod 600 /home/heywoodlh/.ssh/authorized_keys
+    chown -R heywoodlh:heywoodlh /home/heywoodlh/.ssh
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-gen-host-keys
+  namespace: @namespace@
+data:
+  gen-host-keys.sh: |-
+    #!/usr/bin/env bash
+    [[ -e /etc/ssh/host_keys/ssh_host_rsa_key ]] || ssh-keygen -f /etc/ssh/host_keys/ssh_host_rsa_key -N '' -t rsa
+    [[ -e /etc/ssh/host_keys/ssh_host_dsa_key ]] || ssh-keygen -f /etc/ssh/host_keys/ssh_host_dsa_key -N '' -t dsa
+    # Overwrite host keys
+    cp -rf /etc/ssh/host_keys/* /etc/ssh
+
+    # Ensure heywoodlh permissions are correct
+    chown -R heywoodlh /home/heywoodlh
+    chmod 700 /home/heywoodlh
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-timezone
+  namespace: @namespace@
+data:
+  timezone.sh: |-
+    #!/usr/bin/env bash
+    rm /etc/localtime
+    ln -s /usr/share/zoneinfo/America/Denver /etc/localtime
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-custom-fish
+  namespace: @namespace@
+data:
+  custom.fish: |-
+    export DOCKER_TLS_CERTDIR='/certs'
+    export DOCKER_CERT_PATH='/certs'
+    export DOCKER_HOST="tcp://localhost:2376"
+    export DOCKER_TLS_VERIFY="1"
+    export KUBECONFIG="/kubeconfig"
+    export OLLAMA_HOST="ollama.default.svc.cluster.local:11434"
+
+    function ssh-unlock
+      op-unlock
+      op read 'op://Personal/rlt3q545cf5a4r4arhnb4h5qmi/private_key' | ssh-add -t 4h -
+    end
+
+    tmux set -g status on &> /dev/null
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-bash-profile
+  namespace: @namespace@
+data:
+  .bash_profile: |-
+    # This file is only used over ssh
+    # Always use "main" session (for multiple devices to retain continuity)
+    [[ -e /home/heywoodlh/.nix-profile/bin/tmux ]] && [ -z $TMUX ] && { /home/heywoodlh/.nix-profile/bin/tmux new-session -A -s main && exit;}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-tmux
+  namespace: @namespace@
+data:
+  tmux.sh: |-
+    #!/usr/bin/env bash
+    [ -z $TMUX ] && { /home/heywoodlh/.nix-profile/bin/tmux new-session -A -s main && exit;}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-ttyd
+  namespace: @namespace@
+data:
+  ttyd.sh: |-
+    #!/usr/bin/env bash
+
+    TTYD_ARGS=""
+
+    if [ -n "${TTYD_USER}" ] && [ -n "${TTYD_PASS}" ];
+    then
+        TTYD_ARGS="${TTYD_ARGS} --credential ${TTYD_USER}:${TTYD_PASS}"
+    fi
+
+    COMMAND="/bin/bash"
+    [[ -e /home/heywoodlh/.nix-profile/bin/tmux ]] && COMMAND="/tmux.sh"
+
+    if [[ -e /home/heywoodlh/.nix-profile/bin/ttyd ]]
+    then
+        /home/heywoodlh/.nix-profile/bin/ttyd -W -t fontSize=16 -t fontFamily="JetBrains Mono Regular" -p 80 --uid 1000 --gid 1000 -w /home/heywoodlh --writable ${TTYD_ARGS} ${COMMAND}
+    else
+        /usr/bin/ttyd -W -t fontSize=16 -t fontFamily="JetBrains Mono Regular" -p 80 --uid 1000 --gid 1000 -w /home/heywoodlh --writable ${TTYD_ARGS} ${COMMAND}
+    fi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-nix-conf
+  namespace: @namespace@
+data:
+  nix.custom.conf: |-
+    # Managed via Kubernetes
+    sandbox = false
+    filter-syscalls = false
+    extra-substituters = http://attic.default.svc.cluster.local/nixos
+    extra-trusted-public-keys = nixos:pU2PdLt/QaDk8nec7lcy8DgsM96NTJ1bAOSs+jdoECc=
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dev
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: dev
+    app.kubernetes.io/instance: dev
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "dev"
+    tailscale.com/tags: "tag:http,tag:sshd"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: ttyd
+      protocol: TCP
+      name: ttyd
+    - port: 22
+      targetPort: sshd
+      protocol: TCP
+      name: sshd
+    - port: 60000
+      targetPort: 60000
+      protocol: UDP
+      name: udp
+  selector:
+    app.kubernetes.io/name: dev
+    app.kubernetes.io/instance: dev
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dev-nix
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 128Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dev-home
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 128Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dev-dind-storage
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dev-dind-certs
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: dev-host-keys
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 100Mi
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: k8s-dev
+  namespace: @namespace@
+subjects:
+- kind: ServiceAccount
+  name: k8s-dev
+  namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-dev
+  namespace: @namespace@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-kubeconfig
+  namespace: @namespace@
+data:
+  kubeconfig: |-
+    apiVersion: v1
+    clusters:
+    - cluster:
+        server: https://kubernetes.default.svc.cluster.local:443
+        certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      name: local
+    contexts:
+    - context:
+        cluster: local
+        user: default-user
+      name: local
+    current-context: local
+    kind: Config
+    preferences: {}
+    users:
+    - name: default-user
+      user:
+        tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: dev
+    app.kubernetes.io/instance: dev
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dev
+      app.kubernetes.io/instance: dev
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dev
+        app.kubernetes.io/instance: dev
+    spec:
+      serviceAccountName: k8s-dev
+      hostname: dev
+      securityContext:
+        {}
+      containers:
+        - name: dind
+          image: docker.io/docker:dind
+          ports:
+            - name: dind-con-port
+              containerPort: 2376
+              protocol: TCP
+          volumeMounts:
+            - name: dev-dind-certs
+              mountPath: /certs/client
+            - name: dev-dind-storage
+              mountPath: /var/lib/docker
+          tty: true
+          securityContext:
+            privileged: true
+        - name: dev
+          image: "@image@"
+          command:
+            - "bash"
+            - "-c"
+          args: [ "/gen-host-keys.sh; /keys.sh; /timezone.sh; /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf" ]
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: ttyd
+              containerPort: 80
+              protocol: TCP
+            - name: sshd
+              containerPort: 22
+              protocol: TCP
+          resources:
+            {}
+          volumeMounts:
+            - name: dev-nix
+              mountPath: /nix
+            - name: dev-home
+              mountPath: /home/heywoodlh
+            - name: dev-dind-certs
+              mountPath: /certs
+            - name: dev-sshd-config
+              mountPath: /etc/ssh/sshd_config.d/sshd.conf
+              subPath: sshd.conf
+            - name: dev-keys
+              mountPath: /keys.sh
+              subPath: keys.sh
+            - name: dev-gen-host-keys
+              mountPath: /gen-host-keys.sh
+              subPath: gen-host-keys.sh
+            - name: dev-custom-fish
+              mountPath: /home/heywoodlh/.config/fish/custom.fish
+              subPath: custom.fish
+            - name: dev-bash-profile
+              mountPath: /home/heywoodlh/.bash_profile
+              subPath: .bash_profile
+            - name: dev-tmux
+              mountPath: /tmux.sh
+              subPath: tmux.sh
+            - name: dev-ttyd
+              mountPath: /ttyd.sh
+              subPath: ttyd.sh
+            - name: dev-host-keys
+              mountPath: /etc/ssh/host_keys
+            - name: syncthing-data
+              mountPath: /opt/syncthing
+            - name: dev-timezone
+              mountPath: /timezone.sh
+              subPath: timezone.sh
+            - name: dev-nix-conf
+              mountPath: /etc/nix/nix.custom.conf
+              subPath: nix.custom.conf
+            - name: dev-kubeconfig
+              mountPath: /kubeconfig
+              subPath: kubeconfig
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: '/certs'
+            - name: DOCKER_CERT_PATH
+              value: '/certs'
+            - name: DOCKER_HOST
+              value: "tcp://localhost:2376"
+            - name: DOCKER_TLS_VERIFY
+              value: "1"
+            - name: TTYD_USER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-password
+                  key: username
+            - name: TTYD_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: dev-password
+                  key: password
+            - name: KUBECONFIG
+              value: "/kubeconfig"
+      volumes:
+        - name: dev-dind-certs
+          persistentVolumeClaim:
+            claimName: dev-dind-certs
+        - name: dev-dind-storage
+          persistentVolumeClaim:
+            claimName: dev-dind-storage
+        - name: dev-nix
+          persistentVolumeClaim:
+            claimName: dev-nix
+        - name: dev-home
+          persistentVolumeClaim:
+            claimName: dev-home
+        - name: dev-sshd-config
+          configMap:
+            name: dev-sshd-config
+        - name: dev-custom-fish
+          configMap:
+            name: dev-custom-fish
+        - name: dev-bash-profile
+          configMap:
+            name: dev-bash-profile
+        - name: dev-tmux
+          configMap:
+            name: dev-tmux
+            defaultMode: 0777
+        - name: dev-ttyd
+          configMap:
+            name: dev-ttyd
+            defaultMode: 0777
+        - name: dev-keys
+          configMap:
+            name: dev-keys
+            defaultMode: 0777
+        - name: dev-gen-host-keys
+          configMap:
+            name: dev-gen-host-keys
+            defaultMode: 0777
+        - name: dev-timezone
+          configMap:
+            name: dev-timezone
+            defaultMode: 0777
+        - name: dev-host-keys
+          persistentVolumeClaim:
+            claimName: dev-host-keys
+        - name: syncthing-data
+          hostPath:
+            path: /opt/syncthing
+            type: Directory
+        - name: dev-nix-conf
+          configMap:
+            name: dev-nix-conf
+        - name: dev-kubeconfig
+          configMap:
+            name: dev-kubeconfig

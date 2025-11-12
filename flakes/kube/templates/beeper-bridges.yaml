@@ -1,0 +1,111 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  finalizers:
+  - onepassword.com/finalizer.secret
+  generation: 1
+  name: beeper-key
+  namespace: @namespace@
+spec:
+  itemPath: vaults/Kubernetes/items/ujxgo6q3j7k44nr4vgxgkh3zoi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beeper-bridges
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: beeper-bridges
+    app.kubernetes.io/instance: beeper-bridges
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: beeper-bridges
+      app.kubernetes.io/instance: beeper-bridges
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: beeper-bridges
+        app.kubernetes.io/instance: beeper-bridges
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: beeper-signal
+          securityContext:
+            {}
+          image: "@image@"
+          command:
+            - "/bin/ash"
+            - "-c"
+          volumeMounts:
+            - name: signal-config
+              mountPath: /data
+          args:
+            - /usr/local/bin/run-bridge.sh sh-signal-000
+          imagePullPolicy: IfNotPresent
+          resources:
+            {}
+          env:
+            - name: MATRIX_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-key
+                  key: password
+        - name: beeper-discord
+          securityContext:
+            {}
+          image: "@image@"
+          command:
+            - "/bin/ash"
+            - "-c"
+          volumeMounts:
+            - name: discord-config
+              mountPath: /data
+          args:
+            - /usr/local/bin/run-bridge.sh sh-discord-000
+          imagePullPolicy: IfNotPresent
+          resources:
+            {}
+          env:
+            - name: MATRIX_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-key
+                  key: password
+        #- name: beeper-irc
+        #  securityContext:
+        #    {}
+        #  image: "@image@"
+        #  command:
+        #    - "/bin/ash"
+        #    - "-c"
+        #  volumeMounts:
+        #    - name: irc-config
+        #      mountPath: /data
+        #  args:
+        #    - /usr/local/bin/run-bridge.sh sh-irc-000
+        #  imagePullPolicy: IfNotPresent
+        #  resources:
+        #    {}
+        #  env:
+        #    - name: MATRIX_ACCESS_TOKEN
+        #      valueFrom:
+        #        secretKeyRef:
+        #          name: beeper-key
+        #          key: password
+      volumes:
+      - name: signal-config
+        hostPath:
+          path: @hostfolder@/signal
+          type: Directory
+      - name: discord-config
+        hostPath:
+          path: @hostfolder@/discord
+          type: Directory
+      - name: irc-config
+        hostPath:
+          path: @hostfolder@/irc
+          type: Directory

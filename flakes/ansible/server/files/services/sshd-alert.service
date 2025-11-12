@@ -1,0 +1,8 @@
+[Unit]
+Description=sshd-alert service
+
+[Service]
+ExecStart=/opt/scripts/sshd-alert.sh
+
+[Install]
+WantedBy=multi-user.target

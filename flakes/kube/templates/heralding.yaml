@@ -1,0 +1,183 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: heralding
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: heralding
+    app.kubernetes.io/instance: heralding
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "heralding"
+    tailscale.com/tags: "tag:honeypot"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 21
+      targetPort: ftp
+      protocol: TCP
+      name: ftp
+    - port: 22
+      targetPort: ssh
+      protocol: TCP
+      name: ssh
+    - port: 23
+      targetPort: telnet
+      protocol: TCP
+      name: telnet
+    - port: 25
+      targetPort: smtp
+      protocol: TCP
+      name: smtp
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 110
+      targetPort: pop3
+      protocol: TCP
+      name: pop3
+    - port: 143
+      targetPort: imap
+      protocol: TCP
+      name: imap
+    - port: 443
+      targetPort: https
+      protocol: TCP
+      name: https
+    - port: 465
+      targetPort: smtps
+      protocol: TCP
+      name: smtps
+    - port: 993
+      targetPort: imaps
+      protocol: TCP
+      name: imaps
+    - port: 995
+      targetPort: pop3s
+      protocol: TCP
+      name: pop3s
+    - port: 1080
+      targetPort: socks5
+      protocol: TCP
+      name: socks5
+    - port: 3306
+      targetPort: mysql
+      protocol: TCP
+      name: mysql
+    - port: 3389
+      targetPort: rdp
+      protocol: TCP
+      name: rdp
+    - port: 5432
+      targetPort: postgresql
+      protocol: TCP
+      name: postgresql
+    - port: 5900
+      targetPort: vnc
+      protocol: TCP
+      name: vnc
+  selector:
+    app.kubernetes.io/name: heralding
+    app.kubernetes.io/instance: heralding
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heralding
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: heralding
+    app.kubernetes.io/instance: heralding
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: heralding
+      app.kubernetes.io/instance: heralding
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: heralding
+        app.kubernetes.io/instance: heralding
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: tailer
+          image: docker.io/curlimages/curl:latest
+          command:
+            - "/bin/ash"
+            - "-c"
+          args:
+            - while read line; do curl --silent -d "honeypot alert -- ${line}" http://ntfy/honeypot-notifications; done < <(tail -F /log/log_auth.csv | grep -v '^timestamp')
+          volumeMounts:
+            - name: heralding-log
+              mountPath: /log
+        - name: heralding
+          securityContext:
+            {}
+          image: "@image@"
+          workingDir: /log
+          command:
+            - "heralding"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: heralding-log
+              mountPath: /log
+          ports:
+            - name: ftp
+              containerPort: 21
+              protocol: TCP
+            - name: ssh
+              containerPort: 22
+              protocol: TCP
+            - name: telnet
+              containerPort: 23
+              protocol: TCP
+            - name: smtp
+              containerPort: 25
+              protocol: TCP
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: pop3
+              containerPort: 110
+              protocol: TCP
+            - name: imap
+              containerPort: 143
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+            - name: smtps
+              containerPort: 465
+              protocol: TCP
+            - name: imaps
+              containerPort: 993
+              protocol: TCP
+            - name: pop3s
+              containerPort: 995
+              protocol: TCP
+            - name: socks5
+              containerPort: 1080
+              protocol: TCP
+            - name: mysql
+              containerPort: 3306
+              protocol: TCP
+            - name: rdp
+              containerPort: 3389
+              protocol: TCP
+            - name: postgresql
+              containerPort: 5432
+              protocol: TCP
+            - name: vnc
+              containerPort: 5900
+              protocol: TCP
+          resources:
+            {}
+      volumes:
+        - name: heralding-log
+          emptyDir:
+            sizeLimit: 2Gi

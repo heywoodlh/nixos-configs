@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: retroarcher
+  name: retroarcher
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: retroarcher
+  template:
+    metadata:
+      labels:
+        app: retroarcher
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+      - image: @image@
+        name: retroarcher
+        workingDir: /app
+        ports:
+        - name: retroarcher
+          containerPort: 9696
+        volumeMounts:
+        - name: retroarcher-config
+          mountPath: /config
+        env:
+          - name: TZ
+            value: "America/Denver"
+      volumes:
+      - name: retroarcher-config
+        hostPath:
+          path: @hostfolder@
+          type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: retroarcher
+  name: retroarcher
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "retroarcher"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: retroarcher
+    port: 80
+    protocol: TCP
+    targetPort: 9696
+  selector:
+    app: retroarcher
+  type: ClusterIP

@@ -1,0 +1,127 @@
+---
+- name: remove broken apt repository reference
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list
+    line: "deb https://deb.debian.org/debian/ bullseye-backports main"
+    state: absent
+
+- name: add neovim
+  ansible.builtin.apt:
+    name: neovim
+    state: latest
+
+- name: upgrade syslog-ng
+  ansible.builtin.apt:
+    name: syslog-ng
+    state: latest
+    dpkg_options: "force-confdef,force-confold,force-overwrite"
+
+- name: create syslog-ng configuration
+  ansible.builtin.file:
+    path: "/etc/syslog-ng/conf.d/"
+    state: directory
+
+- name: copy syslog-ng configuration
+  ansible.builtin.copy:
+    src: "etc/syslog-ng/{{ item }}"
+    dest: "/etc/syslog-ng/conf.d/{{ item }}"
+    force: true
+  register: syslog_config
+  with_items:
+    - "unifi-threat.conf"
+
+- name: restart syslog-ng
+  ansible.builtin.systemd_service:
+    name: syslog-ng.service
+    state: restarted
+  when:
+    - syslog_config.changed
+
+- name: check if connected to tailscale
+  ansible.builtin.uri:
+    url: http://files.barn-banana.ts.net
+  register: tailscale_server_check
+  ignore_errors: true
+
+- name: copy tailscale-dependent syslog-ng configuration
+  ansible.builtin.copy:
+    src: "etc/syslog-ng/{{ item }}"
+    dest: "/etc/syslog-ng/conf.d/{{ item }}"
+    force: true
+  register: syslog_config
+  with_items:
+    - "d_ntfy.conf"
+
+- name: restart syslog-ng
+  ansible.builtin.systemd_service:
+    name: syslog-ng.service
+    state: restarted
+  when:
+    - syslog_config.changed
+
+- name: install deps
+  ansible.builtin.apt:
+    pkg:
+      - wakeonlan
+      - cron
+
+- name: set cron timezone to America/Denver time
+  ansible.builtin.cron:
+    name: CRON_TZ
+    env: yes
+    value: America/Denver
+
+- name: set cron shell to bash
+  ansible.builtin.cron:
+    name: SHELL
+    env: yes
+    value: /bin/bash
+
+- name: install osquery agent
+  when: tailscale_server_check.status == 200
+  block:
+    - name: uninstall fleet package if installed
+      ansible.builtin.apt:
+        name: fleet-osquery
+        state: absent
+
+    - name: install osquery package
+      ansible.builtin.apt:
+        deb: "https://pkg.osquery.io/deb/osquery_5.17.0-1.linux_arm64.deb"
+
+    - name: mask journald audit socket (to reduce performance issues)
+      ansible.builtin.systemd_service:
+        name: systemd-journald-audit.socket
+        masked: true
+
+    - name: create osquery directory
+      ansible.builtin.file:
+        path: /etc/osquery
+        state: directory
+
+    - name: download osquery flagfile
+      ansible.builtin.copy:
+        src: etc/osquery/osquery.flags
+        dest: "/etc/osquery/osquery.flags"
+      register: osquery_flagfile
+
+    - name: download osquery certs
+      ansible.builtin.uri:
+        url: "http://files.barn-banana.ts.net/fleet/{{ item }}"
+        dest: "/etc/osquery/{{ item }}"
+      ignore_errors: true
+      with_items:
+        - "fleet.pem"
+        - "secret.txt"
+
+    - name: enable osquery service
+      ansible.builtin.systemd_service:
+        name: osqueryd.service
+        enabled: true
+        state: started
+
+    - name: restart osquery service
+      ansible.builtin.systemd_service:
+        name: osqueryd.service
+        state: restarted
+      when: osquery_flagfile.changed

@@ -1,0 +1,79 @@
+From e3c97b85f0e94011e77af9259d379c956f9d6d64 Mon Sep 17 00:00:00 2001
+From: Randy Palamar <palamar@ualberta.ca>
+Date: Thu, 25 Feb 2021 23:53:47 -0700
+Subject: [PATCH] support setting the default font size on invocation
+
+---
+ st.1 | 8 ++++++++
+ x.c  | 8 +++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/st.1 b/st.1
+index 39120b4..57ddfb8 100644
+--- a/st.1
++++ b/st.1
+@@ -22,6 +22,8 @@ st \- simple terminal
+ .IR line ]
+ .RB [ \-w
+ .IR windowid ]
++.RB [ \-z
++.IR fontsize ]
+ .RB [[ \-e ]
+ .IR command
+ .RI [ arguments ...]]
+@@ -44,6 +46,8 @@ st \- simple terminal
+ .IR title ]
+ .RB [ \-w
+ .IR windowid ]
++.RB [ \-z
++.IR fontsize ]
+ .RB \-l
+ .IR line
+ .RI [ stty_args ...]
+@@ -91,6 +95,10 @@ defines the window title (default 'st').
+ embeds st within the window identified by
+ .I windowid
+ .TP
++.BI \-z " fontsize"
++sets the default fontsize to
++.I fontsize
++.TP
+ .BI \-l " line"
+ use a tty
+ .I line
+diff --git a/x.c b/x.c
+index 120e495..224f26e 100644
+--- a/x.c
++++ b/x.c
+@@ -4,6 +4,7 @@
+ #include <limits.h>
+ #include <locale.h>
+ #include <signal.h>
++#include <stdlib.h>
+ #include <sys/select.h>
+ #include <time.h>
+ #include <unistd.h>
+@@ -1114,7 +1115,7 @@ xinit(int cols, int rows)
+ 		die("could not init fontconfig.\n");
+ 
+ 	usedfont = (opt_font == NULL)? font : opt_font;
+-	xloadfonts(usedfont, 0);
++	xloadfonts(usedfont, defaultfontsize);
+ 
+ 	/* colors */
+ 	xw.cmap = XDefaultColormap(xw.dpy, xw.scr);
+@@ -2038,6 +2039,11 @@ main(int argc, char *argv[])
+ 	case 'v':
+ 		die("%s " VERSION "\n", argv0);
+ 		break;
++	case 'z':
++		defaultfontsize = strtod(EARGF(usage()), NULL);
++		if (!(defaultfontsize > 0))
++			usage();
++		break;
+ 	default:
+ 		usage();
+ 	} ARGEND;
+-- 
+2.26.2
+

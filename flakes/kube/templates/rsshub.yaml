@@ -1,0 +1,164 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rsshub-browserless
+  name: rsshub-browserless
+  namespace: @namespace@
+spec:
+  replicas: @browserless_replicas@
+  selector:
+    matchLabels:
+      app: rsshub-browserless
+  template:
+    metadata:
+      labels:
+        app: rsshub-browserless
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+      - image: @browserless_image@
+        name: rsshub-browserless
+        ports:
+        - name: browserless
+          containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: rsshub-browserless
+  name: rsshub-browserless
+  namespace: @namespace@
+spec:
+  ports:
+  - name: rsshub-browserless
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: rsshub-browserless
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rsshub-redis
+  name: rsshub-redis
+  namespace: @namespace@
+spec:
+  replicas: @redis_replicas@
+  selector:
+    matchLabels:
+      app: rsshub-redis
+  template:
+    metadata:
+      labels:
+        app: rsshub-redis
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+      - image: @redis_image@
+        name: rsshub-redis
+        ports:
+        - name: redis
+          containerPort: 6379
+        volumeMounts:
+        - name: rsshub-redis-data
+          mountPath: /data
+      volumes:
+      - name: rsshub-redis-data
+        hostPath:
+          path: @hostfolder@/redis
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: rsshub-redis
+  name: rsshub-redis
+  namespace: @namespace@
+spec:
+  ports:
+  - name: rsshub-redis
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    app: rsshub-redis
+  type: ClusterIP
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "rsshub"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/dvcsamqty7467ditg2wrehgiym"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rsshub
+  name: rsshub
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: rsshub
+  template:
+    metadata:
+      labels:
+        app: rsshub
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+      - image: @image@
+        name: rsshub
+        ports:
+        - name: rsshub
+          containerPort: 1200
+        env:
+        - name: NODE_ENV
+          value: "1"
+        - name: CACHE_TYPE
+          value: "redis"
+        - name: REDIS_URL
+          value: "redis://rsshub-redis:6379/"
+        - name: PUPPETEER_WS_ENDPOINT
+          value: "ws://rsshub-browserless:3000"
+        - name: YOUTUBE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: rsshub
+              key: youtube_key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: rsshub
+  name: rsshub
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "rsshub"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: rsshub
+    port: 80
+    protocol: TCP
+    targetPort: 1200
+  selector:
+    app: rsshub
+  type: ClusterIP

@@ -1,0 +1,34 @@
+---
+- name: check if trizen is installed
+  ansible.builtin.command: bash -c "command -v trizen"
+  check_mode: false
+  changed_when: false
+  failed_when: which_trizen.rc > 1
+  register: which_trizen
+
+- name: copy install-trizen.sh script
+  when: which_trizen.rc != 0
+  block:
+    - name: copy install-trizen.sh script
+      ansible.builtin.copy:
+        src: ../files/install-trizen.sh
+        dest: /tmp/install-trizen.sh
+        mode: '0755'
+
+    - name: allow sudo without password for heywoodlh
+      ansible.builtin.include_tasks: ./sudo-passwordless.yml
+      vars:
+        state: "present"
+        username: "heywoodlh"
+
+    - name: install trizen
+      ansible.builtin.command: /tmp/install-trizen.sh
+      become: true
+      become_user: "heywoodlh"
+
+    - name: remove sudo without password for heywoodlh
+      ansible.builtin.include_tasks: ./sudo-passwordless.yml
+      vars:
+        state: "absent"
+        username: "heywoodlh"
+

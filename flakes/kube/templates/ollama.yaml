@@ -1,0 +1,133 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/instance: ollama
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "ollama"
+    tailscale.com/tags: "tag:ollama"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 11434
+      targetPort: ollama
+      protocol: TCP
+      name: ollama
+  selector:
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/instance: ollama
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/instance: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ollama
+      app.kubernetes.io/instance: ollama
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ollama
+        app.kubernetes.io/instance: ollama
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: ollama
+          securityContext:
+            privileged: true
+          image: "@image@"
+          imagePullPolicy: IfNotPresent
+          command: [ "ollama", "serve" ]
+          ports:
+            - name: ollama
+              containerPort: 11434
+              protocol: TCP
+          volumeMounts:
+            - name: ollama
+              mountPath: /root/.ollama
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+          env:
+            - name: DEVICE
+              value: "Arc"
+            - name: OLLAMA_INTEL_GPU
+              value: "true"
+            - name: ZES_ENABLE_SYSMAN
+              value: "1"
+            - name: OLLAMA_NUM_GPU
+              value: "999"
+            - name: OLLAMA_HOST
+              value: "0.0.0.0"
+      volumes:
+      - name: ollama
+        hostPath:
+          path: @hostfolder@
+          type: Directory
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ollama-pull
+  namespace: @namespace@
+data:
+  ollama-pull.sh: |-
+    #!/usr/bin/env bash
+    ## Models I always need
+    models=("gpt-oss:20b" "llama3:8b" "llama3.1:8b" "deepseek-coder:6.7b" "mistral:7b" "gemma3:4b" "qwen3:8b")
+    for model in "${models[@]}"
+    do
+      ollama pull "${model}"
+    done
+
+    ## Pull latest of existing models
+    ollama list | awk '{print $1}' | xargs -I {} ollama pull "{}"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ollama-pull
+  namespace: @namespace@
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: ollama-pull
+              image: "@image@"
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/bash", "-c"]
+              args: [
+                "/ollama-pull.sh"
+              ]
+              env:
+                - name: OLLAMA_HOST
+                  value: "ollama.@namespace@.svc.cluster.local:11434"
+              volumeMounts:
+                - name: ollama-pull
+                  mountPath: /ollama-pull.sh
+                  subPath: ollama-pull.sh
+          restartPolicy: OnFailure
+          volumes:
+            - name: ollama-pull
+              configMap:
+                name: ollama-pull
+                defaultMode: 0777
+

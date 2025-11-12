@@ -1,0 +1,93 @@
+---
+- name: arch tasks to install nix
+  when: ansible_os_family == 'Archlinux'
+  block:
+    - name: install nix
+      community.general.pacman:
+        name: "nix"
+        update_cache: yes
+
+    - name: ensure nix-users group exists
+      ansible.builtin.group:
+        name: nix-users
+        state: present
+
+    - name: add heywoodlh to nix group
+      ansible.builtin.user:
+        name: heywoodlh
+        groups: nix-users
+        append: yes
+
+    - name: enable flakes
+      ansible.builtin.lineinfile:
+        path: /etc/nix/nix.conf
+        line: "extra-experimental-features = nix-command flakes"
+        create: yes
+
+    - name: enable nix-daemon
+      ansible.builtin.systemd_service:
+        name: nix-daemon.service
+        state: restarted
+        enabled: true
+
+- name: alpine linux tasks to install nix
+  when: ansible_os_family == 'Alpine'
+  block:
+    - name: install nix dependencies
+      community.general.apk:
+        name: git,bash
+
+    - name: install nix
+      community.general.apk:
+        name: nix
+        update_cache: true
+
+    - name: ensure nix group exists
+      ansible.builtin.group:
+        name: nix
+        state: present
+
+    - name: add heywoodlh to nix group
+      ansible.builtin.user:
+        name: heywoodlh
+        groups: nix
+        append: yes
+
+    - name: enable flakes
+      ansible.builtin.lineinfile:
+        path: /etc/nix/nix.conf
+        line: "extra-experimental-features = nix-command flakes"
+        create: yes
+
+    - name: enable nix-daemon service
+      ansible.builtin.service:
+        name: nix-daemon
+        enabled: true
+        state: started
+
+- name: generic tasks to install nix
+  when:
+    - ansible_os_family != 'Archlinux'
+    - ansible_os_family != 'Alpine'
+  block:
+    - name: Install curl if on Debian
+      ansible.builtin.apt:
+        name: curl
+        update_cache: yes
+        lock_timeout: 600
+      when: ansible_os_family == "Debian"
+
+    - name: Check if Nix store exists
+      ansible.builtin.stat:
+        path: "/nix"
+      register: nix_store_check
+
+    - name: Install Nix
+      ansible.builtin.shell: |
+        curl -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+      when: not nix_store_check.stat.exists
+
+    - name: Add nix to $PATH
+      copy:
+        dest: /etc/profile.d/nix-path.sh
+        content: 'PATH=$PATH:/nix/var/nix/profiles/default/bin'

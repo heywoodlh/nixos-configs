@@ -1,0 +1,54 @@
+---
+- name: create /opt
+  ansible.builtin.file:
+    path: /opt/
+    state: directory
+    mode: 0755
+
+- name: create /opt/scripts
+  ansible.builtin.file:
+    path: /opt/scripts
+    state: directory
+    mode: 0700
+
+- name: add install-ansible.sh script
+  ansible.builtin.copy:
+    src: scripts/install-ansible.sh
+    dest: /opt/scripts/install-ansible.sh
+    mode: 0700
+
+- name: add ansible-pull.sh script
+  ansible.builtin.copy:
+    src: scripts/ansible-pull.sh
+    dest: /opt/scripts/ansible-pull.sh
+    mode: 0700
+
+- name: Check if Nix store exists
+  ansible.builtin.stat:
+    path: "/nix"
+  register: nix_store_check
+
+- name: create cron job to regularly ansible-pull
+  ansible.builtin.cron:
+    name: "ansible-pull"
+    special_time: hourly
+    job: "/opt/scripts/ansible-pull.sh &>/dev/null"
+
+- name: Setup Nix crons
+  when: nix_store_check.stat.exists
+  block:
+  - name: add nix-collect-garbage.sh script
+    ansible.builtin.copy:
+      src: scripts/nix-collect-garbage.sh
+      dest: /opt/scripts/nix-collect-garbage.sh
+      mode: 0700
+
+  - name: cron job to regularly run nix-collect-garbage
+    ansible.builtin.cron:
+      name: "nix-collect-garbage"
+      special_time: weekly
+      job: "/opt/scripts/nix-collect-garbage.sh &>/dev/null"
+
+  - name: import archlinux tasks
+    include_tasks: ../../../common/tasks/archlinux.yml
+    when: ansible_os_family == "Archlinux"

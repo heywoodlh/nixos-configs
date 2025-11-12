@@ -1,0 +1,133 @@
+---
+- name: configure root user
+  block:
+    - name: create root .ssh directory
+      ansible.builtin.file:
+        path: /root/.ssh
+        mode: '0700'
+        owner: root
+        state: directory
+
+    - name: update authorized_keys file
+      ansible.builtin.copy:
+        src: users/root/authorized_keys
+        dest: /root/.ssh/authorized_keys
+        mode: '0600'
+        owner: root
+
+    - name: add github keys to root authorized_keys
+      ansible.posix.authorized_key:
+        user: root
+        key: https://github.com/heywoodlh.keys
+
+- name: delete default users
+  block:
+    - name: "delete user {{ item }}"
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - linuxuser
+        - ubuntu
+
+    - name: "delete /home/{{ item }}"
+      ansible.builtin.file:
+        path: "/home/{{ item }}"
+        state: absent
+      loop:
+        - linuxuser
+        - ubuntu
+
+- name: configure heywoodlh user
+  block:
+    - name: create heywoodlh
+      ansible.builtin.user:
+        name: heywoodlh
+        shell: /bin/bash
+
+    - name: create /etc/sudoers.d
+      ansible.builtin.file:
+        path: /etc/sudoers.d/
+        state: directory
+
+    - name: passwordless sudo for heywoodlh
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/heywoodlh
+        state: present
+        create: true
+        regexp: "^heywoodlh"
+        line: "heywoodlh ALL=(ALL) NOPASSWD: ALL"
+        validate: 'visudo -cf %s'
+
+    - name: remove sudo configuration from archinstall script if exists
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: absent
+        regexp: "^heywoodlh"
+        line: "heywoodlh ALL=(ALL) ALL"
+        validate: 'visudo -cf %s'
+
+    - name:
+      shell: >
+        getent passwd heywoodlh | cut -d: -f6
+      changed_when: false
+      register: user_home
+
+    - name: create heywoodlh .ssh directory
+      ansible.builtin.file:
+        path: "{{ user_home.stdout }}/.ssh"
+        mode: '0700'
+        owner: heywoodlh
+        state: directory
+
+    - name: grab authorized_keys file
+      ansible.builtin.get_url:
+        url: https://github.com/heywoodlh.keys
+        dest: "{{ user_home.stdout }}/.ssh/authorized_keys"
+        mode: '0600'
+        owner: heywoodlh
+
+    #- name: install flakes
+    #  include_tasks: ./include/flake.yml
+    #  loop:
+    #  - tmux
+    #  - vim
+    #  - git
+
+    - name: check if tmux flake installed
+      ansible.builtin.command: "ls -l {{ user_home.stdout }}/.nix-profile/bin/tmux"
+      register: tmux_check
+      ignore_errors: true
+
+    - name: source .bashrc in .bash_profile
+      ansible.builtin.lineinfile:
+        path: "{{ user_home.stdout }}/.bash_profile"
+        create: true
+        line: "source {{ user_home.stdout }}/.bashrc"
+        owner: heywoodlh
+
+    - name: launch tmux with bash
+      ansible.builtin.lineinfile:
+        path: "{{ user_home.stdout }}/.bashrc"
+        create: true
+        line: "[ -z $TMUX ] && { {{ user_home.stdout }}/.nix-profile/bin/tmux new-session -A -s main && exit;}"
+        owner: heywoodlh
+      when: tmux_check is succeeded
+
+    - name: "add {{ user_home.stdout }}/.config/fish"
+      ansible.builtin.file:
+        state: directory
+        path: "{{ user_home.stdout }}/.config/fish"
+        owner: heywoodlh
+      when: tmux_check is succeeded
+      become_user: heywoodlh
+      become: true
+
+    - name: add machine.fish
+      ansible.builtin.copy:
+        src: users/heywoodlh/machine.fish
+        dest: "{{ user_home.stdout }}/.config/fish/machine.fish"
+        owner: heywoodlh
+      when: tmux_check is succeeded
+      become_user: heywoodlh
+      become: true

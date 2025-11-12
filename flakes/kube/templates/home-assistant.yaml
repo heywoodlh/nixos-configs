@@ -1,0 +1,128 @@
+---
+apiVersion: v1
+data:
+  TZ: @timezone@
+kind: ConfigMap
+metadata:
+  labels:
+    app: home-assistant
+    app.kubernetes.io/name: home-assistant
+  name: home-assistant-config-extraconf
+  namespace: @namespace@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: home-assistant
+    app.kubernetes.io/name: home-assistant
+  name: home-assistant
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "home-assistant"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: http
+    port: @port@
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: home-assistant
+    app.kubernetes.io/name: home-assistant
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: home-assistant
+    app.kubernetes.io/name: home-assistant
+  name: home-assistant
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: home-assistant
+      app.kubernetes.io/name: home-assistant
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: home-assistant
+        app.kubernetes.io/name: home-assistant
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      #hostNetwork: true
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: home-assistant-config-extraconf
+        image: @image@
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          tcpSocket:
+            port: 8123
+          timeoutSeconds: 1
+        name: home-assistant-app
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+              - NET_ADMIN
+              - NET_RAW
+              - SYS_ADMIN
+        ports:
+        - containerPort: 8123
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          tcpSocket:
+            port: 8123
+          timeoutSeconds: 1
+        resources: {}
+        startupProbe:
+          failureThreshold: 30
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          tcpSocket:
+            port: 8123
+          timeoutSeconds: 1
+        volumeMounts:
+        - mountPath: /config
+          name: ha-config-root
+          # Bluetooth
+        - mountPath: /dev/ttyACM0
+          name: ttyacm
+        - mountPath: /run/dbus
+          name: dbus
+        - mountPath: /dev/ttyUSB0
+          name: ttyusb
+      restartPolicy: Always
+      volumes:
+      - name: ha-config-root
+        hostPath:
+          path: /opt/home-assistant
+      # Bluetooth
+      - name: ttyacm
+        hostPath:
+          path: /dev/ttyACM0
+      # Zigbee USB
+      - name: ttyusb
+        hostPath:
+          path: /dev/ttyUSB0
+
+      - name: dbus
+        hostPath:
+          path: /run/dbus

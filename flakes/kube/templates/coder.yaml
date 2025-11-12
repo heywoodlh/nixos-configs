@@ -1,0 +1,420 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: @namespace@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: coder-postgresql
+  namespace: "@namespace@"
+  labels:
+    app.kubernetes.io/instance: coder
+    app.kubernetes.io/name: coder-postgresql
+    app.kubernetes.io/version: @postgres_version@
+automountServiceAccountToken: false
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "coder-db"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/2xjh5ay5mfce4r6fpbrxei27mq"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coder-postgresql-hl
+  namespace: "@namespace@"
+  labels:
+    app.kubernetes.io/instance: coder
+    app.kubernetes.io/name: coder-postgresql
+    app.kubernetes.io/version: @postgres_version@
+    app.kubernetes.io/component: primary
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/instance: coder
+    app.kubernetes.io/name: coder-postgresql
+    app.kubernetes.io/component: primary
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coder-postgresql
+  namespace: "@namespace@"
+  labels:
+    app.kubernetes.io/instance: coder
+    app.kubernetes.io/name: coder-postgresql
+    app.kubernetes.io/version: @postgres_version@
+    app.kubernetes.io/component: primary
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/instance: coder
+    app.kubernetes.io/name: coder-postgresql
+    app.kubernetes.io/component: primary
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: coder-postgresql
+  namespace: "@namespace@"
+  labels:
+    app.kubernetes.io/instance: coder
+    app.kubernetes.io/name: coder-postgresql
+    app.kubernetes.io/version: @postgres_version@
+    app.kubernetes.io/component: primary
+spec:
+  replicas: @postgres_replicas@
+  serviceName: coder-postgresql-hl
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: coder
+      app.kubernetes.io/name: coder-postgresql
+      app.kubernetes.io/component: primary
+  template:
+    metadata:
+      name: coder-postgresql
+      labels:
+        app.kubernetes.io/instance: coder
+        app.kubernetes.io/name: coder-postgresql
+        app.kubernetes.io/version: @postgres_version@
+        app.kubernetes.io/component: primary
+    spec:
+      serviceAccountName: coder-postgresql
+      automountServiceAccountToken: false
+      affinity:
+        podAffinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: coder
+                    app.kubernetes.io/name: coder-postgresql
+                    app.kubernetes.io/component: primary
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      hostNetwork: false
+      hostIPC: false
+      containers:
+        - name: postgresql
+          image: @postgres_image@
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_VOLUME_DIR
+              value: "/bitnami/postgresql"
+            - name: PGDATA
+              value: "/bitnami/postgresql/data"
+            # Authentication
+            - name: POSTGRES_USER
+              value: "coder"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: coder-db
+                  key: password
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: coder-db
+                  key: postgres-password
+            - name: POSTGRES_DATABASE
+              value: "coder"
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+            - name: POSTGRESQL_ENABLE_TLS
+              value: "no"
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: "false"
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: "off"
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: "error"
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: "pgaudit"
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "coder" -d "dbname=coder" -h 127.0.0.1 -p 5432
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  exec pg_isready -U "coder" -d "dbname=coder" -h 127.0.0.1 -p 5432
+                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+          resources:
+            limits: {}
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+            - name: data
+              mountPath: /bitnami/postgresql
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+        storageClassName: @postgres_storage_class@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations: {}
+  labels:
+    app.kubernetes.io/instance: coder
+    app.kubernetes.io/name: coder
+    app.kubernetes.io/part-of: coder
+    app.kubernetes.io/version: @version@
+  name: coder
+  namespace: @namespace@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: coder-workspace-perms
+  namespace: @namespace@
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs:
+    - create
+    - delete
+    - deletecollection
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs:
+    - create
+    - delete
+    - deletecollection
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - apps
+    resources:
+    - deployments
+    verbs:
+    - create
+    - delete
+    - deletecollection
+    - get
+    - list
+    - patch
+    - update
+    - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: "coder"
+  namespace: @namespace@
+subjects:
+  - kind: ServiceAccount
+    name: "coder"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: coder-workspace-perms
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coder
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: coder
+    app.kubernetes.io/instance: coder
+    app.kubernetes.io/part-of: coder
+    app.kubernetes.io/version: "@version@"
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "coder"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: "http"
+      port: @port@
+      targetPort: "http"
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: coder
+    app.kubernetes.io/instance: coder
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/instance: coder
+    app.kubernetes.io/name: coder
+    app.kubernetes.io/part-of: coder
+    app.kubernetes.io/version: @version@
+  name: coder
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: coder
+      app.kubernetes.io/name: coder
+  template:
+    metadata:
+      annotations: {}
+      labels:
+        app.kubernetes.io/instance: coder
+        app.kubernetes.io/name: coder
+        app.kubernetes.io/part-of: coder
+        app.kubernetes.io/version: @version@
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                  - coder
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - args:
+        - server
+        command:
+        - /opt/coder
+        env:
+        - name: CODER_HTTP_ADDRESS
+          value: 0.0.0.0:8080
+        - name: CODER_PROMETHEUS_ADDRESS
+          value: 0.0.0.0:2112
+        - name: KUBE_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: CODER_DERP_SERVER_RELAY_URL
+          value: http://$(KUBE_POD_IP):8080
+        - name: CODER_PG_CONNECTION_URL
+          valueFrom:
+            secretKeyRef:
+              key: db_url
+              name: coder-db
+        - name: CODER_ACCESS_URL
+          value: @access_url@
+        image: @image@
+        imagePullPolicy: IfNotPresent
+        lifecycle: {}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            scheme: HTTP
+        name: coder
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            scheme: HTTP
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: null
+          runAsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts: []
+      restartPolicy: Always
+      serviceAccountName: coder
+      terminationGracePeriodSeconds: 60
+      volumes: []

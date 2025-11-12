@@ -1,0 +1,16 @@
+---
+- name: copy journald.conf
+  ansible.builtin.copy:
+    src: systemd/journald.conf
+    dest: /etc/systemd/journald.conf
+    force: true
+  register: journald_config
+  when: ansible_os_family != "Alpine"
+
+- name: restart journald
+  ansible.builtin.systemd:
+    name: systemd-journald.service
+    state: restarted
+  when:
+    - journald_config.changed
+    - ansible_os_family != "Alpine"

@@ -1,0 +1,104 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: foldingathome
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: foldingathome
+  namespace: foldingathome
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: foldingathome
+  namespace: foldingathome
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: foldingathome
+  namespace: foldingathome
+subjects:
+- kind: ServiceAccount
+  name: foldingathome
+  namespace: foldingathome
+roleRef:
+  kind: Role
+  name: foldingathome
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: foldingathome
+  name: foldingathome
+  namespace: foldingathome
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: foldingathome
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: foldingathome
+    spec:
+      serviceAccountName: foldingathome
+      containers:
+        - env:
+            - name: ACCOUNT_TOKEN
+              value: ""
+            - name: CLI_ARGS
+              value: ""
+            - name: MACHINE_NAME
+              value: homelab
+            - name: PGID
+              value: "1000"
+            - name: PUID
+              value: "1000"
+            - name: TZ
+              value: America/Denver
+          image: lscr.io/linuxserver/foldingathome:8.4.9
+          name: foldingathome
+          ports:
+            - containerPort: 7396
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: config
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+      restartPolicy: Always
+      volumes:
+        - name: config
+          hostPath:
+            path: /media/data-ssd/foldingathome
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: foldingathome
+  name: foldingathome
+  namespace: foldingathome
+spec:
+  ports:
+    - name: "7396"
+      port: 7396
+      targetPort: 7396
+  selector:
+    app: foldingathome

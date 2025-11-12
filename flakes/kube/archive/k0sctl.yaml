@@ -1,0 +1,48 @@
+apiVersion: k0sctl.k0sproject.io/v1beta1
+kind: Cluster
+metadata:
+  name: k0s-cluster
+spec:
+  hosts:
+  - role: controller+worker
+    ssh:
+      user: heywoodlh
+      port: 22
+      address: 100.122.112.166
+    privateInterface: tailscale0
+    installFlags:
+      - --kubelet-extra-args="--node-ip=100.122.112.166"
+      - --no-taints
+  - role: worker
+    ssh:
+      user: heywoodlh
+      port: 22
+      address: 100.98.186.142
+    privateInterface: tailscale0
+    installFlags:
+      - --kubelet-extra-args="--node-ip=100.98.186.142"
+  - role: worker
+    ssh:
+      user: heywoodlh
+      port: 22
+      address: 100.118.109.137
+    privateInterface: tailscale0
+    installFlags:
+      - --kubelet-extra-args="--node-ip=100.118.109.137"
+  - role: worker
+    ssh:
+      user: heywoodlh
+      port: 22
+      address: 100.108.69.46
+    privateInterface: tailscale0
+    installFlags:
+      - --kubelet-extra-args="--node-ip=100.108.69.46"
+  k0s:
+    version: v1.29.1+k0s.0
+    dynamicConfig: false
+    config:
+      spec:
+        network:
+          provider: calico
+          calico:
+            mtu: 1280  # Tailscale

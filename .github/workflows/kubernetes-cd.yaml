@@ -1,0 +1,74 @@
+name: kubernetes cd
+
+on:
+  workflow_dispatch:
+  #schedule:
+  #  - cron: "0 0 * * 2"
+  #push:
+  #  branches:
+  #    - master
+  #  paths:
+  #    - flakes/kube/**
+  #    - '!flakes/kube/**.md'
+  #    - .github/workflows/kubernetes-cd.yaml
+
+jobs:
+  render-manifests:
+    name: Check and apply all deployments
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Login to Tailnet
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: true
+
+      - name: Set up binary cache
+        env:
+          ATTIC_PUBKEY: ${{ secrets.ATTIC_LINUX_PUBKEY }}
+          ATTIC_CACHE: "http://attic/nixos"
+        run: |
+          sudo tee -a /etc/nix/nix.conf > /dev/null <<EOF
+          extra-substituters = $ATTIC_CACHE
+          extra-trusted-public-keys = $ATTIC_PUBKEY
+          EOF
+
+      - name: Update manifests
+        working-directory: ./flakes
+        run: |
+          ./kube/render.sh
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: github.ref == 'refs/heads/master'
+        with:
+          commit_message: "GitHub Action automated Kubernetes update"
+          file_pattern: 'flakes/kube/manifests/*.yaml'
+
+      - name: Install kubectl
+        if: github.ref == 'refs/heads/master'
+        uses: azure/setup-kubectl@v4
+
+        # Get the value for the GitHub Actions secret with these commands:
+        # nix shell "github:nixos/nixpkgs/nixpkgs-unstable#coreutils"
+        # op read 'op://Kubernetes/s5dqdxlxnvhvdnq4pbyzg22swa/unprotected-kubeconfig' | base64
+      - name: Apply kube manifests
+        if: github.ref == 'refs/heads/master'
+        working-directory: ./flakes
+        run: |
+          mkdir -p -m 700 $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+          for file in $(ls ./kube/manifests/ | grep yaml); do kubectl apply -f ./kube/manifests/${file}; done

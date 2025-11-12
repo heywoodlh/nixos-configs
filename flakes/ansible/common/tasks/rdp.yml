@@ -1,0 +1,83 @@
+---
+- name: install gnome
+  ansible.builtin.apt:
+    name:
+      - gnome-control-center
+      - gnome-shell
+      - gnome-session
+      - network-manager
+      - xrdp
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: install gnome
+  community.general.pacman:
+    name:
+      - gnome-control-center
+      - gnome-shell
+      - gnome-session
+      - gnome-terminal
+      - firefox
+      - networkmanager
+    update_cache: yes
+  when: ansible_os_family == 'Archlinux'
+
+- name: install xrdp on arch
+  when: ansible_os_family == 'Archlinux'
+  block:
+    - name: allow sudo without password for heywoodlh
+      ansible.builtin.include_tasks: ./sudo-passwordless.yml
+      vars:
+        state: "present"
+        username: "heywoodlh"
+
+    - name: install xrdp
+      ansible.builtin.command: trizen -Sy --noconfirm xrdp xorgxrdp-glamor
+      become: true
+      become_user: "heywoodlh"
+
+    - name: remove sudo without password for heywoodlh
+      ansible.builtin.include_tasks: ./sudo-passwordless.yml
+      vars:
+        state: "absent"
+        username: "heywoodlh"
+
+- name: allow rdp through the firewall
+  ignore_errors: true # archlinux container doesn't like this
+  community.general.ufw:
+    rule: allow
+    port: '3389'
+    proto: tcp
+
+- name: configure xrdp for gnome
+  ansible.builtin.lineinfile:
+    path: "/home/heywoodlh/.xsession"
+    insertbefore: BOF
+    line: "gnome-session"
+    create: true
+    mode: "0644"
+    owner: "heywoodlh"
+
+- name: configure xrdp for gnome
+  ansible.builtin.blockinfile:
+    path: "/home/heywoodlh/.xsessionrc"
+    create: true
+    mode: "0644"
+    owner: "heywoodlh"
+    block: |
+      export XAUTHORITY=${HOME}/.Xauthority
+      export GNOME_SHELL_SESSION_MODE=ubuntu
+      export XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+  register: xrdp_gnome_configured
+
+- name: restart xrdp if gnome config changed
+  ansible.builtin.systemd_service:
+    name: xrdp.service
+    state: restarted
+  when: xrdp_gnome_configured.changed
+
+- name: enable xrdp
+  ansible.builtin.systemd_service:
+    name: xrdp.service
+    enabled: true
+    state: started

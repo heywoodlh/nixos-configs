@@ -1,0 +1,150 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "miniflux-db"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/mmvpitotypsaor7jvxc5e2xhim"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: miniflux-db
+  name: miniflux-db
+  namespace: @namespace@
+spec:
+  replicas: @postgres_replicas@
+  selector:
+    matchLabels:
+      app: miniflux-db
+  template:
+    metadata:
+      labels:
+        app: miniflux-db
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+      - image: @postgres_image@
+        name: miniflux-db
+        ports:
+        - name: postgres
+          containerPort: 5432
+        volumeMounts:
+        - name: miniflux-db-data
+          mountPath: /var/lib/postgresql/data
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: miniflux-db
+              key: username
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: miniflux-db
+              key: db_name
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: miniflux-db
+              key: password
+      volumes:
+      - name: miniflux-db-data
+        hostPath:
+          path: @hostfolder@/db
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: miniflux-db
+  name: miniflux-db
+  namespace: @namespace@
+spec:
+  ports:
+  - name: miniflux-db
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app: miniflux-db
+  type: ClusterIP
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "miniflux"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/3jdvjlmc67dfngycergck6ikxq"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: miniflux
+  name: miniflux
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: miniflux
+  template:
+    metadata:
+      labels:
+        app: miniflux
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+      - image: @image@
+        name: miniflux
+        ports:
+        - name: miniflux
+          containerPort: 8080
+        env:
+        - name: RUN_MIGRATIONS
+          value: "1"
+        - name: CREATE_ADMIN
+          value: "1"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: miniflux
+              key: db_url
+        - name: ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: miniflux
+              key: username
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: miniflux
+              key: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: miniflux
+  name: miniflux
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "miniflux"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: miniflux
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: miniflux
+  type: ClusterIP

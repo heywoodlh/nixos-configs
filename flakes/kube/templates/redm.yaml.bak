@@ -1,0 +1,311 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "redm"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/yybucjio2rjhyn6ve2bkmni3i4"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redm-mysql
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: redm-mysql
+  template:
+    metadata:
+      labels:
+        app: redm-mysql
+    spec:
+      containers:
+      - name: redm-mysql
+        image: @mysql_image@
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        env:
+        - name: MYSQL_DATABASE
+          value: redm
+        - name: MYSQL_HOST
+          value: 0.0.0.0
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redm
+              key: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redm
+              key: MYSQL_PASSWORD
+      volumes:
+      - name: mysql-data
+        hostPath:
+          path: @hostfolder@/db
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redm-mysql
+  namespace: @namespace@
+spec:
+  selector:
+    app: redm-mysql
+  ports:
+  - name: mysql
+    port: 3306
+    targetPort: 3306
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redm-init
+  namespace: @namespace@
+data:
+  clone.sh: |-
+    #!/usr/bin/env ash
+    repo="$1"
+    dest="$2"
+    rev="$3"
+
+    test -e "$dest" || git clone "$repo" "$dest"
+    git -C "$dest" fetch
+    git -C "$dest" checkout "$rev"
+  init.sh: |-
+    #!/usr/bin/env ash
+    apk --no-cache add git curl unzip mariadb-client
+    RESOURCE_DIR="/opt/cfx-server/resources"
+
+    # Resources can be found here: https://forum.cfx.re/c/redm-releases/60/l/top?period=all
+    # VORP
+    # Reference https://github.com/VORPCORE/VORP_txAdmin/blob/589b370752c80e66108aab7de53997162919d8dd/vorp_recipe.yaml#L33-L331
+    mkdir -p "$RESOURCE_DIR/[VORP]"
+    /clone.sh https://github.com/VORPCORE/vorp_lib $RESOURCE_DIR/[VORP]/vorp_lib 5f6e651906c5bf784a64fcd958eda487f39f1b40
+    /clone.sh https://github.com/VORPCORE/vorp_core $RESOURCE_DIR/[VORP]/vorp_core b25a05d9ff0332fac77075ce88b546ed898d85a9
+    /clone.sh https://github.com/VORPCORE/vorp_character $RESOURCE_DIR/[VORP]/vorp_character cc96a9adddbb98a8c5fe6a963e0245ec4ea76919
+    /clone.sh https://github.com/VORPCORE/vorp_inventory $RESOURCE_DIR/[VORP]/vorp_inventory 5a421c4107cb8a06c1c352d4bcbe409a7973aeed
+    /clone.sh https://github.com/VORPCORE/vorp_inputs-lua $RESOURCE_DIR/[VORP]/vorp_inputs b240d6ffc87d0c7843563ba3299bd8d5691f35db
+    /clone.sh https://github.com/VORPCORE/vorp_progressbar $RESOURCE_DIR/[VORP]/vorp_progressbar 70d938981b90467ba06ed30e123c11a1eed6e20b
+    /clone.sh https://github.com/VORPCORE/vorp_police $RESOURCE_DIR/[VORP]/vorp_police 50a7bec81120f6591d0016c7bead767ea18d85d1
+    /clone.sh https://github.com/VORPCORE/vorp_medic $RESOURCE_DIR/[VORP]/vorp_medic 1f23e8747ab7032db295f1922c20ac243610e234
+    /clone.sh https://github.com/VORPCORE/vorp_stores $RESOURCE_DIR/[VORP]/vorp_stores 515bd86ee7f18c9bc394aac23b23e86eb7e40450
+    /clone.sh https://github.com/VORPCORE/vorp_weaponsv2 $RESOURCE_DIR/[VORP]/vorp_weaponsv2 10974927894cfb8bef85d68aea3e3d5b8379b21a
+    /clone.sh https://github.com/VORPCORE/vorp_banking $RESOURCE_DIR/[VORP]/vorp_banking f3c108f1ac9111d52c924de78fc38a30cec14623
+    /clone.sh https://github.com/VORPCORE/vorp_paycheck $RESOURCE_DIR/[VORP]/vorp_paycheck 5f202f86e199221d5fd9cd88f585a69982771a65
+    /clone.sh https://github.com/VORPCORE/vorp_wildhorse $RESOURCE_DIR/[VORP]/vorp_wildhorse 0c381dcd72e5b34984481467069d776faa1a7dee
+    /clone.sh https://github.com/VORPCORE/vorp_lootnpcs $RESOURCE_DIR/[VORP]/vorp_lootnpcs 60f40992d0fd8e9ef2868f347469551ce411c934
+    /clone.sh https://github.com/VORPCORE/vorp_herbs $RESOURCE_DIR/[VORP]/vorp_herbs a48a419e25cf0fdabe7d972b44a31db9f8e4f70d
+    /clone.sh https://github.com/VORPCORE/vorp_billing $RESOURCE_DIR/[VORP]/vorp_billing 86c72dc5bfbda3ba67003937484f3942d2381053
+    /clone.sh https://github.com/VORPCORE/vorp_doorlocks $RESOURCE_DIR/[VORP]/vorp_doorlocks 0752fcd69d6240c1feb8828fa78f1faba1ffb97b
+    /clone.sh https://github.com/VORPCORE/vorp_admin $RESOURCE_DIR/[VORP]/vorp_admin 3dbf398733b0b0f02a90ca41b42e8c8c8f5059b9
+    /clone.sh https://github.com/VORPCORE/vorp_stables-lua $RESOURCE_DIR/[VORP]/vorp_stables 2bbc9ebaa17290ba1046f645621b36d89c9d8970
+    /clone.sh https://github.com/VORPCORE/vorp_hunting $RESOURCE_DIR/[VORP]/vorp_hunting 94c4bd25c4cbff619e6ec74ecc105399c32eef68
+    /clone.sh https://github.com/VORPCORE/vorp_housing $RESOURCE_DIR/[VORP]/vorp_housing b04a538275601e1abd7eb4a079f4f4b9c0d3b300
+    /clone.sh https://github.com/VORPCORE/vorp_crafting $RESOURCE_DIR/[VORP]/vorp_crafting cb7a91f34ef412fa95392fe55af01f88181105c8
+    /clone.sh https://github.com/VORPCORE/vorp_zonenotify $RESOURCE_DIR/[VORP]/vorp_zonenotify 098b0fa766a4d454308e17c0d0a4f1bc58b8decd
+    /clone.sh https://github.com/VORPCORE/vorp_mining $RESOURCE_DIR/[VORP]/vorp_mining 4db1ab89cc4ebe7a54ffabe8f7e54b02cd29ab54
+    /clone.sh https://github.com/VORPCORE/vorp_lumberjack $RESOURCE_DIR/[VORP]/vorp_lumberjack b66fcf97d3ac3ddbf454ed518043e42201bde11c
+    /clone.sh https://github.com/VORPCORE/vorp_fishing $RESOURCE_DIR/[VORP]/vorp_fishing a50533095404d60c3cfe3c052aea940685ee00df
+    /clone.sh https://github.com/VORPCORE/vorp_outlaws $RESOURCE_DIR/[VORP]/vorp_outlaws 94a42219814db5485f9ed257b8813db8546bea36
+    /clone.sh https://github.com/VORPCORE/vorp_crawfish $RESOURCE_DIR/[VORP]/vorp_crawfish 49fd88b514b5965261df87afebc76fd12c66e072
+    /clone.sh https://github.com/VORPCORE/vorp_animations $RESOURCE_DIR/[VORP]/vorp_animations 311d9169ce6b509676ca1c467685bafcc3faae11
+    /clone.sh https://github.com/VORPCORE/vorp_mailbox $RESOURCE_DIR/[VORP]/vorp_mailbox 07810b7e37c4808e94efd4c535c2db375ea909f8
+    /clone.sh https://github.com/VORPCORE/vorp_barbershop_lua $RESOURCE_DIR/[VORP]/vorp_barbershop f1d27c1e6c623bb038a9d87db089683529d51a35
+    /clone.sh https://github.com/VORPCORE/vorp_metabolism $RESOURCE_DIR/[VORP]/vorp_metabolism 94df851e97f9ee6258072c5a3110febcfff2589b
+    /clone.sh https://github.com/VORPCORE/vorp_utils $RESOURCE_DIR/[VORP]/vorp_utils b7eea92543b4322b1f967205605cc67df56c77e4
+    /clone.sh https://github.com/VORPCORE/vorp_menu $RESOURCE_DIR/[VORP]/vorp_menu c2c30b478d1220838db3ea10dda7cd1539eee1a0
+    /clone.sh https://github.com/VORPCORE/vorp_walkanim $RESOURCE_DIR/[VORP]/vorp_walkanim ea4b234ecda66865d4ddbee49e82afa9a56ddd78
+
+    # VORP postman has odd path
+    # https://github.com/VORPCORE/VORP_txAdmin/blob/589b370752c80e66108aab7de53997162919d8dd/vorp_recipe.yaml#L232-L235
+    if ! test -e "$RESOURCE_DIR/[VORP]/vorp_postman"
+    then
+      /clone.sh https://github.com/VORPCORE/VORP-PostMan /tmp/vorp_postman 7e52b0b24d6aa7372e0b4400acc7cd3f5dc1e60b
+      mv /tmp/vorp_postman/VORP-PostMan[Server-Client]/build/vorp_postman "$RESOURCE_DIR/[VORP]/vorp_postman"
+    fi
+
+    # Standalone VORP resources
+    mkdir -p "$RESOURCE_DIR/[standalone]"
+    # oxmysql
+    oxmysql_version="v2.12.0"
+    if ! test -e "$RESOURCE_DIR/[standalone]/oxmysql"
+    then
+      echo "Downloading oxmysql..."
+      cd $RESOURCE_DIR/[standalone]
+      curl -L https://github.com/overextended/oxmysql/releases/download/$oxmysql_version/oxmysql.zip -o ./oxmysql.zip
+      unzip ./oxmysql.zip
+      rm ./oxmysql.zip
+    fi
+    /clone.sh https://github.com/outsider31000/female_body_fix $RESOURCE_DIR/[standalone]/female_body_fix 9dfe2513161b3cb3fd514ac0274383069abe5dde
+    /clone.sh https://github.com/AvarianKnight/pma-voice $RESOURCE_DIR/[standalone]/pma-voice dc099d3f599c1bb96ac4c9cf0ef6e40d91e2042d
+    /clone.sh https://github.com/kibook/weathersync $RESOURCE_DIR/[standalone]/weathersync 9c8d3c49d8c0180a78c145d2a8e8ce73a1920bd0
+    /clone.sh https://github.com/outsider31000/redm-ipls $RESOURCE_DIR/[standalone]/redm-ipls 89c55aa39b122ef740cbb895d5b21f32ca93e266
+    /clone.sh https://github.com/outsider31000/syn_minigame $RESOURCE_DIR/[standalone]/syn_minigame cc69188671fa4dedadb1002a03f90f54d53c884c
+    /clone.sh https://github.com/outsider31000/moonshine_interiors $RESOURCE_DIR/[standalone]/moonshine_interiors 6e4340220d2d871f74c3527b15e01f8894b4c673
+    /clone.sh https://github.com/outsider31000/PolyZone $RESOURCE_DIR/[standalone]/PolyZone d124ac002ffd01722d2d57677e729c0e43b517e2
+    /clone.sh https://github.com/outsider31000/lockpick $RESOURCE_DIR/[standalone]/lockpick 162859fa2568a38c97b67f6407aab2714245da2d
+    /clone.sh https://github.com/outsider31000/loadingscreen $RESOURCE_DIR/[standalone]/loadingscreen ae7211ef6ad6d0ab96dc0022f9b6f49821f106be
+
+    # VORP_txAdmin assets for database, icon
+    /clone.sh https://github.com/VORPCORE/VORP_txAdmin $RESOURCE_DIR/[VORP]/vorp_txadmin 589b370752c80e66108aab7de53997162919d8dd
+
+    # Setup cfx-server-data resources folder
+    if ! test -e "$RESOURCE_DIR/[CFX]"
+    then
+      /clone.sh https://github.com/outsider31000/cfx-server-data /tmp/cfx-server-data 7b5e6a40458b0c23ff1e40811bd7ec0def118eb1
+      mv /tmp/cfx-server-data/resources "$RESOURCE_DIR/[CFX]"
+      rm -rf "$RESOURCE_DIR/[CFX]/[gameplay]/chat"
+    fi
+
+    # Custom stuff
+    mkdir -p "$RESOURCE_DIR/[custom]"
+
+    chown -R 1000: $RESOURCE_DIR
+    if mariadb --skip-ssl -u root -p$MYSQL_ROOT_PASSWORD -h $MYSQL_HOST -D $MYSQL_DATABASE -e 'SELECT * FROM bank_users LIMIT 1' > /dev/null
+    then
+        echo 'Database already initialized, skipping import'
+    else
+        echo 'Running initial database import'
+        mariadb --skip-ssl -u root -p$MYSQL_ROOT_PASSWORD -h $MYSQL_HOST -D $MYSQL_DATABASE < /opt/cfx-server/resources/[VORP]/vorp_txadmin/MariaDB.sql
+        echo 'Import completed'
+    fi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redm
+  name: redm
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redm
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: redm
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      initContainers:
+        - name: redm-init
+          image: "docker.io/alpine:latest"
+          command: [ "/bin/ash", "-c" ]
+          args: [
+            "/init.sh || true"
+          ]
+          volumeMounts:
+            - name: redm-init
+              mountPath: /init.sh
+              subPath: init.sh
+            - name: redm-clone
+              mountPath: /clone.sh
+              subPath: clone.sh
+            - mountPath: /opt/cfx-server/resources
+              name: redm-resources
+          env:
+          - name: MYSQL_DATABASE
+            value: redm
+          - name: MYSQL_HOST
+            value: redm-mysql.@namespace@.svc.cluster.local
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: redm
+                key: MYSQL_PASSWORD
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: redm
+                key: MYSQL_PASSWORD
+      containers:
+        - name: redm
+          command: [ "/opt/cfx-server/run.sh" ]
+          image: @image@
+          ports:
+            - containerPort: 30120
+              protocol: TCP
+            - containerPort: 30120
+              protocol: UDP
+            - containerPort: 40120
+              protocol: TCP
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /opt/cfx-server/server.cfg
+              subPath: server.cfg
+              name: redm-config
+            - mountPath: /opt/cfx-server/resources
+              name: redm-resources
+            - mountPath: /txData
+              name: redm-txdata
+      restartPolicy: Always
+      volumes:
+        - name: redm-config
+          secret:
+            secretName: redm
+            items:
+              - key: heywood-server-config
+                path: server.cfg
+        - name: redm-resources
+          hostPath:
+            path: @hostfolder@/resources
+            type: DirectoryOrCreate
+        - name: redm-txdata
+          hostPath:
+            path: @hostfolder@/txdata
+            type: DirectoryOrCreate
+        - name: redm-init
+          configMap:
+            name: redm-init
+            defaultMode: 0777
+            items:
+              - key: init.sh
+                path: init.sh
+        - name: redm-clone
+          configMap:
+            name: redm-init
+            defaultMode: 0777
+            items:
+              - key: clone.sh
+                path: clone.sh
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redm
+  name: redm
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "redm"
+    tailscale.com/tags: "tag:redm,tag:http"
+spec:
+  ports:
+    - name: "redm-tcp"
+      port: 30120
+      targetPort: 30120
+    - name: "redm-udp"
+      port: 30120
+      protocol: UDP
+      targetPort: 30120
+    - name: "txadmin"
+      port: 80
+      targetPort: 40120
+  selector:
+    app: redm

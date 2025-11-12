@@ -1,0 +1,22 @@
+---
+- name: install microceph snap
+  community.general.snap:
+    name: microceph
+
+- name: bootstrap the cluster (skip failure if already bootstrapped)
+  ansible.builtin.command: microceph cluster bootstrap || true
+
+- name: add single node rules to cluster
+  ansible.builtin.command: "{{ item }}"
+  loop:
+    - microceph.ceph osd crush rule rm replicated_rule
+    - microceph.ceph osd crush rule create-replicated single default osd
+
+- name: copy add-ceph.sh to server
+  ansible.builtin.copy:
+    src: storage/add-ceph.sh
+    dest: /tmp/add-ceph.sh
+    mode: '755'
+
+- name: add ceph to the cluster
+  ansible.builtin.command: /tmp/add-ceph.sh /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi2

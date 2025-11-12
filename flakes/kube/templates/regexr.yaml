@@ -1,0 +1,50 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: @namespace@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: regexr
+  name: regexr
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: regexr
+  template:
+    metadata:
+      labels:
+        app: regexr
+    spec:
+      containers:
+      - image: @image@
+        name: regexr
+        ports:
+        - name: regexr
+          containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: regexr
+  name: regexr
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "regexr"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: regexr
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: regexr
+  type: ClusterIP

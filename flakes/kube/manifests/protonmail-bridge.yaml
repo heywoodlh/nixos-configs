@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: protonmail-bridge
+  name: protonmail-bridge
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: protonmail-bridge
+  template:
+    metadata:
+      labels:
+        app: protonmail-bridge
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: docker.io/shenxn/protonmail-bridge:3.19.0-1
+        name: protonmail-bridge
+        ports:
+        - name: smtp
+          containerPort: 25
+        - name: imap
+          containerPort: 143
+        - name: caldav
+          containerPort: 8080
+        volumeMounts:
+        - name: protonmail-bridge-data
+          mountPath: /root/
+      volumes:
+      - name: protonmail-bridge-data
+        hostPath:
+          path: /opt/protonmail-bridge
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: protonmail-bridge
+  name: protonmail-bridge
+  namespace: default
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "protonmail-bridge"
+    tailscale.com/tags: "tag:protonmailbridge"
+spec:
+  ports:
+  - name: smtp
+    port: 25
+    protocol: TCP
+    targetPort: smtp
+  - name: imap
+    port: 143
+    protocol: TCP
+    targetPort: imap
+  - name: caldav
+    port: 8080
+    protocol: TCP
+    targetPort: caldav
+  selector:
+    app: protonmail-bridge
+  type: ClusterIP

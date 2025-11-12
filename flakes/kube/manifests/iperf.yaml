@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iperf
+  namespace: default
+  labels:
+    app.kubernetes.io/name: iperf
+    app.kubernetes.io/instance: iperf
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "iperf"
+    tailscale.com/tags: "tag:iperf"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5201
+      targetPort: iperf
+      protocol: TCP
+      name: iperf
+  selector:
+    app.kubernetes.io/name: iperf
+    app.kubernetes.io/instance: iperf
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iperf
+  namespace: default
+  labels:
+    app.kubernetes.io/name: iperf
+    app.kubernetes.io/instance: iperf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: iperf
+      app.kubernetes.io/instance: iperf
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: iperf
+        app.kubernetes.io/instance: iperf
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: iperf
+          securityContext:
+            {}
+          image: "docker.io/heywoodlh/iperf3:3.16-r0"
+          command:
+            - "/bin/ash"
+            - "-c"
+          args:
+            - iperf3 --server
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: iperf
+              containerPort: 5201
+              protocol: TCP
+          resources:
+            {}

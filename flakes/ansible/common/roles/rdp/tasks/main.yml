@@ -1,0 +1,4 @@
+---
+- name: import linux.yml tasks
+  import_tasks: linux.yml
+  when: ansible_os_family == 'Debian' or ansible_os_family == 'Archlinux'

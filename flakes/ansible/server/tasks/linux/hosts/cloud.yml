@@ -1,0 +1,4 @@
+---
+- name: import rdp tasks
+  include_tasks: ../../../../common/tasks/rdp.yml
+  when: ansible_hostname == 'cloud'

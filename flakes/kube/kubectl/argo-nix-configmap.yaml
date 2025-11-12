@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nix-cmp-config
+  namespace: argo
+data:
+  nix.conf: |
+    build-users-group = nixbld
+    sandbox = false
+    experimental-features = nix-command flakes
+    substituters = https://cache.nixos.org https://nixhelm.cachix.org
+    trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nixhelm.cachix.org-1:esqauAsR4opRF0UsGrA6H3gD21OrzMnBBYvJXeddjtY=
+  passwd: |
+    nix:x:999:30000:Nix build user 1:/home/nix:/bin/false
+    root:x:0:0::/root:/bin/bash
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: nix-cmp-plugin
+    spec:
+      discover:
+        fileName: flake.nix
+      generate:
+        command:
+        - sh
+        - "-c"
+        - cat result
+      init:
+        command:
+        - sh
+        - "-c"
+        - |
+          export OUTPUT="${ARGOCD_ENV_NIX_OUTPUT:-kubernetesConfiguration}"
+          echo -ne "Building for $OUTPUT\n" >/dev/stderr
+          if [ "$PARAM_VALUES" != "" ]; then
+            echo -ne "With values\n" >/dev/stderr
+            echo "$PARAM_VALUES" > values.json
+            nix-shell -p git --run ''git add values.json''
+          fi
+          if [ "$PARAM_IMPURE" == "true" ]; then
+            echo -ne "With impure\n" >/dev/stderr
+            IMPURE_FLAG="--impure"
+          else
+            IMPURE_FLAG=""
+          fi
+          nix build $IMPURE_FLAG ".#${OUTPUT}"
+      lockRepo: true
+      name: nix-cmp-plugin
+      version: v1.0

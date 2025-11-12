@@ -1,0 +1,180 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "atuin-secrets"
+  namespace: @namespace@
+spec:
+  itemPath: "vaults/Kubernetes/items/i4tx742api4557bhfmf7wmiws4"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  strategy:
+    type: Recreate # This is important to ensure duplicate pods don't run and cause corruption
+  selector:
+    matchLabels:
+      io.kompose.service: atuin-db
+  template:
+    metadata:
+      labels:
+        io.kompose.service: atuin-db
+    spec:
+      containers:
+        - name: postgresql
+          image: @postgres_image@
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: atuin
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: atuin-secrets
+                  key: ATUIN_DB_PASSWORD
+                  optional: false
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: atuin-secrets
+                  key: ATUIN_DB_USERNAME
+                  optional: false
+          lifecycle:
+            preStop:
+              exec:
+                # This ensures graceful shutdown see: https://stackoverflow.com/a/75829325/3437018
+                # Potentially consider using a `StatefulSet` instead of a `Deployment`
+                command: ["/usr/local/bin/pg_ctl stop -D /var/lib/postgresql/data -w -t 60 -m fast"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 250m
+              memory: 600Mi
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data/
+              name: database
+      volumes:
+        - name: database
+          persistentVolumeClaim:
+            claimName: atuin-db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atuin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: atuin
+  template:
+    metadata:
+      labels:
+        io.kompose.service: atuin
+    spec:
+      containers:
+        - args:
+            - server
+            - start
+          env:
+            - name: ATUIN_DB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: atuin-secrets
+                  key: ATUIN_DB_URI
+                  optional: false
+            - name: ATUIN_HOST
+              value: 0.0.0.0
+            - name: ATUIN_PORT
+              value: "8888"
+            - name: ATUIN_OPEN_REGISTRATION
+              value: "true"
+          image: @image@
+          name: atuin
+          ports:
+            - containerPort: 8888
+          resources:
+            limits:
+              cpu: 250m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 1Gi
+          volumeMounts:
+            - mountPath: /config
+              name: atuin
+      volumes:
+        - name: atuin
+          persistentVolumeClaim:
+            claimName: atuin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: atuin
+  name: atuin
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "atuin"
+    tailscale.com/tags: "tag:atuin"
+spec:
+  ports:
+    - port: 8888
+      targetPort: 8888
+      protocol: TCP
+      name: atuin
+  selector:
+    io.kompose.service: atuin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: atuin-db
+  name: postgres
+spec:
+  type: ClusterIP
+  selector:
+    io.kompose.service: atuin-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: atuin-db
+  name: atuin-db
+  namespace: @namespace@
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: atuin
+  name: atuin
+  namespace: @namespace@
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi

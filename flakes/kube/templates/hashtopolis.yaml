@@ -1,0 +1,240 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "hashtopolis"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/n5xv4oqmltdxosxcqyy3gigh6i"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kubernetes.service: hashtopolisdb
+  name: hashtopolisdb
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kubernetes.service: hashtopolisdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kubernetes.service: hashtopolisdb
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+        - env:
+            - name: MYSQL_DATABASE
+              value: hashtopolis
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hashtopolis
+                  key: db-password
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hashtopolis
+                  key: db-password
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: hashtopolis
+                  key: db-username
+          image: @mysql_image@
+          name: hashtopolis-db
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db
+          ports:
+            - name: mysql
+              containerPort: 3306
+              protocol: TCP
+      restartPolicy: Always
+      volumes:
+        - name: db
+          hostPath:
+            path: @hostfolder@/db
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kubernetes.service: hashtopolisdb
+  name: hashtopolisdb
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "mysql"
+      port: 3306
+      targetPort: mysql
+  selector:
+    io.kubernetes.service: hashtopolisdb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kubernetes.service: hashtopolis-backend
+  name: hashtopolis-backend
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kubernetes.service: hashtopolis-backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kubernetes.service: hashtopolis-backend
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+        - env:
+            - name: HASHTOPOLIS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hashtopolis
+                  key: username
+            - name: HASHTOPOLIS_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: hashtopolis
+                  key: password
+            - name: HASHTOPOLIS_APIV2_ENABLE
+              value: "1"
+            - name: HASHTOPOLIS_DB_DATABASE
+              value: hashtopolis
+            - name: HASHTOPOLIS_DB_HOST
+              value: hashtopolisdb.@namespace@.svc.cluster.local
+            - name: HASHTOPOLIS_DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: hashtopolis
+                  key: db-password
+            - name: HASHTOPOLIS_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: hashtopolis
+                  key: db-username
+          image: @backend_image@
+          name: hashtopolis-backend
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /usr/local/share/hashtopolis
+              name: hashtopolis-data
+      restartPolicy: Always
+      volumes:
+        - name: hashtopolis-data
+          hostPath:
+            path: @hostfolder@/data
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kubernetes.service: hashtopolis-backend
+  name: hashtopolis-backend
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "http"
+      port: 8080
+      targetPort: http
+  selector:
+    io.kubernetes.service: hashtopolis-backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kubernetes.service: hashtopolis-frontend
+  name: hashtopolis-frontend
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kubernetes.service: hashtopolis-frontend
+  template:
+    metadata:
+      labels:
+        io.kubernetes.service: hashtopolis-frontend
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+        - env:
+            - name: HASHTOPOLIS_BACKEND_URL
+              value: http://hashtopolis-backend.@namespace@.svc.cluster.local:8080
+          image: @frontend_image@
+          name: hashtopolis-frontend
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kubernetes.service: hashtopolis-frontend
+  name: hashtopolis
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "hashtopolis"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+    - name: "http"
+      port: 80
+      targetPort: http
+  selector:
+    io.kubernetes.service: hashtopolis-frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kubernetes.service: hashtopolis-agent
+  name: hashtopolis-agent
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kubernetes.service: hashtopolis-agent
+  template:
+    metadata:
+      labels:
+        io.kubernetes.service: hashtopolis-agent
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+        - image: @agent_image@
+          name: hashtopolis-agent
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+      restartPolicy: Always

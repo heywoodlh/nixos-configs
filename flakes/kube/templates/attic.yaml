@@ -1,0 +1,132 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "attic-server-token"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/za3oirjkd6ehdlnzvisb445hga"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: server-toml
+  namespace: @namespace@
+data:
+  server.toml: |-
+    listen = "[::]:8080"
+    allowed-hosts = []
+    [database]
+    url = "sqlite:///data/db/server.db"
+    [storage]
+    type = "local"
+    path = "/data/attic/storage"
+    [chunking]
+    nar-size-threshold = 65536
+    min-size = 16384
+    avg-size = 65536
+    max-size = 262144
+    [compression]
+    type = "zstd"
+    [garbage-collection]
+    interval = "12 hours"
+    default-retention-period = "3 months"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: attic
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: attic
+    app.kubernetes.io/instance: attic
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "attic"
+    tailscale.com/tags: "tag:attic"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: attic
+  selector:
+    app.kubernetes.io/name: attic
+    app.kubernetes.io/instance: attic
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attic
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: attic
+    app.kubernetes.io/instance: attic
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: attic
+      app.kubernetes.io/instance: attic
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: attic
+        app.kubernetes.io/instance: attic
+    spec:
+      securityContext:
+        {}
+      initContainers:
+        - name: db-init
+          image: docker.io/alpine/sqlite
+          command:
+            - "/bin/ash"
+            - "-c"
+          args:
+            - |
+              test -e /data/db/server.db || sqlite3 /data/db/server.db "VACUUM;"
+          volumeMounts:
+            - name: dbdir
+              mountPath: /data/db
+      containers:
+        - name: attic
+          image: "@image@"
+          command:
+            - "/bin/ash"
+            - "-c"
+          args:
+            - /bin/atticd -f /var/empty/.config/attic/server.toml
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {}
+          volumeMounts:
+            - name: server-toml
+              mountPath: /var/empty/.config/attic/server.toml
+              subPath: server.toml
+            - name: dbdir
+              mountPath: /data/db
+            - name: storagedir
+              mountPath: /data/attic/storage
+          env:
+            - name: ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64
+              valueFrom:
+                secretKeyRef:
+                  name: attic-server-token
+                  key: password
+      volumes:
+        - name: server-toml
+          configMap:
+            name: server-toml
+        - name: dbdir
+          hostPath:
+            path: @hostfolder@/db
+            type: Directory
+        - name: storagedir
+          hostPath:
+            path: @hostfolder@/data
+            type: Directory

@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: squid
+  name: squid
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: squid
+  template:
+    metadata:
+      labels:
+        app: squid
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+      - image: @image@
+        name: squid
+        ports:
+        - name: squid
+          containerPort: 3128
+        volumeMounts:
+        - name: squid-config
+          mountPath: /etc/squid
+        - name: squid-cache
+          mountPath: /var/spool/squid
+        - name: squid-log
+          mountPath: /var/log/squid
+      - name: tailer
+        image: docker.io/busybox:1.35.0
+        command:
+        - "/bin/sh"
+        - "-c"
+        args:
+          - tail -F /var/log/squid/access.log
+        volumeMounts:
+          - name: squid-log
+            mountPath: /var/log/squid
+      volumes:
+      - name: squid-config
+        hostPath:
+          path: @hostfolder@/config
+          type: Directory
+      - name: squid-cache
+        hostPath:
+          path: @hostfolder@/cache
+          type: Directory
+      - name: squid-log
+        hostPath:
+          path: @hostfolder@/log
+          type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: squid
+  name: squid
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "squid"
+    tailscale.com/tags: "tag:squid"
+spec:
+  ports:
+  - name: squid
+    port: 3128
+    protocol: TCP
+    targetPort: 3128
+  selector:
+    app: squid
+  type: ClusterIP

@@ -1,0 +1,146 @@
+---
+- name: set ssh service name to 'ssh' if Debian-based
+  ansible.builtin.set_fact:
+    ssh_service_name: 'ssh'
+  when: ansible_os_family == 'Debian'
+
+- name: set ssh service name to 'sshd' if not Debian-based
+  ansible.builtin.set_fact:
+    ssh_service_name: 'sshd'
+  when: ansible_os_family != 'Debian'
+
+- name: setup sshd-alert systemd monitoring script
+  when: ansible_os_family != 'Alpine'
+  block:
+  - name: create /opt/scripts directory
+    ansible.builtin.file:
+      path: /opt/scripts
+      state: directory
+      owner: root
+      group: root
+      mode: '0700'
+
+  - name: create sshd-alert.sh script
+    ansible.builtin.template:
+      src: sshd-alert.sh.j2
+      dest: /opt/scripts/sshd-alert.sh
+      owner: root
+      group: root
+      mode: '0700'
+      force: true
+    register: sshd_alert_script_copy
+
+  - name: copy sshd-alert systemd service
+    ansible.builtin.copy:
+      src: services/sshd-alert.service
+      dest: /etc/systemd/system/sshd-alert.service
+
+  - name: start and enable sshd-alert.service
+    ansible.builtin.systemd:
+      name: sshd-alert.service
+      daemon_reload: true
+      state: started
+      enabled: true
+
+  - name: restart sshd-alert.service if sshd-alert.sh script changed
+    ansible.builtin.systemd:
+      name: sshd-alert.service
+      state: restarted
+    when: sshd_alert_script_copy.changed
+
+- name: configure sshd
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regex: "^(#)?{{item.key}}"
+    line: "{{item.key}} {{item.value}}"
+    state: present
+  loop:
+    - { key: "PermitRootLogin", value: "prohibit-password" }
+    - { key: "PasswordAuthentication", value: "no" }
+  register: sshd_configure_root
+
+- name: restart sshd.service if config changed
+  ansible.builtin.service:
+    name: "{{ ssh_service_name }}"
+    state: restarted
+  when: sshd_configure_root.changed
+
+- name: check if on UDM
+  ansible.builtin.stat:
+    path: /usr/bin/ubios-udapi-server
+  register: udm_check
+
+- name: enable ufw with default rules
+  when: not udm_check.stat.exists
+  block:
+    - name: enable iptables on arch
+      ansible.builtin.service:
+        name: iptables
+        state: started
+        enabled: true
+      when: ansible_os_family == "Archlinux"
+
+    - ansible.builtin.shell: "{{ item }}"
+      ignore_errors: true # archlinux container doesn't like this
+      loop:
+        - ufw allow 22
+        - ufw allow 60000:61000/udp
+        - ufw allow in on tailscale0 to any
+        - ufw allow out on tailscale0 to any
+        - yes | ufw enable
+
+    - ansible.builtin.service:
+        name: ufw
+        state: started
+        enabled: true
+      ignore_errors: true # archlinux container doesn't like this
+
+- name: check if connected to tailscale
+  ansible.builtin.uri:
+    url: http://files.barn-banana.ts.net
+  register: tailscale_server_check
+  ignore_errors: true
+
+#- name: install wazuh agent
+#  when:
+#    - tailscale_check is succeeded
+#    - ansible_os_family == 'Debian'
+#    - ansible_hostname != 'wazuh'
+#  block:
+#    - ansible.builtin.apt:
+#        deb: "https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_{{ wazuh_version }}_{{ wazuh_arch }}.deb"
+#      environment:
+#        WAZUH_MANAGER: "wazuh.barn-banana.ts.net"
+#      vars:
+#        wazuh_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}"
+#        wazuh_version: "4.9.0-1"
+#
+#    - name: enable wazuh service
+#      ansible.builtin.systemd_service:
+#        state: started
+#        daemon_reload: true
+#        enabled: true
+#        name: wazuh-agent
+
+- name: check if running on Unifi Dream Machine
+  ansible.builtin.stat:
+    path: /usr/bin/ubios-udapi-server
+  register: udm_check
+
+- name: install fleet agent
+  when:
+    - tailscale_server_check.status == 200
+    - ansible_os_family == 'Debian'
+    - not udm_check.stat.exists
+  block:
+    - name: gather package facts
+      ansible.builtin.package_facts:
+        manager: "apt"
+
+    - ansible.builtin.apt:
+        deb: "http://files.barn-banana.ts.net/fleet/fleet-osquery_1.44.0_{{ fleet_arch }}.deb"
+      when:
+        - "'fleet-osquery' not in ansible_facts.packages"
+      ignore_errors: true
+      vars:
+        fleet_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}"

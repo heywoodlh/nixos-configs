@@ -1,0 +1,60 @@
+- name: Setup Ubuntu Workstation
+  groups:
+    - all
+  tasks:
+    - !shell
+      name: Update apt cache
+      cmd: "apt update"
+      with:
+        sudo: root
+
+    - !shell
+      name: Install dependencies
+      cmd: "apt install -y {{ item }}"
+      with:
+        sudo: root
+        items:
+          - curl
+          - acpi
+          - gnome-screenshot
+
+    - !shell
+      name: Install Tailscale
+      cmd: "curl https://tailscale.com/install.sh | bash"
+      with:
+        sudo: root
+
+    - !copy
+      name: Copy firefox-snap.sh
+      src: scripts/firefox-snap.sh
+      dest: /tmp/firefox-snap.sh
+
+    - !shell
+      name: Disable Firefox Snap
+      cmd: bash /tmp/firefox-snap.sh
+      with:
+        sudo: root
+
+    - !shell
+      name: Configure dbus
+      cmd: ln -s /usr/share/dbus-1/session.conf /etc/dbus-1/session.conf || true
+      with:
+        sudo: root
+
+    - !shell
+      name: Add nix to PATH if exists
+      cmd: ln -sf /nix/var/nix/profiles/default/bin/nix /usr/local/bin/nix || true
+      with:
+        sudo: root
+
+    - !shell
+      name: Configure Home Manager
+      cmd: "nix --extra-experimental-features 'nix-command flakes' run {{ nixos-configs }}#homeConfigurations.heywoodlh.activationPackage --impure --override-input 'nixpkgs-lts' 'github:nixos/nixpkgs/{{ release }}'"
+      with:
+        sudo: heywoodlh
+
+    - !shell
+      name: Enable ufw
+      cmd: "ufw --force enable"
+      with:
+        sudo: root

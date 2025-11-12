@@ -1,0 +1,172 @@
+name: build-linux-bundles
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 2"
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/linux-bundles.yml
+
+jobs:
+  build-multiarch-bundles:
+    name: Build multiarch bundles
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+        flake: [vim, fish, git, ttyd-nerd]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Login to Tailnet
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: true
+
+      - name: Set up binary cache
+        env:
+          ATTIC_PUBKEY: ${{ secrets.ATTIC_LINUX_PUBKEY }}
+          ATTIC_CACHE: "http://attic/nixos"
+        run: |
+          sudo tee -a /etc/nix/nix.conf > /dev/null <<EOF
+          extra-substituters = $ATTIC_CACHE
+          extra-trusted-public-keys = $ATTIC_PUBKEY
+          EOF
+
+      - name: Build ${{ matrix.flake }} flake bundles
+        working-directory: ./flakes
+        run: |
+          mkdir -p appimage deb
+          nix bundle -o "./${{ matrix.os }}-${{ matrix.out }}-appimage" --bundler github:ralismark/nix-appimage "./${{ matrix.flake }}"
+          cp "./${{ matrix.os }}-${{ matrix.out }}-appimage" "./appimage/${{ matrix.flake }}-amd64.appimage"
+          nix bundle -o "./${{ matrix.os }}-${{ matrix.flake }}-deb" --bundler github:nixos/bundlers#toDEB "./${{ matrix.flake }}"
+          cp "./${{ matrix.os }}-${{ matrix.flake }}-deb"/*.deb "./deb/${{ matrix.flake }}-amd64.deb"
+          nix run nixpkgs#tree
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-${{ matrix.flake }}
+          path: |
+            ./flakes/appimage/*.appimage
+            ./flakes/deb/*.deb
+
+  build-custom-bundles:
+    name: Build custom flake bundles
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            flake: "./flakes/fish#tmux"
+            out: "tmux"
+          - os: ubuntu-24.04-arm
+            flake: "./flakes/fish#tmux"
+            out: "tmux"
+
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Login to Tailnet
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: true
+
+      - name: Set up binary cache
+        env:
+          ATTIC_PUBKEY: ${{ secrets.ATTIC_LINUX_PUBKEY }}
+          ATTIC_CACHE: "http://attic/nixos"
+        run: |
+          sudo tee -a /etc/nix/nix.conf > /dev/null <<EOF
+          extra-substituters = $ATTIC_CACHE
+          extra-trusted-public-keys = $ATTIC_PUBKEY
+          EOF
+
+      - name: Build ${{ matrix.flake }} flake bundles
+        working-directory: ./flakes
+        run: |
+          mkdir -p appimage deb
+          nix bundle -o "./${{ matrix.os }}-${{ matrix.out }}-appimage" --bundler github:ralismark/nix-appimage "${{ matrix.flake }}"
+          cp "./${{ matrix.os }}-${{ matrix.out }}-appimage" "./appimage/${{ matrix.out }}-amd64.appimage"
+          nix bundle -o "./${{ matrix.os }}-${{ matrix.out }}-deb" --bundler github:nixos/bundlers#toDEB "${{ matrix.flake }}"
+          cp "./${{ matrix.os }}-${{ matrix.out }}-deb"/*.deb "./deb/${{ matrix.out }}-amd64.deb"
+          nix run nixpkgs#tree
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-${{ matrix.out }}
+          path: |
+            ./flakes/appimage/*.appimage
+            ./flakes/deb/*.deb
+
+  push-releases:
+    name: Push releases
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: [build-multiarch-bundles, build-custom-bundles]
+    steps:
+      - name: Login to Tailnet
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: true
+
+      - name: Set up binary cache
+        env:
+          ATTIC_PUBKEY: ${{ secrets.ATTIC_LINUX_PUBKEY }}
+          ATTIC_CACHE: "http://attic/nixos"
+        run: |
+          sudo tee -a /etc/nix/nix.conf > /dev/null <<EOF
+          extra-substituters = $ATTIC_CACHE
+          extra-trusted-public-keys = $ATTIC_PUBKEY
+          EOF
+
+      - name: Download bundles
+        uses: actions/download-artifact@v5
+
+      - name: Show final structure of bundles
+        working-directory: ./flakes
+        run: |
+          nix run nixpkgs#tree
+
+      - name: Create appimage release with flake executables
+        uses: ncipollo/release-action@v1.20.0
+        with:
+          artifacts: './flakes/*/appimage/*.appimage'
+          tag: "appimages"
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create deb release with flake executables
+        uses: ncipollo/release-action@v1.20.0
+        with:
+          artifacts: "./flakes/*/deb/*.deb"
+          tag: "packages"
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}

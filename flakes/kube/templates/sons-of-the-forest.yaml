@@ -1,0 +1,181 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: @namespace@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/instance: "theforest"
+    app.kubernetes.io/name: theforest
+data:
+  dedicatedserver.cfg: |-
+    {
+      "IpAddress": "100.69.214.75",
+      "GamePort": 8766,
+      "QueryPort": 27016,
+      "BlobSyncPort": 9700,
+      "ServerName": "heywoodlh-server",
+      "MaxPlayers": 8,
+      "Password": "",
+      "SaveSlot": 5,
+      "SaveMode": "Continue",
+      "GameMode": "Custom",
+      "SaveInterval": 600,
+      "IdleDayCycleSpeed": 0.0,
+      "IdleTargetFramerate": 5,
+      "ActiveTargetFramerate": 60,
+      "LogFilesEnabled": false,
+      "TimestampLogFilenames": true,
+      "TimestampLogEntries": true,
+      "GameSettings": {
+        "Gameplay.TreeRegrowth": false,
+        "Structure.Damage": true
+      },
+      "CustomGameModeSettings": {
+        "GameSetting.Multiplayer.Cheats": true,
+        "GameSetting.Multiplayer.PvpDamage": "Off",
+        "GameSetting.Vail.EnemySpawn": true,
+        "GameSetting.Vail.EnemyHealth": "Low",
+        "GameSetting.Vail.EnemyDamage": "High",
+        "GameSetting.Vail.EnemyArmour": "Low",
+        "GameSetting.Vail.EnemyAggression": "Low",
+        "GameSetting.Vail.AnimalSpawnRate": "Normal",
+        "GameSetting.Environment.StartingSeason": "Winter",
+        "GameSetting.Environment.SeasonLength": "Default",
+        "Structure.Damage": "true",
+        "Gameplay.TreeRegrowth": false,
+        "GameSetting.Environment.DayLength": "Long",
+        "GameSetting.Environment.PrecipitationFrequency": "High",
+        "GameSetting.Survival.ConsumableEffects": "Normal",
+        "GameSetting.Survival.PlayerStatsDamage": "Off",
+        "GameSetting.Survival.ColdPenalties": "Off",
+        "GameSetting.Survival.ReducedFoodInContainers": false,
+        "GameSetting.Survival.SingleUseContainers": true
+      },
+      "LanOnly": true,
+      "SkipNetworkAccessibilityTest": false
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: theforest
+  name: theforest
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: theforest
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose.yml convert
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: theforest
+    spec:
+      securityContext:
+        fsGroup: 1000
+      initContainers:
+        - name: config-init
+          image: "docker.io/busybox:latest"
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/ash", "-c"]
+          args: [
+            "cp -vf /data/dedicatedserver.cfg /sonsoftheforest/userdata/dedicatedserver.cfg && chown 1000:1000 /sonsoftheforest/userdata/dedicatedserver.cfg"
+          ]
+          volumeMounts:
+            - mountPath: /sonsoftheforest
+              name: theforest-claim0
+            - name: config-volume
+              mountPath: /data
+      containers:
+        - env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: ALWAYS_UPDATE_ON_START
+              value: "true"
+            - name: SKIP_NETWORK_ACCESSIBILITY_TEST
+              value: "true"
+            - name: FILTER_SHADER_AND_MESH_AND_WINE_DEBUG
+              value: "true"
+          image: @image@
+          imagePullPolicy: Always
+          name: theforest-server
+          ports:
+            - containerPort: 8766
+              protocol: UDP
+            - containerPort: 27016
+              protocol: UDP
+            - containerPort: 9700
+              protocol: UDP
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 500Mi
+          volumeMounts:
+            - mountPath: /sonsoftheforest
+              name: theforest-claim0
+            - name: config-volume
+              mountPath: /data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: theforest-claim0
+          hostPath:
+            path: @hostfolder@
+            type: Directory
+        - name: config-volume
+          configMap:
+            name: config
+            defaultMode: 0777
+            items:
+            - key: dedicatedserver.cfg
+              path: dedicatedserver.cfg
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.35.0 (HEAD)
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "forest"
+    tailscale.com/tags: "tag:theforest"
+  labels:
+    io.kompose.service: theforest
+  name: theforest
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "theforest-1"
+      port: 8766
+      protocol: UDP
+      targetPort: 8766
+    - name: "theforest-2"
+      port: 27016
+      protocol: UDP
+      targetPort: 27016
+    - name: "theforest-3"
+      port: 9700
+      protocol: UDP
+      targetPort: 9700
+  selector:
+    io.kompose.service: theforest

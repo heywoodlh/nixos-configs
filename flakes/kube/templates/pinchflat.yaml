@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: pinchflat
+  name: pinchflat
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      io.kompose.service: pinchflat
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: pinchflat
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      securityContext:
+        runAsUser: 995
+        fsGroup: 995
+      containers:
+        - image: @image@
+          imagePullPolicy: "Always"
+          name: pinchflat
+          ports:
+            - containerPort: 8945
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: pinchflat-data
+            - mountPath: /downloads
+              name: pinchflat-downloads
+      restartPolicy: Always
+      volumes:
+        - name: pinchflat-data
+          hostPath:
+            path: @hostfolder@/data
+            type: DirectoryOrCreate
+        - name: pinchflat-downloads
+          hostPath:
+            path: @hostmediafolder@
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: pinchflat
+  name: pinchflat
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "pinchflat"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8945
+  selector:
+    io.kompose.service: pinchflat

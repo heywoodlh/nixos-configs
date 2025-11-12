@@ -1,0 +1,41 @@
+---
+- name: Create /opt/public directory
+  ansible.builtin.file:
+    state: directory
+    path: "/opt/public"
+    mode: "0755"
+
+- name: Copy wakeonlan scripts
+  ansible.builtin.copy:
+    src: "files/scripts/{{ item }}"
+    dest: "/opt/public/{{ item }}"
+    mode: "0755"
+  loop:
+    - "wake-spencer-gaming.sh"
+    - "wake-sarah-gaming.sh"
+
+- name: Wake gaming machines during automatic update times
+  ansible.builtin.cron:
+    name: "check dirs"
+    minute: "*/5"
+    hour: "2-4"
+    job: "{{ item }}"
+  loop:
+    - "/opt/public/wake-spencer-gaming.sh"
+    - "/opt/public/wake-sarah-gaming.sh"
+
+- name: create unprivileged shortcuts user
+  ansible.builtin.user:
+    name: shortcuts
+    shell: /bin/bash
+
+- name: add shortcuts authorized_keys
+  ansible.posix.authorized_key:
+    key: "{{ item }}"
+    user: shortcuts
+  loop:
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGwSpRQbbgxX5uoJTyWfK4X+2f+1ax1cXFcJ8LFrY0Hd Shortcuts on CloudyRushmore"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL5Tu90fnoX8OBMfOCn4GrXL56zTBeBbA/rvnfT1wift Shortcuts on Spencer’s Mac mini"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICrFlxnaT/0dmxT0cVx0hT+g7ImFQtEaAxLBbbaEMAcq Shortcuts on m4-ipad-pro"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWD92zJTd8O3SbCn5/6zFcFwllRp+8PC5Q02F3E25io Shortcuts on m4-macbook-air"
+    - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE8z3QrQ8Oe910R2e7XkY+D/52GodqCu+5u/if1AIn3v Shortcuts on Sarah ipad"

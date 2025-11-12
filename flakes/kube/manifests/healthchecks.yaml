@@ -1,0 +1,38 @@
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  finalizers:
+  - onepassword.com/finalizer.secret
+  generation: 1
+  name: healthchecks-io
+  namespace: monitoring
+spec:
+  itemPath: vaults/Kubernetes/items/tdehpmbj4xwrzz6yzjgoozn7om
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: healthchecks
+  namespace: monitoring
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 30
+      template:
+        spec:
+          containers:
+          - image: docker.io/curlimages/curl:8.16.0
+            name: healthchecks
+            command:
+            - "/bin/ash"
+            - "-c"
+            args:
+            - "curl -fS -m 10 --retry 5 -o /dev/null $(HEALTHCHECKS_URL)"
+            env:
+              - name: HEALTHCHECKS_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: healthchecks-io
+                    key: kubernetes-cluster-url
+          restartPolicy: OnFailure

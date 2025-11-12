@@ -1,0 +1,174 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "arma-reforger"
+  namespace: @namespace@
+spec:
+  itemPath: "vaults/Kubernetes/items/bo7ij7tziueojgebxbpvuov55e"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arma-mods
+  namespace: @namespace@
+data:
+  mods.json: |
+    [
+      {
+        "modId": "655936C958B2D030" // red dawn 2 pve
+      },
+      {
+        "modId": "5965550F24A0C152" // wherami
+      },
+      {
+        "modId": "5AAF6D5352E5FCAB" // redline-core
+      },
+      {
+        "modId": "59A30ACC02650E71" // night vision systems
+      },
+      {
+        "modId": "5CA125536EE7430A" // m110 dmr
+      },
+      {
+        "modId": "5D7531C2D05BC700" // mcr-pack 5.56
+      },
+      {
+        "modId": "5F173AB9D0648AD1" // noveske n4 (ar-15)
+      },
+      {
+        "modId": "5F268647F8A1A1F4" // crx enfusion ai
+      },
+      {
+        "modId": "606B100247F5C709" // bacon loadout editor
+      },
+      {
+        "modId": "5C73156675E11A0F" // gm persistent loadouts
+      }
+    ]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose.yml convert
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: arma-reforger
+  name: arma-reforger
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: arma-reforger
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose -f docker-compose.yml convert
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: arma-reforger
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+        - image: ghcr.io/acemod/arma-reforger:latest
+          name: arma-reforger
+          command: ["/bin/bash", "-c"]
+          args: # remove comments from mods.json
+            - rm -f /reforger/Configs/docker_generated.json && cat /config/mods.json | sed -re 's#^(([^"\n]*"[^"\n]*")*[^"\n]*)\/\/.*$#\1#' > /mods.json && python3 /launch.py
+          env:
+            - name: GAME_NAME
+              value: heywoodlh-arma
+            - name: GAME_ADMINS
+              value: "76561198268733886"
+            - name: GAME_SCENARIO_ID
+              value: "{DFAC5FABD11F2390}Missions/26_CombatOpsEveron.conf"
+            - name: GAME_PROPS_BATTLEYE
+              value: "false"
+            - name: GAME_SUPPORTED_PLATFORMS
+              value: "PLATFORM_PC,PLATFORM_XBL,PLATFORM_PSN"
+            - name: GAME_PASSWORD_ADMIN
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: arma-reforger
+            - name: RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: rcon
+                  name: arma-reforger
+            - name: GAME_MODS_JSON_FILE_PATH
+              value: "/mods.json"
+          ports:
+            - containerPort: 2001
+              protocol: UDP
+            - containerPort: 17777
+              protocol: UDP
+            - containerPort: 19999
+              protocol: UDP
+          volumeMounts:
+            - mountPath: /reforger/Configs
+              name: configs
+            - mountPath: /home/profile
+              name: home-profile
+            - mountPath: /root
+              name: root
+            - mountPath: /reforger/workshop
+              name: workshop
+            - name: arma-mods
+              mountPath: /config/mods.json
+              subPath: mods.json
+      restartPolicy: Always
+      volumes:
+        - name: configs
+          hostPath:
+            path: @hostfolder@/configs
+        - name: home-profile
+          hostPath:
+            path: @hostfolder@/home-profile
+        - name: root
+          hostPath:
+            path: @hostfolder@/root
+        - name: workshop
+          hostPath:
+            path: @hostfolder@/workshop
+        - name: arma-mods
+          configMap:
+            name: arma-mods
+            items:
+            - key: mods.json
+              path: mods.json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose.yml convert
+    kompose.version: 1.35.0 (HEAD)
+    tailscale.com/tags: "tag:arma-reforger"
+    tailscale.com/hostname: "arma-reforger"
+    tailscale.com/expose: "true"
+  labels:
+    io.kompose.service: arma-reforger
+  name: arma-reforger
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "udp"
+      port: 2001
+      protocol: UDP
+      targetPort: 2001
+    - name: "udp1"
+      port: 17777
+      protocol: UDP
+      targetPort: 17777
+    - name: "rcon"
+      port: 19999
+      protocol: UDP
+      targetPort: 19999
+  selector:
+    io.kompose.service: arma-reforger

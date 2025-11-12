@@ -1,0 +1,128 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: motioneye-pvc
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: @storageclass@
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: motioneye
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: motioneye
+    app.kubernetes.io/instance: motioneye
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: motioneye
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: motioneye
+    app.kubernetes.io/instance: motioneye
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "motioneye"
+    tailscale.com/tags: "tag:motioneye"
+spec:
+  type: ClusterIP
+  ports:
+    - port: @port@
+      targetPort: 8765
+      protocol: TCP
+      name: http
+    - port: 8081
+      targetPort: 8081
+      protocol: TCP
+      name: stream
+    - port: 8082
+      targetPort: 8082
+      protocol: TCP
+      name: stream-2
+    - port: 8083
+      targetPort: 8083
+      protocol: TCP
+      name: stream-3
+  selector:
+    app.kubernetes.io/name: motioneye
+    app.kubernetes.io/instance: motioneye
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: motioneye
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: motioneye
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: motioneye
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: motioneye
+        app.kubernetes.io/instance: motioneye
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      serviceAccountName: motioneye
+      securityContext:
+        {}
+      containers:
+        - name: motioneye
+          securityContext: {}
+          image: "docker.io/ccrisan/motioneye:@tag@"
+          imagePullPolicy: Always
+          ports:
+            - name: stream
+              containerPort: 8081
+              protocol: TCP
+            - name: stream-2
+              containerPort: 8082
+              protocol: TCP
+            - name: stream-3
+              containerPort: 8083
+              protocol: TCP
+            - name: server
+              containerPort: 8765
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 0.5
+              memory: 512Mi
+            limits:
+              cpu: 1
+              memory: 1Gi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8765
+          resources: {}
+          volumeMounts:
+            - name: motioneye-data
+              mountPath: /etc/motioneye
+            - name: localtime
+              mountPath: /etc/localtime
+      volumes:
+        - name: motioneye-data
+          persistentVolumeClaim:
+            claimName: motioneye-pvc
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+            type: File

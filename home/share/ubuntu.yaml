@@ -17,11 +17,11 @@ provision:
     #!/bin/bash
     curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
     source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-    nix profile install "github:heywoodlh/flakes#tmux" --no-write-lock-file
+    nix profile install "github:heywoodlh/nixos-configs?dir=flakes#tmux" --no-write-lock-file
     echo '[ -e ~/.nix-profile/bin/tmux ] && [ -z "$TMUX"  ] && { ~/.nix-profile/bin/tmux && exit;}' | tee ~{{.User}}/.bashrc
-    nix profile install "github:heywoodlh/flakes#vim" --no-write-lock-file
-    nix profile install "github:heywoodlh/flakes#git" --no-write-lock-file
-    nix profile install "github:heywoodlh/flakes#op" --no-write-lock-file
+    nix profile install "github:heywoodlh/nixos-configs?dir=flakes#vim" --no-write-lock-file
+    nix profile install "github:heywoodlh/nixos-configs?dir=flakes#git" --no-write-lock-file
+    nix profile install "github:heywoodlh/nixos-configs?dir=flakes#op" --no-write-lock-file
 - mode: system
   script: |
     #!/bin/bash

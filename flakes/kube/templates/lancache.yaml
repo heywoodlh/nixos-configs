@@ -1,0 +1,164 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    io.kubernetes.service: lancache-dns
+  name: lancache-dns
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      io.kubernetes.service: lancache-dns
+  template:
+    metadata:
+      annotations: {}
+      labels:
+        io.kubernetes.service: lancache-dns
+    spec:
+      containers:
+        - name: lancache-dns
+          tty: true
+          env:
+            - name: CACHE_DISK_SIZE
+              value: "@cache_disk_size@"
+            - name: CACHE_INDEX_SIZE
+              value: "@cache_index_size@"
+            - name: CACHE_MAX_AGE
+              value: "@cache_max_age@"
+            - name: CACHE_ROOT
+              value: "/lancache/cache"
+            - name: DNS_BIND_IP
+              value: "0.0.0.0"
+            - name: LANCACHE_IP
+              value: "@cache_ip@"
+            - name: TZ
+              value: "@timezone@"
+            - name: UPSTREAM_DNS
+              value: "@dns_upstream@"
+            - name: USE_GENERIC_CACHE
+              value: "@cache_generic@"
+            - name: ALLOW_GLOBAL_ROUTABLE_IP
+              value: "1"
+          image: @dns_image@
+          ports:
+            - containerPort: 53
+              protocol: UDP
+            - containerPort: 53
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lancache-dns
+  namespace: @namespace@
+  annotations:
+    tailscale.com/tailnet-ip: "@dns_ip@"
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "lancache-dns"
+    tailscale.com/tags: "tag:dns"
+  labels:
+    io.kubernetes.service: lancache-dns
+spec:
+  ports:
+    - name: "53"
+      port: 53
+      protocol: UDP
+      targetPort: 53
+    - name: 53-tcp
+      port: 53
+      targetPort: 53
+  selector:
+    io.kubernetes.service: lancache-dns
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lancache
+  namespace: @namespace@
+  annotations: {}
+  labels:
+    io.kubernetes.service: lancache
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      io.kubernetes.service: lancache
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations: {}
+      labels:
+        io.kubernetes.service: lancache
+    spec:
+      containers:
+        - name: lancache
+          env:
+            - name: CACHE_DISK_SIZE
+              value: "@cache_disk_size@"
+            - name: CACHE_INDEX_SIZE
+              value: "@cache_index_size@"
+            - name: CACHE_MAX_AGE
+              value: "@cache_max_age@"
+            - name: CACHE_ROOT
+              value: /data/cache
+            - name: DNS_BIND_IP
+              value: "@dns_ip@"
+            - name: LANCACHE_IP
+              value: "@cache_ip@"
+            - name: TZ
+              value: "@timezone@"
+            - name: UPSTREAM_DNS
+              value: "@dns_upstream@"
+            - name: USE_GENERIC_CACHE
+              value: "@cache_generic@"
+          image: @cache_image@
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 443
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/cache
+              name: monolithic-cache
+            - mountPath: /data/logs
+              name: monolithic-logs
+      restartPolicy: Always
+      volumes:
+        - name: monolithic-cache
+          hostPath:
+            path: @cache_hostDir@/cache
+            type: Directory
+        - name: monolithic-logs
+          hostPath:
+            path: @cache_hostDir@/logs
+            type: Directory
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lancache
+  namespace: @namespace@
+  annotations:
+    tailscale.com/tailnet-ip: "@cache_ip@"
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "lancache"
+    tailscale.com/tags: "tag:http"
+  labels:
+    io.kubernetes.service: lancache
+spec:
+  ports:
+    - name: "80"
+      port: 80
+      targetPort: 80
+    - name: "443"
+      port: 443
+      targetPort: 443
+  selector:
+    io.kubernetes.service: lancache

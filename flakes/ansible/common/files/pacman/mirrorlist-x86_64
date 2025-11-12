@@ -1,0 +1,6 @@
+## United States
+Server = http://mirrors.xmission.com/archlinux/$repo/os/$arch
+Server = http://mirrors.mit.edu/archlinux/$repo/os/$arch
+Server = https://mirrors.mit.edu/archlinux/$repo/os/$arch
+Server = http://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch
+Server = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch

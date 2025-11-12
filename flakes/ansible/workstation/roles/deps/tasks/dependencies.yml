@@ -1,0 +1,80 @@
+---
+- name: install alpine packages
+  community.general.apk:
+    name: cronie,git,curl,py3-pip,sudo,ufw
+    update_cache: true
+  when: ansible_os_family == 'Alpine'
+
+- name: install arch packages
+  when: ansible_os_family == 'Archlinux'
+  block:
+    - name: include archlinux-keyring
+      ansible.builtin.include_tasks: ../../../common/archlinux-keyring.yml
+
+    - community.general.pacman:
+        name:
+          - cronie
+          - git
+          - curl
+          - python-pip
+          - sudo
+          - tailscale
+          - ufw
+
+- name: install debian packages
+  ansible.builtin.apt:
+    pkg:
+      - cron
+      - curl
+      - git
+      - python3-pip
+      - sudo
+      - ufw
+    update_cache: yes
+    lock_timeout: 600
+  when: ansible_os_family == 'Debian'
+
+- name: install tailscale
+  ansible.builtin.shell: |
+    curl https://tailscale.com/install.sh | bash
+  when:
+    - ansible_os_family != 'Archlinux'
+    - ansible_os_family != 'Alpine'
+
+- name: install tailscale (alpine)
+  community.general.apk:
+    name: tailscale
+    update_cache: true
+    repository: http://dl-3.alpinelinux.org/alpine/edge/community
+  when: ansible_os_family == 'Alpine'
+
+- name: enable cronie service
+  ansible.builtin.service:
+    name: cronie
+    enabled: yes
+    state: started
+  when: ansible_os_family != 'Debian'
+
+- name: uninstall firefox snap
+  when: ansible_distribution == "Ubuntu"
+  ignore_errors: true
+  block:
+  - name: disable firefox snap service
+    ansible.builtin.shell: systemctl disable --now var-snap-firefox-common-host\\x2dhunspell.mount
+
+  - name: remove firefox snap
+    community.general.snap:
+      name: firefox
+      state: absent
+
+  - name: disallow apt from installing firefox via snap
+    ansible.builtin.copy:
+      create: true
+      src: apt/mozilla-firefox
+      dest: /etc/apt/preferences.d/mozilla-firefox
+
+  - name: enable autoupgrades for firefox
+    ansible.builtin.copy:
+      create: true
+      src: apt/51-autoupgrade-firefox
+      dest: /etc/apt/apt.conf.d/51-autoupgrade-firefox

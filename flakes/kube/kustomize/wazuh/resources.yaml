@@ -1,0 +1,14 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: wazuh-manager-master
+  namespace: wazuh
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: wazuh-indexer
+          resources:
+            requests: {}

@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dnsutils
+  namespace: default
+spec:
+  containers:
+  - name: dnsutils
+    image: docker.io/heywoodlh/dnsutils:latest
+    imagePullPolicy: IfNotPresent
+    command: [ "/bin/ash", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ]
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dnsutils
+  namespace: coredns
+spec:
+  containers:
+  - name: dnsutils
+    image: docker.io/heywoodlh/dnsutils:latest
+    imagePullPolicy: IfNotPresent
+    command: [ "/bin/ash", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ]
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dnsutils
+  namespace: media
+spec:
+  containers:
+  - name: dnsutils
+    image: docker.io/heywoodlh/dnsutils:latest
+    imagePullPolicy: IfNotPresent
+    command: [ "/bin/ash", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ]
+  restartPolicy: Always
+

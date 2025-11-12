@@ -1,0 +1,662 @@
+# plex
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: plex
+  name: plex
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      initContainers:
+        - name: bundle-downloader
+          image: docker.io/alpine/git
+          command:
+            - "/bin/ash"
+            - "-c"
+          args:
+            - |
+              test -e "/config/Library/Application Support/Plex Media Server/Plug-ins/YouTube-Agent.bundle" || git clone https://github.com/ZeroQI/YouTube-Agent.bundle "/config/Library/Application Support/Plex Media Server/Plug-ins/YouTube-Agent.bundle"
+              test -e "/config/Library/Application Support/Plex Media Server/Plug-ins/AudNexus.bundle" || git clone https://github.com/djdembeck/AudNexus.bundle "/config/Library/Application Support/Plex Media Server/Plug-ins/AudNexus.bundle"
+              chown -R 995 "/config/Library/Application Support/Plex Media Server/Plug-ins"
+              exit 0
+          volumeMounts:
+            - name: plex-config
+              mountPath: /config
+      containers:
+      - image: docker.io/linuxserver/plex:1.42.2
+        name: plex
+        ports:
+        - name: plex
+          containerPort: 32400
+        volumeMounts:
+        - name: plex-config
+          mountPath: /config
+        - name: media
+          mountPath: /media/home-media
+        env:
+          - name: PUID
+            value: "995"
+          - name: PGID
+            value: "995"
+        # GPU acceleration
+        resources:
+          requests:
+            gpu.intel.com/i915: "1"
+          limits:
+            gpu.intel.com/i915: "1"
+      volumes:
+      - name: plex-config
+        hostPath:
+          path: /media/config/services/plex
+          type: Directory
+      - name: media
+        hostPath:
+          path: /media/home-media
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: plex
+  name: plex
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "plex"
+    tailscale.com/tags: "tag:plex"
+spec:
+  ports:
+  - name: plex
+    port: 32400
+    protocol: TCP
+    targetPort: plex
+    nodePort: 32400
+  selector:
+    app: plex
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.1.22
+# Radarr
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: radarr
+  name: radarr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: docker.io/linuxserver/radarr:5.28.1-nightly
+        name: radarr
+        ports:
+        - name: http
+          containerPort: 7878
+        volumeMounts:
+        - name: radarr-config
+          mountPath: /config
+        - name: media
+          mountPath: /media/home-media
+        env:
+          - name: PUID
+            value: "995"
+          - name: PGID
+            value: "995"
+      volumes:
+      - name: radarr-config
+        hostPath:
+          path: /media/config/services/radarr
+          type: Directory
+      - name: media
+        hostPath:
+          path: /media/home-media
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: radarr
+  name: radarr
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "radarr"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: radarr
+  type: ClusterIP
+# Sonarr
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sonarr
+  name: sonarr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: docker.io/linuxserver/sonarr:4.0.15-develop
+        name: sonarr
+        ports:
+        - name: http
+          containerPort: 8989
+        volumeMounts:
+        - name: sonarr-config
+          mountPath: /config
+        - name: media
+          mountPath: /media/home-media
+        env:
+          - name: PUID
+            value: "995"
+          - name: PGID
+            value: "995"
+      volumes:
+      - name: sonarr-config
+        hostPath:
+          path: /media/config/services/sonarr
+          type: Directory
+      - name: media
+        hostPath:
+          path: /media/home-media
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sonarr
+  name: sonarr
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "sonarr"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: sonarr
+  type: ClusterIP
+
+# sabnzbd
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sabnzbd
+  name: sabnzbd
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sabnzbd
+  template:
+    metadata:
+      labels:
+        app: sabnzbd
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: docker.io/linuxserver/sabnzbd:4.5.3
+        name: sabnzbd
+        ports:
+        - name: http
+          containerPort: 8080
+        volumeMounts:
+        - name: sabnzbd-config
+          mountPath: /config
+        - name: media
+          mountPath: /media/home-media
+        env:
+          - name: PUID
+            value: "995"
+          - name: PGID
+            value: "995"
+      volumes:
+      - name: sabnzbd-config
+        hostPath:
+          path: /media/config/services/sabnzbd
+          type: Directory
+      - name: media
+        hostPath:
+          path: /media/home-media
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sabnzbd
+  name: sabnzbd
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "sabnzbd"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: sabnzbd
+  type: ClusterIP
+# readarr
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: readarr
+  name: readarr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: readarr
+  template:
+    metadata:
+      labels:
+        app: readarr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: docker.io/linuxserver/readarr:0.4.19-nightly
+        name: readarr
+        ports:
+        - name: http
+          containerPort: 8787
+        volumeMounts:
+        - name: readarr-config
+          mountPath: /config
+        - name: media
+          mountPath: /media/home-media
+        env:
+          - name: PUID
+            value: "995"
+          - name: PGID
+            value: "995"
+      volumes:
+      - name: readarr-config
+        hostPath:
+          path: /media/config/services/readarr
+          type: Directory
+      - name: media
+        hostPath:
+          path: /media/home-media
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: readarr
+  name: readarr
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "readarr"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: readarr
+  type: ClusterIP
+# lidarr
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: lidarr
+  name: lidarr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lidarr
+  template:
+    metadata:
+      labels:
+        app: lidarr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: ghcr.io/hotio/lidarr:pr-plugins
+        name: lidarr
+        ports:
+        - name: http
+          containerPort: 8686
+        volumeMounts:
+        - name: lidarr-config
+          mountPath: /config
+        - name: media
+          mountPath: /media/home-media
+        env:
+          - name: PUID
+            value: "995"
+          - name: PGID
+            value: "995"
+      volumes:
+      - name: lidarr-config
+        hostPath:
+          path: /media/config/services/lidarr
+          type: Directory
+      - name: media
+        hostPath:
+          path: /media/home-media
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: lidarr
+  name: lidarr
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "lidarr"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: lidarr
+  type: ClusterIP
+# tautulli
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ntfy
+  namespace: media
+data:
+  ntfy.sh: |-
+    #!/usr/bin/env bash
+    ntfy_uri="http://ntfy.default.svc.cluster.local/plex-notifications"
+    message="$1"
+    if [ -z ${message} ] || echo $@ | grep -Eq '\-h|\-\-help'
+    then
+            echo "usage: $0 message"
+            exit 0
+    fi
+    curl -d "${message}" ${ntfy_uri}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tautulli
+  name: tautulli
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tautulli
+  template:
+    metadata:
+      labels:
+        app: tautulli
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: docker.io/linuxserver/tautulli:2.16.0
+        name: tautulli
+        ports:
+        - name: http
+          containerPort: 8181
+        volumeMounts:
+        - name: tautulli-config
+          mountPath: /config
+        - name: ntfy
+          mountPath: /scripts/ntfy.sh
+          subPath: ntfy.sh
+      volumes:
+      - name: tautulli-config
+        hostPath:
+          path: /media/config/services/tautulli/config
+          type: Directory
+      - name: ntfy
+        configMap:
+          name: ntfy
+          defaultMode: 0777
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tautulli
+  name: tautulli
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "tautulli"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: tautulli
+  type: ClusterIP
+# qbittorrent
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: qbittorrent
+  name: qbittorrent
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: docker.io/linuxserver/qbittorrent:5.1.2
+        name: qbittorrent
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: torrenting
+          containerPort: 6881
+        - name: torrenting-udp
+          containerPort: 6881
+          protocol: UDP
+        volumeMounts:
+        - name: qbittorrent-config
+          mountPath: /config
+        - name: media
+          mountPath: /media/home-media
+        env:
+          - name: PUID
+            value: "995"
+          - name: PGID
+            value: "995"
+          - name: TZ
+            value: "America/Denver"
+          - name: WEBUI_PORT
+            value: "8080"
+          - name: TORRENTING_PORT
+            value: "6881"
+      volumes:
+      - name: qbittorrent-config
+        hostPath:
+          path: /media/config/services/qbittorrent
+          type: Directory
+      - name: media
+        hostPath:
+          path: /media/home-media
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: qbittorrent
+  name: qbittorrent
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "qbittorrent"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: torrenting
+    port: 6881
+    protocol: TCP
+    targetPort: torrenting
+  - name: torrenting-udp
+    port: 6881
+    protocol: UDP
+    targetPort: torrenting-udp
+  selector:
+    app: qbittorrent
+  type: ClusterIP
+# openaudible
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: openaudible
+  name: openaudible
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openaudible
+  template:
+    metadata:
+      labels:
+        app: openaudible
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: docker.io/openaudible/openaudible:latest
+        name: openaudible
+        ports:
+        - name: http
+          containerPort: 3000
+        volumeMounts:
+        - name: openaudible-config
+          mountPath: /config/OpenAudible
+        - name: media
+          mountPath: /media/home-media
+        env:
+          - name: PUID
+            value: "995"
+          - name: PGID
+            value: "995"
+      volumes:
+      - name: openaudible-config
+        hostPath:
+          path: /media/config/services/openaudible
+          type: Directory
+      - name: media
+        hostPath:
+          path: /media/home-media
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: openaudible
+  name: openaudible
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "openaudible"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: openaudible
+  type: ClusterIP

@@ -1,0 +1,8 @@
+---
+resources:
+- wazuh-src/envs/local-env
+
+patches:
+- path: services.yaml
+- path: storage-class.yaml
+- path: statefulsets.yaml

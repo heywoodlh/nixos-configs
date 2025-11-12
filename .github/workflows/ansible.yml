@@ -1,0 +1,26 @@
+name: ansible-playbooks-test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - flakes/ansible/**
+    branches:
+      - main
+
+jobs:
+  ansible-playbooks-test:
+    name: Test ansible playbooks with Docker
+    if: github.event.pull_request.merged != true # don't run on merged PRs
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build containers and test
+        run: |
+          script -e -c ./flakes/ansible/test.sh
+

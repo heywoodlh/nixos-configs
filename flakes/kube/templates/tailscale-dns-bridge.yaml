@@ -1,0 +1,131 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "tailscale-auth-key"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/5ujv4rys5u6obn3t6vaokwh2vm"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: tailscale-dns-bridge
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "list", "create", "update", "patch", "delete"]
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tailscale-dns-bridge-state
+  namespace: "@namespace@"
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: tailscale-dns-bridge
+  namespace: @namespace@
+subjects:
+- kind: ServiceAccount
+  name: tailscale-dns-bridge
+  namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: tailscale-dns-bridge
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tailscale-dns-bridge
+  namespace: @namespace@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tailscale-dns-bridge
+  name: tailscale-dns-bridge
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: tailscale-dns-bridge
+  template:
+    metadata:
+      labels:
+        app: tailscale-dns-bridge
+    spec:
+      serviceAccountName: tailscale-dns-bridge
+      hostname: tailscale-dns-bridge
+      containers:
+      - image: @image@
+        name: tailscale-dns-bridge
+        env:
+          - name: TS_AUTHKEY
+            valueFrom:
+              secretKeyRef:
+                name: tailscale-auth-key
+                key: password
+          - name: TS_KUBE_SECRET
+            value: "tailscale-dns-bridge-state"
+          - name: TS_ACCEPT_DNS
+            value: "true"
+          - name: TS_USERSPACE
+            value: "false"
+          - name: TS_EXTRA_ARGS
+            value: "--accept-routes=true"
+        ports:
+        - name: dns-udp
+          containerPort: 53
+          protocol: UDP
+        - name: dns-tcp
+          containerPort: 53
+          protocol: TCP
+        volumeMounts:
+          - name: dev-net-tun
+            mountPath: /dev/net/tun
+        securityContext:
+          privileged: true
+      volumes:
+        - name: tailscale-dns-bridge-data
+          hostPath:
+            path: @hostfolder@
+            type: Directory
+        - name: dev-net-tun
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tailscale-dns-bridge
+  name: tailscale-dns-bridge
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "tailscale-dns-bridge"
+    tailscale.com/tags: "tag:dns"
+spec:
+  ports:
+  - name: dns-udp
+    port: 53
+    protocol: UDP
+    targetPort: 53
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+    targetPort: 53
+  selector:
+    app: tailscale-dns-bridge
+  clusterIP: 10.43.0.15
+  type: ClusterIP

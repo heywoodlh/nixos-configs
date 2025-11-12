@@ -1,0 +1,79 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: ersatztv
+  name: ersatztv
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      io.kompose.service: ersatztv
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ersatztv
+    spec:
+      runtimeClassName: nvidia
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      securityContext:
+        runAsUser: 995
+        fsGroup: 995
+      containers:
+        - image: @image@
+          imagePullPolicy: "Always"
+          name: ersatztv
+          ports:
+            - name: http
+              containerPort: 8409
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: ersatztv-data
+            - mountPath: /media/home-media/
+              name: ersatztv-media
+            - mountPath: /transcode
+              name: transcode
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+      restartPolicy: Always
+      volumes:
+        - name: ersatztv-data
+          hostPath:
+            path: @hostfolder@/data
+            type: DirectoryOrCreate
+        - name: ersatztv-media
+          hostPath:
+            path: @hostmediafolder@
+            type: Directory
+        - name: transcode
+          emptyDir:
+            sizeLimit: 1Gi
+            medium: Memory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: ersatztv
+  name: ersatztv
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "ersatztv"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+  selector:
+    io.kompose.service: ersatztv

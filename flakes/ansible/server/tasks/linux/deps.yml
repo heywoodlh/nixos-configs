@@ -1,0 +1,91 @@
+---
+- name: arch linux tasks
+  when:
+    - ansible_os_family == 'Archlinux'
+  block:
+    - name: include archlinux-keyring
+      ansible.builtin.include_tasks: ../../../common/archlinux-keyring.yml
+
+    - name: install arch linux packages
+      community.general.pacman:
+        name:
+          - autoconf
+          - curl
+          - cronie
+          - gawk
+          - gcc
+          - gettext
+          - git
+          - lsb-release
+          - make
+          - mosh
+          - openbsd-netcat
+          - openssh
+          - sudo
+          - ufw
+          - wget
+          - tailscale
+
+- name: debian tasks
+  when:
+    - ansible_os_family == "Debian"
+  block:
+    - name: get ubuntu version
+      ansible.builtin.shell: "cat /etc/os-release | grep UBUNTU_CODENAME | cut -d= -f2"
+      when: ansible_distribution == "Ubuntu"
+      register: ubuntu_version
+
+    - name: set ubuntu_codename
+      ansible.builtin.set_fact:
+        ubuntu_codename: "{{ ubuntu_version.stdout }}"
+      when: ansible_distribution == "Ubuntu"
+
+    - name: setup ubuntu repositories
+      ansible.builtin.template:
+        src: "ubuntu/sources.list-{{ ansible_architecture }}.j2"
+        dest: /etc/apt/sources.list
+      when: ansible_distribution == "Ubuntu"
+
+    - name: install debian packages
+      ansible.builtin.apt:
+        update_cache: yes
+        pkg:
+          - autoconf
+          - bc
+          - build-essential
+          - cron
+          - curl
+          - dc
+          - gawk
+          - gcc
+          - gettext
+          - git
+          - libc6
+          - libmcrypt-dev
+          - libnet-snmp-perl
+          - libssl-dev
+          - lsb-release
+          - make
+          - mosh
+          - netcat-openbsd
+          - openssh-server
+          - snmp
+          - sudo
+          - ufw
+          - wget
+
+    - name: install tailscale
+      block:
+        - ansible.builtin.get_url:
+            url: https://tailscale.com/install.sh
+            dest: /tmp/tailscale.sh
+        - ansible.builtin.command: bash /tmp/tailscale.sh
+
+- name: alpine linux tasks
+  when:
+    - ansible_os_family == "Alpine"
+  block:
+    - name: install dependencies
+      community.general.apk:
+        name: curl,cronie,wget,ufw,mosh,openssh,gettext,sudo
+        no_cache: true

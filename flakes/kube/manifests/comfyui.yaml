@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comfyui
+  namespace: default
+  labels:
+    app.kubernetes.io/name: comfyui
+    app.kubernetes.io/instance: comfyui
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "comfyui"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: comfyui
+  selector:
+    app.kubernetes.io/name: comfyui
+    app.kubernetes.io/instance: comfyui
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comfyui
+  namespace: default
+  labels:
+    app.kubernetes.io/name: comfyui
+    app.kubernetes.io/instance: comfyui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: comfyui
+      app.kubernetes.io/instance: comfyui
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: comfyui
+        app.kubernetes.io/instance: comfyui
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: comfyui
+          securityContext:
+            {}
+          image: "ghcr.io/lecode-official/comfyui-docker:latest"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - -c
+          args: [
+            "pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/xpu;",
+            "/bin/bash /entrypoint.sh --oneapi-device-selector level_zero:gpu"
+          ]
+          ports:
+            - name: http
+              containerPort: 8188
+              protocol: TCP
+          volumeMounts:
+            - name: comfyui-models
+              mountPath: /opt/comfyui/models
+            - name: comfyui-output
+              mountPath: /opt/comfyui/output
+            - name: comfyui-nodes
+              mountPath: /opt/comfyui/custom_nodes
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+      volumes:
+      - name: comfyui-models
+        hostPath:
+          path: /media/data-ssd/comfyui/models
+          type: DirectoryOrCreate
+      - name: comfyui-nodes
+        hostPath:
+          path: /media/data-ssd/comfyui/nodes
+          type: DirectoryOrCreate
+      - name: comfyui-output
+        hostPath:
+          path: /media/data-ssd/comfyui/output
+          type: DirectoryOrCreate
+

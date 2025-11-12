@@ -1,0 +1,925 @@
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: actual
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "actual.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: attic
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "attic.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "argo.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: beeper-bridges
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "beeper-bridges.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudflared
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "cloudflared.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: coredns
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "coredns.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: comfyui
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "comfyui.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: coredns-kube-system
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "coredns-kube-system.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crossplane
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "crossplane.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: drawio
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "drawio.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: elastic-cloud-operator
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "elastic-cloud-operator.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: elastic-cloud-elastic-stack
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "elastic-cloud-elastic-stack.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: flan-scan
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "flan-scan.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fleetdm
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "fleetdm.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: foldingathome
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "foldingathome.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ersatztv
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "ersatztv.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "grafana.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hashcat
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "hashcat.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: healthchecks
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "healthchecks.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: homepage
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "homepage.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: http-files
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "http-files.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: iperf
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "iperf.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lancache
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "lancache.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: media
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "media.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: miniflux
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "miniflux.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: namespaces
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "namespaces.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nfcapd
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "nfcapd.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ntfy
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "ntfy.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nuclei
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "nuclei.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: open-webui
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "open-webui.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: palworld
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "palworld.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pinchflat
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "pinchflat.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "prometheus.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: protonmail-bridge
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "protonmail-bridge.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redm
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "redm.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rsshub
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "rsshub.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rustdesk
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "rustdesk.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rustdesk-web
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "rustdesk-web.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: samplicator
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "samplicator.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: silverbullet
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "silverbullet.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: syncthing
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "syncthing.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: syslog
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "syslog.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tailscale-dns-bridge
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "tailscale-dns-bridge.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tor-socks-proxy
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "tor-socks-proxy.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

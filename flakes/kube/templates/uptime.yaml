@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uptime-status
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uptime-config
+  namespace: @namespace@
+data:
+  uptime.yaml: |
+    global:
+      track_status: true
+      status_dir: "/status"
+    ping:
+      hosts:
+        - homelab
+      options: "-c 1 -W 5"
+      silent: "true"
+    curl:
+      urls:
+        - "http://syncthing.syncthing"
+      options: "-LI --silent -k"
+      silent: "true"
+    netcat:
+      services:
+        - rustdesk.default:21115
+        - protonmail-bridge.default:25
+        - protonmail-bridge.default:143
+        - protonmail-bridge.default:143
+        - syncthing.syncthing:80
+        - syncthing.syncthing:22000
+      options: "-vz -w 1"
+      silent: "true"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: uptime
+  namespace: @namespace@
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 30
+      template:
+        spec:
+          containers:
+          - image: @image@
+            name: uptime
+            command:
+            - "/bin/bash"
+            - "-c"
+            args:
+            - "/app/uptime.sh | xargs -r -I {} curl -d \"{}\" http://ntfy.default/uptime-notifications"
+            volumeMounts:
+            - name: uptime-config
+              mountPath: /app/uptime.yaml
+              subPath: uptime.yaml
+            - name: uptime-status
+              mountPath: /status
+          restartPolicy: OnFailure
+          volumes:
+          - name: uptime-config
+            configMap:
+              name: uptime-config
+              items:
+              - key: uptime.yaml
+                path: uptime.yaml
+          - name: uptime-status
+            persistentVolumeClaim:
+              claimName: uptime-status

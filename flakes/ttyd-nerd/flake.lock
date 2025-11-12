@@ -1,0 +1,129 @@
+{
+  "nodes": {
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "hack": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1520301381,
+        "narHash": "sha256-r0vPNA3VRLZqgcZbsfIVQl7NEz/o/4APqwK3sbQHCDY=",
+        "type": "tarball",
+        "url": "https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-webfonts.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-webfonts.tar.gz"
+      }
+    },
+    "iosevka": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1733020388,
+        "narHash": "sha256-qJr0YS8sMg1vK8ZmcSOrlJAvSJHUX5nJCh3BwQWgru8=",
+        "owner": "iosevka-webfonts",
+        "repo": "iosevka",
+        "rev": "26bd341f7eacd904c8a76f1e6ec62385bced74a5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "iosevka-webfonts",
+        "repo": "iosevka",
+        "rev": "26bd341f7eacd904c8a76f1e6ec62385bced74a5",
+        "type": "github"
+      }
+    },
+    "jetbrains": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673708658,
+        "narHash": "sha256-SW9d5yVud2BWUJpDOlqYn1E1cqicIHdSZjbXjqOAQGw=",
+        "owner": "JetBrains",
+        "repo": "JetBrainsMono",
+        "rev": "cd5227bd1f61dff3bbd6c814ceaf7ffd95e947d9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "JetBrains",
+        "ref": "v2.304",
+        "repo": "JetBrainsMono",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1738163270,
+        "narHash": "sha256-B/7Y1v4y+msFFBW1JAdFjNvVthvNdJKiN6EGRPnqfno=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "59e618d90c065f55ae48446f307e8c09565d5ab0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "hack": "hack",
+        "iosevka": "iosevka",
+        "jetbrains": "jetbrains",
+        "nixpkgs": "nixpkgs",
+        "source-code-pro": "source-code-pro"
+      }
+    },
+    "source-code-pro": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1681290322,
+        "narHash": "sha256-Pl7cuBFtbk9tPv421ejKnKFKdsW6oezMnAGCWKI3OVY=",
+        "owner": "adobe-fonts",
+        "repo": "source-code-pro",
+        "rev": "d3f1a5962cde503f9409c21e58527611d4a19ef1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "adobe-fonts",
+        "ref": "2.042R-u/1.062R-i/1.026R-vf",
+        "repo": "source-code-pro",
+        "type": "github"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

@@ -1,0 +1,17 @@
+---
+- name: delete old generations
+  ansible.builtin.command: nix-collect-garbage --delete-older-than 7d
+
+- name: run git clone https://github.com/heywoodlh/nixos-configs
+  ansible.builtin.git:
+    repo: https://github.com/heywoodlh/nixos-configs
+    dest: /tmp/nixos-configs
+    force: true
+
+- name: run nixos-rebuild against hostname
+  ansible.builtin.shell: "nixos-rebuild switch --flake /tmp/nixos-configs#$(hostname) --impure"
+
+- name: remove /tmp/nixos-configs
+  ansible.builtin.file:
+    path: /tmp/nixos-configs
+    state: absent

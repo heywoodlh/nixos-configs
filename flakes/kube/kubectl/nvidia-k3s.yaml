@@ -1,0 +1,60 @@
+# https://github.com/NixOS/nixpkgs/issues/288037#issuecomment-3236524720
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: generic-cdi-plugin
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: generic-cdi-plugin-daemonset
+  namespace: generic-cdi-plugin
+spec:
+  selector:
+    matchLabels:
+      name: generic-cdi-plugin
+  template:
+    metadata:
+      labels:
+        name: generic-cdi-plugin
+        app.kubernetes.io/component: generic-cdi-plugin
+        app.kubernetes.io/name: generic-cdi-plugin
+    spec:
+      containers:
+      - image: ghcr.io/olfillasodikno/generic-cdi-plugin:main
+        name: generic-cdi-plugin
+        command:
+          - /generic-cdi-plugin
+          - /var/run/cdi/nvidia-container-toolkit.json
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        tty: true
+        volumeMounts:
+        - name: kubelet
+          mountPath: /var/lib/kubelet
+        - name: nvidia-container-toolkit
+          mountPath: /var/run/cdi/nvidia-container-toolkit.json
+      volumes:
+      - name: kubelet
+        hostPath:
+          path: /var/lib/kubelet
+      - name: nvidia-container-toolkit
+        hostPath:
+          path: /var/run/cdi/nvidia-container-toolkit.json
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "nixos-nvidia-cdi"
+                operator: In
+                values:
+                - "enabled"
+---
+kind: Node
+apiVersion: v1
+metadata:
+  name: homelab
+  labels:
+    nixos-nvidia-cdi: enabled

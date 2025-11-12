@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ntfy-cache
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ntfy-etc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ntfy
+  name: ntfy
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntfy
+  template:
+    metadata:
+      labels:
+        app: ntfy
+    spec:
+      containers:
+      - image: docker.io/binwiederhier/ntfy:v2.14.0
+        name: ntfy
+        command: ["ntfy"]
+        args: ["serve", "--cache-file", "/var/cache/ntfy/cache.db"]
+        ports:
+        - name: ntfy
+          containerPort: 80
+        volumeMounts:
+        - name: ntfy-cache
+          mountPath: /var/cache/ntfy
+        - name: ntfy-etc
+          mountPath: /etc/ntfy
+        env:
+          - name: NTFY_BASE_URL
+            value: "http://ntfy.barn-banana.ts.net"
+          - name: NTFY_UPSTREAM_BASE_URL
+            value: "https://ntfy.sh"
+          - name: TZ
+            value: "America/Denver"
+      volumes:
+      - name: ntfy-cache
+        persistentVolumeClaim:
+          claimName: ntfy-cache
+      - name: ntfy-etc
+        persistentVolumeClaim:
+          claimName: ntfy-etc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ntfy
+  name: ntfy
+  namespace: default
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "ntfy"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: ntfy
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: ntfy
+  type: ClusterIP

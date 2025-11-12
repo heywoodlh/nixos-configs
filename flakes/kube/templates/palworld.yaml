@@ -1,0 +1,133 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: @namespace@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "palworld"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/xmbn3b7aeg5wejbw5bodxpruwa"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: palworld
+  name: palworld
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: palworld
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose.yml convert
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: palworld
+    spec:
+      containers:
+        - env:
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: palworld
+                  key: admin-password
+            - name: ALLOW_CONNECT_PLATFORM
+              value: Steam
+            - name: COMMUNITY
+              value: "false"
+            - name: MULTITHREADING
+              value: "true"
+            - name: PGID
+              value: "1000"
+            - name: PLAYERS
+              value: "16"
+            - name: PORT
+              value: "8211"
+            - name: PUID
+              value: "1000"
+            - name: RCON_ENABLED
+              value: "true"
+            - name: RCON_PORT
+              value: "25575"
+            - name: SERVER_DESCRIPTION
+              value: heywood-server
+            - name: SERVER_NAME
+              value: heywood-server
+            - name: SERVER_PASSWORD
+              value: ""
+            - name: TZ
+              value: "America/Denver"
+            - name: DEATH_PENALTY
+              value: "None"
+            - name: AUTO_PAUSE_ENABLED
+              value: "true"
+          image: @image@
+          imagePullPolicy: Always
+          name: palworld-server
+          ports:
+            - containerPort: 8211
+              protocol: UDP
+            - containerPort: 27015
+              protocol: UDP
+            - containerPort: 25575
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 4Gi
+            requests:
+              cpu: 500m
+              memory: 500Mi
+          volumeMounts:
+            - mountPath: /palworld
+              name: palworld-claim0
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: palworld-claim0
+          hostPath:
+            path: @hostfolder@
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.35.0 (HEAD)
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "palworld"
+    tailscale.com/tags: "tag:palworld"
+  labels:
+    io.kompose.service: palworld
+  name: palworld
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "palworld-1"
+      port: 8211
+      protocol: UDP
+      targetPort: 8211
+    - name: "palworld-2"
+      port: 27015
+      protocol: UDP
+      targetPort: 27015
+    - name: "rcon"
+      port: 25575
+      protocol: TCP
+      targetPort: 25575
+  selector:
+    io.kompose.service: palworld

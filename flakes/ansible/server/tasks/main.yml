@@ -1,0 +1,82 @@
+---
+- name: set server status
+  operator_sdk.util.k8s_status:
+    api_version: compute.heywoodlh.io/v1
+    kind: Server
+    name: "{{ ansible_operator_meta.name }}"
+    namespace: "{{ ansible_operator_meta.namespace }}"
+    conditions:
+      - type: ServerStat
+        reason: "Syncing"
+        status: "False"
+        message: "Starting playbook run"
+
+- name: retrieve status
+  operator_sdk.util.k8s_status:
+    api_version: compute.heywoodlh.io/v1
+    kind: Server
+    namespace: "{{ ansible_operator_meta.namespace }}"
+    name: "{{ ansible_operator_meta.name }}"
+  register: server_status_reg
+
+- name: register fact for current status
+  ansible.builtin.set_fact:
+    server_status: "{{ server_status_reg.result.status }}"
+
+- name: set server facts
+  ansible.builtin.set_fact:
+    hostname: "{{ server_status | json_query('hostname') }}"
+    username: "{{ server_status | json_query('username') }}"
+    sshkey: "{{ server_status | json_query('sshkey') }}"
+    sshport: "{{ server_status | json_query('sshport') }}"
+
+- name: create ssh key file
+  ansible.builtin.tempfile:
+    state: file
+  register: ssh_keyfile
+
+- name: write ssh key contents to file
+  ansible.builtin.copy:
+    content: "{{ sshkey }}"
+    dest: "{{ ssh_keyfile.path }}"
+    mode: "0600"
+
+- name: add host to in-memory inventory
+  ansible.builtin.add_host:
+    name: "{{ hostname }}"
+    ansible_user: "{{ username }}"
+    ansible_ssh_private_key_file: "{{ ssh_keyfile.path }}"
+    ansible_python_interpreter: "auto"
+
+- name: set server status
+  operator_sdk.util.k8s_status:
+    api_version: compute.heywoodlh.io/v1
+    kind: Server
+    name: "{{ ansible_operator_meta.name }}"
+    namespace: "{{ ansible_operator_meta.namespace }}"
+    conditions:
+      - type: ServerStat
+        reason: "Syncing"
+        status: "False"
+        message: "Running server tasks"
+
+- name: run linux tasks
+  ansible.builtin.import_tasks: ./linux/main.yml
+  delegate_to: "{{ hostname }}"
+
+- name: remove keyfile
+  ansible.builtin.file:
+    path: "{{ ssh_keyfile.path }}"
+    state: absent
+
+- name: set server status
+  operator_sdk.util.k8s_status:
+    api_version: compute.heywoodlh.io/v1
+    kind: Server
+    name: "{{ ansible_operator_meta.name }}"
+    namespace: "{{ ansible_operator_meta.namespace }}"
+    conditions:
+      - type: ServerStat
+        reason: "Syncronized"
+        status: "True"
+        message: "Syncronized successfully"

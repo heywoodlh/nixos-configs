@@ -1,0 +1,85 @@
+---
+- name: install lsb_release
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    install_recommends: no
+    update_cache: yes
+    cache_valid_time: 3600
+  loop:
+    - lsb-release
+    - ufw
+
+- name: disable enterprise repository
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/pve-enterprise.list
+    state: absent
+
+- name: get distribution codename
+  ansible.builtin.shell: lsb_release -c | cut -f 2
+  register: codename
+
+- ansible.builtin.set_fact:
+    codename: "{{ codename.stdout }}"
+
+- name: add no-subscription repository
+  template:
+    src: templates/pve-no-subscription.list.j2
+    dest: /etc/apt/sources.list.d/pve-no-subscription.list
+
+- name: disable subscription notice
+  ansible.builtin.replace:
+      path: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+      regexp: "res === null \\|\\| res === undefined \\|\\| \\!res \\|\\| res\\n\\t\\t\\t.data.status.toLowerCase\\(\\) \\!== 'active'"
+      replace: "false"
+      backup: yes
+
+- name: allow proxmox ports in ufw
+  ansible.builtin.command: "ufw allow {{ item }}"
+  with_items:
+    - "8006"
+    - "6789"
+    - "6800:7568/tcp"
+
+- name: configure ssh for system-wide authorized_keys
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    line: "AuthorizedKeysFile     /etc/ssh/authorized_keys/%u .ssh/authorized_keys .ssh/authorized_keys2"
+    insertafter: EOF
+  register: sshd_system_auth_keys
+
+- name: create /etc/ssh/authorized_keys
+  ansible.builtin.file:
+    state: directory
+    path: /etc/ssh/authorized_keys
+    mode: "0755"
+
+- name: add proxmox authorized keys for root
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/authorized_keys/root
+    create: true
+    insertafter: EOF
+    line: "{{ item }}"
+  loop:
+    - from="100.109.183.68" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQClbyKk9D4dWDO2fCNV8KbT8HyUzCmmyfuly4fWZ2R78frVJRpkeDJ3N9Km+Pegi13uwaky0NMDF5t5xTACgS8Z+J3z6v+f93OF32n+FMiBEIs+91PzUs9iFvlLSyN9WbQ1dxgJKAnJkuFle4tK1simK+EbO2kvtsT5h3XdMI0lVlg4lIUhz8KO81OcQJ+MLzwqrxg/AN+6uLan5oav72cpXD4fB/lJnfn33awg5MklPg/BSYD5pY5EvPFmiwaFZzppD7nO3KLoWgT5ksX+fTxpeFlfP525u31lMaHYQZiwIFDzCPyVsocP1dlfny0j25Cz3ycFk8wGUswMRfi6/WSj root@proxmox-mac-mini
+    - from="192.168.50.20" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQClbyKk9D4dWDO2fCNV8KbT8HyUzCmmyfuly4fWZ2R78frVJRpkeDJ3N9Km+Pegi13uwaky0NMDF5t5xTACgS8Z+J3z6v+f93OF32n+FMiBEIs+91PzUs9iFvlLSyN9WbQ1dxgJKAnJkuFle4tK1simK+EbO2kvtsT5h3XdMI0lVlg4lIUhz8KO81OcQJ+MLzwqrxg/AN+6uLan5oav72cpXD4fB/lJnfn33awg5MklPg/BSYD5pY5EvPFmiwaFZzppD7nO3KLoWgT5ksX+fTxpeFlfP525u31lMaHYQZiwIFDzCPyVsocP1dlfny0j25Cz3ycFk8wGUswMRfi6/WSj root@proxmox-mac-mini
+    - from="100.79.151.6" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoCHYi25JA+QueyDNph6aGM+xPyDub3SQ8kj8sSy66O6YC7OH/CfRz6btRHff1PB8jtwxD4QUBvWaRKpKZB/2rZ/4i7yMULhAJlZkKyqnLl5QAvRMc21x0OlCSCXMpSbdSOwvfOouXLGCbBXS4n5L8+jKwUfZ06eM6V901KilymqMJiCQjFgrc0thlwyFUl2ZFeu+/H/UzhhBPWrrVDDq+RWbX34cI/qJrcvW4PYZYVKFBUXWy575C7ouIgdjeh3dQYNcPX6kaN56g/VawmfUxEDZoGhTzhU5rX4DBxTnL9Cp+sQkDXKNTK+TBAmM4JNg0tQbUv05Wi4LUTKD0vN4b root@proxmox-oryx-pro
+    - from="192.168.50.21" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoCHYi25JA+QueyDNph6aGM+xPyDub3SQ8kj8sSy66O6YC7OH/CfRz6btRHff1PB8jtwxD4QUBvWaRKpKZB/2rZ/4i7yMULhAJlZkKyqnLl5QAvRMc21x0OlCSCXMpSbdSOwvfOouXLGCbBXS4n5L8+jKwUfZ06eM6V901KilymqMJiCQjFgrc0thlwyFUl2ZFeu+/H/UzhhBPWrrVDDq+RWbX34cI/qJrcvW4PYZYVKFBUXWy575C7ouIgdjeh3dQYNcPX6kaN56g/VawmfUxEDZoGhTzhU5rX4DBxTnL9Cp+sQkDXKNTK+TBAmM4JNg0tQbUv05Wi4LUTKD0vN4b root@proxmox-oryx-pro
+    - from="100.108.77.60" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH root@nix-nvidia
+    - from="192.168.50.22" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH root@nix-nvidia
+    - from="100.69.115.100" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKvlDF8X40/ASMEp2VsbmnKPb+E+OxEncnDn4biRhGGs root@nixos-mac-mini
+    - from="192.168.50.5" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKvlDF8X40/ASMEp2VsbmnKPb+E+OxEncnDn4biRhGGs root@nixos-mac-mini
+
+- name: restart ssh if sshd_config changed
+  ansible.builtin.service:
+    name: ssh
+    state: restarted
+  when: sshd_system_auth_keys.changed
+
+- name: enable snippets on local storage
+  ansible.builtin.command: "pvesm set local --content images,rootdir,vztmpl,iso,snippets"
+
+- name: restart proxmox web interface
+  ansible.builtin.systemd_service:
+    name: pveproxy.service
+    state: restarted
+

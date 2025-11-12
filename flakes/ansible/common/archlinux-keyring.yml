@@ -1,0 +1,29 @@
+- name: archlinux keyring tasks
+  when:
+    - ansible_os_family == "Archlinux"
+  block:
+    - name: arch linux mirrorlist repo configuration
+      ansible.builtin.copy:
+        src: "pacman/mirrorlist-{{ ansible_architecture }}"
+        dest: /etc/pacman.d/mirrorlist
+        backup: true
+        owner: root
+        mode: 644
+
+    - name: ensure that /etc/pacman.d/mirrorlist has 644 permissions
+      ansible.builtin.file:
+        path: /etc/pacman.d/mirrorlist
+        mode: '0644'
+        force: true
+      register: mirrorlist_perms
+
+    - name: install archlinux-keyring
+      community.general.pacman:
+        name:
+          - archlinux-keyring
+        update_cache: yes
+
+    - name: populate archlinux keyring
+      ansible.builtin.shell: archlinux-keyring-wkd-sync
+      when: mirrorlist_perms.changed # only populate archlinux-keyring on first run of ansible playbooks
+      ignore_errors: true # ignore errors about specific keys not being found

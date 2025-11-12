@@ -1,0 +1,37 @@
+terminal:
+  colorScheme:
+    name: Nord
+    foreground: '#d8dee9'
+    background: '#2e3440'
+    cursor: '#d8dee9'
+    colors:
+      - '#3b4252'
+      - '#bf616a'
+      - '#a3be8c'
+      - '#ebcb8b'
+      - '#81a1c1'
+      - '#b48ead'
+      - '#88c0d0'
+      - '#e5e9f0'
+      - '#373e4d'
+      - '#94545d'
+      - '#809575'
+      - '#b29e75'
+      - '#68809a'
+      - '#8c738c'
+      - '#6d96a5'
+      - '#aeb3bb'
+  hideTabIndex: true
+enableAnalytics: false
+enableWelcomeTab: false
+hotkeys:
+  toggle-window:
+    - Ctrl-`
+appearance:
+  tabsLocation: bottom
+  dock: top
+  dockFill: 0.85
+  lastTabClosesWindow: true
+recoverTabs: false
+hideTray: true
+enableAutomaticUpdates: false

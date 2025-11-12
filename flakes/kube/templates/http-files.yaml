@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-files
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "files"
+    tailscale.com/tags: "tag:http"
+spec:
+  selector:
+    app: http-files
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-files
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: http-files
+  template:
+    metadata:
+      labels:
+        app: http-files
+    spec:
+      containers:
+      - name: http-files
+        image: @image@
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: http-files
+          mountPath: /web
+      volumes:
+      - name: http-files
+        hostPath:
+          path: /opt/files
+

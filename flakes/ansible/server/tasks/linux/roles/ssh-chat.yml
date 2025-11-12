@@ -1,0 +1,44 @@
+---
+- name: Copy ssh-chat files
+  ansible.builtin.copy:
+    src: ssh-chat
+    dest: /opt/
+    force: true
+
+- name: Set ssh service name to 'ssh' if Debian-based
+  ansible.builtin.set_fact:
+    ssh_service_name: 'ssh'
+  when: ansible_os_family == 'Debian'
+
+- name: Install Docker
+  ansible.builtin.include_role:
+    name: geerlingguy.docker
+  vars:
+    pip_install_packages:
+      - name: docker
+    docker_install_compose_plugin: true
+    docker_service_manage: true
+    docker_service_state: started
+    docker_service_enabled: true
+    docker_restart_handler_state: restarted
+
+- name: Configure sshd
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regex: "^(#)?{{item.key}}"
+    line: "{{item.key}} {{item.value}}"
+    state: present
+  loop:
+    - { key: "Port", value: "2222" }
+  register: sshd_configure_port
+
+- name: Restart sshd.service if config changed
+  ansible.builtin.systemd:
+    name: "{{ ssh_service_name }}.service"
+    state: restarted
+  when: sshd_configure_port.changed
+
+- name: Bring up ssh-chat docker-compose
+  community.docker.docker_compose_v2:
+    project_src: /opt/ssh-chat
+    recreate: always

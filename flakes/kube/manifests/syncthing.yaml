@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: syncthing
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: syncthing
+  name: syncthing
+  namespace: syncthing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: syncthing
+  template:
+    metadata:
+      labels:
+        app: syncthing
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: docker.io/syncthing/syncthing:1.30.0
+        name: syncthing
+        ports:
+        - name: web-ui
+          containerPort: 8384
+        - name: sync
+          containerPort: 22000
+        - name: api
+          containerPort: 21027
+        volumeMounts:
+        - name: syncthing-data
+          mountPath: /var/syncthing
+      volumes:
+      - name: syncthing-data
+        hostPath:
+          path: /opt/syncthing
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: syncthing
+  name: syncthing
+  namespace: syncthing
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "syncthing"
+    tailscale.com/tags: "tag:syncthing"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: web-ui
+  - name: sync
+    port: 22000
+    protocol: TCP
+    targetPort: sync
+  - name: api
+    port: 21027
+    protocol: TCP
+    targetPort: api
+  selector:
+    app: syncthing
+  type: ClusterIP

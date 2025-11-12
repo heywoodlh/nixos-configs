@@ -1,0 +1,418 @@
+---
+apiVersion: v1
+data:
+  DB_PASS: whishper
+  DB_USER: whishper
+  LT_LOAD_ONLY: es,en,fr
+  WHISHPER_HOST: http://127.0.0.1:8082
+  WHISPER_MODELS: tiny,small
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: whishper-mongo-env
+  name: whishper-env
+  namespace: @namespace@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: whishper-mongo-claim0
+  name: whishper-mongo-claim0
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: whishper-mongo-claim1
+  name: whishper-mongo-claim1
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /nix/store/c5p8piha8yamv18l3h8yrwwp9ga5pcrm-kompose-1.34.0/bin/kompose -f docker-compose.yml convert
+    kompose.version: 1.34.0 (HEAD)
+  labels:
+    io.kompose.service: whishper-mongo
+  name: whishper-mongo
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: whishper-mongo
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: /nix/store/c5p8piha8yamv18l3h8yrwwp9ga5pcrm-kompose-1.34.0/bin/kompose -f docker-compose.yml convert
+        kompose.version: 1.34.0 (HEAD)
+      labels:
+        io.kompose.service: whishper-mongo
+    spec:
+      containers:
+        - args:
+            - --logpath
+            - /var/log/mongodb/mongod.log
+          env:
+            - name: DB_PASS
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_PASS
+                  name: whishper-env
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: whishper-env
+            - name: LT_LOAD_ONLY
+              valueFrom:
+                configMapKeyRef:
+                  key: LT_LOAD_ONLY
+                  name: whishper-env
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: whishper
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: whishper
+            - name: WHISHPER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: WHISHPER_HOST
+                  name: whishper-env
+            - name: WHISPER_MODELS
+              valueFrom:
+                configMapKeyRef:
+                  key: WHISPER_MODELS
+                  name: whishper-env
+          image: docker.io/mongo:8.0.3
+          name: mongo
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/db
+              name: whishper-mongo-claim0
+            - mountPath: /var/log/mongodb
+              name: whishper-mongo-claim1
+      restartPolicy: Always
+      volumes:
+        - name: whishper-mongo-claim0
+          persistentVolumeClaim:
+            claimName: whishper-mongo-claim0
+        - name: whishper-mongo-claim1
+          persistentVolumeClaim:
+            claimName: whishper-mongo-claim1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: /nix/store/c5p8piha8yamv18l3h8yrwwp9ga5pcrm-kompose-1.34.0/bin/kompose -f docker-compose.yml convert
+    kompose.version: 1.34.0 (HEAD)
+  labels:
+    io.kompose.service: whishper-mongo
+  name: whishper-mongo
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "27017"
+      port: 27017
+      targetPort: 27017
+  selector:
+    io.kompose.service: whishper-mongo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: whishper-translate-claim0
+  name: whishper-translate-claim0
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: whishper-translate-claim1
+  name: whishper-translate-claim1
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /nix/store/c5p8piha8yamv18l3h8yrwwp9ga5pcrm-kompose-1.34.0/bin/kompose -f docker-compose.yml convert
+    kompose.version: 1.34.0 (HEAD)
+  labels:
+    io.kompose.service: whishper-translate
+  name: whishper-translate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: whishper-translate
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: /nix/store/c5p8piha8yamv18l3h8yrwwp9ga5pcrm-kompose-1.34.0/bin/kompose -f docker-compose.yml convert
+        kompose.version: 1.34.0 (HEAD)
+      labels:
+        io.kompose.service: whishper-translate
+    spec:
+      containers:
+        - env:
+            - name: DB_PASS
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_PASS
+                  name: whishper-env
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: whishper-env
+            - name: LT_DISABLE_WEB_UI
+              value: "true"
+            - name: LT_LOAD_ONLY
+              valueFrom:
+                configMapKeyRef:
+                  key: LT_LOAD_ONLY
+                  name: whishper-env
+            - name: LT_UPDATE_MODELS
+              value: "true"
+            - name: WHISHPER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: WHISHPER_HOST
+                  name: whishper-env
+            - name: WHISPER_MODELS
+              valueFrom:
+                configMapKeyRef:
+                  key: WHISPER_MODELS
+                  name: whishper-env
+          image: libretranslate/libretranslate:v1.6.2
+          livenessProbe:
+            exec:
+              command:
+                - ./venv/bin/python scripts/healthcheck.py
+            failureThreshold: 5
+            periodSeconds: 2
+            timeoutSeconds: 3
+          name: whisper-libretranslate
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          tty: true
+          volumeMounts:
+            - mountPath: /home/libretranslate/.local/share
+              name: whishper-translate-claim0
+            - mountPath: /home/libretranslate/.local/cache
+              name: whishper-translate-claim1
+      restartPolicy: Always
+      volumes:
+        - name: whishper-translate-claim0
+          persistentVolumeClaim:
+            claimName: whishper-translate-claim0
+        - name: whishper-translate-claim1
+          persistentVolumeClaim:
+            claimName: whishper-translate-claim1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: /nix/store/c5p8piha8yamv18l3h8yrwwp9ga5pcrm-kompose-1.34.0/bin/kompose -f docker-compose.yml convert
+    kompose.version: 1.34.0 (HEAD)
+  labels:
+    io.kompose.service: whishper-translate
+  name: whishper-translate
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "5000"
+      port: 5000
+      targetPort: 5000
+  selector:
+    io.kompose.service: whishper-translate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: whishper-claim0
+  name: whishper-claim0
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: whishper-claim1
+  name: whishper-claim1
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    io.kompose.service: whishper-models
+  name: whishper-models
+  namespace: @namespace@
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /nix/store/c5p8piha8yamv18l3h8yrwwp9ga5pcrm-kompose-1.34.0/bin/kompose -f docker-compose.yml convert
+    kompose.version: 1.34.0 (HEAD)
+  labels:
+    io.kompose.service: whishper
+  name: whishper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: whishper
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: /nix/store/c5p8piha8yamv18l3h8yrwwp9ga5pcrm-kompose-1.34.0/bin/kompose -f docker-compose.yml convert
+        kompose.version: 1.34.0 (HEAD)
+      labels:
+        io.kompose.service: whishper
+    spec:
+      containers:
+        - env:
+            - name: CPU_THREADS
+              value: "4"
+            - name: DB_PASS
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_PASS
+                  name: whishper-env
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_USER
+                  name: whishper-env
+            - name: LT_LOAD_ONLY
+              valueFrom:
+                configMapKeyRef:
+                  key: LT_LOAD_ONLY
+                  name: whishper-env
+            - name: PUBLIC_API_HOST
+            - name: PUBLIC_INTERNAL_API_HOST
+              value: http://127.0.0.1:80
+            - name: PUBLIC_TRANSLATION_API_HOST
+            - name: PUBLIC_WHISHPER_PROFILE
+              value: gpu
+            - name: UPLOAD_DIR
+              value: /app/uploads
+            - name: WHISHPER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: WHISHPER_HOST
+                  name: whishper-env
+            - name: WHISPER_MODELS
+              valueFrom:
+                configMapKeyRef:
+                  key: WHISPER_MODELS
+                  name: whishper-env
+            - name: WHISPER_MODELS_DIR
+              value: /app/models
+          image: @image@
+          name: whishper
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/uploads
+              name: whishper-claim0
+            - mountPath: /var/log/whishper
+              name: whishper-claim1
+            - mountPath: /app/models
+              name: whishper-models
+      restartPolicy: Always
+      volumes:
+        - name: whishper-claim0
+          persistentVolumeClaim:
+            claimName: whishper-claim0
+        - name: whishper-claim1
+          persistentVolumeClaim:
+            claimName: whishper-claim1
+        - name: whishper-models
+          persistentVolumeClaim:
+            claimName: whishper-models
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: /nix/store/c5p8piha8yamv18l3h8yrwwp9ga5pcrm-kompose-1.34.0/bin/kompose -f docker-compose.yml convert
+    kompose.version: 1.34.0 (HEAD)
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "whishper"
+    tailscale.com/tags: "tag:http"
+  labels:
+    io.kompose.service: whishper
+  name: whishper
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "whishper-web-ui"
+      port: 8082
+      targetPort: 80
+  selector:
+    io.kompose.service: whishper

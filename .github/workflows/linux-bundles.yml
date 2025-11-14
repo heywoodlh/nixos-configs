@@ -102,7 +102,6 @@ jobs:
           EOF
 
       - name: Build ${{ matrix.flake }} flake bundles
-        working-directory: ./flakes
         run: |
           mkdir -p appimage deb
           nix bundle -o "./${{ matrix.os }}-${{ matrix.out }}-appimage" --bundler github:ralismark/nix-appimage "${{ matrix.flake }}"

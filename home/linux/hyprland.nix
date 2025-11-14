@@ -3,11 +3,61 @@
 let
   system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
-in {
-  imports = [
-    ./hyprland/office-monitors.nix
-  ];
+  ashellConf = pkgs.writeText "config.toml" ''
+    log_level = "warn"
+    outputs = { Targets = ["eDP-1"] }
+    position = "Top"
+    app_launcher_cmd = "${pkgs.fuzzel}/bin/fuzzel -I"
 
+    [modules]
+    left = [ [ "appLauncher", "Updates", "Workspaces" ] ]
+    center = [ "WindowTitle" ]
+    right = [ [  "Tray", "Clock", "Privacy", "Settings" ] ]
+
+    [workspaces]
+    enable_workspace_filling = true
+
+    [[CustomModule]]
+    name = "appLauncher"
+    icon = "󱗼"
+    command = "${pkgs.fuzzel}/bin/fuzzel -I"
+
+    [window_title]
+    truncate_title_after_length = 100
+
+    [settings]
+    lock_cmd = "${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.swaylock-effects}/bin/swaylock -fF &"
+    audio_sinks_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 3"
+    audio_sources_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 4"
+    wifi_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor"
+    vpn_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor"
+    bluetooth_more_cmd = "${pkgs.blueberry}/bin/blueberry"
+
+    [appearance]
+    style = "Islands"
+    primary_color = "#8cc4ff"
+    success_color = "#56b3da"
+    text_color = "#d6deeb"
+
+    workspace_colors = [ "#8cc4ff", "#56b3da" ]
+
+    special_workspace_colors = [ "#8cc4ff", "#56b3da" ]
+
+    [appearance.danger_color]
+    base = "#eb9e0f"
+    weak = "#d99a6f"
+
+    [appearance.background_color]
+    base = "#2c323a"
+    weak = "#3b4257"
+    strong = "#47535e"
+
+    [appearance.secondary_color]
+    base = "#3b5b6c"
+
+  '';
+
+in {
   home.packages = with pkgs; [
     acpi
     bluetuith
@@ -15,7 +65,7 @@ in {
     brillo
     dunst
     grim
-    polkit-kde-agent
+    kdePackages.polkit-kde-agent-1
     libnotify
     pavucontrol
     playerctl
@@ -391,7 +441,6 @@ in {
       #}
       #env = GDK_SCALE, 2
       env = XCURSOR_SIZE, 24
-      env = NIXOS_OZONE_WL, 1
 
       general {
         #col.active_border = 81a1c1ff
@@ -400,11 +449,14 @@ in {
       }
 
       # Apps to start on login
+      exec-once = ${pkgs.hyprland}/bin/hyprctl setcursor Adwaita 24
       exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
-      exec-once = ${homeDir}/.nix-profile/bin/1password --silent
+      exec-once = ${pkgs._1password-gui}/bin/1password --silent
+      exec-once = ${pkgs.ashell}/bin/ashell --config-path ${ashellConf}
       exec-once = ${pkgs.dunst}/bin/dunst
-      exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-authentication-agent-1
+      exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
       exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
+
       # Start terminal in special workspace so I can toggle it
       #exec-once = [workspace special:terminal] ${pkgs.ghostty}/bin/ghostty
       workspace = special:terminal, on-created-empty:${pkgs.ghostty}/bin/ghostty --font-size=12
@@ -431,17 +483,18 @@ in {
         #suppress_portal_warnings = true
       }
 
+      ecosystem {
+        no_update_news = true
+        no_donation_nag = true
+      }
+
       # Window rules
       #windowrulev2 = dimaround, class:^(1Password)$, floating
       windowrulev2 = center, class:^(1Password)$
       windowrulev2 = stayfocused,class:^(1Password)$
-      windowrule = rounding 10, ^(1Password)$
-      windowrule = rounding 10, ^(firefox)$
 
       # Gestures
-      gestures {
-        workspace_swipe = on
-      }
+      gesture = 3, horizontal, workspace
 
       input {
         touchpad {

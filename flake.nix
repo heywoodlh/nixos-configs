@@ -58,7 +58,6 @@
     osquery-fix-nixpkgs = {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
-    hyprland.url = "github:hyprwm/Hyprland?submodules=1";
     # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
     jovian-nixos = {
       url = "git+https://github.com/Jovian-Experiments/Jovian-NixOS?ref=development";
@@ -82,15 +81,6 @@
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/wallpapers/nix-wallpaper-simple-light-gray.png";
       flake = false;
     };
-    nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
-    cosmic-manager = {
-      url = "github:HeitorAugustoLN/cosmic-manager";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-      };
-    };
-    ts-warp-nixpkgs.url = "github:heywoodlh/nixpkgs/ts-warp-init";
     qutebrowser = {
       url = "github:qutebrowser/qutebrowser";
       flake = false;
@@ -134,6 +124,14 @@
       url = "github:heywoodlh/hexstrike-ai/nix-flake-init";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland = {
+      url = "github:hyprwm/hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    hyprmon = {
+      url = "github:erans/hyprmon";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self,
@@ -158,10 +156,6 @@
                       nix-on-droid,
                       dark-wallpaper,
                       light-wallpaper,
-                      hyprland,
-                      nixos-cosmic,
-                      cosmic-manager,
-                      ts-warp-nixpkgs,
                       qutebrowser,
                       signal-ntfy,
                       lanzaboote,
@@ -176,6 +170,8 @@
                       omarchy,
                       vicinae-nix,
                       hexstrike-ai,
+                      hyprland,
+                      hyprmon,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -685,7 +681,6 @@
           modules = [
             determinate-nix.homeModules.default
             #(mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
-            cosmic-manager.homeManagerModules.cosmic-manager
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config
@@ -735,8 +730,6 @@
                 '';
               };
             }
-            #hyprland.homeManagerModules.default
-            #./home/linux/hyprland.nix
           ];
           extraSpecialArgs = inputs;
         };

@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, hyprland, ... }:
+{ config, pkgs, home-manager, hyprland, ashell, ... }:
 
 {
   nix.settings = {
@@ -11,17 +11,23 @@
     ];
   };
 
+  services.displayManager.defaultSession = "hyprland";
+
   # Enable hyprland
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
   };
-  services.displayManager.defaultSession = "hyprland";
   security.pam.services.swaylock.text = "auth include login";
   hardware.brillo.enable = true;
 
-  home-manager.users.heywoodlh.imports = [
-    hyprland.homeManagerModules.default
-    ../../../home/linux/hyprland.nix
-  ];
+  home-manager.users.heywoodlh = {
+    imports = [
+      hyprland.homeManagerModules.default
+      ../../../home/linux/hyprland.nix
+    ];
+    wayland.windowManager.hyprland.extraConfig = ''
+      env = NIXOS_OZONE_WL, 1
+    '';
+  };
 }

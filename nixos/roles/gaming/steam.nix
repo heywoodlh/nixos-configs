@@ -6,11 +6,6 @@
     protontricks.enable = true;
   };
 
-  # Add KDE for gaming
-  services.desktopManager.plasma6.enable = true;
-  programs.kdeconnect.package = lib.mkForce pkgs.gnomeExtensions.gsconnect;
-  programs.ssh.askPassword = lib.mkForce "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
-
   hardware.bluetooth.input = {
     General = {
       UserspaceHID = true;

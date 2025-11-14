@@ -24,7 +24,7 @@ in {
   nix = {
     package = pkgs.lib.mkForce determinate-nix.packages.${system}.default;
     extraOptions = ''
-      extra-experimental-features = nix-command flakes
+      extra-experimental-features = nix-command flakes pipe-operators
     '';
     settings = {
       auto-optimise-store = true;

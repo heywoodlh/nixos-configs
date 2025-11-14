@@ -2,7 +2,7 @@
   nur, nixpkgs-stable, nixpkgs-lts,
   myFlakes,
   light-wallpaper, dark-wallpaper,
-  ts-warp-nixpkgs, qutebrowser,
+  qutebrowser,
   ghostty,
   vicinae-nix,
   ... }:
@@ -24,6 +24,7 @@ in {
     ./base.nix
     ./roles/desktop/user-icon.nix
     ./roles/virtualization/libvirt.nix
+    ./roles/desktop/hyprland.nix
   ];
 
   nixpkgs.overlays = [
@@ -226,7 +227,6 @@ in {
       inherit nixpkgs-stable;
       inherit light-wallpaper;
       inherit dark-wallpaper;
-      inherit ts-warp-nixpkgs;
       inherit qutebrowser;
       inherit ghostty;
       inherit vicinae-nix;

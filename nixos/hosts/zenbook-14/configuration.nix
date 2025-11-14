@@ -32,9 +32,9 @@ in {
 
   # Configuration for this machine
   home-manager.users.heywoodlh = {
-    imports = [
-      ../../../home/roles/discord.nix
-    ];
+    wayland.windowManager.hyprland.extraConfig = ''
+      monitor=eDP-1,2880x1800@60,0x0,2
+    '';
     home.packages = with pkgs; [
       gimp
       moonlight-qt

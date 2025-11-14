@@ -2,7 +2,7 @@
   description = "Helix editor flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     flake-utils.url = "github:numtide/flake-utils";
     helix-src = {
       url = "github:alevinval/helix/issue-2719";
@@ -22,7 +22,7 @@
       };
 
       myConfig = pkgs.writeText "config.toml" ''
-        theme = "heywoodlh"
+        theme = "base16_transparent"
 
         [editor.cursor-shape]
         insert = "bar"
@@ -40,9 +40,6 @@
 
         [editor.lsp]
         display-inlay-hints = true
-
-        [editor.soft-wrap]
-        enable = true
 
         [editor]
         auto-pairs = false

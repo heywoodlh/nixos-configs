@@ -29,9 +29,13 @@
     myFlakes = {
       url = ./flakes;
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
+      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
       inputs.vicinae-nix.follows = "vicinae-nix";
       inputs.mcphub-nvim.follows = "mcphub-nvim";
+    };
+    helix = {
+      url = ./flakes/helix;
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
@@ -128,10 +132,6 @@
       url = "github:hyprwm/hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprmon = {
-      url = "github:erans/hyprmon";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs@{ self,
@@ -140,6 +140,7 @@
                       nixpkgs-pam-lid-fix,
                       nixpkgs-apple-containers,
                       myFlakes,
+                      helix,
                       nixpkgs-backports,
                       nixpkgs-lts,
                       nixos-wsl,
@@ -171,7 +172,6 @@
                       vicinae-nix,
                       hexstrike-ai,
                       hyprland,
-                      hyprmon,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {

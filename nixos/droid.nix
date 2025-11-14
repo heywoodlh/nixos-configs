@@ -6,8 +6,6 @@ let
   pathToPubKey = ssh-keys.outPath;
   port = 8022;
   system = pkgs.stdenv.hostPlatform.system;
-  myVim = myFlakes.packages.${system}.vim;
-  myGit = myFlakes.packages.${system}.git;
 in
 {
   imports = [
@@ -43,8 +41,6 @@ in
       echo "Starting sshd in non-daemonized way on port ${toString port}"
       ${pkgs.openssh}/bin/sshd -f "${sshdDirectory}/sshd_config" -D
     '')
-    myGit
-    myVim
     pkgs.busybox
     pkgs.coreutils
   ];

@@ -1,4 +1,4 @@
-{ config, pkgs, determinate-nix, home-manager, myFlakes, nur, ts-warp-nixpkgs, qutebrowser, ghostty, iamb-home-manager, hexstrike-ai, ... }:
+{ config, pkgs, determinate-nix, home-manager, myFlakes, helix, nur, ts-warp-nixpkgs, qutebrowser, ghostty, iamb-home-manager, hexstrike-ai, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -23,6 +23,7 @@ in {
   home-manager = {
     extraSpecialArgs = {
       inherit myFlakes;
+      inherit helix;
       inherit ts-warp-nixpkgs;
       inherit qutebrowser;
       inherit ghostty;

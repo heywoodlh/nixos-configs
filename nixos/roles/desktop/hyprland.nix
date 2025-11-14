@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, hyprland, ashell, ... }:
+{ config, pkgs, home-manager, hyprland, ... }:
 
 {
   nix.settings = {

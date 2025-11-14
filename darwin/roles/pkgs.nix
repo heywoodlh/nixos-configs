@@ -84,15 +84,5 @@ in {
       "rustdesk"
       "shortcat"
     ];
-    masApps = {
-      DaisyDisk = 411643860;
-      "WiFi Explorer" = 494803304;
-      "Reeder 5." = 1529448980;
-      "1Password for Safari" = 1569813296;
-      "Dark Reader for Safari" = 1438243180;
-      "Redirect Web for Safari" = 1571283503;
-      "Vimlike" = 1584519802;
-      "AdGuard for Safari" = 1440147259;
-    };
   };
 }

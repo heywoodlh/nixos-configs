@@ -25,7 +25,7 @@
     };
     helix-flake = {
       url = "./helix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     git-flake = {
       url = "./git";

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nur, myFlakes, iamb-home-manager, modulesPath, hexstrike-ai, ... }:
+{ config, pkgs, lib, home-manager, nur, myFlakes, helix, iamb-home-manager, modulesPath, hexstrike-ai, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -7,6 +7,7 @@ let
   myFish = myFlakes.packages.${system}.fish;
   myVM = myFlakes.packages.${system}.nixos-vm;
   myVim = myFlakes.packages.${system}.vim;
+  myHelix = helix.packages.${system}.helix-wrapper;
   myGit = myFlakes.packages.${system}.git;
   myJujutsu = myFlakes.packages.${system}.jujutsu;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
@@ -350,6 +351,7 @@ in {
     vdirsyncer
     zip
     myVim
+    myHelix
     myGit
     myJujutsu
     myFlakes.packages.${system}.tmux

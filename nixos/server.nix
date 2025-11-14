@@ -8,8 +8,6 @@
 let
   system = pkgs.stdenv.hostPlatform.system;
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
-  myVim = myFlakes.packages.${system}.vim;
-  myGit = myFlakes.packages.${system}.git;
 in {
   imports = [
     comin.nixosModules.comin
@@ -38,7 +36,6 @@ in {
     pkgs.croc
     pkgs.file
     pkgs.gcc
-    myGit
     pkgs.gnumake
     pkgs.gnupg
     pkgs.gptfdisk
@@ -51,7 +48,6 @@ in {
     pkgs.unzip
     pkgs.wireguard-tools
     pkgs.zsh
-    myVim
   ];
 
   # Wazuh configuration

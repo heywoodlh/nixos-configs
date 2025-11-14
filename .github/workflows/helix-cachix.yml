@@ -1,0 +1,47 @@
+name: build-helix-and-push
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * *"
+
+jobs:
+  push-helix:
+    name: Build Helix and push to Cachix
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Login to Tailnet
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: true
+
+      - name: Set up binary cache
+        env:
+          ATTIC_PUBKEY: ${{ secrets.ATTIC_LINUX_PUBKEY }}
+          ATTIC_CACHE: "http://attic/nixos"
+        run: |
+          sudo tee -a /etc/nix/nix.conf > /dev/null <<EOF
+          extra-substituters = $ATTIC_CACHE
+          extra-trusted-public-keys = $ATTIC_PUBKEY
+          EOF
+
+      - uses: cachix/cachix-action@v16
+        with:
+          name: heywoodlh-helix
+          authToken: '${{ secrets.CACHIX_HEYWOODLH_HELIX }}'
+
+      - name: Build Helix
+        working-directory: ./flakes
+        run: |
+          nix build .#helix --no-write-lock-file --json | jq -r '.[].outputs | to_entries[].value' | cachix push heywoodlh-helix
+          nix build helix#helix --json | jq -r '.[].outputs | to_entries[].value' | cachix push heywoodlh-helix

@@ -65,6 +65,7 @@ in {
     brillo
     dunst
     grim
+    hyprmon
     kdePackages.polkit-kde-agent-1
     libnotify
     pavucontrol

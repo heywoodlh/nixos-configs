@@ -1,5 +1,5 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, determinate-nix, nixpkgs-stable, lib, nur, home-manager, iamb-home-manager, browsh, hexstrike-ai, mcphub, ... }:
+{ config, pkgs, determinate-nix, nixpkgs-stable, lib, nur, home-manager, iamb-home-manager, browsh, hexstrike-ai, mcphub, myFlakes, helix, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -8,6 +8,9 @@ let
     inherit system;
     config.allowUnfree = true;
   };
+  myVim = myFlakes.packages.${system}.vim;
+  myHelix = helix.packages.${system}.helix-wrapper;
+  myGit = myFlakes.packages.${system}.git;
 in {
   imports = [
     ./roles/virtualization/multiarch.nix
@@ -66,6 +69,9 @@ in {
     myNixosSwitchWithFlakes
     myNixosBoot
     myNixosBuild
+    myGit
+    myHelix
+    myVim
     mosh
   ];
 
@@ -87,6 +93,7 @@ in {
       inherit browsh;
       inherit hexstrike-ai;
       inherit mcphub;
+      inherit helix;
     };
     users.heywoodlh = { ... }: {
       home.activation.docker-rootless-context = ''

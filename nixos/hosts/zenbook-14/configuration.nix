@@ -41,7 +41,6 @@ in {
       protonup-ng
       stable-pkgs.beeper
       stable-pkgs.legcord
-      stable-pkgs.rustdesk
       zoom-us
     ];
   };

@@ -54,9 +54,14 @@ let
 
     [appearance.secondary_color]
     base = "#3b5b6c"
-
   '';
+  onepasswordToggle = pkgs.writeShellScriptBin "1password-toggle.sh" ''
+    # Check if 1password is running
+    ps aux | grep -i 1password | grep -iq silent || ${pkgs._1password-gui-beta}/bin/1password --silent --ozone-platform-hint=wayland
 
+    # Open 1password quick access
+    ${pkgs._1password-gui-beta}/bin/1password --quick-access
+  '';
 in {
   home.packages = with pkgs; [
     acpi
@@ -81,6 +86,7 @@ in {
     wireplumber
     wl-clipboard
     xdg-desktop-portal-hyprland
+    onepasswordToggle
   ];
 
   # Dunst config
@@ -361,21 +367,6 @@ in {
     '';
   };
 
-
-  # 1Password script
-  home.file."bin/1password-toggle.sh" = {
-    enable = true;
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      # Check if 1password is running
-      ps aux | grep -i 1password | grep -iq silent || ${homeDir}/.nix-profile/bin/1password --silent
-
-      # Open 1password quick access
-      ${homeDir}/.nix-profile/bin/1password --quick-access
-    '';
-  };
-
   # Nord-themed Swaylock
   programs.swaylock = {
     enable = true;
@@ -452,7 +443,7 @@ in {
       # Apps to start on login
       exec-once = ${pkgs.hyprland}/bin/hyprctl setcursor Adwaita 24
       exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
-      exec-once = ${pkgs._1password-gui}/bin/1password --silent
+      exec-once = ${pkgs._1password-gui-beta}/bin/1password --silent
       exec-once = ${pkgs.ashell}/bin/ashell --config-path ${ashellConf}
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
@@ -490,9 +481,16 @@ in {
       }
 
       # Window rules
-      #windowrulev2 = dimaround, class:^(1Password)$, floating
-      windowrulev2 = center, class:^(1Password)$
-      windowrulev2 = stayfocused,class:^(1Password)$
+      windowrulev2 = float, title:(1Password)
+      windowrulev2 = size 70% 70%, title:(1Password)
+      windowrulev2 = center, title:(1Password)
+
+      # Firefox PiP
+      windowrulev2 = float, title:^(Picture-in-Picture)$
+      windowrulev2 = size 20% 20%, title:^(Picture-in-Picture)$
+      windowrulev2 = move 100%-w-30, title:^(Picture-in-Picture)$
+      windowrulev2 = pin, title:^(Picture-in-Picture)$
+      windowrulev2 = noborder, title:^(Picture-in-Picture)$
 
       # Gestures
       gesture = 3, horizontal, workspace
@@ -511,7 +509,9 @@ in {
       bind = CTRL_ALT, t, exec, ${pkgs.ghostty}/bin/ghostty
       bind = CTRL, grave, togglespecialworkspace, terminal
       # 1Password
-      bind = CTRL_SUPER, s, exec, ${homeDir}/bin/1password-toggle.sh
+      bind = CTRL_SUPER, s, exec, ${onepasswordToggle}/bin/1password-toggle.sh
+      # Emote picker
+      bind = CTRL_SUPER, Space, exec, ${pkgs.emote}/bin/emote
       # Launcher
       bind = $mainMod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel -I
       # Lock screen

@@ -288,8 +288,22 @@ in {
 
   nix = {
     extraOptions = ''
-      experimental-features = nix-command flakes
+      extra-experimental-features = nix-command flakes pipe-operators
     '';
+    settings = {
+      auto-optimise-store = true;
+      trusted-users = [
+        "heywoodlh"
+      ];
+      extra-substituters = [
+        "https://nix-community.cachix.org"
+        "https://heywoodlh-helix.cachix.org"
+      ];
+      trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "heywoodlh-helix.cachix.org-1:qHDV95nI/wX9pidAukzMzgeok1415rgjMAXinDsbb7M="
+      ];
+    };
   };
 
   disabledModules = [

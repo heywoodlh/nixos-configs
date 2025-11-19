@@ -1,5 +1,112 @@
 # plex
 ---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "plex-cloudflare-token"
+  namespace: "media"
+spec:
+  itemPath: "vaults/Kubernetes/items/73gahgdaks7s3hl4dsjoxjzflq"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: plex-letsencrypt-renew
+  namespace: media
+data:
+  run.sh: |-
+    #!/usr/bin/env ash
+    printf "dns_cloudflare_email = $CLOUDFLARE_EMAIL\ndns_cloudflare_api_key = $CLOUDFLARE_TOKEN\n" > /cloudflare.ini
+    chmod 600 /cloudflare.ini
+    if [ -e /letsencrypt/config/live/plex.heywoodlh.io/fullchain.pem ]
+    then
+      certbot renew \
+        --preferred-challenges dns-01 \
+        --config-dir /letsencrypt/config \
+        --work-dir /letsencrypt/work \
+        --logs-dir /letsencrypt/logs
+    else
+      certbot certonly \
+        --dns-cloudflare \
+        --dns-cloudflare-credentials /cloudflare.ini \
+        --agree-tos \
+        --no-eff-email \
+        --dns-cloudflare-propagation-seconds 60 \
+        --preferred-challenges dns-01 \
+        --config-dir /letsencrypt/config \
+        --work-dir /letsencrypt/work \
+        --logs-dir /letsencrypt/logs \
+        -m $CLOUDFLARE_EMAIL \
+        -d $CLOUDFLARE_DOMAIN
+    fi
+    openssl pkcs12 -export \
+      -passout pass:$OPENSSL_PASSPHRASE \
+      -out /letsencrypt/certificate.pfx \
+      -inkey /letsencrypt/config/live/plex.heywoodlh.io/privkey.pem \
+      -in /letsencrypt/config/live/plex.heywoodlh.io/cert.pem \
+      -certfile /letsencrypt/config/live/plex.heywoodlh.io/chain.pem
+    chown -R 995: /letsencrypt/certificate.pfx
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: plex-letsencrypt-renew
+  namespace: media
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: letsencrypt
+              image: docker.io/certbot/dns-cloudflare:latest
+              command:
+                - "/bin/ash"
+                - "-c"
+              args:
+                - |
+                  /run.sh
+                  exit 0
+              env:
+                - name: CLOUDFLARE_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: plex-cloudflare-token
+                      key: password
+                - name: CLOUDFLARE_EMAIL
+                  valueFrom:
+                    secretKeyRef:
+                      name: plex-cloudflare-token
+                      key: username
+                - name: CLOUDFLARE_DOMAIN
+                  valueFrom:
+                    secretKeyRef:
+                      name: plex-cloudflare-token
+                      key: domain
+                - name: OPENSSL_PASSPHRASE
+                  valueFrom:
+                    secretKeyRef:
+                      name: plex-cloudflare-token
+                      key: openssl-passphrase
+              volumeMounts:
+                - name: plex-letsencrypt
+                  mountPath: /letsencrypt
+                - name: plex-letsencrypt-renew
+                  mountPath: /run.sh
+                  subPath: run.sh
+          volumes:
+          - name: plex-letsencrypt
+            hostPath:
+              path: /media/config/services/plex/letsencrypt
+              type: DirectoryOrCreate
+          - name: plex-letsencrypt-renew
+            configMap:
+              name: plex-letsencrypt-renew
+              defaultMode: 0777
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,6 +114,8 @@ metadata:
     app: plex
   name: plex
   namespace: media
+  annotations:
+    operator.1password.io/auto-restart: "true"
 spec:
   replicas: 1
   selector:
@@ -34,6 +143,42 @@ spec:
           volumeMounts:
             - name: plex-config
               mountPath: /config
+        - name: letsencrypt
+          image: docker.io/certbot/dns-cloudflare:latest
+          command:
+            - "/bin/ash"
+            - "-c"
+          args:
+            - |
+              /run.sh
+              exit 0
+          env:
+            - name: CLOUDFLARE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: plex-cloudflare-token
+                  key: password
+            - name: CLOUDFLARE_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: plex-cloudflare-token
+                  key: username
+            - name: CLOUDFLARE_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: plex-cloudflare-token
+                  key: domain
+            - name: OPENSSL_PASSPHRASE
+              valueFrom:
+                secretKeyRef:
+                  name: plex-cloudflare-token
+                  key: openssl-passphrase
+          volumeMounts:
+            - name: plex-letsencrypt
+              mountPath: /letsencrypt
+            - name: plex-letsencrypt-renew
+              mountPath: /run.sh
+              subPath: run.sh
       containers:
       - image: docker.io/linuxserver/plex:1.42.2
         name: plex
@@ -45,6 +190,8 @@ spec:
           mountPath: /config
         - name: media
           mountPath: /media/home-media
+        - name: plex-letsencrypt
+          mountPath: /letsencrypt
         env:
           - name: PUID
             value: "995"
@@ -65,6 +212,14 @@ spec:
         hostPath:
           path: /media/home-media
           type: Directory
+      - name: plex-letsencrypt
+        hostPath:
+          path: /media/config/services/plex/letsencrypt
+          type: DirectoryOrCreate
+      - name: plex-letsencrypt-renew
+        configMap:
+          name: plex-letsencrypt-renew
+          defaultMode: 0777
 ---
 apiVersion: v1
 kind: Service

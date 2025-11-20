@@ -24,7 +24,7 @@
     luks = {
       yubikeySupport = true;
       devices."luks" = {
-        device = "/dev/disk/by-uuid/a5764b6d-4435-4dde-97e5-43a3c1738c85";
+        device = "/dev/disk/by-uuid/c0db86d8-325a-4237-89d4-86eab2597026";
         yubikey = {
           slot = 2;
           twoFactor = false; # Set to false for 1FA
@@ -42,7 +42,7 @@
   };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/32A7-11EA";
+    { device = "/dev/disk/by-uuid/EA68-14F8";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };

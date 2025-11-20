@@ -482,7 +482,6 @@ in {
 
       # Window rules
       windowrulev2 = float, title:(1Password)
-      windowrulev2 = size 70% 70%, title:(1Password)
       windowrulev2 = center, title:(1Password)
 
       # Firefox PiP

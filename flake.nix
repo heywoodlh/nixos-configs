@@ -489,6 +489,7 @@
               };
               environment.systemPackages = with pkgs; [
                 git
+                pkgs.helix # So as not to overlap with Helix input
                 msedit
                 nano
               ];

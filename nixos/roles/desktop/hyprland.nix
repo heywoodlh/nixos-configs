@@ -21,6 +21,10 @@
   security.pam.services.swaylock.text = "auth include login";
   hardware.brillo.enable = true;
 
+  # Keyring
+  programs.seahorse.enable = true;
+  services.gnome.gnome-keyring.enable = true;
+
   home-manager.users.heywoodlh = {
     imports = [
       hyprland.homeManagerModules.default

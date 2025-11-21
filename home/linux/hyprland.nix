@@ -448,6 +448,7 @@ in {
       exec-once = ${pkgs.dunst}/bin/dunst
       exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
       exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
+      exec-once = ${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets
 
       # Start terminal in special workspace so I can toggle it
       #exec-once = [workspace special:terminal] ${pkgs.ghostty}/bin/ghostty

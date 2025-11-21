@@ -142,6 +142,7 @@
                       nixpkgs-backports,
                       nixpkgs-lts,
                       nixos-wsl,
+                      nixos-apple-silicon,
                       darwin,
                       home-manager,
                       iamb-home-manager,
@@ -407,8 +408,13 @@
                   "heywoodlh"
                 ];
               };
+              home-manager.users.heywoodlh = {
+                wayland.windowManager.hyprland.extraConfig = ''
+                  monitor=eDP-1,2560x1440@60,0x0,2
+                '';
+              };
             }
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/razer-blade-14.nix
             ./nixos/desktop.nix
             ./nixos/roles/gaming/steam.nix
           ];

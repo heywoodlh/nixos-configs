@@ -391,6 +391,28 @@
             ./nixos/hosts/thinkpad-x270/configuration.nix
           ];
         };
+        nixos-blade = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs;
+          modules = [
+            {
+              # Bootloader
+              boot.loader.systemd-boot.enable = true;
+              boot.loader.efi.canTouchEfiVariables = true;
+              networking.hostName = "nixos-blade";
+              time.timeZone = "America/Denver";
+              hardware.openrazer = {
+                enable = true;
+                users = [
+                  "heywoodlh"
+                ];
+              };
+            }
+            /etc/nixos/hardware-configuration.nix
+            ./nixos/desktop.nix
+            ./nixos/roles/gaming/steam.nix
+          ];
+        };
         nixos-m1-mac-mini = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           specialArgs = inputs;

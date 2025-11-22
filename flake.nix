@@ -410,8 +410,29 @@
               };
               home-manager.users.heywoodlh = {
                 wayland.windowManager.hyprland.extraConfig = ''
-                  monitor=eDP-1,2560x1440@60,0x0,2
+                  # change monitor to high resolution, the last argument is the scale factor
+                  monitor = , highres, auto, 2
+                  # unscale XWayland
+                  xwayland {
+                    force_zero_scaling = true
+                  }
+                  # toolkit-specific scale
+                  env = GDK_SCALE,2
+                  env = XCURSOR_SIZE,32
                 '';
+              };
+              # Nvidia settings
+              boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+              hardware.graphics = {
+                enable = true;
+              };
+              services.xserver.videoDrivers = ["nvidia"];
+              hardware.nvidia = {
+                modesetting.enable = true;
+                powerManagement.finegrained = false;
+                open = true;
+                nvidiaSettings = true;
+                package = pkgs.linuxKernel.packages.linux_zen.nvidiaPackages.beta;
               };
             }
             ./nixos/hosts/razer-blade-14.nix
@@ -434,6 +455,7 @@
             ./nixos/desktop.nix
             ./nixos/roles/nixos/asahi.nix
             ./nixos/roles/gaming/steam.nix
+            ./nixos/roles/remote-access/sshd.nix
           ];
         };
 

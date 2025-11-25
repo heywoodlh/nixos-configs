@@ -1,5 +1,5 @@
 # Configuration loaded for family systems
-{ config, pkgs, determinate-nix, home-manager, nur, ... }:
+{ config, pkgs, home-manager, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;

@@ -353,48 +353,6 @@ boolean
 
 
 
-## heywoodlh\.home\.qutebrowser\.enable
-
-
-
-Enable heywoodlh qutebrowser config\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/qutebrowser\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/qutebrowser.nix)
-
-
-
-## heywoodlh\.home\.qutebrowser\.enable1Pass
-
-
-
-Enable qutebrowser 1Pass userscript\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/qutebrowser\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/qutebrowser.nix)
-
-
-
 ## heywoodlh\.home\.sway\.enable
 
 

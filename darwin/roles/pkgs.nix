@@ -1,9 +1,8 @@
-{ config, determinate-nix, pkgs, myFlakes, darwin, nixpkgs-apple-containers, ... }:
+{ config, determinate, pkgs, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-  nixPkg = determinate-nix.packages.${system}.default;
-  container = nixpkgs-apple-containers.legacyPackages.${system}.container;
+  nixPkg = determinate.packages.${system}.default;
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
@@ -26,7 +25,6 @@ let
 in {
   #nix packages
   environment.systemPackages = [
-    container
     linuxBuilderSsh
     myDarwinSwitch
     myDarwinBoot
@@ -51,6 +49,8 @@ in {
       "aaronraimist/tap/gomuks"
       "mas"
       "mosh"
+      "ollama"
+      "opencode"
       "pinentry-mac"
       "spice-gtk"
       "watch"

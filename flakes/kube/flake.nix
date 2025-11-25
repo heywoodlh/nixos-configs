@@ -4,11 +4,12 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixpkgs-old.url = "github:NixOS/nixpkgs/nixos-24.05"; # For deprecated substituteAll function
+    flake-utils.url = "github:numtide/flake-utils";
     fish-flake = {
       url = ../fish;
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
-    flake-utils.url = "github:numtide/flake-utils";
     cloudflared-helm = {
       url = "github:cloudflare/helm-charts";
       flake = false;
@@ -17,9 +18,22 @@
       url = "github:kubernetes-sigs/nfs-subdir-external-provisioner";
       flake = false;
     };
-    nixhelm.url = "github:nix-community/nixhelm";
     nix-kube-generators.url = "github:farcaller/nix-kube-generators";
-    tailscale.url = "github:tailscale/tailscale";
+    nixhelm = {
+      url = "github:nix-community/nixhelm";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.nix-kube-generators.follows = "nix-kube-generators";
+      inputs.poetry2nix.inputs = {
+        flake-utils.follows = "nixhelm/flake-utils";
+        systems.follows = "nixhelm/flake-utils/systems";
+      };
+    };
+    tailscale = {
+      url = "github:tailscale/tailscale";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "flake-utils/systems";
+    };
     minecraft-helm = {
       url = "github:itzg/minecraft-server-charts";
       flake = false;
@@ -51,6 +65,7 @@
     krew2nix = {
       url = "github:eigengrau/krew2nix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
     kasmweb = {
       url = "github:kasmtech/kasm-helm/release/1.16.0";

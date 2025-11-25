@@ -2,8 +2,6 @@
   nur, nixpkgs-stable, nixpkgs-lts,
   myFlakes,
   light-wallpaper, dark-wallpaper,
-  qutebrowser,
-  ghostty,
   vicinae-nix,
   ... }:
 
@@ -15,10 +13,10 @@ let
   };
   # Overlay that replaces gnome-shell and gnome-session with the stable ones
   # Because extensions are often broken with the latest gnome-shell
-  gnome-stable = (final: prev: {
-    gnome-shell  = pkgs-stable.gnome-shell;
-    gnome-session = pkgs-stable.gnome-session;
-  });
+  #gnome-stable = (final: prev: {
+  #  gnome-shell  = pkgs-stable.gnome-shell;
+  #  gnome-session = pkgs-stable.gnome-session;
+  #});
 in {
   imports = [
     ./base.nix
@@ -30,7 +28,6 @@ in {
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
     nur.overlays.default
-    gnome-stable
   ];
 
   boot = {
@@ -49,35 +46,11 @@ in {
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable nord-themed lightdm
-  #services.xserver.displayManager.lightdm = {
-  #  enable = false;
-  #  background = dark-wallpaper;
-  #  greeters.gtk = {
-  #    enable = true;
-  #    theme = {
-  #      name = "Nordic-darker";
-  #      package = pkgs.nordic;
-  #    };
-  #  };
-  #};
-
-  # Enable GNOME
-  services.desktopManager.gnome.enable = true;
-  services.displayManager.gdm.enable = true;
+  services.power-profiles-daemon.enable = true;
+  services.greetd.enable = true;
   boot.tmp.cleanOnBoot = true;
 
-  # Enable Sway (home-manager config manages details)
-  #programs.sway = {
-  #  enable = true;
-  #  wrapperFeatures = {
-  #    base = true;
-  #    gtk = true;
-  #  };
-  #  xwayland.enable = true;
-  #};
-
-  # Enable kde connect
+  # enable kde connect
   programs.kdeconnect = {
     enable = true;
     package = pkgs.gnomeExtensions.gsconnect;
@@ -206,7 +179,7 @@ in {
     pkgs.ifuse
     pkgs.usbutils
     myFlakes.packages.${system}.tmux
-    myFlakes.packages.${system}.vim
+    myFlakes.packages.${system}.helix
   ];
 
   # Disable wait-online service for Network Manager
@@ -227,8 +200,6 @@ in {
       inherit nixpkgs-stable;
       inherit light-wallpaper;
       inherit dark-wallpaper;
-      inherit qutebrowser;
-      inherit ghostty;
       inherit vicinae-nix;
     };
     backupFileExtension = ".bak";

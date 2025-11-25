@@ -1,4 +1,4 @@
-{ callPackage, mcphub, mcphub-nvim, ...}:
+{ callPackage, ...}:
 
 let
   modFiles = [
@@ -30,5 +30,5 @@ let
     ./vimrc.nix
   ];
 
-  importModFile = f: callPackage f { inherit mcphub; inherit mcphub-nvim; };
+  importModFile = f: callPackage f {};
 in map importModFile modFiles

@@ -1,5 +1,5 @@
 # Configuration loaded for all NixOS hosts
-{ config, pkgs, determinate-nix, nixpkgs-stable, lib, nur, home-manager, iamb-home-manager, browsh, hexstrike-ai, mcphub, myFlakes, helix, ... }:
+{ pkgs, determinate, nixpkgs-stable, lib, nur, home-manager, hexstrike-ai, myFlakes, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -9,13 +9,13 @@ let
     config.allowUnfree = true;
   };
   myVim = myFlakes.packages.${system}.vim;
-  myHelix = helix.packages.${system}.helix-wrapper;
+  myHelix = myFlakes.packages.${system}.helix-wrapper;
   myGit = myFlakes.packages.${system}.git;
 in {
   imports = [
     ./roles/virtualization/multiarch.nix
     ./roles/nixos/attic.nix
-    determinate-nix.nixosModules.default
+    determinate.nixosModules.default
     home-manager.nixosModules.home-manager
   ];
 
@@ -25,7 +25,7 @@ in {
   ];
 
   nix = {
-    package = pkgs.lib.mkForce determinate-nix.packages.${system}.default;
+    package = lib.mkForce determinate.packages.${system}.default;
     extraOptions = ''
       extra-experimental-features = nix-command flakes pipe-operators
     '';
@@ -47,7 +47,7 @@ in {
 
   # Stable, system-wide packages
   environment.systemPackages = with stable-pkgs; let
-    nixPkg = determinate-nix.packages.${system}.default;
+    nixPkg = determinate.packages.${system}.default;
     nixosRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
       [[ -d $HOME/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /home/heywoodlh/opt/nixos-configs
       # Wrapper to use the stable nixos-rebuild
@@ -90,12 +90,9 @@ in {
     useGlobalPkgs = true;
     extraSpecialArgs = {
       inherit nur;
-      inherit determinate-nix;
-      inherit iamb-home-manager;
-      inherit browsh;
+      inherit determinate
+;
       inherit hexstrike-ai;
-      inherit mcphub;
-      inherit helix;
     };
     users.heywoodlh = { ... }: {
       home.activation.docker-rootless-context = ''

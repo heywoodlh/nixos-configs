@@ -2,7 +2,6 @@
   home-manager, nur,
   myFlakes,
   nixpkgs-backports,
-  comin,
   ... }:
 
 let
@@ -10,7 +9,6 @@ let
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
 in {
   imports = [
-    comin.nixosModules.comin
     ./base.nix
     ./roles/remote-access/sshd.nix
     ./roles/security/sshd-monitor.nix
@@ -99,17 +97,6 @@ in {
 
   # Disable wait-online service for Network Manager
   systemd.services.NetworkManager-wait-online.enable = false;
-
-  # Stage CI/CD
-  services.comin = {
-    #enable = true; # Assume opt-in
-    remotes = [{
-      name = "origin";
-      url = "https://github.com/heywoodlh/nixos-configs.git";
-      branches.main.name = "master";
-      poller.period = 86400; # Auto-update every 24 hours
-    }];
-  };
 
   nix.gc = {
     automatic = true;

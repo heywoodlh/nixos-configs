@@ -1,8 +1,8 @@
-{ config, pkgs, determinate-nix, home-manager, myFlakes, helix, nur, ts-warp-nixpkgs, qutebrowser, ghostty, iamb-home-manager, hexstrike-ai, ... }:
+{ config, pkgs, determinate, home-manager, myFlakes, nur, ts-warp-nixpkgs, hexstrike-ai, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-  nixPkg = determinate-nix.packages.${system}.default;
+  nixPkg = determinate.packages.${system}.default;
 in {
   # Define user settings
   users.users.heywoodlh = import ../roles/user.nix {
@@ -23,13 +23,9 @@ in {
   home-manager = {
     extraSpecialArgs = {
       inherit myFlakes;
-      inherit helix;
       inherit ts-warp-nixpkgs;
-      inherit qutebrowser;
-      inherit ghostty;
       inherit nur;
-      inherit determinate-nix;
-      inherit iamb-home-manager;
+      inherit determinate;
       inherit hexstrike-ai;
     };
     # Set home-manager configs for heywoodlh

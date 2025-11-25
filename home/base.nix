@@ -1,13 +1,13 @@
-{ config, pkgs, lib, home-manager, nur, myFlakes, helix, iamb-home-manager, modulesPath, hexstrike-ai, ... }:
+{ config, pkgs, myFlakes, hexstrike-ai, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
   stdenv = pkgs.stdenv;
   homeDir = config.home.homeDirectory;
   myFish = myFlakes.packages.${system}.fish;
-  myVM = myFlakes.packages.${system}.nixos-vm;
   myVim = myFlakes.packages.${system}.vim;
-  myHelix = helix.packages.${system}.helix-wrapper;
+  myHelix = myFlakes.packages.${system}.helix;
+  myHelixConf = myFlakes.packages.${system}.helix-config;
   myGit = myFlakes.packages.${system}.git;
   myJujutsu = myFlakes.packages.${system}.jujutsu;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
@@ -269,7 +269,6 @@ let
     mkdir -p ~/.config/attic
     ${op-wrapper} read 'op://Kubernetes/za3oirjkd6ehdlnzvisb445hga/normal-config' > ~/.config/attic/config.toml
   '';
-  hexstrike-ai-mcp = hexstrike-ai.packages.${system}.hexstrike-ai-mcp;
   myChat = pkgs.writeShellScriptBin "chat" ''
     ${myVim}/bin/vim -c ":CodeCompanionChat" -c ":only"
   '';
@@ -306,13 +305,8 @@ in {
     };
   };
 
-  disabledModules = [
-    "programs/iamb.nix"
-  ];
-
   imports = [
     ./modules/default.nix
-    "${iamb-home-manager}/modules/programs/iamb.nix"
   ];
 
   # Packages I need installed on every system
@@ -351,8 +345,6 @@ in {
     nixos-rebuild-ng
     nixfmt-rfc-style
     nmap
-    ollama
-    opencode
     openssl
     pciutils
     pwgen
@@ -370,7 +362,6 @@ in {
     myJujutsu
     myFlakes.packages.${system}.tmux
     myFish # For non-nix use-cases
-    #myVM
     myChat
     todomanWrapper
     vimTodoAdd
@@ -398,6 +389,17 @@ in {
 
   home.file."tmp/.placeholder.txt" = {
     text = "";
+  };
+
+  home.file.".config/helix/config.toml" = {
+    source = myHelixConf;
+  };
+
+  # Enable nix-direnv
+  home.file.".config/direnv/direnvrc" = {
+    text = ''
+      source ${pkgs.nix-direnv}/share/nix-direnv/direnvrc
+    '';
   };
 
   home.file."share/redirector.json" = {
@@ -773,26 +775,10 @@ in {
         dismiss_keymap = "<S-Tab>",
       })
 
-      require("mcphub").setup({
-        config = vim.fn.expand("~/.config/mcphub/servers.json"),
-      })
-
       require("codecompanion").setup({
         extensions = {
           history = {
             enabled = true,
-          },
-          mcphub = {
-            callback = "mcphub.extensions.codecompanion",
-            opts = {
-              make_tools = true,
-              show_server_tools_in_chat = true,
-              add_mcp_prefix_to_tool_names = false,
-              show_result_in_chat = true,
-              format_tool = nil,
-              make_vars = true,
-              make_slash_commands = true,
-            }
           },
         },
         strategies = {
@@ -834,22 +820,6 @@ in {
         },
       })
     EOF
-  '';
-
-  home.file.".config/mcphub/servers.json".text = ''
-    {
-      "servers": {
-        "hexstrike": {
-          "type": "stdio",
-          "command": "${hexstrike-ai-mcp}/bin/hexstrike_mcp.py",
-          "args": [
-            "--server",
-            "http://homelab.barn-banana.ts.net:8888"
-          ]
-        }
-      },
-      "inputs": []
-    }
   '';
 
   home.file.".config/opencode/opencode.json".text = builtins.toJSON {

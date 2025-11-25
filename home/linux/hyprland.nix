@@ -65,6 +65,7 @@ let
 in {
   home.packages = with pkgs; [
     acpi
+    adwaita-icon-theme
     bluetuith
     bluez
     brillo
@@ -427,11 +428,7 @@ in {
     package = pkgs.hyprland; # use nixpkgs-provided hyprland
     extraConfig = ''
       # Fix blurry X11 apps, hidpi
-      #exec-once = xprop -root -f _XWAYLAND_GLOBAL_OUTPUT_SCALE 24c -set _XWAYLAND_GLOBAL_OUTPUT_SCALE 2
-      #xwayland {
-      #  force_zero_scaling = true
-      #}
-      #env = GDK_SCALE, 2
+      monitor=,preferred,auto,1
       env = XCURSOR_SIZE, 24
 
       general {
@@ -482,8 +479,10 @@ in {
       }
 
       # Window rules
-      windowrulev2 = float, title:(1Password)
-      windowrulev2 = center, title:(1Password)
+      windowrulev2 = float,title:(1Password)
+      windowrulev2 = nomaxsize,title:(1Password)
+      windowrulev2 = float,title:^(Quick Access — 1Password)$
+      windowrulev2 = nomaxsize,title:^(Quick Access — 1Password)$
 
       # Firefox PiP
       windowrulev2 = float, title:^(Picture-in-Picture)$
@@ -543,7 +542,7 @@ in {
       # Productivity
       bind = SUPER_SHIFT, s, exec, ${homeDir}/bin/screenshot.sh
       bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
-      bind = CTRL_SHIFT, f, exec, ${homeDir}/bin/applications.sh
+      bind = SUPER_TAB, f, exec, ${homeDir}/bin/applications.sh
       bind = CTRL_SHIFT, e, exec, hyprctl dispatch exit
       bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
       bind = CTRL_SHIFT, d, exec, ${pkgs.bash}/bin/bash -c '${pkgs.libnotify}/bin/notify-send $(date "+%T")'

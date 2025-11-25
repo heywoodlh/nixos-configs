@@ -1,8 +1,9 @@
 {
   description = "heywoodlh tmux flake";
 
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixos-configs.url = "github:heywoodlh/nixos-configs";
+  inputs.nixos-configs.url = "../../";
+  inputs.nixpkgs.follows = "nixos-configs/nixpkgs";
+  inputs.flake-utils.follows = "nixos-configs/flake-utils";
 
   outputs = { self, nixpkgs, flake-utils, nixos-configs, }:
     flake-utils.lib.eachDefaultSystem (system:

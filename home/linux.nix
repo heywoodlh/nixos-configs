@@ -17,6 +17,8 @@ in {
   home.packages = with pkgs; [
     gomuks
     libvirt
+    ollama
+    opencode
     cpuspeed
   ];
 

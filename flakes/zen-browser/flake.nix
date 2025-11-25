@@ -3,7 +3,10 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.zen-browser.url = "github:MarceColl/zen-browser-flake";
+  inputs.zen-browser = {
+    url = "github:MarceColl/zen-browser-flake";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   outputs =
     inputs@{

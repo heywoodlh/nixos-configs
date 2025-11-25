@@ -1,4 +1,4 @@
-{ config, pkgs, myFlakes, determinate-nix, ... }:
+{ config, pkgs, myFlakes, determinate, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -24,7 +24,7 @@ in {
           myFlakes.packages.aarch64-linux.vim
         ];
         nix = {
-          package = determinate-nix.packages.aarch64-linux.default;
+          package = determinate.packages.aarch64-linux.default;
           settings.experimental-features = [ "nix-command" "flakes" ];
         };
       };

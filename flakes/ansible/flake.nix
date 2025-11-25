@@ -1,15 +1,13 @@
 {
   description = "ansible configurations";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixos-configs.url = "github:heywoodlh/nixos-configs";
 
   outputs = inputs @ {
     self,
     nixpkgs,
     flake-utils,
-    nixos-configs,
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
@@ -37,7 +35,6 @@
         name = "ansible";
         buildInputs = with pkgs; [
           ansible
-          ansible-language-server
           test-sh
         ];
       };

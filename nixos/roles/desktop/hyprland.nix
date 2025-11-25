@@ -11,15 +11,23 @@
     ];
   };
 
-  services.displayManager.defaultSession = "hyprland";
+  services.greetd = {
+    settings = {
+      default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --theme 'border=black;text=white;prompt=white;time=white;action=gray;button=yellow;container=black;input=lightgray' --cmd '${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop'";
+      };
+    };
+  };
 
   # Enable hyprland
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
+    withUWSM = true;
   };
   security.pam.services.swaylock.text = "auth include login";
   hardware.brillo.enable = true;
+  environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
 
   # Keyring
   programs.seahorse.enable = true;
@@ -30,8 +38,11 @@
       hyprland.homeManagerModules.default
       ../../../home/linux/hyprland.nix
     ];
-    wayland.windowManager.hyprland.extraConfig = ''
-      env = NIXOS_OZONE_WL, 1
-    '';
+    wayland.windowManager.hyprland = {
+      extraConfig = ''
+        env = NIXOS_OZONE_WL, 1
+      '';
+      systemd.enable = false; # Managed with NixOS module
+    };
   };
 }

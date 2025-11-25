@@ -29,13 +29,7 @@ let
     fi
     ${pkgs.flatpak}/bin/flatpak run --user com.rustdesk.RustDesk || ${pkgs.libnotify}/bin/notify-send "Failed to launch RustDesk"
   '';
-  myVicinae = myFlakes.packages.${system}.vicinae;
 in {
-  imports = [
-    #./xfce.nix
-    ./gnome-desktop.nix
-  ];
-
   # Nix snowflake icon
   home.file.".icons/snowflake.png" = {
     source = snowflake;
@@ -81,7 +75,6 @@ in {
     pkgs.ghostty
     captive-portal
     zen-wrapper
-    myVicinae
   ] ++ (if system == "aarch64-linux" then [
     myFlakes.packages.aarch64-linux.chromium-widevine
   ] else []);

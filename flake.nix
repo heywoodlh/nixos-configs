@@ -1,44 +1,35 @@
-{
-  description = "heywoodlh nix config";
+{ description = "heywoodlh nix config";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.05";
     nixos-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
-    nixpkgs-apple-containers.url = "github:xiaoxiangmoe/nixpkgs/container";
-    # identify possible nvidia versions here:
-    # https://github.com/icewind1991/nvidia-patch-nixos/blob/main/patch.json
-    # if errors encountered, search for commits with the previous version
-    # i.e. https://github.com/NixOS/nixpkgs/pulls?q=565.57.01
-    nixpkgs-nvidia.url = "github:nixos/nixpkgs/e718ed96ed39ece6433b965b1b1479b8878a29a3";
-    determinate-nix.url = "github:DeterminateSystems/nix/v2.28.1";
+    # only to sync dependents that use flake-utils
+    flake-utils.url = "github:numtide/flake-utils";
+    # only to sync dependents that use flake-parts
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    determinate = {
+      url = "github:DeterminateSystems/nix/v2.28.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     vicinae-nix = {
       url = "github:vicinaehq/vicinae";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    mcphub = {
-      url = "github:ravitemer/mcp-hub";
-      flake = false;
-    };
-    mcphub-nvim = {
-      url = "github:ravitemer/mcphub.nvim";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.systems.follows = "flake-utils/systems";
     };
     myFlakes = {
       url = ./flakes;
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
+      inputs.flake-utils.follows = "flake-utils";
       inputs.vicinae-nix.follows = "vicinae-nix";
-      inputs.mcphub-nvim.follows = "mcphub-nvim";
     };
-    helix = {
-      url = ./flakes/helix;
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
-    nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
-    nixos-wsl.url = "github:nix-community/NixOS-WSL";
     darwin = {
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -47,16 +38,17 @@
       url = "github:nix-community/nixos-apple-silicon";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
+    };
     ssh-keys = {
       url = "https://github.com/heywoodlh.keys";
       flake = false;
     };
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    iamb-home-manager = {
-      url = "github:heywoodlh/home-manager/iamb-macos-settings-support";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     osquery-fix-nixpkgs = {
@@ -67,16 +59,11 @@
       url = "git+https://github.com/Jovian-Experiments/Jovian-NixOS?ref=development";
       flake = false;
     };
-    nur.url = "github:nix-community/NUR";
-    spicetify = {
-      url = "gitlab:kylesferrazza/spicetify-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.flake-parts.follows = "flake-parts";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nix-on-droid = {
-      url = "github:nix-community/nix-on-droid/release-23.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     dark-wallpaper = {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/wallpapers/nix-wallpaper-dracula.png";
       flake = false;
@@ -85,46 +72,26 @@
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/wallpapers/nix-wallpaper-simple-light-gray.png";
       flake = false;
     };
-    qutebrowser = {
-      url = "github:qutebrowser/qutebrowser";
-      flake = false;
-    };
     signal-ntfy = {
       url = "github:heywoodlh/signal-ntfy-mirror";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.2";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-    };
-    comin = {
-      url = "github:nlewo/comin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nvidia-patch = {
-      url = "github:icewind1991/nvidia-patch-nixos";
-      inputs.nixpkgs.follows = "nixpkgs-nvidia";
+      inputs.flake-utils.follows = "flake-utils";
     };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-    ghostty.url = "github:ghostty-org/ghostty";
     cart = {
       url = "github:heywoodlh/cart";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix-darwin.follows = "darwin";
-    };
-    browsh.url = ./flakes/browsh;
-    omarchy = {
-      url = "github:henrysipp/omarchy-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
+      inputs.flake-utils.follows = "flake-utils";
     };
     hexstrike-ai = {
       url = "github:heywoodlh/hexstrike-ai/nix-flake-init";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
     hyprland = {
       url = "github:hyprwm/hyprland";
@@ -136,37 +103,25 @@
                       nixpkgs,
                       nixpkgs-stable,
                       nixpkgs-pam-lid-fix,
-                      nixpkgs-apple-containers,
                       myFlakes,
-                      helix,
                       nixpkgs-backports,
                       nixpkgs-lts,
                       nixos-wsl,
                       nixos-apple-silicon,
                       darwin,
                       home-manager,
-                      iamb-home-manager,
                       jovian-nixos,
                       nur,
                       flake-utils,
-                      spicetify,
                       nixos-hardware,
                       ssh-keys,
                       osquery-fix-nixpkgs,
-                      nix-on-droid,
                       dark-wallpaper,
                       light-wallpaper,
-                      qutebrowser,
                       signal-ntfy,
-                      lanzaboote,
-                      comin,
-                      nvidia-patch,
                       plasma-manager,
-                      ghostty,
-                      determinate-nix,
+                      determinate,
                       cart,
-                      browsh,
-                      omarchy,
                       vicinae-nix,
                       hexstrike-ai,
                       hyprland,
@@ -196,7 +151,7 @@
         specialArgs = inputs;
         modules = [
           darwinModules.heywoodlh.darwin
-          determinate-nix.darwinModules.default
+          determinate.darwinModules.default
           home-manager.darwinModules.home-manager
           ./darwin/roles/base.nix
           ./darwin/roles/defaults.nix
@@ -408,17 +363,20 @@
                   "heywoodlh"
                 ];
               };
+              environment.systemPackages = with pkgs; [
+                nvtopPackages.nvidia
+              ];
               home-manager.users.heywoodlh = {
                 wayland.windowManager.hyprland.extraConfig = ''
                   # change monitor to high resolution, the last argument is the scale factor
-                  monitor = , highres, auto, 2
+                  monitor = , highres, auto, 1.6
                   # unscale XWayland
                   xwayland {
                     force_zero_scaling = true
                   }
                   # toolkit-specific scale
                   env = GDK_SCALE,2
-                  env = XCURSOR_SIZE,32
+                  env = XCURSOR_SIZE,24
                 '';
               };
               # Nvidia settings
@@ -450,6 +408,19 @@
               boot.loader.efi.canTouchEfiVariables = false;
               networking.hostName = "nixos-m1-mac-mini";
               time.timeZone = "America/Denver";
+              home-manager.users.heywoodlh = {
+                wayland.windowManager.hyprland.extraConfig = ''
+                  # change monitor to high resolution, the last argument is the scale factor
+                  monitor = , highres, auto, 1.6
+                  # unscale XWayland
+                  xwayland {
+                    force_zero_scaling = true
+                  }
+                  # toolkit-specific scale
+                  env = GDK_SCALE,2
+                  env = XCURSOR_SIZE,24
+                '';
+              };
             }
             ./nixos/hosts/m1-mac-mini.nix
             ./nixos/desktop.nix
@@ -537,7 +508,7 @@
               };
               environment.systemPackages = with pkgs; [
                 git
-                pkgs.helix # So as not to overlap with Helix input
+                myFlakes.packages.${system}.helix
                 msedit
                 nano
               ];
@@ -574,11 +545,6 @@
             ./nixos/hosts/homelab/configuration.nix
             #proxmoxConfig
           ];
-        };
-        nix-drive = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [ ./nixos/hosts/nix-drive/configuration.nix ];
         };
         nixos-lima-vm = nixpkgs.lib.nixosSystem {
           system = "${linuxSystem}";
@@ -722,17 +688,18 @@
             fi
           fi
         '';
-        nixPkg = determinate-nix.packages.${system}.default;
+        nixPkg = determinate.packages.${system}.default;
       in {
         # Used in CI
         heywoodlh = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            determinate-nix.homeModules.default
+            determinate.homeModules.default
             #(mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config
+            ./home/linux/gnome-desktop.nix
             (import myFlakes.packages.${system}.gnome-dconf)
             {
               # Home-Manager specific nixpkgs config
@@ -785,7 +752,7 @@
         heywoodlh-server = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            determinate-nix.homeModules.default
+            determinate.homeModules.default
             ./home/linux.nix
             ./home/linux/no-desktop.nix
             {
@@ -835,13 +802,6 @@
           extraSpecialArgs = inputs;
         };
       };
-      packages.nixOnDroidConfigurations = {
-        default = nix-on-droid.lib.nixOnDroidConfiguration {
-          extraSpecialArgs = inputs;
-          modules = [ ./nixos/droid.nix ];
-          home-manager-path = home-manager.outPath;
-        };
-      };
       packages = {
         docs = pkgs.runCommand "options-doc.md" {} ''
           cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/nixos\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/home\/modules|g' > $out
@@ -853,6 +813,7 @@
         buildInputs = with pkgs; [
           lefthook
           stable-pkgs.gitleaks # bug in pkgs.gitleaks currently
+          pkgs.strip-ansi
         ];
       };
     }

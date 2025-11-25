@@ -3,10 +3,14 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+  inputs.nix-vscode-extensions = {
+    url = "github:nix-community/nix-vscode-extensions";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
   inputs.fish-flake = {
     url = ../fish;
     inputs.nixpkgs.follows = "nixpkgs";
+    inputs.flake-utils.follows = "flake-utils";
   };
 
   outputs = inputs@{

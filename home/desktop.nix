@@ -291,26 +291,6 @@ in {
   # Add my custom docker executables
   heywoodlh.home.dockerBins.enable = true;
 
-  # My qutebrowser config
-  heywoodlh.home.qutebrowser = {
-    enable = false;
-    enable1Pass = false;
-  };
-  # (less generic qutebrowser config goes here)
-  programs.qutebrowser = {
-    enable = false;
-    searchEngines.DEFAULT = "https://leta.mullvad.net/search?q={}";
-    settings = {
-      url.start_pages = ["https://leta.mullvad.net"];
-    };
-    aliases = {
-      set-proxy = "set content.proxy socks://mullvad-socks-router.barn-banana.ts.net:1080/";
-      unset-proxy = "config-unset content.proxy";
-      set-tor = "set content.proxy socks://tor.barn-banana.ts.net:1080/";
-      unset-tor = "config-unset content.proxy";
-    };
-  };
-
   # Enable Marp
   heywoodlh.home.marp.enable = true;
 

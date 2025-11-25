@@ -2,16 +2,18 @@
   description = "GNOME desktop flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.05"; # pinned for gnome-extensions-cli instability
     flake-utils.url = "github:numtide/flake-utils";
     fish-flake = {
       url = ../fish;
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
     vim-flake = {
       url = ../vim;
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
     vim-ime = {
       flake = false;
@@ -24,6 +26,7 @@
     vicinae-nix = {
       url = "github:vicinaehq/vicinae";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "flake-utils/systems";
     };
   };
   outputs = inputs @ {

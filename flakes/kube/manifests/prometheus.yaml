@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: prometheus
     app.kubernetes.io/instance: prometheus
     app.kubernetes.io/version: v3.7.3
-    helm.sh/chart: prometheus-27.42.1
+    helm.sh/chart: prometheus-27.46.0
     app.kubernetes.io/part-of: prometheus
   name: prometheus-server
   namespace: monitoring
@@ -24,7 +24,7 @@ metadata:
     app.kubernetes.io/name: prometheus
     app.kubernetes.io/instance: prometheus
     app.kubernetes.io/version: v3.7.3
-    helm.sh/chart: prometheus-27.42.1
+    helm.sh/chart: prometheus-27.46.0
     app.kubernetes.io/part-of: prometheus
   name: prometheus-server
   namespace: monitoring
@@ -372,7 +372,7 @@ metadata:
     app.kubernetes.io/name: prometheus
     app.kubernetes.io/instance: prometheus
     app.kubernetes.io/version: v3.7.3
-    helm.sh/chart: prometheus-27.42.1
+    helm.sh/chart: prometheus-27.46.0
     app.kubernetes.io/part-of: prometheus
   name: prometheus-server
   namespace: monitoring
@@ -392,7 +392,7 @@ metadata:
     app.kubernetes.io/name: prometheus
     app.kubernetes.io/instance: prometheus
     app.kubernetes.io/version: v3.7.3
-    helm.sh/chart: prometheus-27.42.1
+    helm.sh/chart: prometheus-27.46.0
     app.kubernetes.io/part-of: prometheus
   name: prometheus-server
 rules:
@@ -442,7 +442,7 @@ metadata:
     app.kubernetes.io/name: prometheus
     app.kubernetes.io/instance: prometheus
     app.kubernetes.io/version: v3.7.3
-    helm.sh/chart: prometheus-27.42.1
+    helm.sh/chart: prometheus-27.46.0
     app.kubernetes.io/part-of: prometheus
   name: prometheus-server
 subjects:
@@ -463,7 +463,7 @@ metadata:
     app.kubernetes.io/name: prometheus
     app.kubernetes.io/instance: prometheus
     app.kubernetes.io/version: v3.7.3
-    helm.sh/chart: prometheus-27.42.1
+    helm.sh/chart: prometheus-27.46.0
     app.kubernetes.io/part-of: prometheus
   name: prometheus-server
   namespace: monitoring
@@ -489,7 +489,7 @@ metadata:
     app.kubernetes.io/name: prometheus
     app.kubernetes.io/instance: prometheus
     app.kubernetes.io/version: v3.7.3
-    helm.sh/chart: prometheus-27.42.1
+    helm.sh/chart: prometheus-27.46.0
     app.kubernetes.io/part-of: prometheus
   name: prometheus-server
   namespace: monitoring
@@ -511,14 +511,14 @@ spec:
         app.kubernetes.io/name: prometheus
         app.kubernetes.io/instance: prometheus
         app.kubernetes.io/version: v3.7.3
-        helm.sh/chart: prometheus-27.42.1
+        helm.sh/chart: prometheus-27.46.0
         app.kubernetes.io/part-of: prometheus
     spec:
       enableServiceLinks: true
       serviceAccountName: prometheus-server
       containers:
         - name: prometheus-server-configmap-reload
-          image: "quay.io/prometheus-operator/prometheus-config-reloader:v0.86.1"
+          image: "quay.io/prometheus-operator/prometheus-config-reloader:v0.87.0"
           imagePullPolicy: "IfNotPresent"
           args:
             - --watched-dir=/etc/config

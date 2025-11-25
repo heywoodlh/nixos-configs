@@ -78,7 +78,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: bootstrapper
 data:
-  crossplaneVersion: 1.18.0-up.1
+  crossplaneVersion: 1.18.5-up.1
   uxpVersion: 0.0.1
 ---
 # Source: universal-crossplane/templates/crossplane/clusterrole.yaml
@@ -735,7 +735,7 @@ spec:
       serviceAccountName: crossplane
       hostNetwork: false
       initContainers:
-        - image: "xpkg.upbound.io/upbound/crossplane:v1.18.0-up.1"
+        - image: "xpkg.upbound.io/upbound/crossplane:v1.18.5-up.1"
           args:
           - core
           - init
@@ -789,7 +789,7 @@ spec:
           - name: "TLS_CLIENT_SECRET_NAME"
             value: crossplane-tls-client
       containers:
-      - image: "xpkg.upbound.io/upbound/crossplane:v1.18.0-up.1"
+      - image: "xpkg.upbound.io/upbound/crossplane:v1.18.5-up.1"
         args:
         - core
         - start
@@ -906,7 +906,7 @@ spec:
     spec:
       serviceAccountName: rbac-manager
       initContainers:
-      - image: "xpkg.upbound.io/upbound/crossplane:v1.18.0-up.1"
+      - image: "xpkg.upbound.io/upbound/crossplane:v1.18.5-up.1"
         args:
         - rbac
         - init
@@ -938,7 +938,7 @@ spec:
                 resource: limits.memory
                 divisor: "1"
       containers:
-      - image: "xpkg.upbound.io/upbound/crossplane:v1.18.0-up.1"
+      - image: "xpkg.upbound.io/upbound/crossplane:v1.18.5-up.1"
         args:
         - rbac
         - start

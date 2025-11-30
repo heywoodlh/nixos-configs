@@ -257,7 +257,7 @@
         name='terminal ctrl_alt'
 
         [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
-        binding='<Ctrl><Super>s'
+        binding='<ctrl><Super>s'
         command='${pkgs._1password-gui}/bin/1password --quick-access'
         name='1pass-quick-access'
 
@@ -288,12 +288,12 @@
 
         [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9]
         binding='<Super>space'
-        command='${vicinae-sh}/bin/vicinae'
+        command='${vicinae-sh}/bin/vicinae open'
         name='launcher'
 
         [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10]
         binding='<Control>space'
-        command='${vicinae-sh}/bin/vicinae'
+        command='${vicinae-sh}/bin/vicinae open'
         name='launcher'
 
         [org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11]

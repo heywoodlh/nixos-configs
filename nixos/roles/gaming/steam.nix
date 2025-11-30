@@ -8,24 +8,34 @@ in {
     protontricks.enable = true;
   };
 
-  environment.systemPackages = lib.optionals (system == "aarch64-linux") [
-    pkgs.fex
-    pkgs.fuse
-    pkgs.muvm
-    pkgs.squashfuse
-    pkgs.steam-unwrapped
-    (pkgs.writeShellScriptBin "steam" ''
-      # for fex rootfs fetcher
-      STEAMDIR=$HOME/.local/share/Steam
-      mkdir -p $STEAMDIR
-
+  environment.systemPackages = let
+    fexRunner = pkgs.writeShellScriptBin "fex-run" ''
       if [[ ! -e $HOME/.fex-emu/RootFS/Ubuntu_24_04.sqsh ]]
       then
         ${pkgs.libnotify}/bin/notify-send "Downloading rootfs for Steam"
         ${pkgs.fex}/bin/FEXRootFSFetcher --distro-name "ubuntu" --distro-version "24.04" -y -x
       fi
+
+      ${pkgs.muvm}/bin/muvm \
+        --mount opengl:/run/opengl-driver:/run/opengl-driver \
+        --mount tmp:/tmp:/tmp \
+        --systemd-udevd-path /usr/lib/systemd/systemd-udevd \
+        -- $@
+    '';
+  in lib.optionals (system == "aarch64-linux") [
+    pkgs.fex
+    pkgs.fuse
+    pkgs.muvm
+    pkgs.squashfuse
+    pkgs.steam-unwrapped
+    fexRunner
+    (pkgs.writeShellScriptBin "steam" ''
+      # for fex rootfs fetcher
+      STEAMDIR=$HOME/.local/share/Steam
+      mkdir -p $STEAMDIR
+
       [[ -e $STEAMDIR/ubuntu12_32/steam ]] || tar -C $STEAMDIR -xvf ${pkgs.steam-unwrapped}/lib/steam/bootstraplinux_ubuntu12_32.tar.xz
-      ${pkgs.muvm}/bin/muvm -- $HOME/.local/share/Steam/ubuntu12_32/steam
+      ${fexRunner}/bin/fex-run $HOME/.local/share/Steam/ubuntu12_32/steam
     '')
   ];
 

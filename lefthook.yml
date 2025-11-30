@@ -2,10 +2,10 @@ pre-commit:
   commands:
     check-dupe-inputs:
       run: |
-        if grep -q _2 flake.lock
+        if grep -Riq '_2": {' flake.lock
         then
           echo duplicate inputs detected in flake.lock
-          printf "useful commands for finding dupes:\ngrep -Ri _2 flake.lock\nnix flake metadata | strip-ansi\n"
+          printf "useful commands for finding dupes:\ngrep -Ri '_2\": {' flake.lock\nnix flake metadata | strip-ansi\n"
           exit 1
         fi
     gen-docs:

@@ -30,6 +30,10 @@ let
     ${pkgs.flatpak}/bin/flatpak run --user com.rustdesk.RustDesk || ${pkgs.libnotify}/bin/notify-send "Failed to launch RustDesk"
   '';
 in {
+  imports = [
+    ./gnome-desktop.nix
+  ];
+
   # Nix snowflake icon
   home.file.".icons/snowflake.png" = {
     source = snowflake;

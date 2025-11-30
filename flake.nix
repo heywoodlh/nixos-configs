@@ -14,9 +14,17 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+    # only to sync dependents that use nix
+    nix = {
+      url = "github:nixos/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
+    };
     determinate = {
       url = "github:DeterminateSystems/nix/v2.28.1";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nix.follows = "nix";
     };
     vicinae-nix = {
       url = "github:vicinaehq/vicinae";
@@ -61,6 +69,7 @@
     };
     nur = {
       url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -93,9 +102,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    # only to sync dependents that use pre-commit-hooks
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
+    };
     hyprland = {
       url = "github:hyprwm/hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "flake-utils/systems";
+      inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     };
   };
 
@@ -409,9 +426,12 @@
               networking.hostName = "nixos-m1-mac-mini";
               time.timeZone = "America/Denver";
               home-manager.users.heywoodlh = {
+                home.packages = with pkgs; [
+                  moonlight-qt
+                ];
                 wayland.windowManager.hyprland.extraConfig = ''
                   # change monitor to high resolution, the last argument is the scale factor
-                  monitor = , highres, auto, 1.6
+                  monitor = , highres, auto, 1
                   # unscale XWayland
                   xwayland {
                     force_zero_scaling = true

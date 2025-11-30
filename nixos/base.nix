@@ -75,6 +75,8 @@ in {
     myHelix
     myVim
     mosh
+    ntfs3g
+    exfatprogs
   ];
 
   # Enable appimage
@@ -118,6 +120,8 @@ in {
     Host mac-mini intel-mac-vm ${altBuilder}
       IdentityAgent /home/heywoodlh/.ssh/agent.sock
   '';
+
+  boot.supportedFilesystems = [ "ntfs" "exfat" ];
 
   i18n.defaultLocale = "en_US.UTF-8";
 

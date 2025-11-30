@@ -24,6 +24,7 @@ in {
     pkgs.epiphany
     gnome-extensions-cli
     pkgs-stable.gnomeExtensions.pop-shell
+    myVicinae
   ];
 
   # Enable unclutter
@@ -158,12 +159,12 @@ in {
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9" = {
       binding = lib.mkForce "<Super>space";
-      command = lib.mkForce "${myVicinae}/bin/vicinae";
+      command = lib.mkForce "${myVicinae}/bin/vicinae open";
       name = lib.mkForce "launcher";
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10" = {
       binding = lib.mkForce "<Control>space";
-      command = lib.mkForce "${myVicinae}/bin/vicinae";
+      command = lib.mkForce "${myVicinae}/bin/vicinae open";
       name = lib.mkForce "launcher-2";
     };
   };

@@ -11,19 +11,10 @@
     ];
   };
 
-  services.greetd = {
-    settings = {
-      default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --theme 'border=black;text=white;prompt=white;time=white;action=gray;button=yellow;container=black;input=lightgray' --cmd '${pkgs.uwsm}/bin/uwsm start hyprland-uwsm.desktop'";
-      };
-    };
-  };
-
   # Enable hyprland
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-    withUWSM = true;
   };
   security.pam.services.swaylock.text = "auth include login";
   hardware.brillo.enable = true;

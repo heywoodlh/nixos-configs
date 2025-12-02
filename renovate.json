@@ -7,7 +7,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["kube\/flake.nix"],
+      "fileMatch": ["flakes/kube\/flake.nix"],
       "matchStringsStrategy": "any",
       "matchStrings": [
         "image = \"(?<depName>.*):(?<currentValue>.*)\";",
@@ -20,14 +20,14 @@
   "packageRules": [
     {
       "matchPaths": [
-        "kube/**"
+        "flakes/kube/**"
       ],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
     },
     {
       "matchPaths": [
-        "ansible/**"
+        "flakes/ansible/**"
       ],
       "automerge": true
     },

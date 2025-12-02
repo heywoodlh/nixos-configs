@@ -172,7 +172,7 @@ spec:
                   mountPath: /targets
           containers:
             - name: nuclei
-              image: "docker.io/heywoodlh/nuclei:v3.4.10"
+              image: "docker.io/heywoodlh/nuclei:v3.5.1"
               imagePullPolicy: IfNotPresent
               command: ["/bin/ash", "-c"]
               args: [

@@ -22,7 +22,7 @@ spec:
       template:
         spec:
           containers:
-          - image: docker.io/curlimages/curl:8.16.0
+          - image: docker.io/curlimages/curl:8.17.0
             name: healthchecks
             command:
             - "/bin/ash"

@@ -69,7 +69,7 @@ spec:
           hostNetwork: true
           containers:
             - name: flan-scan
-              image: "docker.io/heywoodlh/flan-scan:2025_09"
+              image: "docker.io/heywoodlh/flan-scan:2025_11"
               imagePullPolicy: IfNotPresent
               env:
                 - name: format

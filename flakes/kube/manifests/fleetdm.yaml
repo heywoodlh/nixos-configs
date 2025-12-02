@@ -148,7 +148,7 @@ spec:
     spec:
       containers:
       - name: fleet-mysql
-        image: docker.io/mysql:8.4.6
+        image: docker.io/mysql:8.4.7
         ports:
         - containerPort: 3306
         volumeMounts:

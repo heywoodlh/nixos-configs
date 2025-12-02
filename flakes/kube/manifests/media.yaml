@@ -335,7 +335,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/linuxserver/sonarr:4.0.15-develop
+      - image: docker.io/linuxserver/sonarr:4.0.16-develop
         name: sonarr
         ports:
         - name: http
@@ -403,7 +403,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/linuxserver/sabnzbd:4.5.3
+      - image: docker.io/linuxserver/sabnzbd:4.5.5
         name: sabnzbd
         ports:
         - name: http
@@ -684,7 +684,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/linuxserver/qbittorrent:5.1.2
+      - image: docker.io/linuxserver/qbittorrent:5.1.4
         name: qbittorrent
         ports:
         - name: http

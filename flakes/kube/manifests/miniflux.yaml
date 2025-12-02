@@ -27,7 +27,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/postgres:15.14
+      - image: docker.io/postgres:15.15
         name: miniflux-db
         ports:
         - name: postgres
@@ -102,7 +102,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/miniflux/miniflux:2.2.13
+      - image: docker.io/miniflux/miniflux:2.2.14
         name: miniflux
         ports:
         - name: miniflux

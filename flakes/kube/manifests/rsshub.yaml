@@ -63,7 +63,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/redis:7.4.5
+      - image: docker.io/redis:7.4.7
         name: rsshub-redis
         ports:
         - name: redis

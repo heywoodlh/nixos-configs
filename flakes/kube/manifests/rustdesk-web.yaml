@@ -54,7 +54,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: rustdesk-web
-          image: "docker.io/heywoodlh/rustdesk-web:1.4.2"
+          image: "docker.io/heywoodlh/rustdesk-web:1.4.4"
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: rustdesk-web-home

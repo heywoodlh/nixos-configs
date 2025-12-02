@@ -40,7 +40,7 @@ spec:
         app: ntfy
     spec:
       containers:
-      - image: docker.io/binwiederhier/ntfy:v2.14.0
+      - image: docker.io/binwiederhier/ntfy:v2.15.0
         name: ntfy
         command: ["ntfy"]
         args: ["serve", "--cache-file", "/var/cache/ntfy/cache.db"]

@@ -6,7 +6,7 @@ metadata:
   namespace: security
 spec:
   containers:
-    - image: docker.io/ubuntu:24.04
+    - image: docker.io/ubuntu:24.10
       name: hashcat
       command: [ "/bin/bash", "-c", "--" ]
       args: [ "printf 'Welcome to the Hashcat container!\nHost directory /tmp/hashcat is mounted at /data\n' > /etc/motd; printf 'cat /etc/motd' > /root/.bashrc; apt update && apt install -y hashcat intel-opencl-icd; while true; do sleep 30; done;" ]

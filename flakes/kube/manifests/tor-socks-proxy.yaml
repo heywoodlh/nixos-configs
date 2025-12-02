@@ -67,7 +67,7 @@ spec:
         - name: tor-socks-proxy
           securityContext:
             {}
-          image: "docker.io/heywoodlh/tor-socks-proxy:0.4.8.18"
+          image: "docker.io/heywoodlh/tor-socks-proxy:0.4.8.21"
           imagePullPolicy: IfNotPresent
           ports:
             - name: socks

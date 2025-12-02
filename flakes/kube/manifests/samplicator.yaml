@@ -87,7 +87,7 @@ spec:
           serviceAccountName: samplicator
           containers:
             - name: samplicator-conf-updater
-              image: docker.io/heywoodlh/kubectl:v1.33.4
+              image: docker.io/heywoodlh/kubectl:v1.34.2
               imagePullPolicy: IfNotPresent
               command: [ "/bin/ash", "-c" ]
               args: [
@@ -146,7 +146,7 @@ spec:
       serviceAccountName: samplicator
       initContainers:
         - name: conf-init
-          image: docker.io/heywoodlh/kubectl:v1.33.4
+          image: docker.io/heywoodlh/kubectl:v1.34.2
           command: [ "/bin/ash", "-c" ]
           args: [
             "/init.sh || true"

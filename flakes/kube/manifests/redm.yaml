@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: redm-mysql
-        image: docker.io/mariadb:10.11.2
+        image: docker.io/mariadb:10.11.15
         ports:
         - containerPort: 3306
         volumeMounts:

@@ -66,7 +66,7 @@ spec:
       serviceAccountName: tailscale-dns-bridge
       hostname: tailscale-dns-bridge
       containers:
-      - image: docker.io/heywoodlh/tailscale-dns-bridge:1.88.2
+      - image: docker.io/heywoodlh/tailscale-dns-bridge:1.90.9
         name: tailscale-dns-bridge
         env:
           - name: TS_AUTHKEY

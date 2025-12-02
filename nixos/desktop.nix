@@ -11,19 +11,14 @@ let
     inherit system;
     config.allowUnfree = true;
   };
-  # Overlay that replaces gnome-shell and gnome-session with the stable ones
-  # Because extensions are often broken with the latest gnome-shell
-  gnome-stable = (final: prev: {
-    gnome-shell  = pkgs-stable.gnome-shell;
-    gnome-session = pkgs-stable.gnome-session;
-  });
 in {
   imports = [
-    ./base.nix
     ./roles/desktop/user-icon.nix
     ./roles/virtualization/libvirt.nix
-    ./roles/desktop/hyprland.nix
   ];
+
+  heywoodlh.gnome.enable = true;
+  heywoodlh.hyprland.enable = true;
 
   nixpkgs.overlays = [
     # Import nur as nixpkgs.overlays
@@ -48,7 +43,6 @@ in {
 
   services.power-profiles-daemon.enable = true;
   services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
   boot.tmp.cleanOnBoot = true;
 
   # enable kde connect
@@ -98,23 +92,11 @@ in {
     pulse.enable = true;
   };
 
-  ## Bluetooth
-  hardware.bluetooth = {
-    enable = true;
-    settings = {
-      # Necessary for Airpods
-      General = { ControllerMode = "dual"; } ;
-    };
-  };
-
   # Android debugging
   programs.adb.enable = true;
 
   # iPhone usb support
   services.usbmuxd.enable = true;
-
-  # Seahorse (Gnome Keyring)
-  programs.seahorse.enable = true;
 
   services = {
     logind.settings.Login.RuntimeDirectorySize = "10G";
@@ -183,9 +165,6 @@ in {
     myFlakes.packages.${system}.helix
   ];
 
-  # Disable wait-online service for Network Manager
-  systemd.services.NetworkManager-wait-online.enable = false;
-
   programs._1password-gui = {
     enable = true;
     # Certain features, including CLI integration and system authentication support,
@@ -209,7 +188,6 @@ in {
         ../home/linux.nix
         ../home/desktop.nix # base desktop.nix
         ../home/linux/desktop.nix # linux-specific desktop.nix
-        (import myFlakes.packages.${system}.gnome-dconf)
       ];
       home.packages = [
         myFlakes.packages.${system}.git

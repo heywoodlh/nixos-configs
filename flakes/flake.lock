@@ -75,26 +75,6 @@
       },
       "parent": []
     },
-    "flake-parts": {
-      "inputs": {
-        "nixpkgs-lib": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1763759067,
-        "narHash": "sha256-LlLt2Jo/gMNYAwOgdRQBrsRoOz7BPRkzvNaI/fzXi2Q=",
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "rev": "2cccadc7357c0ba201788ae99c4dfa90728ef5e0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "flake-parts",
-        "type": "github"
-      }
-    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -312,45 +292,6 @@
       },
       "parent": []
     },
-    "mcphub": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1755841689,
-        "narHash": "sha256-KakvXZf0vjdqzyT+LsAKHEr4GLICGXPmxl1hZ3tI7Yg=",
-        "owner": "ravitemer",
-        "repo": "mcp-hub",
-        "rev": "9c7670a4c341ed3cf738a6242c0fde1cea40bccf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ravitemer",
-        "repo": "mcp-hub",
-        "type": "github"
-      }
-    },
-    "mcphub-nvim": {
-      "inputs": {
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1759035242,
-        "narHash": "sha256-I6EbgY/2sAdtrxtmH0qbAAQvMCHhOsfolJfblV0fXOk=",
-        "owner": "ravitemer",
-        "repo": "mcphub.nvim",
-        "rev": "8ff40b5edc649959bb7e89d25ae18e055554859a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ravitemer",
-        "repo": "mcphub.nvim",
-        "type": "github"
-      }
-    },
     "nix-vscode-extensions": {
       "inputs": {
         "nixpkgs": [
@@ -496,15 +437,12 @@
       "inputs": {
         "chromium-widevine-flake": "chromium-widevine-flake",
         "fish-flake": "fish-flake",
-        "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "git-flake": "git-flake",
         "gnome-flake": "gnome-flake",
         "helix-flake": "helix-flake",
         "jujutsu-flake": "jujutsu-flake",
         "lima-flake": "lima-flake",
-        "mcphub": "mcphub",
-        "mcphub-nvim": "mcphub-nvim",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
         "nushell-flake": "nushell-flake",
@@ -663,12 +601,6 @@
       "inputs": {
         "flake-utils": [
           "flake-utils"
-        ],
-        "mcphub": [
-          "mcphub"
-        ],
-        "mcphub-nvim": [
-          "mcphub-nvim"
         ],
         "nixpkgs": [
           "nixpkgs"

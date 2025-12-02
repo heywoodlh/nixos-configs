@@ -14,7 +14,6 @@ in {
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../server.nix
     #../../roles/virtualization/libvirt.nix
     ../../roles/monitoring/syslog-ng/server.nix
     ../../roles/monitoring/syslog-ng/client.nix

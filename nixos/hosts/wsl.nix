@@ -3,7 +3,6 @@
 
 {
   imports = [
-    ../desktop.nix
     nixos-wsl.nixosModules.wsl
   ];
 
@@ -18,7 +17,6 @@
     wslConf.automount.root = "/mnt";
     defaultUser = "heywoodlh";
     startMenuLaunchers = true;
-    docker-native.enable = true;
   };
 
   # WSL-specific packages

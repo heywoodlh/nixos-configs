@@ -9,7 +9,6 @@ let
   pkgs-backports = nixpkgs-backports.legacyPackages.${system};
 in {
   imports = [
-    ./base.nix
     ./roles/remote-access/sshd.nix
     ./roles/security/sshd-monitor.nix
     ./roles/tailscale.nix

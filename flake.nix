@@ -1,4 +1,5 @@
-{ description = "heywoodlh nix config";
+{
+  description = "heywoodlh nix config";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -144,107 +145,108 @@
                       hyprland,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
+    pkgs = import nixpkgs {
+      inherit system;
+      config = {
+        allowUnfree = true;
       };
-      stable-pkgs = import nixpkgs-stable {
-        inherit system;
-        config = {
-          allowUnfree = true;
-        };
+    };
+    stable-pkgs = import nixpkgs-stable {
+      inherit system;
+      config = {
+        allowUnfree = true;
       };
-      lib = pkgs.lib;
-      arch = pkgs.stdenv.hostPlatform.uname.processor;
-      linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
-      darwinSystem = "${arch}-darwin";
-      darwinModules.heywoodlh.darwin = ./darwin/modules/default.nix;
-      homeModules.heywoodlh.home = ./home/modules/default.nix;
+    };
+    lib = pkgs.lib;
+    arch = pkgs.stdenv.hostPlatform.uname.processor;
+    linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
+    darwinSystem = "${arch}-darwin";
+    darwinModules.heywoodlh.darwin = ./darwin/modules/default.nix;
+    homeModules.heywoodlh.home = ./home/modules/default.nix;
+    nixosModules.heywoodlh = { config, pkgs, ... }: {
+      imports = [
+        ./nixos/modules/gnome.nix
+        ./nixos/modules/hyprland.nix
+      ];
+    };
 
-      darwinConfig = machineType: myHostname: extraConf: darwin.lib.darwinSystem {
-        system = "${darwinSystem}";
-        specialArgs = inputs;
-        modules = [
-          darwinModules.heywoodlh.darwin
-          determinate.darwinModules.default
-          home-manager.darwinModules.home-manager
-          ./darwin/roles/base.nix
-          ./darwin/roles/defaults.nix
-          ./darwin/roles/pkgs.nix
-          ./darwin/roles/network.nix
-          extraConf
-          {
-            imports = [
-              "${cart}/darwin.nix"
-            ];
-            # Import nur as nixpkgs.overlays
-            nixpkgs.overlays = [
-              nur.overlays.default
-            ];
-            home-manager.useGlobalPkgs = true;
+    darwinConfig = machineType: myHostname: extraConf: darwin.lib.darwinSystem {
+      system = "${darwinSystem}";
+      specialArgs = inputs;
+      modules = [
+        darwinModules.heywoodlh.darwin
+        determinate.darwinModules.default
+        home-manager.darwinModules.home-manager
+        ./darwin/roles/base.nix
+        ./darwin/roles/defaults.nix
+        ./darwin/roles/pkgs.nix
+        ./darwin/roles/network.nix
+        extraConf
+        {
+          imports = [
+            "${cart}/darwin.nix"
+          ];
+          # Import nur as nixpkgs.overlays
+          nixpkgs.overlays = [
+            nur.overlays.default
+          ];
+          home-manager.useGlobalPkgs = true;
 
-            networking.hostName = myHostname;
-            networking.computerName = myHostname;
-            heywoodlh.darwin = {
-              sketchybar.enable = true;
-              yabai = {
-                enable = true;
-                homebrew = true;
-              };
+          networking.hostName = myHostname;
+          networking.computerName = myHostname;
+          heywoodlh.darwin = {
+            sketchybar.enable = true;
+            yabai = {
+              enable = true;
+              homebrew = true;
             };
-            system.stateVersion = 6;
-          }
-        ] ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
-      };
+          };
+          system.stateVersion = 6;
+        }
+      ] ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
+    };
 
-      eval = pkgs.lib.evalModules {
-        specialArgs = { inherit pkgs; };
-        modules = [
-          darwinModules.heywoodlh.darwin { config._module.check = false; }
-          homeModules.heywoodlh.home { config._module.check = false; }
-        ];
-      };
+    nixosConfig = machineType: myHostname: extraConf: nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = inputs;
+      modules = [
+        nixosModules.heywoodlh
+        {
+          home-manager.users.heywoodlh = { ... }: {
+            imports = [
+              homeModules.heywoodlh.home
+            ];
+          };
+        }
+        extraConf
+      ] ++ lib.optionals (machineType == "server") [
+        ./nixos/base.nix
+        ./nixos/server.nix
+      ] ++ lib.optionals (machineType == "workstation") [
+        ./nixos/base.nix
+        ./nixos/desktop.nix
+      ] ++ lib.optionals (machineType == "console") [
+        ./nixos/base.nix
+        ./nixos/console.nix
+      ];
+    };
 
-      # https://github.com/NixOS/nixpkgs/issues/293510
-      cleanEval = pkgs.lib.filterAttrsRecursive (n: v: n != "_module") eval;
+    eval = pkgs.lib.evalModules {
+      specialArgs = { inherit pkgs; };
+      modules = [
+        darwinModules.heywoodlh.darwin { config._module.check = false; }
+        homeModules.heywoodlh.home { config._module.check = false; }
+        nixosModules.heywoodlh { config._module.check = false; }
+      ];
+    };
 
-      optionsDoc = pkgs.nixosOptionsDoc {
-        inherit (cleanEval) options;
-      };
+    # https://github.com/NixOS/nixpkgs/issues/293510
+    cleanEval = pkgs.lib.filterAttrsRecursive (n: v: n != "_module") eval;
 
-      #myDevContainer = dev-container.packages.${linuxSystem}.dockerImage;
-      #anonScript = pkgs.writeShellScriptBin "anon" ''
-      #  ${pkgs.docker-client}/bin/docker image ls | grep -q 'heywoodlh/dev' || ${pkgs.docker-client}/bin/docker load -i ${myDevContainer}
-      #  ${pkgs.docker-client}/bin/docker network ls | grep -i socks-anon || ${pkgs.docker-client}/bin/docker network create socks-anon
-      #  ${pkgs.docker-client}/bin/docker ps -a | grep -q tor-socks-proxy && ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
-      #  ${pkgs.docker-client}/bin/docker run -d --name=tor-socks-proxy --network=socks-anon docker.io/heywoodlh/tor-socks-proxy:latest
-      #  ${pkgs.docker-client}/bin/docker run --network=socks-anon -it --rm -e SSH_TTY=true -e http_proxy="socks://tor-socks-proxy:9150" -e https_proxy="socks://tor-socks-proxy:9150" -e all_proxy="socks://tor-socks-proxy:9150" -e no_proxy="localhost,127.0.0.1,100.64.0.0/10,.barn-banana.ts.net" heywoodlh/dev:latest
-      #  ${pkgs.docker-client}/bin/docker rm -f tor-socks-proxy
-      #  ${pkgs.docker-client}/bin/docker network rm -f socks-anon
-      #'';
-    #proxmoxConfig = {
-    #  imports = [
-    #    proxmox-nixos.nixosModules.proxmox-ve
-    #  ];
-    #  services.proxmox-ve.enable = true;
-    #  nixpkgs.overlays = [
-    #    proxmox-nixos.overlays.${pkgs.system}
-    #  ];
-    #  nix.settings = {
-    #    substituters = [ "https://cache.saumon.network/proxmox-nixos" ];
-    #    trusted-public-keys = [ "proxmox-nixos:nveXDuVVhFDRFx8Dn19f1WDEaNRJjPrF2CPD2D+m1ys=" ];
-    #  };
-    #  users.users.root.openssh.authorizedKeys.keys = [
-    #    "from=\"100.109.183.68\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQClbyKk9D4dWDO2fCNV8KbT8HyUzCmmyfuly4fWZ2R78frVJRpkeDJ3N9Km+Pegi13uwaky0NMDF5t5xTACgS8Z+J3z6v+f93OF32n+FMiBEIs+91PzUs9iFvlLSyN9WbQ1dxgJKAnJkuFle4tK1simK+EbO2kvtsT5h3XdMI0lVlg4lIUhz8KO81OcQJ+MLzwqrxg/AN+6uLan5oav72cpXD4fB/lJnfn33awg5MklPg/BSYD5pY5EvPFmiwaFZzppD7nO3KLoWgT5ksX+fTxpeFlfP525u31lMaHYQZiwIFDzCPyVsocP1dlfny0j25Cz3ycFk8wGUswMRfi6/WSj root@proxmox-mac-mini"
-    #    "from=\"192.168.50.20\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQClbyKk9D4dWDO2fCNV8KbT8HyUzCmmyfuly4fWZ2R78frVJRpkeDJ3N9Km+Pegi13uwaky0NMDF5t5xTACgS8Z+J3z6v+f93OF32n+FMiBEIs+91PzUs9iFvlLSyN9WbQ1dxgJKAnJkuFle4tK1simK+EbO2kvtsT5h3XdMI0lVlg4lIUhz8KO81OcQJ+MLzwqrxg/AN+6uLan5oav72cpXD4fB/lJnfn33awg5MklPg/BSYD5pY5EvPFmiwaFZzppD7nO3KLoWgT5ksX+fTxpeFlfP525u31lMaHYQZiwIFDzCPyVsocP1dlfny0j25Cz3ycFk8wGUswMRfi6/WSj root@proxmox-mac-mini"
-    #    "from=\"100.79.151.6\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoCHYi25JA+QueyDNph6aGM+xPyDub3SQ8kj8sSy66O6YC7OH/CfRz6btRHff1PB8jtwxD4QUBvWaRKpKZB/2rZ/4i7yMULhAJlZkKyqnLl5QAvRMc21x0OlCSCXMpSbdSOwvfOouXLGCbBXS4n5L8+jKwUfZ06eM6V901KilymqMJiCQjFgrc0thlwyFUl2ZFeu+/H/UzhhBPWrrVDDq+RWbX34cI/qJrcvW4PYZYVKFBUXWy575C7ouIgdjeh3dQYNcPX6kaN56g/VawmfUxEDZoGhTzhU5rX4DBxTnL9Cp+sQkDXKNTK+TBAmM4JNg0tQbUv05Wi4LUTKD0vN4b root@proxmox-oryx-pro"
-    #    "from=\"192.168.50.21\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCoCHYi25JA+QueyDNph6aGM+xPyDub3SQ8kj8sSy66O6YC7OH/CfRz6btRHff1PB8jtwxD4QUBvWaRKpKZB/2rZ/4i7yMULhAJlZkKyqnLl5QAvRMc21x0OlCSCXMpSbdSOwvfOouXLGCbBXS4n5L8+jKwUfZ06eM6V901KilymqMJiCQjFgrc0thlwyFUl2ZFeu+/H/UzhhBPWrrVDDq+RWbX34cI/qJrcvW4PYZYVKFBUXWy575C7ouIgdjeh3dQYNcPX6kaN56g/VawmfUxEDZoGhTzhU5rX4DBxTnL9Cp+sQkDXKNTK+TBAmM4JNg0tQbUv05Wi4LUTKD0vN4b root@proxmox-oryx-pro"
-    #    "from=\"100.108.77.60\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH"
-    #    "from=\"192.168.50.22\" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINY1Uh0d+CCNdWdnLa1R/1gIdVFWnOTQpu8AGtzvTbBH"
-    #  ];
-    #};
+    optionsDoc = pkgs.nixosOptionsDoc {
+      inherit (cleanEval) options;
+    };
+
     # shared config among darwin workstations
     darwinWorkstationConfig = {
       homebrew = {
@@ -350,125 +352,105 @@
 
       # nixos targets
       packages.nixosConfigurations = {
-        nixos-zenbook = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/hosts/zenbook-14/configuration.nix
+
+        homelab = nixosConfig "server" "homelab" {
+          imports = [
+            ./nixos/hosts/homelab/configuration.nix
           ];
         };
-        nixos-thinkpad = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/hosts/thinkpad-x270/configuration.nix
-          ];
-        };
-        nixos-blade = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            {
-              # Bootloader
-              boot.loader.systemd-boot.enable = true;
-              boot.loader.efi.canTouchEfiVariables = true;
-              networking.hostName = "nixos-blade";
-              time.timeZone = "America/Denver";
-              hardware.openrazer = {
-                enable = true;
-                users = [
-                  "heywoodlh"
-                ];
-              };
-              environment.systemPackages = with pkgs; [
-                nvtopPackages.nvidia
-              ];
-              home-manager.users.heywoodlh = {
-                wayland.windowManager.hyprland.extraConfig = ''
-                  # change monitor to high resolution, the last argument is the scale factor
-                  monitor = , highres, auto, 1.6
-                  # unscale XWayland
-                  xwayland {
-                    force_zero_scaling = true
-                  }
-                  # toolkit-specific scale
-                  env = GDK_SCALE,2
-                  env = XCURSOR_SIZE,24
-                '';
-              };
-              # Nvidia settings
-              boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
-              hardware.graphics = {
-                enable = true;
-              };
-              services.xserver.videoDrivers = ["nvidia"];
-              hardware.nvidia = {
-                modesetting.enable = true;
-                powerManagement.finegrained = false;
-                open = true;
-                nvidiaSettings = true;
-                package = pkgs.linuxKernel.packages.linux_zen.nvidiaPackages.beta;
-              };
-            }
+
+        nixos-blade = nixosConfig "workstation" "nixos-blade" {
+          imports = [
             ./nixos/hosts/razer-blade-14.nix
-            ./nixos/desktop.nix
             ./nixos/roles/gaming/steam.nix
           ];
+          boot.loader.systemd-boot.enable = true;
+          boot.loader.efi.canTouchEfiVariables = true;
+          networking.hostName = "nixos-blade";
+          time.timeZone = "America/Denver";
+          hardware.openrazer = {
+            enable = true;
+            users = [
+              "heywoodlh"
+            ];
+          };
+          environment.systemPackages = with pkgs; [
+            nvtopPackages.nvidia
+          ];
+          home-manager.users.heywoodlh = {
+            wayland.windowManager.hyprland.extraConfig = ''
+              # change monitor to high resolution, the last argument is the scale factor
+              monitor = , highres, auto, 1.6
+              # unscale XWayland
+              xwayland {
+                force_zero_scaling = true
+              }
+              # toolkit-specific scale
+              env = GDK_SCALE,2
+              env = XCURSOR_SIZE,24
+            '';
+          };
+          # Nvidia settings
+          boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
+          hardware.graphics = {
+            enable = true;
+          };
+          services.xserver.videoDrivers = ["nvidia"];
+          hardware.nvidia = {
+            modesetting.enable = true;
+            powerManagement.finegrained = false;
+            open = true;
+            nvidiaSettings = true;
+            package = pkgs.linuxKernel.packages.linux_zen.nvidiaPackages.beta;
+          };
         };
-        nixos-m1-mac-mini = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          specialArgs = inputs;
-          modules = [
-            {
-              # Bootloader
-              boot.loader.systemd-boot.enable = true;
-              boot.loader.efi.canTouchEfiVariables = false;
-              networking.hostName = "nixos-m1-mac-mini";
-              time.timeZone = "America/Denver";
-              home-manager.users.heywoodlh = {
-                home.packages = with pkgs; [
-                  moonlight-qt
-                ];
-                wayland.windowManager.hyprland.extraConfig = ''
-                  # change monitor to high resolution, the last argument is the scale factor
-                  monitor = , highres, auto, 1
-                  # unscale XWayland
-                  xwayland {
-                    force_zero_scaling = true
-                  }
-                  # toolkit-specific scale
-                  env = GDK_SCALE,2
-                  env = XCURSOR_SIZE,24
-                '';
-              };
-            }
+        nixos-m1-mac-mini = nixosConfig "workstation" "nixos-m1-mac-mini" {
+          imports = [
             ./nixos/hosts/m1-mac-mini.nix
             ./nixos/desktop.nix
             ./nixos/roles/nixos/asahi.nix
             ./nixos/roles/gaming/steam.nix
             ./nixos/roles/remote-access/sshd.nix
           ];
+          # Bootloader
+          boot.loader.systemd-boot.enable = true;
+          boot.loader.efi.canTouchEfiVariables = false;
+          networking.hostName = "nixos-m1-mac-mini";
+          time.timeZone = "America/Denver";
+          home-manager.users.heywoodlh = {
+            home.packages = with pkgs; [
+              moonlight-qt
+            ];
+            wayland.windowManager.hyprland.extraConfig = ''
+              # change monitor to high resolution, the last argument is the scale factor
+              monitor = , highres, auto, 1
+              # unscale XWayland
+              xwayland {
+                force_zero_scaling = true
+              }
+              # toolkit-specific scale
+              env = GDK_SCALE,2
+              env = XCURSOR_SIZE,24
+            '';
+          };
         };
 
-        nixos-usb = nixpkgs.lib.nixosSystem {
-          system = "${system}";
-          specialArgs = inputs;
-          modules = [
+        nixos-usb = nixosConfig "workstation" "nixos-usb" {
+          imports = [
             (nixpkgs + "/nixos/modules/profiles/all-hardware.nix")
             /etc/nixos/hardware-configuration.nix
-            ./nixos/desktop.nix
-            {
-              networking.hostName = "nixos-usb";
-              # Bootloader
-              boot.loader.systemd-boot.enable = true;
-              boot.loader.efi.canTouchEfiVariables = false;
-              # Enable networking
-              networking.networkmanager.enable = true;
-              # Set your time zone.
-              time.timeZone = "America/Denver";
-            }
           ];
+
+          networking.hostName = "nixos-usb";
+          # Bootloader
+          boot.loader.systemd-boot.enable = true;
+          boot.loader.efi.canTouchEfiVariables = false;
+          # Enable networking
+          networking.networkmanager.enable = true;
+          # Set your time zone.
+          time.timeZone = "America/Denver";
         };
+
         family-mac-mini = let
           intel-cpu-pkgs = import nixpkgs-stable {
             inherit system;
@@ -479,37 +461,33 @@
               ];
             };
           };
-        in nixpkgs.lib.nixosSystem {
-          system = "${system}";
-          specialArgs = inputs;
-          modules = [
+        in nixosConfig "workstation" "family-mac-mini" {
+          imports = [
             ./nixos/hosts/family-mac-mini/hardware-configuration.nix
-            ./nixos/desktop.nix
             ./nixos/roles/remote-access/sshd.nix
             ./nixos/family.nix
             ./nixos/roles/monitoring/osquery.nix
-            {
-              networking.hostName = "family-mac-mini";
-              # Bootloader
-              boot.loader.systemd-boot.enable = true;
-              boot.loader.efi.canTouchEfiVariables = false;
-              # Enable networking
-              networking.networkmanager.enable = true;
-              # Set your time zone.
-              time.timeZone = "America/Denver";
-              nixpkgs.config.
-              # Intel hardware acceleration
-              hardware.graphics = {
-                enable = true;
-                extraPackages = with pkgs; [
-                  intel-vaapi-driver
-                  libvdpau-va-gl
-                  intel-cpu-pkgs.intel-media-sdk
-                ];
-              };
-              environment.sessionVariables.LIBVA_DRIVER_NAME = "i965";
-            }
           ];
+
+          networking.hostName = "family-mac-mini";
+          # Bootloader
+          boot.loader.systemd-boot.enable = true;
+          boot.loader.efi.canTouchEfiVariables = false;
+          # Enable networking
+          networking.networkmanager.enable = true;
+          # Set your time zone.
+          time.timeZone = "America/Denver";
+          nixpkgs.config.
+          # Intel hardware acceleration
+          hardware.graphics = {
+            enable = true;
+            extraPackages = with pkgs; [
+              intel-vaapi-driver
+              libvdpau-va-gl
+              intel-cpu-pkgs.intel-media-sdk
+            ];
+          };
+          environment.sessionVariables.LIBVA_DRIVER_NAME = "i965";
         };
 
         # generic build for initial setup
@@ -536,149 +514,80 @@
             }
           ];
         };
-        nixos-wsl = nixpkgs.lib.nixosSystem {
-          system = "${system}";
-          specialArgs = inputs;
-          modules = [ ./nixos/hosts/wsl.nix ];
+
+        nixos-wsl = nixosConfig "workstation" "nixos-wsl" {
+          imports = [ ./nixos/hosts/wsl.nix ];
         };
-        nixos-arm64-vm = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          specialArgs = inputs;
-          modules = [ ./nixos/hosts/nixos-arm64-vm/configuration.nix ];
+
+        nixos-arm64-vm = nixosConfig "workstation" "nixos-arm64-vm" {
+          imports = [ ./nixos/hosts/nixos-arm64-vm/configuration.nix ];
         };
+
         # generic build for CI
-        nixos-server = nixpkgs.lib.nixosSystem {
-          system = "${system}";
-          specialArgs = inputs;
-          modules = [ ./nixos/hosts/nixos-build/server.nix ];
+        nixos-server = nixosConfig "server" "nixos-server" {
+          imports = [ ./nixos/hosts/nixos-build/server.nix ];
         };
+
         # generic build for CI
-        nixos-desktop = nixpkgs.lib.nixosSystem {
-          system = "${system}";
-          specialArgs = inputs;
-          modules = [ ./nixos/hosts/nixos-build/desktop.nix ];
+        nixos-desktop = nixosConfig "server" "nixos-desktop" {
+          imports = [ ./nixos/hosts/nixos-build/desktop.nix ];
         };
-        homelab = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/hosts/homelab/configuration.nix
-            #proxmoxConfig
-          ];
-        };
-        nixos-lima-vm = nixpkgs.lib.nixosSystem {
-          system = "${linuxSystem}";
-          specialArgs = inputs;
-          modules = [
-            (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
-            (myFlakes + "/lima/lima-init.nix")
-            (myFlakes + "/lima/configuration.nix")
-            ./nixos/server.nix
-            {
-              networking.hostName = "nixos-lima-vm";
-            }
-          ];
-        };
+
         # Console
-        nixos-console = nixpkgs.lib.nixosSystem {
-          system = "${linuxSystem}";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/console.nix
-            /etc/nixos/hardware.nix
-            {
-              networking.hostName = "nixos-console";
-            }
-          ];
+        nixos-console = nixosConfig "console" "nixos-console" {
+          imports = [ /etc/nixos/hardware.nix ];
+          networking.hostName = "nixos-console";
         };
+
         # Dev VM for running on workstations
-        nixos-dev = nixpkgs.lib.nixosSystem {
-          system = "${linuxSystem}";
-          specialArgs = inputs;
-          modules = [
+        nixos-dev = nixosConfig "workstation" "nixos-dev" {
+          imports = [
             /etc/nixos/hardware-configuration.nix
             ./nixos/vm.nix
-            {
-              networking.hostName = "nixos-dev";
-            }
           ];
+          networking.hostName = "nixos-dev";
         };
+
         # VMWare VM for running on workstations
-        nixos-vmware = nixpkgs.lib.nixosSystem {
-          system = "${linuxSystem}";
-          specialArgs = inputs;
-          modules = [
+        nixos-vmware = nixosConfig "workstation" "nixos-vmware" {
+          imports = [
             /etc/nixos/hardware-configuration.nix
             ./nixos/vm.nix
-            {
-              networking.hostName = "nixos-vmware";
-              virtualisation.vmware.guest.enable = true;
-              console.earlySetup = true;
-              fileSystems."/shared" = {
-                device = ".host:/";
-                fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse"; # "fuse.${pkgs.open-vm-tools}/bin/vmhgfs-fuse" does not work
-                options = [
-                  "allow_other"
-                  "auto_unmount"
-                  "defaults"
-                  "gid=1000"
-                  "uid=1000"
-                  "umask=0022"
-                ];
-              };
-              home-manager.users.heywoodlh = {
-                home.file.".gitconfig" = {
-                  text = ''
-                    [safe]
-                    directory = "/shared/*";
-                  '';
-                };
-              };
-            }
           ];
+          networking.hostName = "nixos-vmware";
+          virtualisation.vmware.guest.enable = true;
+          console.earlySetup = true;
+          fileSystems."/shared" = {
+            device = ".host:/";
+            fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse"; # "fuse.${pkgs.open-vm-tools}/bin/vmhgfs-fuse" does not work
+            options = [
+              "allow_other"
+              "auto_unmount"
+              "defaults"
+              "gid=1000"
+              "uid=1000"
+              "umask=0022"
+            ];
+          };
+          home-manager.users.heywoodlh = {
+            home.file.".gitconfig" = {
+              text = ''
+                [safe]
+                directory = "/shared/*";
+              '';
+            };
+          };
         };
-        nixos-gaming = nixpkgs.lib.nixosSystem {
-          system = "${linuxSystem}";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/server.nix
-            ./nixos/roles/gaming/palworld.nix
-            ./nixos/hosts/nixos-gaming.nix
-            {
-              networking.hostName = "nixos-gaming";
-              boot.loader = {
-                systemd-boot.enable = true;
-                efi.canTouchEfiVariables = true;
-              };
-            }
-          ];
-        };
-        # Mac Mini NixOS VM in UTM
-        nixos-mac-mini = nixpkgs.lib.nixosSystem {
-          system = "${linuxSystem}";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/vm.nix
-            (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
-            {
-              networking.hostName = "nixos-mac-mini";
-              services.qemuGuest.enable = true;
-            }
-          ];
-        };
+
         # Generic UTM VM for running on any Mac
-        nixos-utm = nixpkgs.lib.nixosSystem {
-          system = "${linuxSystem}";
-          specialArgs = inputs;
-          modules = [
+        nixos-utm = nixosConfig "workstation" "nixos-utm" {
+          imports = [
             ./nixos/vm.nix
             /etc/nixos/hardware-configuration.nix
             (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
-            {
-              networking.hostName = "nixos-utm";
-              services.qemuGuest.enable = true;
-            }
           ];
+          networking.hostName = "nixos-utm";
+          services.qemuGuest.enable = true;
         };
       };
       # home-manager targets (non NixOS/MacOS, ideally Arch Linux)
@@ -719,8 +628,6 @@
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config
-            ./home/linux/gnome-desktop.nix
-            (import myFlakes.packages.${system}.gnome-dconf)
             {
               # Home-Manager specific nixpkgs config
               nixpkgs.config = {

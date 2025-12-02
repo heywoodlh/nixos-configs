@@ -27,7 +27,6 @@ let
   '';
 in {
   imports = [
-    ./base.nix
     ./roles/virtualization/libvirt.nix
   ];
 

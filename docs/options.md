@@ -122,6 +122,27 @@ boolean
 
 
 
+## heywoodlh\.gnome\.enable
+
+
+
+Enable heywoodlh gnome configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gnome\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gnome.nix)
+
+
+
 ## heywoodlh\.home\.applications
 
 
@@ -290,6 +311,48 @@ boolean
 
 
 
+## heywoodlh\.home\.gnome\.enable
+
+
+
+Enable heywoodlh gnome configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gnome\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gnome.nix)
+
+
+
+## heywoodlh\.home\.hyprland\.enable
+
+
+
+Enable heywoodlh hyprland configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/hyprland\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/hyprland.nix)
+
+
+
 ## heywoodlh\.home\.lima\.enable
 
 
@@ -353,11 +416,11 @@ boolean
 
 
 
-## heywoodlh\.home\.sway\.enable
+## heywoodlh\.hyprland\.enable
 
 
 
-Enable heywoodlh Sway configuration\.
+Enable heywoodlh hyprland configuration\.
 
 
 
@@ -370,6 +433,6 @@ boolean
 ` false `
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/sway\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/sway.nix)
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/hyprland\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/hyprland.nix)
 
 

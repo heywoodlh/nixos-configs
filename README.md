@@ -2,13 +2,13 @@
 
 This repo stores my NixOS and Nix on Darwin setup.
 
-NixOS configs are here: <./nixos>
+NixOS configs are here: [./nixos](./nixos)
 
-Nix-Darwin configs: <./darwin>
+Nix-Darwin configs: [./darwin](./darwin)
 
-Home-Manager configs: <./home>
+Home-Manager configs: [./home](./home)
 
-Standalone flakes: <./flakes>
+Standalone flakes: [./flakes](./flakes)
 
 ## Using custom modules
 

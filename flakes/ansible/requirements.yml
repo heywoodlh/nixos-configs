@@ -5,20 +5,20 @@ collections:
   - name: operator_sdk.util
     version: "0.5.0"
   - name: kubernetes.core
-    version: "5.4.0"
+    version: "5.4.1"
   - name: cloud.common
     version: "4.2.0"
   - name: community.docker
-    version: "4.7.0"
+    version: "4.8.4"
   - name: ansible.posix
     version: "2.1.0"
   - name: community.general
-    version: "10.7.4"
+    version: "10.7.6"
   - name: ansible.windows
-    version: "3.2.0"
+    version: "3.3.0"
   - name: prometheus.prometheus
-    version: "0.27.3"
+    version: "0.27.4"
 
 roles:
   - name: geerlingguy.docker
-    version: "7.5.5"
+    version: "7.9.0"

@@ -359,6 +359,38 @@
           ];
         };
 
+
+        nixos-intel-mac-mini = let
+          intel-cpu-pkgs = import nixpkgs-stable {
+            inherit system;
+            config = {
+              allowUnfree = true;
+              permittedInsecurePackages = [
+                "intel-media-sdk-23.2.2"
+              ];
+            };
+          };
+        in nixosConfig "workstation" "nixos-intel-mac-mini" {
+          imports = [
+            /etc/nixos/hardware-configuration.nix
+            ./nixos/roles/remote-access/sshd.nix
+            #./nixos/roles/monitoring/osquery.nix
+          ];
+          boot.loader.systemd-boot.enable = true;
+          boot.loader.efi.canTouchEfiVariables = true;
+          networking.hostName = "nixos-intel-mac-mini";
+          # Intel hardware acceleration
+          hardware.graphics = {
+            enable = true;
+            extraPackages = with pkgs; [
+              intel-vaapi-driver
+              libvdpau-va-gl
+              intel-cpu-pkgs.intel-media-sdk
+            ];
+          };
+          environment.sessionVariables.LIBVA_DRIVER_NAME = "i965";
+        };
+
         nixos-blade = nixosConfig "workstation" "nixos-blade" {
           imports = [
             ./nixos/hosts/razer-blade-14.nix
@@ -477,7 +509,6 @@
           networking.networkmanager.enable = true;
           # Set your time zone.
           time.timeZone = "America/Denver";
-          nixpkgs.config.
           # Intel hardware acceleration
           hardware.graphics = {
             enable = true;

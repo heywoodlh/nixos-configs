@@ -198,7 +198,7 @@
           src = ./templates/actual.yaml;
           namespace = "default";
           replicas = 1;
-          image = "docker.io/actualbudget/actual-server:25.11.0-alpine";
+          image = "docker.io/actualbudget/actual-server:25.12.0-alpine";
           hostfolder = "/media/data-ssd/actual";
         };
         # After applying this, run the following: `kubectl apply -f ./kubectl/argo-nix-configmap.yaml`
@@ -330,7 +330,7 @@
           src = ./templates/coder.yaml;
           namespace = "coder";
           version = "2.8.3";
-          image = "ghcr.io/coder/coder:v2.28.5";
+          image = "ghcr.io/coder/coder:v2.29.0";
           access_url = "https://coder.heywoodlh.io";
           replicas = "1";
           port = "80";
@@ -460,7 +460,7 @@
           src = ./templates/home-assistant.yaml;
           namespace = "default";
           timezone = "America/Denver";
-          image = "ghcr.io/home-assistant/home-assistant:2025.11.3";
+          image = "ghcr.io/home-assistant/home-assistant:2025.12.0";
           port = 80;
           replicas = 1;
           nodename = "homelab";
@@ -652,7 +652,7 @@
           namespace = "nuclei";
           image = "docker.io/heywoodlh/nuclei:v3.5.1";
           interactsh_image = "docker.io/projectdiscovery/interactsh-server:v1.2.4";
-          httpd_image = "docker.io/httpd:2.4.65";
+          httpd_image = "docker.io/httpd:2.4.66";
           replicas = 1;
         };
         ollama = mkKubeDrv "ollama" {
@@ -666,8 +666,8 @@
         open-webui = mkKubeDrv "open-webui" {
           src = ./templates/open-webui.yaml;
           namespace = "open-webui";
-          webui_image = "ghcr.io/open-webui/open-webui:0.6.40";
-          ollama_image = "docker.io/ollama/ollama:0.13.0";
+          webui_image = "ghcr.io/open-webui/open-webui:0.6.41";
+          ollama_image = "docker.io/ollama/ollama:0.13.1";
           hostfolder = "/opt/open-webui";
         };
         palworld = mkKubeDrv "palworld" {
@@ -694,7 +694,7 @@
             server = {
               image = {
                 repository = "quay.io/prometheus/prometheus";
-                tag = "v3.7.3";
+                tag = "v3.8.0";
               };
               extraFlags = [
                 "storage.tsdb.wal-compression"

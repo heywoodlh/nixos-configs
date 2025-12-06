@@ -67,18 +67,16 @@ let
   '';
 in {
   options = {
-    heywoodlh.home.hyprland = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Enable heywoodlh hyprland configuration.
-        '';
-        type = types.bool;
-      };
+    heywoodlh.home.hyprland = mkOption {
+      default = false;
+      description = ''
+        Enable heywoodlh hyprland configuration.
+      '';
+      type = types.bool;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg {
     home.packages = with pkgs; [
       acpi
       adwaita-icon-theme
@@ -418,16 +416,10 @@ in {
     # Swayidle config
     services.swayidle = {
       enable = true;
-      events = [
-        {
-          event = "before-sleep";
-          command = "${pkgs.systemd}/bin/loginctl lock-session";
-        }
-        {
-          event = "lock";
-          command = "${pkgs.swaylock-effects}/bin/swaylock -fF";
-        }
-      ];
+      events = {
+        "before-sleep" = "${pkgs.systemd}/bin/loginctl lock-session";
+        "lock" = "${pkgs.swaylock-effects}/bin/swaylock -fF";
+      };
       timeouts = [
         {
           timeout = 330;

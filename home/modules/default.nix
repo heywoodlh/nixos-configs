@@ -11,5 +11,6 @@
     ./darwin-defaults.nix
     ./gnome.nix
     ./hyprland.nix
+    ./vicinae.nix
   ];
 }

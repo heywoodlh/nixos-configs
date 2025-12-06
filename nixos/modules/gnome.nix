@@ -9,28 +9,17 @@ let
     inherit system;
     config.allowUnfree = true;
   };
-  # Overlay that replaces gnome-shell and gnome-session with the stable ones
-  # Because extensions are often broken with the latest gnome-shell
-  gnome-stable = (final: prev: {
-    gnome-shell  = pkgs-stable.gnome-shell;
-    gnome-session = pkgs-stable.gnome-session;
-  });
+  username = config.heywoodlh.defaults.user.name;
 in {
-  options.heywoodlh.gnome = {
-    enable = mkOption {
-      default = false;
-      description = ''
-        Enable heywoodlh gnome configuration.
-      '';
-      type = types.bool;
-    };
+  options.heywoodlh.gnome = mkOption {
+    default = false;
+    description = ''
+      Enable heywoodlh gnome configuration.
+    '';
+    type = types.bool;
   };
 
-  config = mkIf cfg.enable {
-    nixpkgs.overlays = [
-      gnome-stable
-    ];
-
+  config = mkIf cfg {
     services.desktopManager.gnome.enable = true;
 
     ## Bluetooth
@@ -47,5 +36,7 @@ in {
 
     # Disable wait-online service for Network Manager
     systemd.services.NetworkManager-wait-online.enable = false;
+
+    home-manager.users.${username}.heywoodlh.home.gnome = true;
   };
 }

@@ -27,17 +27,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix.follows = "nix";
     };
-    vicinae-nix = {
-      url = "github:vicinaehq/vicinae";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.systems.follows = "flake-utils/systems";
-    };
     myFlakes = {
       url = ./flakes;
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
       inputs.flake-utils.follows = "flake-utils";
-      inputs.vicinae-nix.follows = "vicinae-nix";
     };
     darwin = {
       url = "github:LnL7/nix-darwin";
@@ -140,7 +134,6 @@
                       plasma-manager,
                       determinate,
                       cart,
-                      vicinae-nix,
                       hexstrike-ai,
                       hyprland,
                       ... }:
@@ -165,8 +158,18 @@
     homeModules.heywoodlh.home = ./home/modules/default.nix;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = [
+        determinate.nixosModules.default
+        home-manager.nixosModules.home-manager
+        ./nixos/modules/defaults.nix
         ./nixos/modules/gnome.nix
         ./nixos/modules/hyprland.nix
+        ./nixos/modules/intel-mac.nix
+        ./nixos/modules/workstation.nix
+        ./nixos/modules/console.nix
+        ./nixos/modules/server.nix
+        ./nixos/modules/laptop.nix
+        ./nixos/modules/vm.nix
+        ./nixos/modules/user-icon.nix
       ];
     };
 
@@ -211,7 +214,20 @@
       specialArgs = inputs;
       modules = [
         nixosModules.heywoodlh
+        home-manager.nixosModules.home-manager
+        ./nixos/roles/virtualization/multiarch.nix
+        ./nixos/roles/nixos/attic.nix
         {
+          heywoodlh.defaults = {
+            enable = true;
+            user = {
+              name = "heywoodlh";
+              description = "Spencer Heywood";
+              uid = 1000;
+              homeDir = "/home/heywoodlh";
+            };
+            hostname = myHostname;
+          };
           home-manager.users.heywoodlh = { ... }: {
             imports = [
               homeModules.heywoodlh.home
@@ -220,14 +236,22 @@
         }
         extraConf
       ] ++ lib.optionals (machineType == "server") [
-        ./nixos/base.nix
-        ./nixos/server.nix
+        ./nixos/roles/remote-access/sshd.nix
+        ./nixos/roles/security/sshd-monitor.nix
+        ./nixos/roles/tailscale.nix
+        ./nixos/roles/monitoring/syslog-ng/client.nix
+        ./nixos/roles/monitoring/node-exporter.nix
+        ./nixos/roles/backups/tarsnap.nix
+        { heywoodlh.server = true; }
       ] ++ lib.optionals (machineType == "workstation") [
-        ./nixos/base.nix
-        ./nixos/desktop.nix
+        { heywoodlh.workstation = true; }
+      ] ++ lib.optionals (machineType == "laptop") [
+        { heywoodlh.laptop = true; }
+      ] ++ lib.optionals (machineType == "vm") [
+        ./nixos/roles/remote-access/sshd.nix
+        { heywoodlh.vm = true; }
       ] ++ lib.optionals (machineType == "console") [
-        ./nixos/base.nix
-        ./nixos/console.nix
+        { heywoodlh.console = true; }
       ];
     };
 
@@ -352,54 +376,26 @@
 
       # nixos targets
       packages.nixosConfigurations = {
-
         homelab = nixosConfig "server" "homelab" {
           imports = [
             ./nixos/hosts/homelab/configuration.nix
           ];
         };
 
-
-        nixos-intel-mac-mini = let
-          intel-cpu-pkgs = import nixpkgs-stable {
-            inherit system;
-            config = {
-              allowUnfree = true;
-              permittedInsecurePackages = [
-                "intel-media-sdk-23.2.2"
-              ];
-            };
-          };
-        in nixosConfig "workstation" "nixos-intel-mac-mini" {
+        nixos-intel-mac-mini = nixosConfig "workstation" "nixos-intel-mac-mini" {
           imports = [
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/intel-mac-mini.nix
             ./nixos/roles/remote-access/sshd.nix
             #./nixos/roles/monitoring/osquery.nix
           ];
-          boot.loader.systemd-boot.enable = true;
-          boot.loader.efi.canTouchEfiVariables = true;
-          networking.hostName = "nixos-intel-mac-mini";
-          # Intel hardware acceleration
-          hardware.graphics = {
-            enable = true;
-            extraPackages = with pkgs; [
-              intel-vaapi-driver
-              libvdpau-va-gl
-              intel-cpu-pkgs.intel-media-sdk
-            ];
-          };
-          environment.sessionVariables.LIBVA_DRIVER_NAME = "i965";
+          heywoodlh.intel-mac = true;
         };
 
-        nixos-blade = nixosConfig "workstation" "nixos-blade" {
+        nixos-blade = nixosConfig "laptop" "nixos-blade" {
           imports = [
             ./nixos/hosts/razer-blade-14.nix
             ./nixos/roles/gaming/steam.nix
           ];
-          boot.loader.systemd-boot.enable = true;
-          boot.loader.efi.canTouchEfiVariables = true;
-          networking.hostName = "nixos-blade";
-          time.timeZone = "America/Denver";
           hardware.openrazer = {
             enable = true;
             users = [
@@ -439,16 +435,12 @@
         nixos-m1-mac-mini = nixosConfig "workstation" "nixos-m1-mac-mini" {
           imports = [
             ./nixos/hosts/m1-mac-mini.nix
-            ./nixos/desktop.nix
             ./nixos/roles/nixos/asahi.nix
             ./nixos/roles/gaming/steam.nix
             ./nixos/roles/remote-access/sshd.nix
           ];
           # Bootloader
-          boot.loader.systemd-boot.enable = true;
-          boot.loader.efi.canTouchEfiVariables = false;
-          networking.hostName = "nixos-m1-mac-mini";
-          time.timeZone = "America/Denver";
+          boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
           home-manager.users.heywoodlh = {
             home.packages = with pkgs; [
               moonlight-qt
@@ -472,53 +464,19 @@
             (nixpkgs + "/nixos/modules/profiles/all-hardware.nix")
             /etc/nixos/hardware-configuration.nix
           ];
-
-          networking.hostName = "nixos-usb";
-          # Bootloader
-          boot.loader.systemd-boot.enable = true;
-          boot.loader.efi.canTouchEfiVariables = false;
-          # Enable networking
-          networking.networkmanager.enable = true;
-          # Set your time zone.
-          time.timeZone = "America/Denver";
+          boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
         };
 
-        family-mac-mini = let
-          intel-cpu-pkgs = import nixpkgs-stable {
-            inherit system;
-            config = {
-              allowUnfree = true;
-              permittedInsecurePackages = [
-                "intel-media-sdk-23.2.2"
-              ];
-            };
-          };
-        in nixosConfig "workstation" "family-mac-mini" {
+        family-mac-mini = nixosConfig "workstation" "family-mac-mini" {
           imports = [
-            ./nixos/hosts/family-mac-mini/hardware-configuration.nix
+            ./nixos/hosts/family-mac-mini.nix
             ./nixos/roles/remote-access/sshd.nix
-            ./nixos/family.nix
+            ./nixos/roles/desktop/family.nix
             ./nixos/roles/monitoring/osquery.nix
           ];
 
-          networking.hostName = "family-mac-mini";
-          # Bootloader
-          boot.loader.systemd-boot.enable = true;
-          boot.loader.efi.canTouchEfiVariables = false;
-          # Enable networking
-          networking.networkmanager.enable = true;
-          # Set your time zone.
-          time.timeZone = "America/Denver";
-          # Intel hardware acceleration
-          hardware.graphics = {
-            enable = true;
-            extraPackages = with pkgs; [
-              intel-vaapi-driver
-              libvdpau-va-gl
-              intel-cpu-pkgs.intel-media-sdk
-            ];
-          };
-          environment.sessionVariables.LIBVA_DRIVER_NAME = "i965";
+          boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
+          heywoodlh.intel-mac = true;
         };
 
         # generic build for initial setup
@@ -550,17 +508,13 @@
           imports = [ ./nixos/hosts/wsl.nix ];
         };
 
-        nixos-arm64-vm = nixosConfig "workstation" "nixos-arm64-vm" {
-          imports = [ ./nixos/hosts/nixos-arm64-vm/configuration.nix ];
-        };
-
         # generic build for CI
         nixos-server = nixosConfig "server" "nixos-server" {
           imports = [ ./nixos/hosts/nixos-build/server.nix ];
         };
 
         # generic build for CI
-        nixos-desktop = nixosConfig "server" "nixos-desktop" {
+        nixos-desktop = nixosConfig "desktop" "nixos-desktop" {
           imports = [ ./nixos/hosts/nixos-build/desktop.nix ];
         };
 
@@ -571,21 +525,19 @@
         };
 
         # Dev VM for running on workstations
-        nixos-dev = nixosConfig "workstation" "nixos-dev" {
+        nixos-dev = nixosConfig "vm" "nixos-dev" {
           imports = [
             /etc/nixos/hardware-configuration.nix
             ./nixos/vm.nix
           ];
-          networking.hostName = "nixos-dev";
         };
 
         # VMWare VM for running on workstations
-        nixos-vmware = nixosConfig "workstation" "nixos-vmware" {
+        nixos-vmware = nixosConfig "vm" "nixos-vmware" {
           imports = [
             /etc/nixos/hardware-configuration.nix
             ./nixos/vm.nix
           ];
-          networking.hostName = "nixos-vmware";
           virtualisation.vmware.guest.enable = true;
           console.earlySetup = true;
           fileSystems."/shared" = {
@@ -611,13 +563,12 @@
         };
 
         # Generic UTM VM for running on any Mac
-        nixos-utm = nixosConfig "workstation" "nixos-utm" {
+        nixos-utm = nixosConfig "vm" "nixos-utm" {
           imports = [
             ./nixos/vm.nix
             /etc/nixos/hardware-configuration.nix
             (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
           ];
-          networking.hostName = "nixos-utm";
           services.qemuGuest.enable = true;
         };
       };

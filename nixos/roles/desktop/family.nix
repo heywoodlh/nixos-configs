@@ -46,8 +46,12 @@ let
           url = "https://coolmathgames.com";
         }
         {
-          name = "ClassLink";
+          name = "classlink";
           url = "https://launchpad.classlink.com/southsanpete#mybackpack";
+        }
+        {
+          name = "gimkit";
+          url = "https://gimkit.com";
         }
       ];
       # Render bookmarks with buku
@@ -282,6 +286,9 @@ in {
     };
   };
 
+  services.displayManager.ly.enable = pkgs.lib.mkForce false;
+  services.displayManager.gdm.enable = pkgs.lib.mkForce true;
+
   users.extraGroups.lp.members = [ "family" ];
   users.extraGroups.scanner.members = [ "family" ];
 
@@ -403,6 +410,8 @@ in {
             .adobeexchange.com
             .adobe.io
             .adobelogin.com
+            .gimkit.com
+            .gimkitconnect.com
           '';
         in [
           "${squid-conf}:/etc/squid/squid.conf"

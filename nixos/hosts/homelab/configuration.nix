@@ -14,16 +14,12 @@ in {
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    #../../roles/virtualization/libvirt.nix
     ../../roles/monitoring/syslog-ng/server.nix
     ../../roles/monitoring/syslog-ng/client.nix
     ../../roles/gaming/minecraft-bedrock.nix
-    #../../roles/monitoring/graylog.nix
     ../../roles/containers/k3s-server.nix
-    #../../roles/security/fleetdm.nix
     ../../roles/monitoring/osquery.nix
     ../../roles/nixos/cache.nix
-    #../../roles/remote-access/wireguard-server.nix
     ../../roles/home-automation/homebridge.nix
     ../../roles/monitoring/ntfy-signal.nix
     ../../roles/nixos/cache-populator.nix
@@ -34,7 +30,6 @@ in {
     ../../roles/remote-access/cloudflared.nix
     ../../roles/remote-access/wol.nix
     ../../roles/security/hexstrike-ai.nix
-    #../../roles/dev/vscode.nix # many things don't work with non-standard Nix paths
   ];
 
   # Bootloader.
@@ -183,7 +178,6 @@ in {
   # Route mullvad through Tailscale
   services.tailscale.extraSetFlags = [
     "--advertise-routes=10.64.0.1/32"
-    "--accept-routes"
     "--accept-dns"
     "--stateful-filtering"
   ];

@@ -4,18 +4,17 @@ with lib;
 
 let
   cfg = config.heywoodlh.hyprland;
+  username = config.heywoodlh.defaults.user.name;
 in {
-  options.heywoodlh.hyprland = {
-    enable = mkOption {
-      default = false;
-      description = ''
-        Enable heywoodlh hyprland configuration.
-      '';
-      type = types.bool;
-    };
+  options.heywoodlh.hyprland = mkOption {
+    default = false;
+    description = ''
+      Enable heywoodlh hyprland configuration.
+    '';
+    type = types.bool;
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg {
     nix.settings = {
       sandbox = true;
       substituters = [
@@ -39,12 +38,8 @@ in {
     programs.seahorse.enable = true;
     services.gnome.gnome-keyring.enable = true;
 
-    home-manager.users.heywoodlh = {
-      imports = [
-        hyprland.homeManagerModules.default
-      ];
-
-      heywoodlh.home.hyprland.enable = true;
+    home-manager.users.${username} = {
+      heywoodlh.home.hyprland = true;
 
       wayland.windowManager.hyprland = {
         extraConfig = ''

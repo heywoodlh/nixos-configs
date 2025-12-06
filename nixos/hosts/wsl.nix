@@ -6,11 +6,6 @@
     nixos-wsl.nixosModules.wsl
   ];
 
-  networking.hostName = "nixos-wsl"; # Define your hostname.
-
-  # Set your time zone.
-  time.timeZone = "America/Denver";
-
   # WSL settings
   wsl = {
     enable = true;

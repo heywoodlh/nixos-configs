@@ -313,5 +313,5 @@ in {
     '';
   };
 
-  heywoodlh.home.gnome.enable = pkgs.stdenv.isLinux;
+  heywoodlh.home.gnome = pkgs.stdenv.isLinux;
 }

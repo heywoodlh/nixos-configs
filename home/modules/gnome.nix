@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixpkgs-stable, nixpkgs-lts, vicinae-nix, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
+{ config, lib, pkgs, nixpkgs-stable, nixpkgs-lts, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
 
 with lib;
 
@@ -7,8 +7,6 @@ let
   system = pkgs.stdenv.hostPlatform.system;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
   myGnomeExtensionsInstaller = myFlakes.packages.${system}.gnome-install-extensions;
-  vicinaePkg = vicinae-nix.packages.${system}.default;
-  myVicinae = myFlakes.packages.${system}.vicinae;
   pkgs-stable = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
@@ -22,18 +20,18 @@ let
   '';
 in {
   options = {
-    heywoodlh.home.gnome = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Enable heywoodlh gnome configuration.
-        '';
-        type = types.bool;
-      };
+    heywoodlh.home.gnome = mkOption {
+      default = false;
+      description = ''
+        Enable heywoodlh gnome configuration.
+      '';
+      type = types.bool;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg {
+    heywoodlh.home.vicinae.enable = true;
+
     home.packages = with gnome-pkgs; [
       # Fallback to old name if undefined (i.e. on Ubuntu LTS)
       (if (builtins.hasAttr "dconf-editor" gnome-pkgs) then gnome-pkgs.dconf-editor else gnome.dconf-editor)
@@ -43,7 +41,6 @@ in {
       pkgs.epiphany
       gnome-extensions-cli
       pkgs-stable.gnomeExtensions.pop-shell
-      myVicinae
     ];
 
     # Enable unclutter
@@ -57,10 +54,6 @@ in {
     };
 
     heywoodlh.home.autostart = [
-      {
-        name = "Vicinae";
-        command = "${vicinaePkg}/bin/vicinae server";
-      }
       {
         name = "Emote";
         command = "${pkgs.emote}/bin/emote";
@@ -410,13 +403,13 @@ in {
 
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8" = {
         binding = "<Super>space";
-        command = "${myVicinae}/bin/vicinae open";
+        command = "${pkgs.vicinae}/bin/vicinae open";
         name = "launcher";
       };
 
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9" = {
         binding = "<Control>space";
-        command = "${myVicinae}/bin/vicinae open";
+        command = "${pkgs.vicinae}/bin/vicinae open";
         name = "launcher";
       };
 

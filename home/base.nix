@@ -342,6 +342,7 @@ in {
     libarchive
     lima
     msedit
+    nil
     nixos-rebuild-ng
     nixfmt-rfc-style
     nmap

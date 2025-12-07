@@ -34,10 +34,6 @@ in {
     hardware.brillo.enable = true;
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
 
-    # Keyring
-    programs.seahorse.enable = true;
-    services.gnome.gnome-keyring.enable = true;
-
     home-manager.users.${username} = {
       heywoodlh.home.hyprland = true;
 

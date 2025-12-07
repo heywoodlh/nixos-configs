@@ -1,4 +1,4 @@
-{ config, pkgs, lib, stdenv, ... }:
+{ ... }:
 
 {
   imports = [
@@ -10,6 +10,8 @@
     ./1password-docker-helper.nix
     ./darwin-defaults.nix
     ./gnome.nix
+    ./cosmic.nix
+    ./guake.nix
     ./hyprland.nix
     ./vicinae.nix
   ];

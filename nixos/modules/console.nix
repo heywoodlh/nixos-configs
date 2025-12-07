@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nixpkgs-stable, nixpkgs-backports, ... }:
+{ config, pkgs, lib,  ... }:
 
 with lib;
 with lib.types;
@@ -6,11 +6,6 @@ with lib.types;
 let
   cfg = config.heywoodlh.console;
   system = pkgs.stdenv.hostPlatform.system;
-  pkgs-stable = import nixpkgs-stable {
-    inherit system;
-    config.allowUnfree = true;
-  };
-  pkgs-backports = nixpkgs-backports.legacyPackages.${system};
   battpop = pkgs.writeShellScriptBin "battpop" ''
     ${pkgs.acpi}/bin/acpi -b | ${pkgs.gnugrep}/bin/grep -Eo [0-9]+%
   '';
@@ -33,14 +28,12 @@ let
 in {
   options.heywoodlh.console = mkOption {
     default = false;
+    description = "Enable heywoodlh console configuration.";
     type = bool;
   };
 
   config = let
     username = config.heywoodlh.defaults.user.name;
-    userDesc = config.heywoodlh.defaults.user.description;
-    userUid = config.heywoodlh.defaults.user.uid;
-    homeDir = config.heywoodlh.defaults.user.homeDir;
   in mkIf cfg {
     heywoodlh.defaults = {
       enable = true;

@@ -14,6 +14,7 @@ let
 in {
   options.heywoodlh.server = mkOption {
     default = false;
+    description = "Enable heywoodlh server configuration.";
     type = bool;
   };
 

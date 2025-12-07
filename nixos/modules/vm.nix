@@ -9,6 +9,7 @@ let
 in {
   options.heywoodlh.vm = mkOption {
     default = false;
+    description = "Enable heywoodlh virtual machine configuration.";
     type = bool;
   };
 

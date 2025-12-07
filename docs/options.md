@@ -1,4 +1,46 @@
+## heywoodlh\.console
+
+Enable heywoodlh console configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/console\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/console.nix)
+
+
+
+## heywoodlh\.cosmic
+
+
+
+Enable heywoodlh cosmic desktop configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cosmic\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cosmic.nix)
+
+
+
 ## heywoodlh\.darwin\.sketchybar\.enable
+
+
 
 Enable heywoodlh nord-themed sketchybar\.
 
@@ -122,7 +164,317 @@ boolean
 
 
 
-## heywoodlh\.gnome\.enable
+## heywoodlh\.defaults\.enable
+
+
+
+Enable heywoodlh defaults\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.audio
+
+
+
+Enable heywoodlh audio configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.bluetooth
+
+
+
+Enable heywoodlh bluetooth configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.hostname
+
+
+
+Hostname for system\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "nixos" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.keyring
+
+
+
+Enable heywoodlh keyring configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.networkmanager
+
+
+
+Enable heywoodlh network manager\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.quietBoot
+
+
+
+Suppress boot output\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.syncthing
+
+
+
+Enable heywoodlh syncthing configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.tailscale
+
+
+
+Enable heywoodlh tailscale configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.timezone
+
+
+
+Set system timezone\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "America/Denver" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.user
+
+
+
+User for heywoodlh configuration\.
+
+
+
+*Type:*
+submodule
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.user\.description
+
+
+
+Full name of user for heywoodlh defaults\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "Spencer Heywood" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.user\.homeDir
+
+
+
+Home directory for user for heywoodlh defaults\.
+
+
+
+*Type:*
+absolute path
+
+
+
+*Default:*
+` "/home/heywoodlh" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.user\.name
+
+
+
+Username for heywoodlh defaults\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "heywoodlh" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.defaults\.user\.uid
+
+
+
+UID for user for heywoodlh defaults\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+` 1000 `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
+## heywoodlh\.gnome
 
 
 
@@ -182,6 +534,27 @@ list of attribute set of string
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/linux-autostart\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/linux-autostart.nix)
+
+
+
+## heywoodlh\.home\.cosmic
+
+
+
+Enable heywoodlh cosmic configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cosmic\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cosmic.nix)
 
 
 
@@ -311,7 +684,7 @@ boolean
 
 
 
-## heywoodlh\.home\.gnome\.enable
+## heywoodlh\.home\.gnome
 
 
 
@@ -332,7 +705,28 @@ boolean
 
 
 
-## heywoodlh\.home\.hyprland\.enable
+## heywoodlh\.home\.guake
+
+
+
+Enable heywoodlh guake configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/guake\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/guake.nix)
+
+
+
+## heywoodlh\.home\.hyprland
 
 
 
@@ -416,7 +810,28 @@ boolean
 
 
 
-## heywoodlh\.hyprland\.enable
+## heywoodlh\.home\.vicinae\.enable
+
+
+
+Enable heywoodlh vicinae configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/vicinae\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/vicinae.nix)
+
+
+
+## heywoodlh\.hyprland
 
 
 
@@ -434,5 +849,441 @@ boolean
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/hyprland\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/hyprland.nix)
+
+
+
+## heywoodlh\.intel-mac
+
+
+
+Enable configuration for Intel-based Macs\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/intel-mac\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/intel-mac.nix)
+
+
+
+## heywoodlh\.laptop
+
+
+
+Enable heywoodlh laptop configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/laptop\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/laptop.nix)
+
+
+
+## heywoodlh\.server
+
+
+
+Enable heywoodlh server configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/server\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/server.nix)
+
+
+
+## heywoodlh\.vm
+
+
+
+Enable heywoodlh virtual machine configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vm.nix)
+
+
+
+## heywoodlh\.workstation
+
+
+
+Enable heywoodlh workstation configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/workstation\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/workstation.nix)
+
+
+
+## home-manager\.enableLegacyProfileManagement
+
+
+
+Whether to enable legacy profile management during activation\. When
+enabled, the Home Manager activation will produce a per-user
+` home-manager ` Nix profile, just like in the standalone installation of
+Home Manager\. Typically, this is not desired when Home Manager is
+embedded in the system configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.backupCommand
+
+
+
+On activation run this command on each existing file
+rather than exiting with an error\.
+
+
+
+*Type:*
+null or string or absolute path
+
+
+
+*Default:*
+` null `
+
+
+
+*Example:*
+` ${pkgs.trash-cli}/bin/trash `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.backupFileExtension
+
+
+
+On activation move existing files by appending the given
+file extension rather than exiting with an error\.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+` null `
+
+
+
+*Example:*
+` "backup" `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.extraSpecialArgs
+
+
+
+Extra ` specialArgs ` passed to Home Manager\. This
+option can be used to pass additional arguments to all modules\.
+
+
+
+*Type:*
+attribute set
+
+
+
+*Default:*
+` { } `
+
+
+
+*Example:*
+` { inherit emacs-overlay; } `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.minimal
+
+
+
+Whether to enable only the necessary modules that allow home-manager to function\.
+
+This can be used to allow vendoring a minimal list of modules yourself, rather than
+importing every single module\.
+
+THIS IS FOR ADVANCED USERS, AND WILL DISABLE ALMOST EVERY MODULE\.
+THIS SHOULD NOT BE ENABLED UNLESS YOU KNOW THE IMPLICATIONS\.
+\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+
+
+*Example:*
+` true `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.overwriteBackup
+
+
+
+Whether to enable forced overwriting of existing backup files when using ` backupFileExtension `
+\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+
+
+*Example:*
+` true `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.sharedModules
+
+
+
+Extra modules added to all users\.
+
+
+
+*Type:*
+list of raw value
+
+
+
+*Default:*
+` [ ] `
+
+
+
+*Example:*
+` [ { home.packages = [ nixpkgs-fmt ]; } ] `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.useGlobalPkgs
+
+
+
+Whether to enable using the system configuration’s ` pkgs `
+argument in Home Manager\. This disables the Home Manager
+options ` nixpkgs.* `\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+
+
+*Example:*
+` true `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.useUserPackages
+
+
+
+Whether to enable installation of user packages through the
+` users.users.<name>.packages ` option\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+
+
+*Example:*
+` true `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.users
+
+
+
+Per-user Home Manager configuration\.
+
+
+
+*Type:*
+attribute set of (Home Manager module)
+
+
+
+*Default:*
+` { } `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## home-manager\.verbose
+
+
+
+Whether to enable verbose output on activation\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+
+
+*Example:*
+` true `
+
+*Declared by:*
+ - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
+
+
+
+## users\.users
+
+
+
+Username definition\.
+
+
+
+*Type:*
+attribute set of (submodule)
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/user-icon\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/user-icon.nix)
+
+
+
+## users\.users\.\<name>\.icon
+
+
+
+Username icon\.
+
+
+
+*Type:*
+null or absolute path
+
+
+
+*Default:*
+` null `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/user-icon\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/user-icon.nix)
 
 

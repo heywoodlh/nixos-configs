@@ -17,18 +17,22 @@ let
     options = {
       name = mkOption {
         default = "heywoodlh";
+        description = "Username for heywoodlh defaults.";
         type = str;
       };
       description = mkOption {
         default = "Spencer Heywood";
+        description = "Full name of user for heywoodlh defaults.";
         type = str;
       };
       uid = mkOption {
         default = 1000;
+        description = "UID for user for heywoodlh defaults.";
         type = int;
       };
       homeDir = mkOption {
         default = "/home/heywoodlh";
+        description = "Home directory for user for heywoodlh defaults.";
         type = path;
       };
     };
@@ -37,33 +41,56 @@ in {
   options.heywoodlh.defaults = {
     enable = mkOption {
       default = false;
+      description = "Enable heywoodlh defaults.";
       type = bool;
     };
     quietBoot = mkOption {
       default = false;
+      description = "Suppress boot output.";
       type = bool;
     };
     hostname = mkOption {
       default = "nixos";
+      description = "Hostname for system.";
       type = str;
     };
     networkmanager = mkOption {
       default = true;
+      description = "Enable heywoodlh network manager.";
+      type = bool;
+    };
+    bluetooth = mkOption {
+      default = false;
+      description = "Enable heywoodlh bluetooth configuration.";
+      type = bool;
+    };
+    audio = mkOption {
+      default = false;
+      description = "Enable heywoodlh audio configuration.";
+      type = bool;
+    };
+    keyring = mkOption {
+      default = false;
+      description = "Enable heywoodlh keyring configuration.";
       type = bool;
     };
     syncthing = mkOption {
       default = true;
+      description = "Enable heywoodlh syncthing configuration.";
       type = bool;
     };
     tailscale = mkOption {
       default = true;
+      description = "Enable heywoodlh tailscale configuration.";
       type = bool;
     };
     timezone = mkOption {
       default = "America/Denver";
+      description = "Set system timezone.";
       type = str;
     };
     user = mkOption {
+      description = "User for heywoodlh configuration.";
       type = userType;
     };
   };
@@ -104,6 +131,9 @@ in {
     networking = {
       networkmanager.enable = cfg.networkmanager;
     };
+
+    # Disable wait-online service for Network Manager
+    systemd.services.NetworkManager-wait-online.enable = false;
 
     nix = {
       package = lib.mkForce determinate.packages.${system}.default;
@@ -146,7 +176,7 @@ in {
     environment.systemPackages = with stable-pkgs; let
       nixPkg = determinate.packages.${system}.default;
       nixosRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
-        [[ -d $HOME/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /home/heywoodlh/opt/nixos-configs
+        [[ -d $HOME/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs ${homeDir}/opt/nixos-configs
         # Wrapper to use the stable nixos-rebuild
         sudo ${nixPkg}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake /home/heywoodlh/opt/nixos-configs#$(hostname) ''${@:2}
       '';
@@ -160,7 +190,7 @@ in {
         ${nixosRebuildWrapper} build $@
       '';
       myNixosSwitchWithFlakes = pkgs.writeShellScriptBin "nixos-switch-with-flakes" ''
-        ${myNixosSwitch}/bin/nixos-switch --override-input myFlakes /home/heywoodlh/opt/flakes $@
+        ${myNixosSwitch}/bin/nixos-switch --override-input myFlakes ${homeDir}/opt/flakes $@
       '';
     in [
       gptfdisk
@@ -211,15 +241,26 @@ in {
           "--accept-routes"
         ];
       };
+      gnome.gnome-keyring.enable = cfg.keyring;
     } // optionalAttrs (cfg.syncthing) {
-        logind.settings.Login.RuntimeDirectorySize = "10G";
-        syncthing = {
-          enable = cfg.syncthing;
-          user = "${username}";
-          dataDir = "${homeDir}/Sync";
-          configDir = "${homeDir}/.config/syncthing";
-        };
+      logind.settings.Login.RuntimeDirectorySize = "10G";
+      syncthing = {
+        enable = cfg.syncthing;
+        user = "${username}";
+        dataDir = "${homeDir}/Sync";
+        configDir = "${homeDir}/.config/syncthing";
+      };
+    } // optionalAttrs (cfg.audio) {
+      pulseaudio.enable = false;
+      pipewire = {
+        enable = true;
+        alsa.enable = true;
+        alsa.support32Bit = true;
+        pulse.enable = true;
+      };
     };
+
+    security.rtkit.enable = cfg.audio;
 
     users.users.${username} = {
       isNormalUser = true;
@@ -248,7 +289,7 @@ in {
         home.activation.docker-rootless-context = ''
           if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
           then
-            ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/1000/docker.sock" &> /dev/null || true
+            ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/${builtins.toString userUid}/docker.sock" &> /dev/null || true
             ${pkgs.docker-client}/bin/docker context use rootless
           fi
         '';
@@ -260,6 +301,18 @@ in {
         ];
       };
     };
+
+    ## Bluetooth
+    hardware.bluetooth = {
+      enable = cfg.bluetooth;
+      settings = {
+        # Necessary for Airpods
+        General = { ControllerMode = "dual"; } ;
+      };
+    };
+
+    # Seahorse (Gnome Keyring)
+    programs.seahorse.enable = cfg.keyring;
 
     # NixOS version
     system.stateVersion = "25.05";

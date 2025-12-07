@@ -5,10 +5,10 @@ with lib.types;
 
 let
   cfg = config.heywoodlh.laptop;
-  system = pkgs.stdenv.hostPlatform.system;
 in {
   options.heywoodlh.laptop = mkOption {
     default = false;
+    description = "Enable heywoodlh laptop configuration.";
     type = bool;
   };
 

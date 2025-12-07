@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nixpkgs-stable, nur, dark-wallpaper, light-wallpaper, myFlakes, ... }:
+{ config, pkgs, lib, nur, dark-wallpaper, light-wallpaper, myFlakes, ... }:
 
 with lib;
 with lib.types;
@@ -6,19 +6,15 @@ with lib.types;
 let
   cfg = config.heywoodlh.workstation;
   system = pkgs.stdenv.hostPlatform.system;
-  pkgs-stable = import nixpkgs-stable {
-    inherit system;
-    config.allowUnfree = true;
-  };
 in {
   options.heywoodlh.workstation = mkOption {
     default = false;
+    description = "Enable heywoodlh workstation configuration.";
     type = bool;
   };
 
   config = let
     username = config.heywoodlh.defaults.user.name;
-    userDesc = config.heywoodlh.defaults.user.description;
     userUid = config.heywoodlh.defaults.user.uid;
     homeDir = config.heywoodlh.defaults.user.homeDir;
   in mkIf cfg {
@@ -27,9 +23,17 @@ in {
       quietBoot = true;
     };
 
-
     services.displayManager.ly.enable = true;
-    heywoodlh.gnome = true;
+
+    programs.dconf.enable = true;
+
+    # Bluetooth, audio, keyring
+    heywoodlh.defaults.bluetooth = true;
+    heywoodlh.defaults.audio = true;
+    heywoodlh.defaults.keyring = true;
+
+    # Desktop environments
+    heywoodlh.cosmic = true;
     heywoodlh.hyprland = true;
 
     # Enable the X11 windowing system.
@@ -38,10 +42,8 @@ in {
     services.power-profiles-daemon.enable = true;
 
     # enable kde connect
-    programs.kdeconnect = {
-      enable = true;
-      package = pkgs.gnomeExtensions.gsconnect;
-    };
+    programs.kdeconnect.enable = true;
+
     networking.firewall = {
       interfaces.tailscale0.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
       interfaces.tailscale0.allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
@@ -81,15 +83,6 @@ in {
     # for scanning documents
     hardware.sane.enable = true;
 
-    # enable sound with pipewire.
-    services.pulseaudio.enable = false;
-    security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
     # android debugging
     programs.adb.enable = true;
 
@@ -163,6 +156,7 @@ in {
           ../../home/desktop.nix # base desktop.nix
           ../../home/linux/desktop.nix # linux-specific desktop.nix
         ];
+        heywoodlh.home.gnome = mkForce config.heywoodlh.gnome;
       };
     };
   };

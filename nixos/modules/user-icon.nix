@@ -2,7 +2,7 @@
 
 let
   userOptions = with lib; {
-    options.icon = mkOption { type = types.nullOr types.path; default = null; };
+    options.icon = mkOption { description = "Username icon."; type = types.nullOr types.path; default = null; };
   };
 
   mkGdmUserConf = icon: ''

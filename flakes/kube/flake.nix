@@ -824,6 +824,13 @@
           image = "ghcr.io/silverbulletmd/silverbullet:v2";
           replicas = 1;
         };
+        skyrim-together = mkKubeDrv "skyrim-together" {
+          src = ./templates/skyrim-together.yaml;
+          namespace = "gaming";
+          replicas = 1;
+          image = "docker.io/tiltedphoques/st-reborn-server:v1.8.0";
+          hostfolder = "/media/data-ssd/st-server";
+        };
         sons-of-the-forest = mkKubeDrv "sons-of-the-forest" {
           src = ./templates/sons-of-the-forest.yaml;
           namespace = "theforest";

@@ -42,6 +42,7 @@ applications=(
   "rustdesk"
   "rustdesk-web"
   "samplicator"
+  "skyrim-together"
   "silverbullet"
   "syncthing"
   "syslog"

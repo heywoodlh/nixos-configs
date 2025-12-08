@@ -46,6 +46,10 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
       inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
     };
+    user-icon = {
+      url = "https://avatars.githubusercontent.com/u/18178614?v=4";
+      flake = false;
+    };
     ssh-keys = {
       url = "https://github.com/heywoodlh.keys";
       flake = false;
@@ -134,6 +138,7 @@
                       flake-utils,
                       nixos-hardware,
                       ssh-keys,
+                      user-icon,
                       osquery-fix-nixpkgs,
                       dark-wallpaper,
                       light-wallpaper,
@@ -177,7 +182,7 @@
         ./nixos/modules/laptop.nix
         ./nixos/modules/cosmic.nix
         ./nixos/modules/vm.nix
-        ./nixos/modules/user-icon.nix
+        ./nixos/modules/sshd.nix
       ];
     };
 
@@ -244,7 +249,6 @@
         }
         extraConf
       ] ++ lib.optionals (machineType == "server") [
-        ./nixos/roles/remote-access/sshd.nix
         ./nixos/roles/security/sshd-monitor.nix
         ./nixos/roles/tailscale.nix
         ./nixos/roles/monitoring/syslog-ng/client.nix
@@ -256,7 +260,6 @@
       ] ++ lib.optionals (machineType == "laptop") [
         { heywoodlh.laptop = true; }
       ] ++ lib.optionals (machineType == "vm") [
-        ./nixos/roles/remote-access/sshd.nix
         { heywoodlh.vm = true; }
       ] ++ lib.optionals (machineType == "console") [
         { heywoodlh.console = true; }
@@ -393,10 +396,10 @@
         nixos-intel-mac-mini = nixosConfig "workstation" "nixos-intel-mac-mini" {
           imports = [
             ./nixos/hosts/intel-mac-mini.nix
-            ./nixos/roles/remote-access/sshd.nix
             #./nixos/roles/monitoring/osquery.nix
           ];
           heywoodlh.intel-mac = true;
+          heywoodlh.sshd.enable = true;
         };
 
         nixos-blade = nixosConfig "laptop" "nixos-blade" {
@@ -445,8 +448,8 @@
             ./nixos/hosts/m1-mac-mini.nix
             ./nixos/roles/nixos/asahi.nix
             ./nixos/roles/gaming/steam.nix
-            ./nixos/roles/remote-access/sshd.nix
           ];
+          heywoodlh.sshd.enable = true;
           # Bootloader
           boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
           home-manager.users.heywoodlh = {
@@ -478,12 +481,12 @@
         family-mac-mini = nixosConfig "workstation" "family-mac-mini" {
           imports = [
             ./nixos/hosts/family-mac-mini.nix
-            ./nixos/roles/remote-access/sshd.nix
             ./nixos/roles/desktop/family.nix
             ./nixos/roles/monitoring/osquery.nix
           ];
 
           boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
+          heywoodlh.sshd.enable = true;
           heywoodlh.intel-mac = true;
         };
 

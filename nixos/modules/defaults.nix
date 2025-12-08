@@ -1,4 +1,4 @@
-{ config, pkgs, lib, determinate, nixpkgs-stable, myFlakes, home-manager, nixpkgs-lts, ... }:
+{ config, pkgs, lib, determinate, nixpkgs-stable, myFlakes, cosmic-home-manager, nixpkgs-lts, ... }:
 
 with lib;
 with lib.types;
@@ -12,6 +12,8 @@ let
   };
   myVim = myFlakes.packages.${system}.vim;
   myHelix = myFlakes.packages.${system}.helix-wrapper;
+  myTmux = myFlakes.packages.${system}.tmux;
+  myFish = myFlakes.packages.${system}.fish;
   myGit = myFlakes.packages.${system}.git;
   userType = submodule {
     options = {
@@ -34,6 +36,11 @@ let
         default = "/home/heywoodlh";
         description = "Home directory for user for heywoodlh defaults.";
         type = path;
+      };
+      icon = mkOption {
+        default = "";
+        description = "Icon for user.";
+        type = str;
       };
     };
   };
@@ -117,6 +124,16 @@ in {
         systemd-boot.enable = true;
         efi.canTouchEfiVariables = true;
       };
+      # User icon
+      postBootCommands = let
+        mkGdmUserConf = icon: ''
+          [User]
+          Session=
+          XSession=
+          Icon=${icon}
+          SystemAccount=false
+        '';
+      in optionalString (cfg.user.icon != "") "echo -e '${mkGdmUserConf cfg.user.icon}' > /var/lib/AccountsService/users/${username}";
     } // optionalAttrs (cfg.quietBoot) {
       kernelParams = [ "quiet" "splash" ];
       plymouth.enable = true;
@@ -193,6 +210,7 @@ in {
         ${myNixosSwitch}/bin/nixos-switch --override-input myFlakes ${homeDir}/opt/flakes $@
       '';
     in [
+      usbutils
       gptfdisk
       myNixosSwitch
       myNixosSwitchWithFlakes
@@ -200,6 +218,8 @@ in {
       myNixosBuild
       myGit
       myHelix
+      myTmux
+      myFish
       myVim
       mosh
       ntfs3g
@@ -214,7 +234,6 @@ in {
 
     # Allow non-free applications to be installed
     nixpkgs.config.allowUnfree = true;
-
 
     i18n.defaultLocale = "en_US.UTF-8";
 
@@ -242,6 +261,8 @@ in {
         ];
       };
       gnome.gnome-keyring.enable = cfg.keyring;
+      # iPhone usb support
+      usbmuxd.enable = true;
     } // optionalAttrs (cfg.syncthing) {
       logind.settings.Login.RuntimeDirectorySize = "10G";
       syncthing = {
@@ -294,6 +315,7 @@ in {
           fi
         '';
         imports = [
+          cosmic-home-manager.homeManagerModules.cosmic-manager
           ../../home/linux.nix
         ];
         home.packages = [
@@ -310,6 +332,12 @@ in {
         General = { ControllerMode = "dual"; } ;
       };
     };
+
+    users.extraGroups.disk.members = [ "${username}" ];
+    users.extraGroups.video.members = [ "${username}" ];
+
+    # Android debugging
+    programs.adb.enable = true;
 
     # Seahorse (Gnome Keyring)
     programs.seahorse.enable = cfg.keyring;

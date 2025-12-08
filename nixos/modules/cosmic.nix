@@ -1,4 +1,4 @@
-{ config, lib, cosmic-home-manager, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -15,12 +15,8 @@ in {
   };
 
   config = mkIf cfg {
+    heywoodlh.defaults.enable = true;
     services.desktopManager.cosmic.enable = true;
-    home-manager.users.${username} = {
-      imports = [
-        cosmic-home-manager.homeManagerModules.cosmic-manager
-      ];
-      heywoodlh.home.cosmic = true;
-    };
+    home-manager.users.${username}.heywoodlh.home.cosmic = true;
   };
 }

@@ -1490,7 +1490,8 @@
         "plasma-manager": "plasma-manager",
         "pre-commit-hooks": "pre-commit-hooks",
         "signal-ntfy": "signal-ntfy",
-        "ssh-keys": "ssh-keys"
+        "ssh-keys": "ssh-keys",
+        "user-icon": "user-icon"
       }
     },
     "rust-overlay": {
@@ -1672,6 +1673,18 @@
       "parent": [
         "myFlakes"
       ]
+    },
+    "user-icon": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-zzP2co4GNiPIoq1XNbwN3qrTYOnQ6dv5NPwM3kPCGBc=",
+        "type": "file",
+        "url": "https://avatars.githubusercontent.com/u/18178614?v=4"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://avatars.githubusercontent.com/u/18178614?v=4"
+      }
     },
     "vicinae-nix": {
       "inputs": {

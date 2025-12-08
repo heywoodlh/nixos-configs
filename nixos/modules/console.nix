@@ -1,4 +1,4 @@
-{ config, pkgs, lib,  ... }:
+{ config, pkgs, lib, myFlakes, ... }:
 
 with lib;
 with lib.types;
@@ -51,32 +51,10 @@ in {
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --theme 'border=magenta;text=cyan;prompt=white;time=white;action=blue;button=yellow;container=black;input=white' --cmd ${startFbterm}/bin/start-fbterm";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --theme 'border=magenta;text=cyan;prompt=white;time=white;action=blue;button=yellow;container=black;input=white' --cmd ${startFbterm}/bin/start-fbterm";
         };
       };
     };
-
-    # Networking
-    networking = {
-      nftables.enable = true;
-      firewall = {
-        enable = true;
-        checkReversePath = "loose";
-      };
-    };
-
-    # Android debugging
-    programs.adb.enable = true;
-
-    # iPhone usb support
-    services.usbmuxd.enable = true;
-
-    # Seahorse (Gnome Keyring)
-    programs.seahorse.enable = true;
-
-    users.extraGroups.disk.members = [ "${username}" ];
-    users.extraGroups.video.members = [ "${username}" ];
-
     fonts.packages = with pkgs.nerd-fonts; [
       jetbrains-mono
     ];
@@ -84,20 +62,14 @@ in {
     environment.systemPackages = [
       pkgs.busybox
       pkgs.ifuse
-      pkgs.usbutils
       pkgs.fbterm
       pkgs.firefox # for browsh
       pkgs.w3m
-      myFlakes.packages.${system}.tmux
-      myFlakes.packages.${system}.vim
       battpop
       timepop
       pbcopy
       wifi
     ];
-
-    # Disable wait-online service for Network Manager
-    systemd.services.NetworkManager-wait-online.enable = false;
 
     home-manager.users.heywoodlh = { ... }: {
       home.file.".config/fbterm/fbtermrc".text = ''

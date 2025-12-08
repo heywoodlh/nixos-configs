@@ -25,6 +25,11 @@ in {
     homeDir = config.heywoodlh.defaults.user.homeDir;
   in mkIf cfg {
     heywoodlh.defaults.enable = true;
+    heywoodlh.console = true;
+    heywoodlh.sshd = {
+      enable = true;
+      mfa = true;
+    };
 
     environment.systemPackages = [
       pkgs.ansible

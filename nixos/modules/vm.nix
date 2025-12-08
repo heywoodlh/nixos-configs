@@ -15,6 +15,7 @@ in {
 
   config = mkIf cfg {
     heywoodlh.workstation = true;
+    heywoodlh.sshd.enable = true;
 
     networking = optionalAttrs (config.heywoodlh.defaults.networkmanager){
       networkmanager =  {

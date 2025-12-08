@@ -33,16 +33,11 @@ in {
   ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   # Enable networking
   networking.networkmanager.enable = true;
   networking.hostName = "homelab"; # Define your hostname
-
-  # Set your time zone.
-  time.timeZone = "America/Denver";
 
   boot.kernelPackages = pkgs.linuxPackages_xanmod_stable;
 
@@ -64,12 +59,6 @@ in {
     device = "/dev/disk/by-uuid/ad1b8750-51fb-4270-b0c2-739276f30a95";
     fsType = "ext4";
   };
-
-  # Prevent system from sleeping (for XRDP to work)
-  systemd.targets.sleep.enable = false;
-  systemd.targets.suspend.enable = false;
-  systemd.targets.hibernate.enable = false;
-  systemd.targets.hybrid-sleep.enable = false;
 
   # Enable mullvad wireguard
   networking.wg-quick.interfaces = {
@@ -119,8 +108,7 @@ in {
     };
   };
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+  heywoodlh.defaults.bluetooth = true;
 
   virtualisation.docker.enable = true;
   environment.systemPackages = with pkgs; [
@@ -176,10 +164,11 @@ in {
   };
 
   # Route mullvad through Tailscale
-  services.tailscale.extraSetFlags = [
+  services.tailscale.extraSetFlags = lib.mkForce [
     "--advertise-routes=10.64.0.1/32"
     "--accept-dns"
     "--stateful-filtering"
+    "--accept-routes=false"
   ];
 
   # Hack to enable i915 driver for Intel GPU (for Kubernetes)

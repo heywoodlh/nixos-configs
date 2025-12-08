@@ -432,6 +432,27 @@ absolute path
 
 
 
+## heywoodlh\.defaults\.user\.icon
+
+
+
+Icon for user\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+
+
+
 ## heywoodlh\.defaults\.user\.name
 
 
@@ -915,6 +936,48 @@ boolean
 
 
 
+## heywoodlh\.sshd\.enable
+
+
+
+Enable heywoodlh ssh configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd.nix)
+
+
+
+## heywoodlh\.sshd\.mfa
+
+
+
+Enable mfa configuration for SSH\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd.nix)
+
+
+
 ## heywoodlh\.vm
 
 
@@ -1248,42 +1311,5 @@ boolean
 
 *Declared by:*
  - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## users\.users
-
-
-
-Username definition\.
-
-
-
-*Type:*
-attribute set of (submodule)
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/user-icon\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/user-icon.nix)
-
-
-
-## users\.users\.\<name>\.icon
-
-
-
-Username icon\.
-
-
-
-*Type:*
-null or absolute path
-
-
-
-*Default:*
-` null `
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/user-icon\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/user-icon.nix)
 
 

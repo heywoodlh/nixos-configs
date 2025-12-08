@@ -1,4 +1,4 @@
-{ config, pkgs, lib, nur, dark-wallpaper, light-wallpaper, myFlakes, ... }:
+{ config, pkgs, lib, nur, dark-wallpaper, light-wallpaper, myFlakes, user-icon, ... }:
 
 with lib;
 with lib.types;
@@ -31,6 +31,7 @@ in {
     heywoodlh.defaults.bluetooth = true;
     heywoodlh.defaults.audio = true;
     heywoodlh.defaults.keyring = true;
+    heywoodlh.defaults.user.icon = "${user-icon}";
 
     # Desktop environments
     heywoodlh.cosmic = true;
@@ -50,12 +51,13 @@ in {
     };
 
     # Desktop packages
-    environment.systemPackages = [
-      pkgs.busybox
-      pkgs.lsof
-      pkgs.gnome-screenshot
-      pkgs.ifuse
-      pkgs.usbutils
+    environment.systemPackages = with pkgs; [
+      busybox
+      lsof
+      gnome-screenshot
+      ifuse
+      usbutils
+      ente-auth
       myFlakes.packages.${system}.tmux
       myFlakes.packages.${system}.helix
     ];
@@ -109,12 +111,6 @@ in {
       packages = with pkgs; [
         legcord
       ];
-      # users.users.<name>.icon not a NixOS option
-      # made possible with ./user-icon.nix
-      icon = builtins.fetchurl {
-        url = "https://avatars.githubusercontent.com/u/18178614?v=4";
-        sha256 = "sha256:02937kl4qmj29gms9r06kckq8fjpvl40bqi9vpxipwa4xy0wrymg";
-      };
     };
 
     services = {

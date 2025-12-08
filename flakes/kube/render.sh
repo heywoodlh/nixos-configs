@@ -24,6 +24,7 @@ applications=(
   "healthchecks"
   "homepage"
   "http-files"
+  "immich"
   "iperf"
   "lancache"
   "media"

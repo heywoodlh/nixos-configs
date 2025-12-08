@@ -1,0 +1,250 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "immich"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/udspwt422lpk5bri23jzqgqfhm"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: immich-database
+  name: immich-database
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-database
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: immich-database
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_INITDB_ARGS
+              value: --data-checksums
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: immich
+                  key: db-name
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich
+                  key: db-password
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: immich
+                  key: db-username
+          image: @postgres_image@
+          name: immich-postgres
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: immich-db
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+      restartPolicy: Always
+      volumes:
+        - name: immich-db
+          hostPath:
+            path: @hostfolder@/db
+            type: DirectoryOrCreate
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: immich-database
+  name: immich-database
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "postgres"
+      port: 5432
+      targetPort: 5432
+  selector:
+    app: immich-database
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: immich-machine-learning
+  name: immich-machine-learning
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-machine-learning
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: immich-machine-learning
+    spec:
+      containers:
+        - env:
+            - name: IMMICH_VERSION
+              value: "@version@"
+            - name: UPLOAD_LOCATION
+              value: "/uploads"
+          image: @immich_ml_image@
+          name: immich-machine-learning
+          volumeMounts:
+            - mountPath: /cache
+              name: model-cache
+            - mountPath: /uploads
+              name: immich-uploads
+      restartPolicy: Always
+      volumes:
+        - name: model-cache
+          hostPath:
+            path: @hostfolder@/ml
+            type: DirectoryOrCreate
+        - name: immich-uploads
+          hostPath:
+            path: @hostfolder@/uploads
+            type: DirectoryOrCreate
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: immich-server
+  name: immich-server
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: immich-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: immich-server
+    spec:
+      containers:
+        - env:
+            - name: TZ
+              value: "@timezone@"
+            - name: IMMICH_VERSION
+              value: "@version@"
+            - name: DB_HOSTNAME
+              value: "immich-database.@namespace@.svc.cluster.local"
+            - name: UPLOAD_LOCATION
+              value: "/uploads"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich
+                  key: db-password
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich
+                  key: db-username
+            - name: DB_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich
+                  key: db-name
+            - name: REDIS_HOSTNAME
+              value: "immich-redis.@namespace@.svc.cluster.local"
+          image: @image@
+          name: immich-server
+          ports:
+            - containerPort: 2283
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: immich-data
+            - mountPath: /uploads
+              name: immich-uploads
+      restartPolicy: Always
+      volumes:
+        - name: immich-data
+          hostPath:
+            path: @hostfolder@/data
+            type: DirectoryOrCreate
+        - name: immich-uploads
+          hostPath:
+            path: @hostfolder@/uploads
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: immich-server
+  name: immich-server
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "immich"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+    - name: "http"
+      port: 80
+      targetPort: 2283
+  selector:
+    app: immich-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: immich-redis
+  name: immich-redis
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-redis
+  template:
+    metadata:
+      labels:
+        app: immich-redis
+    spec:
+      containers:
+        - image: @valkey_image@
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli ping || exit 1
+          name: immich-redis
+          ports:
+            - containerPort: 6379
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: immich-redis
+  name: immich-redis
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "redis"
+      port: 6379
+      targetPort: 6379
+  selector:
+    app: immich-redis

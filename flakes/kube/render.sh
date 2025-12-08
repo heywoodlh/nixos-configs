@@ -23,6 +23,7 @@ applications=(
   "hashcat"
   "healthchecks"
   "homepage"
+  "home-assistant"
   "http-files"
   "immich"
   "iperf"

@@ -464,6 +464,7 @@
           port = 80;
           replicas = 1;
           nodename = "homelab";
+          hostfolder = "/media/data-ssd/home-assistant";
         };
         homepage = mkKubeDrv "homepage" {
           src = ./templates/homepage.yaml;

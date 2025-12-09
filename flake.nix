@@ -119,6 +119,24 @@
       inputs.systems.follows = "flake-utils/systems";
       inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     };
+    # only for dependents that use nmd
+    nmd = {
+      url = "sourcehut:~rycee/nmd";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # only for dependents that use nix-formatter-pack
+    nix-formatter-pack = {
+      url = "github:Gerschtli/nix-formatter-pack";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nmd.follows = "nmd";
+    };
+    nix-on-droid = {
+      url = "github:nix-community/nix-on-droid/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+      inputs.nix-formatter-pack.follows = "nix-formatter-pack";
+      inputs.nmd.follows = "nmd";
+    };
   };
 
   outputs = inputs@{ self,
@@ -148,6 +166,7 @@
                       cart,
                       hexstrike-ai,
                       hyprland,
+                      nix-on-droid,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -723,6 +742,22 @@
           extraSpecialArgs = inputs;
         };
       };
+
+      nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
+        pkgs = import nixpkgs { system = "aarch64-linux"; };
+        modules = [
+          {
+            home-manager.config = { pkgs, ... }:
+            {
+              imports = [
+                ./home/linux.nix
+                ./home/linux/no-desktop.nix
+              ];
+            };
+          }
+        ];
+      };
+
       packages = {
         docs = pkgs.runCommand "options-doc.md" {} ''
           cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/nixos\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/home\/modules|g' > $out

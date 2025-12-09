@@ -58,7 +58,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: @nodename@
-      #hostNetwork: true
       containers:
       - envFrom:
         - configMapRef:
@@ -126,3 +125,75 @@ spec:
       - name: dbus
         hostPath:
           path: /run/dbus
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: matter-server
+  name: matter-server
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: matter-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: matter-server
+    spec:
+      hostNetwork: true
+      containers:
+        - env:
+            - name: TZ
+              value: "@timezone@"
+          image: @matter_image@
+          ports:
+            - containerPort: 5580
+              protocol: TCP
+          name: matter-server
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+                - SYS_ADMIN
+          volumeMounts:
+            - mountPath: /data
+              name: matter-data
+      restartPolicy: Always
+      volumes:
+        - name: matter-data
+          hostPath:
+            path: @hostfolder@/matter-server
+            type: DirectoryOrCreate
+        # Bluetooth
+        - name: ttyacm
+          hostPath:
+            path: /dev/ttyACM0
+        # Zigbee USB
+        - name: ttyusb
+          hostPath:
+            path: /dev/ttyUSB0
+        - name: dbus
+          hostPath:
+            path: /run/dbus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: matter-server
+  name: matter-server
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "matter-websocket"
+      port: 5580
+      targetPort: 5580
+  selector:
+    app: matter-server

@@ -189,7 +189,7 @@ boolean
 
 
 *Default:*
-` true `
+` false `
 
 *Declared by:*
  - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/sound](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/sound)

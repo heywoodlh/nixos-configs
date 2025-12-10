@@ -93,7 +93,7 @@ let
       "launcherExpanded" = false;
       "launcherVisible" = true;
     };
-    "sidebar.main.tools" = "aichat";
+    "sidebar.main.tools" = "";
     "sidebar.position_start" = true;
     "browser.newtabpage.activity-stream.showWeather" = false;
   };

@@ -15,10 +15,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    helix-src = {
+      url = "github:alevinval/helix/issue-2719";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     helix-flake = {
       url = "./helix";
       inputs.nixpkgs.follows = "nixpkgs-stable";
       inputs.flake-utils.follows = "flake-utils";
+      inputs.helix-src.follows = "helix-src";
     };
     git-flake = {
       url = "./git";
@@ -96,6 +102,7 @@
     jujutsu-flake,
     nushell-flake,
     vim-flake,
+    helix-src,
     helix-flake,
     vscode-flake,
     op-flake,

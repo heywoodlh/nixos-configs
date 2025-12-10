@@ -30,7 +30,6 @@ in {
       enable = true;
       xwayland.enable = true;
     };
-    security.pam.services.swaylock.text = "auth include login";
     hardware.brillo.enable = true;
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
 

@@ -1,202 +1,4 @@
-## boot\.m1n1CustomLogo
-
-Custom logo to build into m1n1\. The path must point to a 256x256 PNG\.
-
-
-
-*Type:*
-null or absolute path
-
-
-
-*Default:*
-` null `
-
-*Declared by:*
- - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/boot-m1n1](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/boot-m1n1)
-
-
-
-## boot\.m1n1ExtraOptions
-
-
-
-Append extra options to the m1n1 boot binary\. Might be useful for fixing
-display problems on Mac minis\.
-https://github\.com/AsahiLinux/m1n1/issues/159
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-` "" `
-
-*Declared by:*
- - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/boot-m1n1](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/boot-m1n1)
-
-
-
-## hardware\.asahi\.enable
-
-
-
-Enable the basic Asahi Linux components, such as kernel and boot setup\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` true `
-
-*Declared by:*
- - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default\.nix](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default.nix)
-
-
-
-## hardware\.asahi\.extractPeripheralFirmware
-
-
-
-Automatically extract the non-free non-redistributable peripheral
-firmware necessary for features like Wi-Fi\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` true `
-
-*Declared by:*
- - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/peripheral-firmware](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/peripheral-firmware)
-
-
-
-## hardware\.asahi\.overlay
-
-
-
-The nixpkgs overlay for asahi packages\.
-
-
-
-*Type:*
-nixpkgs overlay
-
-
-
-*Default:*
-` "overlay provided with the module" `
-
-*Declared by:*
- - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default\.nix](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default.nix)
-
-
-
-## hardware\.asahi\.peripheralFirmwareDirectory
-
-
-
-Path to the directory containing the non-free non-redistributable
-peripheral firmware necessary for features like Wi-Fi\. Ordinarily, this
-will automatically point to the appropriate location on the ESP\. Flake
-users and those interested in maximum purity will want to copy those
-files elsewhere and specify this manually\.
-
-Currently, this consists of the files ` all-firmware.tar.gz ` and
-` kernelcache* `\. The official Asahi Linux installer places these files
-in the ` asahi ` directory of the EFI system partition when creating it\.
-
-
-
-*Type:*
-null or absolute path
-
-
-
-*Default:*
-` null `
-
-*Declared by:*
- - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/peripheral-firmware](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/peripheral-firmware)
-
-
-
-## hardware\.asahi\.pkgs
-
-
-
-Package set used to build the major Asahi packages\. Defaults to the
-ambient set if not cross-built, otherwise re-imports the ambient set
-with the system defined by ` hardware.asahi.pkgsSystem `\.
-
-
-
-*Type:*
-raw value
-
-*Declared by:*
- - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default\.nix](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default.nix)
-
-
-
-## hardware\.asahi\.pkgsSystem
-
-
-
-System architecture that should be used to build the major Asahi
-packages, if not the default aarch64-linux\. This allows installing from
-a cross-built ISO without rebuilding them during installation\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-` "aarch64-linux" `
-
-*Declared by:*
- - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default\.nix](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default.nix)
-
-
-
-## hardware\.asahi\.setupAsahiSound
-
-
-
-Set up the Asahi DSP components so that the speakers and headphone jack
-work properly and safely\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-*Declared by:*
- - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/sound](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/sound)
-
-
-
-## heywoodlh\.apple-silicon
+## heywoodlh\.apple-silicon\.enable
 
 
 
@@ -211,6 +13,90 @@ boolean
 
 *Default:*
 ` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.cachefile
+
+Asahi Linux cache file name in ` /boot `\.
+
+
+
+*Type:*
+unspecified value
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.hash
+
+
+
+Hashes for firmware files\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+` { } `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.hash\.cache
+
+
+
+Hash for kernel cache\.
+Retrieve with ` nix hash convert --hash-algo sha256 $(nix-prefetch-url /boot/asahi/<cachefile>) `\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.hash\.firmware
+
+
+
+Hash for firmware file\.
+Retrieve with ` nix hash convert --hash-algo sha256 $(nix-prefetch-url /boot/asahi/all_firmware.tar.gz) `\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
@@ -1238,299 +1124,5 @@ boolean
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/workstation\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/workstation.nix)
-
-
-
-## home-manager\.enableLegacyProfileManagement
-
-
-
-Whether to enable legacy profile management during activation\. When
-enabled, the Home Manager activation will produce a per-user
-` home-manager ` Nix profile, just like in the standalone installation of
-Home Manager\. Typically, this is not desired when Home Manager is
-embedded in the system configuration\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.backupCommand
-
-
-
-On activation run this command on each existing file
-rather than exiting with an error\.
-
-
-
-*Type:*
-null or string or absolute path
-
-
-
-*Default:*
-` null `
-
-
-
-*Example:*
-` ${pkgs.trash-cli}/bin/trash `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.backupFileExtension
-
-
-
-On activation move existing files by appending the given
-file extension rather than exiting with an error\.
-
-
-
-*Type:*
-null or string
-
-
-
-*Default:*
-` null `
-
-
-
-*Example:*
-` "backup" `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.extraSpecialArgs
-
-
-
-Extra ` specialArgs ` passed to Home Manager\. This
-option can be used to pass additional arguments to all modules\.
-
-
-
-*Type:*
-attribute set
-
-
-
-*Default:*
-` { } `
-
-
-
-*Example:*
-` { inherit emacs-overlay; } `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.minimal
-
-
-
-Whether to enable only the necessary modules that allow home-manager to function\.
-
-This can be used to allow vendoring a minimal list of modules yourself, rather than
-importing every single module\.
-
-THIS IS FOR ADVANCED USERS, AND WILL DISABLE ALMOST EVERY MODULE\.
-THIS SHOULD NOT BE ENABLED UNLESS YOU KNOW THE IMPLICATIONS\.
-\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-
-
-*Example:*
-` true `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.overwriteBackup
-
-
-
-Whether to enable forced overwriting of existing backup files when using ` backupFileExtension `
-\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-
-
-*Example:*
-` true `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.sharedModules
-
-
-
-Extra modules added to all users\.
-
-
-
-*Type:*
-list of raw value
-
-
-
-*Default:*
-` [ ] `
-
-
-
-*Example:*
-` [ { home.packages = [ nixpkgs-fmt ]; } ] `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.useGlobalPkgs
-
-
-
-Whether to enable using the system configuration’s ` pkgs `
-argument in Home Manager\. This disables the Home Manager
-options ` nixpkgs.* `\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-
-
-*Example:*
-` true `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.useUserPackages
-
-
-
-Whether to enable installation of user packages through the
-` users.users.<name>.packages ` option\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-
-
-*Example:*
-` true `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.users
-
-
-
-Per-user Home Manager configuration\.
-
-
-
-*Type:*
-attribute set of (Home Manager module)
-
-
-
-*Default:*
-` { } `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
-
-
-
-## home-manager\.verbose
-
-
-
-Whether to enable verbose output on activation\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-
-
-*Example:*
-` true `
-
-*Declared by:*
- - [/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common\.nix](/nix/store/xs7z8954xsf8h8vbdxymkdhm5r9kdp1j-source/nixos/common.nix)
 
 

@@ -20,31 +20,64 @@
       url = "github:nixos/nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
+      inputs.flake-compat.follows = "kyle/flake-compat";
+      inputs.git-hooks-nix.follows = "pre-commit-hooks";
     };
     determinate = {
       url = "github:DeterminateSystems/nix/v2.28.1";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nix.follows = "nix";
     };
+    # for dependents of crane
+    crane.url = "github:ipetkov/crane";
+    # for dependents of helix-src
+    helix-src = {
+      url = "github:heywoodlh/helix/issue-2719";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     myFlakes = {
       url = ./flakes;
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
       inputs.flake-utils.follows = "flake-utils";
+      inputs.helix-src.follows = "helix-src";
+    };
+    # for dependents of ashell
+    ashell = {
+      url = "github:kylesferrazza/ashell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.crane.follows = "crane";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.rust-overlay.follows = "helix-src/rust-overlay";
+    };
+    # for dependents of devenv
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.nix.follows = "nix";
+      inputs.git-hooks.follows = "pre-commit-hooks";
+      inputs.flake-compat.follows = "kyle/flake-compat";
+    };
+    kyle = {
+      url = "gitlab:heywoodlh/nix-configs/asahi-fw-hashes";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.ashell.follows = "ashell";
+      inputs.devenv.follows = "devenv";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.home-manager.follows = "home-manager";
+      inputs.darwin.follows = "darwin";
+      inputs.nur.follows = "nur";
     };
     darwin = {
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-apple-silicon = {
-      url = "github:nix-community/nixos-apple-silicon";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs-stable";
-      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
+      inputs.flake-compat.follows = "kyle/flake-compat";
     };
     user-icon = {
       url = "https://avatars.githubusercontent.com/u/18178614?v=4";
@@ -111,7 +144,7 @@
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
+      inputs.flake-compat.follows = "kyle/flake-compat";
     };
     hyprland = {
       url = "github:hyprwm/hyprland";
@@ -144,10 +177,10 @@
                       nixpkgs-stable,
                       nixpkgs-pam-lid-fix,
                       myFlakes,
+                      kyle,
                       nixpkgs-backports,
                       nixpkgs-lts,
                       nixos-wsl,
-                      nixos-apple-silicon,
                       darwin,
                       home-manager,
                       cosmic-home-manager,
@@ -187,24 +220,33 @@
     darwinSystem = "${arch}-darwin";
     darwinModules.heywoodlh.darwin = ./darwin/modules/default.nix;
     homeModules.heywoodlh.home = ./home/modules/default.nix;
+    extNixOSModules = [
+      determinate.nixosModules.default
+      home-manager.nixosModules.home-manager
+      kyle.nixosModules.apple-silicon-support
+      kyle.nixosModules.appleSilicon
+    ];
+    myNixOSModules = [
+      ./nixos/modules/defaults.nix
+      ./nixos/modules/gnome.nix
+      ./nixos/modules/hyprland.nix
+      ./nixos/modules/intel-mac.nix
+      ./nixos/modules/workstation.nix
+      ./nixos/modules/console.nix
+      ./nixos/modules/server.nix
+      ./nixos/modules/laptop.nix
+      ./nixos/modules/cosmic.nix
+      ./nixos/modules/vm.nix
+      ./nixos/modules/sshd.nix
+      ./nixos/modules/asahi.nix
+    ];
     nixosModules.heywoodlh = { config, pkgs, ... }: {
-      imports = [
-        determinate.nixosModules.default
-        home-manager.nixosModules.home-manager
-        nixos-apple-silicon.nixosModules.default
-        ./nixos/modules/defaults.nix
-        ./nixos/modules/gnome.nix
-        ./nixos/modules/hyprland.nix
-        ./nixos/modules/intel-mac.nix
-        ./nixos/modules/workstation.nix
-        ./nixos/modules/console.nix
-        ./nixos/modules/server.nix
-        ./nixos/modules/laptop.nix
-        ./nixos/modules/cosmic.nix
-        ./nixos/modules/vm.nix
-        ./nixos/modules/sshd.nix
-        ./nixos/modules/asahi.nix
-      ];
+      imports = myNixOSModules ++ extNixOSModules;
+    };
+
+    # for docs on my modules only
+    nixosModules.docs = { config, pkgs, ... }: {
+      imports = myNixOSModules;
     };
 
     darwinConfig = machineType: myHostname: extraConf: darwin.lib.darwinSystem {
@@ -292,7 +334,7 @@
       modules = [
         darwinModules.heywoodlh.darwin { config._module.check = false; }
         homeModules.heywoodlh.home { config._module.check = false; }
-        nixosModules.heywoodlh { config._module.check = false; }
+        nixosModules.docs { config._module.check = false; }
       ];
     };
 
@@ -470,7 +512,14 @@
             ./nixos/roles/gaming/steam.nix
           ];
           heywoodlh.sshd.enable = true;
-          heywoodlh.apple-silicon = true;
+          heywoodlh.apple-silicon = {
+            enable = true;
+            cachefile = "kernelcache.release.mac13g";
+            hash = {
+              cache = "sha256-SYR/EaaIDjeGfvhfzlTqgOihXNQQdBgqJbBJbq+wC9g=";
+              firmware = "sha256-ydzrhKfH/8iYo1PyNDnXmjcniMaete8DnN/yXYJ7mT4=";
+            };
+          };
           # Bootloader
           boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
           home-manager.users.heywoodlh = {

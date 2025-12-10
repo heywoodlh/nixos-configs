@@ -38,7 +38,7 @@ let
     truncate_title_after_length = 100
 
     [settings]
-    lock_cmd = "${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.swaylock-effects}/bin/swaylock -fF &"
+    lock_cmd = ""
     audio_sinks_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 3"
     audio_sources_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 4"
     wifi_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor"
@@ -74,8 +74,8 @@ let
     # Open 1password quick access
     ${pkgs._1password-gui-beta}/bin/1password --quick-access
   '';
-in
-{
+  lockCmd = "${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.swaylock-effects}/bin/swaylock -fF &";
+in {
   options = {
     heywoodlh.home.hyprland = mkOption {
       default = false;
@@ -104,7 +104,6 @@ in
       pulseaudio
       slurp
       swaybg
-      swayidle
       swaylock-effects
       util-linux
       wf-recorder
@@ -423,23 +422,6 @@ in
       };
     };
 
-    # Swayidle config
-    services.swayidle = {
-      enable = true;
-      events = {
-        "before-sleep" = "${pkgs.systemd}/bin/loginctl lock-session";
-        "lock" = "${pkgs.swaylock-effects}/bin/swaylock -fF";
-      };
-      timeouts = [
-        {
-          timeout = 330;
-          command = "${pkgs.systemd}/bin/systemctl suspend";
-        }
-      ];
-    };
-    # start swayidle as part of hyprland, not sway
-    systemd.user.services.swayidle.Install.WantedBy = lib.mkForce [ "hyprland-session.target" ];
-
     # Hyprland
     wayland.windowManager.hyprland = {
       enable = true;
@@ -623,14 +605,14 @@ in
         general = {
           after_sleep_cmd = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on";
           ignore_dbus_inhibit = false;
-          lock_cmd = "${pkgs.hyprlock}/bin/hyprlock";
-          before_sleep_cmd = "${pkgs.hyprlock}/bin/hyprlock";
+          lock_cmd = "${lockCmd}";
+          before_sleep_cmd = "${lockCmd}";
         };
 
         listener = [
           {
             timeout = 900;
-            on-timeout = "${pkgs.hyprlock}/bin/hyprlock";
+            on-timeout = "${lockCmd}";
           }
           {
             timeout = 1200;

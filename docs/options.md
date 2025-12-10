@@ -1,4 +1,225 @@
+## boot\.m1n1CustomLogo
+
+Custom logo to build into m1n1\. The path must point to a 256x256 PNG\.
+
+
+
+*Type:*
+null or absolute path
+
+
+
+*Default:*
+` null `
+
+*Declared by:*
+ - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/boot-m1n1](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/boot-m1n1)
+
+
+
+## boot\.m1n1ExtraOptions
+
+
+
+Append extra options to the m1n1 boot binary\. Might be useful for fixing
+display problems on Mac minis\.
+https://github\.com/AsahiLinux/m1n1/issues/159
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/boot-m1n1](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/boot-m1n1)
+
+
+
+## hardware\.asahi\.enable
+
+
+
+Enable the basic Asahi Linux components, such as kernel and boot setup\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default\.nix](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default.nix)
+
+
+
+## hardware\.asahi\.extractPeripheralFirmware
+
+
+
+Automatically extract the non-free non-redistributable peripheral
+firmware necessary for features like Wi-Fi\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/peripheral-firmware](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/peripheral-firmware)
+
+
+
+## hardware\.asahi\.overlay
+
+
+
+The nixpkgs overlay for asahi packages\.
+
+
+
+*Type:*
+nixpkgs overlay
+
+
+
+*Default:*
+` "overlay provided with the module" `
+
+*Declared by:*
+ - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default\.nix](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default.nix)
+
+
+
+## hardware\.asahi\.peripheralFirmwareDirectory
+
+
+
+Path to the directory containing the non-free non-redistributable
+peripheral firmware necessary for features like Wi-Fi\. Ordinarily, this
+will automatically point to the appropriate location on the ESP\. Flake
+users and those interested in maximum purity will want to copy those
+files elsewhere and specify this manually\.
+
+Currently, this consists of the files ` all-firmware.tar.gz ` and
+` kernelcache* `\. The official Asahi Linux installer places these files
+in the ` asahi ` directory of the EFI system partition when creating it\.
+
+
+
+*Type:*
+null or absolute path
+
+
+
+*Default:*
+` null `
+
+*Declared by:*
+ - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/peripheral-firmware](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/peripheral-firmware)
+
+
+
+## hardware\.asahi\.pkgs
+
+
+
+Package set used to build the major Asahi packages\. Defaults to the
+ambient set if not cross-built, otherwise re-imports the ambient set
+with the system defined by ` hardware.asahi.pkgsSystem `\.
+
+
+
+*Type:*
+raw value
+
+*Declared by:*
+ - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default\.nix](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default.nix)
+
+
+
+## hardware\.asahi\.pkgsSystem
+
+
+
+System architecture that should be used to build the major Asahi
+packages, if not the default aarch64-linux\. This allows installing from
+a cross-built ISO without rebuilding them during installation\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "aarch64-linux" `
+
+*Declared by:*
+ - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default\.nix](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/default.nix)
+
+
+
+## hardware\.asahi\.setupAsahiSound
+
+
+
+Set up the Asahi DSP components so that the speakers and headphone jack
+work properly and safely\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/sound](/nix/store/46mpq9a8ma725f8mdi6iw2p7phdyqxcy-source/apple-silicon-support/modules/sound)
+
+
+
+## heywoodlh\.apple-silicon
+
+
+
+Enable heywoodlh apple-silicon configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+
+
+
 ## heywoodlh\.console
+
+
 
 Enable heywoodlh console configuration\.
 

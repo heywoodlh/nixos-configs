@@ -1,4 +1,13 @@
-{ config, pkgs, lib, home-manager, hyprland, myFlakes, dark-wallpaper, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  home-manager,
+  hyprland,
+  myFlakes,
+  dark-wallpaper,
+  ...
+}:
 
 with lib;
 
@@ -65,7 +74,8 @@ let
     # Open 1password quick access
     ${pkgs._1password-gui-beta}/bin/1password --quick-access
   '';
-in {
+in
+{
   options = {
     heywoodlh.home.hyprland = mkOption {
       default = false;
@@ -223,8 +233,8 @@ in {
       enable = true;
       executable = true;
       text = ''
-      #!/usr/bin/env bash
-      ${pkgs.libnotify}/bin/notify-send $(${pkgs.acpi}/bin/acpi -b | grep -Eo [0-9]+% | ${pkgs.coreutils}/bin/head -1)
+        #!/usr/bin/env bash
+        ${pkgs.libnotify}/bin/notify-send $(${pkgs.acpi}/bin/acpi -b | grep -Eo [0-9]+% | ${pkgs.coreutils}/bin/head -1)
       '';
     };
 
@@ -428,7 +438,7 @@ in {
       ];
     };
     # start swayidle as part of hyprland, not sway
-    systemd.user.services.swayidle.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.swayidle.Install.WantedBy = lib.mkForce [ "hyprland-session.target" ];
 
     # Hyprland
     wayland.windowManager.hyprland = {
@@ -569,6 +579,35 @@ in {
         bind = CTRL_SHIFT, bracketleft, focusmonitor, left
         bind = CTRL_SHIFT, bracketright, focusmonitor, right
 
+        # Keyboard-driven mouse
+        submap=cursor
+        # Jump cursor to a position
+        bind=,a,exec,${pkgs.hyprland}/bin/hyprctl dispatch submap reset && ${pkgs.wl-kbptr}/bin/wl-kbptr && ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor
+        # Cursor movement
+        binde=,j,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 0 10
+        binde=,k,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 0 -10
+        binde=,l,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 10 0
+        binde=,h,exec,${pkgs.wlrctl}/bin/wlrctl pointer move -10 0
+        # Left button
+        bind=,s,exec,${pkgs.wlrctl}/bin/wlrctl pointer click left
+        # Middle button
+        bind=,d,exec,${pkgs.wlrctl}/bin/wlrctl pointer click middle
+        # Right button
+        bind=,f,exec,${pkgs.wlrctl}/bin/wlrctl pointer click right
+        # Scroll up and down
+        binde=,e,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 10 0
+        binde=,r,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll -10 0
+        # Scroll left and right
+        binde=,t,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 -10
+        binde=,g,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 10
+        # Exit cursor submap
+        # If you do not use cursor timeout or cursor:hide_on_key_press, you can delete its respective calls.
+        bind=,escape,exec,${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 3; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press true; ${pkgs.hyprland}/bin/hyprctl dispatch submap reset 
+        submap = reset
+        # Entrypoint
+        # If you do not use cursor timeout or cursor:hide_on_key_press, you can delete its respective calls.
+        bind=$mainMod,g,exec,${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 0; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press false; ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor
+
         # Cursor
         cursor {
           inactive_timeout = 3
@@ -576,6 +615,29 @@ in {
       '';
       xwayland = {
         enable = true;
+      };
+    };
+    services.hypridle = {
+      enable = true;
+      settings = {
+        general = {
+          after_sleep_cmd = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on";
+          ignore_dbus_inhibit = false;
+          lock_cmd = "${pkgs.hyprlock}/bin/hyprlock";
+          before_sleep_cmd = "${pkgs.hyprlock}/bin/hyprlock";
+        };
+
+        listener = [
+          {
+            timeout = 900;
+            on-timeout = "${pkgs.hyprlock}/bin/hyprlock";
+          }
+          {
+            timeout = 1200;
+            on-timeout = "${pkgs.hyprland}/bin/hyprctl dispatch dpms off";
+            on-resume = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on";
+          }
+        ];
       };
     };
   };

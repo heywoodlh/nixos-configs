@@ -191,6 +191,7 @@
       imports = [
         determinate.nixosModules.default
         home-manager.nixosModules.home-manager
+        nixos-apple-silicon.nixosModules.default
         ./nixos/modules/defaults.nix
         ./nixos/modules/gnome.nix
         ./nixos/modules/hyprland.nix
@@ -202,6 +203,7 @@
         ./nixos/modules/cosmic.nix
         ./nixos/modules/vm.nix
         ./nixos/modules/sshd.nix
+        ./nixos/modules/asahi.nix
       ];
     };
 
@@ -465,10 +467,10 @@
         nixos-m1-mac-mini = nixosConfig "workstation" "nixos-m1-mac-mini" {
           imports = [
             ./nixos/hosts/m1-mac-mini.nix
-            ./nixos/roles/nixos/asahi.nix
             ./nixos/roles/gaming/steam.nix
           ];
           heywoodlh.sshd.enable = true;
+          heywoodlh.apple-silicon = true;
           # Bootloader
           boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
           home-manager.users.heywoodlh = {

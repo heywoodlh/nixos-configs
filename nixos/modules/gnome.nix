@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nixpkgs-stable, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 

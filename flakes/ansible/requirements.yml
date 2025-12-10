@@ -9,7 +9,7 @@ collections:
   - name: cloud.common
     version: "4.2.0"
   - name: community.docker
-    version: "4.8.4"
+    version: "5.0.4"
   - name: ansible.posix
     version: "2.1.0"
   - name: community.general

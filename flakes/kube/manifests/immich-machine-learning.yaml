@@ -21,8 +21,8 @@ spec:
       containers:
         - env:
             - name: IMMICH_VERSION
-              value: "v2"
-          image: ghcr.io/immich-app/immich-machine-learning:v2
+              value: "@version@"
+          image: ghcr.io/immich-app/immich-machine-learning:v2.3.1-openvino
           name: immich-machine-learning
           volumeMounts:
             - mountPath: /cache

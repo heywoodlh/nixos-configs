@@ -80,68 +80,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: immich-machine-learning
-  name: immich-machine-learning
-  namespace: @namespace@
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: immich-machine-learning
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: immich-machine-learning
-    spec:
-      containers:
-        - env:
-            - name: IMMICH_VERSION
-              value: "@version@"
-            - name: UPLOAD_LOCATION
-              value: "/uploads"
-          image: @immich_ml_image@
-          name: immich-machine-learning
-          volumeMounts:
-            - mountPath: /cache
-              name: model-cache
-            - mountPath: /uploads
-              name: immich-uploads
-      restartPolicy: Always
-      volumes:
-        - name: model-cache
-          hostPath:
-            path: @hostfolder@/ml
-            type: DirectoryOrCreate
-        - name: immich-uploads
-          hostPath:
-            path: @hostfolder@/uploads
-            type: DirectoryOrCreate
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: immich-machine-learning
-  name: immich-machine-learning
-  namespace: @namespace@
-  annotations:
-    tailscale.com/expose: "true"
-    tailscale.com/hostname: "immich-ml"
-    tailscale.com/tags: "tag:immich"
-spec:
-  ports:
-    - name: "http"
-      port: 80
-      targetPort: 2283
-  selector:
-    app: immich-machine-learning
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
     app: immich-server
   name: immich-server
   namespace: @namespace@

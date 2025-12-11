@@ -490,6 +490,15 @@
           replicas = 1;
           hostfolder = "/media/data-ssd/immich";
         };
+        immich-machine-learning = mkKubeDrv "immich" rec {
+          src = ./templates/immich-ml.yaml;
+          namespace = "default";
+          version = "v2";
+          timezone = "America/Denver";
+          image = "ghcr.io/immich-app/immich-machine-learning:${version}";
+          replicas = 1;
+          hostfolder = "/media/data-ssd/immich-ml";
+        };
         intel-device-plugin = mkKubeDrv "http-files" {
           src = ./templates/intel-device-plugin.yaml;
           namespace = "default";

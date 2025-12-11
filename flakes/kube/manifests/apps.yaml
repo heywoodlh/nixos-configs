@@ -465,7 +465,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: immich
+  name: immich-machine-learning
   namespace: argo
 spec:
   destination:
@@ -476,7 +476,7 @@ spec:
     targetRevision: HEAD
     path: flakes/kube/manifests
     directory:
-      include: "immich.yaml"
+      include: "immich-machine-learning.yaml"
   project: default
   syncPolicy:
     automated:

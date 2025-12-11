@@ -13,6 +13,7 @@
   ansible.builtin.copy:
     src: opt/immich/
     dest: /opt/immich/
+    force: false
     owner: 1000
 
 - name: check if immich is configured

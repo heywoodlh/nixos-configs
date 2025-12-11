@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: immich-machine-learning
+  name: immich-machine-learning
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-machine-learning
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: immich-machine-learning
+    spec:
+      containers:
+        - env:
+            - name: IMMICH_VERSION
+              value: "@version@"
+          image: @image@
+          name: immich-machine-learning
+          volumeMounts:
+            - mountPath: /cache
+              name: model-cache
+          ports:
+            - containerPort: 3003
+              protocol: TCP
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+      restartPolicy: Always
+      volumes:
+        - name: model-cache
+          hostPath:
+            path: @hostfolder@/cache
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: immich-machine-learning
+  name: immich-machine-learning
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "immich-ml"
+    tailscale.com/tags: "tag:immich"
+spec:
+  ports:
+    - name: "immich-ml"
+      port: 3003
+      targetPort: 3003
+  selector:
+    app: immich-machine-learning

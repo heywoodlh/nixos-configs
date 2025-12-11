@@ -25,7 +25,7 @@ applications=(
   "homepage"
   "home-assistant"
   "http-files"
-  "immich"
+  "immich-machine-learning"
   "iperf"
   "lancache"
   "media"

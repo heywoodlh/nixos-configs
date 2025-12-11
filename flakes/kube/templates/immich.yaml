@@ -119,6 +119,25 @@ spec:
             path: @hostfolder@/uploads
             type: DirectoryOrCreate
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: immich-machine-learning
+  name: immich-machine-learning
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "immich-ml"
+    tailscale.com/tags: "tag:immich"
+spec:
+  ports:
+    - name: "http"
+      port: 80
+      targetPort: 2283
+  selector:
+    app: immich-machine-learning
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

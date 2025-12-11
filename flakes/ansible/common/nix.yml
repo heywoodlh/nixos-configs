@@ -1,34 +1,19 @@
 ---
-- name: arch tasks to install nix
-  when: ansible_os_family == 'Archlinux'
-  block:
-    - name: install nix
-      community.general.pacman:
-        name: "nix"
-        update_cache: yes
+- name: Install curl
+  ansible.builtin.package:
+    name: curl
 
-    - name: ensure nix-users group exists
-      ansible.builtin.group:
-        name: nix-users
-        state: present
+- name: Check if Nix store exists
+  ansible.builtin.stat:
+    path: "/nix"
+  register: nix_store_check
 
-    - name: add heywoodlh to nix group
-      ansible.builtin.user:
-        name: heywoodlh
-        groups: nix-users
-        append: yes
-
-    - name: enable flakes
-      ansible.builtin.lineinfile:
-        path: /etc/nix/nix.conf
-        line: "extra-experimental-features = nix-command flakes"
-        create: yes
-
-    - name: enable nix-daemon
-      ansible.builtin.systemd_service:
-        name: nix-daemon.service
-        state: restarted
-        enabled: true
+- name: Install Nix
+  ansible.builtin.shell: |
+    curl -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
+  when:
+    - not nix_store_check.stat.exists
+    - ansible_os_family != 'Alpine'
 
 - name: alpine linux tasks to install nix
   when: ansible_os_family == 'Alpine'
@@ -53,11 +38,13 @@
         groups: nix
         append: yes
 
-    - name: enable flakes
+    - name: add alpine-specific config
       ansible.builtin.lineinfile:
         path: /etc/nix/nix.conf
-        line: "extra-experimental-features = nix-command flakes"
+        line: "{{ item }}"
         create: yes
+      loop:
+        - "!include nix.custom.conf"
 
     - name: enable nix-daemon service
       ansible.builtin.service:
@@ -65,29 +52,35 @@
         enabled: true
         state: started
 
-- name: generic tasks to install nix
-  when:
-    - ansible_os_family != 'Archlinux'
-    - ansible_os_family != 'Alpine'
-  block:
-    - name: Install curl if on Debian
-      ansible.builtin.apt:
-        name: curl
-        update_cache: yes
-        lock_timeout: 600
-      when: ansible_os_family == "Debian"
+- name: Add nix to $PATH
+  ansible.builtin.copy:
+    dest: /etc/profile.d/nix-path.sh
+    content: 'PATH=$PATH:/nix/var/nix/profiles/default/bin'
+  when: ansible_os_family != 'Alpine'
 
-    - name: Check if Nix store exists
-      ansible.builtin.stat:
-        path: "/nix"
-      register: nix_store_check
+- name: check if connected to tailscale
+  ansible.builtin.uri:
+    url: http://attic.barn-banana.ts.net
+  register: tailscale_server_check
+  ignore_errors: true
 
-    - name: Install Nix
-      ansible.builtin.shell: |
-        curl -L https://install.determinate.systems/nix | sh -s -- install --no-confirm
-      when: not nix_store_check.stat.exists
+- name: copy tailscale nix.conf
+  when: tailscale_server_check.status == 200
+  ansible.builtin.copy:
+    src: etc/nix/nix.tailscale.conf
+    dest: /etc/nix/nix.custom.conf
+  register: nix_ts_conf
 
-    - name: Add nix to $PATH
-      copy:
-        dest: /etc/profile.d/nix-path.sh
-        content: 'PATH=$PATH:/nix/var/nix/profiles/default/bin'
+- name: copy non-tailscale nix.conf
+  when: tailscale_server_check.status != 200
+  ansible.builtin.copy:
+    src: etc/nix/nix.conf
+    dest: /etc/nix/nix.custom.conf
+  register: nix_conf
+
+- name: restart nix-daemon service
+  ansible.builtin.service:
+    name: nix-daemon
+    enabled: true
+    state: restarted
+  when: nix_ts_conf.changed or nix_conf.changed

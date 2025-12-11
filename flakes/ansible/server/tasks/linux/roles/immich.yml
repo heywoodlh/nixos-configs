@@ -24,6 +24,7 @@
   ansible.builtin.include_role:
     name: geerlingguy.docker
   vars:
+    ansible_python_interpreter: /usr/bin/python3
     pip_install_packages:
       - name: docker
     docker_install_compose_plugin: true

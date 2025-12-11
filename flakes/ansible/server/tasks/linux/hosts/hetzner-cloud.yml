@@ -1,0 +1,3 @@
+---
+- name: import immich tasks
+  include_tasks: ../roles/immich.yml

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Usage: ./test.sh <os> <target> <hostname>
+# ./test.sh ubuntu server hetzner-cloud
 export LC_ALL="C.UTF-8"
 dir=$(dirname -- "$( readlink -f -- "$0"; )";)
 operating_systems=("ubuntu" "debian" "unifi" "alpine")
@@ -23,7 +25,13 @@ then
   fi
 fi
 
-docker_run_args=""
+if [[ -n "$3" ]]
+then
+  target_hostname="$3"
+  echo "Using hostname: $target_hostname"
+else
+  target_hostname="cloud"
+fi
 
 echo "Operating systems that will be tested: ${operating_systems[@]}"
 echo "Targets that will be tested: ${targets[@]}"
@@ -44,12 +52,12 @@ do
       echo "Testing: ${target}"
       if [[ "${os}" == "unifi" ]]
       then
-        docker run -it --hostname=spencer-router --rm -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
+        docker run -it -e ANSIBLE_INJECT_FACT_VARS=True --hostname=spencer-router --rm -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
       elif [[ "${os}" == "ubuntu" ]]
       then
-        docker run -it --hostname=cloud --rm -v "${dir}/.ansible.log:/ansible.log" -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
+        docker run -it -e ANSIBLE_INJECT_FACT_VARS=True --hostname="$target_hostname" --rm -v "${dir}/.ansible.log:/ansible.log" -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
       else
-          docker run -it --rm -v "${dir}/.ansible.log:/ansible.log" -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
+        docker run -it -e ANSIBLE_INJECT_FACT_VARS=True --hostname="$target_hostname" --rm -v "${dir}/.ansible.log:/ansible.log" -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
       fi
     fi
   done

@@ -87,13 +87,6 @@
         mode: '0600'
         owner: heywoodlh
 
-    #- name: install flakes
-    #  include_tasks: ./include/flake.yml
-    #  loop:
-    #  - tmux
-    #  - vim
-    #  - git
-
     - name: check if tmux flake installed
       ansible.builtin.command: "ls -l {{ user_home.stdout }}/.nix-profile/bin/tmux"
       register: tmux_check

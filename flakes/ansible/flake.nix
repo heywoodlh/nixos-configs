@@ -21,11 +21,13 @@
       packages = {
         workstation = pkgs.writeShellScriptBin "workstation" ''
           export LC_ALL="C.UTF-8"
+          export ANSIBLE_INJECT_FACT_VARS=True
           ${installCollections}
           sudo ${pkgs.ansible}/bin/ansible-playbook --connection=local ${self}/workstation/workstation.yml
         '';
         server = pkgs.writeShellScriptBin "server" ''
           export LC_ALL="C.UTF-8"
+          export ANSIBLE_INJECT_FACT_VARS=True
           ${installCollections}
           sudo ${pkgs.ansible}/bin/ansible-playbook --connection=local ${self}/server/standalone.yml
         '';

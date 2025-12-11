@@ -1,0 +1,40 @@
+---
+- name: create immich directories
+  ansible.builtin.file:
+    path: "${{ item }}"
+    state: directory
+    recurse: true
+    owner: 1000
+  loop:
+    - "/opt/immich"
+    - "/data/immich"
+
+- name: copy immich resources to host
+  ansible.builtin.copy:
+    src: opt/immich/
+    dest: /opt/immich/
+    owner: 1000
+
+- name: check if immich is configured
+  ansible.builtin.stat:
+    path: /opt/immich/.env
+  register: immich_installed
+
+- name: Install Docker
+  ansible.builtin.include_role:
+    name: geerlingguy.docker
+  vars:
+    pip_install_packages:
+      - name: docker
+    docker_install_compose_plugin: true
+    docker_service_manage: true
+    docker_service_state: started
+    docker_service_enabled: true
+    docker_restart_handler_state: restarted
+    docker_users:
+      - heywoodlh
+
+- name: deploy immich
+  when: immich_installed.stat.exists
+  community.docker.docker_compose_v2:
+    project_src: /opt/immich

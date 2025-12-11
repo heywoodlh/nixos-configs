@@ -161,6 +161,16 @@ in {
       };
     };
 
+    programs.ashell = {
+      enable = true;
+      systemd.enable = true;
+    };
+
+    home.file.".config/ashell/config.toml" = {
+      enable = true;
+      source = ashellConf;
+    };
+
     # Screenshot scripts
     home.file."bin/screenshot.sh" = {
       enable = true;
@@ -441,7 +451,6 @@ in {
         exec-once = ${pkgs.hyprland}/bin/hyprctl setcursor Adwaita 24
         exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
         exec-once = ${pkgs._1password-gui-beta}/bin/1password --silent
-        exec-once = ${pkgs.ashell}/bin/ashell --config-path ${ashellConf}
         exec-once = ${pkgs.dunst}/bin/dunst
         exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
         exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}

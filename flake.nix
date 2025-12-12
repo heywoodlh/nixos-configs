@@ -693,6 +693,8 @@
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config
             {
+              heywoodlh.home.onepassword.enable = true;
+              heywoodlh.home.gnome = true;
               # Home-Manager specific nixpkgs config
               nixpkgs.config = {
                 allowUnfree = true;

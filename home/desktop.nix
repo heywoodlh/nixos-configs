@@ -312,6 +312,4 @@ in {
       end
     '';
   };
-
-  heywoodlh.home.gnome = pkgs.stdenv.isLinux;
 }

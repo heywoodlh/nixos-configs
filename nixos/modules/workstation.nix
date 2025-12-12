@@ -152,6 +152,7 @@ in {
           ../../home/desktop.nix # base desktop.nix
           ../../home/linux/desktop.nix # linux-specific desktop.nix
         ];
+        heywoodlh.home.onepassword.enable = true;
         heywoodlh.home.gnome = mkForce config.heywoodlh.gnome;
       };
     };

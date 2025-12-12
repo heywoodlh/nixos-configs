@@ -13,6 +13,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.hyprland;
+  onepasswordCfg = config.heywoodlh.home.onepassword;
   system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
   ashellConf = pkgs.writeText "config.toml" ''
@@ -69,12 +70,13 @@ let
   '';
   onepasswordToggle = pkgs.writeShellScriptBin "1password-toggle.sh" ''
     # Check if 1password is running
-    ps aux | grep -i 1password | grep -iq silent || ${pkgs._1password-gui-beta}/bin/1password --silent --ozone-platform-hint=wayland
+    ps aux | grep -i 1password | grep -iq silent || ${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --silent --ozone-platform-hint=wayland
 
     # Open 1password quick access
-    ${pkgs._1password-gui-beta}/bin/1password --quick-access
+    ${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --quick-access
   '';
-  lockCmd = "${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.swaylock-effects}/bin/swaylock -fF &";
+  lockCmdPfx = "" + optionalString (onepasswordCfg.enable) "${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --lock;";
+  lockCmd = "${lockCmdPfx} ${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.swaylock-effects}/bin/swaylock -fF &";
 in {
   options = {
     heywoodlh.home.hyprland = mkOption {
@@ -87,6 +89,7 @@ in {
   };
 
   config = mkIf cfg {
+    heywoodlh.home.onepassword.package = mkForce pkgs._1password-gui-beta;
     home.packages = with pkgs; [
       acpi
       adwaita-icon-theme
@@ -110,6 +113,7 @@ in {
       wireplumber
       wl-clipboard
       xdg-desktop-portal-hyprland
+    ] ++ optionals (config.heywoodlh.home.onepassword.enable) [
       onepasswordToggle
     ];
 
@@ -163,8 +167,13 @@ in {
 
     programs.ashell = {
       enable = true;
-      systemd.enable = true;
+      systemd = {
+        enable = true;
+        target = "hyprland-session.target";
+      };
     };
+
+    systemd.user.services.ashell.Service.Restart = mkForce "always";
 
     home.file.".config/ashell/config.toml" = {
       enable = true;
@@ -450,7 +459,7 @@ in {
         # Apps to start on login
         exec-once = ${pkgs.hyprland}/bin/hyprctl setcursor Adwaita 24
         exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
-        exec-once = ${pkgs._1password-gui-beta}/bin/1password --silent
+        exec-once = ${onepasswordCfg.wrapper} --silent
         exec-once = ${pkgs.dunst}/bin/dunst
         exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
         exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
@@ -488,8 +497,8 @@ in {
         }
 
         # Window rules
-        windowrulev2 = float,title:(1Password)
-        windowrulev2 = nomaxsize,title:(1Password)
+        windowrulev2 = float,class:(1password)
+        windowrulev2 = nomaxsize,class:(1password)
         windowrulev2 = float,title:^(Quick Access — 1Password)$
         windowrulev2 = nomaxsize,title:^(Quick Access — 1Password)$
 
@@ -516,14 +525,12 @@ in {
         bind = $mainMod, Return, exec, ${pkgs.ghostty}/bin/ghostty
         bind = CTRL_ALT, t, exec, ${pkgs.ghostty}/bin/ghostty
         bind = CTRL, grave, togglespecialworkspace, terminal
-        # 1Password
-        bind = CTRL_SUPER, s, exec, ${onepasswordToggle}/bin/1password-toggle.sh
         # Emote picker
         bind = CTRL_SUPER, Space, exec, ${pkgs.emote}/bin/emote
         # Launcher
         bind = $mainMod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel -I
         # Lock screen
-        bind = $mainMod, l, exec, ${pkgs.swaylock-effects}/bin/swaylock
+        bind = $mainMod, l, exec, ${lockCmd}
         # Remap caps lock to super
         input {
           kb_options = caps:super
@@ -571,38 +578,43 @@ in {
         bind = CTRL_SHIFT, bracketright, focusmonitor, right
 
         # Keyboard-driven mouse
-        submap=cursor
+        submap = cursor
         # Jump cursor to a position
-        bind=,a,exec,${pkgs.hyprland}/bin/hyprctl dispatch submap reset && ${pkgs.wl-kbptr}/bin/wl-kbptr && ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor
+        bind = ,a,exec,${pkgs.hyprland}/bin/hyprctl dispatch submap reset && ${pkgs.wl-kbptr}/bin/wl-kbptr && ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor
         # Cursor movement
-        binde=,j,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 0 10
-        binde=,k,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 0 -10
-        binde=,l,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 10 0
-        binde=,h,exec,${pkgs.wlrctl}/bin/wlrctl pointer move -10 0
+        binde = ,j,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 0 10
+        binde = ,k,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 0 -10
+        binde = ,l,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 10 0
+        binde = ,h,exec,${pkgs.wlrctl}/bin/wlrctl pointer move -10 0
         # Left button
-        bind=,s,exec,${pkgs.wlrctl}/bin/wlrctl pointer click left
+        binde = ,s,exec,${pkgs.wlrctl}/bin/wlrctl pointer click left
+        binde = ,y,exec,${pkgs.wlrctl}/bin/wlrctl pointer click left
         # Middle button
-        bind=,d,exec,${pkgs.wlrctl}/bin/wlrctl pointer click middle
+        binde = ,d,exec,${pkgs.wlrctl}/bin/wlrctl pointer click middle
         # Right button
-        bind=,f,exec,${pkgs.wlrctl}/bin/wlrctl pointer click right
+        binde = ,f,exec,${pkgs.wlrctl}/bin/wlrctl pointer click right
+        binde = ,u,exec,${pkgs.wlrctl}/bin/wlrctl pointer click right
         # Scroll up and down
-        binde=,e,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 10 0
-        binde=,r,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll -10 0
+        binde = ,e,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 10 0
+        binde = ,r,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll -10 0
         # Scroll left and right
-        binde=,t,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 -10
-        binde=,g,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 10
+        binde = ,t,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 -10
+        binde = ,g,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 10
         # Exit cursor submap
         # If you do not use cursor timeout or cursor:hide_on_key_press, you can delete its respective calls.
-        bind=,escape,exec,${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 3; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press true; ${pkgs.hyprland}/bin/hyprctl dispatch submap reset 
-        submap = reset
+        bind = ,escape,exec,${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 3; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press true; ${pkgs.hyprland}/bin/hyprctl dispatch submap reset 
+        submap  =  reset
         # Entrypoint
         # If you do not use cursor timeout or cursor:hide_on_key_press, you can delete its respective calls.
-        bind=$mainMod,g,exec,${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 0; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press false; ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor
+        bind = $mainMod,g,exec,${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 0; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press false; ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor
 
         # Cursor
         cursor {
           inactive_timeout = 3
         }
+      '' + optionalString (config.heywoodlh.home.onepassword.enable) ''
+        # 1Password
+        bind = CTRL_SUPER, s, exec, ${onepasswordToggle}/bin/1password-toggle.sh
       '';
       xwayland = {
         enable = true;

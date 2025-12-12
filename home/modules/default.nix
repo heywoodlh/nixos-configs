@@ -14,5 +14,6 @@
     ./guake.nix
     ./hyprland.nix
     ./vicinae.nix
+    ./onepassword.nix
   ];
 }

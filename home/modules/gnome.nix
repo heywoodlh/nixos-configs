@@ -261,7 +261,7 @@ in {
 
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
         binding = "<ctrl><Super>s";
-        command = "${pkgs._1password-gui}/bin/1password --quick-access";
+        command = "${config.heywoodlh.home.onepassword.package}/bin/1password --quick-access";
         name = "1pass-quick-access";
       };
 
@@ -303,7 +303,7 @@ in {
 
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10" = {
         binding = "<Control>s";
-        command = "${pkgs._1password-gui}/bin/1password --quick-access";
+        command = "${config.heywoodlh.home.onepassword.package}/bin/1password --quick-access";
         name = "1pass-quick-access";
       };
 

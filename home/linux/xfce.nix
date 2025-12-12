@@ -167,7 +167,7 @@ in {
       "${commandPrefix}<Super>e" = "${pkgs.rofimoji}/bin/rofimoji --action clipboard --skin-tone light";
       "${commandPrefix}<Super>space" = "${pkgs.rofi}/bin/rofi -combi-modi window,drun -config ${rofi-config} -show combi";
       "${commandPrefix}<Control>grave" = "${pkgs.guake}/bin/guake-toggle";
-      "${commandPrefix}<Control><Super>s" = "${pkgs._1password-gui}/bin/1password --quick-access";
+      "${commandPrefix}<Control><Super>s" = "${config.heywoodlh.home.onepassword.package}/bin/1password --quick-access";
       "${commandPrefix}<Control><Alt>t" = "${pkgs.gnome-terminal}/bin/gnome-terminal";
       "${wmPrefix}<Super>bracketleft" = "left_workspace_key";
       "${wmPrefix}<Super>bracketright" = "right_workspace_key";

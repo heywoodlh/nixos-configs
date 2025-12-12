@@ -55,7 +55,6 @@ in {
   };
 
   home.packages = [
-    pkgs._1password-gui
     pkgs.acpi
     pkgs.arch-install-scripts
     pkgs.flatpak
@@ -75,9 +74,11 @@ in {
     pkgs.ghostty
     captive-portal
     zen-wrapper
-  ] ++ (if system == "aarch64-linux" then [
+  ] ++ pkgs.lib.optionals (config.heywoodlh.home.onepassword.enable) [
+    config.heywoodlh.home.onepassword.package
+  ] ++ pkgs.lib.optionals (system == "aarch64-linux") [
     myFlakes.packages.aarch64-linux.chromium-widevine
-  ] else []);
+  ];
 
   home.shellAliases = {
     open = "xdg-open";

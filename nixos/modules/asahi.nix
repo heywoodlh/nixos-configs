@@ -5,6 +5,7 @@ with lib.types;
 
 let
   cfg = config.heywoodlh.apple-silicon;
+  username = config.heywoodlh.defaults.user.name;
 in {
   options.heywoodlh.apple-silicon = {
     enable = mkOption {
@@ -56,6 +57,9 @@ in {
         cache = cfg.hash.cache;
         firmware = cfg.hash.firmware;
       };
+    };
+    home-manager.users.${username} = {
+      heywoodlh.home.onepassword.gpu = false;
     };
   };
 }

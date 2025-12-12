@@ -938,6 +938,111 @@ boolean
 
 
 
+## heywoodlh\.home\.onepassword\.enable
+
+
+
+Enable heywoodlh 1password GUI configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+
+
+
+## heywoodlh\.home\.onepassword\.package
+
+
+
+1Password GUI package to use\.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+` <derivation 1password-8.11.20> `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+
+
+
+## heywoodlh\.home\.onepassword\.extraArgs
+
+
+
+Extra arguments to pass 1Password GUI executable\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+
+
+
+## heywoodlh\.home\.onepassword\.gpu
+
+
+
+Enable GPU acceleration for 1Password GUI\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+
+
+
+## heywoodlh\.home\.onepassword\.wrapper
+
+
+
+1Password GUI wrapper to reference throughout heywoodlh configurations\.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+` <derivation 1password-gui-wrapper> `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+
+
+
 ## heywoodlh\.home\.vicinae\.enable
 
 

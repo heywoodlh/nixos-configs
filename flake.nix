@@ -98,7 +98,7 @@
       inputs.flake-parts.follows = "flake-parts";
     };
     osquery-fix-nixpkgs = {
-      url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
+      url = "github:nixos/nixpkgs/16e00804e126c8aa4900ef1da76aeab74d7cd178";
     };
     # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
     jovian-nixos = {

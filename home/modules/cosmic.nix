@@ -24,30 +24,6 @@ in {
       xclip
     ];
     services.unclutter.enable = true;
-    programs.cosmic-term = {
-      enable = true;
-      profiles = [
-        {
-          command = "${myTmux}/bin/tmux";
-          hold = false;
-          is_default = true;
-          name = "Default";
-          syntax_theme_dark = "COSMIC Dark";
-          syntax_theme_light = "COSMIC Light";
-          tab_title = "Default";
-        }
-        {
-          command = "${myFish}/bin/fish";
-          hold = false;
-          is_default = false;
-          name = "Fish";
-          syntax_theme_dark = "COSMIC Dark";
-          syntax_theme_light = "COSMIC Light";
-          tab_title = "Fish";
-        }
-      ];
-    };
-
     xdg.configFile."com.system76.CosmicComp/v1/input_touchpad".text = ''
       (
           state: Enabled,
@@ -180,24 +156,5 @@ in {
           ): Spawn("1password --quick-access"),
       }
     '';
-
-    wayland.desktopManager.cosmic = {
-      enable = true;
-
-      configFile = {
-        "com.system76.CosmicComp" = {
-          version = 1;
-          entries = {
-            autotile = true; # enable tiling
-            xkb_config = {
-              layout = "us";
-              options = {
-                value = "caps:super";
-              };
-            };
-          };
-        };
-      };
-    };
   };
 }

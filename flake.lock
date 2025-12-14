@@ -175,32 +175,6 @@
         "myFlakes"
       ]
     },
-    "cosmic-home-manager": {
-      "inputs": {
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "home-manager": [
-          "home-manager"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1762776565,
-        "narHash": "sha256-Trd4uVhg9OggkxBMn3qUv74z9rNZE/s7iT7llTYQ0ZU=",
-        "owner": "HeitorAugustoLN",
-        "repo": "cosmic-manager",
-        "rev": "f26cdfef90b8db37db913f7c72a609c997700e59",
-        "type": "github"
-      },
-      "original": {
-        "owner": "HeitorAugustoLN",
-        "repo": "cosmic-manager",
-        "type": "github"
-      }
-    },
     "crane": {
       "locked": {
         "lastModified": 1765145449,
@@ -1815,7 +1789,6 @@
       "inputs": {
         "ashell": "ashell",
         "cart": "cart",
-        "cosmic-home-manager": "cosmic-home-manager",
         "crane": "crane",
         "dark-wallpaper": "dark-wallpaper",
         "darwin": "darwin",

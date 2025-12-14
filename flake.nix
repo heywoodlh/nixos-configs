@@ -91,12 +91,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    cosmic-home-manager = {
-      url = "github:HeitorAugustoLN/cosmic-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-      inputs.flake-parts.follows = "flake-parts";
-    };
     osquery-fix-nixpkgs = {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
@@ -183,7 +177,6 @@
                       nixos-wsl,
                       darwin,
                       home-manager,
-                      cosmic-home-manager,
                       jovian-nixos,
                       nur,
                       flake-utils,
@@ -687,7 +680,6 @@
           inherit pkgs;
           modules = [
             determinate.homeModules.default
-            cosmic-home-manager.homeManagerModules.cosmic-manager
             #(mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config

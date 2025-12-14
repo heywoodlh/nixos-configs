@@ -315,7 +315,6 @@ in {
           fi
         '';
         imports = [
-          cosmic-home-manager.homeManagerModules.cosmic-manager
           ../../home/linux.nix
         ];
         home.packages = [

@@ -145,5 +145,6 @@ in {
 
   system.activationScripts.postActivation.text = ''
     /usr/sbin/spctl --master-enable # Enable Gatekeeper
+    /usr/bin/ulimit -n 10240
   '';
 }

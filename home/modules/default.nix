@@ -5,15 +5,15 @@
     ./docker.nix
     ./lima.nix
     ./applications.nix
-    ./linux-autostart.nix
     ./marp.nix
     ./1password-docker-helper.nix
-    ./darwin-defaults.nix
+    ./onepassword.nix
     ./gnome.nix
     ./cosmic.nix
     ./guake.nix
     ./hyprland.nix
     ./vicinae.nix
-    ./onepassword.nix
+    ./linux-autostart.nix
+    ./darwin-defaults.nix
   ];
 }

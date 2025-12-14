@@ -33,8 +33,12 @@ spec:
           resources:
             requests:
               gpu.intel.com/i915: "1"
+              cpu: 500m
+              memory: 1024Mi
             limits:
               gpu.intel.com/i915: "1"
+              cpu: "2"
+              memory: 2048Mi
       restartPolicy: Always
       volumes:
         - name: model-cache

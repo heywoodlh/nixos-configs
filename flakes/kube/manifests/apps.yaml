@@ -465,6 +465,27 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: immich
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "immich.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: immich-machine-learning
   namespace: argo
 spec:

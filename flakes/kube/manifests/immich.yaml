@@ -3,7 +3,7 @@ apiVersion: onepassword.com/v1
 kind: OnePasswordItem
 metadata:
   name: "immich"
-  namespace: "@namespace@"
+  namespace: "default"
 spec:
   itemPath: "vaults/Kubernetes/items/udspwt422lpk5bri23jzqgqfhm"
 ---
@@ -13,7 +13,7 @@ metadata:
   labels:
     app: immich-database
   name: immich-database
-  namespace: @namespace@
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -45,7 +45,7 @@ spec:
                 secretKeyRef:
                   name: immich
                   key: db-username
-          image: @postgres_image@
+          image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
           name: immich-postgres
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
@@ -57,7 +57,7 @@ spec:
       volumes:
         - name: immich-db
           hostPath:
-            path: @hostfolder@/db
+            path: /media/data-ssd/immich/db
             type: DirectoryOrCreate
 
 ---
@@ -67,7 +67,7 @@ metadata:
   labels:
     app: immich-database
   name: immich-database
-  namespace: @namespace@
+  namespace: default
 spec:
   ports:
     - name: "postgres"
@@ -82,9 +82,9 @@ metadata:
   labels:
     app: immich-server
   name: immich-server
-  namespace: @namespace@
+  namespace: default
 spec:
-  replicas: @replicas@
+  replicas: 1
   selector:
     matchLabels:
       app: immich-server
@@ -98,11 +98,11 @@ spec:
       containers:
         - env:
             - name: TZ
-              value: "@timezone@"
+              value: "America/Denver"
             - name: IMMICH_VERSION
-              value: "@version@"
+              value: "v2"
             - name: DB_HOSTNAME
-              value: "immich-database.@namespace@.svc.cluster.local"
+              value: "immich-database.default.svc.cluster.local"
             - name: UPLOAD_LOCATION
               value: "/uploads"
             - name: DB_PASSWORD
@@ -121,8 +121,8 @@ spec:
                   name: immich
                   key: db-name
             - name: REDIS_HOSTNAME
-              value: "immich-redis.@namespace@.svc.cluster.local"
-          image: @image@
+              value: "immich-redis.default.svc.cluster.local"
+          image: ghcr.io/immich-app/immich-server:v2
           name: immich-server
           ports:
             - containerPort: 2283
@@ -145,11 +145,11 @@ spec:
       volumes:
         - name: immich-data
           hostPath:
-            path: @hostfolder@/data
+            path: /media/data-ssd/immich/data
             type: DirectoryOrCreate
         - name: immich-uploads
           hostPath:
-            path: @hostfolder@/uploads
+            path: /media/data-ssd/immich/uploads
             type: DirectoryOrCreate
 ---
 apiVersion: v1
@@ -158,7 +158,7 @@ metadata:
   labels:
     app: immich-server
   name: immich-server
-  namespace: @namespace@
+  namespace: default
   annotations:
     tailscale.com/expose: "true"
     tailscale.com/hostname: "immich"
@@ -177,7 +177,7 @@ metadata:
   labels:
     app: immich-redis
   name: immich-redis
-  namespace: @namespace@
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -189,7 +189,7 @@ spec:
         app: immich-redis
     spec:
       containers:
-        - image: @valkey_image@
+        - image: docker.io/valkey/valkey:8@sha256:81db6d39e1bba3b3ff32bd3a1b19a6d69690f94a3954ec131277b9a26b95b3aa
           livenessProbe:
             exec:
               command:
@@ -206,7 +206,7 @@ metadata:
   labels:
     app: immich-redis
   name: immich-redis
-  namespace: @namespace@
+  namespace: default
 spec:
   ports:
     - name: "redis"

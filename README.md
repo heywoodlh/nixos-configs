@@ -1,3 +1,7 @@
+[![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
+
+[![build-linux-outputs](https://github.com/heywoodlh/nixos-configs/actions/workflows/linux.yml/badge.svg)](https://github.com/heywoodlh/nixos-configs/actions/workflows/linux.yml)
+
 ## NixOS Configs
 
 This repo stores my NixOS and Nix on Darwin setup.

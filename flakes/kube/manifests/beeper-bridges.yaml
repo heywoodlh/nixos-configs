@@ -36,7 +36,7 @@ spec:
         - name: beeper-signal
           securityContext:
             {}
-          image: "ghcr.io/beeper/bridge-manager:5d5ce6adf5f7d0bfa399e2855506ba717a48d534"
+          image: "ghcr.io/beeper/bridge-manager:8ff78f238554b359e24eb196649eaea0179a700b"
           command:
             - "/bin/ash"
             - "-c"
@@ -57,7 +57,7 @@ spec:
         - name: beeper-discord
           securityContext:
             {}
-          image: "ghcr.io/beeper/bridge-manager:5d5ce6adf5f7d0bfa399e2855506ba717a48d534"
+          image: "ghcr.io/beeper/bridge-manager:8ff78f238554b359e24eb196649eaea0179a700b"
           command:
             - "/bin/ash"
             - "-c"
@@ -75,10 +75,54 @@ spec:
                 secretKeyRef:
                   name: beeper-key
                   key: password
+        # Set up by sending a DM to: `@sh-google-messages-000bot:beeper.local`
+        - name: beeper-google-messages
+          securityContext:
+            {}
+          image: "ghcr.io/beeper/bridge-manager:8ff78f238554b359e24eb196649eaea0179a700b"
+          command:
+            - "/bin/ash"
+            - "-c"
+          volumeMounts:
+            - name: google-messages-config
+              mountPath: /data
+          args:
+            - /usr/local/bin/run-bridge.sh sh-googlemessages-000 
+          imagePullPolicy: IfNotPresent
+          resources:
+            {}
+          env:
+            - name: MATRIX_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-key
+                  key: password
+        # Set up by sending a DM to: `@sh-googlevoice-000bot:beeper.local`
+        - name: beeper-google-voice
+          securityContext:
+            {}
+          image: "ghcr.io/beeper/bridge-manager:8ff78f238554b359e24eb196649eaea0179a700b"
+          command:
+            - "/bin/ash"
+            - "-c"
+          volumeMounts:
+            - name: google-voice-config
+              mountPath: /data
+          args:
+            - /usr/local/bin/run-bridge.sh sh-googlevoice-000
+          imagePullPolicy: IfNotPresent
+          resources:
+            {}
+          env:
+            - name: MATRIX_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-key
+                  key: password
         #- name: beeper-irc
         #  securityContext:
         #    {}
-        #  image: "ghcr.io/beeper/bridge-manager:5d5ce6adf5f7d0bfa399e2855506ba717a48d534"
+        #  image: "ghcr.io/beeper/bridge-manager:8ff78f238554b359e24eb196649eaea0179a700b"
         #  command:
         #    - "/bin/ash"
         #    - "-c"
@@ -100,12 +144,20 @@ spec:
       - name: signal-config
         hostPath:
           path: /media/data-ssd/beeper/signal
-          type: Directory
+          type: DirectoryOrCreate
       - name: discord-config
         hostPath:
           path: /media/data-ssd/beeper/discord
-          type: Directory
+          type: DirectoryOrCreate
       - name: irc-config
         hostPath:
           path: /media/data-ssd/beeper/irc
-          type: Directory
+          type: DirectoryOrCreate
+      - name: google-messages-config
+        hostPath:
+          path: /media/data-ssd/beeper/googlemessages
+          type: DirectoryOrCreate
+      - name: google-voice-config
+        hostPath:
+          path: /media/data-ssd/beeper/googlevoice
+          type: DirectoryOrCreate

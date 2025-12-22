@@ -75,6 +75,50 @@ spec:
                 secretKeyRef:
                   name: beeper-key
                   key: password
+        # Set up by sending a DM to: `@sh-google-messages-000bot:beeper.local`
+        - name: beeper-google-messages
+          securityContext:
+            {}
+          image: "@image@"
+          command:
+            - "/bin/ash"
+            - "-c"
+          volumeMounts:
+            - name: google-messages-config
+              mountPath: /data
+          args:
+            - /usr/local/bin/run-bridge.sh sh-googlemessages-000 
+          imagePullPolicy: IfNotPresent
+          resources:
+            {}
+          env:
+            - name: MATRIX_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-key
+                  key: password
+        # Set up by sending a DM to: `@sh-googlevoice-000bot:beeper.local`
+        - name: beeper-google-voice
+          securityContext:
+            {}
+          image: "@image@"
+          command:
+            - "/bin/ash"
+            - "-c"
+          volumeMounts:
+            - name: google-voice-config
+              mountPath: /data
+          args:
+            - /usr/local/bin/run-bridge.sh sh-googlevoice-000
+          imagePullPolicy: IfNotPresent
+          resources:
+            {}
+          env:
+            - name: MATRIX_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-key
+                  key: password
         #- name: beeper-irc
         #  securityContext:
         #    {}
@@ -100,12 +144,20 @@ spec:
       - name: signal-config
         hostPath:
           path: @hostfolder@/signal
-          type: Directory
+          type: DirectoryOrCreate
       - name: discord-config
         hostPath:
           path: @hostfolder@/discord
-          type: Directory
+          type: DirectoryOrCreate
       - name: irc-config
         hostPath:
           path: @hostfolder@/irc
-          type: Directory
+          type: DirectoryOrCreate
+      - name: google-messages-config
+        hostPath:
+          path: @hostfolder@/googlemessages
+          type: DirectoryOrCreate
+      - name: google-voice-config
+        hostPath:
+          path: @hostfolder@/googlevoice
+          type: DirectoryOrCreate

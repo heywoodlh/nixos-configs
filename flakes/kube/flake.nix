@@ -302,7 +302,7 @@
           src = ./templates/beeper-bridges.yaml;
           namespace = "messaging";
           replicas = 1;
-          image = "ghcr.io/beeper/bridge-manager:5d5ce6adf5f7d0bfa399e2855506ba717a48d534";
+          image = "ghcr.io/beeper/bridge-manager:8ff78f238554b359e24eb196649eaea0179a700b";
           hostfolder = "/media/data-ssd/beeper";
         };
         # Run the following before deploying:

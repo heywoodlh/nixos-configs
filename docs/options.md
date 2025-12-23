@@ -623,6 +623,27 @@ boolean
 
 
 
+## heywoodlh\.helix
+
+
+
+Enable heywoodlh Helix configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/helix.nix)
+
+
+
 ## heywoodlh\.home\.applications
 
 
@@ -851,6 +872,70 @@ boolean
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/guake\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/guake.nix)
+
+
+
+## heywoodlh\.home\.helix\.enable
+
+
+
+Enable heywoodlh helix configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
+
+
+
+## heywoodlh\.home\.helix\.ai
+
+
+
+Enable machine learning tooling, i\.e\. Copilot, lsp-ai\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
+
+
+
+## heywoodlh\.home\.helix\.homelab
+
+
+
+Enable heywoodlh homelab-dependent configuration\.
+Will only be useful to author\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
 
 
 

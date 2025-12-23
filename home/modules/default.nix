@@ -15,5 +15,6 @@
     ./vicinae.nix
     ./linux-autostart.nix
     ./darwin-defaults.nix
+    ./helix.nix
   ];
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, determinate, nixpkgs-stable, myFlakes, cosmic-home-manager, nixpkgs-lts, ... }:
+{ config, pkgs, lib, determinate, nixpkgs-stable, myFlakes, nixpkgs-lts, ... }:
 
 with lib;
 with lib.types;
@@ -11,7 +11,6 @@ let
     config.allowUnfree = true;
   };
   myVim = myFlakes.packages.${system}.vim;
-  myHelix = myFlakes.packages.${system}.helix-wrapper;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
   myGit = myFlakes.packages.${system}.git;
@@ -164,11 +163,9 @@ in {
         ];
         extra-substituters = [
           "https://nix-community.cachix.org"
-          "https://heywoodlh-helix.cachix.org"
         ];
         trusted-public-keys = [
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-          "heywoodlh-helix.cachix.org-1:qHDV95nI/wX9pidAukzMzgeok1415rgjMAXinDsbb7M="
         ];
       };
     };
@@ -217,7 +214,6 @@ in {
       myNixosBoot
       myNixosBuild
       myGit
-      myHelix
       myTmux
       myFish
       myVim
@@ -297,7 +293,23 @@ in {
     };
 
     # Home-manager configs
-    home-manager = {
+    home-manager = let
+        base = {
+          home.activation.docker-rootless-context = ''
+            if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
+            then
+              ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/${builtins.toString userUid}/docker.sock" &> /dev/null || true
+              ${pkgs.docker-client}/bin/docker context use rootless
+            fi
+          '';
+          imports = [
+            ../../home/linux.nix
+          ];
+          home.packages = [
+            myFlakes.packages.${system}.git
+          ];
+        };
+      in {
       useGlobalPkgs = true;
       extraSpecialArgs = {
         inherit determinate;
@@ -306,21 +318,8 @@ in {
         inherit nixpkgs-lts;
       };
       backupFileExtension = ".bak";
-      users.${username} = { ... }: {
-        home.activation.docker-rootless-context = ''
-          if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
-          then
-            ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/${builtins.toString userUid}/docker.sock" &> /dev/null || true
-            ${pkgs.docker-client}/bin/docker context use rootless
-          fi
-        '';
-        imports = [
-          ../../home/linux.nix
-        ];
-        home.packages = [
-          myFlakes.packages.${system}.git
-        ];
-      };
+      users.${username} = { ... }: base;
+      users.root = { ... }: base;
     };
 
     ## Bluetooth
@@ -340,6 +339,9 @@ in {
 
     # Seahorse (Gnome Keyring)
     programs.seahorse.enable = cfg.keyring;
+
+    # Helix
+    heywoodlh.helix = true;
 
     # NixOS version
     system.stateVersion = "25.05";

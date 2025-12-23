@@ -6,8 +6,6 @@ let
   homeDir = config.home.homeDirectory;
   myFish = myFlakes.packages.${system}.fish;
   myVim = myFlakes.packages.${system}.vim;
-  myHelix = myFlakes.packages.${system}.helix;
-  myHelixConf = myFlakes.packages.${system}.helix-config;
   myGit = myFlakes.packages.${system}.git;
   myJujutsu = myFlakes.packages.${system}.jujutsu;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
@@ -296,11 +294,9 @@ in {
       ];
       extra-substituters = [
         "https://nix-community.cachix.org"
-        "https://heywoodlh-helix.cachix.org"
       ];
       extra-trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "heywoodlh-helix.cachix.org-1:qHDV95nI/wX9pidAukzMzgeok1415rgjMAXinDsbb7M="
       ];
     };
   };
@@ -358,7 +354,6 @@ in {
     vdirsyncer
     zip
     myVim
-    myHelix
     myGit
     myJujutsu
     myFlakes.packages.${system}.tmux
@@ -390,10 +385,6 @@ in {
 
   home.file."tmp/.placeholder.txt" = {
     text = "";
-  };
-
-  home.file.".config/helix/config.toml" = {
-    source = myHelixConf;
   };
 
   # Enable nix-direnv
@@ -901,5 +892,10 @@ in {
       [ProxyList]
       socks5 100.115.177.85 1080
     '';
+  };
+  heywoodlh.home.helix = {
+    enable = true;
+    ai = true;
+    homelab = true;
   };
 }

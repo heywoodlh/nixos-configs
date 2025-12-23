@@ -232,6 +232,7 @@
       ./nixos/modules/vm.nix
       ./nixos/modules/sshd.nix
       ./nixos/modules/asahi.nix
+      ./nixos/modules/helix.nix
     ];
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -298,6 +299,11 @@
             hostname = myHostname;
           };
           home-manager.users.heywoodlh = { ... }: {
+            imports = [
+              homeModules.heywoodlh.home
+            ];
+          };
+          home-manager.users.root = { ... }: {
             imports = [
               homeModules.heywoodlh.home
             ];

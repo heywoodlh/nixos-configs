@@ -1685,17 +1685,17 @@
     },
     "osquery-fix-nixpkgs": {
       "locked": {
-        "lastModified": 1690997355,
-        "narHash": "sha256-JgriPhM8Fd0Ed8Yu5irnXno6BlIaeG9sWkVwRTPhFA4=",
+        "lastModified": 1766842692,
+        "narHash": "sha256-Hw85yxsscC8VJo7I//7QKo5/oiKPWEwGKHW6HzJ/gbk=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e4235192047a058776b3680f559579bf885881da",
+        "rev": "beaea8bf4082421e4c58d5797722f73d27c63972",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e4235192047a058776b3680f559579bf885881da",
+        "rev": "beaea8bf4082421e4c58d5797722f73d27c63972",
         "type": "github"
       }
     },

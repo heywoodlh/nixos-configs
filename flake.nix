@@ -464,6 +464,12 @@
           heywoodlh.sshd.enable = true;
         };
 
+        nixos-slc = nixosConfig "server" "nixos-slc" {
+          imports = [
+            /etc/nixos/hardware-configuration.nix
+          ];
+        };
+
         nixos-blade = nixosConfig "laptop" "nixos-blade" {
           imports = [
             ./nixos/hosts/razer-blade-14.nix

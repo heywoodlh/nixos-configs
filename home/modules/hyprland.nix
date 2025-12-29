@@ -39,7 +39,7 @@ let
     truncate_title_after_length = 100
 
     [settings]
-    lock_cmd = ""
+    lock_cmd = "${lockCmd}"
     audio_sinks_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 3"
     audio_sources_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 4"
     wifi_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor"
@@ -169,11 +169,9 @@ in {
       enable = true;
       systemd = {
         enable = true;
-        target = "hyprland-session.target";
+        target = "graphical-session.target";
       };
     };
-
-    systemd.user.services.ashell.Service.Restart = mkForce "always";
 
     home.file.".config/ashell/config.toml" = {
       enable = true;
@@ -459,7 +457,6 @@ in {
         # Apps to start on login
         exec-once = ${pkgs.hyprland}/bin/hyprctl setcursor Adwaita 24
         exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
-        exec-once = ${onepasswordCfg.wrapper} --silent
         exec-once = ${pkgs.dunst}/bin/dunst
         exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
         exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
@@ -613,13 +610,14 @@ in {
           inactive_timeout = 3
         }
       '' + optionalString (config.heywoodlh.home.onepassword.enable) ''
-        # 1Password
+        exec-once = ${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --silent
         bind = CTRL_SUPER, s, exec, ${onepasswordToggle}/bin/1password-toggle.sh
       '';
       xwayland = {
         enable = true;
       };
     };
+
     services.hypridle = {
       enable = true;
       settings = {

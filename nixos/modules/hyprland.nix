@@ -35,13 +35,9 @@ in {
 
     home-manager.users.${username} = {
       heywoodlh.home.hyprland = true;
-
-      wayland.windowManager.hyprland = {
-        extraConfig = ''
-          env = NIXOS_OZONE_WL, 1
-        '';
-        systemd.enable = false; # Managed with NixOS module
-      };
+      wayland.windowManager.hyprland.extraConfig = ''
+        env = NIXOS_OZONE_WL, 1
+      '';
     };
   };
 }

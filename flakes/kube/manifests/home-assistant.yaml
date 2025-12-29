@@ -33,6 +33,29 @@ spec:
     app.kubernetes.io/name: home-assistant
   type: ClusterIP
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: homekit-bridge
+  name: homekit-bridge
+  namespace: default
+spec:
+  ports:
+  - name: homekit-bridge
+    port: 32000
+    protocol: TCP
+    targetPort: 32000
+    nodePort: 32000
+  selector:
+    app: home-assistant
+    app.kubernetes.io/name: home-assistant
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.1.22
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -82,6 +105,9 @@ spec:
         ports:
         - containerPort: 8123
           name: http
+          protocol: TCP
+        - containerPort: 32000
+          name: homekit-bridge
           protocol: TCP
         readinessProbe:
           failureThreshold: 3

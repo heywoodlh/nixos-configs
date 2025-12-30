@@ -1212,6 +1212,92 @@ boolean
 
 
 
+## heywoodlh\.luksYubikey\.enable
+
+
+
+Enable Yubikey luks single factor decryption\.
+See the following gist for setup example:
+https://gist\.github\.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+
+
+
+## heywoodlh\.luksYubikey\.device
+
+
+
+Full path of FAT boot device (i\.e\. /dev/nvme0n1p1)\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+
+
+
+## heywoodlh\.luksYubikey\.name
+
+
+
+LUKS device name\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "luks" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+
+
+
+## heywoodlh\.luksYubikey\.uuid
+
+
+
+LUKS device UUID\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+
+
+
 ## heywoodlh\.server
 
 

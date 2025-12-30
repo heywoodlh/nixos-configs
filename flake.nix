@@ -233,6 +233,7 @@
       ./nixos/modules/sshd.nix
       ./nixos/modules/asahi.nix
       ./nixos/modules/helix.nix
+      ./nixos/modules/luks.nix
     ];
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;

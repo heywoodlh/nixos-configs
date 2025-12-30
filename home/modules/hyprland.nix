@@ -173,6 +173,14 @@ in {
       };
     };
 
+    # Workaround for ashell not starting immediately
+    systemd.user.services.ashell = {
+      Service = {
+        Restart = mkForce "always";
+        RestartSec = 5;
+      };
+    };
+
     home.file.".config/ashell/config.toml" = {
       enable = true;
       source = ashellConf;

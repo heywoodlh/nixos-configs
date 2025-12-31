@@ -1,4 +1,4 @@
-{ config, pkgs, myFlakes, hexstrike-ai, ... }:
+{ config, pkgs, myFlakes, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -462,34 +462,26 @@ in {
   '';
 
   # Aerc
-  home.file.".config/aerc/accounts.conf" = {
-    enable = true;
-    text = ''
-      [fastmail]
-      source = imaps://heywoodlh%40heywoodlh.io@imap.fastmail.com:993
-      source-cred-cmd = ${op-wrapper} read 'op://Personal/3qaxsqbv5dski4wqswxapc7qoi/password'
-      outgoing = smtps://heywoodlh%40heywoodlh.io@smtp.fastmail.com:465
-      outgoing-cred-cmd = ${op-wrapper} read 'op://Personal/3qaxsqbv5dski4wqswxapc7qoi/password'
-      default = INBOX
-      copy-to = Sent
-      from = Spencer Heywood <heywoodlh@heywoodlh.io>
-      aliases = *@heywoodlh.io
-
-      [protonmail]
-      source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143
-      source-cred-cmd = ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'
-      outgoing = smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25
-      outgoing-cred-cmd = ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'
-      default = INBOX
-      copy-to = Sent
-      from = Spencer Heywood <l.spencer.heywood@protonmail.com>
-
-    '';
-  };
   programs.aerc = {
     enable = true;
+    extraAccounts = {
+      protonmail = {
+        source = "imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143";
+        source-cred-cmd = "${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'";
+        outgoing = "smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25";
+        outgoing-cred-cmd = "${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'";
+        default = "INBOX";
+        copy-to = "Sent";
+        from = "Spencer Heywood <spencer@heywoodlh.io>";
+        aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>";
+        signature-file = "${pkgs.writeText "signature.txt" "- Spencer"}";
+      };
+    };
     extraConfig = {
-      general.unsafe-accounts-conf = true;
+      general = {
+        unsafe-accounts-conf = true;
+        editor = "hx";
+      };
       filters = {
         "text/html" = "${aerc-html-filter}/bin/html";
         "text/plain" = "${pkgs.coreutils}/bin/fold -w 80";
@@ -628,6 +620,9 @@ in {
       function lnav
         kubectl exec -it -n monitoring $(kubectl get pods -n monitoring | grep -i lnav | head -1 | awk '{print $1}') -- env TERM="screen-256color" lnav /logs $argv
       end
+
+      export EDITOR="hx"
+      export VISUAL="hx"
 
       # Config file that gets loaded very last
       test -e ~/.config/fish/override.fish && source ~/.config/fish/override.fish || true

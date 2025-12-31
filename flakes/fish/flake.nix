@@ -181,10 +181,6 @@
         # Add direnv to $PATH
         add-to-path ${pkgs.direnv}/bin
 
-        # Set EDITOR to vim
-        set -gx EDITOR "vim"
-        set -gx GIT_EDITOR "vim"
-
         # Hammerspoon
         add-to-path /Applications/Hammerspoon.app/Contents/Frameworks/hs
 

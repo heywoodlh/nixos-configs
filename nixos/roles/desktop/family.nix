@@ -136,6 +136,7 @@ in {
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.visualstudio.code
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.valvesoftware.SteamLink
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.jeffser.Alpaca
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.vinegarhq.Vinegar
         echo "Completed installation of Flatpaks..."
       '';
       home.file.".local/share/applications/org.mozilla.firefox.desktop".text = ''

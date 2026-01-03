@@ -75,7 +75,7 @@ spec:
                 secretKeyRef:
                   name: beeper-key
                   key: password
-        # Set up by sending a DM to: `@sh-google-messages-000bot:beeper.local`
+        # Set up by sending a DM to: `@sh-googlemessages-000bot:beeper.local`
         - name: beeper-google-messages
           securityContext:
             {}
@@ -87,7 +87,7 @@ spec:
             - name: google-messages-config
               mountPath: /data
           args:
-            - /usr/local/bin/run-bridge.sh sh-googlemessages-000 
+            - /usr/local/bin/run-bridge.sh sh-googlemessages-000
           imagePullPolicy: IfNotPresent
           resources:
             {}

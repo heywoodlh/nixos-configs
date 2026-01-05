@@ -60,7 +60,10 @@ in {
       package = myHelix;
       defaultEditor = true;
       extraPackages = with pkgs; [
+        bash-language-server
+        fish-lsp
         gopls
+        harper
         marksman
         nil
         ty
@@ -69,7 +72,7 @@ in {
         lsp-ai
       ];
       settings = {
-        theme = "base16_transparent";
+        theme = "custom";
         editor = {
           shell = [
             "${myFish}/bin/fish"
@@ -92,26 +95,53 @@ in {
               tab = "┆";
             };
           };
-          lsp = {
-            display-inlay-hints = true;
+          lsp.display-inlay-hints = true;
+          soft-wrap.enable = true;
+          inline-diagnostics = {
+            cursor-line = "hint";
+            other-lines = "error";
+          };
+        };
+        keys = {
+          normal.space = {
+            i = ":toggle lsp.display-inlay-hints";
           };
         };
       };
-      languages = optionalAttrs (cfg.ai) {
-        copilot = {
+      languages = {
+        language-server.harper = {
+          command = "harper-ls";
+          args = [ "--stdio" ];
+
+          config.harper-ls = {
+            diagnosticSeverity = "hint";
+            dialect = "American";
+            linters = { long_sentences = false; };
+          };
+        };
+        copilot = optionalAttrs (cfg.ai) {
           command = "${gptPkg}/bin/helix-gpt";
           args = [
             "--handler" "copilot"
           ];
         };
-        "lsp-ai" = {
+        "lsp-ai" = optionalAttrs (cfg.ai) {
           command = "lsp-ai";
           args = ["--stdio"];
         };
         language = [
           {
+            name = "markdown";
+            language-servers = [ "marksman" "harper" ];
+          }
+        ] ++ optionals (cfg.ai) [
+          {
             name = "bash";
             language-servers = [ "bash-language-server" "copilot" ];
+          }
+          {
+            name = "fish";
+            language-servers = [ "fish-lsp" "copilot" ];
           }
           {
             name = "go";
@@ -126,6 +156,20 @@ in {
             language-servers = [ "ty" "copilot" ];
           }
         ];
+      };
+      # My overrides to base16_transparent theme
+      themes.custom = {
+        inherits = "base16_transparent";
+        "comment".fg = "comment";
+        "diagnostic.hint".underline = {
+          color = "#5E81AC";
+          style = "curl";
+        };
+        "hint" = "#5E81AC";
+        "ui.virtual.inlay-hint" = {
+          fg = "#4C566A";
+          modifiers = ["italic"];
+        };
       };
     };
     nix.settings = {

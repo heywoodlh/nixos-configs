@@ -181,22 +181,6 @@
         "type": "github"
       }
     },
-    "minecraft-helm": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1760041309,
-        "narHash": "sha256-5h4rKS+SUaysHTkqNgY7D3+z442zlYGQ9ybIRe+D+yE=",
-        "owner": "itzg",
-        "repo": "minecraft-server-charts",
-        "rev": "54b274bc9a1f76a177646e85fc907f35f9972b47",
-        "type": "github"
-      },
-      "original": {
-        "owner": "itzg",
-        "repo": "minecraft-server-charts",
-        "type": "github"
-      }
-    },
     "nfs-helm": {
       "flake": false,
       "locked": {
@@ -367,7 +351,6 @@
         "flake-utils": "flake-utils",
         "kasmweb": "kasmweb",
         "krew2nix": "krew2nix",
-        "minecraft-helm": "minecraft-helm",
         "nfs-helm": "nfs-helm",
         "nix-kube-generators": "nix-kube-generators",
         "nixhelm": "nixhelm",

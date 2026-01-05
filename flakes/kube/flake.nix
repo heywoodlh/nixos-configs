@@ -34,10 +34,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "flake-utils/systems";
     };
-    minecraft-helm = {
-      url = "github:itzg/minecraft-server-charts";
-      flake = false;
-    };
     truecharts-helm = {
       url = "github:truecharts/charts";
       flake = false;
@@ -83,7 +79,6 @@
     nixhelm,
     tailscale,
     cloudflared-helm,
-    minecraft-helm,
     truecharts-helm,
     open-webui,
     coredns,
@@ -604,10 +599,10 @@
         };
         minecraft-bedrock = mkKubeDrv "minecraft-bedrock" {
           src = ./templates/minecraft-bedrock.yaml;
-          namespace = "default";
-          image = "docker.io/itzg/minecraft-bedrock-server:latest";
+          namespace = "gaming";
+          image = "ghcr.io/dmedina559/bedrock-server-manager:stable";
           nodename = "homelab";
-          hostfolder = "/opt/minecraft-bedrock";
+          hostfolder = "/media/data-ssd/minecraft";
         };
         miniflux = mkKubeDrv "miniflux" {
           src = ./templates/miniflux.yaml;

@@ -30,6 +30,7 @@ applications=(
   "iperf"
   "lancache"
   "media"
+  "minecraft-bedrock"
   "miniflux"
   "namespaces"
   "nfcapd"

@@ -488,6 +488,7 @@
           valkey_image = "docker.io/valkey/valkey:8@sha256:81db6d39e1bba3b3ff32bd3a1b19a6d69690f94a3954ec131277b9a26b95b3aa";
           replicas = 1;
           hostfolder = "/media/data-ssd/immich";
+          datafolder = "/media/data_pool/immich/data";
         };
         immich-machine-learning = mkKubeDrv "immich-machine-learning" {
           src = ./templates/immich-ml.yaml;

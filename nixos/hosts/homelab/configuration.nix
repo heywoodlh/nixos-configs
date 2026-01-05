@@ -92,6 +92,7 @@ in {
         3389
         5900
         32000 # home-assistant homekit device
+        32001 # immich
       ];
       extraCommands = "iptables -t nat -A POSTROUTING -d 10.64.0.1 -p tcp -m tcp --dport 1080 -j MASQUERADE";
     };
@@ -177,13 +178,14 @@ in {
     "i915"
   ];
 
-  # Do not start k3s is media drives fail
+  # Do not start k3s if media drives fail
   systemd.services.k3s = let
     mediaMounts = [
       "media-data\\x2dssd.mount"
       "media-home\\x2dmedia-disk1.mount"
       "media-home\\x2dmedia-disk2.mount"
       "media-home\\x2dmedia-disk3.mount"
+      "media-data_pool-immich.mount"
     ];
   in {
     after = mediaMounts;
@@ -195,5 +197,12 @@ in {
     enable = true;
     reflector = true;
     openFirewall = true;
+  };
+
+  # Dedicated immich ZFS device/mountpoint
+  # Created with: `sudo zfs create -o mountpoint=/media/data_pool/immich data_pool/immich`
+  fileSystems."/media/data_pool/immich" = {
+    device = "data_pool/immich";
+    fsType = "zfs";
   };
 }

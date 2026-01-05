@@ -145,7 +145,7 @@ spec:
       volumes:
         - name: immich-data
           hostPath:
-            path: /media/data-ssd/immich/data
+            path: /media/data_pool/immich/data
             type: DirectoryOrCreate
         - name: immich-uploads
           hostPath:
@@ -168,8 +168,16 @@ spec:
     - name: "http"
       port: 80
       targetPort: 2283
+      nodePort: 32001
+  type: LoadBalancer
+  externalIPs:
+    - 192.168.1.22
   selector:
     app: immich-server
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.1.22
 ---
 apiVersion: apps/v1
 kind: Deployment

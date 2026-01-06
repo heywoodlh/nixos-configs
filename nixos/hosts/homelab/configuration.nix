@@ -84,6 +84,7 @@ in {
     firewall = {
       enable = true;
       allowedUDPPorts = [
+        5353 # home-assistant homekit bridge
         9995
       ];
       allowedTCPPorts = [
@@ -91,7 +92,7 @@ in {
         443
         3389
         5900
-        32000 # home-assistant homekit device
+        21063 # home-assistant homekit bridge
         32001 # immich
       ];
       extraCommands = "iptables -t nat -A POSTROUTING -d 10.64.0.1 -p tcp -m tcp --dport 1080 -j MASQUERADE";

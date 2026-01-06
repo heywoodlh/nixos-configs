@@ -80,6 +80,7 @@ in {
       "knockknock"
       "lulu"
       "oversight"
+      "proton-drive"
       "remoteviewer"
       "rustdesk"
       "shortcat"

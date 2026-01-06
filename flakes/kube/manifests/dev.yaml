@@ -3,7 +3,7 @@ apiVersion: onepassword.com/v1
 kind: OnePasswordItem
 metadata:
   name: "dev-password"
-  namespace: "@namespace@"
+  namespace: "default"
 spec:
   itemPath: "vaults/Kubernetes/items/boofeqmvt7vmcdqsyzczhiwqre"
 ---
@@ -11,7 +11,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-sshd-config
-  namespace: @namespace@
+  namespace: default
 data:
   sshd_config: |-
     Include /etc/ssh/sshd_config.d/*.conf
@@ -32,7 +32,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-keys
-  namespace: @namespace@
+  namespace: default
 data:
   keys.sh: |-
     #!/usr/bin/env bash
@@ -45,7 +45,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-gen-host-keys
-  namespace: @namespace@
+  namespace: default
 data:
   gen-host-keys.sh: |-
     #!/usr/bin/env bash
@@ -62,7 +62,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-init
-  namespace: @namespace@
+  namespace: default
 data:
   init.sh: |-
     #!/usr/bin/env bash
@@ -82,7 +82,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-heywoodlh
-  namespace: @namespace@
+  namespace: default
 data:
   heywoodlh.sh: |-
     #!/usr/bin/env bash
@@ -124,7 +124,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-custom-fish
-  namespace: @namespace@
+  namespace: default
 data:
   custom.fish: |-
     export DOCKER_TLS_CERTDIR='/certs'
@@ -145,7 +145,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-bash-profile
-  namespace: @namespace@
+  namespace: default
 data:
   .bash_profile: |-
     # This file is only used over ssh
@@ -156,7 +156,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-tmux
-  namespace: @namespace@
+  namespace: default
 data:
   tmux.sh: |-
     #!/usr/bin/env bash
@@ -166,7 +166,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-ttyd
-  namespace: @namespace@
+  namespace: default
 data:
   ttyd.sh: |-
     #!/usr/bin/env bash
@@ -192,7 +192,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-nix-conf
-  namespace: @namespace@
+  namespace: default
 data:
   nix.custom.conf: |-
     # Managed via Kubernetes
@@ -205,7 +205,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: dev
-  namespace: @namespace@
+  namespace: default
   labels:
     app.kubernetes.io/name: dev
     app.kubernetes.io/instance: dev
@@ -236,7 +236,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: dev-nix
-  namespace: @namespace@
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
@@ -249,7 +249,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: dev-home
-  namespace: @namespace@
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
@@ -262,7 +262,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: dev-dind-storage
-  namespace: @namespace@
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
@@ -275,7 +275,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: dev-dind-certs
-  namespace: @namespace@
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
@@ -288,7 +288,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: dev-host-keys
-  namespace: @namespace@
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
@@ -301,11 +301,11 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: k8s-dev
-  namespace: @namespace@
+  namespace: default
 subjects:
 - kind: ServiceAccount
   name: k8s-dev
-  namespace: @namespace@
+  namespace: default
 roleRef:
   kind: ClusterRole
   name: cluster-admin
@@ -315,13 +315,13 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: k8s-dev
-  namespace: @namespace@
+  namespace: default
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dev-kubeconfig
-  namespace: @namespace@
+  namespace: default
 data:
   kubeconfig: |-
     apiVersion: v1
@@ -347,12 +347,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dev
-  namespace: @namespace@
+  namespace: default
   labels:
     app.kubernetes.io/name: dev
     app.kubernetes.io/instance: dev
 spec:
-  replicas: @replicas@
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: dev
@@ -383,7 +383,7 @@ spec:
           securityContext:
             privileged: true
         - name: dev
-          image: "@image@"
+          image: "docker.io/heywoodlh/dev:2025_11_snapshot"
           command:
             - "bash"
             - "-c"

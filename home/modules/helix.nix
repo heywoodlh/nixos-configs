@@ -1,10 +1,14 @@
-{ config, lib, pkgs, myFlakes, ... }:
+{ config, lib, nixpkgs-stable, pkgs, myFlakes, ... }:
 
 with lib;
 
 let
   cfg = config.heywoodlh.home.helix;
   system = pkgs.stdenv.hostPlatform.system;
+  pkgs-stable = import nixpkgs-stable {
+    inherit system;
+    config.allowUnfree = true;
+  };
   myHelix = myFlakes.packages.${system}.helix;
   myFish = myFlakes.packages.${system}.fish;
   opWrapper = myFlakes.packages.${system}.op-wrapper;
@@ -53,7 +57,7 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs; optionals (cfg.ai) [
       gptPkg
-      lsp-ai
+      pkgs-stable.lsp-ai
     ];
     programs.helix = {
       enable = true;
@@ -69,7 +73,7 @@ in {
         ty
       ] ++ optionals (cfg.ai) [
         gptPkg
-        lsp-ai
+        pkgs-stable.lsp-ai
       ];
       settings = {
         theme = "custom";

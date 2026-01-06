@@ -38,6 +38,27 @@ unspecified value
 
 
 
+## heywoodlh\.apple-silicon\.firmwarefile
+
+
+
+Asahi Linux all firmware file name in ` /boot `\.
+
+
+
+*Type:*
+unspecified value
+
+
+
+*Default:*
+` "all_firmware.tar.gz" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+
+
+
 ## heywoodlh\.apple-silicon\.hash
 
 
@@ -1058,7 +1079,7 @@ package
 
 
 *Default:*
-` <derivation 1password-8.11.20> `
+` <derivation 1password-8.11.22> `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)

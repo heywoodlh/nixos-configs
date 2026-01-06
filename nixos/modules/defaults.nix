@@ -10,7 +10,7 @@ let
     inherit system;
     config.allowUnfree = true;
   };
-  myVim = myFlakes.packages.${system}.vim;
+  myHelix = myFlakes.packages.${system}.helix;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
   myGit = myFlakes.packages.${system}.git;
@@ -216,7 +216,7 @@ in {
       myGit
       myTmux
       myFish
-      myVim
+      myHelix
       mosh
       ntfs3g
       exfatprogs

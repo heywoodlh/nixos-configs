@@ -21,6 +21,12 @@ in {
         Asahi Linux cache file name in `/boot`.
       '';
     };
+    firmwarefile = mkOption {
+      default = "all_firmware.tar.gz";
+      description = ''
+        Asahi Linux all firmware file name in `/boot`.
+      '';
+    };
     hash = let
       hashType = submodule {
         options = {
@@ -52,10 +58,13 @@ in {
   config = mkIf (cfg.enable) {
     kyle.appleSilicon = {
       enable = true;
-      cachefile = cfg.cachefile;
-      hash = {
-        cache = cfg.hash.cache;
-        firmware = cfg.hash.firmware;
+      kernelcache = {
+        name = cfg.cachefile;
+        hash = cfg.hash.cache;
+      };
+      allfirmware = {
+        name = cfg.firmwarefile;
+        hash = cfg.hash.firmware;
       };
     };
     home-manager.users.${username} = {

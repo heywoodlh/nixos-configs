@@ -267,8 +267,6 @@ let
   code-reset = pkgs.writeShellScriptBin "code-reset" ''
     rm -rf ~/.vscode ~/Documents/Code ${vscodeSettingsDir}
   '';
-  myVscode = myFlakes.packages.${system}.vscode;
-  myTmux = myFlakes.packages.${system}.tmux;
   arc-settings = ./share/arc-browser.plist;
 in {
   home.packages = [

@@ -5,7 +5,7 @@ let
   stdenv = pkgs.stdenv;
   homeDir = config.home.homeDirectory;
   myFish = myFlakes.packages.${system}.fish;
-  myVim = myFlakes.packages.${system}.vim;
+  myVim = pkgs.neovim;
   myGit = myFlakes.packages.${system}.git;
   myJujutsu = myFlakes.packages.${system}.jujutsu;
   aerc-html-filter = pkgs.writeScriptBin "html" ''
@@ -736,138 +736,7 @@ in {
     };
   };
 
-  home.file.".config/vim/vimrc".text = ''
-    lua << EOF
-      local llm = require('llm')
-      llm.setup({
-        lsp = {
-          bin_path = "${pkgs.llm-ls}/bin/llm-ls",
-        },
-        model = "llama3.1:8b",
-        backend = "ollama",
-        url = os.getenv("OLLAMA_HOST") or "${ollamaUrl}",
-        request_body = {
-          temperature = 0.2,
-          top_p = 0.95,
-          system = "Complete the given code without explanation. Respond only with the code. Do not place the code in markdown. Do not place the code in markdown. Fill in the middle requests will be used.",
-        },
-        fim = {
-          enabled = true,
-        },
-        debounce_ms = 150,
-        enable_suggestions_on_startup = false,
-        enable_suggestions_on_files = '*.sh,*.fish,*.zsh,*.go,*.nix,*.py,*.lua,*.java,*.js,*.jsx,*.ts,*.tsx,*.html,*.css,*.scss,*.json,*.yaml,*.yml,*.toml',
-        context_window = 10240,
-        accept_keymap = "<Tab>",
-        dismiss_keymap = "<S-Tab>",
-      })
-
-      require("codecompanion").setup({
-        extensions = {
-          history = {
-            enabled = true,
-          },
-        },
-        strategies = {
-          chat = {
-            adapter = "ollama",
-          },
-          inline = {
-            adapter = "ollama",
-          },
-        },
-        adapters = {
-          http = {
-            ollama = function()
-              return require("codecompanion.adapters").extend("ollama", {
-                env = {
-                  url = os.getenv("OLLAMA_HOST") or "${ollamaUrl}",
-                },
-                headers = {
-                  ["Content-Type"] = "application/json",
-                },
-                parameters = {
-                  sync = true,
-                },
-                schema = {
-                  model = {
-                    default = "llama3.1:8b",
-                  },
-               },
-              })
-            end,
-            openai = function()
-              return require("codecompanion.adapters").extend("openai", {
-                env = {
-                  api_key = "cmd:${op-wrapper} read 'op://Personal/wnnzk4qgffnymdqdhbmzgruquq/api-key' --no-newline",
-                },
-              })
-            end,
-          }
-        },
-      })
-    EOF
-  '';
-
-  home.file.".config/opencode/opencode.json".text = builtins.toJSON {
-    "$schema" = "https://opencode.ai/config.json";
-    theme = "nord";
-    model = "ollama/mistral:7b";
-    provider = {
-      ollama = {
-        npm = "@ai-sdk/openai-compatible";
-        options = {
-          baseURL = "${ollamaUrl}/v1";
-        };
-        models = {
-          "gpt-oss:20b" = {
-            name = "gpt-oss";
-          };
-          "mistral:7b" = {
-            name = "mistral";
-          };
-          "llama3:8b" = {
-            name = "llama3";
-          };
-          "deepseek-coder:6.7b" = {
-            name = "deepseek-coder";
-          };
-        };
-      };
-    };
-  };
-
-  # Ripgrep executable for opencode
-  home.file.".local/share/opencode/bin/rg".source = "${pkgs.ripgrep}/bin/rg";
-
   heywoodlh.home.docker-credential-1password.enable = true;
-  #home.file.".docker/config.json".text = if pkgs.stdenv.isDarwin then ''
-  #  {
-  #      "auths": {
-  #          "docker.io": {},
-  #          "ghcr.io": {}
-  #      },
-  #      "credsStore": "1password",
-  #      "credHelpers": {
-  #          "docker.io": "1password",
-  #          "ghcr.io": "1password"
-  #      },
-  #      "currentContext": "docker-lima"
-  #  }
-  #'' else ''
-  #  {
-  #      "auths": {
-  #          "docker.io": {},
-  #          "ghcr.io": {}
-  #      },
-  #      "credsStore": "1password",
-  #      "credHelpers": {
-  #          "docker.io": "1password",
-  #          "ghcr.io": "1password"
-  #      },
-  #      "currentContext": "rootless"
-  #  }
-  #'';
 
   home.file.".config/browsh/config.toml".text = ''
     default_search_engine_base = "https://leta.mullvad.net/search?q="

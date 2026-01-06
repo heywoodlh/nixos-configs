@@ -29,7 +29,6 @@ in {
     ../../roles/storage/nfs-media.nix
     ../../roles/remote-access/cloudflared.nix
     ../../roles/remote-access/wol.nix
-    ../../roles/security/hexstrike-ai.nix
   ];
 
   # Bootloader.
@@ -45,7 +44,7 @@ in {
   boot.extraModulePackages = [ pkgs.linuxKernel.packages.linux_xanmod_stable.zfs_unstable ];
   boot.zfs.package = pkgs.zfs_unstable;
   boot.supportedFilesystems = [ "zfs" ];
-  systemd.services.zfs-mount.enable = false; # Disable systemd service for ZFS mount, use Filesystems option instead
+  systemd.services.zfs-mount.enable = true;
   networking.hostId = "fd838b2e"; # Set a unique host ID for ZFS
 
   nixpkgs.config.allowUnfree = true;
@@ -186,7 +185,6 @@ in {
       "media-home\\x2dmedia-disk1.mount"
       "media-home\\x2dmedia-disk2.mount"
       "media-home\\x2dmedia-disk3.mount"
-      "media-data_pool-immich.mount"
     ];
   in {
     after = mediaMounts;
@@ -200,10 +198,7 @@ in {
     openFirewall = true;
   };
 
-  # Dedicated immich ZFS device/mountpoint
-  # Created with: `sudo zfs create -o mountpoint=/media/data_pool/immich data_pool/immich`
-  fileSystems."/media/data_pool/immich" = {
-    device = "data_pool/immich";
-    fsType = "zfs";
-  };
+  # Data_pool including dedicated immich ZFS device/mountpoint
+  # Created with: `sudo zfs create -o canmount=on -o mountpoint=/media/data_pool/immich data_pool/immich`
+  boot.zfs.extraPools = [ "data_pool" ];
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, determinate, home-manager, myFlakes, nur, ts-warp-nixpkgs, hexstrike-ai, ... }:
+{ config, pkgs, nixpkgs-stable, determinate, home-manager, myFlakes, nur, ts-warp-nixpkgs, hexstrike-ai, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -27,6 +27,7 @@ in {
       inherit nur;
       inherit determinate;
       inherit hexstrike-ai;
+      inherit nixpkgs-stable;
     };
     # Set home-manager configs for heywoodlh
     users.heywoodlh = { ... }: {

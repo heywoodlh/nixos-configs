@@ -15,6 +15,11 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+    nixos-apple-silicon = {
+      url = "github:nix-community/nixos-apple-silicon";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "kyle/flake-compat";
+    };
     # only to sync dependents that use nix
     nix = {
       url = "github:nixos/nix";
@@ -58,6 +63,7 @@
       inputs.nix.follows = "nix";
       inputs.git-hooks.follows = "pre-commit-hooks";
       inputs.flake-compat.follows = "kyle/flake-compat";
+      inputs.nixd.follows = "";
     };
     kyle = {
       url = "gitlab:heywoodlh/nix-configs/asahi-fw-hashes";
@@ -69,6 +75,7 @@
       inputs.home-manager.follows = "home-manager";
       inputs.darwin.follows = "darwin";
       inputs.nur.follows = "nur";
+      inputs.nixos-apple-silicon.follows = "nixos-apple-silicon";
     };
     darwin = {
       url = "github:LnL7/nix-darwin";

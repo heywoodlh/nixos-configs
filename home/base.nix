@@ -473,7 +473,7 @@ in {
         default = "INBOX";
         copy-to = "Sent";
         from = "Spencer Heywood <spencer@heywoodlh.io>";
-        aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>";
+        aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>, Spencer Heywood <heywoodlh@heywoodlh.io>";
         signature-file = "${pkgs.writeText "signature.txt" "- Spencer"}";
       };
     };

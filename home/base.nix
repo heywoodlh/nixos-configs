@@ -697,7 +697,7 @@ in {
       tcp_connect_time_out 8000
       localnet 127.0.0.0/255.0.0.0
       [ProxyList]
-      socks5 100.115.177.85 1080
+      socks5 10.64.0.1 1080
     '';
   };
 

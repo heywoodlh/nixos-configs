@@ -10,7 +10,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: dev-sshd-config
+  name: dev-ssh-config
   namespace: @namespace@
 data:
   sshd_config: |-
@@ -27,6 +27,11 @@ data:
     PermitRootLogin prohibit-password
     HostKey /etc/ssh/host_keys/ssh_host_rsa_key
     PubkeyAuthentication yes
+  ssh_config: |-
+    Include /etc/ssh/ssh_config.d/*.conf
+    Host *
+        SendEnv LANG LC_*
+        HashKnownHosts yes
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -116,6 +121,9 @@ data:
     $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#docker-client
     NIXPKGS_ALLOW_INSECURE=1 $NIX_EXE profile add --impure --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#gomuks
     $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#aerc
+    $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#proxychains-ng
+    $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#w3m
+    $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#ollama
 
     # Install ttyd
     if [[ -e $TTYD_EXE ]]
@@ -129,19 +137,71 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: dev-aerc-accounts
+  name: dev-dotfiles
   namespace: @namespace@
 data:
-  accounts.conf: |-
+  aerc-accounts.conf: |-
     [protonmail]
     aliases = Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>, Spencer Heywood <heywoodlh@heywoodlh.io>
     copy-to = Sent
     default = INBOX
     from = Spencer Heywood <spencer@heywoodlh.io>
-    outgoing = smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.default.svc.cluster.local:25
+    outgoing = smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25
     outgoing-cred-cmd = op-wrapper read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'
-    source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.default.svc.cluster.local:143
+    source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143
     source-cred-cmd = op-wrapper read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'
+  aerc.conf: |-
+    [filters]
+    text/plain = fold -w 80
+    text/html = proxychains4 -q w3m -dump -T text/html -o display_link_number=true
+    [general]
+    editor = hx
+    unsafe-accounts-conf = true
+  helix-config.toml: |-
+    theme = "custom"
+    [editor]
+    auto-pairs = false
+    [editor.cursor-shape]
+    insert = "bar"
+    normal = "block"
+    [editor.inline-diagnostics]
+    cursor-line = "hint"
+    other-lines = "error"
+    [editor.lsp]
+    display-inlay-hints = true
+    [editor.soft-wrap]
+    enable = true
+    [editor.whitespace.characters]
+    space = "·"
+    tab = "┆"
+    [editor.whitespace.render]
+    nbsp = "trailing"
+    nnbsp = "trailing"
+    space = "trailing"
+    tab = "trailing"
+    [keys.normal.space]
+    i = ":toggle lsp.display-inlay-hints"
+  helix-custom.toml: |-
+    hint = "#5E81AC"
+    inherits = "base16_transparent"
+    [comment]
+    fg = "comment"
+    ["diagnostic.hint".underline]
+    color = "#5E81AC"
+    style = "curl"
+    ["ui.virtual.inlay-hint"]
+    fg = "#4C566A"
+    modifiers = ["italic"]
+  proxychains.conf: |-
+    strict_chain
+    proxy_dns
+    quiet_mode
+    remote_dns_subnet 224
+    tcp_read_time_out 15000
+    tcp_connect_time_out 8000
+    localnet 127.0.0.0/255.0.0.0
+    [ProxyList]
+    socks5 10.64.0.1 1080
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -155,7 +215,7 @@ data:
     export DOCKER_HOST="tcp://localhost:2376"
     export DOCKER_TLS_VERIFY="1"
     export KUBECONFIG="/kubeconfig"
-    export OLLAMA_HOST="ollama.default.svc.cluster.local:11434"
+    export OLLAMA_HOST="ollama.barn-banana.ts.net:11434"
 
     function ssh-unlock
       op-unlock
@@ -221,7 +281,7 @@ data:
     # Managed via Kubernetes
     sandbox = false
     filter-syscalls = false
-    extra-substituters = http://attic.default.svc.cluster.local/nixos
+    extra-substituters = http://attic.barn-banana.ts.net/nixos
     extra-trusted-public-keys = nixos:pU2PdLt/QaDk8nec7lcy8DgsM96NTJ1bAOSs+jdoECc=
 ---
 apiVersion: v1
@@ -350,7 +410,7 @@ data:
     apiVersion: v1
     clusters:
     - cluster:
-        server: https://kubernetes.default.svc.cluster.local:443
+        server: https://homelab.barn-banana.ts.net:443
         certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
       name: local
     contexts:
@@ -390,6 +450,10 @@ spec:
       hostname: dev
       securityContext:
         {}
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 100.100.100.100
       containers:
         - name: dind
           image: docker.io/docker:dind
@@ -429,8 +493,11 @@ spec:
             - name: dev-dind-certs
               mountPath: /certs
             - name: dev-sshd-config
-              mountPath: /etc/ssh/sshd_config.d/sshd.conf
-              subPath: sshd.conf
+              mountPath: /etc/ssh/sshd_config
+              subPath: sshd_config
+            - name: dev-ssh-config
+              mountPath: /etc/ssh/ssh_config
+              subPath: ssh_config
             - name: dev-keys
               mountPath: /keys.sh
               subPath: keys.sh
@@ -462,6 +529,14 @@ spec:
             - name: dev-aerc-accounts
               mountPath: /home/heywoodlh/.config/aerc/accounts.conf
               subPath: accounts.conf
+            - name: dev-aerc-conf
+              mountPath: /home/heywoodlh/.config/aerc/aerc.conf
+              subPath: aerc.conf
+            - name: dev-helix
+              mountPath: /home/heywoodlh/.config/helix
+            - name: dev-proxychains-conf
+              mountPath: /home/heywoodlh/.proxychains/proxychains.conf
+              subPath: proxychains.conf
             - name: dev-nix-conf
               mountPath: /etc/nix/nix.custom.conf.kube
               subPath: nix.custom.conf.kube
@@ -504,7 +579,16 @@ spec:
             claimName: dev-home
         - name: dev-sshd-config
           configMap:
-            name: dev-sshd-config
+            name: dev-ssh-config
+            items:
+              - key: "sshd_config"
+                path: "sshd_config"
+        - name: dev-ssh-config
+          configMap:
+            name: dev-ssh-config
+            items:
+              - key: "ssh_config"
+                path: "ssh_config"
         - name: dev-custom-fish
           configMap:
             name: dev-custom-fish
@@ -537,7 +621,30 @@ spec:
             defaultMode: 0777
         - name: dev-aerc-accounts
           configMap:
-            name: dev-aerc-accounts
+            name: dev-dotfiles
+            items:
+              - key: "aerc-accounts.conf"
+                path: "accounts.conf"
+        - name: dev-aerc-conf
+          configMap:
+            name: dev-dotfiles
+            items:
+              - key: "aerc.conf"
+                path: "aerc.conf"
+        - name: dev-helix
+          configMap:
+            name: dev-dotfiles
+            items:
+              - key: "helix-config.toml"
+                path: "config.toml"
+              - key: "helix-custom.toml"
+                path: "themes/custom.toml"
+        - name: dev-proxychains-conf
+          configMap:
+            name: dev-dotfiles
+            items:
+              - key: "proxychains.conf"
+                path: "proxychains.conf"
         - name: dev-host-keys
           persistentVolumeClaim:
             claimName: dev-host-keys

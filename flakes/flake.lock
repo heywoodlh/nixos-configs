@@ -37,7 +37,6 @@
     "crane": {
       "inputs": {
         "nixpkgs": [
-          "helix-flake",
           "helix-src",
           "nixpkgs"
         ]
@@ -163,7 +162,9 @@
         "flake-utils": [
           "flake-utils"
         ],
-        "helix-src": "helix-src",
+        "helix-src": [
+          "helix-src"
+        ],
         "nixpkgs": [
           "nixpkgs-stable"
         ]
@@ -182,11 +183,9 @@
       "inputs": {
         "crane": "crane",
         "flake-utils": [
-          "helix-flake",
           "flake-utils"
         ],
         "nixpkgs": [
-          "helix-flake",
           "nixpkgs"
         ],
         "rust-overlay": "rust-overlay"
@@ -441,6 +440,7 @@
         "git-flake": "git-flake",
         "gnome-flake": "gnome-flake",
         "helix-flake": "helix-flake",
+        "helix-src": "helix-src",
         "jujutsu-flake": "jujutsu-flake",
         "lima-flake": "lima-flake",
         "nixpkgs": "nixpkgs",
@@ -458,12 +458,10 @@
     "rust-overlay": {
       "inputs": {
         "flake-utils": [
-          "helix-flake",
           "helix-src",
           "flake-utils"
         ],
         "nixpkgs": [
-          "helix-flake",
           "helix-src",
           "nixpkgs"
         ]

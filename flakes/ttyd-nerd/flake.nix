@@ -43,6 +43,8 @@
           cp ${source-code-pro}/WOFF2/TTF/SourceCodePro-Regular.ttf.woff2 "$dest"/html/src/style/webfont/source-code-pro-regular.woff2
           cp ${hack}/fonts/hack-regular.woff2 "$dest"/html/src/style/webfont/hack-regular.woff2
         '';
+        ttyd-patch = ./ttyd.patch;
+        src = ./src;
         ttydOverlay = (final: prev: {
           ttyd-nerd-fonts = prev.ttyd.overrideAttrs (oldAttrs: rec {
             buildInputs = with pkgs; oldAttrs.buildInputs ++ [
@@ -51,8 +53,8 @@
             patchPhase = ''
                dest="$(pwd)" # used by cp-fonts
                ${cp-fonts}
-               cp ${self}/src/html.h src/html.h
-               git apply ${self}/ttyd.patch
+               cp ${src}/html.h src/html.h
+               git apply ${ttyd-patch}
             '' + prev.patchPhase or "";
           });
         });
@@ -86,12 +88,12 @@
           dest="$dir/app/ttyd"
           cp ${dockerfile} "$dir"/Dockerfile
           cp ${entrypoint} "$dir"/entrypoint.sh && chmod +xw "$dir"/entrypoint.sh
-          cp ${self}/ttyd.patch "$dir"/ttyd.patch
+          cp ${ttyd-patch} "$dir"/ttyd.patch
           docker build -t ttyd-html "$dir"
           mkdir -p "$dir/app"
           rm -rf "$dest"
           git clone --depth=1 -b 1.7.7 https://github.com/tsl0922/ttyd "$dest"
-          git -C "$dest" apply ${self}/ttyd.patch
+          git -C "$dest" apply ${ttyd-patch}
           ${cp-fonts}
           docker run -v "$dest":/app/ttyd -it --rm ttyd-html
           mkdir -p $(pwd)/src

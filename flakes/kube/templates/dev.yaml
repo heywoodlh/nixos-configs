@@ -72,9 +72,9 @@ data:
     rm /etc/localtime
     ln -s /usr/share/zoneinfo/America/Denver /etc/localtime
 
-    # Configure Nix, not using configmap because initial Determinate Systems Nix install fails with readonly version
+    # Configure Nix, not using configmap because initial Nix install fails with readonly version
     cp /etc/nix/nix.custom.conf.kube /etc/nix/nix.custom.conf
-    chown root /nix
+    chown -R heywoodlh /nix
     chmod 755 /nix
 ---
 
@@ -88,13 +88,17 @@ data:
     #!/usr/bin/env bash
     set -ex
 
+    NIX_EXE="/nix/var/nix/profiles/default/bin/nix"
+    TTYD_EXE="/home/heywoodlh/.nix-profile/bin/ttyd"
+
     # Install Nix
-    if [[ -e /nix/var/nix/profiles/default/bin/nix ]]
+    if [[ -e $NIX_EXE ]]
     then
       echo "Nix already installed."
     else
       curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm || true
-      if [[ -e /nix/var/nix/profiles/default/bin/nix ]]
+      sudo chown -R heywoodlh /nix
+      if [[ -e $NIX_EXE ]]
       then
         echo "Nix installation succeeded."
       else
@@ -103,16 +107,41 @@ data:
     fi
 
     # Install flakes
+    $NIX_EXE profile add /opt/syncthing/opt/nixos-configs#helix
+    $NIX_EXE profile add /opt/syncthing/opt/nixos-configs#tmux
+    $NIX_EXE profile add /opt/syncthing/opt/nixos-configs#op-wrapper
+    $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#openssh
+    $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#kubectl
+    $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#k9s
+    $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#docker-client
+    NIXPKGS_ALLOW_INSECURE=1 $NIX_EXE profile add --impure --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#gomuks
+    $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs nixpkgs#aerc
 
     # Install ttyd
-    if nix profile list | grep -q ttyd
+    if [[ -e $TTYD_EXE ]]
     then
       echo "Nix ttyd installation detected."
     else
-      nix profile install "github:heywoodlh/flakes?dir=ttyd-nerd#ttyd"
-      [[ -e /home/heywoodlh/.nix-profile/bin/tmux ]] && sudo pkill -9 ttyd
+      $NIX_EXE profile add --inputs-from /opt/syncthing/opt/nixos-configs '/opt/syncthing/opt/nixos-configs/flakes/ttyd-nerd#ttyd'
+      [[ -e $TTYD_EXE ]] && sudo pkill -9 ttyd
     fi
-
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-aerc-accounts
+  namespace: @namespace@
+data:
+  accounts.conf: |-
+    [protonmail]
+    aliases = Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>, Spencer Heywood <heywoodlh@heywoodlh.io>
+    copy-to = Sent
+    default = INBOX
+    from = Spencer Heywood <spencer@heywoodlh.io>
+    outgoing = smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.default.svc.cluster.local:25
+    outgoing-cred-cmd = op-wrapper read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'
+    source = imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.default.svc.cluster.local:143
+    source-cred-cmd = op-wrapper read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -430,6 +459,9 @@ spec:
             - name: dev-heywoodlh
               mountPath: /heywoodlh.sh
               subPath: heywoodlh.sh
+            - name: dev-aerc-accounts
+              mountPath: /home/heywoodlh/.config/aerc/accounts.conf
+              subPath: accounts.conf
             - name: dev-nix-conf
               mountPath: /etc/nix/nix.custom.conf.kube
               subPath: nix.custom.conf.kube
@@ -503,6 +535,9 @@ spec:
           configMap:
             name: dev-heywoodlh
             defaultMode: 0777
+        - name: dev-aerc-accounts
+          configMap:
+            name: dev-aerc-accounts
         - name: dev-host-keys
           persistentVolumeClaim:
             claimName: dev-host-keys

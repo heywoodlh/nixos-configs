@@ -868,6 +868,11 @@
         docs = pkgs.runCommand "options-doc.md" {} ''
           cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/nixos\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/home\/modules|g' > $out
         '';
+        # Applications I want to export and remain consistent with this repo
+        helix = myFlakes.packages.${system}.helix;
+        fish = myFlakes.packages.${system}.fish;
+        tmux = myFlakes.packages.${system}.tmux;
+        op-wrapper = myFlakes.packages.${system}.op-wrapper;
       };
 
       devShell = pkgs.mkShell {

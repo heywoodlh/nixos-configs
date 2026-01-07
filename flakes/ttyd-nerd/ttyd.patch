@@ -1,0 +1,135 @@
+diff --git a/html/package.json b/html/package.json
+index d8cf47f..322ad71 100644
+--- a/html/package.json
++++ b/html/package.json
+@@ -18,7 +18,7 @@
+     "fix": "gts fix"
+   },
+   "engines": {
+-    "node": ">=12"
++    "node": ">=21"
+   },
+   "devDependencies": {
+     "@typescript-eslint/eslint-plugin": "^7.1.1",
+@@ -70,5 +70,5 @@
+   "resolutions": {
+     "zmodem.js@^0.1.10": "patch:zmodem.js@npm%3A0.1.10#./.yarn/patches/zmodem.js-npm-0.1.10-e5537fa2ed.patch"
+   },
+-  "packageManager": "yarn@3.6.3"
++  "packageManager": "yarn@1.22.22"
+ }
+diff --git a/html/src/style/index.scss b/html/src/style/index.scss
+index 0f9244b..f314fc0 100644
+--- a/html/src/style/index.scss
++++ b/html/src/style/index.scss
+@@ -1,18 +1,66 @@
+ html,
+ body {
+-  height: 100%;
+-  min-height: 100%;
+-  margin: 0;
+-  overflow: hidden;
++    height: 100%;
++    min-height: 100%;
++    margin: 0;
++    overflow: hidden;
++}
++
++* {
++  /* Fix weird font issues in Safari https://stackoverflow.com/a/9450719 */
++  -webkit-font-smoothing: antialiased;
++  -font-synthesis: none !important;
++}
++
++@font-face {
++    font-family: JetBrains;
++    font-style: normal;
++    font-weight: normal;
++    src: url('webfont/jetbrains-mono-regular.woff2') format('WOFF2');
++}
++
++@font-face {
++    font-family: JetBrains;
++    font-style: normal;
++    font-weight: bold;
++    src: url('webfont/jetbrains-mono-regular.woff2') format('WOFF2');
++}
++
++@font-face {
++    font-family: 'JetBrains Mono Regular';
++    font-style: normal;
++    font-weight: normal;
++    src: url('webfont/jetbrains-mono-regular.woff2') format('WOFF2');
++}
++
++@font-face {
++    font-family: 'JetBrains Mono Regular';
++    font-style: normal;
++    font-weight: bold;
++    src: url('webfont/jetbrains-mono-regular.woff2') format('WOFF2');
++}
++
++@font-face {
++    font-family: SourceCodePro;
++    font-style: normal;
++    font-weight: normal;
++    src: url('webfont/source-code-pro-regular.woff2') format('WOFF2');
++}
++
++@font-face {
++    font-family: Hack;
++    font-style: normal;
++    font-weight: normal;
++    src: url('webfont/hack-regular.woff2') format('WOFF2');
+ }
+ 
+ #terminal-container {
+-  width: auto;
+-  height: 100%;
+-  margin: 0 auto;
+-  padding: 0;
+-  .terminal {
+-    padding: 5px;
+-    height: calc(100% - 10px);
+-  }
++    width: auto;
++    height: 100%;
++    margin: 0 auto;
++    padding: 0;
++    .terminal {
++        padding: 5px;
++        height: calc(100% - 10px);
++    }
+ }
+diff --git a/html/src/template.html b/html/src/template.html
+index 80ee93c..2b2f44c 100644
+--- a/html/src/template.html
++++ b/html/src/template.html
+@@ -9,6 +9,8 @@
+     <% for (const css in htmlWebpackPlugin.files.css) { %>
+     <link inline rel="stylesheet" type="text/css" href="<%= htmlWebpackPlugin.files.css[css] %>">
+     <% } %>
++    <!-- Remove white bars in Safari https://web.archive.org/web/20190621194842/https://stephenradford.me/removing-the-white-bars-in-safari-on-iphone-x/ -->
++    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+ </head>
+ <body>
+ <% for (const js in htmlWebpackPlugin.files.js) { %>
+diff --git a/html/webpack.config.js b/html/webpack.config.js
+index 18bfcf3..77dcbc2 100644
+--- a/html/webpack.config.js
++++ b/html/webpack.config.js
+@@ -29,9 +29,13 @@ const baseConfig = {
+                 test: /\.s?[ac]ss$/,
+                 use: [devMode ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+             },
++            {
++                test: /\.(ttf|otf|eot|woff|woff2)$/,
++                type: 'asset/inline',
++            },
+         ],
+     },
+-    resolve: {
++   resolve: {
+         extensions: ['.tsx', '.ts', '.js'],
+     },
+     plugins: [

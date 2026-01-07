@@ -34,13 +34,6 @@ let
   battpop = pkgs.writeShellScriptBin "battpop.sh" ''
     osascript -e "display notification \"$(system_profiler SPPowerDataType | grep Charging -A1 | head -2 | awk '{$1=$1};1')\""
   '';
-  brew-path = if pkgs.stdenv.isAarch64 then "/opt/homebrew/bin" else "/usr/local/bin";
-  yabai-brew = pkgs.writeShellScriptBin "yabai" ''
-    exec ${brew-path}/yabai $@
-  '';
-  skhd-brew = pkgs.writeShellScriptBin "skhd" ''
-    exec ${brew-path}/skhd $@
-  '';
 in {
   options = {
     heywoodlh.darwin.yabai = {
@@ -48,13 +41,6 @@ in {
         default = false;
         description = ''
           Enable heywoodlh Yabai and SKHD for keyboard shortcuts and window tiling.
-        '';
-        type = types.bool;
-      };
-      homebrew = mkOption {
-        default = false;
-        description = ''
-          Use Yabai and SKHD from Homebrew and not Nixpkgs.
         '';
         type = types.bool;
       };
@@ -76,19 +62,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    homebrew = mkIf cfg.homebrew {
-      enable = true;
-      taps = [
-        "koekeishiya/formulae"
-      ];
-      brews = [
-        "koekeishiya/formulae/yabai"
-        "koekeishiya/formulae/skhd"
-      ];
-    };
     services.yabai = {
       enable = true;
-      package = if cfg.homebrew == true then yabai-brew else pkgs.yabai;
+      package = pkgs.yabai;
       enableScriptingAddition = false;
       extraConfig = ''
         yabai -m config window_placement             first_child
@@ -156,7 +132,7 @@ in {
 
     services.skhd = {
       enable = true;
-      package = if cfg.homebrew == true then skhd-brew else pkgs.skhd;
+      package = pkgs.skhd;
       skhdConfig = ''
         # focus window
         ctrl + cmd - j : yabai -m window --focus west

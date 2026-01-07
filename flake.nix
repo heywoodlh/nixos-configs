@@ -705,8 +705,8 @@
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config
             {
-              nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
-                "olm"
+              nixpkgs.config.permittedInsecurePackages = [
+                "olm-3.2.16"
               ];
               heywoodlh.home.onepassword.enable = true;
               heywoodlh.home.gnome = true;
@@ -762,8 +762,8 @@
             homeModules.heywoodlh.home
             determinate.homeModules.default
             {
-              nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
-                "olm"
+              nixpkgs.config.permittedInsecurePackages = [
+                "olm-3.2.16"
               ];
               home = {
                 username = "heywoodlh";
@@ -807,9 +807,8 @@
               # Home-Manager specific nixpkgs config
               nixpkgs.config = {
                 allowUnfree = true;
-                # Allow olm for gomuks until issues are resolved
-                nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
-                  "olm"
+                permittedInsecurePackages = [
+                  "olm-3.2.16"
                 ];
                 overlays = [
                   nur.overlays.default

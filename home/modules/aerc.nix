@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.heywoodlh.home.aerc;
   system = pkgs.stdenv.hostPlatform.system;
-  op-wrapper = myFlakes.packages.${system}.op-wrapper;
+  op-wrapper = "${myFlakes.packages.${system}.op-wrapper}/bin/op-wrapper";
   aerc-html-filter = pkgs.writeScriptBin "html" ''
     export SOCKS_SERVER="homelab:1080"
     exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \

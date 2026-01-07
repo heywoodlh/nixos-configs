@@ -8,15 +8,6 @@ let
   myVim = pkgs.neovim;
   myGit = myFlakes.packages.${system}.git;
   myJujutsu = myFlakes.packages.${system}.jujutsu;
-  aerc-html-filter = pkgs.writeScriptBin "html" ''
-    export SOCKS_SERVER="homelab:1080"
-    exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
-      -T text/html \
-      -cols $(${pkgs.ncurses}/bin/tput cols) \
-      -dump \
-      -o display_image=false \
-      -o display_link_number=true
-  '';
   todomanWrapper = pkgs.writeScriptBin "todo" ''
     ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null && ${pkgs.todoman}/bin/todo "$@" && ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null
   '';
@@ -280,26 +271,6 @@ let
     ${pkgs.openssh}/bin/ssh spencer-router.barn-banana.ts.net /opt/public/wake-sarah-gaming.sh
   '';
 in {
-  home.stateVersion = "25.05";
-  home.enableNixpkgsReleaseCheck = false;
-
-  nix = {
-    extraOptions = ''
-      extra-experimental-features = nix-command flakes pipe-operators
-    '';
-    settings = {
-      auto-optimise-store = true;
-      trusted-users = [
-        "heywoodlh"
-      ];
-      extra-substituters = [
-        "https://nix-community.cachix.org"
-      ];
-      extra-trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      ];
-    };
-  };
 
   imports = [
     ./modules/default.nix
@@ -460,34 +431,6 @@ in {
           env: null
           provideClusterInfo: false
   '';
-
-  # Aerc
-  programs.aerc = {
-    enable = true;
-    extraAccounts = {
-      protonmail = {
-        source = "imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143";
-        source-cred-cmd = "${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'";
-        outgoing = "smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25";
-        outgoing-cred-cmd = "${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge'";
-        default = "INBOX";
-        copy-to = "Sent";
-        from = "Spencer Heywood <spencer@heywoodlh.io>";
-        aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>, Spencer Heywood <heywoodlh@heywoodlh.io>";
-        signature-file = "${pkgs.writeText "signature.txt" "- Spencer"}";
-      };
-    };
-    extraConfig = {
-      general = {
-        unsafe-accounts-conf = true;
-        editor = "hx";
-      };
-      filters = {
-        "text/html" = "${aerc-html-filter}/bin/html";
-        "text/plain" = "${pkgs.coreutils}/bin/fold -w 80";
-      };
-    };
-  };
 
   programs.newsboat = {
     enable = true;
@@ -757,9 +700,15 @@ in {
       socks5 100.115.177.85 1080
     '';
   };
+
+  heywoodlh.home.defaults = true;
   heywoodlh.home.helix = {
     enable = true;
     ai = true;
     homelab = true;
+  };
+  heywoodlh.home.aerc = {
+    enable = true;
+    accounts = true;
   };
 }

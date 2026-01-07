@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./base.nix
     ./docker.nix
     ./lima.nix
     ./applications.nix
@@ -16,5 +17,6 @@
     ./linux-autostart.nix
     ./darwin-defaults.nix
     ./helix.nix
+    ./aerc.nix
   ];
 }

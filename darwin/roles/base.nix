@@ -12,12 +12,10 @@ in {
   system.primaryUser = "heywoodlh";
 
   # Allow olm for gomuks until issues are resolved
-  nixpkgs = {
-    hostPlatform.system = "aarch64-darwin";
-    config.permittedInsecurePackages = [
-      "olm-3.2.16"
-    ];
-  };
+  nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+    "olm"
+  ];
+  nixpkgs.hostPlatform.system = "aarch64-darwin";
 
   # Home-Manager config
   home-manager = {

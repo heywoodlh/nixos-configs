@@ -665,6 +665,48 @@ boolean
 
 
 
+## heywoodlh\.home\.aerc\.enable
+
+
+
+Enable heywoodlh aerc configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc.nix)
+
+
+
+## heywoodlh\.home\.aerc\.accounts
+
+
+
+Enable heywoodlh aerc accounts\. Only useful to the author\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc.nix)
+
+
+
 ## heywoodlh\.home\.applications
 
 
@@ -809,6 +851,27 @@ boolean
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+
+
+
+## heywoodlh\.home\.defaults
+
+
+
+Enable heywoodlh home-manager defaults\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/base\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/base.nix)
 
 
 

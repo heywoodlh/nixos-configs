@@ -705,15 +705,15 @@
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config
             {
+              nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
+                "olm"
+              ];
               heywoodlh.home.onepassword.enable = true;
               heywoodlh.home.gnome = true;
               # Home-Manager specific nixpkgs config
               nixpkgs.config = {
                 allowUnfree = true;
                 # Allow olm for gomuks until issues are resolved
-                permittedInsecurePackages = [
-                  "olm-3.2.16"
-                ];
                 overlays = [
                   nur.overlays.default
                 ];
@@ -754,6 +754,49 @@
           ];
           extraSpecialArgs = inputs;
         };
+
+        # Absolute bare-minimum env
+        heywoodlh-minimal = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [
+            homeModules.heywoodlh.home
+            determinate.homeModules.default
+            {
+              nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
+                "olm"
+              ];
+              home = {
+                username = "heywoodlh";
+                homeDirectory = if pkgs.stdenv.isDarwin then
+                "/Users/heywoodlh" else
+                "/home/heywoodlh";
+              };
+              heywoodlh.home = {
+                defaults = true;
+                aerc = {
+                  enable = true;
+                  accounts = false; # assume accounts will be setup manually
+                };
+                helix = {
+                  enable = true;
+                  ai = true;
+                  homelab = true;
+                };
+              };
+              home.packages = with pkgs; [
+                bash
+                gomuks
+                myFlakes.packages.${system}.git
+                myFlakes.packages.${system}.fish
+                myFlakes.packages.${system}.op-wrapper
+                myFlakes.packages.${system}.tmux
+              ];
+            }
+          ];
+
+          extraSpecialArgs = inputs;
+        };
+
         heywoodlh-server = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
@@ -765,8 +808,8 @@
               nixpkgs.config = {
                 allowUnfree = true;
                 # Allow olm for gomuks until issues are resolved
-                permittedInsecurePackages = [
-                  "olm-3.2.16"
+                nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
+                  "olm"
                 ];
                 overlays = [
                   nur.overlays.default
@@ -782,7 +825,6 @@
                 myFlakes.packages.${system}.vim
               ];
               fonts.fontconfig.enable = true;
-              targets.genericLinux.enable = true;
               programs.home-manager.enable = true;
               home.file."bin/home-switch" = {
                 enable = true;

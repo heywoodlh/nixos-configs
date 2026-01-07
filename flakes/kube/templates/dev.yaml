@@ -102,13 +102,7 @@ data:
       fi
     fi
 
-    # Install home-manager configuration
-    if nix profile list | grep -q 'home-manager'
-    then
-      echo "Home-Manager server profile already installed."
-    else
-      /nix/var/nix/profiles/default/bin/nix run "github:heywoodlh/nixos-configs/$(nix run nixpkgs#git -- ls-remote https://github.com/heywoodlh/nixos-configs | head -1 | awk '{print $1}')#homeConfigurations.heywoodlh-server.activationPackage"
-    fi
+    # Install flakes
 
     # Install ttyd
     if nix profile list | grep -q ttyd

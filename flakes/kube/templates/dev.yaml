@@ -410,8 +410,8 @@ data:
     apiVersion: v1
     clusters:
     - cluster:
-        server: https://homelab.barn-banana.ts.net:443
-        certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        server: https://homelab.barn-banana.ts.net:6443
+        insecure-skip-tls-verify: true
       name: local
     contexts:
     - context:

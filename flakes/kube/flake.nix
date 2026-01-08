@@ -400,7 +400,7 @@
         fleetdm = mkKubeDrv "fleetdm" {
           src = ./templates/fleetdm.yaml;
           namespace = "monitoring";
-          image = "docker.io/fleetdm/fleet:c62899e";
+          image = "docker.io/fleetdm/fleet:v4.78.1";
           mysql_image = "docker.io/mysql:8.4.7";
           redis_image = "docker.io/redis:8.0-M02-alpine3.21";
           replicas = 1;
@@ -955,6 +955,7 @@
         name = "kubernetes-shell";
         buildInputs = with pkgs; [
           argocd
+          gitleaks
           k9s
           kubectl
           kubernetes-helm

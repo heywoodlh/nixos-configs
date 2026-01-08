@@ -70,7 +70,7 @@ spec:
     spec:
       containers:
       - name: fleet
-        image: docker.io/fleetdm/fleet:c62899e
+        image: docker.io/fleetdm/fleet:v4.78.1
         ports:
         - containerPort: 9080
         volumeMounts:

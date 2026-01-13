@@ -457,10 +457,18 @@
           timezone = "America/Denver";
           image = "ghcr.io/home-assistant/home-assistant:2025.12.0";
           matter_image = "ghcr.io/home-assistant-libs/python-matter-server:8.1";
+          scrypted_image = "ghcr.io/koush/scrypted:intel";
           port = 80;
           replicas = 1;
           nodename = "homelab";
           hostfolder = "/media/data-ssd/home-assistant";
+        };
+        homebridge = mkKubeDrv "homebridge" {
+          src = ./templates/homebridge.yaml;
+          namespace = "default";
+          image = "docker.io/homebridge/homebridge:latest";
+          nodename = "homelab";
+          hostfolder = "/media/data-ssd/homebridge";
         };
         homepage = mkKubeDrv "homepage" {
           src = ./templates/homepage.yaml;

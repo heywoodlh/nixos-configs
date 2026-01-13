@@ -198,3 +198,105 @@ spec:
       targetPort: 5580
   selector:
     app: matter-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: scrypted
+  name: scrypted
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrypted
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: scrypted
+    spec:
+      hostNetwork: true
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+        - image: ghcr.io/koush/scrypted:intel
+          imagePullPolicy: Always
+          name: scrypted
+          env:
+            - name: SCRYPTED_NVR_VOLUME
+              value: "/nvr"
+            - name: SCRYPTED_INSECURE_PORT
+              value: "11080"
+          ports:
+            - name: scrypted-http
+              containerPort: 11080
+              protocol: TCP
+            - name: scrypted-https
+              containerPort: 10443
+              protocol: TCP
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+          volumeMounts:
+            - mountPath: /server/volume
+              name: scrypted-db
+            - mountPath: /nvr
+              name: scrypted-nvr
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: scrypted-db
+          hostPath:
+            path: /media/data-ssd/home-assistant/scrypted/db
+            type: DirectoryOrCreate
+        - name: scrypted-nvr
+          hostPath:
+            path: /media/data-ssd/home-assistant/scrypted/nvr
+            type: DirectoryOrCreate
+# Unencrypted http endpoint for tailscale
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "scrypted"
+    tailscale.com/tags: "tag:http"
+  labels:
+    app: scrypted
+  name: scrypted-http
+  namespace: default
+spec:
+  ports:
+    - name: "scrypted"
+      port: 80
+      protocol: TCP
+      targetPort: scrypted-http
+  selector:
+    app: scrypted
+# HTTPS for internal cluster traffic
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "scrypted-https"
+    tailscale.com/tags: "tag:http"
+  labels:
+    app: scrypted
+  name: scrypted-https
+  namespace: default
+spec:
+  ports:
+    - name: "scrypted-https"
+      port: 443
+      protocol: TCP
+      targetPort: scrypted-https
+  selector:
+    app: scrypted

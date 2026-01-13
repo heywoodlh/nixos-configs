@@ -24,6 +24,7 @@ applications=(
   "healthchecks"
   "homepage"
   "home-assistant"
+  "homebridge"
   "http-files"
   "immich"
   "immich-machine-learning"

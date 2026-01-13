@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: homebridge
+  name: homebridge
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homebridge
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: homebridge
+    spec:
+      hostNetwork: true
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+        - image: docker.io/homebridge/homebridge:latest
+          imagePullPolicy: Always
+          name: homebridge-server
+          ports:
+            - name: homebridge
+              containerPort: 8581
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 500Mi
+          volumeMounts:
+            - mountPath: /homebridge
+              name: homebridge-data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: homebridge-data
+          hostPath:
+            path: /media/data-ssd/homebridge
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "homebridge"
+    tailscale.com/tags: "tag:homebridge"
+  labels:
+    app: homebridge
+  name: homebridge
+  namespace: default
+spec:
+  ports:
+    - name: "homebridge"
+      port: 80
+      protocol: TCP
+      targetPort: homebridge
+  selector:
+    app: homebridge

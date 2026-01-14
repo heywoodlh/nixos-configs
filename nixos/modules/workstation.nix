@@ -85,9 +85,6 @@ in {
     # for scanning documents
     hardware.sane.enable = true;
 
-    # android debugging
-    programs.adb.enable = true;
-
     # iphone usb support
     services.usbmuxd.enable = true;
 

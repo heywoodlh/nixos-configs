@@ -225,6 +225,14 @@ spec:
         - image: ghcr.io/koush/scrypted:intel
           imagePullPolicy: Always
           name: scrypted
+          # For MDNS
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+                - SYS_ADMIN
           env:
             - name: SCRYPTED_NVR_VOLUME
               value: "/nvr"
@@ -300,3 +308,86 @@ spec:
       targetPort: scrypted-https
   selector:
     app: scrypted
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "eufy"
+  namespace: "default"
+spec:
+  itemPath: "vaults/Kubernetes/items/2bt7kfmjowtpqsvdvqvewn7ase"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: eufy
+  name: eufy
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eufy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: eufy
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+        - image: docker.io/bropat/eufy-security-ws:1.9
+          imagePullPolicy: Always
+          name: scrypted
+          env:
+            - name: PORT
+              value: "3000"
+            - name: TRUSTED_DEVICE_NAME
+              value: "eufy-security-ws"
+            - name: USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: eufy
+                  key: username
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: eufy
+                  key: password
+          ports:
+            - name: eufy
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: eufy-data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: eufy-data
+          hostPath:
+            path: /media/data-ssd/home-assistant/eufy
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "eufy"
+    tailscale.com/tags: "tag:http"
+  labels:
+    app: eufy
+  name: eufy
+  namespace: default
+spec:
+  ports:
+    - name: "eufy"
+      port: 80
+      protocol: TCP
+      targetPort: eufy
+  selector:
+    app: eufy

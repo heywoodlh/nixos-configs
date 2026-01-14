@@ -458,6 +458,7 @@
           image = "ghcr.io/home-assistant/home-assistant:2025.12.0";
           matter_image = "ghcr.io/home-assistant-libs/python-matter-server:8.1";
           scrypted_image = "ghcr.io/koush/scrypted:intel";
+          eufy_image = "docker.io/bropat/eufy-security-ws:1.9";
           port = 80;
           replicas = 1;
           nodename = "homelab";

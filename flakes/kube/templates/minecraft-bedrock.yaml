@@ -63,15 +63,12 @@ metadata:
     tailscale.com/hostname: "minecraft"
     tailscale.com/tags: "tag:minecraft"
 spec:
-  type: LoadBalancer
-  externalIPs:
-    - 192.168.1.22
+  type: ClusterIP
   ports:
   - name: minecraft
     port: 19132
     targetPort: 19132
     protocol: UDP
-    nodePort: 32002
   selector:
     app: minecraft-bedrock
 ---

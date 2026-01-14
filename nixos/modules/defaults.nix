@@ -207,6 +207,7 @@ in {
         ${myNixosSwitch}/bin/nixos-switch --override-input myFlakes ${homeDir}/opt/flakes $@
       '';
     in [
+      android-tools
       usbutils
       gptfdisk
       myNixosSwitch
@@ -333,9 +334,6 @@ in {
 
     users.extraGroups.disk.members = [ "${username}" ];
     users.extraGroups.video.members = [ "${username}" ];
-
-    # Android debugging
-    programs.adb.enable = true;
 
     # Seahorse (Gnome Keyring)
     programs.seahorse.enable = cfg.keyring;

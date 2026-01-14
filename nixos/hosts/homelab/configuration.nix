@@ -88,6 +88,7 @@ in {
       ];
       allowedTCPPorts = [
         1080
+        1984 # go2rtc home-assistant
         443
         3389
         5900

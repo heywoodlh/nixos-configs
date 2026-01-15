@@ -457,8 +457,6 @@ in {
         env = XCURSOR_SIZE, 24
 
         general {
-          #col.active_border = 81a1c1ff
-          no_border_on_floating = yes
           no_focus_fallback = true
         }
 

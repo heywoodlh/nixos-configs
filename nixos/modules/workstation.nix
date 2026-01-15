@@ -5,7 +5,14 @@ with lib.types;
 
 let
   cfg = config.heywoodlh.workstation;
+  lyCfg = config.services.displayManager.ly;
   system = pkgs.stdenv.hostPlatform.system;
+  shell = "${myFlakes.packages.${system}.tmux}/bin/tmux";
+  startFbterm = pkgs.writeShellScriptBin "start-fbterm" ''
+    eval $(${pkgs.openssh}/bin/ssh-agent)
+    export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
+    FBTERM=1 exec /run/wrappers/bin/fbterm -- ${shell}
+  '';
 in {
   options.heywoodlh.workstation = mkOption {
     default = false;
@@ -36,6 +43,20 @@ in {
     # Desktop environments
     heywoodlh.cosmic = true;
     heywoodlh.hyprland = true;
+
+    # Console
+    heywoodlh.console = true;
+    services.greetd.enable = lib.mkForce false;
+    environment.etc."ly/custom-sessions/fbterm.desktop" = {
+      enable = lyCfg.enable;
+      text = ''
+        [Desktop Entry]
+        Name=fbterm
+        Exec=${startFbterm}/bin/fbterm
+        DesktopNames=null
+        Terminal=true
+      '';
+    };
 
     # Enable the X11 windowing system.
     services.xserver.enable = true;

@@ -277,10 +277,7 @@
           networking.computerName = myHostname;
           heywoodlh.darwin = {
             sketchybar.enable = true;
-            yabai = {
-              enable = true;
-              homebrew = true;
-            };
+            yabai.enable = true;
           };
           system.stateVersion = 6;
         }
@@ -622,7 +619,6 @@
         nixos-dev = nixosConfig "vm" "nixos-dev" {
           imports = [
             /etc/nixos/hardware-configuration.nix
-            ./nixos/vm.nix
           ];
         };
 
@@ -630,7 +626,6 @@
         nixos-vmware = nixosConfig "vm" "nixos-vmware" {
           imports = [
             /etc/nixos/hardware-configuration.nix
-            ./nixos/vm.nix
           ];
           virtualisation.vmware.guest.enable = true;
           console.earlySetup = true;
@@ -659,7 +654,6 @@
         # Generic UTM VM for running on any Mac
         nixos-utm = nixosConfig "vm" "nixos-utm" {
           imports = [
-            ./nixos/vm.nix
             /etc/nixos/hardware-configuration.nix
             (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
           ];

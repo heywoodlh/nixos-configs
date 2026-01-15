@@ -587,7 +587,7 @@
           readarr_hostfolder = "/media/config/services/readarr";
           sabnzbd_image = "docker.io/linuxserver/sabnzbd:4.5.5";
           sabnzbd_hostfolder = "/media/config/services/sabnzbd";
-          tautulli_image = "docker.io/linuxserver/tautulli:2.16.0";
+          tautulli_image = "docker.io/tautulli/tautulli:v2.16.0";
           tautulli_hostfolder = "/media/config/services/tautulli/config";
           qbittorrent_image = "docker.io/linuxserver/qbittorrent:5.1.4";
           qbittorrent_hostfolder = "/media/config/services/qbittorrent";

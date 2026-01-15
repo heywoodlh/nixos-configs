@@ -621,7 +621,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/linuxserver/tautulli:2.16.0
+      - image: docker.io/tautulli/tautulli:v2.16.0
         name: tautulli
         ports:
         - name: http

@@ -116,6 +116,6 @@ in {
   heywoodlh.home.darwin.defaults.enable = true;
   home.file.".config/fish/config.fish".text = ''
     # Fix for "too many files open" error on MacOS
-    /usr/bin/ulimit -n 10240
+    builtin ulimit -n 10240
   '';
 }

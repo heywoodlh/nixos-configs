@@ -18,5 +18,6 @@
     ./darwin-defaults.nix
     ./helix.nix
     ./aerc.nix
+    ./ghostty.nix
   ];
 }

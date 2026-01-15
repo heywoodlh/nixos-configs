@@ -292,14 +292,11 @@ in {
   # Enable Marp
   heywoodlh.home.marp.enable = true;
 
+  # Enable ghostty
+  heywoodlh.home.ghostty.enable = true;
+
   # Enable syncthing
   services.syncthing.enable = true;
-
-  # Ghostty config
-  home.file.".config/ghostty/config" = {
-    enable = true;
-    source = myFlakes.packages.${system}.ghostty-config;
-  };
 
   # Logbash wrapper
   home.file.".config/fish/config.fish" = {

@@ -79,6 +79,7 @@ in {
       ifuse
       usbutils
       ente-auth
+      meshtastic
       myFlakes.packages.${system}.tmux
       myFlakes.packages.${system}.helix
     ];
@@ -157,6 +158,9 @@ in {
         ln -s /run/user/${builtins.toString userUid}/keyring/ssh ${homeDir}/.ssh/agent.sock &> /dev/null || true
       '';
     };
+
+    # Enable meshtasticd
+    services.meshtasticd.enable = true;
 
     # Home-manager configs
     home-manager = {

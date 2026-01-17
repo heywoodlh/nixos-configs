@@ -596,6 +596,12 @@
           media_hostfolder = "/media/home-media";
           nodename = "homelab";
         };
+        meshtastic = mkKubeDrv "meshtastic" {
+          src = ./templates/meshtastic.yaml;
+          namespace = "default";
+          image = "docker.io/heywoodlh/contact:8fd48c5e5fa60043d443ecf038df4e28167bec13";
+          usb = "/dev/ttyUSB1";
+        };
         metrics-server = mkKubeDrv "metrics-server" {
           src = ./templates/metrics-server.yaml;
           image = "registry.k8s.io/metrics-server/metrics-server:v0.8.0";

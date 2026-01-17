@@ -15,8 +15,10 @@ in {
   ];
 
   home.packages = with pkgs; [
+    contact
     gomuks
     libvirt
+    meshtastic
     ollama
     opencode
     cpuspeed

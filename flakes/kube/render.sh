@@ -31,6 +31,7 @@ applications=(
   "iperf"
   "lancache"
   "media"
+  "meshtastic"
   "minecraft-bedrock"
   "miniflux"
   "namespaces"

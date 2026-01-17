@@ -85,5 +85,8 @@ in {
       "rustdesk"
       "shortcat"
     ];
+    masApps = {
+      "Meshtastic" = 1586432531;
+    };
   };
 }

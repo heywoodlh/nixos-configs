@@ -1,0 +1,112 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: contact
+  name: contact
+  namespace: default
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: contact-clusterrolebinding
+  labels:
+    app: contact
+subjects:
+  - kind: ServiceAccount
+    name: contact
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: contact-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: contact
+  namespace: default
+  labels:
+    app: contact
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: contact
+  namespace: default
+  labels:
+    app: contact
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: contact
+subjects:
+- kind: ServiceAccount
+  name: contact
+  namespace: default
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: contact
+  namespace: default
+data:
+  contact: |-
+    #!/usr/bin/env bash
+    /usr/local/bin/contact --port /dev/ttyUSB1 $@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: meshtastic
+  name: meshtastic
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meshtastic
+  template:
+    metadata:
+      labels:
+        app: meshtastic
+    spec:
+      serviceAccountName: contact
+      containers:
+        - image: docker.io/heywoodlh/contact:8fd48c5e5fa60043d443ecf038df4e28167bec13
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
+          workingDir: /data
+          name: meshtastic
+          securityContext:
+            privileged: true # For reading USB
+          volumeMounts:
+            - mountPath: /dev/ttyUSB1
+              name: usb0
+            - mountPath: /data
+              name: data
+            - name: contact-wrapper
+              mountPath: /data/bin/contact
+              subPath: contact
+          env:
+            - name: PATH
+              value: '/data/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+      volumes:
+        - name: usb0
+          hostPath:
+            path: /dev/ttyUSB1
+        - name: data
+          hostPath:
+            path: /media/data-ssd/meshtastic
+            type: DirectoryOrCreate
+        - name: contact-wrapper
+          configMap:
+            name: contact
+            defaultMode: 0777
+            items:
+              - key: "contact"
+                path: "contact"
+      restartPolicy: Always

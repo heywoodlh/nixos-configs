@@ -159,9 +159,6 @@ in {
       '';
     };
 
-    # Enable meshtasticd
-    services.meshtasticd.enable = true;
-
     # Home-manager configs
     home-manager = {
       extraSpecialArgs = {

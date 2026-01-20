@@ -30,6 +30,8 @@ in {
       enable = true;
       mfa = true;
     };
+    # Enable backup user
+    heywoodlh.backup.enable = true;
 
     environment.systemPackages = [
       pkgs.ansible

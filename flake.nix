@@ -241,6 +241,8 @@
       ./nixos/modules/asahi.nix
       ./nixos/modules/helix.nix
       ./nixos/modules/luks.nix
+      ./nixos/modules/backups.nix
+      ./nixos/modules/cloudflared.nix
     ];
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -320,7 +322,6 @@
         ./nixos/roles/tailscale.nix
         ./nixos/roles/monitoring/syslog-ng/client.nix
         ./nixos/roles/monitoring/node-exporter.nix
-        ./nixos/roles/backups/tarsnap.nix
         { heywoodlh.server = true; }
       ] ++ lib.optionals (machineType == "workstation") [
         { heywoodlh.workstation = true; }

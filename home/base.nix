@@ -86,15 +86,6 @@ let
     [ProxyList]
     socks5 tor.barn-banana.ts.net 1080
   '';
-  tarsnap-key-backup = pkgs.writeShellScriptBin "tarsnap-key-backup.sh" ''
-    hosts=("nix-drive" "homelab" "nixos-gaming")
-    op_item="fp5jsqodjv3gzlwtlgojays7qe"
-
-    for host in "''${hosts[@]}"
-    do
-      ssh heywoodlh@$host "sudo cp /root/tarsnap.key /home/heywoodlh/tarsnap.key; sudo chown -R heywoodlh /home/heywoodlh/tarsnap.key" && scp heywoodlh@$host:/home/heywoodlh/tarsnap.key $host && ssh heywoodlh@$host "rm /home/heywoodlh/tarsnap.key" && op-wrapper.sh item edit fp5jsqodjv3gzlwtlgojays7qe "$host[file]=$host" && rm $host
-    done
-  '';
   duo-key-self-setup = pkgs.writeShellScriptBin "duo-key-setup.sh" ''
     op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key > /tmp/duo.key
     op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key > /tmp/duo-integration.key
@@ -311,14 +302,13 @@ in {
     msedit
     nil
     nixos-rebuild-ng
-    nixfmt-rfc-style
+    nixfmt
     nmap
     openssl
     pciutils
     pwgen
     python3
     screen
-    tarsnap-key-backup
     tcpdump
     tree
     unzip

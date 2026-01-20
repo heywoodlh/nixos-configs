@@ -272,7 +272,6 @@ in {
   home.packages = [
     code-reset
     pkgs.mdp
-    pkgs.tarsnap
   ];
 
   # Firefox/Mullvad Browser Browser configuration

@@ -27,7 +27,6 @@ in {
     ../../roles/media/youtube.nix
     ../../roles/monitoring/iperf.nix
     ../../roles/storage/nfs-media.nix
-    ../../roles/remote-access/cloudflared.nix
     ../../roles/remote-access/wol.nix
   ];
 
@@ -141,23 +140,6 @@ in {
     ];
   };
 
-  # Exclude Documents folder in Tarsnap
-  services.tarsnap.archives.nixos.excludes = [
-    "/home/heywoodlh/Documents"
-    "/opt/fauxpilot"
-    "/opt/graylog"
-    "/opt/nfcapd"
-    "/opt/open-webui"
-    "/opt/protonmail-bridge"
-    "/opt/serge"
-    "/media/data-ssd/ollama"
-    "/opt/syncthing/mac-mini-vm"
-    "/opt/syncthing/clone-hero-songs"
-    "/opt/syncthing/opt/nixpkgs"
-    "/opt/syncthing/gamma"
-    "/opt/syncthing/anomaly"
-  ];
-
   # Resolve too many open files error
   # https://discourse.nixos.org/t/unable-to-fix-too-many-open-files-error/27094/7
   # https://askubuntu.com/a/1451118
@@ -202,4 +184,7 @@ in {
   # Data_pool including dedicated immich ZFS device/mountpoint
   # Created with: `sudo zfs create -o canmount=on -o mountpoint=/media/data_pool/immich data_pool/immich`
   boot.zfs.extraPools = [ "data_pool" ];
+
+  heywoodlh.backup.server = true;
+  heywoodlh.cloudflared = true;
 }

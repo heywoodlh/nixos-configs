@@ -335,7 +335,7 @@
     };
 
     eval = pkgs.lib.evalModules {
-      specialArgs = { inherit pkgs; };
+      specialArgs = { inherit pkgs; inherit myFlakes; };
       modules = [
         darwinModules.heywoodlh.darwin { config._module.check = false; }
         homeModules.heywoodlh.home { config._module.check = false; }

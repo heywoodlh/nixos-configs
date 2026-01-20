@@ -124,6 +124,116 @@ string
 
 
 
+## heywoodlh\.backup\.enable
+
+
+
+Enable heywoodlh backup client configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+
+
+
+## heywoodlh\.backup\.publicKeys
+
+
+
+List of public keys to use for backups\.
+
+
+
+*Type:*
+list of (optionally newline-terminated) single-line string
+
+
+
+*Default:*
+
+```
+[
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJszbIpuxux7oAANlLC+RphqlEW4Ak1128QMvkI06TiY root@homelab"
+]
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+
+
+
+## heywoodlh\.backup\.server
+
+
+
+Enable heywoodlh backup server (duplicati) configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+
+
+
+## heywoodlh\.backup\.username
+
+
+
+Username for backups over SSH\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "backups" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+
+
+
+## heywoodlh\.cloudflared
+
+
+
+Enable heywoodlh cloudflared configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cloudflared\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cloudflared.nix)
+
+
+
 ## heywoodlh\.console
 
 
@@ -893,6 +1003,132 @@ boolean
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.enable
+
+
+
+Enable heywoodlh vicinae configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.command
+
+
+
+Ghostty default command\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "/nix/store/gba1viay0zhyzcp39bxigmqrfnzlgw6j-tmux/bin/tmux" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.extraSettings
+
+
+
+Extra settings to append to ghostty home-manager configuration\.
+
+
+
+*Type:*
+attribute set
+
+
+
+*Default:*
+` { } `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.fontSize
+
+
+
+Ghostty font size\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+` 14 `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.quickTerminalKeybind
+
+
+
+Keybinding for Quick Terminal\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "global:ctrl+grave_accent=toggle_quick_terminal" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.theme
+
+
+
+Ghostty theme\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "Nord" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
 
 
 

@@ -21,7 +21,7 @@ metadata:
   annotations:
     tailscale.com/expose: "true"
     tailscale.com/hostname: "home-assistant"
-    tailscale.com/tags: "tag:http"
+    tailscale.com/tags: "tag:home-assistant"
 spec:
   ports:
   - name: http
@@ -203,28 +203,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: scrypted
-  name: scrypted
+    app: go2rtc
+  name: go2rtc
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scrypted
+      app: go2rtc
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: scrypted
+        app: go2rtc
     spec:
       hostNetwork: true
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-        - image: ghcr.io/koush/scrypted:intel
+        - image: docker.io/alexxit/go2rtc:1.9.14
           imagePullPolicy: Always
-          name: scrypted
+          name: go2rtc
           # For MDNS
           securityContext:
             privileged: true
@@ -234,16 +234,14 @@ spec:
                 - NET_RAW
                 - SYS_ADMIN
           env:
-            - name: SCRYPTED_NVR_VOLUME
-              value: "/nvr"
-            - name: SCRYPTED_INSECURE_PORT
-              value: "11080"
+            - name: TZ
+              value: "America/Denver"
           ports:
-            - name: scrypted-http
-              containerPort: 11080
+            - name: go2rtc
+              containerPort: 1984
               protocol: TCP
-            - name: scrypted-https
-              containerPort: 10443
+            - name: go2rtc-rtsp
+              containerPort: 8554
               protocol: TCP
           resources:
             requests:
@@ -251,63 +249,153 @@ spec:
             limits:
               gpu.intel.com/i915: "1"
           volumeMounts:
-            - mountPath: /server/volume
-              name: scrypted-db
-            - mountPath: /nvr
-              name: scrypted-nvr
+            - mountPath: /config
+              name: go2rtc
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       volumes:
-        - name: scrypted-db
+        - name: go2rtc
           hostPath:
-            path: /media/data-ssd/home-assistant/scrypted/db
+            path: /media/data-ssd/home-assistant/go2rtc
             type: DirectoryOrCreate
-        - name: scrypted-nvr
-          hostPath:
-            path: /media/data-ssd/home-assistant/scrypted/nvr
-            type: DirectoryOrCreate
-# Unencrypted http endpoint for tailscale
 ---
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
     tailscale.com/expose: "true"
-    tailscale.com/hostname: "scrypted"
-    tailscale.com/tags: "tag:http"
+    tailscale.com/hostname: "go2rtc"
+    tailscale.com/tags: "tag:home-assistant"
   labels:
-    app: scrypted
-  name: scrypted-http
+    app: go2rtc
+  name: go2rtc
   namespace: default
 spec:
   ports:
-    - name: "scrypted"
+    - name: "go2rtc"
       port: 80
       protocol: TCP
-      targetPort: scrypted-http
+      targetPort: go2rtc
+    - name: "go2rtc-rtsp"
+      port: 8554
+      protocol: TCP
+      targetPort: go2rtc-rtsp
   selector:
-    app: scrypted
-# HTTPS for internal cluster traffic
+    app: go2rtc
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "frigate"
+  namespace: "default"
+spec:
+  itemPath: "vaults/Kubernetes/items/5r2mzxzqbozrmctx6qthzqgouy"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: frigate
+  name: frigate
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frigate
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: frigate
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+        - image: ghcr.io/blakeblackshear/frigate:stable
+          imagePullPolicy: Always
+          name: frigate
+          # For MDNS
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - NET_ADMIN
+                - NET_RAW
+                - SYS_ADMIN
+          env:
+            - name: FRIGATE_RTSP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: frigate
+                  key: password
+          ports:
+            - name: frigate
+              containerPort: 8971
+              protocol: TCP
+            - name: frigate-rtsp
+              containerPort: 8554
+              protocol: TCP
+            - name: frigate-rtc
+              containerPort: 8555
+              protocol: TCP
+            - name: frigate-rtc-udp
+              containerPort: 8555
+              protocol: UDP
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+          volumeMounts:
+            - mountPath: /config
+              name: frigate-config
+            - mountPath: /media/frigate
+              name: frigate-media
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: frigate-config
+          hostPath:
+            path: /media/data-ssd/home-assistant/frigate/config
+            type: DirectoryOrCreate
+        - name: frigate-media
+          hostPath:
+            path: /media/data-ssd/home-assistant/frigate/media
+            type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
     tailscale.com/expose: "true"
-    tailscale.com/hostname: "scrypted-https"
-    tailscale.com/tags: "tag:http"
+    tailscale.com/hostname: "frigate"
+    tailscale.com/tags: "tag:home-assistant"
   labels:
-    app: scrypted
-  name: scrypted-https
+    app: frigate
+  name: frigate
   namespace: default
 spec:
   ports:
-    - name: "scrypted-https"
-      port: 443
+    - name: "frigate"
+      port: 80
       protocol: TCP
-      targetPort: scrypted-https
+      targetPort: frigate
+    - name: frigate-rtsp
+      port: 8554
+      protocol: TCP
+      targetPort: frigate-rtsp
+    - name: frigate-rtc
+      port: 8555
+      protocol: TCP
+      targetPort: frigate-rtc
+    - name: frigate-rtc-udp
+      port: 8555
+      protocol: UDP
+      targetPort: frigate-rtc-udp
   selector:
-    app: scrypted
+    app: frigate
 ---
 apiVersion: onepassword.com/v1
 kind: OnePasswordItem
@@ -378,7 +466,7 @@ metadata:
   annotations:
     tailscale.com/expose: "true"
     tailscale.com/hostname: "eufy"
-    tailscale.com/tags: "tag:http"
+    tailscale.com/tags: "tag:home-assistant"
   labels:
     app: eufy
   name: eufy

@@ -1,0 +1,131 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: duplicati
+  name: duplicati
+  namespace: @namespace@
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: duplicati-clusterrolebinding
+  labels:
+    app: duplicati
+subjects:
+  - kind: ServiceAccount
+    name: duplicati
+    namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: duplicati-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: duplicati
+  namespace: @namespace@
+  labels:
+    app: duplicati
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: duplicati
+  namespace: @namespace@
+  labels:
+    app: duplicati
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: duplicati
+subjects:
+- kind: ServiceAccount
+  name: duplicati
+  namespace: @namespace@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: duplicati
+  name: duplicati
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: duplicati
+  template:
+    metadata:
+      labels:
+        app: duplicati
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      serviceAccountName: duplicati
+      containers:
+        - image: @image@
+          name: duplicati
+          ports:
+          - containerPort: 8200
+            name: http
+            protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /media
+              name: media
+            - mountPath: /opt
+              name: opt
+            - mountPath: /root
+              name: root
+          env:
+            - name: TZ
+              value: "America/Denver"
+            - name: PUID
+              value: "0"
+            - name: PGID
+              value: "0"
+      volumes:
+        - name: config
+          hostPath:
+            path: @hostfolder@
+            type: DirectoryOrCreate
+        - name: media
+          hostPath:
+            path: /media
+            type: Directory
+        - name: opt
+          hostPath:
+            path: /opt
+            type: Directory
+        - name: root
+          hostPath:
+            path: /root
+            type: Directory
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: duplicati
+  name: duplicati
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "backups"
+    tailscale.com/tags: "tag:backups,tag:http"
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: duplicati
+  type: ClusterIP

@@ -59,13 +59,5 @@ in {
      "hmac-md5-96"
      "hmac-md5"
     ];
-
-    services.duplicati = lib.optionalAttrs (cfg.server) {
-      enable = true;
-      interface = "any";
-      user = "root";
-    };
-
-    networking.firewall.interfaces.tailscale0.allowedTCPPorts = lib.optionals (cfg.server) [ 8200 ];
   };
 }

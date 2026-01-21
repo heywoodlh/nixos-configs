@@ -364,6 +364,13 @@
           port = "80";
           replicas = "1";
         };
+        duplicati = mkKubeDrv "duplicati" {
+          src = ./templates/duplicati.yaml;
+          namespace = "default";
+          image = "docker.io/linuxserver/duplicati:2.2.0";
+          hostfolder = "/media/data-ssd/duplicati";
+          nodename = "homelab";
+        };
         elastic-cloud-operator = (kubelib.buildHelmChart {
           name = "elastic-cloud-operator";
           chart = "${elastic-cloud}/deploy/eck-operator";

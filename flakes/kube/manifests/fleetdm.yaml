@@ -71,6 +71,9 @@ spec:
       containers:
       - name: fleet
         image: docker.io/fleetdm/fleet:v4.78.1
+        # Uncomment below to perform db migrations
+        #command: [ "/bin/ash", "-c", "--" ]
+        #args: [ "while true; do sleep 30; done;" ]
         ports:
         - containerPort: 9080
         volumeMounts:

@@ -13,6 +13,7 @@ applications=(
   "coredns-kube-system"
   "crossplane"
   "drawio"
+  "duplicati"
   "elastic-cloud-operator"
   "elastic-cloud-elastic-stack"
   "flan-scan"

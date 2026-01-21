@@ -1041,7 +1041,7 @@ string
 
 
 *Default:*
-` "/nix/store/gba1viay0zhyzcp39bxigmqrfnzlgw6j-tmux/bin/tmux" `
+` "/nix/store/35cqqcxzla0b1vkmcs20nhd5ahkkybq1-tmux/bin/tmux" `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1083,7 +1083,7 @@ signed integer
 
 
 *Default:*
-` 14 `
+` 16 `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)

@@ -476,6 +476,12 @@
           ];
         };
 
+        nixos-thinkpad = nixosConfig "laptop" "nixos-thinkpad" {
+          imports = [
+            /etc/nixos/hardware-configuration.nix
+          ];
+        };
+
         nixos-blade = nixosConfig "laptop" "nixos-blade" {
           imports = [
             ./nixos/hosts/razer-blade-14.nix
@@ -587,7 +593,7 @@
               };
               environment.systemPackages = with pkgs; [
                 git
-                myFlakes.packages.${system}.helix
+                helix
                 msedit
                 nano
               ];

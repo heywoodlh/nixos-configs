@@ -60,7 +60,18 @@ in {
         from = "Spencer Heywood <spencer@heywoodlh.io>";
         aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>, Spencer Heywood <heywoodlh@heywoodlh.io>";
         signature-file = "${pkgs.writeText "signature.txt" "- Spencer"}";
+        address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
       };
     };
+
+    home.packages = with pkgs; lib.optionals (cfg.accounts) [
+      khard
+    ];
+
+    home.file.".config/khard/khard.conf".text = lib.optionalString (cfg.accounts) ''
+      [addressbooks]
+      [[personal]]
+      path = ~/.contacts/apple/main
+    '';
   };
 }

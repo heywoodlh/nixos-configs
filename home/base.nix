@@ -570,6 +570,8 @@ in {
       [general]
       status_path = "${homeDir}/.config/vdirsyncer/status/"
 
+      ## Calendar/Reminders
+
       [pair icloud_calendar]
       a = "apple_local"
       b = "apple_remote"
@@ -580,12 +582,32 @@ in {
       path = "~/.todo/apple"
       fileext = ".ics"
 
-      # Reminder, this is not proper iCloud
+      # Reminder, this is not the iOS-provided iCloud integration
       # All devices (i.e. Apple devices) who want to see this should be using caldav
       [storage apple_remote]
       type = "caldav"
       item_types = ["VTODO"]
       url = "https://caldav.icloud.com"
+      username.fetch = ["shell", "${op-wrapper} item get 'zu6wuwgrlv42ngwchxs2vt75wq' --fields label=username --reveal"]
+      password.fetch = ["shell", "${op-wrapper} item get 'zu6wuwgrlv42ngwchxs2vt75wq' --fields label=app-password --reveal"]
+
+      ## Contacts
+
+      [pair icloud_contacts]
+      a = "apple_remote_contacts"
+      b = "apple_local_contacts"
+      collections = [["icloud_contacts", "card", "main"]]
+      conflict_resolution = "a wins"
+      metadata = ["displayname"]
+
+      [storage apple_local_contacts]
+      type = "filesystem"
+      path = "~/.contacts/apple"
+      fileext = ".vcf"
+
+      [storage apple_remote_contacts]
+      type = "carddav"
+      url = "https://contacts.icloud.com"
       username.fetch = ["shell", "${op-wrapper} item get 'zu6wuwgrlv42ngwchxs2vt75wq' --fields label=username --reveal"]
       password.fetch = ["shell", "${op-wrapper} item get 'zu6wuwgrlv42ngwchxs2vt75wq' --fields label=app-password --reveal"]
     '';

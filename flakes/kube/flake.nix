@@ -790,6 +790,7 @@
           src = ./templates/protonmail-bridge.yaml;
           namespace = "default";
           image = "docker.io/shenxn/protonmail-bridge:3.19.0-1";
+          ferroxide_image = "docker.io/heywoodlh/ferroxide:2026_01";
           nodename = "homelab";
           hostfolder = "/opt/protonmail-bridge";
           replicas = 1;

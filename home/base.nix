@@ -8,11 +8,12 @@ let
   myVim = pkgs.neovim;
   myGit = myFlakes.packages.${system}.git;
   myJujutsu = myFlakes.packages.${system}.jujutsu;
+  myHelix = myFlakes.packages.${system}.helix;
   todomanWrapper = pkgs.writeScriptBin "todo" ''
     ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null && ${pkgs.todoman}/bin/todo "$@" && ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null
   '';
-  vimTodoAdd = pkgs.writeScriptBin "todo-vim" ''
-    output="$(${pkgs.coreutils}/bin/printf "Summary: \n\n#Example Date:$(${pkgs.coreutils}/bin/date "+%Y-%m-%d %H:%M")\nDue: " | EDITOR='${myVim}/bin/vim' ${pkgs.moreutils}/bin/vipe)"
+  todoEdit = pkgs.writeScriptBin "todo-edit" ''
+    output="$(${pkgs.coreutils}/bin/printf "Summary: \n\n#Example Date:$(${pkgs.coreutils}/bin/date "+%Y-%m-%d %H:%M")\nDue: " | EDITOR='${myHelix}/bin/hx' ${pkgs.moreutils}/bin/vipe)"
     summary="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep 'Summary:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2 | ${pkgs.findutils}/bin/xargs | ${pkgs.gnused}/bin/sed 's/  / /g')"
     date="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep 'Due:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2 | ${pkgs.findutils}/bin/xargs)"
     if [ -n "$summary" ]
@@ -321,7 +322,7 @@ in {
     myFish # For non-nix use-cases
     myChat
     todomanWrapper
-    vimTodoAdd
+    todoEdit
     password
     otp
     op-backup
@@ -569,22 +570,24 @@ in {
       [general]
       status_path = "${homeDir}/.config/vdirsyncer/status/"
 
-      [pair my_todo]
-      a = "fastmail_local"
-      b = "fastmail_remote"
-      collections = ["from a", "from b"]
+      [pair icloud_calendar]
+      a = "apple_local"
+      b = "apple_remote"
+      collections = ["from b", "from a"]
 
-      [storage fastmail_local]
+      [storage apple_local]
       type = "filesystem"
-      path = "~/.todo/fastmail"
+      path = "~/.todo/apple"
       fileext = ".ics"
 
-      [storage fastmail_remote]
+      # Reminder, this is not proper iCloud
+      # All devices (i.e. Apple devices) who want to see this should be using caldav
+      [storage apple_remote]
       type = "caldav"
       item_types = ["VTODO"]
-      url = "https://caldav.fastmail.com"
-      username = "heywoodlh@heywoodlh.io"
-      password.fetch = ["shell", "${op-wrapper} item get '3qaxsqbv5dski4wqswxapc7qoi' --fields label=password --reveal"]
+      url = "https://caldav.icloud.com"
+      username.fetch = ["shell", "${op-wrapper} item get 'zu6wuwgrlv42ngwchxs2vt75wq' --fields label=username --reveal"]
+      password.fetch = ["shell", "${op-wrapper} item get 'zu6wuwgrlv42ngwchxs2vt75wq' --fields label=app-password --reveal"]
     '';
   };
 
@@ -592,10 +595,10 @@ in {
   home.file.".config/todoman/config.py" = {
     enable = true;
     text = ''
-      path = "~/.todo/fastmail/*"
+      path = "~/.todo/apple/*"
       date_format = "%Y-%m-%d"
       time_format = "%H:%M"
-      default_list = "FF7A0137-4E3F-4C31-A6C7-C49FE1C91631" # Professional
+      default_list = "20D38BB7-DC41-4D9A-A207-5ECD392A77BF" # personal
       default_due = 0
       default_command = "list --sort created_at --no-reverse"
     '';

@@ -26,8 +26,6 @@ spec:
           containerPort: 25
         - name: imap
           containerPort: 143
-        - name: caldav
-          containerPort: 8080
         volumeMounts:
         - name: protonmail-bridge-data
           mountPath: /root/
@@ -58,10 +56,69 @@ spec:
     port: 143
     protocol: TCP
     targetPort: imap
-  - name: caldav
+  selector:
+    app: protonmail-bridge
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ferroxide
+  name: ferroxide
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ferroxide
+  template:
+    metadata:
+      labels:
+        app: ferroxide
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: @ferroxide_image@
+        name: ferroxide
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "ferroxide -config-home /config -carddav-host 0.0.0.0 -caldav-host 0.0.0.0 -disable-imap -disable-smtp serve" ]
+        ports:
+        - name: carddav
+          containerPort: 8080
+        - name: caldav
+          containerPort: 8081
+        volumeMounts:
+        - name: ferroxide-config
+          mountPath: /config
+      volumes:
+      - name: ferroxide-config
+        hostPath:
+          path: @hostfolder@/ferroxide
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ferroxide
+  name: ferroxide
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "dav"
+    tailscale.com/tags: "tag:protonmailbridge"
+spec:
+  ports:
+  - name: carddav
     port: 8080
+    protocol: TCP
+    targetPort: carddav
+  - name: caldav
+    port: 8081
     protocol: TCP
     targetPort: caldav
   selector:
-    app: protonmail-bridge
+    app: ferroxide
   type: ClusterIP

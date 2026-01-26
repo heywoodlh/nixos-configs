@@ -2,9 +2,6 @@
   config,
   pkgs,
   lib,
-  home-manager,
-  hyprland,
-  myFlakes,
   dark-wallpaper,
   ...
 }:
@@ -467,6 +464,9 @@ in {
         exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
         exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
         exec-once = ${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets
+
+        # Workaround for hypridle
+        exec-once = /run/current-system/sw/bin/systemctl restart --user hypridle.service
 
         # Start terminal in special workspace so I can toggle it
         #exec-once = [workspace special:terminal] ${pkgs.ghostty}/bin/ghostty

@@ -1,8 +1,7 @@
-{ config, determinate, pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-  nixPkg = determinate.packages.${system}.default;
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';

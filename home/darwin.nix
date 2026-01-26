@@ -1,8 +1,7 @@
-{ config, pkgs, home-manager, nur, lib, myFlakes, determinate, ... }:
+{ config, pkgs, home-manager, nur, lib, myFlakes, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-  nixPkg = determinate.packages.${system}.default;
   homeDir = config.home.homeDirectory;
   myTmux = myFlakes.packages.${system}.tmux;
 in {
@@ -23,7 +22,6 @@ in {
     pkgs.m-cli
     pkgs.mas
     pkgs.pinentry_mac
-    nixPkg # $HOME/.nix-profile/bin/nix will be prioritized over /var/nix/profiles/default/bin/nix
   ];
 
   home.shellAliases = {

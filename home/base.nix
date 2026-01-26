@@ -5,7 +5,7 @@ let
   stdenv = pkgs.stdenv;
   homeDir = config.home.homeDirectory;
   myFish = myFlakes.packages.${system}.fish;
-  myVim = pkgs.neovim;
+  myVim = pkgs.neovim-unwrapped;
   myGit = myFlakes.packages.${system}.git;
   myJujutsu = myFlakes.packages.${system}.jujutsu;
   myHelix = myFlakes.packages.${system}.helix;
@@ -164,7 +164,7 @@ let
     ${pkgs.leaf}/bin/leaf $@
   '';
   test-linux = pkgs.writeText "test-linux.sh" ''
-    #!/usr/bin/env -S nix shell "github:nixos/nixpkgs/nixpkgs-unstable#bash" "github:DeterminateSystems/nix" "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" --command bash
+    #!/usr/bin/env -S nix shell "github:nixos/nixpkgs/nixpkgs-unstable#bash" "github:nixos/nixpkgs/nixpkgs-unstable#nix" "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" --command bash
     cd /tmp
     set -e
     # Home-Manager
@@ -193,7 +193,7 @@ let
     fi
   '';
   test-darwin = pkgs.writeText "test-darwin.sh" ''
-    #!/usr/bin/env -S nix shell "github:nixos/nixpkgs/nixpkgs-unstable#bash" "github:DeterminateSystems/nix" --command bash
+    #!/usr/bin/env -S nix shell "github:nixos/nixpkgs/nixpkgs-unstable#bash" "github:nixos/nixpkgs/nixpkgs-unstable#nix" --command bash
     cd /tmp
     printf "\nTesting Nix-Darwin build\n"
     nix build /tmp/nixos-configs#darwinConfigurations.mac-mini.system
@@ -315,7 +315,6 @@ in {
     unzip
     vdirsyncer
     zip
-    myVim
     myGit
     myJujutsu
     myFlakes.packages.${system}.tmux
@@ -692,6 +691,14 @@ in {
         notifications.enabled = false;
       };
     };
+  };
+
+  programs.neovim = {
+    enable = true;
+    package = myVim;
+    vimAlias = true;
+    viAlias = true;
+    vimdiffAlias = true;
   };
 
   heywoodlh.home.docker-credential-1password.enable = true;

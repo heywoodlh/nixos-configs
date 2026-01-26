@@ -28,11 +28,6 @@
       inputs.flake-compat.follows = "kyle/flake-compat";
       inputs.git-hooks-nix.follows = "pre-commit-hooks";
     };
-    determinate = {
-      url = "github:DeterminateSystems/nix/v2.28.1";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nix.follows = "nix";
-    };
     # for dependents of crane
     crane.url = "github:ipetkov/crane";
     # for dependents of helix-src
@@ -195,7 +190,6 @@
                       light-wallpaper,
                       signal-ntfy,
                       plasma-manager,
-                      determinate,
                       cart,
                       hexstrike-ai,
                       hyprland,
@@ -221,7 +215,6 @@
     darwinModules.heywoodlh.darwin = ./darwin/modules/default.nix;
     homeModules.heywoodlh.home = ./home/modules/default.nix;
     extNixOSModules = [
-      determinate.nixosModules.default
       home-manager.nixosModules.home-manager
       kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
@@ -258,7 +251,6 @@
       specialArgs = inputs;
       modules = [
         darwinModules.heywoodlh.darwin
-        determinate.darwinModules.default
         home-manager.darwinModules.home-manager
         ./darwin/roles/base.nix
         ./darwin/roles/defaults.nix
@@ -694,13 +686,11 @@
             fi
           fi
         '';
-        nixPkg = determinate.packages.${system}.default;
       in {
         # Used in CI
         heywoodlh = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            determinate.homeModules.default
             #(mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config
@@ -748,7 +738,7 @@
                 text = ''
                   #!/usr/bin/env bash
                   ${homeSwitch}
-                  ${nixPkg}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
+                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
                 '';
               };
             }
@@ -761,7 +751,6 @@
           inherit pkgs;
           modules = [
             homeModules.heywoodlh.home
-            determinate.homeModules.default
             {
               nixpkgs.config.permittedInsecurePackages = [
                 "olm-3.2.16"
@@ -801,7 +790,6 @@
         heywoodlh-server = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            determinate.homeModules.default
             ./home/linux.nix
             ./home/linux/no-desktop.nix
             {
@@ -832,7 +820,7 @@
                 text = ''
                   #!/usr/bin/env bash
                   ${homeSwitch}
-                  ${nixPkg}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" $EXTRA_ARGS --impure $@
+                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" $EXTRA_ARGS --impure $@
                 '';
               };
               # Logbash wrapper

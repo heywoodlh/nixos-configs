@@ -222,30 +222,6 @@
         "type": "github"
       }
     },
-    "determinate": {
-      "inputs": {
-        "nix": [
-          "nix"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1744405241,
-        "narHash": "sha256-/WA+SmhMndoF1/8lIkZtj9e0XsSeL8uRwmxFXbZGDmw=",
-        "owner": "DeterminateSystems",
-        "repo": "nix",
-        "rev": "83ae59b410a8d9667d8fe730c4f63aef6fb82abf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "DeterminateSystems",
-        "ref": "v2.28.1",
-        "repo": "nix",
-        "type": "github"
-      }
-    },
     "devenv": {
       "inputs": {
         "cachix": "cachix",
@@ -1824,7 +1800,6 @@
         "crane": "crane",
         "dark-wallpaper": "dark-wallpaper",
         "darwin": "darwin",
-        "determinate": "determinate",
         "devenv": "devenv",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",

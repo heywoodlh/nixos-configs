@@ -33,7 +33,7 @@ terraform.rc
 
 [core]
   autocrlf = "input"
-  editor = "vim"
+  editor = "hx"
   pager = "${pkgs.less}/bin/less -+F"
   whitespace = "cr-at-eol"
   excludesFile = "${gitignore}"

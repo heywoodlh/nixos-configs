@@ -29,15 +29,20 @@ in {
     programs.hyprland = {
       enable = true;
       xwayland.enable = true;
+      withUWSM = false;
     };
+    programs.uwsm.enable = false;
     hardware.brillo.enable = true;
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
 
     home-manager.users.${username} = {
       heywoodlh.home.hyprland = true;
-      wayland.windowManager.hyprland.extraConfig = ''
-        env = NIXOS_OZONE_WL, 1
-      '';
+      wayland.windowManager.hyprland = {
+        extraConfig = ''
+          env = NIXOS_OZONE_WL, 1
+        '';
+        systemd.enable = false;
+      };
     };
   };
 }

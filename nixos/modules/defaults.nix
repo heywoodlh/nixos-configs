@@ -1,4 +1,4 @@
-{ config, pkgs, lib, determinate, nixpkgs-stable, myFlakes, nixpkgs-lts, ... }:
+{ config, pkgs, lib, nixpkgs-stable, myFlakes, nixpkgs-lts, ... }:
 
 with lib;
 with lib.types;
@@ -152,7 +152,6 @@ in {
     systemd.services.NetworkManager-wait-online.enable = false;
 
     nix = {
-      package = lib.mkForce determinate.packages.${system}.default;
       extraOptions = ''
         extra-experimental-features = nix-command flakes pipe-operators
       '';
@@ -188,11 +187,10 @@ in {
 
     # Stable, system-wide packages
     environment.systemPackages = with stable-pkgs; let
-      nixPkg = determinate.packages.${system}.default;
       nixosRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
         [[ -d $HOME/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs ${homeDir}/opt/nixos-configs
         # Wrapper to use the stable nixos-rebuild
-        sudo ${nixPkg}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake /home/heywoodlh/opt/nixos-configs#$(hostname) ''${@:2}
+        sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake /home/heywoodlh/opt/nixos-configs#$(hostname) ''${@:2}
       '';
       myNixosSwitch = pkgs.writeShellScriptBin "nixos-switch" ''
         ${nixosRebuildWrapper} switch $@
@@ -313,7 +311,6 @@ in {
       in {
       useGlobalPkgs = true;
       extraSpecialArgs = {
-        inherit determinate;
         inherit myFlakes;
         inherit nixpkgs-stable;
         inherit nixpkgs-lts;

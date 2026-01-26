@@ -5,6 +5,7 @@ with lib.types;
 
 let
   cfg = config.heywoodlh.workstation;
+  hyprlandCfg = config.heywoodlh.hyprland;
   lyCfg = config.services.displayManager.ly;
   system = pkgs.stdenv.hostPlatform.system;
   shell = "${myFlakes.packages.${system}.tmux}/bin/tmux";
@@ -30,7 +31,13 @@ in {
       quietBoot = true;
     };
 
-    services.displayManager.ly.enable = true;
+    services.displayManager.ly = {
+      enable = true;
+      settings = {
+        sleep_cmd = "/run/current-system/systemd/bin/systemctl sleep";
+        vi_mode = true;
+      };
+    };
 
     programs.dconf.enable = true;
 

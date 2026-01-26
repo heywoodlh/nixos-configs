@@ -1,8 +1,7 @@
-{ config, pkgs, nixpkgs-stable, determinate, home-manager, myFlakes, nur, ts-warp-nixpkgs, hexstrike-ai, ... }:
+{ config, pkgs, nixpkgs-stable, home-manager, myFlakes, nur, ts-warp-nixpkgs, hexstrike-ai, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-  nixPkg = determinate.packages.${system}.default;
 in {
   # Define user settings
   users.users.heywoodlh = import ../roles/user.nix {
@@ -23,7 +22,6 @@ in {
       inherit myFlakes;
       inherit ts-warp-nixpkgs;
       inherit nur;
-      inherit determinate;
       inherit hexstrike-ai;
       inherit nixpkgs-stable;
     };
@@ -43,7 +41,6 @@ in {
   '';
 
   nix = {
-    package = pkgs.lib.mkForce nixPkg;
     settings = {
       extra-substituters = [
         "https://nix-community.cachix.org"

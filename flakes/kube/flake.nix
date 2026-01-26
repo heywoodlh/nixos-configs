@@ -933,6 +933,13 @@
           image = "docker.io/heywoodlh/bash-uptime:0.0.4";
           ntfy_url = "http://ntfy.default/uptime-notifications";
         };
+        valheim = mkKubeDrv "valheim" {
+          src = ./templates/valheim.yaml;
+          namespace = "gaming";
+          image = "docker.io/lloesche/valheim-server:latest";
+          nodename = "homelab";
+          hostfolder = "/media/data-ssd/valheim";
+        };
         # Copy certs first: `scp -r homelab:/opt/wazuh/certs /tmp/certs`
         # Then build with: `nix build .#wazuh --impure`
         wazuh = let

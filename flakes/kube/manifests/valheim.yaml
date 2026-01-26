@@ -1,0 +1,161 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: valheim
+    app.kubernetes.io/instance: valheim
+  name: valheim
+  namespace: gaming
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: valheim-clusterrolebinding
+  labels:
+    app.kubernetes.io/name: valheim
+    app.kubernetes.io/instance: valheim
+subjects:
+  - kind: ServiceAccount
+    name: valheim
+    namespace: gaming
+roleRef:
+  kind: ClusterRole
+  name: valheim-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: valheim
+  namespace: gaming
+  labels:
+    app.kubernetes.io/name: valheim
+    app.kubernetes.io/instance: valheim
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: valheim
+  namespace: gaming
+  labels:
+    app.kubernetes.io/name: valheim
+    app.kubernetes.io/instance: valheim
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: valheim
+subjects:
+- kind: ServiceAccount
+  name: valheim
+  namespace: gaming
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: valheim
+  namespace: gaming
+  labels:
+    app: valheim
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "valheim"
+    tailscale.com/tags: "tag:valheim"
+spec:
+  type: ClusterIP
+  ports:
+  - name: valheim
+    port: 2456
+    targetPort: 2456
+    protocol: UDP
+  - name: valheim1
+    port: 2457
+    targetPort: 2457
+    protocol: UDP
+  selector:
+    app: valheim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: valheim-manager
+  namespace: gaming
+  labels:
+    app: valheim
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "valheim-manager"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  ports:
+  - name: manager
+    port: 80
+    targetPort: manager
+  selector:
+    app: valheim
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: valheim
+  namespace: gaming
+  labels:
+    app: valheim
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: valheim
+  template:
+    metadata:
+      labels:
+        app: valheim
+    spec:
+      serviceAccountName: valheim
+      securityContext:
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: valheim
+        image: "docker.io/lloesche/valheim-server:latest"
+        imagePullPolicy: Always
+        env:
+          #- name: VALHEIM_PLUS
+          #  value: "true"
+          - name: SERVER_PASS
+            value: "malia"
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        ports:
+        - name: valheim
+          containerPort: 2456
+          protocol: UDP
+        - name: valheim1
+          containerPort: 2457
+          protocol: UDP
+        volumeMounts:
+        - name: configdir
+          mountPath: /config
+        - name: datadir
+          mountPath: /opt/valheim
+        securityContext:
+          capabilities:
+            add:
+              - SYS_NICE
+      volumes:
+      - name: configdir
+        hostPath:
+          path: /media/data-ssd/valheim/config
+          type: DirectoryOrCreate
+      - name: datadir
+        hostPath:
+          path: /media/data-ssd/valheim/data
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: homelab

@@ -236,6 +236,7 @@
       ./nixos/modules/luks.nix
       ./nixos/modules/backups.nix
       ./nixos/modules/cloudflared.nix
+      ./nixos/modules/rayhunter.nix
     ];
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;

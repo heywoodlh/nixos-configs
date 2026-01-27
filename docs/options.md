@@ -1597,6 +1597,111 @@ string
 
 
 
+## heywoodlh\.rayhunter\.enable
+
+
+
+Enable heywoodlh rayhunter ntfy reverse proxy configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
+## heywoodlh\.rayhunter\.interface
+
+
+
+RayHunter USB interface name\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
+## heywoodlh\.rayhunter\.ntfy
+
+
+
+NTFY URL to proxy\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
+## heywoodlh\.rayhunter\.port
+
+
+
+Reverse proxy port\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+` 6767 `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
+## heywoodlh\.rayhunter\.user
+
+
+
+User to run the reverse proxy\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "rayhunter" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
 ## heywoodlh\.server
 
 

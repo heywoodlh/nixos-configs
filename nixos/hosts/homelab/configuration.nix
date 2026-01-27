@@ -188,4 +188,18 @@ in {
 
   heywoodlh.backup.server = true;
   heywoodlh.cloudflared = true;
+  heywoodlh.rayhunter = {
+    enable = true;
+    ntfy = "http://ntfy.barn-banana.ts.net";
+    user = "rayhunter";
+    interface = "enp5s0f0u8";
+    port = 6767;
+  };
+
+  # NextDNS
+  networking.nameservers = [
+    "45.90.28.89"
+    "45.90.30.89"
+  ];
+
 }

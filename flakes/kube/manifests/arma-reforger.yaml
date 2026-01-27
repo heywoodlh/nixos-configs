@@ -3,7 +3,7 @@ apiVersion: onepassword.com/v1
 kind: OnePasswordItem
 metadata:
   name: "arma-reforger"
-  namespace: @namespace@
+  namespace: gaming
 spec:
   itemPath: "vaults/Kubernetes/items/bo7ij7tziueojgebxbpvuov55e"
 ---
@@ -11,7 +11,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: arma-mods
-  namespace: @namespace@
+  namespace: gaming
 data:
   mods.json: |
     [
@@ -32,7 +32,7 @@ metadata:
   labels:
     io.kompose.service: arma-reforger
   name: arma-reforger
-  namespace: @namespace@
+  namespace: gaming
 spec:
   replicas: 1
   selector:
@@ -49,7 +49,7 @@ spec:
         io.kompose.service: arma-reforger
     spec:
       nodeSelector:
-        kubernetes.io/hostname: @nodename@
+        kubernetes.io/hostname: homelab
       containers:
         - image: ghcr.io/acemod/arma-reforger:latest
           workingDir: /reforger
@@ -69,7 +69,7 @@ spec:
             - name: GAME_SUPPORTED_PLATFORMS
               value: "PLATFORM_PC,PLATFORM_XBL,PLATFORM_PSN"
             - name: SERVER_PUBLIC_ADDRESS
-              value: "@address@"
+              value: "100.77.128.95"
             - name: GAME_PASSWORD_ADMIN
               valueFrom:
                 secretKeyRef:
@@ -105,16 +105,16 @@ spec:
       volumes:
         - name: configs
           hostPath:
-            path: @hostfolder@/configs
+            path: /media/data-ssd/games/arma-reforger/configs
         - name: home-profile
           hostPath:
-            path: @hostfolder@/home-profile
+            path: /media/data-ssd/games/arma-reforger/home-profile
         - name: root
           hostPath:
-            path: @hostfolder@/root
+            path: /media/data-ssd/games/arma-reforger/root
         - name: workshop
           hostPath:
-            path: @hostfolder@/workshop
+            path: /media/data-ssd/games/arma-reforger/workshop
         - name: arma-mods
           configMap:
             name: arma-mods
@@ -134,7 +134,7 @@ metadata:
   labels:
     io.kompose.service: arma-reforger
   name: arma-reforger
-  namespace: @namespace@
+  namespace: gaming
 spec:
   ports:
     - name: "udp"

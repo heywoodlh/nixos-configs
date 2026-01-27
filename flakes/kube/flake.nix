@@ -173,14 +173,13 @@
           };
         });
         "1password-item" = onepassworditem;
-        # before deploying arma-reforger, run the following:
-        # kubectl create ns gaming
         arma-reforger = mkKubeDrv "arma-reforger" {
           src = ./templates/arma-reforger.yaml;
           namespace = "gaming";
           replicas = 1;
           hostfolder = "/media/data-ssd/games/arma-reforger";
           nodename = "homelab";
+          address = "100.77.128.95";
         };
         attic = mkKubeDrv "attic" {
           src = ./templates/attic.yaml;

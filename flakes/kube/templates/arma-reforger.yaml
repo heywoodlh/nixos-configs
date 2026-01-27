@@ -19,7 +19,7 @@ data:
         "modId": "66FCED586CC278D5" // brotherhood survival
       },
       {
-        "modId": "5965550F24A0C152" // wherami
+        "modId": "5CAB06A845A6DC18" // units map markers
       }
     ]
 ---
@@ -63,7 +63,7 @@ spec:
             - name: GAME_ADMINS
               value: "76561198268733886"
             - name: GAME_SCENARIO_ID
-              value: "{DFAC5FABD11F2390}Missions/26_CombatOpsEveron.conf"
+              value: "{3E1C5811E6614663}Missions/testworld.conf"
             - name: GAME_PROPS_BATTLEYE
               value: "false"
             - name: GAME_SUPPORTED_PLATFORMS

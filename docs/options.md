@@ -1041,7 +1041,7 @@ string
 
 
 *Default:*
-` "/nix/store/gba1viay0zhyzcp39bxigmqrfnzlgw6j-tmux/bin/tmux" `
+` "/nix/store/35cqqcxzla0b1vkmcs20nhd5ahkkybq1-tmux/bin/tmux" `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1083,7 +1083,7 @@ signed integer
 
 
 *Default:*
-` 14 `
+` 16 `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1594,111 +1594,6 @@ string
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
-
-
-
-## heywoodlh\.rayhunter\.enable
-
-
-
-Enable heywoodlh rayhunter ntfy reverse proxy configuration\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-` false `
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
-
-
-
-## heywoodlh\.rayhunter\.interface
-
-
-
-RayHunter USB interface name\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-` "" `
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
-
-
-
-## heywoodlh\.rayhunter\.ntfy
-
-
-
-NTFY URL to proxy\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-` "" `
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
-
-
-
-## heywoodlh\.rayhunter\.port
-
-
-
-Reverse proxy port\.
-
-
-
-*Type:*
-signed integer
-
-
-
-*Default:*
-` 6767 `
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
-
-
-
-## heywoodlh\.rayhunter\.user
-
-
-
-User to run the reverse proxy\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-` "rayhunter" `
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
 
 
 

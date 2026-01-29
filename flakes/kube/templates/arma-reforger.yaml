@@ -16,7 +16,46 @@ data:
   mods.json: |
     [
       {
-        "modId": "66FCED586CC278D5" // brotherhood survival
+        "modId": "CAFEBABEF0CACC1A" // freedom fighters plus
+      },
+      {
+        "modId": "EB16A284342F9482" // ff-rhs-persistence-fix
+      },
+      {
+        "modId": "66DE15760F187E40" // ff-whereisthebattle
+      },
+      {
+        "modId": "661F445FF0B4D696" // ff-scar
+      },
+      {
+        "modId": "685767F866F5A6F8" // ff - spawn with a watch
+      },
+      {
+        "modId": "665754CB5D6A728F" // freedom fighters - sonar fix (radio stations)
+      },
+      {
+        "modId": "67269AA718F11901" // freedom fighters logistic (automatic sorting)
+      },
+      {
+        "modId": "606B100247F5C709" // bacon loadout editor
+      },
+      {
+        "modId": "5CA125536EE7430A" // m110 dmr
+      },
+      {
+        "modId": "5AB890B71D748750" // m4 block ii and urg-i
+      },
+      {
+        "modId": "658C0A491D81806C" // nasty glock 18c
+      },
+      {
+        "modId": "6620D014EA017158" // ff - svu-as
+      },
+      {
+        "modId": "59A30ACC02650E71" // night vision system
+      },
+      {
+        "modId": "5C73156675E11A0F" // gm persistent loadouts
       },
       {
         "modId": "5CAB06A845A6DC18" // units map markers
@@ -63,7 +102,7 @@ spec:
             - name: GAME_ADMINS
               value: "76561198268733886"
             - name: GAME_SCENARIO_ID
-              value: "{3E1C5811E6614663}Missions/testworld.conf"
+              value: "{3AD5C3E6BB400639}Missions/FreedomFighters/Kolguyev.conf" # from "freedom fighters plus" dependency "freedom fighters"
             - name: GAME_PROPS_BATTLEYE
               value: "false"
             - name: GAME_SUPPORTED_PLATFORMS

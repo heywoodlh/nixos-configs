@@ -13,7 +13,7 @@ in {
       enable = mkOption {
         default = false;
         description = ''
-          Enable heywoodlh vicinae configuration.
+          Enable heywoodlh ghostty configuration.
         '';
         type = types.bool;
       };

@@ -19,5 +19,6 @@
     ./helix.nix
     ./aerc.nix
     ./ghostty.nix
+    ./determinate.nix
   ];
 }

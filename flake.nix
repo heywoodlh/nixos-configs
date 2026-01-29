@@ -8,6 +8,18 @@
     nixos-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
+    determinate-nixpkgs.url = "https://api.flakehub.com/f/pinned/NixOS/nixpkgs/0.2505.811874%2Brev-daf6dc47aa4b44791372d6139ab7b25269184d55/019a3494-3498-707e-9086-1fb81badc7fe/source.tar.gz"; # TODO: update to upstream input when PR is merged
+    determinate-nix = {
+      url = "github:heywoodlh/nix-src/fix-input-conflict";
+      inputs.determinate-nixpkgs.follows = "determinate-nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.git-hooks-nix.follows = "pre-commit-hooks";
+    };
+    determinate = {
+      url = "github:heywoodlh/determinate/fix-input-conflict";
+      inputs.determinate-nixpkgs.follows = "determinate-nixpkgs";
+      inputs.determinate-nix.follows = "determinate-nix";
+    };
     # only to sync dependents that use flake-utils
     flake-utils.url = "github:numtide/flake-utils";
     # only to sync dependents that use flake-parts
@@ -19,14 +31,6 @@
       url = "github:nix-community/nixos-apple-silicon";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "kyle/flake-compat";
-    };
-    # only to sync dependents that use nix
-    nix = {
-      url = "github:nixos/nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
-      inputs.flake-compat.follows = "kyle/flake-compat";
-      inputs.git-hooks-nix.follows = "pre-commit-hooks";
     };
     # for dependents of crane
     crane.url = "github:ipetkov/crane";
@@ -55,7 +59,7 @@
       url = "github:cachix/devenv";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.nix.follows = "nix";
+      inputs.nix.follows = "determinate-nix";
       inputs.git-hooks.follows = "pre-commit-hooks";
       inputs.flake-compat.follows = "kyle/flake-compat";
       inputs.nixd.follows = "";
@@ -172,6 +176,8 @@
                       nixpkgs,
                       nixpkgs-stable,
                       nixpkgs-pam-lid-fix,
+                      determinate-nix,
+                      determinate,
                       myFlakes,
                       kyle,
                       nixpkgs-backports,
@@ -211,13 +217,29 @@
     lib = pkgs.lib;
     arch = pkgs.stdenv.hostPlatform.uname.processor;
     linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
+    # Modules shared between NixOS and MacOS
+    commonModules = [];
     darwinSystem = "${arch}-darwin";
-    darwinModules.heywoodlh.darwin = ./darwin/modules/default.nix;
+    nixPkg = determinate-nix.packages.${system}.default;
+    myDarwinModules = [
+      ./darwin/modules/sketchybar.nix
+      ./darwin/modules/yabai.nix
+      ./darwin/modules/stage-manager.nix
+      ./darwin/modules/determinate.nix
+    ] ++ commonModules;
+    extDarwinModules = [
+      determinate.darwinModules.default
+    ];
+    darwinModules.heywoodlh = { config, pkgs, ... }: {
+      imports = myDarwinModules ++ extDarwinModules;
+      determinateNix.enable = lib.mkDefault false;
+    };
     homeModules.heywoodlh.home = ./home/modules/default.nix;
     extNixOSModules = [
       home-manager.nixosModules.home-manager
       kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
+      determinate.nixosModules.default
     ];
     myNixOSModules = [
       ./nixos/modules/defaults.nix
@@ -237,7 +259,8 @@
       ./nixos/modules/backups.nix
       ./nixos/modules/cloudflared.nix
       ./nixos/modules/rayhunter.nix
-    ];
+      ./nixos/modules/determinate.nix
+    ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
     };
@@ -246,12 +269,15 @@
     nixosModules.docs = { config, pkgs, ... }: {
       imports = myNixOSModules;
     };
+    darwinModules.docs = { config, pkgs, ... }: {
+      imports = myDarwinModules;
+    };
 
     darwinConfig = machineType: myHostname: extraConf: darwin.lib.darwinSystem {
       system = "${darwinSystem}";
       specialArgs = inputs;
       modules = [
-        darwinModules.heywoodlh.darwin
+        darwinModules.heywoodlh
         home-manager.darwinModules.home-manager
         ./darwin/roles/base.nix
         ./darwin/roles/defaults.nix
@@ -267,10 +293,12 @@
             nur.overlays.default
           ];
           home-manager.useGlobalPkgs = true;
+          home-manager.extraSpecialArgs = inputs;
 
           networking.hostName = myHostname;
           networking.computerName = myHostname;
           heywoodlh.darwin = {
+            determinate.enable = true;
             sketchybar.enable = true;
             yabai.enable = true;
           };
@@ -288,15 +316,18 @@
         ./nixos/roles/virtualization/multiarch.nix
         ./nixos/roles/nixos/attic.nix
         {
-          heywoodlh.defaults = {
-            enable = true;
-            user = {
-              name = "heywoodlh";
-              description = "Spencer Heywood";
-              uid = 1000;
-              homeDir = "/home/heywoodlh";
+          heywoodlh = {
+            determinate.enable = true;
+            defaults = {
+              enable = true;
+              user = {
+                name = "heywoodlh";
+                description = "Spencer Heywood";
+                uid = 1000;
+                homeDir = "/home/heywoodlh";
+              };
+              hostname = myHostname;
             };
-            hostname = myHostname;
           };
           home-manager.users.heywoodlh = { ... }: {
             imports = [
@@ -330,7 +361,7 @@
     eval = pkgs.lib.evalModules {
       specialArgs = { inherit pkgs; inherit myFlakes; };
       modules = [
-        darwinModules.heywoodlh.darwin { config._module.check = false; }
+        darwinModules.docs { config._module.check = false; }
         homeModules.heywoodlh.home { config._module.check = false; }
         nixosModules.docs { config._module.check = false; }
       ];
@@ -739,7 +770,7 @@
                 text = ''
                   #!/usr/bin/env bash
                   ${homeSwitch}
-                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
+                  ${nixPkg}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
                 '';
               };
             }
@@ -821,7 +852,7 @@
                 text = ''
                   #!/usr/bin/env bash
                   ${homeSwitch}
-                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" $EXTRA_ARGS --impure $@
+                  ${nixPkg}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" $EXTRA_ARGS --impure $@
                 '';
               };
               # Logbash wrapper

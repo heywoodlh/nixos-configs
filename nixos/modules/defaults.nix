@@ -1,4 +1,4 @@
-{ config, pkgs, lib, nixpkgs-stable, myFlakes, nixpkgs-lts, ... }:
+{ config, pkgs, lib, nixpkgs-stable, myFlakes, nixpkgs-lts, determinate-nix, ... }:
 
 with lib;
 with lib.types;
@@ -10,6 +10,7 @@ let
     inherit system;
     config.allowUnfree = true;
   };
+  nixPkg = determinate-nix.packages.${system}.default;
   myHelix = myFlakes.packages.${system}.helix;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
@@ -190,7 +191,7 @@ in {
       nixosRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
         [[ -d $HOME/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs ${homeDir}/opt/nixos-configs
         # Wrapper to use the stable nixos-rebuild
-        sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake /home/heywoodlh/opt/nixos-configs#$(hostname) ''${@:2}
+        sudo ${nixPkg}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake /home/heywoodlh/opt/nixos-configs#$(hostname) ''${@:2}
       '';
       myNixosSwitch = pkgs.writeShellScriptBin "nixos-switch" ''
         ${nixosRebuildWrapper} switch $@

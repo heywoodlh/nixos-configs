@@ -723,6 +723,7 @@ in {
     '';
   };
 
+  heywoodlh.home.determinate.enable = true;
   heywoodlh.home.defaults = true;
   heywoodlh.home.helix = {
     enable = true;

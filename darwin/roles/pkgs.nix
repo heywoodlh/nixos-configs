@@ -1,12 +1,14 @@
-{ config, pkgs, ... }:
+{ config, pkgs, determinate-nix, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
+  nixPkg = determinate-nix.packages.${system}.default;
   darwinRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
     [[ -d $HOME/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs $HOME/opt/nixos-configs
+
     /usr/bin/sudo darwin-rebuild $1 --flake $HOME/opt/nixos-configs#$(hostname) ''${@:2}
   '';
   myDarwinSwitch = pkgs.writeShellScriptBin "darwin-switch" ''

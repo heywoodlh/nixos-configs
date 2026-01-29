@@ -5,7 +5,7 @@
 
 ## NixOS Configs
 
-This repo stores my NixOS and Nix on Darwin setup.
+This repo stores my NixOS and Nix on Darwin setup. Note, I only use [Determinate Nix](https://github.com/DeterminateSystems/nix-src).
 
 NixOS configs are here: [./nixos](./nixos)
 

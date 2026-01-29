@@ -222,6 +222,112 @@
         "type": "github"
       }
     },
+    "determinate": {
+      "inputs": {
+        "determinate-nix": [
+          "determinate-nix"
+        ],
+        "determinate-nixd-aarch64-darwin": "determinate-nixd-aarch64-darwin",
+        "determinate-nixd-aarch64-linux": "determinate-nixd-aarch64-linux",
+        "determinate-nixd-x86_64-linux": "determinate-nixd-x86_64-linux",
+        "determinate-nixpkgs": [
+          "determinate-nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1769707563,
+        "narHash": "sha256-bZ5hNWhBSdq34Nhw5EHe7jlgyRj8vQxeF7m+9EHwQWo=",
+        "owner": "heywoodlh",
+        "repo": "determinate",
+        "rev": "c149f897463d81a2e3511ff4fb92102191a2046c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "fix-input-conflict",
+        "repo": "determinate",
+        "type": "github"
+      }
+    },
+    "determinate-nix": {
+      "inputs": {
+        "determinate-nixpkgs": [
+          "determinate-nixpkgs"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "git-hooks-nix": [
+          "pre-commit-hooks"
+        ],
+        "nixpkgs-23-11": "nixpkgs-23-11",
+        "nixpkgs-regression": "nixpkgs-regression"
+      },
+      "locked": {
+        "lastModified": 1769728983,
+        "narHash": "sha256-a00ZaZr5niY+Y/8uLD2kAI4jDWK7K2Ry1jr8ZTy3rfI=",
+        "owner": "heywoodlh",
+        "repo": "nix-src",
+        "rev": "78fcfe9964c94782939b2122b4a26e07afeb4e13",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "fix-input-conflict",
+        "repo": "nix-src",
+        "type": "github"
+      }
+    },
+    "determinate-nixd-aarch64-darwin": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-zK2dgNHh/p92rk5jN+Y1LOMn0HEdTsS+7XXwb2g52oM=",
+        "type": "file",
+        "url": "https://install.determinate.systems/determinate-nixd/tag/v3.15.2/macOS"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://install.determinate.systems/determinate-nixd/tag/v3.15.2/macOS"
+      }
+    },
+    "determinate-nixd-aarch64-linux": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-ckvZP0zFcbzLXWYOJUqYXkKBt0b2IZcQEr7YjEVtwOI=",
+        "type": "file",
+        "url": "https://install.determinate.systems/determinate-nixd/tag/v3.15.2/aarch64-linux"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://install.determinate.systems/determinate-nixd/tag/v3.15.2/aarch64-linux"
+      }
+    },
+    "determinate-nixd-x86_64-linux": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-8dLtm8FJrpyBmrNpspJj30/6I5HGEfjjXuFqURcZ8pk=",
+        "type": "file",
+        "url": "https://install.determinate.systems/determinate-nixd/tag/v3.15.2/x86_64-linux"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://install.determinate.systems/determinate-nixd/tag/v3.15.2/x86_64-linux"
+      }
+    },
+    "determinate-nixpkgs": {
+      "locked": {
+        "lastModified": 1761597516,
+        "narHash": "sha256-wxX7u6D2rpkJLWkZ2E932SIvDJW8+ON/0Yy8+a5vsDU=",
+        "rev": "daf6dc47aa4b44791372d6139ab7b25269184d55",
+        "revCount": 811874,
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/NixOS/nixpkgs/0.2505.811874%2Brev-daf6dc47aa4b44791372d6139ab7b25269184d55/019a3494-3498-707e-9086-1fb81badc7fe/source.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/NixOS/nixpkgs/0.2505.811874%2Brev-daf6dc47aa4b44791372d6139ab7b25269184d55/019a3494-3498-707e-9086-1fb81badc7fe/source.tar.gz"
+      }
+    },
     "devenv": {
       "inputs": {
         "cachix": "cachix",
@@ -236,7 +342,7 @@
           "pre-commit-hooks"
         ],
         "nix": [
-          "nix"
+          "determinate-nix"
         ],
         "nixd": [],
         "nixpkgs": [
@@ -1143,38 +1249,6 @@
         "type": "gitlab"
       }
     },
-    "nix": {
-      "inputs": {
-        "flake-compat": [
-          "kyle",
-          "flake-compat"
-        ],
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "git-hooks-nix": [
-          "pre-commit-hooks"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-23-11": "nixpkgs-23-11",
-        "nixpkgs-regression": "nixpkgs-regression"
-      },
-      "locked": {
-        "lastModified": 1768259978,
-        "narHash": "sha256-d5DUs6CkWX9R3bVrjqlDZ/MWX9TmEB2pCOJDdCBRbis=",
-        "owner": "nixos",
-        "repo": "nix",
-        "rev": "a8087ebf5264c969190e45bb75774b198b0b48e5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "repo": "nix",
-        "type": "github"
-      }
-    },
     "nix-formatter-pack": {
       "inputs": {
         "nixpkgs": [
@@ -1800,6 +1874,9 @@
         "crane": "crane",
         "dark-wallpaper": "dark-wallpaper",
         "darwin": "darwin",
+        "determinate": "determinate",
+        "determinate-nix": "determinate-nix",
+        "determinate-nixpkgs": "determinate-nixpkgs",
         "devenv": "devenv",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
@@ -1811,7 +1888,6 @@
         "kyle": "kyle",
         "light-wallpaper": "light-wallpaper",
         "myFlakes": "myFlakes",
-        "nix": "nix",
         "nix-formatter-pack": "nix-formatter-pack",
         "nix-on-droid": "nix-on-droid",
         "nixos-apple-silicon": "nixos-apple-silicon",

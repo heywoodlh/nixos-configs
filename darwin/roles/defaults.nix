@@ -1,4 +1,4 @@
-{ config, pkgs, myFlakes, determinate, ... }:
+{ config, pkgs, myFlakes, determinate-nix, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -6,37 +6,7 @@ in {
   #package config
   nixpkgs.config.allowUnfree = true;
   # nix configuration
-  nix = {
-    settings = {
-      trusted-users = [
-        "@admin"
-      ];
-    };
-    linux-builder = {
-      enable = false; # Disable Linux builder -- transition to something more consistent
-      package = pkgs.darwin.linux-builder;
-      ephemeral = true; # Wipe on every reboot
-      systems = [
-        "aarch64-linux"
-      ];
-      config = {
-        environment.systemPackages = [
-          myFlakes.packages.aarch64-linux.vim
-        ];
-        nix = {
-          package = determinate.packages.aarch64-linux.default;
-          settings.experimental-features = [ "nix-command" "flakes" ];
-        };
-      };
-    };
-  };
-
-  system.activationScripts.chownLinuxBuilderKey = {
-    enable = true;
-    text = ''
-      chown 501 /etc/nix/builder_ed25519 || true
-    '';
-  };
+  nix.settings.trusted-users = [ "heywoodlh" ];
 
   programs.nix-index.enable = true;
 
@@ -47,7 +17,7 @@ in {
   ];
 
   environment.systemPackages = [
-    myFlakes.packages.${system}.vim
+    myFlakes.packages.${system}.helix
     myFlakes.packages.${system}.git
   ];
 

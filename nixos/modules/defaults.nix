@@ -307,6 +307,10 @@ in {
           home.packages = [
             myFlakes.packages.${system}.git
           ];
+          nix.settings.trusted-users = [
+            "root"
+            username
+          ];
         };
       in {
       useGlobalPkgs = true;

@@ -189,7 +189,7 @@ in {
   heywoodlh.backup.server = true;
   heywoodlh.cloudflared = true;
   heywoodlh.rayhunter = {
-    enable = true;
+    enable = false;
     ntfy = "http://ntfy.barn-banana.ts.net";
     user = "rayhunter";
     interface = "enp5s0f0u8";

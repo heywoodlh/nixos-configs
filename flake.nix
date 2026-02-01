@@ -465,7 +465,7 @@
 
         nixos-slc = nixosConfig "server" "nixos-slc" {
           imports = [
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/slc.nix
           ];
         };
 

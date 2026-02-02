@@ -596,7 +596,7 @@
           sabnzbd_hostfolder = "/media/config/services/sabnzbd";
           tautulli_image = "docker.io/tautulli/tautulli:v2.16.0";
           tautulli_hostfolder = "/media/config/services/tautulli/config";
-          qbittorrent_image = "docker.io/linuxserver/qbittorrent:5.1.4";
+          qbittorrent_image = "docker.io/linuxserver/qbittorrent:20.04.1";
           qbittorrent_hostfolder = "/media/config/services/qbittorrent";
           openaudible_image = "docker.io/openaudible/openaudible:latest";
           openaudible_hostfolder = "/media/config/services/openaudible";

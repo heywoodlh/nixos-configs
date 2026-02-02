@@ -526,6 +526,10 @@ in {
         args = [ "-c" "${pkgs.coreutils}/bin/mkdir -p $out/atuin; ${pkgs.coreutils}/bin/cp ${atuinConfig} $out/atuin/config.toml;" ];
       };
     in ''
+      # Ensure nix-profile in PATH
+      set -g PATH "$HOME/.nix-profile/bin" $PATH
+
+      # Atuin
       set -g PATH "${pkgs.atuin}/bin" $PATH
       set -gx ATUIN_CONFIG_DIR "${atuinConfigDir}/atuin"
       ${pkgs.atuin}/bin/atuin init fish --disable-up-arrow | source

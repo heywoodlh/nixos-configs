@@ -83,6 +83,7 @@ in {
       "remoteviewer"
       "rustdesk"
       "shortcat"
+      "soduto"
     ];
     masApps = {
       "Meshtastic" = 1586432531;

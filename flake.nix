@@ -212,8 +212,34 @@
     arch = pkgs.stdenv.hostPlatform.uname.processor;
     linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
     darwinSystem = "${arch}-darwin";
-    darwinModules.heywoodlh.darwin = ./darwin/modules/default.nix;
-    homeModules.heywoodlh.home = ./home/modules/default.nix;
+    darwinModules.heywoodlh.darwin = { config, pkgs, ... }: {
+      imports = [
+        ./darwin/modules/sketchybar.nix
+        ./darwin/modules/yabai.nix
+        ./darwin/modules/stage-manager.nix
+      ];
+    };
+    homeModules.heywoodlh.home = { config, pkgs, ... }: {
+      imports = [
+        ./home/modules/base.nix
+        ./home/modules/docker.nix
+        ./home/modules/lima.nix
+        ./home/modules/applications.nix
+        ./home/modules/marp.nix
+        ./home/modules/1password-docker-helper.nix
+        ./home/modules/onepassword.nix
+        ./home/modules/gnome.nix
+        ./home/modules/cosmic.nix
+        ./home/modules/guake.nix
+        ./home/modules/hyprland.nix
+        ./home/modules/vicinae.nix
+        ./home/modules/linux-autostart.nix
+        ./home/modules/darwin-defaults.nix
+        ./home/modules/helix.nix
+        ./home/modules/aerc.nix
+        ./home/modules/ghostty.nix
+      ];
+    };
     extNixOSModules = [
       home-manager.nixosModules.home-manager
       kyle.nixosModules.apple-silicon-support
@@ -374,7 +400,14 @@
     in {
       formatter = pkgs.alejandra;
       # custom nix-darwin modules
-      darwinModules.heywoodlh.darwin = self.darwinModules.heywoodlh.darwin;
+      darwinModules.heywoodlh = darwinModules.heywoodlh.darwin;
+
+      # custom nixos modules
+      nixosModules.heywoodlh = nixosModules.heywoodlh;
+
+      # custom home-manager modules
+      homeModules.heywoodlh = homeModules.heywoodlh.home;
+
       # macos targets
       packages.darwinConfigurations = {
         # Invoke darwinConfig like this:

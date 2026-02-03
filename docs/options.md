@@ -943,6 +943,28 @@ boolean
 
 
 
+## heywoodlh\.home\.darwin\.nord-terminal
+
+
+
+Enable heywoodlh Terminal\.app Nord configuration\.
+Warning: will overwrite existing settings\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/nord-terminal\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/nord-terminal.nix)
+
+
+
 ## heywoodlh\.home\.defaults
 
 

@@ -219,26 +219,43 @@
         ./darwin/modules/stage-manager.nix
       ];
     };
+    commonHomeModules = [
+      ./home/modules/base.nix
+      ./home/modules/docker.nix
+      ./home/modules/lima.nix
+      ./home/modules/applications.nix
+      ./home/modules/marp.nix
+      ./home/modules/1password-docker-helper.nix
+      ./home/modules/onepassword.nix
+      ./home/modules/helix.nix
+      ./home/modules/aerc.nix
+      ./home/modules/ghostty.nix
+    ];
+    linuxHomeModules = [
+      ./home/modules/gnome.nix
+      ./home/modules/cosmic.nix
+      ./home/modules/guake.nix
+      ./home/modules/hyprland.nix
+      ./home/modules/vicinae.nix
+      ./home/modules/linux-autostart.nix
+    ];
+    macosHomeModules = [
+      ./home/modules/darwin-defaults.nix
+      ./home/modules/nord-terminal.nix
+    ];
+    allHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
+    # Combine all modules, excluding modules not relevant to platform
+    platformHomeModules = if pkgs.stdenv.isDarwin then
+      commonHomeModules ++ macosHomeModules
+    else
+      commonHomeModules ++ linuxHomeModules
+    ;
     homeModules.heywoodlh.home = { config, pkgs, ... }: {
-      imports = [
-        ./home/modules/base.nix
-        ./home/modules/docker.nix
-        ./home/modules/lima.nix
-        ./home/modules/applications.nix
-        ./home/modules/marp.nix
-        ./home/modules/1password-docker-helper.nix
-        ./home/modules/onepassword.nix
-        ./home/modules/gnome.nix
-        ./home/modules/cosmic.nix
-        ./home/modules/guake.nix
-        ./home/modules/hyprland.nix
-        ./home/modules/vicinae.nix
-        ./home/modules/linux-autostart.nix
-        ./home/modules/darwin-defaults.nix
-        ./home/modules/helix.nix
-        ./home/modules/aerc.nix
-        ./home/modules/ghostty.nix
-      ];
+      imports = platformHomeModules;
+    };
+    # For docs only (to enumerate _all_ home modules regardless of platform)
+    homeModules.docs = { config, pkgs, ... }: {
+      imports = allHomeModules;
     };
     extNixOSModules = [
       home-manager.nixosModules.home-manager
@@ -292,7 +309,15 @@
           nixpkgs.overlays = [
             nur.overlays.default
           ];
-          home-manager.useGlobalPkgs = true;
+          home-manager = {
+            useGlobalPkgs = true;
+            users.heywoodlh = { ... }: {
+              imports = [
+                homeModules.heywoodlh.home
+              ];
+              heywoodlh.home.darwin.nord-terminal = true;
+            };
+          };
 
           networking.hostName = myHostname;
           networking.computerName = myHostname;
@@ -357,7 +382,7 @@
       specialArgs = { inherit pkgs; inherit myFlakes; };
       modules = [
         darwinModules.heywoodlh.darwin { config._module.check = false; }
-        homeModules.heywoodlh.home { config._module.check = false; }
+        homeModules.docs { config._module.check = false; }
         nixosModules.docs { config._module.check = false; }
       ];
     };

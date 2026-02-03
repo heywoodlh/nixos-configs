@@ -263,11 +263,6 @@ let
     ${pkgs.openssh}/bin/ssh spencer-router.barn-banana.ts.net /opt/public/wake-sarah-gaming.sh
   '';
 in {
-
-  imports = [
-    ./modules/default.nix
-  ];
-
   # Packages I need installed on every system
   home.packages = with pkgs; [
     _1password-cli

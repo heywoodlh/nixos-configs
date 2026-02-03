@@ -107,6 +107,9 @@
             end
         end
 
+        # Ensure Nix profile in path
+        add-to-path $HOME/.nix-profile/bin
+
         # Special stuff for appimage to work
         add-to-path ${pkgs.coreutils}/bin
         add-to-path ${pkgs.ncurses5}/bin

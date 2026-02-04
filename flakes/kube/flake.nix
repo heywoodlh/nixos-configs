@@ -626,6 +626,13 @@
           nodename = "homelab";
           hostfolder = "/media/data-ssd/minecraft";
         };
+        minecraft-java = mkKubeDrv "minecraft-bedrock" {
+          src = ./templates/minecraft-java.yaml;
+          namespace = "gaming";
+          image = "docker.io/itzg/minecraft-server:latest";
+          nodename = "homelab";
+          hostfolder = "/media/data-ssd/minecraft-java";
+        };
         miniflux = mkKubeDrv "miniflux" {
           src = ./templates/miniflux.yaml;
           namespace = "default";

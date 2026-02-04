@@ -1,0 +1,137 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: minecraft-java
+    app.kubernetes.io/instance: minecraft-java
+  name: minecraft-java
+  namespace: @namespace@
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: minecraft-java-clusterrolebinding
+  labels:
+    app.kubernetes.io/name: minecraft-java
+    app.kubernetes.io/instance: minecraft-java
+subjects:
+  - kind: ServiceAccount
+    name: minecraft-java
+    namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: minecraft-java-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: minecraft-java
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: minecraft-java
+    app.kubernetes.io/instance: minecraft-java
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: minecraft-java
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: minecraft-java
+    app.kubernetes.io/instance: minecraft-java
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: minecraft-java
+subjects:
+- kind: ServiceAccount
+  name: minecraft-java
+  namespace: @namespace@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft-java
+  namespace: @namespace@
+  labels:
+    app: minecraft-java
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "minecraft-java"
+    tailscale.com/tags: "tag:minecraft"
+spec:
+  type: LoadBalancer
+  ports:
+  - name: minecraft-java
+    port: 25565
+    targetPort: 25565
+    protocol: TCP
+  selector:
+    app: minecraft-java
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.1.22
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minecraft-java
+  namespace: @namespace@
+  labels:
+    app: minecraft-java
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minecraft-java
+  template:
+    metadata:
+      labels:
+        app: minecraft-java
+    spec:
+      serviceAccountName: minecraft-java
+      containers:
+      - name: minecraft-java
+        image: "@image@"
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        env:
+        - name: EULA
+          value: "TRUE"
+        ports:
+        - name: minecraft-java
+          containerPort: 25565
+          protocol: TCP
+        volumeMounts:
+        - name: datadir
+          mountPath: /data
+        readinessProbe:
+          exec:
+            command: [ "/usr/local/bin/mc-monitor", "status", "--host", "localhost" ]
+          # Give it i + p * f seconds to be ready, so 120 seconds
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          failureThreshold: 20
+        # Monitor ongoing liveness
+        livenessProbe:
+          exec:
+            command: ["/usr/local/bin/mc-monitor", "status", "--host", "localhost"]
+          initialDelaySeconds: 120
+          periodSeconds: 60
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: datadir
+        hostPath:
+          path: @hostfolder@
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@

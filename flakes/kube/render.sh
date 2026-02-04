@@ -34,6 +34,7 @@ applications=(
   "media"
   "meshtastic"
   "minecraft-bedrock"
+  "minecraft-java"
   "miniflux"
   "namespaces"
   "nfcapd"

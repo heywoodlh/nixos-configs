@@ -1154,6 +1154,27 @@ string
 
 
 
+## heywoodlh\.home\.github-cli
+
+
+
+Enable heywoodlh home-manager GitHub CLI configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gh\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gh.nix)
+
+
+
 ## heywoodlh\.home\.gnome
 
 

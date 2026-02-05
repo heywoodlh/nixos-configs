@@ -279,7 +279,6 @@ in {
     findutils
     fzf
     gcc
-    github-cli
     gitleaks
     gnupg
     gnumake
@@ -722,14 +721,28 @@ in {
     '';
   };
 
-  heywoodlh.home.defaults = true;
-  heywoodlh.home.helix = {
-    enable = true;
-    ai = true;
-    homelab = true;
+  # gh-dash setup by heywoodlh.home.github-cli module
+  # only setting stuff here I don't want in module
+  programs.gh-dash.settings.repoPaths = {
+    "heywoodlh/nixos-configs" = "~/opt/nixos-configs";
+    "heywoodlh/dockerfiles" = "~/opt/dockerfiles";
+    "heywoodlh/cart" = "~/opt/cart";
+    "heywoodlh/infrastructure" = "~/opt/infrastructure";
+    "heywoodlh/tailscale-acl" = "~/opt/tailscale-acl";
+    "NixOS/nixpkgs" = "~/opt/nixpkgs";
   };
-  heywoodlh.home.aerc = {
-    enable = true;
-    accounts = true;
+
+  heywoodlh.home = {
+    defaults = true;
+    github-cli = true;
+    helix = {
+      enable = true;
+      ai = true;
+      homelab = true;
+    };
+    aerc = {
+      enable = true;
+      accounts = true;
+    };
   };
 }

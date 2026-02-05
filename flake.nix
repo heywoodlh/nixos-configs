@@ -230,6 +230,7 @@
       ./home/modules/helix.nix
       ./home/modules/aerc.nix
       ./home/modules/ghostty.nix
+      ./home/modules/gh.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix

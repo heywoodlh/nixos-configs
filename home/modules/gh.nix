@@ -24,13 +24,14 @@ in {
   };
 
   config = mkIf cfg {
+    nixpkgs.config.allowUnfree = true;
     programs.gh = {
       enable = true;
-      extensions = [
-        pkgs.gh-copilot
-        pkgs.gh-dash
-        pkgs.gh-eco
-        pkgs.gh-markdown-preview
+      extensions = with pkgs; [
+        gh-copilot
+        gh-dash
+        gh-eco
+        gh-markdown-preview
       ];
       settings = {
         git_protocol = "ssh";

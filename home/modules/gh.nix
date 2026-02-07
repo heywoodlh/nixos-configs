@@ -24,7 +24,6 @@ in {
   };
 
   config = mkIf cfg {
-    nixpkgs.config.allowUnfree = true;
     programs.gh = {
       enable = true;
       extensions = with pkgs; [

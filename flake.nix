@@ -73,7 +73,7 @@
       inputs.nixos-apple-silicon.follows = "nixos-apple-silicon";
     };
     darwin = {
-      url = "github:LnL7/nix-darwin";
+      url = "github:heywoodlh/nix-darwin/container-init";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl = {
@@ -325,6 +325,10 @@
           heywoodlh.darwin = {
             sketchybar.enable = true;
             yabai.enable = true;
+          };
+          services.container = {
+            enable = true;
+            user = "heywoodlh";
           };
           system.stateVersion = 6;
         }

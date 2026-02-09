@@ -58,6 +58,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+    home.file."Applications/LibreWolf.app" = {
+      enable = pkgs.stdenv.isDarwin;
+      source = "${pkgs.librewolf}/Applications/LibreWolf.app";
+    };
+
     programs.librewolf = {
       enable = true;
 
@@ -101,7 +106,7 @@ in {
           privateDefault = "duckduckgo";
           engines = {
             "kagi" = {
-              urls = [{ template = "https://kagi.com/search?q={searchterms}"; }];
+              urls = [{ template = "https://kagi.com/search?q={searchTerms}"; }];
               definedaliases = [ "@k" ];
               icon = "https://kagi.com/favicon.ico";
               updateinterval = 24 * 60 * 60 * 1000; # every day
@@ -124,7 +129,7 @@ in {
           "browser.compactmode.show" = true; # enable compact bar
           "browser.theme.content-theme" = 2; # don't use system theme
           "extensions.activeThemeID" = "{e410fec2-1cbd-4098-9944-e21e708418af}"; # Nord theme
-          "toolkit.legacyUserProfileCustomizations.stylesheets" = true; # userChrome.css
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = false; # userChrome.css
           "gfx.webrender.all" = true;
           "browser.startup.page" = 3; # restore previous session
           "extensions.autoDisableScopes" = 0; # enable auto-loading of extensions
@@ -193,6 +198,9 @@ in {
           "sidebar.main.tools" = "";
           "sidebar.position_start" = true;
           "browser.newtabpage.activity-stream.showWeather" = false;
+          # Librewolf specific: preserve logins between app launch
+          "privacy.clearOnShutdown_v2.cookiesAndStorage" = false;
+          "privacy.sanitize.pending" = "[]";
         } // lib.optionalAttrs (cfg.socks.proxy != null) {
           "network.proxy.no_proxies_on" = cfg.socks.noproxy;
           "network.proxy.socks" = cfg.socks.proxy;

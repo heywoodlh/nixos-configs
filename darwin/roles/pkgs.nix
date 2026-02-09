@@ -68,9 +68,9 @@ in {
     casks = [
       "1password"
       "android-platform-tools"
+      "brave-browser"
       "blockblock"
       "cursorcerer"
-      "firefox"
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"
       "ghostty@tip"
@@ -89,4 +89,11 @@ in {
       "Meshtastic" = 1586432531;
     };
   };
+
+  cart.applications = [
+    {
+      url = "https://codeberg.org/api/packages/librewolf/generic/librewolf/147.0.3-2/librewolf-147.0.3-2-macos-arm64-package.dmg";
+      hash = "7000a8cd56b9cd1aa6c70453b658214569379327f07bbfc0ac918748a500b208";
+    }
+  ];
 }

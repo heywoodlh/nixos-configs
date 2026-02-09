@@ -231,6 +231,7 @@
       ./home/modules/aerc.nix
       ./home/modules/ghostty.nix
       ./home/modules/gh.nix
+      ./home/modules/librewolf.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -297,15 +298,13 @@
       modules = [
         darwinModules.heywoodlh.darwin
         home-manager.darwinModules.home-manager
+        cart.darwinModules.${system}.cart
         ./darwin/roles/base.nix
         ./darwin/roles/defaults.nix
         ./darwin/roles/pkgs.nix
         ./darwin/roles/network.nix
         extraConf
         {
-          imports = [
-            "${cart}/darwin.nix"
-          ];
           # Import nur as nixpkgs.overlays
           nixpkgs.overlays = [
             nur.overlays.default

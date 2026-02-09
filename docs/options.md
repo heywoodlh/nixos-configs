@@ -1302,6 +1302,127 @@ boolean
 
 
 
+## heywoodlh\.home\.librewolf\.enable
+
+
+
+Enable heywoodlh LibreWolf configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.search
+
+
+
+Search engine to use in non-private windows – DDG is default for private\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "duckduckgo" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.socks
+
+
+
+User for heywoodlh configuration\.
+
+
+
+*Type:*
+submodule
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.socks\.noproxy
+
+
+
+SOCKS proxy no proxy string\.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+` "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net,.svc.cluster.local" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.socks\.port
+
+
+
+SOCKS proxy port\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+` 1080 `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.socks\.proxy
+
+
+
+SOCKS proxy address\.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+` null `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
 ## heywoodlh\.home\.lima\.enable
 
 

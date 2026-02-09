@@ -57,6 +57,7 @@ in {
   home.packages = [
     pkgs.acpi
     pkgs.arch-install-scripts
+    pkgs.brave
     pkgs.flatpak
     pkgs.gnome-screenshot
     pkgs.guake

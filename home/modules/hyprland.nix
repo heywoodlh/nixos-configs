@@ -98,6 +98,7 @@ in {
       hyprmon
       kdePackages.polkit-kde-agent-1
       libnotify
+      nordic
       pavucontrol
       playerctl
       procps
@@ -464,6 +465,10 @@ in {
         exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
         exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
         exec-once = ${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets
+
+        # Dark mode for apps
+        exec = gsettings set org.gnome.desktop.interface gtk-theme "Nordic-darker"   # for GTK3 apps
+        exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
 
         # Workaround for hypridle
         exec-once = /run/current-system/sw/bin/systemctl restart --user hypridle.service

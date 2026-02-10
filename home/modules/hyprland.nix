@@ -623,6 +623,8 @@ in {
       '' + optionalString (config.heywoodlh.home.onepassword.enable) ''
         exec-once = ${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --silent
         bind = CTRL_SUPER, s, exec, ${onepasswordToggle}/bin/1password-toggle.sh
+      '' + optionalString (config.heywoodlh.home.librewolf.enable) ''
+        exec-once = ${pkgs.xdg-utils}/bin/xdg-settings set default-web-browser librewolf.desktop
       '';
       xwayland = {
         enable = true;

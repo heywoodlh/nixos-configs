@@ -10,18 +10,18 @@ let
   myJujutsu = myFlakes.packages.${system}.jujutsu;
   myHelix = myFlakes.packages.${system}.helix;
   todomanWrapper = pkgs.writeScriptBin "todo" ''
-    ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null && ${pkgs.todoman}/bin/todo "$@" && ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null
+    ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null && ${pkgs.todoman}/bin/todo "$@" | ${pkgs.gnused}/bin/sed 's/⟳//' && ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null
   '';
   todoEdit = pkgs.writeScriptBin "todo-edit" ''
-    output="$(${pkgs.coreutils}/bin/printf "Summary: \n\n#Example Date:$(${pkgs.coreutils}/bin/date "+%Y-%m-%d %H:%M")\nDue: " | EDITOR='${myHelix}/bin/hx' ${pkgs.moreutils}/bin/vipe)"
+    output="$(${pkgs.coreutils}/bin/printf "Summary: \n\n#Due: $(${pkgs.coreutils}/bin/date -d "+1 day" "+%Y-%m-%d") 00:00" | EDITOR='${myHelix}/bin/hx' ${pkgs.moreutils}/bin/vipe)"
     summary="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep 'Summary:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2 | ${pkgs.findutils}/bin/xargs | ${pkgs.gnused}/bin/sed 's/  / /g')"
-    date="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep 'Due:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2 | ${pkgs.findutils}/bin/xargs)"
+    date="$(${pkgs.coreutils}/bin/printf "$output" | ${pkgs.gnugrep}/bin/grep -E 'Due:' | ${pkgs.coreutils}/bin/cut -d ':' -f 2-3 | ${pkgs.findutils}/bin/xargs)"
     if [ -n "$summary" ]
     then
       if [[ -n $date ]]
       then
-        datearg="--due $date"
-        ${todomanWrapper}/bin/todo new "$datearg" "$summary"
+        datearg="--due "$date""
+        ${todomanWrapper}/bin/todo new $datearg "$summary"
       else
         ${todomanWrapper}/bin/todo new "$summary"
       fi

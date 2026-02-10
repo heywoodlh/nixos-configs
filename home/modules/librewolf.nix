@@ -118,7 +118,7 @@ in {
           facebook-container
           kristofferhagen-nord-theme
           multi-account-containers
-          mullvad # https://github.com/nix-community/nur-combined/blob/0b1bfae0cf152df7a77fe9f56beccf7fa450003e/repos/rycee/pkgs/firefox-addons/default.nix#L93-L107
+          #mullvad # https://github.com/nix-community/nur-combined/blob/0b1bfae0cf152df7a77fe9f56beccf7fa450003e/repos/rycee/pkgs/firefox-addons/default.nix#L93-L107
           #onepassword-password-manager <- install via Firefox extensions, seems to break when using nixpkgs' provided app
           privacy-badger
           terms-of-service-didnt-read

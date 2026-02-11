@@ -33,28 +33,6 @@ in {
     source = ../assets/nord-apple.png;
   };
 
-  home.file."bin/choose-launcher.zsh" = {
-    text = ''
-      #!/run/current-system/sw/bin/zsh
-      source ~/.zshrc
-      application_dirs=( /Applications /System/Applications /System/Library/CoreServices /System/Applications/Utilities $HOME/Applications )
-
-      ### Simple MacOS application launcher that relies on choose: https://github.com/chipsenkbeil/choose
-      ### brew install choose-gui
-
-      if ! command -v choose > /dev/null
-      then
-      	echo 'Please install choose. Exiting.'
-      fi
-
-      selection=$(for dir in ''${application_dirs[@]}; do /bin/ls ''${dir};done | grep ".app" | rev | cut -d/ -f1 | rev | /usr/bin/sort -u | choose)
-
-      open -a "''${selection}"
-
-    '';
-    executable = true;
-  };
-
   home.file.".zshenv" = {
     text = ''
       # Managed with home-manager, check `~/opt/nixos-configs/home/darwin.nix`

@@ -276,6 +276,69 @@ boolean
 
 
 
+## heywoodlh\.darwin\.choose-launcher\.enable
+
+
+
+Enable heywoodlh choose-launcher configuration (offline-only Spotlight replacement)\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
+
+
+
+## heywoodlh\.darwin\.choose-launcher\.skhd
+
+
+
+Integrate choose-launcher with SKHD\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
+
+
+
+## heywoodlh\.darwin\.choose-launcher\.user
+
+
+
+Which user to enable choose-launcher for\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "heywoodlh" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
+
+
+
 ## heywoodlh\.darwin\.sketchybar\.enable
 
 
@@ -1063,7 +1126,7 @@ string
 
 
 *Default:*
-` "/nix/store/z3jksmd56n8lnr9y8dhlgpvb8wkzr59z-tmux/bin/tmux" `
+` "/nix/store/q59h7s2hfk7n57yw1irf57g8vhsb1zpj-tmux/bin/tmux" `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1105,7 +1168,7 @@ signed integer
 
 
 *Default:*
-` 14 `
+` 16 `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1317,6 +1380,27 @@ boolean
 
 *Default:*
 ` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.default
+
+
+
+Make default browser\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)

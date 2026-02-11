@@ -217,6 +217,7 @@
         ./darwin/modules/sketchybar.nix
         ./darwin/modules/yabai.nix
         ./darwin/modules/stage-manager.nix
+        ./darwin/modules/choose-launcher.nix
       ];
     };
     commonHomeModules = [
@@ -324,6 +325,7 @@
           heywoodlh.darwin = {
             sketchybar.enable = true;
             yabai.enable = true;
+            choose-launcher.enable = true;
           };
           services.container = {
             enable = true;

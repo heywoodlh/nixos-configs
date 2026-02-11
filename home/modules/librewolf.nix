@@ -43,6 +43,13 @@ in {
         '';
         type = types.bool;
       };
+      default = mkOption {
+        default = true;
+        description = ''
+          Make default browser.
+        '';
+        type = types.bool;
+      };
       search = mkOption {
         default = "duckduckgo";
         description = ''
@@ -62,6 +69,25 @@ in {
       enable = pkgs.stdenv.isDarwin;
       source = "${pkgs.librewolf}/Applications/LibreWolf.app";
     };
+
+    home.activation.make-default-browser = if pkgs.stdenv.isDarwin then ''
+      /usr/bin/osascript <<-AS
+        do shell script "${pkgs.defaultbrowser}/bin/defaultbrowser librewolf"
+        try
+          tell application "System Events"
+            tell application process "CoreServicesUIAgent"
+              tell window 1
+                tell (first button whose name starts with "use")
+                  perform action "AXPress"
+                end tell
+              end tell
+            end tell
+          end tell
+        end try
+      AS
+    '' else ''
+      ${pkgs.xdg-utils}/bin/xdg-settings set default-web-browser librewolf.desktop
+    '';
 
     programs.librewolf = {
       enable = true;

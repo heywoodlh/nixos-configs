@@ -4,33 +4,6 @@ with lib;
 
 let
   cfg = config.heywoodlh.darwin.yabai;
-  system = pkgs.stdenv.hostPlatform.system;
-  choose = choose-nixpkgs.legacyPackages.${system}.choose-gui;
-  choose-launcher-sh = pkgs.writeShellScriptBin "choose-launcher.sh" ''
-    application_dirs="/Applications/ /System/Applications/ /System/Library/CoreServices/ /System/Applications/Utilities/"
-    PATH="''${HOME}/.nix-profile/bin:''${PATH}"
-
-    if [ -e ''${HOME}/.nix-profile/Applications ]
-    then
-      application_dirs="''${application_dirs} ''${HOME}/.nix-profile/Applications"
-    fi
-    if [ -e ''${HOME}/Applications ]
-    then
-      application_dirs="''${application_dirs} ''${HOME}/Applications"
-    fi
-
-    currentPath="$(echo ''${PATH} | /usr/bin/sed 's/:/ /g')"
-
-    selection=$(/bin/ls ''${application_dirs} ''${currentPath} | /usr/bin/grep -vE 'Applications/:|Applications:|\:' | /usr/bin/sort -u | ${choose}/bin/choose)
-
-    if echo "''${selection}" | grep -q ".app"
-    then
-      app_name=$(basename "''${selection}" .app)
-      osascript -e "tell application \"''${app_name}\" to activate"
-    else
-      binary="$(which ''${selection})" && exec ''${binary}
-    fi
-  '';
   battpop = pkgs.writeShellScriptBin "battpop.sh" ''
     osascript -e "display notification \"$(system_profiler SPPowerDataType | grep Charging -A1 | head -2 | awk '{$1=$1};1')\""
   '';

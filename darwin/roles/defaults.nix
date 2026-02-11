@@ -1,4 +1,6 @@
-{ config, pkgs, myFlakes, determinate, ... }:
+{ config, pkgs, lib, myFlakes, determinate, ... }:
+
+with lib;
 
 let
   system = pkgs.stdenv.hostPlatform.system;

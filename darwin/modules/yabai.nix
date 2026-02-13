@@ -86,8 +86,6 @@ in {
         yabai -m config window_shadow off
 
         ## Unmanaged apps
-        yabai -m rule --add app="/usr/local/bin/choose" manage=off
-        yabai -m rule --add app="/opt/homebrew/bin/choose" manage=off
         yabai -m rule --add app="choose" manage=off
         yabai -m rule --add app="/usr/local/bin/pinentry-mac" manage=off
         yabai -m rule --add app="/opt/homebrew/bin/pinentry-mac" manage=off

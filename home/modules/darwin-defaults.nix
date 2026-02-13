@@ -158,7 +158,7 @@ in {
       /usr/bin/defaults -currentHost write com.apple.assistant.support "Search Queries Data Sharing Status" -int 2
 
       # Disable Spotlight universal search (don't send info to Apple)
-      /usr/bin/defaults write com.apple.safari UniversalSearchEnabled -int 0
+      /usr/bin/defaults write com.apple.safari UniversalSearchEnabled -int 0 || true
 
       # Disable the crash reporter
       /usr/bin/defaults -currentHost write com.apple.CrashReporter DialogType -string "none"

@@ -7,7 +7,7 @@
     " https://github.com/dense-analysis/ale/blob/master/supported-tools.md
     " External dependencies
     " REMINDER TO SELF: don't use cspell (has some annoying defaults)
-    let $PATH = "${pkgs.nixfmt-rfc-style}/bin:" . $PATH
+    let $PATH = "${pkgs.nixfmt}/bin:" . $PATH
     let $PATH = "${pkgs.shellcheck}/bin:" . $PATH
     let $PATH = "${pkgs.vim-vint}/bin:" . $PATH
 

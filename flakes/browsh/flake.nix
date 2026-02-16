@@ -23,6 +23,6 @@
         browsh = browshPackage;
         default = if pkgs.stdenv.isLinux then browshWrapper else browsh;
       };
-      formatter = pkgs.nixfmt-rfc-style;
+      formatter = pkgs.nixfmt;
     });
 }

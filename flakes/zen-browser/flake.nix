@@ -33,7 +33,7 @@
           default = if pkgs.stdenv.isDarwin then zen-wrapper else zen-browser;
         };
 
-        formatter = pkgs.nixfmt-rfc-style;
+        formatter = pkgs.nixfmt;
       }
     );
 }

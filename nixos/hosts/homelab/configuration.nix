@@ -197,6 +197,8 @@ in {
     port = 6767;
   };
 
+  heywoodlh.sshd.mfa = true;
+
   # NextDNS
   networking.nameservers = [
     "45.90.28.89"

@@ -1644,6 +1644,29 @@
         "myFlakes"
       ]
     },
+    "nvidia-patch": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-stable"
+        ],
+        "utils": [
+          "flake-utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1771131227,
+        "narHash": "sha256-YuWhXw8zeVyCqhXcVurmK4EtyDtTeQxCKSFxe3iz2Tg=",
+        "owner": "icewind1991",
+        "repo": "nvidia-patch-nixos",
+        "rev": "0117e5b5e0fa6f8bb1e3f673544e1838027aeafb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "icewind1991",
+        "repo": "nvidia-patch-nixos",
+        "type": "github"
+      }
+    },
     "op-flake": {
       "inputs": {
         "flake-utils": [
@@ -1826,6 +1849,7 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "nmd": "nmd",
         "nur": "nur",
+        "nvidia-patch": "nvidia-patch",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs",
         "plasma-manager": "plasma-manager",
         "pre-commit-hooks": "pre-commit-hooks",

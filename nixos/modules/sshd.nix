@@ -21,7 +21,7 @@ in {
       type = types.bool;
     };
     mfa = mkOption {
-      default = true;
+      default = false;
       description = ''
         Enable mfa configuration for SSH.
       '';
@@ -56,7 +56,9 @@ in {
       settings = {
         PermitRootLogin = "prohibit-password";
         PasswordAuthentication = false;
+      } // lib.optionalAttrs (cfg.mfa) {
         AuthenticationMethods = lib.optionalString (cfg.mfa) "publickey,keyboard-interactive";
+
       };
       extraConfig = pkgs.lib.optionalString (config.security.duosec.ssh.enable) ''
         ForceCommand /usr/bin/env login_duo

@@ -8,6 +8,11 @@
     nixos-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
+    nvidia-patch = {
+      url = "github:icewind1991/nvidia-patch-nixos";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.utils.follows = "flake-utils";
+    };
     # only to sync dependents that use flake-utils
     flake-utils.url = "github:numtide/flake-utils";
     # only to sync dependents that use flake-parts
@@ -537,6 +542,26 @@
           imports = [
             /etc/nixos/hardware-configuration.nix
           ];
+        };
+
+        nixos-gaming = nixosConfig "workstation" "nixos-thinkpad" {
+          imports = [
+            ./nixos/roles/gaming/nvidia-patch.nix
+            ./nixos/roles/gaming/sunshine.nix
+            ./nixos/roles/gaming/steam.nix
+            /etc/nixos/hardware-configuration.nix
+          ];
+          heywoodlh.server = true;
+          networking = {
+            interfaces = {
+              enp4s0 = {
+                wakeOnLan.enable = true;
+              };
+            };
+            firewall = {
+              allowedUDPPorts = [ 9 ];
+            };
+          };
         };
 
         nixos-blade = nixosConfig "laptop" "nixos-blade" {

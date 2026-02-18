@@ -124,6 +124,116 @@ string
 
 
 
+## heywoodlh\.backup\.enable
+
+
+
+Enable heywoodlh backup client configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+
+
+
+## heywoodlh\.backup\.publicKeys
+
+
+
+List of public keys to use for backups\.
+
+
+
+*Type:*
+list of (optionally newline-terminated) single-line string
+
+
+
+*Default:*
+
+```
+[
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJszbIpuxux7oAANlLC+RphqlEW4Ak1128QMvkI06TiY root@homelab"
+]
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+
+
+
+## heywoodlh\.backup\.server
+
+
+
+Enable heywoodlh backup server (duplicati) configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+
+
+
+## heywoodlh\.backup\.username
+
+
+
+Username for backups over SSH\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "backups" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+
+
+
+## heywoodlh\.cloudflared
+
+
+
+Enable heywoodlh cloudflared configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cloudflared\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cloudflared.nix)
+
+
+
 ## heywoodlh\.console
 
 
@@ -163,6 +273,69 @@ boolean
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cosmic\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cosmic.nix)
+
+
+
+## heywoodlh\.darwin\.choose-launcher\.enable
+
+
+
+Enable heywoodlh choose-launcher configuration (offline-only Spotlight replacement)\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
+
+
+
+## heywoodlh\.darwin\.choose-launcher\.skhd
+
+
+
+Integrate choose-launcher with SKHD\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
+
+
+
+## heywoodlh\.darwin\.choose-launcher\.user
+
+
+
+Which user to enable choose-launcher for\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "heywoodlh" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
 
 
 
@@ -833,6 +1006,28 @@ boolean
 
 
 
+## heywoodlh\.home\.darwin\.nord-terminal
+
+
+
+Enable heywoodlh Terminal\.app Nord configuration\.
+Warning: will overwrite existing settings\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/nord-terminal\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/nord-terminal.nix)
+
+
+
 ## heywoodlh\.home\.defaults
 
 
@@ -893,6 +1088,153 @@ boolean
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.enable
+
+
+
+Enable heywoodlh vicinae configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.command
+
+
+
+Ghostty default command\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "/nix/store/z3jksmd56n8lnr9y8dhlgpvb8wkzr59z-tmux/bin/tmux" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.extraSettings
+
+
+
+Extra settings to append to ghostty home-manager configuration\.
+
+
+
+*Type:*
+attribute set
+
+
+
+*Default:*
+` { } `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.fontSize
+
+
+
+Ghostty font size\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+` 14 `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.quickTerminalKeybind
+
+
+
+Keybinding for Quick Terminal\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "global:ctrl+grave_accent=toggle_quick_terminal" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.ghostty\.theme
+
+
+
+Ghostty theme\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "Nord" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+
+
+
+## heywoodlh\.home\.github-cli
+
+
+
+Enable heywoodlh home-manager GitHub CLI configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gh\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gh.nix)
 
 
 
@@ -1020,6 +1362,148 @@ boolean
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/hyprland\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/hyprland.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.enable
+
+
+
+Enable heywoodlh LibreWolf configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.default
+
+
+
+Make default browser\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.search
+
+
+
+Search engine to use in non-private windows – DDG is default for private\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "duckduckgo" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.socks
+
+
+
+User for heywoodlh configuration\.
+
+
+
+*Type:*
+submodule
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.socks\.noproxy
+
+
+
+SOCKS proxy no proxy string\.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+` "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net,.svc.cluster.local" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.socks\.port
+
+
+
+SOCKS proxy port\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+` 1080 `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+
+
+
+## heywoodlh\.home\.librewolf\.socks\.proxy
+
+
+
+SOCKS proxy address\.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+` null `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
 
 
 
@@ -1361,6 +1845,111 @@ string
 
 
 
+## heywoodlh\.rayhunter\.enable
+
+
+
+Enable heywoodlh rayhunter ntfy reverse proxy configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
+## heywoodlh\.rayhunter\.interface
+
+
+
+RayHunter USB interface name\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
+## heywoodlh\.rayhunter\.ntfy
+
+
+
+NTFY URL to proxy\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
+## heywoodlh\.rayhunter\.port
+
+
+
+Reverse proxy port\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+` 6767 `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
+## heywoodlh\.rayhunter\.user
+
+
+
+User to run the reverse proxy\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "rayhunter" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+
+
+
 ## heywoodlh\.server
 
 
@@ -1417,7 +2006,7 @@ boolean
 
 
 *Default:*
-` true `
+` false `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd.nix)

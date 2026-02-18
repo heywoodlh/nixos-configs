@@ -26,10 +26,7 @@ in {
   in mkIf cfg {
     heywoodlh.defaults.enable = true;
     heywoodlh.console = true;
-    heywoodlh.sshd = {
-      enable = true;
-      mfa = true;
-    };
+    heywoodlh.sshd.enable = true;
     # Enable backup user
     heywoodlh.backup.enable = true;
 

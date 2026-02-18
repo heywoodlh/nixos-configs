@@ -72,4 +72,6 @@
     interface = "enp0s20u2";
     port = 6767;
   };
+
+  heywoodlh.sshd.mfa = true;
 }

@@ -1,12 +1,11 @@
-{ config, lib, pkgs, home-manager, plasma-manager, ... }:
+{ config, lib, pkgs, plasma-manager, ... }:
 
 let
-  system = pkgs.stdenv.hostPlatform.system;
   # using pre-release for now
   # (this URL is updated daily, so will break)
   sunshineExe = pkgs.fetchurl {
-    url = "https://github.com/LizardByte/Sunshine/releases/download/v2024.1219.161129/sunshine.AppImage";
-    hash = "sha256-ygUnlahHEBnN2AHPmNTTtFjeZTvmvplr9P3r7tdJpok=";
+    url = "https://github.com/LizardByte/Sunshine/releases/download/v2026.215.224211/sunshine.AppImage";
+    hash = "sha256-8fdG++RH1XT6/VK9Cd3jkA4+3ZWDxe+4dH2Oc3rO2eA=";
   };
   # Using appimage over NixOS service
   # For some reason, NixOS+Sunshine won't properly figure out GPU configuration
@@ -21,7 +20,6 @@ in {
     enable = true;
     remotePlay.openFirewall = true;
   };
-  hardware.xone.enable = true; # support for the xbox controller USB dongle
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services = {
@@ -30,12 +28,13 @@ in {
   };
 
   # Use autologin X11 Plasma 5 over GNOME
-  services.xserver.displayManager.gdm.enable = lib.mkForce false;
-  services.xserver.desktopManager.gnome.enable = lib.mkForce false;
+  services.displayManager.ly.enable = lib.mkForce false;
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = false;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
+  programs.ssh.askPassword = lib.mkForce "${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass";
+
   services.displayManager.autoLogin = {
     enable = true;
     user = "heywoodlh";
@@ -58,7 +57,6 @@ in {
     users.heywoodlh = { ... }: {
       imports = [
         (plasma-manager + /modules/default.nix)
-        ../../../home/modules/default.nix
       ];
       programs.plasma = {
         enable = true;
@@ -70,14 +68,11 @@ in {
         };
         powerdevil.AC = {
           powerProfile = "performance";
-          dimDisplay.enable = false;
           autoSuspend.action = "nothing";
-          turnOffDisplay.idleTimeout = "never";
           whenSleepingEnter = "hybridSleep";
         };
       };
       home.packages = with pkgs; [
-        proton-caller
         steamtinkerlaunch
         sunshine
         wget # winetricks requires GNU wget

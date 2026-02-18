@@ -56,11 +56,10 @@ in {
       settings = {
         PermitRootLogin = "prohibit-password";
         PasswordAuthentication = false;
-      } // lib.optionalAttrs (cfg.mfa) {
-        AuthenticationMethods = lib.optionalString (cfg.mfa) "publickey,keyboard-interactive";
-
+        AuthenticationMethods = if (cfg.mfa) then "publickey,keyboard-interactive" else "publickey";
+        UsePAM = cfg.mfa;
       };
-      extraConfig = pkgs.lib.optionalString (config.security.duosec.ssh.enable) ''
+      extraConfig = lib.optionalString (config.security.duosec.ssh.enable) ''
         ForceCommand /usr/bin/env login_duo
       '';
     };
@@ -86,9 +85,10 @@ in {
     '';
 
     environment.systemPackages = with stable-pkgs; [
-      google-authenticator
       mosh
       tmux
+    ] ++ lib.optionals (cfg.mfa) [
+      google-authenticator
     ];
 
     users.users.${username} = {

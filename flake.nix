@@ -5,12 +5,13 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.05";
+    nixpkgs-next.url = "github:nixos/nixpkgs/release-25.11";
     nixos-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     nvidia-patch = {
       url = "github:icewind1991/nvidia-patch-nixos";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.nixpkgs.follows = "nixpkgs-next";
       inputs.utils.follows = "flake-utils";
     };
     # only to sync dependents that use flake-utils
@@ -176,6 +177,7 @@
   outputs = inputs@{ self,
                       nixpkgs,
                       nixpkgs-stable,
+                      nixpkgs-next,
                       nixpkgs-pam-lid-fix,
                       myFlakes,
                       kyle,
@@ -549,9 +551,17 @@
             ./nixos/roles/gaming/nvidia-patch.nix
             ./nixos/roles/gaming/sunshine.nix
             ./nixos/roles/gaming/steam.nix
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/gaming.nix
           ];
+          hardware.nvidia.open = true;
           heywoodlh.server = true;
+          # Machine-specific sunshine configuration
+          services.sunshine.settings = {
+            sunshine_name = "nixos-gaming";
+            output_name = 0;
+            encoder = "nvenc";
+            nvenc_preset = 1;
+          };
           networking = {
             interfaces = {
               enp4s0 = {
@@ -561,6 +571,16 @@
             firewall = {
               allowedUDPPorts = [ 9 ];
             };
+          };
+          fileSystems."/mnt/hdd0" = {
+            device = "/dev/disk/by-uuid/2292D29C92D273AF";
+            fsType = "ntfs-3g";
+            options = [ "rw" "uid=1000" "nofail" ];
+          };
+          fileSystems."/mnt/ssd0" = {
+            device = "/dev/disk/by-uuid/5D8A245A63983818";
+            fsType = "ntfs-3g";
+            options = [ "rw" "uid=1000" "nofail" ];
           };
         };
 

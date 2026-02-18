@@ -1500,6 +1500,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-next": {
+      "locked": {
+        "lastModified": 1771371298,
+        "narHash": "sha256-AudCpsjP7MfL1mAusLjyyiOz+SF+JujxWzoSAhjk+Og=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "bf117123cd658283c5b5c587e59091168323ad61",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "release-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-pam-lid-fix": {
       "locked": {
         "lastModified": 1741919166,
@@ -1647,7 +1663,7 @@
     "nvidia-patch": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-stable"
+          "nixpkgs-next"
         ],
         "utils": [
           "flake-utils"
@@ -1845,6 +1861,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-backports": "nixpkgs-backports",
         "nixpkgs-lts": "nixpkgs-lts",
+        "nixpkgs-next": "nixpkgs-next",
         "nixpkgs-pam-lid-fix": "nixpkgs-pam-lid-fix",
         "nixpkgs-stable": "nixpkgs-stable",
         "nmd": "nmd",

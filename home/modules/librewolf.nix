@@ -86,7 +86,7 @@ in {
         end try
       AS
     '' else ''
-      ${pkgs.xdg-utils}/bin/xdg-settings set default-web-browser librewolf.desktop
+      ${pkgs.xdg-utils}/bin/xdg-settings set default-web-browser librewolf.desktop || true # may not be present on first setup
     '';
 
     programs.librewolf = {

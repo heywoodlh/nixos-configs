@@ -544,7 +544,7 @@
           ];
         };
 
-        nixos-gaming = nixosConfig "workstation" "nixos-thinkpad" {
+        nixos-gaming = nixosConfig "workstation" "nixos-gaming" {
           imports = [
             ./nixos/roles/gaming/nvidia-patch.nix
             ./nixos/roles/gaming/sunshine.nix

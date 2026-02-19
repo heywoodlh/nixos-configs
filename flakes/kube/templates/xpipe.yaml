@@ -1,0 +1,159 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "xpipe-password"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/boofeqmvt6vmcdqsyzczhiwqre"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: xpipe
+    app.kubernetes.io/instance: xpipe
+  name: xpipe
+  namespace: @namespace@
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: xpipe-clusterrolebinding
+  labels:
+    app.kubernetes.io/name: xpipe
+    app.kubernetes.io/instance: xpipe
+subjects:
+  - kind: ServiceAccount
+    name: xpipe
+    namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: xpipe-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: xpipe
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: xpipe
+    app.kubernetes.io/instance: xpipe
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: xpipe
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: xpipe
+    app.kubernetes.io/instance: xpipe
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: xpipe
+subjects:
+- kind: ServiceAccount
+  name: xpipe
+  namespace: @namespace@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xpipe
+  namespace: @namespace@
+  labels:
+    app: xpipe
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: xpipe
+  template:
+    metadata:
+      labels:
+        app: xpipe
+    spec:
+      hostNetwork: true
+      serviceAccountName: xpipe
+      securityContext:
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: xpipe
+        image: "@image@"
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        ports:
+        - name: webtop
+          containerPort: 3000
+          protocol: TCP
+        volumeMounts:
+        - name: configdir
+          mountPath: /config
+        - name: xpipe-nix
+          mountPath: /nix
+        - name: xpipe-etc-nix
+          mountPath: /etc/nix
+        env:
+        - name: CUSTOM_USER
+          valueFrom:
+            secretKeyRef:
+              name: xpipe-password
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: xpipe-password
+              key: password
+        # GPU acceleration
+        resources:
+          requests:
+            gpu.intel.com/i915: "1"
+          limits:
+            gpu.intel.com/i915: "1"
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: configdir
+        hostPath:
+          path: @hostfolder@/config
+          type: DirectoryOrCreate
+      - name: xpipe-nix
+        hostPath:
+          path: @hostfolder@/nix
+          type: DirectoryOrCreate
+      - name: xpipe-etc-nix
+        hostPath:
+          path: @hostfolder@/etc/nix
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xpipe
+  namespace: @namespace@
+  labels:
+    app: xpipe
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "xpipe"
+    tailscale.com/tags: "tag:adminworkstation:tag:adminhttp"
+spec:
+  type: ClusterIP
+  ports:
+  - name: webtop
+    port: 80
+    targetPort: 3000
+    protocol: TCP
+  selector:
+    app: xpipe

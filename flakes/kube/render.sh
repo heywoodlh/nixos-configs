@@ -56,6 +56,7 @@ applications=(
   "syslog"
   "tailscale-dns-bridge"
   "tor-socks-proxy"
+  "xpipe"
 )
 
 set -ex

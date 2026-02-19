@@ -979,6 +979,13 @@
           replicas = 1;
           image = "docker.io/pluja/whishper:v3.1.4-gpu";
         };
+        xpipe = mkKubeDrv "xpipe" {
+          src = ./templates/xpipe.yaml;
+          namespace = "admin";
+          image = "ghcr.io/xpipe-io/xpipe-webtop:latest";
+          hostfolder = "/media/data-ssd/xpipe";
+          nodename = "homelab";
+        };
         # Kubectl wrapper with plugins
         kubectl = let
           kubectl = (krew2nix.packages.${system}.kubectl.withKrewPlugins (plugins: [

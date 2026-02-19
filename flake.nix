@@ -582,6 +582,15 @@
             fsType = "ntfs-3g";
             options = [ "rw" "uid=1000" "nofail" ];
           };
+
+          home-manager.users.heywoodlh = {
+            heywoodlh.home.autostart = [
+              {
+                name = "Steam (silent)";
+                command = "${pkgs.steam}/bin/steam -silent";
+              }
+            ];
+          };
         };
 
         nixos-blade = nixosConfig "laptop" "nixos-blade" {

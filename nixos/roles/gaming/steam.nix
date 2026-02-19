@@ -50,7 +50,8 @@ in {
         --systemd-udevd-path /usr/lib/systemd/systemd-udevd \
         -- $@
     '';
-  in lib.optionals (system == "aarch64-linux") [
+  in [ get-proton-ge ]
+  ++ lib.optionals (system == "aarch64-linux") [
     pkgs.fex
     pkgs.fuse
     pkgs.muvm

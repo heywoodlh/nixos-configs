@@ -14,6 +14,16 @@ let
     export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
     FBTERM=1 exec /run/wrappers/bin/fbterm -- ${shell}
   '';
+  fbtermDesktop = ''
+    [Desktop Entry]
+    Name=fbterm (x11)
+    Exec=${startFbterm}/bin/fbterm
+  '';
+  fbtermSessionPkg = (pkgs.writeTextDir "share/xsessions/fbterm.desktop" ''
+    ${fbtermDesktop}
+    Type=XSession
+    DesktopNames=fbterm
+  '').overrideAttrs (_: { passthru.providedSessions = [ "fbterm" ]; });
 in {
   options.heywoodlh.workstation = mkOption {
     default = false;
@@ -31,12 +41,9 @@ in {
       quietBoot = true;
     };
 
-    services.displayManager.ly = {
-      enable = true;
-      settings = {
-        sleep_cmd = "/run/current-system/systemd/bin/systemctl sleep";
-        vi_mode = true;
-      };
+    services.displayManager = {
+      gdm.enable = true;
+      defaultSession = "hyprland";
     };
 
     programs.dconf.enable = true;
@@ -57,13 +64,12 @@ in {
     environment.etc."ly/custom-sessions/fbterm.desktop" = {
       enable = lyCfg.enable;
       text = ''
-        [Desktop Entry]
-        Name=fbterm
-        Exec=${startFbterm}/bin/fbterm
+        ${fbtermDesktop}
         DesktopNames=null
         Terminal=true
       '';
     };
+    services.displayManager.sessionPackages = [ fbtermSessionPkg ];
 
     # Enable the X11 windowing system.
     services.xserver.enable = true;

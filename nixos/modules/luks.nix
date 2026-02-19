@@ -39,7 +39,7 @@ in {
       type = str;
     };
     yubikey = mkOption {
-      default = true;
+      default = false;
       description = ''
         Enable Yubikey luks single factor decryption.
         See the following gist for setup example:
@@ -64,15 +64,15 @@ in {
         "nls_cp437"
         "nls_iso8859-1"
       ];
-      systemd = {
+      systemd = optionalAttrs (cfg.fido) {
         enable = true;
-        fido2.enable = cfg.fido;
+        fido2.enable = true;
       };
       luks = {
         yubikeySupport = cfg.yubikey;
         fido2Support = false; # Made obsolete by systemd-cryptenroll
         devices."${cfg.name}" = {
-          #fallbackToPassword = true; # default of boot.initrd.systemd.enable = true
+          fallbackToPassword = cfg.yubikey; # default of boot.initrd.systemd.enable = true
           device = "/dev/disk/by-uuid/${cfg.uuid}";
           yubikey = optionalAttrs (cfg.yubikey) {
             slot = 2;
@@ -81,7 +81,7 @@ in {
             keyLength = 64;
             saltLength = 16;
             storage = {
-              device = cfg.device;
+              device = cfg.boot;
               fsType = "vfat";
               path = "/crypt-storage/default";
             };

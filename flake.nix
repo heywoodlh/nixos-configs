@@ -530,8 +530,22 @@
             ./nixos/hosts/intel-mac-mini.nix
             #./nixos/roles/monitoring/osquery.nix
           ];
+          swapDevices = [
+            {
+              device = "/swap";
+              size = 8 * 1024;
+            }
+          ];
           heywoodlh.intel-mac = true;
           heywoodlh.sshd.enable = true;
+          # Automatic LUKS decryption with Yubikey
+          heywoodlh.luks = {
+            enable = false;
+            boot = "/dev/nvme0n1p1";
+            name = "luks";
+            uuid = "094df1a8-7702-40ae-b866-45cf56c439d1";
+            fido = true;
+          };
         };
 
         nixos-slc = nixosConfig "server" "nixos-slc" {
@@ -709,6 +723,12 @@
                 nano
               ];
               services.tailscale.enable = true;
+              services.syncthing = {
+                enable = true;
+                user = "heywoodlh";
+                dataDir = "/home/heywoodlh/Sync";
+                configDir = "/home/heywoodlh/.config/syncthing";
+              };
             }
           ];
         };

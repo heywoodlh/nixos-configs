@@ -472,6 +472,7 @@ in {
 
         # Workaround for hypridle
         exec-once = /run/current-system/sw/bin/systemctl restart --user hypridle.service
+        exec-once = /run/current-system/sw/bin/systemctl restart --user ashell.service
 
         # Start terminal in special workspace so I can toggle it
         #exec-once = [workspace special:terminal] ${pkgs.ghostty}/bin/ghostty

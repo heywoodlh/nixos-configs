@@ -43,4 +43,13 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  # Automatic LUKS decryption with Yubikey
+  heywoodlh.luks = {
+    enable = true;
+    boot = "/dev/nvme0n1p1";
+    name = "luks";
+    uuid = "094df1a8-7702-40ae-b866-45cf56c439d1";
+    yubikey = true; # Setup with: https://gist.github.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
+  };
 }

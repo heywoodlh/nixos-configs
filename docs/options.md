@@ -1759,7 +1759,7 @@ boolean
 
 
 
-## heywoodlh\.luksYubikey\.enable
+## heywoodlh\.luks\.enable
 
 
 
@@ -1782,7 +1782,7 @@ boolean
 
 
 
-## heywoodlh\.luksYubikey\.device
+## heywoodlh\.luks\.boot
 
 
 
@@ -1803,7 +1803,29 @@ string
 
 
 
-## heywoodlh\.luksYubikey\.name
+## heywoodlh\.luks\.fido
+
+
+
+Use FIDO device decryption\.
+Setup with: ` sudo systemd-cryptenroll /dev/nvme0n1p2 --fido2-device=auto --fido2-with-user-presence=yes --fido2-with-client-pin=no `
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+
+
+
+## heywoodlh\.luks\.name
 
 
 
@@ -1824,11 +1846,12 @@ string
 
 
 
-## heywoodlh\.luksYubikey\.uuid
+## heywoodlh\.luks\.uuid
 
 
 
-LUKS device UUID\.
+LUKS block device UUID\.
+Obtain with ` sudo blkid `\.
 
 
 
@@ -1839,6 +1862,29 @@ string
 
 *Default:*
 ` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+
+
+
+## heywoodlh\.luks\.yubikey
+
+
+
+Enable Yubikey luks single factor decryption\.
+See the following gist for setup example:
+https://gist\.github\.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` true `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)

@@ -204,6 +204,9 @@ in {
       myNixosSwitchWithFlakes = pkgs.writeShellScriptBin "nixos-switch-with-flakes" ''
         ${myNixosSwitch}/bin/nixos-switch --override-input myFlakes ${homeDir}/opt/flakes $@
       '';
+      myNixosListGenerations = pkgs.writeShellScriptBin "nixos-list-generations" ''
+        sudo ${pkgs.nix}/bin/nix-env --list-generations --profile /nix/var/nix/profiles/system
+      '';
     in [
       android-tools
       usbutils
@@ -212,6 +215,7 @@ in {
       myNixosSwitchWithFlakes
       myNixosBoot
       myNixosBuild
+      myNixosListGenerations
       myGit
       myTmux
       myFish

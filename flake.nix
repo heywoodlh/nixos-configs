@@ -536,6 +536,11 @@
               size = 8 * 1024;
             }
           ];
+          # Ensure to power on in case of power failure
+          system.activationScripts.rebootPowerFailure.text = ''
+            ${pkgs.pciutils}/bin/setpci -s 00:1f.0 0xa4.b=0
+          '';
+
           heywoodlh.intel-mac = true;
           heywoodlh.sshd.enable = true;
           # Automatic LUKS decryption with Yubikey
@@ -593,6 +598,11 @@
           };
           fileSystems."/mnt/ssd0" = {
             device = "/dev/disk/by-uuid/5D8A245A63983818";
+            fsType = "ntfs-3g";
+            options = [ "rw" "uid=1000" "nofail" ];
+          };
+          fileSystems."/mnt/windows" = {
+            device = "/dev/disk/by-uuid/360C7E6F0C7E29CF";
             fsType = "ntfs-3g";
             options = [ "rw" "uid=1000" "nofail" ];
           };

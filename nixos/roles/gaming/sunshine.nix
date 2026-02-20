@@ -21,7 +21,7 @@ in {
   };
 
   # Use autologin X11 Plasma 5 over GNOME
-  services.displayManager.ly.enable = lib.mkForce false;
+  services.displayManager.gdm.enable = lib.mkForce false;
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = false;

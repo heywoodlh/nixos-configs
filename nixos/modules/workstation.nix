@@ -16,7 +16,7 @@ let
   '';
   fbtermDesktop = ''
     [Desktop Entry]
-    Name=fbterm (x11)
+    Name=fbterm
     Exec=${startFbterm}/bin/fbterm
   '';
   fbtermSessionPkg = (pkgs.writeTextDir "share/xsessions/fbterm.desktop" ''

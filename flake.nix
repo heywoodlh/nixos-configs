@@ -543,7 +543,7 @@
             enable = false;
             boot = "/dev/nvme0n1p1";
             name = "luks";
-            uuid = "094df1a8-7702-40ae-b866-45cf56c439d1";
+            uuid = "4d5af1ae-c207-417b-a0f6-f2edc7de77a2";
             fido = true;
           };
         };

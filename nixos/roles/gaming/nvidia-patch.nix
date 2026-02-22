@@ -1,15 +1,14 @@
-{ pkgs, config, nvidia-patch, nixpkgs-next, ... }:
+{ pkgs, config, nvidia-patch, nixpkgs, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-  nixpkgs-stable = nixpkgs-next; # TODO: remove when nixpkgs-stable input is updated
-  pkgs-nvidia = import nixpkgs-stable {
+  pkgs-nvidia = import nixpkgs {
     inherit system;
     config.allowUnfree = true;
     overlays = [ nvidia-patch.overlays.default ];
   };
   # possible versions for the package here: https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nvidia-x11/default.nix
-  targetPkg = config.boot.kernelPackages.nvidiaPackages.stable;
+  targetPkg = config.boot.kernelPackages.nvidiaPackages.beta;
   pkgAfterFbc = if builtins.hasAttr targetPkg.version pkgs-nvidia.nvidia-patch-list.fbc
                 then pkgs-nvidia.nvidia-patch.patch-fbc targetPkg
                 else targetPkg;

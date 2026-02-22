@@ -565,12 +565,22 @@
           ];
         };
 
-        nixos-gaming = nixosConfig "workstation" "nixos-gaming" {
+        nixos-gaming =  let
+          youtube-music-brave = {
+            name = "YouTube Music";
+            command = ''
+              ${pkgs.brave}/bin/brave --proxy-server="socks5://10.64.0.1:1080" --app=https://music.youtube.com --window-position=0,0
+            '';
+          };
+        in nixosConfig "workstation" "nixos-gaming" {
           imports = [
             ./nixos/roles/gaming/nvidia-patch.nix
             ./nixos/roles/gaming/sunshine.nix
             ./nixos/roles/gaming/steam.nix
             ./nixos/hosts/gaming.nix
+          ];
+          environment.systemPackages = with pkgs; [
+            steam-run
           ];
           hardware.nvidia.open = true;
           heywoodlh.server = true;
@@ -588,7 +598,10 @@
               };
             };
             firewall = {
-              allowedUDPPorts = [ 9 ];
+              allowedUDPPorts = [
+                9
+                5353 # shanocast
+              ];
             };
           };
           fileSystems."/mnt/hdd0" = {
@@ -607,12 +620,23 @@
             options = [ "rw" "uid=1000" "nofail" ];
           };
 
+          # Allow mdns for shanocast
+          services.avahi = {
+            enable = true;
+            reflector = true;
+            openFirewall = true;
+          };
+
           home-manager.users.heywoodlh = {
             heywoodlh.home.autostart = [
               {
-                name = "Steam (silent)";
-                command = "${pkgs.steam}/bin/steam -silent";
+                name = "Steam";
+                command = "${pkgs.steam}/bin/steam steam://open/bigpicture";
               }
+              youtube-music-brave
+            ];
+            heywoodlh.home.applications = [
+              youtube-music-brave
             ];
           };
         };

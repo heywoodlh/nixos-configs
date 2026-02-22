@@ -7,12 +7,6 @@ let
     inherit system;
     config.allowUnfree = true;
   };
-  wake = pkgs.writeShellScriptBin "wake.sh" ''
-    export QT_QPA_PLATFORM=xcb
-    ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor --dpms on
-    sleep 3
-    sudo pkill -9 sunshine
-  '';
 in {
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services = {
@@ -20,17 +14,18 @@ in {
     "autovt@tty1".enable = false;
   };
 
-  # Use autologin X11 Plasma 5 over GNOME
-  services.displayManager.gdm.enable = lib.mkForce false;
+  # Use KDE autologin
   services.xserver.enable = true;
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = false;
+  services.displayManager = {
+    gdm.enable = lib.mkForce false;
+    defaultSession = lib.mkForce "plasma";
+    sddm = {
+      enable = true;
+      wayland.enable = true;
+    };
+  };
   services.desktopManager.plasma6.enable = true;
   programs.ssh.askPassword = lib.mkForce "${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass";
-
-  environment.systemPackages = [
-    wake
-  ];
 
   services.displayManager.autoLogin = {
     enable = true;
@@ -70,25 +65,20 @@ in {
       ];
     };
 
-    applications = let
-      wake = pkgs.writeShellScript "wake.sh" ''
-        ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor --dpms on
-      '';
-    in {
+    applications = {
       apps = [
         {
           name = "Desktop";
-          detached = [ "${wake}" ];
           image-path = "desktop.png";
         }
       ] ++ lib.optionals (config.programs.steam.enable) [
         {
           name = "Steam Big Picture";
-          detached = [ "${wake}; sudo -u heywoodlh ${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/bigpicture" ];
+          detached = [ "${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/bigpicture" ];
           output = "/tmp/steam.txt";
           prep-cmd = {
             do = "";
-            undo = [ "sudo -u heywoodlh ${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://close/bigpicture" ];
+            undo = [ "${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://close/bigpicture" ];
           };
           image-path = "steam.png";
         }
@@ -120,6 +110,10 @@ in {
           whenSleepingEnter = "hybridSleep";
         };
       };
+      home.file.".config/fish/config.fish".text = ''
+        export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+        export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+      '';
       home.packages = with pkgs; [
         steamtinkerlaunch
         sunshine

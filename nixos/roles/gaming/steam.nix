@@ -34,6 +34,7 @@ in {
   programs.steam = {
     enable = system == "x86_64-linux";
     protontricks.enable = true;
+    gamescopeSession.enable = true;
   };
 
   environment.systemPackages = let

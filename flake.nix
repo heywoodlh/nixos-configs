@@ -572,6 +572,9 @@
               ${pkgs.brave}/bin/brave --proxy-server="socks5://10.64.0.1:1080" --app=https://music.youtube.com --window-position=0,0
             '';
           };
+          reboot-windows = pkgs.writeShellScriptBin "reboot-windows" ''
+            sudo ${pkgs.systemd}/bin/systemctl --boot-loader-entry=auto-windows reboot
+          '';
         in nixosConfig "workstation" "nixos-gaming" {
           imports = [
             ./nixos/roles/gaming/nvidia-patch.nix
@@ -581,6 +584,7 @@
           ];
           environment.systemPackages = with pkgs; [
             steam-run
+            reboot-windows
           ];
           hardware.nvidia.open = true;
           heywoodlh.server = true;

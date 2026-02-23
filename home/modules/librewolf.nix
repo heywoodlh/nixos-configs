@@ -232,7 +232,7 @@ in {
           "privacy.resistFingerprinting" = false;
           "webgl.disabled" = false;
           # Allow unrestricted copy/paste (i.e. fix issues with webtop)
-          "dom.event.clipboardevents.enabled" = false;
+          "dom.events.asyncClipboard.readText" = false;
         } // lib.optionalAttrs (cfg.socks.proxy != null) {
           "network.proxy.no_proxies_on" = cfg.socks.noproxy;
           "network.proxy.socks" = cfg.socks.proxy;

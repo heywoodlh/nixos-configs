@@ -225,6 +225,7 @@
         ./darwin/modules/yabai.nix
         ./darwin/modules/stage-manager.nix
         ./darwin/modules/choose-launcher.nix
+        ./darwin/modules/raycast.nix
       ];
     };
     commonHomeModules = [
@@ -251,6 +252,7 @@
     ];
     macosHomeModules = [
       ./home/modules/darwin-defaults.nix
+      ./home/modules/disable-spotlight.nix
       ./home/modules/nord-terminal.nix
     ];
     allHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
@@ -332,7 +334,14 @@
           heywoodlh.darwin = {
             sketchybar.enable = true;
             yabai.enable = true;
-            choose-launcher.enable = true;
+            choose-launcher = {
+              enable = false; # keeping around for documentation
+              user = "heywoodlh";
+            };
+            raycast = {
+              enable = true;
+              user = "heywoodlh";
+            };
           };
           services.container = {
             enable = true;

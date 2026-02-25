@@ -40,7 +40,7 @@ in {
         type = types.bool;
       };
       user = mkOption {
-        default = "heywoodlh";
+        default = "";
         description = ''
           Which user to enable choose-launcher for.
         '';
@@ -61,29 +61,11 @@ in {
       choose-gui
       choose-launcher-sh
     ];
-    system.activationScripts.postActivation.text = lib.optionalString (cfg.skhd && config.services.skhd.enable) ''
-      # Switch Spotlight to Ctrl + Shift + Space
-      /usr/bin/sudo -u ${cfg.user} /usr/bin/defaults write com.apple.symbolichotkeys.plist AppleSymbolicHotKeys -dict-add 64 "
-      <dict>
-        <key>enabled</key>
-        <false/>
-        <key>value</key>
-        <dict>
-          <key>type</key>
-          <string>standard</string>
-          <key>parameters</key>
-            <array>
-              <integer>32</integer>
-              <integer>49</integer>
-              <integer>1048576</integer>
-            </array>
-        </dict>
-      </dict>
-      "
-      /usr/bin/sudo -u ${cfg.user} /usr/bin/killall cfprefsd
-      /usr/bin/sudo /usr/bin/killall mds
-      /usr/bin/sudo /usr/bin/mdutil -a -i off
-    '';
+
+    # Nest in lib.optionalAttrs in case cfg.user is unset
+    home-manager.users = lib.optionalAttrs (cfg.skhd && config.services.skhd.enable && cfg.user != "") {
+      "${cfg.user}".heywoodlh.home.darwin.disable-spotlight = true;
+    };
 
     services.skhd.skhdConfig = lib.optionalString (cfg.skhd && config.services.skhd.enable) ''
       cmd - space : ${choose-launcher-sh}/bin/choose-launcher.sh

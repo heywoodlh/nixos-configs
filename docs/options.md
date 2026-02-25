@@ -332,10 +332,54 @@ string
 
 
 *Default:*
-` "heywoodlh" `
+` "" `
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
+
+
+
+## heywoodlh\.darwin\.raycast\.enable
+
+
+
+Enable heywoodlh Raycast configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast.nix)
+
+
+
+## heywoodlh\.darwin\.raycast\.user
+
+
+
+Which user to change Cmd+Space shortcut for Spotlight to Ctrl+Shift+Space\.
+If unset, does not change shortcut\.
+Reboot required for Spotlight shortcut to apply\. Sometimes doesn’t work, change manually if needed\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+` "" `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast.nix)
 
 
 
@@ -1003,6 +1047,28 @@ boolean
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+
+
+
+## heywoodlh\.home\.darwin\.disable-spotlight
+
+
+
+Change Spotlight keyboard shortcut to Ctrl + Shift + Space\.
+Reboot is required to apply this change\. Sometimes doesn’t work, change manually if needed\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+` false `
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/disable-spotlight\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/disable-spotlight.nix)
 
 
 
@@ -2039,8 +2105,6 @@ boolean
 
 
 ## heywoodlh\.sshd\.mfa
-
-
 
 Enable mfa configuration for SSH\.
 

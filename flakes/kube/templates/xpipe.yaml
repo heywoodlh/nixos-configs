@@ -87,10 +87,6 @@ spec:
       - name: xpipe
         image: "@image@"
         imagePullPolicy: Always
-        resources:
-          requests:
-            cpu: 500m
-            memory: 512Mi
         ports:
         - name: webtop
           containerPort: 3000
@@ -102,7 +98,11 @@ spec:
           mountPath: /nix
         - name: xpipe-etc-nix
           mountPath: /etc/nix
+        - name: syncthing-data
+          mountPath: /opt/syncthing
         env:
+        - name: TZ
+          value: "America/Denver"
         - name: CUSTOM_USER
           valueFrom:
             secretKeyRef:
@@ -113,15 +113,37 @@ spec:
             secretKeyRef:
               name: xpipe-password
               key: password
+        - name: GNOME_KEYRING_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: xpipe-password
+              key: gnome-keyring
+        - name: PATH
+          value: "/config/.nix-profile/bin:/config/.local/bin:/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
         # GPU acceleration
+        - name: PIXELFLUX_WAYLAND
+          value: "true"
+        - name: DRINODE
+          value: "/dev/dri/renderD128"
+        - name: DRI_NODE
+          value: "/dev/dri/renderD128"
         resources:
           requests:
             gpu.intel.com/i915: "1"
+            cpu: 500m
+            memory: 512Mi
           limits:
             gpu.intel.com/i915: "1"
+            memory: "8192Mi"
+            cpu: "2000m"
+        securityContext:
+          capabilities:
+            add: ["SYS_ADMIN"] # To allow electron apps to leverage sandboxing/namespaces
       volumes:
-      - name: tmp
-        emptyDir: {}
+      - name: syncthing-data
+        hostPath:
+          path: /opt/syncthing
+          type: Directory
       - name: configdir
         hostPath:
           path: @hostfolder@/config

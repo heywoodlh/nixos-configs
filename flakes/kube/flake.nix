@@ -982,7 +982,7 @@
         xpipe = mkKubeDrv "xpipe" {
           src = ./templates/xpipe.yaml;
           namespace = "admin";
-          image = "ghcr.io/xpipe-io/xpipe-webtop:latest";
+          image = "docker.io/heywoodlh/xpipe:latest";
           hostfolder = "/media/data-ssd/xpipe";
           nodename = "homelab";
         };

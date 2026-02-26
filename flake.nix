@@ -576,12 +576,8 @@
 
         nixos-culug = nixosConfig "server" "nixos-culug" {
           imports = [
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/culug.nix
           ];
-          networking.vlans.vlan2 = {
-            id = 2;
-            interface = "enp1s0";
-          };
 
           users.users.alex = {
             isNormalUser = true;
@@ -594,7 +590,31 @@
             ];
             shell = pkgs.bashInteractive;
             homeMode = "755";
+            packages = [
+              home-manager.packages.${system}.home-manager
+            ];
           };
+
+          users.users.heywoodlh.extraGroups = [
+            "docker"
+          ];
+
+          # Fix display
+          boot.kernelParams = [
+            "fbcon=rotate:1"
+            "video=DSI-1:panel_orientation=right_side_up"
+          ];
+
+          environment.etc."nixos/README.md".text = ''
+            Deploy like so:
+
+            ```
+            sudo nixos-rebuild switch --flake "github:heywoodlh/nixos-configs#nixos-culug"
+            ```
+            Open a PR if you want updates.
+
+            CULUG services should be defined outside of NixOS with `docker`/`docker-compose` in `/opt/`. Anything that should be publicly exposed should go through Cloudflare Zero Trust.
+          '';
         };
 
         nixos-gaming =  let

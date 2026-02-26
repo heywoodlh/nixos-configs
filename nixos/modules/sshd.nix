@@ -100,9 +100,13 @@ in {
       ];
     };
 
-    programs.bash.interactiveShellInit = ''
-      [ -z $TMUX ] && { ${tmux}/bin/tmux new-session -A -s main && exit;}
-    '';
+    # Only start tmux if logging in as primary user -- don't make assumptions for other users
+    home-manager.users.${username}.programs.bash = {
+      enable = true;
+      initExtra = ''
+        [ -z $TMUX ] && { ${tmux}/bin/tmux new-session -A -s main && exit;}
+      '';
+    };
 
     boot.postBootCommands = optionalString (cfg.mfa) ''
       test -e /root/.google_authenticator || ln -s /root/.google_authenticator ~${username}/.google_authenticator

@@ -233,6 +233,8 @@ in {
           "webgl.disabled" = false;
           # Allow unrestricted copy/paste (i.e. fix issues with webtop)
           "dom.events.asyncClipboard.readText" = false;
+          # Split screen
+          "browser.tabs.splitView.enabled" = true;
         } // lib.optionalAttrs (cfg.socks.proxy != null) {
           "network.proxy.no_proxies_on" = cfg.socks.noproxy;
           "network.proxy.socks" = cfg.socks.proxy;

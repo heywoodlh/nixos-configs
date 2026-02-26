@@ -590,6 +590,7 @@
               "wheel"
               "adbusers"
               "networkmanager"
+              "docker"
             ];
             shell = pkgs.bashInteractive;
             homeMode = "755";

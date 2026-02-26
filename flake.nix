@@ -574,6 +574,28 @@
           ];
         };
 
+        nixos-culug = nixosConfig "server" "nixos-culug" {
+          imports = [
+            /etc/nixos/hardware-configuration.nix
+          ];
+          networking.vlans.vlan2 = {
+            id = 2;
+            interface = "enp1s0";
+          };
+
+          users.users.alex = {
+            isNormalUser = true;
+            description = "alex";
+            extraGroups = [
+              "wheel"
+              "adbusers"
+              "networkmanager"
+            ];
+            shell = pkgs.bashInteractive;
+            homeMode = "755";
+          };
+        };
+
         nixos-gaming =  let
           youtube-music-brave = {
             name = "YouTube Music";

@@ -637,6 +637,7 @@
           environment.systemPackages = with pkgs; [
             steam-run
             reboot-windows
+            clonehero
           ];
           hardware.nvidia.open = true;
           heywoodlh.server = true;

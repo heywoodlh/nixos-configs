@@ -7,7 +7,7 @@ collections:
   - name: kubernetes.core
     version: "5.4.1"
   - name: cloud.common
-    version: "4.2.0"
+    version: "5.0.0"
   - name: community.docker
     version: "5.0.4"
   - name: ansible.posix

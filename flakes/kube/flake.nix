@@ -795,7 +795,7 @@
         protonmail-bridge = mkKubeDrv "protonmail-bridge" {
           src = ./templates/protonmail-bridge.yaml;
           namespace = "default";
-          image = "docker.io/shenxn/protonmail-bridge:3.19.0-1";
+          image = "docker.io/heywoodlh/tmp:protonmail-bridge-fix-798e66e";
           ferroxide_image = "docker.io/heywoodlh/ferroxide:2026_01";
           nodename = "homelab";
           hostfolder = "/opt/protonmail-bridge";

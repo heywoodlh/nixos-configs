@@ -19,7 +19,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/shenxn/protonmail-bridge:3.19.0-1
+      - image: docker.io/heywoodlh/tmp:protonmail-bridge-fix-798e66e
         name: protonmail-bridge
         ports:
         - name: smtp

@@ -271,6 +271,7 @@ in {
     attic-setup
     bind
     carbonyl
+    codex
     coreutils
     curl
     docker-compose-gen

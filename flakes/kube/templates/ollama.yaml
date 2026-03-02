@@ -64,16 +64,10 @@ spec:
             limits:
               gpu.intel.com/i915: "1"
           env:
-            - name: DEVICE
-              value: "Arc"
-            - name: OLLAMA_INTEL_GPU
-              value: "true"
-            - name: ZES_ENABLE_SYSMAN
-              value: "1"
-            - name: OLLAMA_NUM_GPU
-              value: "999"
             - name: OLLAMA_HOST
               value: "0.0.0.0"
+            - name: OLLAMA_VULKAN
+              value: "1"
       volumes:
       - name: ollama
         hostPath:

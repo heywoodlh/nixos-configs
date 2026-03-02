@@ -48,7 +48,7 @@ spec:
         - name: ollama
           securityContext:
             privileged: true
-          image: "docker.io/grinco/ollama-amd-apu:vulkan"
+          image: "docker.io/ollama/ollama:0.17.5"
           imagePullPolicy: IfNotPresent
           command: [ "ollama", "serve" ]
           ports:
@@ -64,16 +64,10 @@ spec:
             limits:
               gpu.intel.com/i915: "1"
           env:
-            - name: DEVICE
-              value: "Arc"
-            - name: OLLAMA_INTEL_GPU
-              value: "true"
-            - name: ZES_ENABLE_SYSMAN
-              value: "1"
-            - name: OLLAMA_NUM_GPU
-              value: "999"
             - name: OLLAMA_HOST
               value: "0.0.0.0"
+            - name: OLLAMA_VULKAN
+              value: "1"
       volumes:
       - name: ollama
         hostPath:
@@ -111,7 +105,7 @@ spec:
         spec:
           containers:
             - name: ollama-pull
-              image: "docker.io/grinco/ollama-amd-apu:vulkan"
+              image: "docker.io/ollama/ollama:0.17.5"
               imagePullPolicy: IfNotPresent
               command: ["/bin/bash", "-c"]
               args: [

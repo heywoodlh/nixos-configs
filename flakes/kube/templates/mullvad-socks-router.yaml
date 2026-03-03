@@ -1,0 +1,114 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "mullvad-socks-router"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/kcntifehovxbdnp5exk4gwsvta"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: mullvad-socks-router
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "list", "create", "update", "patch", "delete"]
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mullvad-socks-router-state
+  namespace: "@namespace@"
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: mullvad-socks-router
+  namespace: @namespace@
+subjects:
+- kind: ServiceAccount
+  name: mullvad-socks-router
+  namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: mullvad-socks-router
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mullvad-socks-router
+  namespace: @namespace@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mullvad-socks-router
+  name: mullvad-socks-router
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: mullvad-socks-router
+  template:
+    metadata:
+      labels:
+        app: mullvad-socks-router
+    spec:
+      serviceAccountName: mullvad-socks-router
+      hostname: mullvad-socks-router
+      containers:
+      - image: @image@
+        name: mullvad-socks-router
+        env:
+          - name: TS_AUTHKEY
+            valueFrom:
+              secretKeyRef:
+                name: mullvad-socks-router
+                key: TS_AUTHKEY
+          - name: WIREGUARD_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: mullvad-socks-router
+                key: WIREGUARD_ENDPOINT
+          - name: WIREGUARD_ENDPOINT_PUBKEY
+            valueFrom:
+              secretKeyRef:
+                name: mullvad-socks-router
+                key: WIREGUARD_ENDPOINT_PUBKEY
+          - name: WIREGUARD_PRIVKEY
+            valueFrom:
+              secretKeyRef:
+                name: mullvad-socks-router
+                key: WIREGUARD_PRIVKEY
+          - name: WIREGUARD_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: mullvad-socks-router
+                key: WIREGUARD_ADDRESS
+          - name: TS_KUBE_SECRET
+            value: "mullvad-socks-router-state"
+          - name: TS_HOSTNAME
+            value: "mullvad-socks-router-k8s"
+        volumeMounts:
+          - name: dev-net-tun
+            mountPath: /dev/net/tun
+        securityContext:
+          privileged: true
+      volumes:
+        - name: mullvad-socks-router-data
+          hostPath:
+            path: @hostfolder@
+            type: DirectoryOrCreate
+        - name: dev-net-tun
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice

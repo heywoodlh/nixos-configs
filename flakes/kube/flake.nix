@@ -918,6 +918,14 @@
           namespace = "tailscale";
           values = {};
         });
+        tailscale-mullvad-socks-router = mkKubeDrv "tailscale-mullvad-socks-router" {
+          src = ./templates/mullvad-socks-router.yaml;
+          namespace = "default";
+          image = "docker.io/heywoodlh/tailscale-mullvad-router:1.94.2";
+          replicas = 1;
+          hostfolder = "/opt/tailscale-mullvad-router";
+          nodename = "homelab";
+        };
         tailscale-dns-bridge = mkKubeDrv "tailscale-dns-bridge" {
           src = ./templates/tailscale-dns-bridge.yaml;
           namespace = "default";

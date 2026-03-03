@@ -65,6 +65,24 @@
     cloudflared
   ];
 
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      tailscale-mullvad-socks-router = {
+        image = "docker.io/heywoodlh/tailscale-mullvad-router:1.94.2";
+        autoStart = true;
+        privileged = true;
+        environmentFiles = [
+          "/opt/mullvad-socks-router/.env"
+        ];
+        volumes = [
+          "/opt/mullvad-socks-router/tailscale:/var/lib/tailscale"
+          "/etc/localtime:/etc/localtime:ro"
+        ];
+      };
+    };
+  };
+
   heywoodlh.rayhunter = {
     enable = true;
     ntfy = "http://ntfy.barn-banana.ts.net";

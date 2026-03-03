@@ -48,7 +48,7 @@ in {
       "aaronraimist/tap/gomuks"
       "mas"
       "mosh"
-      "ollama"
+      "newsboat"
       "opencode"
       "pinentry-mac"
       "spice-gtk"
@@ -64,6 +64,7 @@ in {
       "kidonng/malt"
       "aaronraimist/homebrew-tap"
       "aaronraimist/tap"
+      "akdev1l/apps" # librewolf
     ];
     casks = [
       "1password"
@@ -77,7 +78,9 @@ in {
       "hiddenbar"
       "iterm2"
       "knockknock"
+      "akdev1l/apps/librewolf"
       "lulu"
+      "moonlight"
       "oversight"
       "proton-drive"
       "remoteviewer"

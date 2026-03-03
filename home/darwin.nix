@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, nur, lib, myFlakes, ... }:
+{ config, pkgs, myFlakes, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -83,12 +83,6 @@ in {
     enableDocker = true;
   };
 
-  heywoodlh.home.applications = [
-    {
-      name = "virt-manager";
-      command = "${pkgs.virt-manager}/bin/virt-manager";
-    }
-  ];
   heywoodlh.home.darwin.defaults.enable = true;
   home.file.".config/fish/config.fish".text = ''
     # Fix for "too many files open" error on MacOS

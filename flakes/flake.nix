@@ -75,11 +75,6 @@
       inputs.vim-flake.follows = "vim-flake";
       inputs.vicinae-nix.follows = "vicinae-nix";
     };
-    zen-browser-flake = {
-      url = "./zen-browser";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     ttyd-flake = {
       url = "./ttyd-nerd";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -105,7 +100,6 @@
     chromium-widevine-flake,
     vicinae-nix,
     gnome-flake,
-    zen-browser-flake,
     ttyd-flake,
   }:
     flake-utils.lib.eachDefaultSystem (system: let
@@ -135,7 +129,6 @@
         gnome = gnome-flake.packages.${system}.gnome-desktop-setup;
         gnome-dconf = gnome-flake.packages.${system}.dconf;
         gnome-install-extensions = gnome-flake.packages.${system}.gnome-install-extensions;
-        zen-browser = zen-browser-flake.packages.${system}.default;
         zellij = fish-flake.packages.${system}.zellij;
         ttyd = ttyd-flake.packages.${system}.ttyd;
         vicinae = gnome-flake.packages.${system}.vicinae;

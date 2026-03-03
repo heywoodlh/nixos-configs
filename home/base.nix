@@ -1,4 +1,6 @@
-{ config, pkgs, myFlakes, ... }:
+{ config, lib, pkgs, myFlakes, ... }:
+
+with lib;
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -241,7 +243,6 @@ let
   youtube-dl-mp3 = pkgs.writeShellScriptBin "youtube-dl-mp3" ''
     ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#yt-dlp" -- -t mp3 "$@"
   '';
-  ollamaUrl = "http://ollama.barn-banana.ts.net:11434";
   carbonyl = pkgs.writeShellScriptBin "carbonyl" ''
     ${pkgs.docker}/bin/docker volume create carbonyl &>/dev/null || true
     ${pkgs.docker}/bin/docker run --rm -it -v carbonyl:/carbonyl/data docker.io/fathyb/carbonyl $@
@@ -305,7 +306,6 @@ in {
     tree
     unzip
     vdirsyncer
-    ytermusic
     zip
     myGit
     myJujutsu
@@ -415,6 +415,7 @@ in {
 
   programs.newsboat = {
     enable = true;
+    package = if pkgs.stdenv.isDarwin then null else pkgs.newsboat;
     extraConfig = ''
       urls-source "miniflux"
       miniflux-url "http://miniflux"
@@ -542,8 +543,6 @@ in {
       function github-unlock
         set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh/personal-access-token --fields=password --reveal)"
       end
-
-      export OLLAMA_HOST="${ollamaUrl}"
 
       function lnav
         kubectl exec -it -n monitoring $(kubectl get pods -n monitoring | grep -i lnav | head -1 | awk '{print $1}') -- env TERM="screen-256color" lnav /logs $argv
@@ -737,7 +736,10 @@ in {
       ai = true;
       homelab = true;
     };
-    llm.enable = true;
+    llm = {
+      enable = true;
+      platform = lib.mkDefault "homelab";
+    };
     aerc = {
       enable = true;
       accounts = true;

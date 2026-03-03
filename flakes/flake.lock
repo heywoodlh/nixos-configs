@@ -447,12 +447,10 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "nushell-flake": "nushell-flake",
         "op-flake": "op-flake",
-        "tabby-flake": "tabby-flake",
         "ttyd-flake": "ttyd-flake",
         "vicinae-nix": "vicinae-nix",
         "vim-flake": "vim-flake",
-        "vscode-flake": "vscode-flake",
-        "zen-browser-flake": "zen-browser-flake"
+        "vscode-flake": "vscode-flake"
       }
     },
     "rust-overlay": {
@@ -511,25 +509,6 @@
         "repo": "default",
         "type": "github"
       }
-    },
-    "tabby-flake": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "./tabby",
-        "type": "path"
-      },
-      "original": {
-        "path": "./tabby",
-        "type": "path"
-      },
-      "parent": []
     },
     "toml-merge": {
       "flake": false,
@@ -649,47 +628,6 @@
       },
       "original": {
         "path": "./vscode",
-        "type": "path"
-      },
-      "parent": []
-    },
-    "zen-browser": {
-      "inputs": {
-        "nixpkgs": [
-          "zen-browser-flake",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1727721329,
-        "narHash": "sha256-QYlWZwUSwrM7BuO+dXclZIwoPvBIuJr6GpFKv9XKFPI=",
-        "owner": "MarceColl",
-        "repo": "zen-browser-flake",
-        "rev": "e6ab73f405e9a2896cce5956c549a9cc359e5fcc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "MarceColl",
-        "repo": "zen-browser-flake",
-        "type": "github"
-      }
-    },
-    "zen-browser-flake": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "zen-browser": "zen-browser"
-      },
-      "locked": {
-        "path": "./zen-browser",
-        "type": "path"
-      },
-      "original": {
-        "path": "./zen-browser",
         "type": "path"
       },
       "parent": []

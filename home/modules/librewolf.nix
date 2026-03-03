@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.librewolf;
+  system = pkgs.stdenv.hostPlatform.system;
   nur-pkgs = import nur {
     inherit pkgs;
     nurpkgs = pkgs;
@@ -65,11 +66,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.file."Applications/LibreWolf.app" = {
-      enable = pkgs.stdenv.isDarwin;
-      source = "${pkgs.librewolf}/Applications/LibreWolf.app";
-    };
-
     home.activation.make-default-browser = if pkgs.stdenv.isDarwin then ''
       /usr/bin/osascript <<-AS
         do shell script "${pkgs.defaultbrowser}/bin/defaultbrowser librewolf"
@@ -91,6 +87,7 @@ in {
 
     programs.librewolf = {
       enable = true;
+      package = if pkgs.stdenv.isDarwin then null else pkgs.librewolf;
 
       profiles.home-manager = {
         isDefault = true;

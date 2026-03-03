@@ -178,9 +178,6 @@ in {
       };
     };
 
-    # Only enable ollama if not on homelab machine
-    services.ollama.enable = (cfg.ai && cfg.homelab == false);
-
     nix.settings = {
       extra-substituters = [
         "https://heywoodlh-helix.cachix.org"

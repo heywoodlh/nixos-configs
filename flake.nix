@@ -232,7 +232,6 @@
       ./home/modules/applications.nix
       ./home/modules/marp.nix
       ./home/modules/1password-docker-helper.nix
-      ./home/modules/onepassword.nix
       ./home/modules/helix.nix
       ./home/modules/aerc.nix
       ./home/modules/ghostty.nix
@@ -247,6 +246,7 @@
       ./home/modules/hyprland.nix
       ./home/modules/vicinae.nix
       ./home/modules/linux-autostart.nix
+      ./home/modules/onepassword.nix
     ];
     macosHomeModules = [
       ./home/modules/darwin-defaults.nix
@@ -337,12 +337,12 @@
               user = "heywoodlh";
             };
             raycast = {
-              enable = true;
+              enable = false;
               user = "heywoodlh";
             };
           };
           services.container = {
-            enable = true;
+            enable = null;
             user = "heywoodlh";
           };
           system.stateVersion = 6;
@@ -430,17 +430,14 @@
           "Screens 5: VNC Remote Desktop" = 1663047912;
         };
       };
-      home-manager.users.heywoodlh = {
-        #home.packages = with pkgs; [
-          #anonScript
-        #];
-        heywoodlh.home.applications = [
-          {
-            name = "Moonlight";
-            command = "${pkgs.moonlight-qt}/bin/moonlight";
-          }
-        ];
-      };
+      #home-manager.users.heywoodlh = {
+      #  heywoodlh.home.applications = [
+      #    {
+      #      name = "Moonlight";
+      #      command = "${pkgs.moonlight-qt}/bin/moonlight";
+      #    }
+      #  ];
+      #};
     };
     in {
       formatter = pkgs.alejandra;

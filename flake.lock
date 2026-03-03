@@ -545,11 +545,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1768248913,
-        "narHash": "sha256-Kr45H5StnR9hgEhpKD8/BDZLvEpLVJb51lvIDQ9EC7U=",
+        "lastModified": 1772516620,
+        "narHash": "sha256-2r4cKdqCVlQkvcTcLUMxmsmAYZZxCMd//w/PnDnukTE=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "360620ec9d5ffc186b5b1fca4c5f5b2e1634a5cf",
+        "rev": "2b9504d5a0169d4940a312abe2df2c5658db8de9",
         "type": "github"
       },
       "original": {
@@ -1109,8 +1109,7 @@
         "ttyd-flake": "ttyd-flake",
         "vicinae-nix": "vicinae-nix",
         "vim-flake": "vim-flake",
-        "vscode-flake": "vscode-flake",
-        "zen-browser-flake": "zen-browser-flake"
+        "vscode-flake": "vscode-flake"
       },
       "locked": {
         "path": "flakes",
@@ -2286,52 +2285,6 @@
         "repo": "xdg-desktop-portal-hyprland",
         "type": "github"
       }
-    },
-    "zen-browser": {
-      "inputs": {
-        "nixpkgs": [
-          "myFlakes",
-          "zen-browser-flake",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1727721329,
-        "narHash": "sha256-QYlWZwUSwrM7BuO+dXclZIwoPvBIuJr6GpFKv9XKFPI=",
-        "owner": "MarceColl",
-        "repo": "zen-browser-flake",
-        "rev": "e6ab73f405e9a2896cce5956c549a9cc359e5fcc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "MarceColl",
-        "repo": "zen-browser-flake",
-        "type": "github"
-      }
-    },
-    "zen-browser-flake": {
-      "inputs": {
-        "flake-utils": [
-          "myFlakes",
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "myFlakes",
-          "nixpkgs"
-        ],
-        "zen-browser": "zen-browser"
-      },
-      "locked": {
-        "path": "./zen-browser",
-        "type": "path"
-      },
-      "original": {
-        "path": "./zen-browser",
-        "type": "path"
-      },
-      "parent": [
-        "myFlakes"
-      ]
     }
   },
   "root": "root",

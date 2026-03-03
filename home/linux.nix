@@ -22,6 +22,7 @@ in {
     ollama
     opencode
     cpuspeed
+    ytermusic
   ];
 
   home.file.".config/fish/config.fish".text = ''

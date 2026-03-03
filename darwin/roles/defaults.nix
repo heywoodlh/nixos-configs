@@ -53,11 +53,6 @@ in {
     myFlakes.packages.${system}.git
   ];
 
-  # add nerd fonts
-  fonts.packages = with pkgs.nerd-fonts; [
-    jetbrains-mono
-  ];
-
   #system-defaults.nix
   system.keyboard = {
     enableKeyMapping = true;

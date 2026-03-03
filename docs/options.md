@@ -1356,7 +1356,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/chgk2ny4pvvrp2ppzrvn8ch1h4bhhgrg-tmux/bin/tmux"
+"/nix/store/mi2xh6qgm1a4y2wpdbfcgym65dyw1agz-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1404,7 +1404,7 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
@@ -1885,6 +1885,61 @@ false
 
 
 
+## heywoodlh\.home\.llm\.model
+
+
+
+Default Ollama model to use for codex\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"llama3.1:8b"
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.platform
+
+
+
+Enable one of the following platforms:
+
+ - “intel”
+ - “nvidia”
+ - “amd”
+ - “homelab”
+
+The “homelab” option is only useful to author – all other options will enable Ollama locally with support for the chosen platform\.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
+
+
+
 ## heywoodlh\.home\.marp\.enable
 
 
@@ -2349,8 +2404,6 @@ string
 
 ## heywoodlh\.rayhunter\.port
 
-
-
 Reverse proxy port\.
 
 
@@ -2396,6 +2449,8 @@ string
 
 
 ## heywoodlh\.server
+
+
 
 Enable heywoodlh server configuration\.
 

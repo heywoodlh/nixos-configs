@@ -80,11 +80,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    tabby-flake = {
-      url = "./tabby";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     ttyd-flake = {
       url = "./ttyd-nerd";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -111,7 +106,6 @@
     vicinae-nix,
     gnome-flake,
     zen-browser-flake,
-    tabby-flake,
     ttyd-flake,
   }:
     flake-utils.lib.eachDefaultSystem (system: let
@@ -142,7 +136,6 @@
         gnome-dconf = gnome-flake.packages.${system}.dconf;
         gnome-install-extensions = gnome-flake.packages.${system}.gnome-install-extensions;
         zen-browser = zen-browser-flake.packages.${system}.default;
-        tabby = tabby-flake.packages.${system}.tabby-wrapper;
         zellij = fish-flake.packages.${system}.zellij;
         ttyd = ttyd-flake.packages.${system}.ttyd;
         vicinae = gnome-flake.packages.${system}.vicinae;

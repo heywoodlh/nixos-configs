@@ -250,9 +250,6 @@ let
     mkdir -p ~/.config/attic
     ${op-wrapper} read 'op://Kubernetes/za3oirjkd6ehdlnzvisb445hga/normal-config' > ~/.config/attic/config.toml
   '';
-  myChat = pkgs.writeShellScriptBin "chat" ''
-    ${myVim}/bin/vim -c ":CodeCompanionChat" -c ":only"
-  '';
   myProxychains = pkgs.writeShellScriptBin "proxychains" ''
     ${pkgs.proxychains-ng}/bin/proxychains4 -q "$@"
   '';
@@ -271,7 +268,6 @@ in {
     attic-setup
     bind
     carbonyl
-    codex
     coreutils
     curl
     docker-compose-gen
@@ -309,12 +305,12 @@ in {
     tree
     unzip
     vdirsyncer
+    ytermusic
     zip
     myGit
     myJujutsu
     myFlakes.packages.${system}.tmux
     myFish # For non-nix use-cases
-    myChat
     todomanWrapper
     todoEdit
     password
@@ -741,6 +737,7 @@ in {
       ai = true;
       homelab = true;
     };
+    llm.enable = true;
     aerc = {
       enable = true;
       accounts = true;

@@ -12,7 +12,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
@@ -31,7 +34,10 @@ unspecified value
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
@@ -52,7 +58,10 @@ unspecified value
 
 
 *Default:*
-` "all_firmware.tar.gz" `
+
+```nix
+"all_firmware.tar.gz"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
@@ -73,7 +82,10 @@ submodule
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
@@ -95,7 +107,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
@@ -117,7 +132,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
@@ -138,7 +156,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
@@ -160,7 +181,7 @@ list of (optionally newline-terminated) single-line string
 
 *Default:*
 
-```
+```nix
 [
   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJszbIpuxux7oAANlLC+RphqlEW4Ak1128QMvkI06TiY root@homelab"
 ]
@@ -185,7 +206,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
@@ -206,7 +230,10 @@ string
 
 
 *Default:*
-` "backups" `
+
+```nix
+"backups"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
@@ -227,7 +254,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cloudflared\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cloudflared.nix)
@@ -248,7 +278,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/console\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/console.nix)
@@ -269,7 +302,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cosmic\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cosmic.nix)
@@ -290,7 +326,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
@@ -311,7 +350,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
@@ -332,7 +374,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
@@ -353,7 +398,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast.nix)
@@ -376,7 +424,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast.nix)
@@ -397,7 +448,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/sketchybar\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/sketchybar.nix)
@@ -418,7 +472,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/stage-manager\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/stage-manager.nix)
@@ -439,7 +496,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
@@ -460,7 +520,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
@@ -481,7 +544,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
@@ -502,7 +568,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -523,7 +592,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -544,7 +616,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -565,7 +640,10 @@ string
 
 
 *Default:*
-` "nixos" `
+
+```nix
+"nixos"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -586,7 +664,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -607,7 +688,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -628,7 +712,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -649,7 +736,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -670,7 +760,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -691,7 +784,10 @@ string
 
 
 *Default:*
-` "America/Denver" `
+
+```nix
+"America/Denver"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -728,7 +824,10 @@ string
 
 
 *Default:*
-` "Spencer Heywood" `
+
+```nix
+"Spencer Heywood"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -749,7 +848,10 @@ absolute path
 
 
 *Default:*
-` "/home/heywoodlh" `
+
+```nix
+"/home/heywoodlh"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -770,7 +872,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -791,7 +896,10 @@ string
 
 
 *Default:*
-` "heywoodlh" `
+
+```nix
+"heywoodlh"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -812,7 +920,10 @@ signed integer
 
 
 *Default:*
-` 1000 `
+
+```nix
+1000
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
@@ -833,7 +944,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gnome\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gnome.nix)
@@ -854,7 +968,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/helix.nix)
@@ -875,7 +992,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc.nix)
@@ -896,7 +1016,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc.nix)
@@ -917,7 +1040,10 @@ list of attribute set of string
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/applications\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/applications.nix)
@@ -938,7 +1064,10 @@ list of attribute set of string
 
 
 *Default:*
-` [ ] `
+
+```nix
+[ ]
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/linux-autostart\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/linux-autostart.nix)
@@ -959,7 +1088,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cosmic\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cosmic.nix)
@@ -980,7 +1112,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
@@ -1001,7 +1136,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
@@ -1022,7 +1160,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
@@ -1043,7 +1184,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
@@ -1065,7 +1209,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/disable-spotlight\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/disable-spotlight.nix)
@@ -1087,7 +1234,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/nord-terminal\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/nord-terminal.nix)
@@ -1108,7 +1258,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/base\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/base.nix)
@@ -1129,7 +1282,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/1password-docker-helper\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/1password-docker-helper.nix)
@@ -1150,7 +1306,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker.nix)
@@ -1171,7 +1330,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1192,7 +1354,10 @@ string
 
 
 *Default:*
-` "/nix/store/z3jksmd56n8lnr9y8dhlgpvb8wkzr59z-tmux/bin/tmux" `
+
+```nix
+"/nix/store/chgk2ny4pvvrp2ppzrvn8ch1h4bhhgrg-tmux/bin/tmux"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1213,7 +1378,10 @@ attribute set
 
 
 *Default:*
-` { } `
+
+```nix
+{ }
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1234,7 +1402,10 @@ signed integer
 
 
 *Default:*
-` 14 `
+
+```nix
+14
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1255,7 +1426,10 @@ string
 
 
 *Default:*
-` "global:ctrl+grave_accent=toggle_quick_terminal" `
+
+```nix
+"global:ctrl+grave_accent=toggle_quick_terminal"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1276,7 +1450,10 @@ string
 
 
 *Default:*
-` "Nord" `
+
+```nix
+"Nord"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
@@ -1297,7 +1474,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gh\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gh.nix)
@@ -1318,7 +1498,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gnome\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gnome.nix)
@@ -1339,7 +1522,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/guake\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/guake.nix)
@@ -1360,7 +1546,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
@@ -1371,7 +1560,7 @@ boolean
 
 
 
-Enable machine learning tooling, i\.e\. Copilot, lsp-ai\.
+Enable machine learning tooling with lsp-ai\.
 
 
 
@@ -1381,7 +1570,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
@@ -1403,7 +1595,34 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
+
+
+
+## heywoodlh\.home\.helix\.model
+
+
+
+Default Ollama model to use for chat\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"llama3:8b"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
@@ -1424,7 +1643,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/hyprland\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/hyprland.nix)
@@ -1445,7 +1667,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
@@ -1466,7 +1691,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
@@ -1487,7 +1715,10 @@ string
 
 
 *Default:*
-` "duckduckgo" `
+
+```nix
+"duckduckgo"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
@@ -1524,7 +1755,10 @@ null or string
 
 
 *Default:*
-` "localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net,.svc.cluster.local" `
+
+```nix
+"localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.ts.net,.svc.cluster.local"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
@@ -1545,7 +1779,10 @@ signed integer
 
 
 *Default:*
-` 1080 `
+
+```nix
+1080
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
@@ -1566,7 +1803,10 @@ null or string
 
 
 *Default:*
-` null `
+
+```nix
+null
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
@@ -1587,7 +1827,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima.nix)
@@ -1608,10 +1851,37 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima.nix)
+
+
+
+## heywoodlh\.home\.llm\.enable
+
+
+
+Enable heywoodlh llm configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
 
 
 
@@ -1629,7 +1899,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/marp\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/marp.nix)
@@ -1650,7 +1923,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
@@ -1671,7 +1947,10 @@ package
 
 
 *Default:*
-` <derivation 1password-8.11.22> `
+
+```nix
+<derivation 1password-8.12.2>
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
@@ -1692,7 +1971,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
@@ -1713,7 +1995,10 @@ boolean
 
 
 *Default:*
-` true `
+
+```nix
+true
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
@@ -1734,7 +2019,10 @@ package
 
 
 *Default:*
-` <derivation 1password-gui-wrapper> `
+
+```nix
+<derivation 1password-gui-wrapper>
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
@@ -1755,7 +2043,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/vicinae\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/vicinae.nix)
@@ -1776,7 +2067,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/hyprland\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/hyprland.nix)
@@ -1797,7 +2091,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/intel-mac\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/intel-mac.nix)
@@ -1818,7 +2115,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/laptop\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/laptop.nix)
@@ -1841,7 +2141,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
@@ -1862,7 +2165,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
@@ -1884,7 +2190,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
@@ -1905,7 +2214,10 @@ string
 
 
 *Default:*
-` "luks" `
+
+```nix
+"luks"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
@@ -1927,7 +2239,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
@@ -1950,7 +2265,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
@@ -1971,7 +2289,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
@@ -1992,7 +2313,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
@@ -2013,7 +2337,10 @@ string
 
 
 *Default:*
-` "" `
+
+```nix
+""
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
@@ -2034,7 +2361,10 @@ signed integer
 
 
 *Default:*
-` 6767 `
+
+```nix
+6767
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
@@ -2055,7 +2385,10 @@ string
 
 
 *Default:*
-` "rayhunter" `
+
+```nix
+"rayhunter"
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
@@ -2063,8 +2396,6 @@ string
 
 
 ## heywoodlh\.server
-
-
 
 Enable heywoodlh server configuration\.
 
@@ -2076,7 +2407,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/server\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/server.nix)
@@ -2097,7 +2431,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd.nix)
@@ -2105,6 +2442,8 @@ boolean
 
 
 ## heywoodlh\.sshd\.mfa
+
+
 
 Enable mfa configuration for SSH\.
 
@@ -2116,7 +2455,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd.nix)
@@ -2137,7 +2479,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vm.nix)
@@ -2158,7 +2503,10 @@ boolean
 
 
 *Default:*
-` false `
+
+```nix
+false
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/workstation\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/workstation.nix)

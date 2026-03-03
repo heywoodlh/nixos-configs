@@ -1,31 +1,12 @@
-{ config, lib, nixpkgs-stable, pkgs, myFlakes, ... }:
+{ config, lib, pkgs, myFlakes, ... }:
 
 with lib;
 
 let
   cfg = config.heywoodlh.home.helix;
   system = pkgs.stdenv.hostPlatform.system;
-  pkgs-stable = import nixpkgs-stable {
-    inherit system;
-    config.allowUnfree = true;
-  };
   myHelix = myFlakes.packages.${system}.helix;
   myFish = myFlakes.packages.${system}.fish;
-  opWrapper = myFlakes.packages.${system}.op-wrapper;
-  gptPkg = if (cfg.homelab) then
-    pkgs.writeShellScriptBin "helix-gpt" ''
-      # Initial auth setup
-      if [[ ! -s $HOME/.local/copilot.txt ]]
-      then
-        mkdir -p $HOME/.local
-        ${opWrapper}/bin/op-wrapper read 'op://Personal/pym6vduaunymq6cokn35kupxky/helix-gpt-copilot' > $HOME/.local/copilot.txt
-        chmod 600 $HOME/.local/copilot.txt
-      fi
-      [[ -e $HOME/.local/copilot.txt ]] && export COPILOT_API_KEY="$(cat $HOME/.local/copilot.txt)"
-      # Fallback to normal 1password wrapper if copilot.txt does not work out
-      [[ -z $COPILOT_API_KEY ]] && export COPILOT_API_KEY=$(${opWrapper}/bin/op-wrapper read 'op://Personal/pym6vduaunymq6cokn35kupxky/helix-gpt-copilot')
-      ${pkgs.helix-gpt}/bin/helix-gpt $@
-    '' else pkgs.helix-gpt;
 in {
   options = {
     heywoodlh.home.helix = {
@@ -47,17 +28,33 @@ in {
       ai = mkOption {
         default = true;
         description = ''
-          Enable machine learning tooling, i.e. Copilot, lsp-ai.
+          Enable machine learning tooling with lsp-ai.
         '';
         type = types.bool;
+      };
+      model = mkOption {
+        default = "llama3:8b";
+        description = ''
+          Default Ollama model to use for chat.
+        '';
+        type = types.str;
       };
     };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; optionals (cfg.ai) [
-      gptPkg
-      pkgs-stable.lsp-ai
+    home.packages = let
+      chat = pkgs.writeShellScriptBin "chat" ''
+        if [[ ! -e "$HOME/.lsp-ai.md" ]]
+        then
+          printf "[comment]: <> (Start a new prompt after "!C", then Space+a to begin conversation)\n" > "$HOME/.lsp-ai.md"
+        fi
+
+        ${myHelix}/bin/hx + $HOME/.lsp-ai.md
+      '';
+    in with pkgs; optionals (cfg.ai) [
+      chat
+      lsp-ai
     ];
     programs.helix = {
       enable = true;
@@ -72,8 +69,7 @@ in {
         nil
         ty
       ] ++ optionals (cfg.ai) [
-        gptPkg
-        pkgs-stable.lsp-ai
+        lsp-ai
       ];
       settings = {
         theme = "custom";
@@ -113,51 +109,56 @@ in {
         };
       };
       languages = {
-        language-server.harper = {
-          command = "harper-ls";
-          args = [ "--stdio" ];
+        language-server = {
+          harper = {
+            command = "harper-ls";
+            args = [ "--stdio" ];
 
-          config.harper-ls = {
-            diagnosticSeverity = "hint";
-            dialect = "American";
-            linters = { long_sentences = false; };
+            config.harper-ls = {
+              diagnosticSeverity = "hint";
+              dialect = "American";
+              linters = { long_sentences = false; };
+            };
           };
-        };
-        copilot = optionalAttrs (cfg.ai) {
-          command = "${gptPkg}/bin/helix-gpt";
-          args = [
-            "--handler" "copilot"
-          ];
-        };
-        "lsp-ai" = optionalAttrs (cfg.ai) {
-          command = "lsp-ai";
-          args = ["--stdio"];
+          "lsp-ai" = optionalAttrs (cfg.ai) {
+            command = "lsp-ai";
+            args = ["--use-seperate-log-file"];
+            config = {
+              memory.file_store = { };
+              chat = [
+                {
+                  trigger = "!C";
+                  action_display_name = "chat";
+                  model = "ollama";
+                  parameters = {
+                    max_context = 4096;
+                    max_tokens = 1024;
+                    system = "You are a code assistant chatbot. The user will ask you for assistance coding and you will do you best to answer succinctly and accurately";
+                  };
+                }
+              ];
+              models = {
+                ollama = let
+                  url = if cfg.homelab then "http://ollama.barn-banana.ts.net:11434" else "http://127.0.0.1:11434";
+                in {
+                  type = "ollama";
+                  model = "${cfg.model}";
+                  chat_endpoint = "${url}/api/chat";
+                  generate_endpoint = "${url}/api/generate";
+                };
+              };
+            };
+          };
         };
         language = [
           {
             name = "markdown";
-            language-servers = [ "marksman" "harper" ];
-          }
-        ] ++ optionals (cfg.ai) [
-          {
-            name = "bash";
-            language-servers = [ "bash-language-server" "copilot" ];
-          }
-          {
-            name = "fish";
-            language-servers = [ "fish-lsp" "copilot" ];
-          }
-          {
-            name = "go";
-            language-servers = [ "gopls" "copilot" ];
-          }
-          {
-            name = "nix";
-            language-servers = [ "nil" "copilot" ];
-          }
-          {
-            name = "python";
-            language-servers = [ "ty" "copilot" ];
+            language-servers = [
+              "marksman"
+              "harper"
+            ] ++ lib.optionals (cfg.ai) [
+              "lsp-ai"
+            ];
           }
         ];
       };
@@ -176,6 +177,10 @@ in {
         };
       };
     };
+
+    # Only enable ollama if not on homelab machine
+    services.ollama.enable = (cfg.ai && cfg.homelab == false);
+
     nix.settings = {
       extra-substituters = [
         "https://heywoodlh-helix.cachix.org"

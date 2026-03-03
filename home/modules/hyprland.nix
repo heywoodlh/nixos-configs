@@ -120,23 +120,22 @@ in {
       enable = true;
       settings = {
         global = {
-          frame_color = "#e5e9f0";
-          separator_color = "#e5e9f0";
+          frame_color = "#8aadf4";
+          separator_color = "frame";
+          highlight = "#8aadf4";
         };
-        base16_low = {
-          msg_urgency = "low";
-          background = "#3b4252";
-          foreground = "#4c566a";
+        urgency_low = {
+          background = "#24273a";
+          foreground = "#cad3f5";
         };
-        base16_normal = {
-          msg_urgency = "normal";
-          background = "#434c5e";
-          foreground = "#e5e9f0";
+        urgency_normal = {
+          background = "#24273a";
+          foreground = "#cad3f5";
         };
-        base16_critical = {
-          msg_urgency = "critical";
-          background = "#bf616a";
-          foreground = "#eceff4";
+        urgency_critical = {
+          background = "#24273a";
+          foreground = "#cad3f5";
+          frame_color = "#f5a97f";
         };
       };
     };
@@ -505,18 +504,24 @@ in {
           no_donation_nag = true
         }
 
-        # Window rules
-        windowrulev2 = float,class:(1password)
-        windowrulev2 = nomaxsize,class:(1password)
-        windowrulev2 = float,title:^(Quick Access — 1Password)$
-        windowrulev2 = nomaxsize,title:^(Quick Access — 1Password)$
+        # 1Password Quick Access
+        windowrule {
+          name = 1password-quick-access
+          match:title = ^(Quick Access — 1Password)$
+          float = yes
+          stay_focused = on
+        }
 
         # Firefox PiP
-        windowrulev2 = float, title:^(Picture-in-Picture)$
-        windowrulev2 = size 20% 20%, title:^(Picture-in-Picture)$
-        windowrulev2 = move 100%-w-30, title:^(Picture-in-Picture)$
-        windowrulev2 = pin, title:^(Picture-in-Picture)$
-        windowrulev2 = noborder, title:^(Picture-in-Picture)$
+        windowrule {
+          name = firefox-pip
+          match:title = ^(Picture-in-Picture)$
+          size = 20% 20%
+          float = yes
+          persistent_size = on
+          pin = on
+          move = 72% 7%
+        }
 
         # Gestures
         gesture = 3, horizontal, workspace

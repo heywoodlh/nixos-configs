@@ -1,12 +1,7 @@
-{ pkgs, config, lib, plasma-manager, nixpkgs-next, ... }:
+{ pkgs, config, lib, plasma-manager, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-  nixpkgs-stable = nixpkgs-next; # TODO: remove when nixpkgs-stable input is updated
-  pkgs-nvidia = import nixpkgs-stable {
-    inherit system;
-    config.allowUnfree = true;
-  };
 in {
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services = {
@@ -34,9 +29,9 @@ in {
 
   services.sunshine = {
     enable = true;
-    package = pkgs-nvidia.sunshine.override {
+    package = pkgs.sunshine.override {
       cudaSupport = true;
-      cudaPackages = pkgs-nvidia.cudaPackages;
+      cudaPackages = pkgs.cudaPackages;
     };
 
     settings = {

@@ -4,14 +4,12 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
-    nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.05";
-    nixpkgs-next.url = "github:nixos/nixpkgs/release-25.11";
-    nixos-stable.url = "github:nixos/nixpkgs/nixos-25.05";
-    nixpkgs-backports.url = "github:nixos/nixpkgs/release-24.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.11";
+    nixpkgs-backports.url = "github:nixos/nixpkgs/release-25.05";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     nvidia-patch = {
       url = "github:icewind1991/nvidia-patch-nixos";
-      inputs.nixpkgs.follows = "nixpkgs-next";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "flake-utils";
     };
     # only to sync dependents that use flake-utils
@@ -177,7 +175,6 @@
   outputs = inputs@{ self,
                       nixpkgs,
                       nixpkgs-stable,
-                      nixpkgs-next,
                       nixpkgs-pam-lid-fix,
                       myFlakes,
                       kyle,
@@ -241,6 +238,7 @@
       ./home/modules/ghostty.nix
       ./home/modules/gh.nix
       ./home/modules/librewolf.nix
+      ./home/modules/llm.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix

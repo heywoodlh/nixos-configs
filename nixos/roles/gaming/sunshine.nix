@@ -113,7 +113,7 @@ in {
         steamtinkerlaunch
         sunshine
         wget # winetricks requires GNU wget
-        wineWowPackages.stable # support both 32-bit and 64-bit applications
+        wineWow64Packages.stable # support both 32-bit and 64-bit applications
         winetricks
       ];
       #heywoodlh.home.autostart = [

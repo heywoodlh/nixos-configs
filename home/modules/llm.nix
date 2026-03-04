@@ -101,7 +101,7 @@ in {
       acceleration = let
         platform = if cfg.platform == "nvidia" then "cuda"
           else if cfg.platform == "amd" then "rocm" else null;
-      in lib.optionalString (platform != "") platform;
+      in lib.optionalString (platform != null) platform;
       environmentVariables = lib.optionalAttrs (cfg.platform != "" && cfg.platform != "homelab") {
         OLLAMA_VULKAN = lib.optionalString (cfg.platform == "intel") "1";
       };

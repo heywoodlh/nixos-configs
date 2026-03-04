@@ -1356,7 +1356,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/mi2xh6qgm1a4y2wpdbfcgym65dyw1agz-tmux/bin/tmux"
+"/nix/store/chgk2ny4pvvrp2ppzrvn8ch1h4bhhgrg-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1404,7 +1404,7 @@ signed integer
 *Default:*
 
 ```nix
-16
+14
 ```
 
 *Declared by:*

@@ -124,7 +124,8 @@ in {
     services.usbmuxd.enable = true;
 
     # Allow x86 packages to be installed on aarch64
-    nixpkgs.config.allowUnsupportedSystem = true;
+    # Disabled due to https://github.com/cachix/devenv-nixpkgs/issues/21
+    nixpkgs.config.allowUnsupportedSystem = false;
 
     networking.firewall = {
       enable = true;

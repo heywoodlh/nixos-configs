@@ -10,13 +10,6 @@ in {
     ./desktop.nix
   ];
 
-  home.file."bin/battpop.sh" = {
-    enable = true;
-    executable = true;
-    text = ''
-    '';
-  };
-
   home.packages = [
     pkgs.fleetctl
     pkgs.m-cli
@@ -77,13 +70,6 @@ in {
     '';
   };
 
-  # Run Lima VM always in background
-  heywoodlh.home.lima = {
-    enable = true;
-    enableDocker = true;
-  };
-
-  heywoodlh.home.darwin.defaults.enable = true;
   home.file.".config/fish/config.fish".text = ''
     # Fix for "too many files open" error on MacOS
     builtin ulimit -n 10240

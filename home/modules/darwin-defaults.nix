@@ -44,7 +44,7 @@ in {
   config = mkIf cfg.enable {
     heywoodlh.home.llm = {
       enable = true;
-      platform = ""; # use local ollama instance
+      homelab = false; # use local ollama instance
     };
     # Helpful resources:
     # - https://github.com/kentcdodds/dotfiles/blob/1e59ac84911eee898b3b9ceab904df9ad243fdd4/.macos#L674

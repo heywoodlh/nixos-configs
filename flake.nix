@@ -252,6 +252,7 @@
       ./home/modules/darwin-defaults.nix
       ./home/modules/disable-spotlight.nix
       ./home/modules/nord-terminal.nix
+      ./home/modules/darwin-protondrive-link.nix
     ];
     allHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
     # Combine all modules, excluding modules not relevant to platform
@@ -323,7 +324,19 @@
               imports = [
                 homeModules.heywoodlh.home
               ];
-              heywoodlh.home.darwin.nord-terminal = true;
+              heywoodlh.home = {
+                darwin = {
+                  nord-terminal = true;
+                  defaults.enable = true;
+                  protondrive = true;
+                };
+
+                # Run Lima VM always in background
+                lima = {
+                  enable = true;
+                  enableDocker = true;
+                };
+              };
             };
           };
 

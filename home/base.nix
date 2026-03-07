@@ -738,7 +738,7 @@ in {
     };
     llm = {
       enable = true;
-      platform = lib.mkDefault "homelab";
+      homelab = lib.mkDefault true;
     };
     aerc = {
       enable = true;

@@ -1244,6 +1244,30 @@ false
 
 
 
+## heywoodlh\.home\.darwin\.protondrive
+
+
+
+Symlink ProtonDrive accounts to $HOME/mnt/protondrive-\*
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-protondrive-link\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-protondrive-link.nix)
+
+
+
 ## heywoodlh\.home\.defaults
 
 
@@ -1885,6 +1909,30 @@ false
 
 
 
+## heywoodlh\.home\.llm\.homelab
+
+
+
+This option is only useful to author\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
+
+
+
 ## heywoodlh\.home\.llm\.model
 
 
@@ -1902,37 +1950,6 @@ string
 
 ```nix
 "llama3.1:8b"
-```
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
-
-
-
-## heywoodlh\.home\.llm\.platform
-
-
-
-Enable one of the following platforms:
-
- - “intel”
- - “nvidia”
- - “amd”
- - “homelab”
-
-The “homelab” option is only useful to author – all other options will enable Ollama locally with support for the chosen platform\.
-
-
-
-*Type:*
-null or string
-
-
-
-*Default:*
-
-```nix
-""
 ```
 
 *Declared by:*
@@ -2380,8 +2397,6 @@ string
 
 ## heywoodlh\.rayhunter\.ntfy
 
-
-
 NTFY URL to proxy\.
 
 
@@ -2403,6 +2418,8 @@ string
 
 
 ## heywoodlh\.rayhunter\.port
+
+
 
 Reverse proxy port\.
 

@@ -15,18 +15,12 @@ in {
         type = types.bool;
       };
       # wait until ollama + tools better supports intel gpus
-      platform = mkOption {
-        default = "";
+      homelab = mkOption {
+        default = false;
         description = ''
-          Enable one of the following platforms:
-          - "intel"
-          - "nvidia"
-          - "amd"
-          - "homelab"
-
-          The "homelab" option is only useful to author -- all other options will enable Ollama locally with support for the chosen platform.
+          This option is only useful to author.
         '';
-        type = types.nullOr types.str;
+        type = types.bool;
       };
       model = mkOption {
         default = "llama3.1:8b";
@@ -42,10 +36,10 @@ in {
     myCodex = pkgs.writeShellScriptBin "codex" ''
       ${pkgs.codex}/bin/codex -p myollama $@
     '';
-    url = if (cfg.platform == "homelab")
+    url = if (cfg.homelab)
       then "http://ollama.barn-banana.ts.net:11434"
       else "http://localhost:11434";
-    ollamaPkg = if (cfg.platform != "homelab") then config.services.ollama.package else pkgs.ollama;
+    ollamaPkg = if (cfg.homelab == false) then config.services.ollama.package else pkgs.ollama;
     myOllamaPull = pkgs.writeShellScript "ollama-pull" ''
       # Loop 3 times until model is pulled
       (r=3;while ! ${ollamaPkg}/bin/ollama list &>/dev/null ; do ((--r))||exit;sleep 60;done) && ${ollamaPkg}/bin/ollama pull ${cfg.model}
@@ -57,7 +51,7 @@ in {
   in mkIf cfg.enable {
     home.packages = [
       myCodex
-    ] ++ lib.optionals (cfg.platform == "homelab") [
+    ] ++ lib.optionals (cfg.homelab) [
       myOllama
     ];
 
@@ -69,7 +63,7 @@ in {
 
       Service = {
         ExecStart = "${myOllamaPull}";
-        Environment = if (cfg.platform != "homelab") then config.systemd.user.services.ollama.Service.Environment else [
+        Environment = if (cfg.homelab == false) then config.systemd.user.services.ollama.Service.Environment else [
           "OLLAMA_HOST=${url}"
         ];
       };
@@ -85,7 +79,7 @@ in {
         ProgramArguments = [
           "${myOllamaPull}"
         ];
-        EnvironmentVariables = if (cfg.platform != "homelab") then config.launchd.agents.ollama.config.EnvironmentVariables else {
+        EnvironmentVariables = if (cfg.homelab == false) then config.launchd.agents.ollama.config.EnvironmentVariables else {
           OLLAMA_HOST = url;
         };
         KeepAlive = {
@@ -96,14 +90,10 @@ in {
       };
     };
 
-    services.ollama = {
-      enable = (cfg.platform != "homelab");
-      acceleration = let
-        platform = if cfg.platform == "nvidia" then "cuda"
-          else if cfg.platform == "amd" then "rocm" else null;
-      in lib.optionalString (platform != null) platform;
-      environmentVariables = lib.optionalAttrs (cfg.platform != "" && cfg.platform != "homelab") {
-        OLLAMA_VULKAN = lib.optionalString (cfg.platform == "intel") "1";
+    services.ollama = lib.optionalAttrs (cfg.homelab == false) {
+      enable = true;
+      environmentVariables = {
+        OLLAMA_VULKAN = "1";
       };
     };
 

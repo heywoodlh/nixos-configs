@@ -428,7 +428,7 @@
         grafana = mkKubeDrv "grafana" {
           src = ./templates/grafana.yaml;
           namespace = "monitoring";
-          image = "docker.io/grafana/grafana:11.6.8";
+          image = "docker.io/grafana/grafana:12.4.0";
           storageclass = "local-path";
         };
         hashcat = mkKubeDrv "hashcat" {

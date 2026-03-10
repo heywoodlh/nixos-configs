@@ -1380,7 +1380,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/chgk2ny4pvvrp2ppzrvn8ch1h4bhhgrg-tmux/bin/tmux"
+"/nix/store/bx08nyy78xlmgnnllmanpzygk3pf57rm-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1428,7 +1428,7 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
@@ -2021,7 +2021,7 @@ package
 *Default:*
 
 ```nix
-<derivation 1password-8.12.2>
+<derivation 1password-8.12.5>
 ```
 
 *Declared by:*

@@ -33,12 +33,12 @@ in {
   };
 
   config = let
-    myCodex = pkgs.writeShellScriptBin "codex" ''
-      ${pkgs.codex}/bin/codex -p myollama $@
-    '';
     url = if (cfg.homelab)
       then "http://ollama.barn-banana.ts.net:11434"
       else "http://localhost:11434";
+    myCodexOllama = pkgs.writeShellScriptBin "codex-ollama" ''
+      ${pkgs.codex}/bin/codex --oss --local-provider ollama --model ${cfg.model} $@
+    '';
     ollamaPkg = if (cfg.homelab == false) then config.services.ollama.package else pkgs.ollama;
     myOllamaPull = pkgs.writeShellScript "ollama-pull" ''
       # Loop 3 times until model is pulled
@@ -46,11 +46,12 @@ in {
     '';
     myOllama = pkgs.writeShellScriptBin "ollama" ''
       [[ -z "$OLLAMA_HOST" ]] && export OLLAMA_HOST="${url}"
-      ${pkgs.ollama}/bin/ollama $@
+      ${ollamaPkg}/bin/ollama $@
     '';
   in mkIf cfg.enable {
-    home.packages = [
-      myCodex
+    home.packages = with pkgs; [
+      codex
+      myCodexOllama
     ] ++ lib.optionals (cfg.homelab) [
       myOllama
     ];
@@ -96,16 +97,5 @@ in {
         OLLAMA_VULKAN = "1";
       };
     };
-
-    home.file.".codex/config.toml".text = ''
-      [model_providers.myollama]
-      name = "myollama"
-      base_url = "${url}/v1"
-      wire_api = "responses"
-
-      [profiles.myollama]
-      model_provider = "myollama"
-      model = "${cfg.model}"
-    '';
   };
 }

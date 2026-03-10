@@ -22,14 +22,14 @@
     nixos-apple-silicon = {
       url = "github:nix-community/nixos-apple-silicon";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "kyle/flake-compat";
+      inputs.flake-compat.follows = "devenv/flake-compat";
     };
     # only to sync dependents that use nix
     nix = {
       url = "github:nixos/nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.flake-compat.follows = "kyle/flake-compat";
+      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
       inputs.git-hooks-nix.follows = "pre-commit-hooks";
     };
     # for dependents of crane
@@ -61,20 +61,20 @@
       inputs.flake-parts.follows = "flake-parts";
       inputs.nix.follows = "nix";
       inputs.git-hooks.follows = "pre-commit-hooks";
-      inputs.flake-compat.follows = "kyle/flake-compat";
       inputs.nixd.follows = "";
     };
     kyle = {
-      url = "gitlab:heywoodlh/nix-configs/asahi-fw-hashes";
+      url = "gitlab:kylesferrazza/nix-configs";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.ashell.follows = "ashell";
-      inputs.devenv.follows = "devenv";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.flake-parts.follows = "flake-parts";
       inputs.home-manager.follows = "home-manager";
-      inputs.darwin.follows = "darwin";
       inputs.nur.follows = "nur";
       inputs.nixos-apple-silicon.follows = "nixos-apple-silicon";
+      inputs.teslamate-src.follows = "";
+      inputs.opnix.follows = "";
+      inputs.stylix.follows = "";
+      inputs.doom-d.follows = "";
+      inputs.vscode-server.follows = "";
     };
     darwin = {
       url = "github:heywoodlh/nix-darwin/container-init";
@@ -83,7 +83,7 @@
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs-stable";
-      inputs.flake-compat.follows = "kyle/flake-compat";
+      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
     };
     user-icon = {
       url = "https://avatars.githubusercontent.com/u/18178614?v=4";
@@ -144,7 +144,7 @@
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "kyle/flake-compat";
+      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
     };
     hyprland = {
       url = "github:hyprwm/hyprland";
@@ -757,12 +757,18 @@
             enable = true;
             cachefile = "kernelcache.release.mac13g";
             hash = {
+              # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/kernelcache.release.mac13g)`
               cache = "sha256-SYR/EaaIDjeGfvhfzlTqgOihXNQQdBgqJbBJbq+wC9g=";
+              # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/all_firmware.tar.gz)`
               firmware = "sha256-ydzrhKfH/8iYo1PyNDnXmjcniMaete8DnN/yXYJ7mT4=";
             };
           };
           # Bootloader
           boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
+
+          # Apple Magic keyboard (makes useless globe key ctrl)
+          boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
+
           home-manager.users.heywoodlh = {
             home.packages = with pkgs; [
               moonlight-qt

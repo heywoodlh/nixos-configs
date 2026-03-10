@@ -35,6 +35,7 @@ in {
     enable = system == "x86_64-linux";
     protontricks.enable = true;
     gamescopeSession.enable = true;
+    localNetworkGameTransfers.openFirewall = true;
   };
 
   environment.systemPackages = let

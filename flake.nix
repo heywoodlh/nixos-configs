@@ -769,6 +769,12 @@
           # Apple Magic keyboard (makes useless globe key ctrl)
           boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
 
+          fileSystems."/mnt/m1-mac-mini" = {
+            device = "/dev/disk/by-uuid/6968-012B";
+            fsType = "exfat";
+            options = [ "rw" "uid=1000" "nofail" ];
+          };
+
           home-manager.users.heywoodlh = {
             home.packages = with pkgs; [
               moonlight-qt

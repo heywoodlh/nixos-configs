@@ -37,7 +37,7 @@ services:
 
   redis:
     container_name: immich_redis
-    image: docker.io/valkey/valkey:8@sha256:81db6d39e1bba3b3ff32bd3a1b19a6d69690f94a3954ec131277b9a26b95b3aa
+    image: docker.io/valkey/valkey:8@sha256:49ccaa10c11575272d4e70b7262b4fdfdbb88fa729147ec6730a190c9cdf3a30
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always

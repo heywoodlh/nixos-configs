@@ -152,7 +152,6 @@ in {
 
   # Route mullvad through Tailscale
   services.tailscale.extraSetFlags = lib.mkForce [
-    "--advertise-routes=10.64.0.1/32"
     "--accept-dns"
     "--stateful-filtering"
     "--accept-routes=false"

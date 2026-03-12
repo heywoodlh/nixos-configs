@@ -744,5 +744,6 @@ in {
       enable = true;
       accounts = true;
     };
+    btop = true;
   };
 }

@@ -34,6 +34,9 @@ in {
   # Enable ghostty
   heywoodlh.home.ghostty.enable = true;
 
+  # Enable cava on Linux
+  heywoodlh.home.cava = pkgs.stdenv.isLinux;
+
   # Enable librewolf
   heywoodlh.home.librewolf = {
     enable = true;

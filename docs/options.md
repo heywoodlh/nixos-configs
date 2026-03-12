@@ -1074,6 +1074,54 @@ list of attribute set of string
 
 
 
+## heywoodlh\.home\.btop
+
+
+
+Enable heywoodlh btop nord configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/btop\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/btop.nix)
+
+
+
+## heywoodlh\.home\.cava
+
+
+
+Enable heywoodlh cava configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cava\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cava.nix)
+
+
+
 ## heywoodlh\.home\.cosmic
 
 
@@ -1453,30 +1501,6 @@ string
 
 ```nix
 "global:ctrl+grave_accent=toggle_quick_terminal"
-```
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
-
-
-
-## heywoodlh\.home\.ghostty\.theme
-
-
-
-Ghostty theme\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-"Nord"
 ```
 
 *Declared by:*
@@ -2373,8 +2397,6 @@ false
 
 ## heywoodlh\.rayhunter\.interface
 
-
-
 RayHunter USB interface name\.
 
 
@@ -2396,6 +2418,8 @@ string
 
 
 ## heywoodlh\.rayhunter\.ntfy
+
+
 
 NTFY URL to proxy\.
 
@@ -2534,6 +2558,78 @@ false
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd.nix)
+
+
+
+## heywoodlh\.stylix\.enable
+
+
+
+Enable heywoodlh Stylix configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [/nix/store/dq7dqva88jrsil7igpbvy2hfpvl28bxw-source/base/stylix\.nix](/nix/store/dq7dqva88jrsil7igpbvy2hfpvl28bxw-source/base/stylix.nix)
+
+
+
+## heywoodlh\.stylix\.theme
+
+
+
+Stylix theme\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"catppuccin-macchiato"
+```
+
+*Declared by:*
+ - [/nix/store/dq7dqva88jrsil7igpbvy2hfpvl28bxw-source/base/stylix\.nix](/nix/store/dq7dqva88jrsil7igpbvy2hfpvl28bxw-source/base/stylix.nix)
+
+
+
+## heywoodlh\.stylix\.username
+
+
+
+Username to apply home-manager configs to\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [/nix/store/dq7dqva88jrsil7igpbvy2hfpvl28bxw-source/base/stylix\.nix](/nix/store/dq7dqva88jrsil7igpbvy2hfpvl28bxw-source/base/stylix.nix)
 
 
 

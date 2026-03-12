@@ -24,13 +24,6 @@ in {
         '';
         type = types.str;
       };
-      theme = mkOption {
-        default = "Nord";
-        description = ''
-          Ghostty theme.
-        '';
-        type = types.str;
-      };
       fontSize = mkOption {
         default = if stdenv.isDarwin then 16 else 14;
         description = ''
@@ -60,11 +53,11 @@ in {
       enable = true;
       package = if stdenv.isDarwin then null else pkgs.ghostty;
       settings = {
-        theme = cfg.theme;
         command = cfg.command;
         auto-update = "off";
         font-size = cfg.fontSize;
         bell-features = "no-system,no-audio,attention,title,border";
+        background-opacity = 0.95;
       } // optionalAttrs (stdenv.isDarwin) {
         macos-window-shadow = false;
         initial-window = false;

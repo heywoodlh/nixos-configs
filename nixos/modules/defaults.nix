@@ -325,7 +325,9 @@ in {
       };
       backupFileExtension = ".bak";
       users.${username} = { ... }: base;
-      users.root = { ... }: base;
+      users.root = { ... }: base // {
+        stylix.targets.helix.enable = false;
+      };
     };
 
     ## Bluetooth

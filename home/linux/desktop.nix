@@ -73,6 +73,7 @@ in {
     pkgs.xclip
     pkgs.xdotool
     pkgs.ghostty
+    pkgs.scrcpy
     captive-portal
     zen-wrapper
   ] ++ pkgs.lib.optionals (config.heywoodlh.home.onepassword.enable) [

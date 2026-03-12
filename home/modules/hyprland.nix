@@ -2,7 +2,6 @@
   config,
   pkgs,
   lib,
-  dark-wallpaper,
   ...
 }:
 
@@ -11,60 +10,7 @@ with lib;
 let
   cfg = config.heywoodlh.home.hyprland;
   onepasswordCfg = config.heywoodlh.home.onepassword;
-  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
-  ashellConf = pkgs.writeText "config.toml" ''
-    log_level = "warn"
-    outputs = { Targets = ["eDP-1"] }
-    position = "Top"
-    app_launcher_cmd = "${pkgs.fuzzel}/bin/fuzzel -I"
-
-    [modules]
-    left = [ [ "appLauncher", "Updates", "Workspaces" ] ]
-    center = [ "WindowTitle" ]
-    right = [ [  "Tray", "Clock", "Privacy", "Settings" ] ]
-
-    [workspaces]
-    enable_workspace_filling = true
-
-    [[CustomModule]]
-    name = "appLauncher"
-    icon = "󱗼"
-    command = "${pkgs.fuzzel}/bin/fuzzel -I"
-
-    [window_title]
-    truncate_title_after_length = 100
-
-    [settings]
-    lock_cmd = "${lockCmd}"
-    audio_sinks_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 3"
-    audio_sources_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 4"
-    wifi_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor"
-    vpn_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor"
-    bluetooth_more_cmd = "${pkgs.blueberry}/bin/blueberry"
-
-    [appearance]
-    style = "Islands"
-    primary_color = "#8cc4ff"
-    success_color = "#56b3da"
-    text_color = "#d6deeb"
-
-    workspace_colors = [ "#8cc4ff", "#56b3da" ]
-
-    special_workspace_colors = [ "#8cc4ff", "#56b3da" ]
-
-    [appearance.danger_color]
-    base = "#eb9e0f"
-    weak = "#d99a6f"
-
-    [appearance.background_color]
-    base = "#2c323a"
-    weak = "#3b4257"
-    strong = "#47535e"
-
-    [appearance.secondary_color]
-    base = "#3b5b6c"
-  '';
   onepasswordToggle = pkgs.writeShellScriptBin "1password-toggle.sh" ''
     # Check if 1password is running
     ps aux | grep -i 1password | grep -iq silent || ${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --silent --ozone-platform-hint=wayland
@@ -74,6 +20,99 @@ let
   '';
   lockCmdPfx = "" + optionalString (onepasswordCfg.enable) "${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --lock;";
   lockCmd = "${lockCmdPfx} ${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.swaylock-effects}/bin/swaylock -fF &";
+  screenshotScript = pkgs.writeShellScriptBin "screenshot.sh" ''
+    screenshot_path="${homeDir}/Downloads/screenshot.png"
+    ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp -d)" - \
+      | ${pkgs.coreutils}/bin/tee "$screenshot_path" \
+      | ${pkgs.wl-clipboard}/bin/wl-copy
+  '';
+  screenrecordScript = pkgs.writeShellScriptBin "screenrecord.sh" ''
+    filename="${homeDir}/Videos/$(date +%Y-%m-%d_%H-%M-%S).mp4"
+    ${pkgs.wf-recorder}/bin/wf-recorder -g "$(${pkgs.slurp}/bin/slurp)" -t -f $filename
+    [[ -e $filename ]] && ${pkgs.libnotify}/bin/notify-send "Screenrecord" "Saved to $filename"
+  '';
+  screenrecordKillScript = pkgs.writeShellScriptBin "screenrecord-kill.sh" ''
+    killall -SIGINT wf-recorder
+  '';
+  battpopScript = pkgs.writeShellScriptBin "battpop.sh" ''
+    ${pkgs.libnotify}/bin/notify-send $(${pkgs.acpi}/bin/acpi -b | grep -Eo [0-9]+% | ${pkgs.coreutils}/bin/head -1)
+  '';
+  monitorsScript = pkgs.writeShellScriptBin "monitors.sh" ''
+    # Hyprland
+    # Script to select monitor and switch focus on it
+    selection=$(hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused == false) | (.name + ": " + .description)' | ${pkgs.fuzzel}/bin/fuzzel -d | ${pkgs.coreutils}/bin/cut -d':' -f1)
+    hyprctl dispatch focusmonitor $selection
+    ${pkgs.libnotify}/bin/notify-send "Monitor switched to $selection"
+  '';
+  applicationsScript = pkgs.writeShellScriptBin "applications.sh" ''
+    # Hyprland
+    # Script to select open apps and switch focus to it
+    # Excludes apps in special workspaces
+    selection=$(hyprctl clients -j | ${pkgs.jq}/bin/jq -r '.[] | select(.class != "") | select(.workspace.name | contains("special") | not) | (.class + ":" + .title + ":" + .address)' | ${pkgs.fuzzel}/bin/fuzzel -d --width=100 | ${pkgs.util-linux}/bin/rev | ${pkgs.coreutils}/bin/cut -d ':' -f1 | ${pkgs.util-linux}/bin/rev)
+
+    hyprctl dispatch focuswindow address:$selection
+  '';
+  caffeineScript = pkgs.writeShellScriptBin "caffeine.sh" ''
+    export caffeine_enabled="false"
+    ${pkgs.procps}/bin/ps aux | ${pkgs.gnugrep}/bin/grep -i systemd-inhibit | ${pkgs.gnugrep}/bin/grep -iq caffeine && caffeine_enabled="true"
+
+    if [[ "$caffeine_enabled" == "true" ]]
+    then
+        ${pkgs.procps}/bin/pkill -9 systemd-inhibit && ${pkgs.libnotify}/bin/notify-send "Disabled caffeine"
+    else
+        ${pkgs.systemd}/bin/systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep inf &
+        disown
+        ${pkgs.libnotify}/bin/notify-send "Enabled caffeine"
+    fi
+  '';
+  soundScript = pkgs.writeShellScriptBin "sound.sh" ''
+    # This script is intended to make switching audio devices easier
+    # Intended for PipeWire
+
+    # Get current audio device info
+    wpctl_status=$(wpctl status)
+    audio_section=$(printf "$wpctl_status" | sed -n '/Audio/,/Streams/p')
+
+    # Choose whether to set output (speaker) or input (microphone)
+    selection=$(printf "Output\nInput" | fuzzel -d)
+
+    if [[ $selection == "Output" ]]
+    then
+        sink_selection=$(printf "$audio_section" | sed -n '/Sinks/,/Sink endpoints/p' | grep -E '\.' | cut -d'[' -f1 | fuzzel --width=100 -d | head -1)
+        sink_selection_name=$(printf "$sink_selection" | cut -d'.' -f2)
+        sink_selection_id=$(printf "$sink_selection" | grep -o '[0-9]*')
+        [[ -n $sink_selection_id ]] && wpctl set-default $sink_selection_id &&\
+            notify-send "Set default audio input to$sink_selection_name"
+    fi
+
+    if [[ $selection == "Input" ]]
+    then
+        source_selection=$(printf "$audio_section" | sed -n '/Sources/,/Source endpoints/p' | grep -E '\.' | cut -d'[' -f1 | fuzzel --width=100 -d | head -1)
+        source_selection_name=$(printf "$source_selection" | cut -d'.' -f2)
+        source_selection_id=$(printf "$source_selection" | grep -o '[0-9]*')
+        [[ -n $source_selection_id ]] && wpctl set-default $source_selection_id &&\
+            notify-send "Set default audio output to$source_selection_name"
+    fi
+  '';
+  keybindHelper = pkgs.writeShellScriptBin "keybind-helper.sh" ''
+    HYPR_CONF="$HOME/.config/hypr/hyprland.conf"
+    # extract the keybindings from hyprland.conf
+    # format: "MOD + KEY<TAB>description<TAB>command"
+    mapfile -t BINDINGS < <(grep '^bind=' "$HYPR_CONF" | \
+        sed -e 's/  */ /g' -e 's/bind=//g' -e 's/, /,/g' -e 's/ # /,/' | \
+        awk -F, '{cmd=""; for(i=3;i<NF;i++) cmd=cmd $(i) " "; printf "%s + %s\t%s\t%s\n", $1, $2, $NF, cmd}')
+    CHOICE=$(printf '%s\n' "''${BINDINGS[@]}" | fuzzel --dmenu --prompt="Hyprland Keybinds: ")
+    # exit if no selection was made (e.g. user pressed ESC)
+    [[ -z "$CHOICE" ]] && exit 0
+    # extract cmd (3rd tab-separated field)
+    CMD=$(echo "$CHOICE" | cut -f3 | sed 's/[[:space:]]*$//')
+    # execute it if first word is exec else use hyprctl dispatch
+    if [[ $CMD == exec* ]]; then
+        eval "$CMD"
+    else
+        hyprctl dispatch "$CMD"
+    fi
+  '';
 in {
   options = {
     heywoodlh.home.hyprland = mkOption {
@@ -111,53 +150,31 @@ in {
       wireplumber
       wl-clipboard
       xdg-desktop-portal-hyprland
+    ] ++ [
+      screenshotScript
+      screenrecordScript
+      screenrecordKillScript
+      battpopScript
+      monitorsScript
+      applicationsScript
+      caffeineScript
+      soundScript
+      keybindHelper
     ] ++ optionals (config.heywoodlh.home.onepassword.enable) [
       onepasswordToggle
     ];
 
-    # Dunst config
-    services.dunst = {
-      enable = true;
-      settings = {
-        global = {
-          frame_color = "#8aadf4";
-          separator_color = "frame";
-          highlight = "#8aadf4";
-        };
-        urgency_low = {
-          background = "#24273a";
-          foreground = "#cad3f5";
-        };
-        urgency_normal = {
-          background = "#24273a";
-          foreground = "#cad3f5";
-        };
-        urgency_critical = {
-          background = "#24273a";
-          foreground = "#cad3f5";
-          frame_color = "#f5a97f";
-        };
-      };
-    };
+    # Dunst for notifications
+    services.dunst.enable = true;
 
-    # Fuzzel launcher Nord theme
     programs.fuzzel = {
       enable = true;
       settings = {
         main = {
           terminal = "${pkgs.ghostty}/bin/ghostty";
           layer = "overlay";
-          width = 45;
+          width = 50;
           lines = 5;
-        };
-        colors = {
-          background = "3b4252ff";
-          text = "f8f8f2ff";
-          match = "8be9fdff";
-          selection-match = "8be9fdff";
-          selection = "739dd1ff";
-          selection-text = "ffffffff";
-          border = "81a1c1ff";
         };
       };
     };
@@ -167,6 +184,47 @@ in {
       systemd = {
         enable = true;
         target = "graphical-session.target";
+      };
+      settings = {
+        log_level = "warn";
+        outputs = { Targets = [ "eDP-1" ]; };
+        position = "Top";
+        app_launcher_cmd = "${pkgs.fuzzel}/bin/fuzzel -I";
+
+        modules = {
+          left = [ [ "appLauncher" "Updates" "Workspaces" ] ];
+          center = [ "WindowTitle" ];
+          right = [ [ "Tray" "Clock" "Privacy" "Settings" ] ];
+        };
+
+        workspaces = {
+          enable_workspace_filling = true;
+        };
+
+        CustomModule = [
+          {
+            name = "appLauncher";
+            icon = "󱗼";
+            command = "${pkgs.fuzzel}/bin/fuzzel -I";
+          }
+        ];
+
+        window_title = {
+          truncate_title_after_length = 100;
+        };
+
+        settings = {
+          lock_cmd = "${lockCmd}";
+          audio_sinks_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 3";
+          audio_sources_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 4";
+          wifi_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
+          vpn_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
+          bluetooth_more_cmd = "${pkgs.blueberry}/bin/blueberry";
+        };
+
+        appearance = {
+          style = "Islands";
+        };
       };
     };
 
@@ -178,270 +236,82 @@ in {
       };
     };
 
-    home.file.".config/ashell/config.toml" = {
-      enable = true;
-      source = ashellConf;
+    xdg.desktopEntries = {
+      screenrecord = {
+        name = "Screenrecord";
+        genericName = "recorder";
+        comment = "Interactively record screen";
+        exec = "${screenrecordScript}/bin/screenrecord.sh";
+        terminal = false;
+        type = "Application";
+        categories = [ "Utility" ];
+        icon = "nix-snowflake";
+      };
+      screenrecord-kill = {
+        name = "Screenrecord (Kill)";
+        genericName = "recorder-kill";
+        comment = "Kill recording screen";
+        exec = "${screenrecordKillScript}/bin/screenrecord-kill.sh";
+        terminal = false;
+        type = "Application";
+        categories = [ "Utility" ];
+        icon = "nix-snowflake";
+      };
+      monitor-switch = {
+        name = "Monitor switch focus";
+        genericName = "monitors";
+        comment = "Switch monitor focus";
+        exec = "${monitorsScript}/bin/monitors.sh";
+        terminal = false;
+        type = "Application";
+        categories = [ "Utility" ];
+        icon = "nix-snowflake";
+      };
+      app-switcher = {
+        name = "App Switcher";
+        genericName = "applications";
+        comment = "Switch application focus";
+        exec = "${applicationsScript}/bin/applications.sh";
+        terminal = false;
+        type = "Application";
+        categories = [ "Utility" ];
+        icon = "nix-snowflake";
+      };
+      caffeine = {
+        name = "Caffeine toggle";
+        genericName = "caffeine";
+        comment = "Toggle caffeine";
+        exec = "${caffeineScript}/bin/caffeine.sh";
+        terminal = false;
+        type = "Application";
+        categories = [ "Utility" ];
+        icon = "nix-snowflake";
+      };
+      default-sound-switcher = {
+        name = "Default Sound Device Switcher";
+        genericName = "sound";
+        comment = "Switch default sound device";
+        exec = "${soundScript}/bin/sound.sh";
+        terminal = false;
+        type = "Application";
+        categories = [ "Utility" ];
+        icon = "nix-snowflake";
+      };
+      keybind-helper = {
+        name = "keybind-helper";
+        genericName = "keybinds";
+        comment = "Show Hyprland keybinds";
+        exec = "${keybindHelper}/bin/keybind-helper.sh";
+        terminal = false;
+        type = "Application";
+        categories = [ "Utility" ];
+        icon = "nix-snowflake";
+      };
     };
 
-    # Screenshot scripts
-    home.file."bin/screenshot.sh" = {
-      enable = true;
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-        ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp -d)" - | ${pkgs.wl-clipboard}/bin/wl-copy
-      '';
-    };
-
-    # Screenrecord scripts
-    home.file."bin/screenrecord.sh" = {
-      enable = true;
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-        filename="${homeDir}/Videos/$(date +%Y-%m-%d_%H-%M-%S).mp4"
-        ${pkgs.wf-recorder}/bin/wf-recorder -g "$(${pkgs.slurp}/bin/slurp)" -t -f $filename
-        [[ -e $filename ]] && ${pkgs.libnotify}/bin/notify-send "Screenrecord" "Saved to $filename"
-      '';
-    };
-
-    # Screenrecord scripts
-    home.file."bin/screenrecord-kill.sh" = {
-      enable = true;
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-        killall -SIGINT wf-recorder
-      '';
-    };
-
-    # Screen record desktop file
-    home.file.".local/share/applications/screenrecord.desktop" = {
-      enable = true;
-      text = ''
-        [Desktop Entry]
-        Name=Screenrecord
-        GenericName=recorder
-        Comment=Interactively record screen
-        Exec=${homeDir}/bin/screenrecord.sh
-        Terminal=false
-        Type=Application
-        Keywords=recorder;screen;record;video;hyprland
-        Icon=nix-snowflake
-        Categories=Utility;
-      '';
-    };
-
-    # Screen record killer desktop file
-    home.file.".local/share/applications/screenrecord-kill.desktop" = {
-      enable = true;
-      text = ''
-        [Desktop Entry]
-        Name=Screenrecord (Kill)
-        GenericName=recorder-kill
-        Comment=Kill recording screen
-        Exec=${homeDir}/bin/screenrecord-kill.sh
-        Terminal=false
-        Type=Application
-        Keywords=recorder;screen;record;video;hyprland
-        Icon=nix-snowflake
-        Categories=Utility;
-      '';
-    };
-
-    # Battery notification script
-    home.file."bin/battpop.sh" = {
-      enable = true;
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-        ${pkgs.libnotify}/bin/notify-send $(${pkgs.acpi}/bin/acpi -b | grep -Eo [0-9]+% | ${pkgs.coreutils}/bin/head -1)
-      '';
-    };
-
-    # Monitor switching script
-    home.file."bin/monitors.sh" = {
-      enable = true;
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-        # Hyprland
-        # Script to select monitor and switch focus on it
-        selection=$(hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused == false) | (.name + ": " + .description)' | ${pkgs.fuzzel}/bin/fuzzel -d | ${pkgs.coreutils}/bin/cut -d':' -f1)
-        hyprctl dispatch focusmonitor $selection
-        ${pkgs.libnotify}/bin/notify-send "Monitor switched to $selection"
-      '';
-    };
-
-    # Monitor switch
-    home.file.".local/share/applications/monitor-switch.desktop" = {
-      enable = true;
-      text = ''
-        [Desktop Entry]
-        Name=Monitor switch focus
-        GenericName=monitors
-        Comment=Switch monitor focus
-        Exec=${homeDir}/bin/monitors.sh
-        Terminal=false
-        Type=Application
-        Keywords=hyprland;monitor
-        Icon=nix-snowflake
-        Categories=Utility;
-      '';
-    };
-
-    # Application switching script
-    home.file."bin/applications.sh" = {
-      enable = true;
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-        # Hyprland
-        # Script to select open apps and switch focus to it
-        # Excludes apps in special workspaces
-        selection=$(hyprctl clients -j | ${pkgs.jq}/bin/jq -r '.[] | select(.class != "") | select(.workspace.name | contains("special") | not) | (.class + ":" + .title + ":" + .address)' | ${pkgs.fuzzel}/bin/fuzzel -d --width=100 | ${pkgs.util-linux}/bin/rev | ${pkgs.coreutils}/bin/cut -d ':' -f1 | ${pkgs.util-linux}/bin/rev)
-
-        hyprctl dispatch focuswindow address:$selection
-      '';
-    };
-
-    # App switcher
-    home.file.".local/share/applications/app-switcher.desktop" = {
-      enable = true;
-      text = ''
-        [Desktop Entry]
-        Name=App Switcher
-        GenericName=applications
-        Comment=Switch application focus
-        Exec=${homeDir}/bin/applications.sh
-        Terminal=false
-        Type=Application
-        Keywords=hyprland;monitor
-        Icon=nix-snowflake
-        Categories=Utility;
-      '';
-    };
-
-    # Caffeine toggle script
-    home.file."bin/caffeine.sh" = {
-      enable = true;
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-        export caffeine_enabled="false"
-        ${pkgs.procps}/bin/ps aux | ${pkgs.gnugrep}/bin/grep -i systemd-inhibit | ${pkgs.gnugrep}/bin/grep -iq caffeine && caffeine_enabled="true"
-
-        if [[ "$caffeine_enabled" == "true" ]]
-        then
-            ${pkgs.procps}/bin/pkill -9 systemd-inhibit && ${pkgs.libnotify}/bin/notify-send "Disabled caffeine"
-        else
-            ${pkgs.systemd}/bin/systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep inf &
-            disown
-            ${pkgs.libnotify}/bin/notify-send "Enabled caffeine"
-        fi
-      '';
-    };
-
-    # Caffeine toggler
-    home.file.".local/share/applications/caffeine.desktop" = {
-      enable = true;
-      text = ''
-        [Desktop Entry]
-        Name=Caffeine toggle
-        GenericName=caffeine
-        Comment=Toggle caffeine
-        Exec=${homeDir}/bin/caffeine.sh
-        Terminal=false
-        Type=Application
-        Keywords=hyprland;monitor;caffeine;suspend
-        Icon=nix-snowflake
-        Categories=Utility;
-      '';
-    };
-
-    # Default sound device switching script
-    home.file."bin/sound.sh" = {
-      enable = true;
-      executable = true;
-      text = ''
-        #!/usr/bin/env bash
-
-        # This script is intended to make switching audio devices easier
-        # Intended for PipeWire
-
-        # Get current audio device info
-        wpctl_status=$(wpctl status)
-        audio_section=$(printf "$wpctl_status" | sed -n '/Audio/,/Streams/p')
-
-        # Choose whether to set output (speaker) or input (microphone)
-        selection=$(printf "Output\nInput" | fuzzel -d)
-
-        if [[ $selection == "Output" ]]
-        then
-            sink_selection=$(printf "$audio_section" | sed -n '/Sinks/,/Sink endpoints/p' | grep -E '\.' | cut -d'[' -f1 | fuzzel --width=100 -d | head -1)
-            sink_selection_name=$(printf "$sink_selection" | cut -d'.' -f2)
-            sink_selection_id=$(printf "$sink_selection" | grep -o '[0-9]*')
-            [[ -n $sink_selection_id ]] && wpctl set-default $sink_selection_id &&\
-                notify-send "Set default audio input to$sink_selection_name"
-        fi
-
-        if [[ $selection == "Input" ]]
-        then
-            source_selection=$(printf "$audio_section" | sed -n '/Sources/,/Source endpoints/p' | grep -E '\.' | cut -d'[' -f1 | fuzzel --width=100 -d | head -1)
-            source_selection_name=$(printf "$source_selection" | cut -d'.' -f2)
-            source_selection_id=$(printf "$source_selection" | grep -o '[0-9]*')
-            [[ -n $source_selection_id ]] && wpctl set-default $source_selection_id &&\
-                notify-send "Set default audio output to$source_selection_name"
-        fi
-      '';
-    };
-
-    # Default sound switcher
-    home.file.".local/share/applications/default-sound-switcher.desktop" = {
-      enable = true;
-      text = ''
-        [Desktop Entry]
-        Name=Default Sound Device Switcher
-        GenericName=sound
-        Comment=Switch default sound device
-        Exec=${homeDir}/bin/sound.sh
-        Terminal=false
-        Type=Application
-        Keywords=hyprland;audio
-        Icon=nix-snowflake
-        Categories=Utility;
-      '';
-    };
-
-    # Nord-themed Swaylock
     programs.swaylock = {
       enable = true;
       package = pkgs.swaylock-effects;
-      settings = {
-        image = "${dark-wallpaper}";
-        bs-hl-color = "b48eadff";
-        caps-lock-bs-hl-color = "d08770ff";
-        caps-lock-key-hl-color = "ebcb8bff";
-        font = "JetBrainsMono Nerd Font Mono";
-        indicator-radius = "25";
-        indicator-thickness = "10";
-        inside-color = "2e3440ff";
-        inside-clear-color = "81a1c1ff";
-        inside-ver-color = "5e81acff";
-        inside-wrong-color = "bf616aff";
-        key-hl-color = "a3be8cff";
-        layout-bg-color = "2e3440ff";
-        line-uses-ring = true;
-        ring-color = "3b4252ff";
-        ring-clear-color = "88c0d0ff";
-        ring-ver-color = "81a1c1ff";
-        ring-wrong-color = "d08770ff";
-        separator-color = "3b4252ff";
-        text-color = "eceff4ff";
-        text-clear-color = "3b4252ff";
-        text-ver-color = "3b4252ff";
-        text-wrong-color = "3b4252ff";
-      };
     };
 
     # Hyprland
@@ -462,16 +332,16 @@ in {
         exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
         exec-once = ${pkgs.dunst}/bin/dunst
         exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
-        exec-once = ${pkgs.swaybg}/bin/swaybg -i ${dark-wallpaper}
         exec-once = ${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets
 
         # Dark mode for apps
-        exec = gsettings set org.gnome.desktop.interface gtk-theme "Nordic-darker"   # for GTK3 apps
         exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
 
-        # Workaround for hypridle
+        # Workarounds
         exec-once = /run/current-system/sw/bin/systemctl restart --user hypridle.service
         exec-once = /run/current-system/sw/bin/systemctl restart --user ashell.service
+        exec-once = /run/current-system/sw/bin/systemctl restart --user hyprpaper.service
+        exec-once = /run/current-system/sw/bin/systemctl restart --user kdeconnect.service
 
         # Start terminal in special workspace so I can toggle it
         #exec-once = [workspace special:terminal] ${pkgs.ghostty}/bin/ghostty
@@ -515,12 +385,12 @@ in {
         # Firefox PiP
         windowrule {
           name = firefox-pip
-          match:title = ^(Picture-in-Picture)$
-          size = 20% 20%
-          float = yes
-          persistent_size = on
+          move = ((monitor_w*0.72)) ((monitor_h*0.07))
+          float = on
+          opacity = 0.95 0.75
           pin = on
-          move = 72% 7%
+          keep_aspect_ratio = on
+          match:title = ^(Picture-in-Picture)$
         }
 
         # Gestures
@@ -570,12 +440,13 @@ in {
         binde = , XF86MonBrightnessDown, exec, ${pkgs.libnotify}/bin/notify-send -e "Brightness: $(${pkgs.brillo}/bin/brillo)"
 
         # Productivity
-        bind = SUPER_SHIFT, s, exec, ${homeDir}/bin/screenshot.sh
-        bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
-        bind = SUPER_TAB, f, exec, ${homeDir}/bin/applications.sh
+        bind = SUPER_SHIFT, s, exec, ${screenshotScript}/bin/screenshot.sh
+        bind = CTRL_SHIFT, b, exec, ${battpopScript}/bin/battpop.sh
+        bind = $mainMod, Tab, exec, ${applicationsScript}/bin/applications.sh
         bind = CTRL_SHIFT, e, exec, hyprctl dispatch exit
-        bind = CTRL_SHIFT, b, exec, ${homeDir}/bin/battpop.sh
+        bind = CTRL_SHIFT, b, exec, ${battpopScript}/bin/battpop.sh
         bind = CTRL_SHIFT, d, exec, ${pkgs.bash}/bin/bash -c '${pkgs.libnotify}/bin/notify-send $(date "+%T")'
+        bind = CTRL_SUPER, h, exec, ${keybindHelper}/bin/keybind-helper.sh
 
         # Navigation
         bind = $mainMod, 1, workspace, 1
@@ -590,6 +461,10 @@ in {
         bind = $mainMod, bracketright, workspace, r+1
         bind = CTRL_SHIFT, bracketleft, focusmonitor, left
         bind = CTRL_SHIFT, bracketright, focusmonitor, right
+        bind = CTRL_ALT, left, exec, ${pkgs.hyprland}/bin/hyprctl dispatch movewindow l
+        bind = CTRL_ALT, right, exec, ${pkgs.hyprland}/bin/hyprctl dispatch movewindow r
+        bind = CTRL_ALT, up, exec, ${pkgs.hyprland}/bin/hyprctl dispatch movewindow u
+        bind = CTRL_ALT, down, exec, ${pkgs.hyprland}/bin/hyprctl dispatch movewindow d
 
         # Keyboard-driven mouse
         submap = cursor
@@ -637,6 +512,13 @@ in {
       };
     };
 
+    # Wallpaper daemon
+    services.hyprpaper.enable = true;
+
+    # KDE Connect
+    services.kdeconnect.enable = true;
+
+    # Idle/suspend daemon
     services.hypridle = {
       enable = true;
       settings = {

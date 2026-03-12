@@ -7,6 +7,13 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.11";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-25.05";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "flake-utils/systems";
+      inputs.nur.follows = "nur";
+      inputs.flake-parts.follows = "flake-parts";
+    };
     nvidia-patch = {
       url = "github:icewind1991/nvidia-patch-nixos";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -112,7 +119,7 @@
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     dark-wallpaper = {
-      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/wallpapers/nix-wallpaper-dracula.png";
+      url = ./assets/catppuccin-nix.png;
       flake = false;
     };
     light-wallpaper = {
@@ -177,6 +184,7 @@
                       nixpkgs-stable,
                       nixpkgs-pam-lid-fix,
                       myFlakes,
+                      stylix,
                       kyle,
                       nixpkgs-backports,
                       nixpkgs-lts,
@@ -223,6 +231,7 @@
         ./darwin/modules/stage-manager.nix
         ./darwin/modules/choose-launcher.nix
         ./darwin/modules/raycast.nix
+        ./darwin/modules/stylix.nix
       ];
     };
     commonHomeModules = [
@@ -238,6 +247,8 @@
       ./home/modules/gh.nix
       ./home/modules/librewolf.nix
       ./home/modules/llm.nix
+      ./home/modules/btop.nix
+      ./home/modules/cava.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -254,7 +265,7 @@
       ./home/modules/nord-terminal.nix
       ./home/modules/darwin-protondrive-link.nix
     ];
-    allHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
+    myHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
     # Combine all modules, excluding modules not relevant to platform
     platformHomeModules = if pkgs.stdenv.isDarwin then
       commonHomeModules ++ macosHomeModules
@@ -266,12 +277,17 @@
     };
     # For docs only (to enumerate _all_ home modules regardless of platform)
     homeModules.docs = { config, pkgs, ... }: {
-      imports = allHomeModules;
+      imports = myHomeModules;
     };
     extNixOSModules = [
       home-manager.nixosModules.home-manager
+      stylix.nixosModules.stylix
       kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
+    ];
+    # Modules for NixOS and Nix-Darwin
+    commonModules = [
+      ./base/stylix.nix
     ];
     myNixOSModules = [
       ./nixos/modules/defaults.nix
@@ -291,7 +307,8 @@
       ./nixos/modules/backups.nix
       ./nixos/modules/cloudflared.nix
       ./nixos/modules/rayhunter.nix
-    ];
+      ./nixos/modules/stylix.nix
+    ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
     };
@@ -308,6 +325,7 @@
         darwinModules.heywoodlh.darwin
         home-manager.darwinModules.home-manager
         cart.darwinModules.${system}.cart
+        stylix.darwinModules.stylix
         ./darwin/roles/base.nix
         ./darwin/roles/defaults.nix
         ./darwin/roles/pkgs.nix
@@ -342,6 +360,7 @@
 
           networking.hostName = myHostname;
           networking.computerName = myHostname;
+          heywoodlh.stylix.enable = true;
           heywoodlh.darwin = {
             sketchybar.enable = true;
             yabai.enable = true;
@@ -360,7 +379,7 @@
           };
           system.stateVersion = 6;
         }
-      ] ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
+      ] ++ commonModules ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
     };
 
     nixosConfig = machineType: myHostname: extraConf: nixpkgs.lib.nixosSystem {
@@ -392,6 +411,7 @@
               homeModules.heywoodlh.home
             ];
           };
+          heywoodlh.stylix.enable = true;
         }
         extraConf
       ] ++ lib.optionals (machineType == "server") [
@@ -779,6 +799,8 @@
             home.packages = with pkgs; [
               moonlight-qt
             ];
+            # Use local ollama instance
+            heywoodlh.home.llm.homelab = false;
             wayland.windowManager.hyprland.extraConfig = ''
               # change monitor to high resolution, the last argument is the scale factor
               monitor = , highres, auto, 1

@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, vidhanix, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -25,61 +25,66 @@ let
     # if result is ok, continue
 
     # make steam directory if it does not exist
-    mkdir -p ~/.steam/root/compatibilitytools.d
+    mkdir -p $HOME/.steam/root/compatibilitytools.d
 
     # extract proton tarball to steam directory
-    tar -xf $tarball_name -C ~/.steam/root/compatibilitytools.d/
+    tar -xf $tarball_name -C $HOME/.steam/root/compatibilitytools.d/
+  '';
+  fexFetcher = pkgs.writeShellScriptBin "fex-fetch.sh" ''
+    if [[ ! -e $HOME/.fex-emu/RootFS/Ubuntu_24_04.sqsh ]]
+    then
+      ${pkgs.libnotify}/bin/notify-send "Downloading rootfs for Steam"
+      ${pkgs.fex}/bin/FEXRootFSFetcher --distro-name "ubuntu" --distro-version "24.04" -y -x
+    else
+      ${pkgs.libnotify}/bin/notify-send "FEX rootfs for Steam already downloaded at $HOME/.fex-emu/RootFS/Ubuntu_24_04.sqsh"
+    fi
   '';
 in {
   programs.steam = {
-    enable = system == "x86_64-linux";
-    protontricks.enable = true;
+    enable = true;
+    package = if (system == "aarch64-linux") then
+      vidhanix.packages.${system}.muvm-steam
+    else pkgs.steam;
+    protontricks.enable = (system == "x86_64-linux");
     gamescopeSession.enable = true;
     localNetworkGameTransfers.openFirewall = true;
   };
 
-  environment.systemPackages = let
-    fexRunner = pkgs.writeShellScriptBin "fex-run" ''
-      if [[ ! -e $HOME/.fex-emu/RootFS/Ubuntu_24_04.sqsh ]]
-      then
-        ${pkgs.libnotify}/bin/notify-send "Downloading rootfs for Steam"
-        ${pkgs.fex}/bin/FEXRootFSFetcher --distro-name "ubuntu" --distro-version "24.04" -y -x
-      fi
-
-      ${pkgs.muvm}/bin/muvm \
-        --mount opengl:/run/opengl-driver:/run/opengl-driver \
-        --mount tmp:/tmp:/tmp \
-        --systemd-udevd-path /usr/lib/systemd/systemd-udevd \
-        -- $@
-    '';
-  in [ get-proton-ge ]
-  ++ lib.optionals (system == "aarch64-linux") [
-    pkgs.fex
-    pkgs.fuse
-    pkgs.muvm
-    pkgs.squashfuse
-    pkgs.steam-unwrapped
-    fexRunner
-    (pkgs.writeShellScriptBin "steam" ''
-      # for fex rootfs fetcher
-      STEAMDIR=$HOME/.local/share/Steam
-      mkdir -p $STEAMDIR
-
-      [[ -e $STEAMDIR/ubuntu12_32/steam ]] || tar -C $STEAMDIR -xvf ${pkgs.steam-unwrapped}/lib/steam/bootstraplinux_ubuntu12_32.tar.xz
-      ${fexRunner}/bin/fex-run $HOME/.local/share/Steam/ubuntu12_32/steam
-    '')
+  environment.systemPackages = with pkgs; [
+    get-proton-ge
+  ] ++ lib.optionals (system == "aarch64-linux") [
+    fex
+    fuse
+    muvm
+    squashfuse
+    fexFetcher
   ];
 
-  hardware.bluetooth.input = {
-    General = {
-      UserspaceHID = true;
-      ClassicBondedOnly = false;
-      LEAutoSecurity = false;
-    };
+  # FUSE required for FEX (FEX is part of muvm-steam)
+  programs.fuse = lib.optionalAttrs (system == "aarch64-linux") {
+    enable = true;
+    userAllowOther = true;
   };
+
+  hardware = {
+    graphics = lib.optionalAttrs (system == "aarch64-linux") {
+      enable32Bit = lib.mkForce false;
+    };
+    bluetooth.input = {
+      General = {
+        UserspaceHID = true;
+        ClassicBondedOnly = false;
+        LEAutoSecurity = false;
+      };
+    };
+    steam-hardware.enable = true;
+  };
+
   boot.kernelModules = [
     "hid_microsoft" # Xbox One Elite 2 controller driver preferred by Steam
     "uinput"
+  ] ++ lib.optionals (system == "aarch64-linux") [
+    "fuse"
   ];
   # https://github.com/ValveSoftware/steam-for-linux/issues/9310#issuecomment-2166248312
   services.udev.packages = [
@@ -90,4 +95,3 @@ in {
     })
   ];
 }
-

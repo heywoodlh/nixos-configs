@@ -334,6 +334,9 @@ in {
         exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
         exec-once = ${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets
 
+        # DBUS
+        exec-once = ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
+
         # Dark mode for apps
         exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
 

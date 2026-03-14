@@ -31,6 +31,38 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "devenv/flake-compat";
     };
+    # For dependents of treefmt-nix
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # For Steam on Apple Silicon
+    vidhanix = {
+      url = "github:vidhanio/vidhanix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nixpkgs-lib.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        home-manager.follows = "home-manager";
+        hyprland.follows = "hyprland";
+        nixos-apple-silicon.follows = "nixos-apple-silicon";
+        stylix.follows = "stylix";
+        systems.follows = "flake-utils/systems";
+        treefmt-nix.follows = "treefmt-nix";
+        git-hooks-nix.follows = "pre-commit-hooks";
+        agenix.follows = "";
+        disko.follows = "";
+        vidhan-fonts.follows = "";
+        vscode-extensions.follows = "";
+        spicetify-nix.follows = "";
+        ghostty-shader-playground.follows = "";
+        nixvim.follows = "";
+        impermanence.follows = "";
+        nixcord.follows = "";
+        nix-index-database.follows = "";
+        nix-cachyos-kernel.follows = "";
+      };
+    };
     # only to sync dependents that use nix
     nix = {
       url = "github:nixos/nix";
@@ -206,6 +238,7 @@
                       hexstrike-ai,
                       hyprland,
                       nix-on-droid,
+                      vidhanix,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

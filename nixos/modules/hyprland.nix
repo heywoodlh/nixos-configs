@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, hyprland, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -34,6 +34,8 @@ in {
     programs.uwsm.enable = false;
     hardware.brillo.enable = true;
     environment.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
+
+    security.pam.services.hyprlock = {};
 
     home-manager.users.${username} = {
       heywoodlh.home.hyprland = true;

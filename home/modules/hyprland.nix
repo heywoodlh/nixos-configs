@@ -19,7 +19,7 @@ let
     ${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --quick-access
   '';
   lockCmdPfx = "" + optionalString (onepasswordCfg.enable) "${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --lock;";
-  lockCmd = "${lockCmdPfx} ${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.swaylock-effects}/bin/swaylock -fF &";
+  lockCmd = "${lockCmdPfx} ${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.hyprlock}/bin/hyprlock";
   screenshotScript = pkgs.writeShellScriptBin "screenshot.sh" ''
     screenshot_path="${homeDir}/Downloads/screenshot.png"
     ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp -d)" - \
@@ -144,7 +144,6 @@ in {
       pulseaudio
       slurp
       swaybg
-      swaylock-effects
       util-linux
       wf-recorder
       wireplumber
@@ -309,10 +308,7 @@ in {
       };
     };
 
-    programs.swaylock = {
-      enable = true;
-      package = pkgs.swaylock-effects;
-    };
+    programs.hyprlock.enable = true;
 
     # Hyprland
     wayland.windowManager.hyprland = {

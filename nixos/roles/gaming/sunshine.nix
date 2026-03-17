@@ -82,8 +82,12 @@ in {
 
     autoStart = true;
     capSysAdmin = true;
-    openFirewall = true;
+    openFirewall = false; # disable on LAN
   };
+
+  # Only allow Sunshine over Tailscale
+  networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 47990 ];
+
   home-manager = {
     users.heywoodlh = { ... }: {
       imports = [

@@ -2150,7 +2150,7 @@
     "ssh-keys": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-+hoyg0H5gX99BogPmIqSYpB26Tb/5T2ZnEUfYSW0IF4=",
+        "narHash": "sha256-gjrKS2C2S44bn3pDrzuBOE7VHKymeFUMo6cTk8lKghs=",
         "type": "file",
         "url": "https://github.com/heywoodlh.keys"
       },

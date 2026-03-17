@@ -257,6 +257,10 @@
     arch = pkgs.stdenv.hostPlatform.uname.processor;
     linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
     darwinSystem = "${arch}-darwin";
+    # Modules for NixOS and Nix-Darwin
+    commonModules = [
+      ./base/stylix.nix
+    ];
     darwinModules.heywoodlh.darwin = { config, pkgs, ... }: {
       imports = [
         ./darwin/modules/sketchybar.nix
@@ -265,7 +269,7 @@
         ./darwin/modules/choose-launcher.nix
         ./darwin/modules/raycast.nix
         ./darwin/modules/stylix.nix
-      ];
+      ] ++ commonModules;
     };
     commonHomeModules = [
       ./home/modules/base.nix
@@ -317,10 +321,6 @@
       stylix.nixosModules.stylix
       kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
-    ];
-    # Modules for NixOS and Nix-Darwin
-    commonModules = [
-      ./base/stylix.nix
     ];
     myNixOSModules = [
       ./nixos/modules/defaults.nix
@@ -412,7 +412,7 @@
           };
           system.stateVersion = 6;
         }
-      ] ++ commonModules ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
+      ] ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
     };
 
     nixosConfig = machineType: myHostname: extraConf: nixpkgs.lib.nixosSystem {

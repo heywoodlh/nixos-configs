@@ -635,6 +635,25 @@
           ];
         };
 
+        nixos-framework = nixosConfig "laptop" "nixos-framework" {
+          imports = [
+            nixos-hardware.nixosModules.framework-intel-core-ultra-series1
+            ./nixos/roles/gaming/steam.nix
+            /etc/nixos/hardware-configuration.nix
+          ];
+
+          home-manager.users.heywoodlh = {
+            heywoodlh.home.llm.homelab = false;
+          };
+
+          swapDevices = [
+            {
+              device = "/swap";
+              size = 16 * 1024;
+            }
+          ];
+        };
+
         nixos-culug = nixosConfig "server" "nixos-culug" {
           imports = [
             ./nixos/hosts/culug.nix

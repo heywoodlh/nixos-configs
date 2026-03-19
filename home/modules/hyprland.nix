@@ -217,7 +217,7 @@ in {
           audio_sources_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 4";
           wifi_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
           vpn_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
-          bluetooth_more_cmd = "${pkgs.blueberry}/bin/blueberry";
+          bluetooth_more_cmd = "${pkgs.blueman}/bin/blueman-manager";
         };
 
         appearance = {

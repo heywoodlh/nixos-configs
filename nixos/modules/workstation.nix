@@ -101,7 +101,14 @@ in {
       enable = true;
       # Certain features, including CLI integration and system authentication support,
       # require enabling PolKit integration on some desktop environments (e.g. Plasma).
-      polkitPolicyOwners = [ "heywoodlh" ];
+      polkitPolicyOwners = [ "${username}" ];
+    };
+
+    security.polkit = {
+      enable = true;
+      adminIdentities = [
+        "unix-group:wheel"
+      ];
     };
 
     # configure keymap in X11
@@ -172,6 +179,8 @@ in {
         ln -s /run/user/${builtins.toString userUid}/keyring/ssh ${homeDir}/.ssh/agent.sock &> /dev/null || true
       '';
     };
+
+    services.gnome.gnome-settings-daemon.enable = true;
 
     # Home-manager configs
     home-manager = {

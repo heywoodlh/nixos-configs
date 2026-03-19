@@ -31,6 +31,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "devenv/flake-compat";
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.0.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.pre-commit.follows = "pre-commit-hooks";
+      inputs.crane.follows = "crane";
+    };
     # For dependents of treefmt-nix
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
@@ -77,6 +83,7 @@
     helix-src = {
       url = "github:heywoodlh/helix/issue-2719";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "lanzaboote/rust-overlay";
     };
     myFlakes = {
       url = ./flakes;
@@ -91,7 +98,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.crane.follows = "crane";
       inputs.flake-utils.follows = "flake-utils";
-      inputs.rust-overlay.follows = "helix-src/rust-overlay";
+      inputs.rust-overlay.follows = "lanzaboote/rust-overlay";
     };
     # for dependents of devenv
     devenv = {
@@ -239,6 +246,7 @@
                       hyprland,
                       nix-on-droid,
                       vidhanix,
+                      lanzaboote,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -295,6 +303,7 @@
       ./home/modules/vicinae.nix
       ./home/modules/linux-autostart.nix
       ./home/modules/onepassword.nix
+      ./home/modules/bluetuith.nix
     ];
     macosHomeModules = [
       ./home/modules/darwin-defaults.nix
@@ -639,19 +648,26 @@
           imports = [
             nixos-hardware.nixosModules.framework-intel-core-ultra-series1
             ./nixos/roles/gaming/steam.nix
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/framework-13.nix
           ];
 
           home-manager.users.heywoodlh = {
             heywoodlh.home.llm.homelab = false;
+            wayland.windowManager.hyprland.extraConfig = ''
+              # change monitor to high resolution, the last argument is the scale factor
+              monitor = , highres, auto, 1.6
+              # unscale XWayland
+              xwayland {
+                force_zero_scaling = true
+              }
+              # toolkit-specific scale
+              env = GDK_SCALE,2
+              env = XCURSOR_SIZE,24
+            '';
+            home.packages = with pkgs; [
+              moonlight-qt
+            ];
           };
-
-          swapDevices = [
-            {
-              device = "/swap";
-              size = 16 * 1024;
-            }
-          ];
         };
 
         nixos-culug = nixosConfig "server" "nixos-culug" {

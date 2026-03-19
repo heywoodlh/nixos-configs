@@ -1074,6 +1074,30 @@ list of attribute set of string
 
 
 
+## heywoodlh\.home\.bluetuith
+
+
+
+Enable heywoodlh Vim-keybindings bluetuith configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/bluetuith\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/bluetuith.nix)
+
+
+
 ## heywoodlh\.home\.btop
 
 
@@ -2373,8 +2397,6 @@ false
 
 ## heywoodlh\.rayhunter\.enable
 
-
-
 Enable heywoodlh rayhunter ntfy reverse proxy configuration\.
 
 
@@ -2396,6 +2418,8 @@ false
 
 
 ## heywoodlh\.rayhunter\.interface
+
+
 
 RayHunter USB interface name\.
 
@@ -2581,7 +2605,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/rmd6q422h2hd8a4sxlcxg2imgrlyzaaz-source/base/stylix\.nix](/nix/store/rmd6q422h2hd8a4sxlcxg2imgrlyzaaz-source/base/stylix.nix)
+ - [/nix/store/bksic3dbwc6j5z5p5idm1gnqf1yzldmq-source/base/stylix\.nix](/nix/store/bksic3dbwc6j5z5p5idm1gnqf1yzldmq-source/base/stylix.nix)
 
 
 
@@ -2605,7 +2629,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/rmd6q422h2hd8a4sxlcxg2imgrlyzaaz-source/base/stylix\.nix](/nix/store/rmd6q422h2hd8a4sxlcxg2imgrlyzaaz-source/base/stylix.nix)
+ - [/nix/store/bksic3dbwc6j5z5p5idm1gnqf1yzldmq-source/base/stylix\.nix](/nix/store/bksic3dbwc6j5z5p5idm1gnqf1yzldmq-source/base/stylix.nix)
 
 
 
@@ -2629,7 +2653,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/rmd6q422h2hd8a4sxlcxg2imgrlyzaaz-source/base/stylix\.nix](/nix/store/rmd6q422h2hd8a4sxlcxg2imgrlyzaaz-source/base/stylix.nix)
+ - [/nix/store/bksic3dbwc6j5z5p5idm1gnqf1yzldmq-source/base/stylix\.nix](/nix/store/bksic3dbwc6j5z5p5idm1gnqf1yzldmq-source/base/stylix.nix)
 
 
 

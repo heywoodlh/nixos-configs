@@ -45,6 +45,12 @@ in {
         '';
         systemd.enable = false;
       };
+      # support fingerprint
+      programs.hyprlock.settings = lib.optionalAttrs (config.services.fprintd.enable) {
+        auth = {
+          "fingerprint:enabled" = true;
+        };
+      };
     };
   };
 }

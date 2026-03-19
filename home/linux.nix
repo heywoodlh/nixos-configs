@@ -66,5 +66,8 @@ allowedSignersFile = ${signersFile}
     pinentry.package = pkgs.pinentry-curses;
   };
 
-  heywoodlh.home.dockerBins.enable = true;
+  heywoodlh.home = {
+    bluetuith = true;
+    dockerBins.enable = true;
+  };
 }

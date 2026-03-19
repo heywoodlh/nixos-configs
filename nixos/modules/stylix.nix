@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
+  # Set originally in `./base/stylix.nix`
+  # This file contains only NixOS specific config
   cfg = config.heywoodlh.stylix;
 in {
   config = lib.mkIf cfg.enable {
@@ -39,7 +41,17 @@ in {
         };
       };
     };
+
     home-manager.users.${cfg.username} = { ... }: {
+      # get rid of the god-awful orange
+      # for some reason `stylix.targets.ashell.override` does not seem to work
+      programs.ashell.settings.appearance = {
+        danger_color = lib.mkForce "#d8dee9";
+        workspace_colors = lib.mkForce [
+          "#d8dee9"
+          "#8aadf4"
+        ];
+      };
       fonts.fontconfig.enable = true;
       stylix.targets = {
         fuzzel.fonts.override = {

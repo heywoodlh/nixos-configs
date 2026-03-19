@@ -46,7 +46,7 @@ in {
       vidhanix.packages.${system}.muvm-steam
     else pkgs.steam;
     protontricks.enable = (system == "x86_64-linux");
-    gamescopeSession.enable = true;
+    gamescopeSession.enable = false;
     localNetworkGameTransfers.openFirewall = true;
   };
 

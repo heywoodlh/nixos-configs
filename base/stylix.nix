@@ -53,6 +53,10 @@ in {
           name = "Noto Color Emoji";
         };
       };
+      targets.plymouth = lib.optionalAttrs (pkgs.stdenv.isLinux) {
+        logo = ../assets/catppuccin-nix.png;
+        logoAnimated = false;
+      };
     };
     home-manager.users.${cfg.username} = { ... }: {
       stylix.targets = {

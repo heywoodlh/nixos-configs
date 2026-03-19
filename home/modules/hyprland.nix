@@ -129,7 +129,6 @@ in {
     home.packages = with pkgs; [
       acpi
       adwaita-icon-theme
-      bluetuith
       bluez
       brillo
       dunst

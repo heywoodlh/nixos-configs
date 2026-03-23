@@ -463,6 +463,7 @@
         ./nixos/roles/monitoring/node-exporter.nix
         { heywoodlh.server = true; }
       ] ++ lib.optionals (machineType == "workstation") [
+        ./nixos/roles/hardware/printers.nix
         { heywoodlh.workstation = true; }
       ] ++ lib.optionals (machineType == "laptop") [
         { heywoodlh.laptop = true; }

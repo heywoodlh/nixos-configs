@@ -344,6 +344,19 @@ in {
         # Start terminal in special workspace so I can toggle it
         #exec-once = [workspace special:terminal] ${pkgs.ghostty}/bin/ghostty
         workspace = special:terminal, on-created-empty:${pkgs.ghostty}/bin/ghostty --font-size=12
+
+        windowrule {
+          name = special-terminal-whitelist
+          match:workspace = s[true]n[e:terminal]
+          match:class = negative:^(com.mitchellh.ghostty|1password|emote)$
+          workspace = previous silent
+        }
+
+        windowrule {
+          name = ghostty
+          match:class = ^(com.mitchellh.ghostty)$
+        }
+
         # Animations
         animations {
           enabled = yes
@@ -383,7 +396,7 @@ in {
         # Firefox PiP
         windowrule {
           name = firefox-pip
-          move = ((monitor_w*0.72)) ((monitor_h*0.07))
+          move = ((monitor_w*0.68)) ((monitor_h*0.02))
           float = on
           opacity = 0.95 0.75
           pin = on
@@ -404,9 +417,9 @@ in {
         # General Keybindings
         $mainMod = SUPER
         # Terminal
-        bind = $mainMod, Return, exec, ${pkgs.ghostty}/bin/ghostty
-        bind = CTRL_ALT, t, exec, ${pkgs.ghostty}/bin/ghostty
-        bind = CTRL, grave, togglespecialworkspace, terminal
+        bind = $mainMod, Return, exec, ${pkgs.foot}/bin/foot
+        bind = CTRL_ALT, t, exec, ${pkgs.foot}/bin/foot
+        bind = CTRL, grave, exec, ${pkgs.hyprland}/bin/hyprctl dispatch togglespecialworkspace terminal
         # Emote picker
         bind = CTRL_SUPER, Space, exec, ${pkgs.emote}/bin/emote
         # Launcher
@@ -509,6 +522,9 @@ in {
         enable = true;
       };
     };
+
+    # Foot terminal for non-special workspaces
+    programs.foot.enable = true;
 
     # Wallpaper daemon
     services.hyprpaper.enable = true;

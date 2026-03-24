@@ -308,6 +308,7 @@ in {
     vdirsyncer
     zip
     myGit
+    git-lfs
     myJujutsu
     myFlakes.packages.${system}.tmux
     myFish # For non-nix use-cases

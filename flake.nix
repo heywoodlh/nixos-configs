@@ -350,6 +350,7 @@
       ./nixos/modules/cloudflared.nix
       ./nixos/modules/rayhunter.nix
       ./nixos/modules/stylix.nix
+      ./nixos/modules/grayjay.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;

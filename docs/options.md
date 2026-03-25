@@ -2395,7 +2395,79 @@ false
 
 
 
+## heywoodlh\.nixos\.grayjay\.enable
+
+Enable Grayjay container\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay.nix)
+
+
+
+## heywoodlh\.nixos\.grayjay\.tailscale
+
+
+
+Enable Grayjay container for use over Tailscale\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay.nix)
+
+
+
+## heywoodlh\.nixos\.grayjay\.volume
+
+
+
+Volume to use for Grayjay\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"grayjay"
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay.nix)
+
+
+
 ## heywoodlh\.rayhunter\.enable
+
+
 
 Enable heywoodlh rayhunter ntfy reverse proxy configuration\.
 
@@ -2605,7 +2677,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/sw2v6xb68db4302656r4x2j8fbd4ppqw-source/base/stylix\.nix](/nix/store/sw2v6xb68db4302656r4x2j8fbd4ppqw-source/base/stylix.nix)
+ - [/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix\.nix](/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix.nix)
 
 
 
@@ -2629,7 +2701,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/sw2v6xb68db4302656r4x2j8fbd4ppqw-source/base/stylix\.nix](/nix/store/sw2v6xb68db4302656r4x2j8fbd4ppqw-source/base/stylix.nix)
+ - [/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix\.nix](/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix.nix)
 
 
 
@@ -2653,7 +2725,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/sw2v6xb68db4302656r4x2j8fbd4ppqw-source/base/stylix\.nix](/nix/store/sw2v6xb68db4302656r4x2j8fbd4ppqw-source/base/stylix.nix)
+ - [/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix\.nix](/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix.nix)
 
 
 

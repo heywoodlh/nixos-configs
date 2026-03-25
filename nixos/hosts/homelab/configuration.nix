@@ -197,11 +197,14 @@ in {
   };
 
   heywoodlh.sshd.mfa = true;
+  heywoodlh.nixos.grayjay = {
+    enable = true;
+    volume = "/media/data-ssd/grayjay";
+  };
 
   # NextDNS
   networking.nameservers = [
     "45.90.28.89"
     "45.90.30.89"
   ];
-
 }

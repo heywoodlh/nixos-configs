@@ -2677,7 +2677,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix\.nix](/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix.nix)
+ - [/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix\.nix](/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix.nix)
 
 
 
@@ -2701,7 +2701,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix\.nix](/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix.nix)
+ - [/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix\.nix](/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix.nix)
 
 
 
@@ -2725,7 +2725,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix\.nix](/nix/store/pzs87f7bbmz4r2qr4fksgygzixympnsb-source/base/stylix.nix)
+ - [/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix\.nix](/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix.nix)
 
 
 

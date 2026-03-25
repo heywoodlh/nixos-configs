@@ -8,7 +8,7 @@ let
     overlays = [ nvidia-patch.overlays.default ];
   };
   # possible versions for the package here: https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nvidia-x11/default.nix
-  targetPkg = config.boot.kernelPackages.nvidiaPackages.stable;
+  targetPkg = config.boot.kernelPackages.nvidiaPackages.latest;
   pkgAfterFbc = if builtins.hasAttr targetPkg.version pkgs-nvidia.nvidia-patch-list.fbc
                 then pkgs-nvidia.nvidia-patch.patch-fbc targetPkg
                 else targetPkg;

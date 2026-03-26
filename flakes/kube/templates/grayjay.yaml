@@ -1,0 +1,113 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: grayjay
+    app.kubernetes.io/instance: grayjay
+  name: grayjay
+  namespace: @namespace@
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: grayjay-clusterrolebinding
+  labels:
+    app.kubernetes.io/name: grayjay
+    app.kubernetes.io/instance: grayjay
+subjects:
+  - kind: ServiceAccount
+    name: grayjay
+    namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: grayjay-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: grayjay
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: grayjay
+    app.kubernetes.io/instance: grayjay
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: grayjay
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: grayjay
+    app.kubernetes.io/instance: grayjay
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: grayjay
+subjects:
+- kind: ServiceAccount
+  name: grayjay
+  namespace: @namespace@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grayjay
+  namespace: @namespace@
+  labels:
+    app: grayjay
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "grayjay"
+    tailscale.com/tags: "tag:http,tag:grayjay"
+spec:
+  type: ClusterIP
+  ports:
+  - name: grayjay
+    port: 80
+    targetPort: grayjay-http
+    protocol: TCP
+  selector:
+    app: grayjay
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grayjay
+  namespace: @namespace@
+  labels:
+    app: grayjay
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: grayjay
+  template:
+    metadata:
+      labels:
+        app: grayjay
+    spec:
+      serviceAccountName: grayjay
+      containers:
+      - name: grayjay
+        image: "@image@"
+        imagePullPolicy: Always
+        ports:
+        - name: grayjay-http
+          containerPort: 11338
+          protocol: TCP
+        volumeMounts:
+        - name: http-datadir
+          mountPath: /data
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: http-datadir
+        hostPath:
+          path: @hostfolder@/http
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@

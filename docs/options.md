@@ -1452,7 +1452,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/xapxwv7ssc0y0xm2vyi88aqb2xi7rrfl-tmux/bin/tmux"
+"/nix/store/h6nr09y4w63xjy6hhx8kwkn36cypf62q-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -2395,79 +2395,7 @@ false
 
 
 
-## heywoodlh\.nixos\.grayjay\.enable
-
-Enable Grayjay container\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-false
-```
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay.nix)
-
-
-
-## heywoodlh\.nixos\.grayjay\.tailscale
-
-
-
-Enable Grayjay container for use over Tailscale\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-true
-```
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay.nix)
-
-
-
-## heywoodlh\.nixos\.grayjay\.volume
-
-
-
-Volume to use for Grayjay\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-"grayjay"
-```
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/grayjay.nix)
-
-
-
 ## heywoodlh\.rayhunter\.enable
-
-
 
 Enable heywoodlh rayhunter ntfy reverse proxy configuration\.
 
@@ -2677,7 +2605,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix\.nix](/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix.nix)
+ - [/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix\.nix](/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix.nix)
 
 
 
@@ -2701,7 +2629,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix\.nix](/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix.nix)
+ - [/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix\.nix](/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix.nix)
 
 
 
@@ -2725,7 +2653,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix\.nix](/nix/store/faqa6736nyijby946d4l8vjjb1y2k8yy-source/base/stylix.nix)
+ - [/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix\.nix](/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix.nix)
 
 
 

@@ -431,6 +431,13 @@
           image = "docker.io/grafana/grafana:11.6.8";
           storageclass = "local-path";
         };
+        grayjay = mkKubeDrv "grayjay" {
+          src = ./templates/grayjay.yaml;
+          namespace = "default";
+          image = "docker.io/heywoodlh/grayjay:2026_03";
+          nodename = "homelab";
+          hostfolder = "/media/data-ssd/grayjay";
+        };
         hashcat = mkKubeDrv "hashcat" {
           src = ./templates/hashcat.yaml;
           namespace = "security";

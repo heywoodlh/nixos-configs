@@ -729,6 +729,16 @@ in {
     "NixOS/nixpkgs" = "~/opt/nixpkgs";
   };
 
+  programs.codex.settings.projects = {
+    "${homeDir}/opt/nixos-configs".trust_level = "trusted";
+    "${homeDir}/opt/nixpkgs".trust_level = "trusted";
+    "${homeDir}/opt/dockerfiles".trust_level = "trusted";
+    "${homeDir}/opt/actions".trust_level = "trusted";
+    "${homeDir}/opt/infrastructure".trust_level = "trusted";
+    "${homeDir}/opt/cart".trust_level = "trusted";
+    "${homeDir}/opt/tailscale-acl".trust_level = "trusted";
+  };
+
   heywoodlh.home = {
     defaults = true;
     github-cli = true;
@@ -736,10 +746,6 @@ in {
       enable = true;
       ai = true;
       homelab = true;
-    };
-    llm = {
-      enable = true;
-      homelab = lib.mkDefault true;
     };
     aerc = {
       enable = true;

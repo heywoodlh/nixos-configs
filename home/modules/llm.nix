@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.llm;
+  homeDir = config.home.homeDirectory;
 in {
   options = {
     heywoodlh.home.llm = {
@@ -22,13 +23,6 @@ in {
         '';
         type = types.bool;
       };
-      model = mkOption {
-        default = "llama3.1:8b";
-        description = ''
-          Default Ollama model to use for codex.
-        '';
-        type = types.str;
-      };
     };
   };
 
@@ -36,25 +30,115 @@ in {
     url = if (cfg.homelab)
       then "http://ollama.barn-banana.ts.net:11434"
       else "http://localhost:11434";
+    # Lightweight model to always pull
+    model = "llama3.1:8b";
     myCodexOllama = pkgs.writeShellScriptBin "codex-ollama" ''
-      ${pkgs.codex}/bin/codex --oss --local-provider ollama --model ${cfg.model} $@
+      ${pkgs.codex}/bin/codex --oss --local-provider ollama $@
     '';
     ollamaPkg = if (cfg.homelab == false) then config.services.ollama.package else pkgs.ollama;
     myOllamaPull = pkgs.writeShellScript "ollama-pull" ''
       # Loop 3 times until model is pulled
-      (r=3;while ! ${ollamaPkg}/bin/ollama list &>/dev/null ; do ((--r))||exit;sleep 60;done) && ${ollamaPkg}/bin/ollama pull ${cfg.model}
+      (r=3;while ! ${ollamaPkg}/bin/ollama list &>/dev/null ; do ((--r))||exit;sleep 60;done) && ${ollamaPkg}/bin/ollama pull ${model}
     '';
     myOllama = pkgs.writeShellScriptBin "ollama" ''
       [[ -z "$OLLAMA_HOST" ]] && export OLLAMA_HOST="${url}"
       ${ollamaPkg}/bin/ollama $@
     '';
   in mkIf cfg.enable {
-    home.packages = with pkgs; [
-      codex
+    home.packages = [
       myCodexOllama
     ] ++ lib.optionals (cfg.homelab) [
       myOllama
     ];
+
+    programs.codex = {
+      enable = true;
+      enableMcpIntegration = true;
+      settings = {
+        features = {
+          streamable_shell = true;
+          rmcp_client = true;
+          unified_exec = true;
+          view_image_tool = true;
+          shell_tool = true; # enable `/shell`
+          apply_patch_freeform = true; # freeform patch syntax
+        };
+        history = {
+          persistence = "save-all";
+        };
+        shell_environment_policy = {
+          "inherit" = "all";
+          "set" = {
+            CODEX_AGENT = "1";
+          };
+        };
+        model = "gpt-5.3-codex";
+        model_provider = "openai"; # use openai by default
+        model_providers = {
+          ollama = {
+            name = "ollama";
+            base_url = "${url}/v1";
+            wire_api = "responses";
+          };
+        };
+        sandbox_mode = "workspace-write";
+        sandbox_workspace_write = {
+          writable_roots = [
+            "${homeDir}/.cache/sccache"
+            "${homeDir}/.cache/nix"
+            "/nix"
+            "/nix/var/nix"
+            "${homeDir}/.cache/pre-commit"
+            # Allow Codex sandboxed pre-commit runs to write their hook log.
+            "${homeDir}/.cache/pre-commit/pre-commit.log"
+          ];
+          network_access = true;
+          exclude_tmpdir_env_var = false;
+          exclude_slash_tmp = false;
+        };
+        # Multiple profiles let you switch between open‑source and OpenAI models.
+        # The UI can pick a profile via the `/select_profile` command or by setting
+        profiles = {
+          openai = {
+            model = "gpt-5.1-codex";
+            # Web search requires OpenAI backend.
+            features = {
+              web_search_request = true;
+            };
+          };
+          llama3 = {
+            model = "${model}";
+            model_provider = "ollama";
+            features = {
+              web_search_request = false;
+            };
+          };
+        };
+      };
+    };
+
+    programs.opencode = {
+      enable = true;
+      enableMcpIntegration = true;
+      settings = {
+        # Disable default cloud providers
+        "disabled_providers" = [
+          "opencode"
+        ];
+        provider.ollama = {
+          npm = "@ai-sdk/openai-compatible";
+          name = "Ollama (local)";
+          options = {
+            baseURL = "${url}/v1";
+          };
+          models = {
+            "${model}" = {
+              name = "${model}";
+            };
+          };
+        };
+      };
+    };
 
     systemd.user.services.ollama-pull = {
       Unit = {

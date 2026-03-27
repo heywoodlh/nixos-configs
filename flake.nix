@@ -868,8 +868,6 @@
             home.packages = with pkgs; [
               moonlight-qt
             ];
-            # Use local ollama instance
-            heywoodlh.home.llm.homelab = false;
             wayland.windowManager.hyprland.extraConfig = ''
               # change monitor to high resolution, the last argument is the scale factor
               monitor = , highres, auto, 1

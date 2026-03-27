@@ -1981,30 +1981,6 @@ false
 
 
 
-## heywoodlh\.home\.llm\.model
-
-
-
-Default Ollama model to use for codex\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-"llama3.1:8b"
-```
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
-
-
-
 ## heywoodlh\.home\.marp\.enable
 
 
@@ -2397,6 +2373,8 @@ false
 
 ## heywoodlh\.rayhunter\.enable
 
+
+
 Enable heywoodlh rayhunter ntfy reverse proxy configuration\.
 
 
@@ -2418,8 +2396,6 @@ false
 
 
 ## heywoodlh\.rayhunter\.interface
-
-
 
 RayHunter USB interface name\.
 
@@ -2605,7 +2581,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix\.nix](/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix.nix)
+ - [/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix\.nix](/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix.nix)
 
 
 
@@ -2629,7 +2605,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix\.nix](/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix.nix)
+ - [/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix\.nix](/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix.nix)
 
 
 
@@ -2653,7 +2629,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix\.nix](/nix/store/k45qwy92fw49x268zhwdk1kx2carm99l-source/base/stylix.nix)
+ - [/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix\.nix](/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix.nix)
 
 
 

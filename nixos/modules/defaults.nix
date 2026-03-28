@@ -278,9 +278,35 @@ in {
         alsa.support32Bit = true;
         pulse.enable = true;
       };
+      udev.extraRules = ''
+        KERNEL=="rtc0", GROUP="audio"
+        KERNEL=="hpet", GROUP="audio"
+      '';
     };
 
-    security.rtkit.enable = cfg.audio;
+    security = {
+      rtkit.enable = cfg.audio;
+      pam.loginLimits = lib.optionals (cfg.audio) [
+        {
+          domain = "@audio";
+          item = "memlock";
+          type = "-";
+          value = "unlimited";
+        }
+        {
+          domain = "@audio";
+          item = "nofile";
+          type = "soft";
+          value = "99999";
+        }
+        {
+          domain = "@audio";
+          item = "nofile";
+          type = "hard";
+          value = "524288";
+        }
+      ];
+    };
 
     users.users.${username} = {
       isNormalUser = true;

@@ -2417,6 +2417,102 @@ false
 
 
 
+## heywoodlh\.nixos\.gaming
+
+
+
+Enable heywoodlh gaming configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gaming\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gaming.nix)
+
+
+
+## heywoodlh\.nixos\.nvidia-patch
+
+
+
+Enable heywoodlh nvidia-patch configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/nvidia-patch\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/nvidia-patch.nix)
+
+
+
+## heywoodlh\.nixos\.sunshine\.enable
+
+
+
+Enable heywoodlh sunshine configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sunshine\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sunshine.nix)
+
+
+
+## heywoodlh\.nixos\.sunshine\.user
+
+
+
+User for heywoodlh configuration\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sunshine\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sunshine.nix)
+
+
+
 ## heywoodlh\.rayhunter\.enable
 
 
@@ -2629,7 +2725,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix\.nix](/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix.nix)
+ - [/nix/store/9l52fk2vvn72amz5q522vjv0v3vk9xv5-source/base/stylix\.nix](/nix/store/9l52fk2vvn72amz5q522vjv0v3vk9xv5-source/base/stylix.nix)
 
 
 
@@ -2653,7 +2749,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix\.nix](/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix.nix)
+ - [/nix/store/9l52fk2vvn72amz5q522vjv0v3vk9xv5-source/base/stylix\.nix](/nix/store/9l52fk2vvn72amz5q522vjv0v3vk9xv5-source/base/stylix.nix)
 
 
 
@@ -2677,7 +2773,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix\.nix](/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix.nix)
+ - [/nix/store/9l52fk2vvn72amz5q522vjv0v3vk9xv5-source/base/stylix\.nix](/nix/store/9l52fk2vvn72amz5q522vjv0v3vk9xv5-source/base/stylix.nix)
 
 
 

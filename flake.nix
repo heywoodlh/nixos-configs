@@ -350,6 +350,9 @@
       ./nixos/modules/cloudflared.nix
       ./nixos/modules/rayhunter.nix
       ./nixos/modules/stylix.nix
+      ./nixos/modules/sunshine.nix
+      ./nixos/modules/nvidia-patch.nix
+      ./nixos/modules/gaming.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -648,9 +651,10 @@
         nixos-framework = nixosConfig "laptop" "nixos-framework" {
           imports = [
             nixos-hardware.nixosModules.framework-intel-core-ultra-series1
-            ./nixos/roles/gaming/steam.nix
             ./nixos/hosts/framework-13.nix
           ];
+
+          heywoodlh.nixos.gaming = true;
 
           home-manager.users.heywoodlh = {
             heywoodlh.home.llm.homelab = false;
@@ -726,9 +730,6 @@
           '';
         in nixosConfig "workstation" "nixos-gaming" {
           imports = [
-            ./nixos/roles/gaming/nvidia-patch.nix
-            ./nixos/roles/gaming/sunshine.nix
-            ./nixos/roles/gaming/steam.nix
             ./nixos/hosts/gaming.nix
           ];
           environment.systemPackages = with pkgs; [
@@ -736,8 +737,14 @@
             reboot-windows
             clonehero
           ];
-          hardware.nvidia.open = true;
-          heywoodlh.server = true;
+          heywoodlh = {
+            server = true;
+            nixos = {
+              sunshine.enable = true;
+              nvidia-patch = true;
+              gaming = true;
+            };
+          };
           # Machine-specific sunshine configuration
           services.sunshine.settings = {
             sunshine_name = "nixos-gaming";
@@ -798,7 +805,6 @@
         nixos-blade = nixosConfig "laptop" "nixos-blade" {
           imports = [
             ./nixos/hosts/razer-blade-14.nix
-            ./nixos/roles/gaming/steam.nix
           ];
           hardware.openrazer = {
             enable = true;
@@ -806,6 +812,12 @@
               "heywoodlh"
             ];
           };
+
+          heywoodlh.nixos = {
+            nvidia-patch = true;
+            gaming = true;
+          };
+
           environment.systemPackages = with pkgs; [
             nvtopPackages.nvidia
           ];
@@ -822,34 +834,23 @@
               env = XCURSOR_SIZE,24
             '';
           };
-          # Nvidia settings
-          boot.kernelPackages = pkgs.linuxKernel.packages.linux_zen;
-          hardware.graphics = {
-            enable = true;
-          };
-          services.xserver.videoDrivers = ["nvidia"];
-          hardware.nvidia = {
-            modesetting.enable = true;
-            powerManagement.finegrained = false;
-            open = true;
-            nvidiaSettings = true;
-            package = pkgs.linuxKernel.packages.linux_zen.nvidiaPackages.beta;
-          };
         };
         nixos-m1-mac-mini = nixosConfig "workstation" "nixos-m1-mac-mini" {
           imports = [
             ./nixos/hosts/m1-mac-mini.nix
-            ./nixos/roles/gaming/steam.nix
           ];
-          heywoodlh.sshd.enable = true;
-          heywoodlh.apple-silicon = {
-            enable = true;
-            cachefile = "kernelcache.release.mac13g";
-            hash = {
-              # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/kernelcache.release.mac13g)`
-              cache = "sha256-SYR/EaaIDjeGfvhfzlTqgOihXNQQdBgqJbBJbq+wC9g=";
-              # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/all_firmware.tar.gz)`
-              firmware = "sha256-ydzrhKfH/8iYo1PyNDnXmjcniMaete8DnN/yXYJ7mT4=";
+          heywoodlh = {
+            sshd.enable = true;
+            nixos.gaming = true;
+            apple-silicon = {
+              enable = true;
+              cachefile = "kernelcache.release.mac13g";
+              hash = {
+                # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/kernelcache.release.mac13g)`
+                cache = "sha256-SYR/EaaIDjeGfvhfzlTqgOihXNQQdBgqJbBJbq+wC9g=";
+                # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/all_firmware.tar.gz)`
+                firmware = "sha256-ydzrhKfH/8iYo1PyNDnXmjcniMaete8DnN/yXYJ7mT4=";
+              };
             };
           };
           # Bootloader

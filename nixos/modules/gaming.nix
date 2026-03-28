@@ -115,6 +115,7 @@ in {
         "hid_microsoft" # Xbox One Elite 2 controller driver preferred by Steam
         "uinput"
         "bfq"
+        "ntsync"
       ] ++ lib.optionals (system == "aarch64-linux") [
         "fuse"
       ];
@@ -135,6 +136,11 @@ in {
           name = "xbox-one-elite-2-udev-rules";
           text = ''KERNEL=="hidraw*", TAG+="uaccess"'';
           destination = "/etc/udev/rules.d/60-xbox-elite-2-hid.rules";
+        })
+        (pkgs.writeTextFile {
+          name = "ntsync-udev-rules";
+          text = ''KERNEL=="ntsync", MODE="0660", TAG+="uaccess"'';
+          destination = "/etc/udev/rules.d/70-ntsync.rules";
         })
       ];
     };

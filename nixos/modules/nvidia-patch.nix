@@ -32,7 +32,14 @@ in {
       enable = true;
     };
     services.xserver.videoDrivers = ["nvidia"];
-    boot.kernelPackages = pkgs-nvidia.linuxKernel.packages.linux_zen;
+    boot = {
+      kernelParams = [
+        "nvidia.NVreg_UsePageAttributeTable=1"
+        "NVreg_InitializeSystemMemoryAllocations=0"
+        "NVreg_RegistryDwords=RMIntrLockingMode=1"
+      ];
+      kernelPackages = pkgs-nvidia.linuxKernel.packages.linux_zen;
+    };
     hardware.nvidia = {
       open = true;
       modesetting.enable = true;

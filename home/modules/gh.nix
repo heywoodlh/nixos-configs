@@ -27,7 +27,6 @@ in {
     programs.gh = {
       enable = true;
       extensions = with pkgs; [
-        github-copilot-cli
         gh-dash
         gh-eco
         gh-markdown-preview

@@ -23,6 +23,13 @@ in {
         '';
         type = types.bool;
       };
+      copilot = mkOption {
+        default = true;
+        description = ''
+          Enable GitHub Copilot.
+        '';
+        type = types.bool;
+      };
     };
   };
 
@@ -45,11 +52,14 @@ in {
       ${ollamaPkg}/bin/ollama $@
     '';
   in mkIf cfg.enable {
-    home.packages = [
+    home.packages = with pkgs; [
       myCodexOllama
+      github-copilot-cli
     ] ++ lib.optionals (cfg.homelab) [
       myOllama
     ];
+
+    heywoodlh.home.helix.ai = true;
 
     programs.codex = {
       enable = true;
@@ -72,8 +82,8 @@ in {
             CODEX_AGENT = "1";
           };
         };
-        model = "gpt-5.3-codex";
-        model_provider = "openai"; # use openai by default
+        model = "";
+        model_provider = "github-copilot"; # use copilot by default
         model_providers = {
           ollama = {
             name = "ollama";
@@ -96,16 +106,8 @@ in {
           exclude_tmpdir_env_var = false;
           exclude_slash_tmp = false;
         };
-        # Multiple profiles let you switch between open‑source and OpenAI models.
         # The UI can pick a profile via the `/select_profile` command or by setting
         profiles = {
-          openai = {
-            model = "gpt-5.1-codex";
-            # Web search requires OpenAI backend.
-            features = {
-              web_search_request = true;
-            };
-          };
           llama3 = {
             model = "${model}";
             model_provider = "ollama";

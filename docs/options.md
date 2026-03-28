@@ -1452,7 +1452,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/h6nr09y4w63xjy6hhx8kwkn36cypf62q-tmux/bin/tmux"
+"/nix/store/xapxwv7ssc0y0xm2vyi88aqb2xi7rrfl-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1632,7 +1632,7 @@ false
 
 
 
-Enable machine learning tooling with lsp-ai\.
+Enable machine learning tooling with lsp-ai (local Ollama and GitHub Copilot)\.
 
 
 
@@ -1677,11 +1677,35 @@ false
 
 
 
+## heywoodlh\.home\.helix\.local
+
+
+
+Prefer local vs cloud ai\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
+
+
+
 ## heywoodlh\.home\.helix\.model
 
 
 
-Default Ollama model to use for chat\.
+Default Ollama model to use for llama chat\.
 
 
 
@@ -1950,6 +1974,30 @@ boolean
 
 ```nix
 false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.copilot
+
+
+
+Enable GitHub Copilot\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
 ```
 
 *Declared by:*
@@ -2347,8 +2395,6 @@ string
 
 ## heywoodlh\.luks\.yubikey
 
-
-
 Enable Yubikey luks single factor decryption\.
 See the following gist for setup example:
 https://gist\.github\.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
@@ -2396,6 +2442,8 @@ false
 
 
 ## heywoodlh\.rayhunter\.interface
+
+
 
 RayHunter USB interface name\.
 
@@ -2581,7 +2629,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix\.nix](/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix.nix)
+ - [/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix\.nix](/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix.nix)
 
 
 
@@ -2605,7 +2653,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix\.nix](/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix.nix)
+ - [/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix\.nix](/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix.nix)
 
 
 
@@ -2629,7 +2677,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix\.nix](/nix/store/58g9vv923qdfks5p2d1ywjjczsn2c310-source/base/stylix.nix)
+ - [/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix\.nix](/nix/store/kzkdzfsh2mh8n74k6h8h7n162316wnzh-source/base/stylix.nix)
 
 
 

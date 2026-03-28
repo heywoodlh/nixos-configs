@@ -554,6 +554,11 @@ in {
 
       # Config file that gets loaded very last
       test -e ~/.config/fish/override.fish && source ~/.config/fish/override.fish || true
+
+      # Copilot chat
+      function chat
+        GITHUB_TOKEN=$(${op-wrapper}/bin/op-wrapper item get 'pym6vduaunymq6cokn35kupxky' --fields label=copilot --reveal) ${homeDir}/.nix-profile/bin/chat
+      end
     '';
   };
 

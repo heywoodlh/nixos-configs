@@ -5,34 +5,6 @@ with lib;
 let
   cfg = config.heywoodlh.nixos.gaming;
   system = pkgs.stdenv.hostPlatform.system;
-  get-proton-ge = pkgs.writeShellScriptBin "proton-ge.sh" ''
-    set -ex
-    export PATH="${pkgs.coreutils}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:$PATH"
-    # make temp working directory
-    rm -rf /tmp/proton-ge-custom
-    mkdir /tmp/proton-ge-custom
-    cd /tmp/proton-ge-custom
-
-    # download tarball
-    tarball_url=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep browser_download_url | cut -d\" -f4 | grep .tar.gz)
-    tarball_name=$(basename $tarball_url)
-    curl -# -L $tarball_url -o $tarball_name --no-progress-meter
-
-    # download checksum
-    checksum_url=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep browser_download_url | cut -d\" -f4 | grep .sha512sum)
-    checksum_name=$(basename $checksum_url)
-    curl -# -L $checksum_url -o $checksum_name --no-progress-meter
-
-    # check tarball with checksum
-    sha512sum -c $checksum_name
-    # if result is ok, continue
-
-    # make steam directory if it does not exist
-    mkdir -p $HOME/.steam/root/compatibilitytools.d
-
-    # extract proton tarball to steam directory
-    tar -xf $tarball_name -C $HOME/.steam/root/compatibilitytools.d/
-  '';
   fexFetcher = pkgs.writeShellScriptBin "fex-fetch.sh" ''
     if [[ ! -e $HOME/.fex-emu/RootFS/Ubuntu_24_04.sqsh ]]
     then
@@ -40,6 +12,72 @@ let
       ${pkgs.fex}/bin/FEXRootFSFetcher --distro-name "ubuntu" --distro-version "24.04" -y -x
     else
       ${pkgs.libnotify}/bin/notify-send "FEX rootfs for Steam already downloaded at $HOME/.fex-emu/RootFS/Ubuntu_24_04.sqsh"
+    fi
+  '';
+  get-custom-proton = pkgs.writeShellScriptBin "proton-custom.sh" ''
+    export PATH="${pkgs.coreutils}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:${pkgs.gzip}/bin:${pkgs.xz}/bin:${pkgs.jq}/bin:$PATH"
+    if [[ -z "$1" ]]
+    then
+      echo proton-cachyos usage: $0 "CachyOS/proton-cachyos"
+      echo glorious-eggroll usage: $0 "GloriousEggroll/proton-ge-custom"
+      exit 0
+    else
+      target="$1"
+    fi
+
+    if [[ "$target" != "CachyOS/proton-cachyos" ]] && [[ "$target" != "GloriousEggroll/proton-ge-custom" ]]
+    then
+      echo ERROR: must provide valid proton target
+      echo proton-cachyos usage: $0 "CachyOS/proton-cachyos"
+      echo glorious-eggroll usage: $0 "GloriousEggroll/proton-ge-custom"
+      exit 0
+    fi
+
+    if [[ "$target" == "CachyOS/proton-cachyos" ]]
+    then
+      # https://github.com/CachyOS/proton-cachyos/releases/download/cachyos-10.0-20260324-slr/proton-cachyos-10.0-20260324-slr-x86_64.tar.xz
+      suffix="slr-x86_64.tar.xz"
+      shasum_suffix="slr-x86_64.sha512sum"
+    fi
+
+    if [[ "$target" == "GloriousEggroll/proton-ge-custom" ]]
+    then
+      # https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton10-34/GE-Proton10-34.tar.gz
+      suffix=".tar.gz"
+      shasum_suffix=".sha512sum"
+    fi
+
+    STEAM_DIR="$HOME/.steam/root/compatibilitytools.d"
+    release_tag=$(curl -s https://api.github.com/repos/$target/releases/latest | jq -r '.tag_name')
+    if ls $STEAM_DIR | grep -q "$release_tag"
+    then
+      echo "Latest $target release already downloaded."
+    else
+      set -ex
+      # make temp working directory
+      rm -rf /tmp/proton-custom
+      mkdir /tmp/proton-custom
+      cd /tmp/proton-custom
+
+      # download tarball
+      tarball_url=$(curl -s https://api.github.com/repos/$target/releases/latest | grep browser_download_url | cut -d\" -f4 | grep $suffix)
+      tarball_name=$(basename $tarball_url)
+      curl -# -L $tarball_url -o $tarball_name --no-progress-meter
+
+      # download checksum
+      checksum_url=$(curl -s https://api.github.com/repos/$target/releases/latest | grep browser_download_url | cut -d\" -f4 | grep $shasum_suffix)
+      checksum_name=$(basename $checksum_url)
+      curl -# -L $checksum_url -o $checksum_name --no-progress-meter
+
+      # check tarball with checksum
+      sha512sum -c $checksum_name
+      # if result is ok, continue
+
+      # make steam directory if it does not exist
+      mkdir -p "$STEAM_DIR"
+
+      # extract proton tarball to steam directory
+      tar -xf $tarball_name -C "$STEAM_DIR"
     fi
   '';
 in {
@@ -52,6 +90,7 @@ in {
   };
 
   config = mkIf cfg {
+    heywoodlh.nixos.cachyos-kernel.enable = true;
     programs.steam = {
       enable = true;
       package = if (system == "aarch64-linux") then
@@ -63,7 +102,9 @@ in {
     };
 
     environment.systemPackages = with pkgs; [
-      get-proton-ge
+      protonup-ng
+    ] ++ lib.optionals (system == "x86_64-linux") [
+      get-custom-proton
     ] ++ lib.optionals (system == "aarch64-linux") [
       fex
       fuse
@@ -181,5 +222,12 @@ in {
         echo "Done restarting pci-latency service!"
       '';
     };
+
+    home-manager.users.${config.heywoodlh.defaults.user.name}.home.activation.get-latest-proton = lib.optionalString (system == "x86_64-linux") ''
+      # GloriousEggroll
+      ${get-custom-proton}/bin/proton-custom.sh "GloriousEggroll/proton-ge-custom"
+      # CachyOS proton
+      ${get-custom-proton}/bin/proton-custom.sh "CachyOS/proton-cachyos"
+    '';
   };
 }

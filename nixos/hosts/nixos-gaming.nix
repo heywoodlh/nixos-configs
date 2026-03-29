@@ -25,5 +25,11 @@
 
   networking.useDHCP = lib.mkDefault true;
 
+  system.activationScripts.clear-drkonqi-crashes = {
+    text = ''
+      rm -rf /home/heywoodlh/.cache/drkonqi/crashes
+    '';
+  };
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }

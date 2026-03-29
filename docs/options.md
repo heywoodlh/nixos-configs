@@ -805,6 +805,14 @@ User for heywoodlh configuration\.
 *Type:*
 submodule
 
+
+
+*Default:*
+
+```nix
+{ }
+```
+
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
 
@@ -1452,7 +1460,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/xapxwv7ssc0y0xm2vyi88aqb2xi7rrfl-tmux/bin/tmux"
+"/nix/store/2caczhkyzl85ydmhpk8c2r8rrj01l0ql-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1831,6 +1839,14 @@ User for heywoodlh configuration\.
 
 *Type:*
 submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
 
 *Declared by:*
  - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
@@ -2417,6 +2433,54 @@ false
 
 
 
+## heywoodlh\.nixos\.cachyos-kernel\.enable
+
+
+
+Enable heywoodlh cachyos-kernel configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cachyos-kernel\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cachyos-kernel.nix)
+
+
+
+## heywoodlh\.nixos\.cachyos-kernel\.kernel
+
+
+
+Desired CachyOS kernel version\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"linuxPackages-cachyos-latest-zen4"
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cachyos-kernel\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cachyos-kernel.nix)
+
+
+
 ## heywoodlh\.nixos\.gaming
 
 
@@ -2725,7 +2789,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/fyjg423zfwxlsswzv4jv8fscv24jhw0d-source/base/stylix\.nix](/nix/store/fyjg423zfwxlsswzv4jv8fscv24jhw0d-source/base/stylix.nix)
+ - [/nix/store/jqg9zx8zgbcmq6cqfx9gvvz1yrc14d95-source/base/stylix\.nix](/nix/store/jqg9zx8zgbcmq6cqfx9gvvz1yrc14d95-source/base/stylix.nix)
 
 
 
@@ -2749,7 +2813,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/fyjg423zfwxlsswzv4jv8fscv24jhw0d-source/base/stylix\.nix](/nix/store/fyjg423zfwxlsswzv4jv8fscv24jhw0d-source/base/stylix.nix)
+ - [/nix/store/jqg9zx8zgbcmq6cqfx9gvvz1yrc14d95-source/base/stylix\.nix](/nix/store/jqg9zx8zgbcmq6cqfx9gvvz1yrc14d95-source/base/stylix.nix)
 
 
 
@@ -2773,7 +2837,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/fyjg423zfwxlsswzv4jv8fscv24jhw0d-source/base/stylix\.nix](/nix/store/fyjg423zfwxlsswzv4jv8fscv24jhw0d-source/base/stylix.nix)
+ - [/nix/store/jqg9zx8zgbcmq6cqfx9gvvz1yrc14d95-source/base/stylix\.nix](/nix/store/jqg9zx8zgbcmq6cqfx9gvvz1yrc14d95-source/base/stylix.nix)
 
 
 

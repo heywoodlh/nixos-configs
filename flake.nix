@@ -216,6 +216,12 @@
       inputs.nix-formatter-pack.follows = "nix-formatter-pack";
       inputs.nmd.follows = "nmd";
     };
+    nix-cachyos-kernel = {
+      url = "github:xddxdd/nix-cachyos-kernel/release";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.flake-compat.follows = "devenv/flake-compat";
+    };
   };
 
   outputs = inputs@{ self,
@@ -247,6 +253,7 @@
                       nix-on-droid,
                       vidhanix,
                       lanzaboote,
+                      nix-cachyos-kernel,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -353,6 +360,7 @@
       ./nixos/modules/sunshine.nix
       ./nixos/modules/nvidia-patch.nix
       ./nixos/modules/gaming.nix
+      ./nixos/modules/cachyos-kernel.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;

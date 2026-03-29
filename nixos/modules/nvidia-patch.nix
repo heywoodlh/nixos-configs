@@ -28,6 +28,7 @@ in {
   };
 
   config = mkIf cfg {
+    heywoodlh.nixos.cachyos-kernel.enable = true;
     hardware.graphics = {
       enable = true;
     };
@@ -38,7 +39,6 @@ in {
         "NVreg_InitializeSystemMemoryAllocations=0"
         "NVreg_RegistryDwords=RMIntrLockingMode=1"
       ];
-      kernelPackages = pkgs-nvidia.linuxKernel.packages.linux_zen;
     };
     hardware.nvidia = {
       open = true;

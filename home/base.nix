@@ -679,20 +679,6 @@ in {
   '';
   nix.settings.builders = myBuilders;
 
-  programs.iamb = {
-    enable = true;
-    settings = {
-      default_profile = "beeper";
-      profiles.beeper = {
-        user_id = "@heywoodlh:beeper.com";
-        url = "https://matrix.beeper.com";
-      };
-      settings = {
-        notifications.enabled = false;
-      };
-    };
-  };
-
   programs.neovim = {
     enable = true;
     package = myVim;

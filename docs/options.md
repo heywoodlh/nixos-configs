@@ -1997,30 +1997,6 @@ false
 
 
 
-## heywoodlh\.home\.llm\.copilot
-
-
-
-Enable GitHub Copilot\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-true
-```
-
-*Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
-
-
-
 ## heywoodlh\.home\.llm\.homelab
 
 
@@ -2411,6 +2387,8 @@ string
 
 ## heywoodlh\.luks\.yubikey
 
+
+
 Enable Yubikey luks single factor decryption\.
 See the following gist for setup example:
 https://gist\.github\.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
@@ -2434,8 +2412,6 @@ false
 
 
 ## heywoodlh\.nixos\.cachyos-kernel\.enable
-
-
 
 Enable heywoodlh cachyos-kernel configuration\.
 
@@ -2789,7 +2765,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/0qzximjvki6mqf8i6j14zzp3a5ldrvmg-source/base/stylix\.nix](/nix/store/0qzximjvki6mqf8i6j14zzp3a5ldrvmg-source/base/stylix.nix)
+ - [/nix/store/5hzgg04q51zimki38ak6z2c2izspfyj7-source/base/stylix\.nix](/nix/store/5hzgg04q51zimki38ak6z2c2izspfyj7-source/base/stylix.nix)
 
 
 
@@ -2813,7 +2789,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0qzximjvki6mqf8i6j14zzp3a5ldrvmg-source/base/stylix\.nix](/nix/store/0qzximjvki6mqf8i6j14zzp3a5ldrvmg-source/base/stylix.nix)
+ - [/nix/store/5hzgg04q51zimki38ak6z2c2izspfyj7-source/base/stylix\.nix](/nix/store/5hzgg04q51zimki38ak6z2c2izspfyj7-source/base/stylix.nix)
 
 
 
@@ -2837,7 +2813,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0qzximjvki6mqf8i6j14zzp3a5ldrvmg-source/base/stylix\.nix](/nix/store/0qzximjvki6mqf8i6j14zzp3a5ldrvmg-source/base/stylix.nix)
+ - [/nix/store/5hzgg04q51zimki38ak6z2c2izspfyj7-source/base/stylix\.nix](/nix/store/5hzgg04q51zimki38ak6z2c2izspfyj7-source/base/stylix.nix)
 
 
 

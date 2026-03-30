@@ -6,6 +6,12 @@ let
   cfg = config.heywoodlh.stylix;
 in {
   config = lib.mkIf cfg.enable {
+    stylix = {
+      targets.plymouth = {
+        logo = ../../assets/catppuccin-nix.png;
+        logoAnimated = false;
+      };
+    };
     fonts = {
       enableDefaultPackages = true;
       fontDir.enable = true;

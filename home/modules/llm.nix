@@ -23,13 +23,6 @@ in {
         '';
         type = types.bool;
       };
-      copilot = mkOption {
-        default = true;
-        description = ''
-          Enable GitHub Copilot.
-        '';
-        type = types.bool;
-      };
     };
   };
 
@@ -82,15 +75,6 @@ in {
             CODEX_AGENT = "1";
           };
         };
-        model = "";
-        model_provider = "github-copilot"; # use copilot by default
-        model_providers = {
-          ollama = {
-            name = "ollama";
-            base_url = "${url}/v1";
-            wire_api = "responses";
-          };
-        };
         sandbox_mode = "workspace-write";
         sandbox_workspace_write = {
           writable_roots = [
@@ -105,16 +89,6 @@ in {
           network_access = true;
           exclude_tmpdir_env_var = false;
           exclude_slash_tmp = false;
-        };
-        # The UI can pick a profile via the `/select_profile` command or by setting
-        profiles = {
-          llama3 = {
-            model = "${model}";
-            model_provider = "ollama";
-            features = {
-              web_search_request = false;
-            };
-          };
         };
       };
     };

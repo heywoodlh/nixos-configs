@@ -184,6 +184,15 @@ let
       nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-desktop" --impure
       echo "$targets" | grep -q 'skip-cache' || nix run "nixpkgs#attic-client" -- push nixos ./result
       rm -f result
+
+      # Also test Nvidia stuff
+      if arch | grep -q x86_64
+      then
+        printf "\nTesting NixOS Nvidia Desktop build\n"
+        nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-blade" --impure
+        echo "$targets" | grep -q 'skip-cache' || nix run "nixpkgs#attic-client" -- push nixos ./result
+        rm -f result
+      fi
     fi
     # Server
     if echo "$targets" | grep -q 'nixos-server'
@@ -219,7 +228,7 @@ let
     # Test linux
     if echo "$targets" | ${pkgs.gnugrep}/bin/grep -qE 'home-manager|nixos-desktop|nixos-server'
     then
-      for server in "dev.barn-banana.ts.net" "ubuntu-arm64.barn-banana.ts.net"
+      for server in "homelab.barn-banana.ts.net" "nixos-m1-mac-mini.barn-banana.ts.net"
       do
         ${pkgs.openssh}/bin/ssh heywoodlh@''${server} sudo rm -rf /tmp/nixos-configs || echo "Failed to remove existing nixos-configs from ''${server}"
         echo "Copying nixos-configs to ''${server}"

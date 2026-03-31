@@ -90,7 +90,6 @@ in {
   };
 
   config = mkIf cfg {
-    heywoodlh.nixos.cachyos-kernel.enable = (config.nixpkgs.hostPlatform == "x86_64-linux"); # using `system` variable results in recursion -- this works around it
     programs.steam = {
       enable = true;
       package = if (system == "aarch64-linux") then
@@ -99,6 +98,11 @@ in {
       protontricks.enable = (system == "x86_64-linux");
       gamescopeSession.enable = false;
       localNetworkGameTransfers.openFirewall = true;
+    };
+
+    programs.gamemode = {
+      enable = true;
+      enableRenice = true;
     };
 
     environment.systemPackages = with pkgs; [

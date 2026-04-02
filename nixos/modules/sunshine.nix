@@ -139,15 +139,7 @@ in {
           wineWow64Packages.stable # support both 32-bit and 64-bit applications
           winetricks
         ];
-        #heywoodlh.home.autostart = [
-        #  {
-        #    name = "Steam";
-        #    command = ''
-        #      sleep 30 # start last
-        #      ${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/bigpicture
-        #    '';
-        #  }
-        #];
+        systemd.user.startServices = true;
       };
     };
   };

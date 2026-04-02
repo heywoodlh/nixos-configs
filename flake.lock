@@ -1104,20 +1104,24 @@
       }
     },
     "jovian-nixos": {
-      "flake": false,
+      "inputs": {
+        "nix-github-actions": "nix-github-actions",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1767888166,
-        "narHash": "sha256-dfZKtAv2bTD8EsOxLQ6/a7zSZt8KTy+HuRq3wz1z3LA=",
-        "ref": "development",
-        "rev": "3e0747d31474cdb182801518e39511eed2c84c91",
-        "revCount": 1468,
-        "type": "git",
-        "url": "https://github.com/Jovian-Experiments/Jovian-NixOS"
+        "lastModified": 1775071677,
+        "narHash": "sha256-EkVrhsEVG8FVodTPduAFC+qnb9YnKboF0It29zGJx8U=",
+        "owner": "Jovian-Experiments",
+        "repo": "Jovian-NixOS",
+        "rev": "049bfbe4cc042e6003414d0875f0a70873fc4d6b",
+        "type": "github"
       },
       "original": {
-        "ref": "development",
-        "type": "git",
-        "url": "https://github.com/Jovian-Experiments/Jovian-NixOS"
+        "owner": "Jovian-Experiments",
+        "repo": "Jovian-NixOS",
+        "type": "github"
       }
     },
     "jujutsu-flake": {
@@ -1426,6 +1430,28 @@
       "original": {
         "owner": "Gerschtli",
         "repo": "nix-formatter-pack",
+        "type": "github"
+      }
+    },
+    "nix-github-actions": {
+      "inputs": {
+        "nixpkgs": [
+          "jovian-nixos",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1729697500,
+        "narHash": "sha256-VFTWrbzDlZyFHHb1AlKRiD/qqCJIripXKiCSFS8fAOY=",
+        "owner": "zhaofengli",
+        "repo": "nix-github-actions",
+        "rev": "e418aeb728b6aa5ca8c5c71974e7159c2df1d8cf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zhaofengli",
+        "ref": "matrix-name",
+        "repo": "nix-github-actions",
         "type": "github"
       }
     },

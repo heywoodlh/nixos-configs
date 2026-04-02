@@ -146,10 +146,9 @@
     osquery-fix-nixpkgs = {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
-    # Fetch the "development" branch of the Jovian-NixOS repository (Steam Deck)
     jovian-nixos = {
-      url = "git+https://github.com/Jovian-Experiments/Jovian-NixOS?ref=development";
-      flake = false;
+      url = "github:Jovian-Experiments/Jovian-NixOS";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nur = {
       url = "github:nix-community/NUR";
@@ -337,6 +336,7 @@
       stylix.nixosModules.stylix
       kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
+      jovian-nixos.nixosModules.default
     ];
     myNixOSModules = [
       ./nixos/modules/defaults.nix
@@ -361,6 +361,7 @@
       ./nixos/modules/nvidia-patch.nix
       ./nixos/modules/gaming.nix
       ./nixos/modules/cachyos-kernel.nix
+      ./nixos/modules/steam-deck.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;

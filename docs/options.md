@@ -1460,7 +1460,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/2caczhkyzl85ydmhpk8c2r8rrj01l0ql-tmux/bin/tmux"
+"/nix/store/47ldssxz80adkd8s7lr6r5a4wckm9k04-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -2505,6 +2505,30 @@ false
 
 
 
+## heywoodlh\.nixos\.steam-deck
+
+
+
+Enable heywoodlh Steam Deck configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/steam-deck\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/steam-deck.nix)
+
+
+
 ## heywoodlh\.nixos\.sunshine\.enable
 
 
@@ -2765,7 +2789,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/jsqik7zbgn0khq619mzzv2fv7ljh6n5z-source/base/stylix\.nix](/nix/store/jsqik7zbgn0khq619mzzv2fv7ljh6n5z-source/base/stylix.nix)
+ - [/nix/store/bifvkbic27iv3ck696xlay4dxamqh56m-source/base/stylix\.nix](/nix/store/bifvkbic27iv3ck696xlay4dxamqh56m-source/base/stylix.nix)
 
 
 
@@ -2789,7 +2813,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/jsqik7zbgn0khq619mzzv2fv7ljh6n5z-source/base/stylix\.nix](/nix/store/jsqik7zbgn0khq619mzzv2fv7ljh6n5z-source/base/stylix.nix)
+ - [/nix/store/bifvkbic27iv3ck696xlay4dxamqh56m-source/base/stylix\.nix](/nix/store/bifvkbic27iv3ck696xlay4dxamqh56m-source/base/stylix.nix)
 
 
 
@@ -2813,7 +2837,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/jsqik7zbgn0khq619mzzv2fv7ljh6n5z-source/base/stylix\.nix](/nix/store/jsqik7zbgn0khq619mzzv2fv7ljh6n5z-source/base/stylix.nix)
+ - [/nix/store/bifvkbic27iv3ck696xlay4dxamqh56m-source/base/stylix\.nix](/nix/store/bifvkbic27iv3ck696xlay4dxamqh56m-source/base/stylix.nix)
 
 
 

@@ -96,7 +96,6 @@ in {
         vidhanix.packages.${system}.muvm-steam
       else pkgs.steam;
       protontricks.enable = (system == "x86_64-linux");
-      gamescopeSession.enable = false;
       localNetworkGameTransfers.openFirewall = true;
     };
 
@@ -233,5 +232,32 @@ in {
       # CachyOS proton
       ${get-custom-proton}/bin/proton-custom.sh "CachyOS/proton-cachyos"
     '';
+
+    # Use Decky loader if Gamescope is enabled for Steam Deck like UX
+    # Requires enabling CEF remote debugging on the Developer menu settings to work.
+    jovian.decky-loader = {
+      enable = true;
+      user = config.heywoodlh.defaults.user.name;
+      extraPackages = with pkgs; [
+        power-profiles-daemon
+        inotify-tools
+        libpulseaudio
+        coreutils
+        gamescope
+        gamemode
+        mangohud
+        pciutils
+        systemd
+        gnugrep
+        python3
+        gnused
+        procps
+        gawk
+        file
+      ];
+      extraPythonPackages = pythonPkgs: with pythonPkgs; [
+        click
+      ];
+    };
   };
 }

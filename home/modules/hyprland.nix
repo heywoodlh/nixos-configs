@@ -540,6 +540,7 @@ in {
           after_sleep_cmd = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on";
           ignore_dbus_inhibit = false;
           lock_cmd = "${lockCmd}";
+          unlock_cmd = "/run/current-system/sw/bin/systemctl --user restart ashell.service";
           before_sleep_cmd = "${lockCmd}";
         };
 

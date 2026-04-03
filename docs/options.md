@@ -2045,6 +2045,30 @@ false
 
 
 
+## heywoodlh\.home\.moonlight
+
+
+
+Use more recent build of Moonlight\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/moonlight\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/moonlight.nix)
+
+
+
 ## heywoodlh\.home\.onepassword\.enable
 
 
@@ -2387,8 +2411,6 @@ string
 
 ## heywoodlh\.luks\.yubikey
 
-
-
 Enable Yubikey luks single factor decryption\.
 See the following gist for setup example:
 https://gist\.github\.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
@@ -2412,6 +2434,8 @@ false
 
 
 ## heywoodlh\.nixos\.cachyos-kernel\.enable
+
+
 
 Enable heywoodlh cachyos-kernel configuration\.
 
@@ -2789,7 +2813,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/13fnjjandxshgr3rlbfzjzdzsdd7s3p4-source/base/stylix\.nix](/nix/store/13fnjjandxshgr3rlbfzjzdzsdd7s3p4-source/base/stylix.nix)
+ - [/nix/store/dlqk0hix5xjfp1dxcnf03h9ya5zmw2kf-source/base/stylix\.nix](/nix/store/dlqk0hix5xjfp1dxcnf03h9ya5zmw2kf-source/base/stylix.nix)
 
 
 
@@ -2813,7 +2837,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/13fnjjandxshgr3rlbfzjzdzsdd7s3p4-source/base/stylix\.nix](/nix/store/13fnjjandxshgr3rlbfzjzdzsdd7s3p4-source/base/stylix.nix)
+ - [/nix/store/dlqk0hix5xjfp1dxcnf03h9ya5zmw2kf-source/base/stylix\.nix](/nix/store/dlqk0hix5xjfp1dxcnf03h9ya5zmw2kf-source/base/stylix.nix)
 
 
 
@@ -2837,7 +2861,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/13fnjjandxshgr3rlbfzjzdzsdd7s3p4-source/base/stylix\.nix](/nix/store/13fnjjandxshgr3rlbfzjzdzsdd7s3p4-source/base/stylix.nix)
+ - [/nix/store/dlqk0hix5xjfp1dxcnf03h9ya5zmw2kf-source/base/stylix\.nix](/nix/store/dlqk0hix5xjfp1dxcnf03h9ya5zmw2kf-source/base/stylix.nix)
 
 
 

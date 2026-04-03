@@ -310,6 +310,7 @@
       ./home/modules/linux-autostart.nix
       ./home/modules/onepassword.nix
       ./home/modules/bluetuith.nix
+      ./home/modules/moonlight.nix
     ];
     macosHomeModules = [
       ./home/modules/darwin-defaults.nix
@@ -875,9 +876,8 @@
           };
 
           home-manager.users.heywoodlh = {
-            home.packages = with pkgs; [
-              moonlight-qt
-            ];
+            heywoodlh.home.moonlight = true;
+
             wayland.windowManager.hyprland.extraConfig = ''
               # change monitor to high resolution, the last argument is the scale factor
               monitor = , highres, auto, 1

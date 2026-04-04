@@ -58,25 +58,25 @@ in {
         system_tray = false;
         fps = "[ 60 120 ]";
         av1_mode = 1;
-        global_prep_cmd = let
-          autoAdjustRes = pkgs.writeShellScript "res.sh" ''
-            ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.HDMI-A-1.mode.''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS} | grep -q 'not found'
-            if [[ "$?" == 0 ]]
-            then
-               msg="$(date) unable to automatically adjust resolution, falling back to 1080 -- requested resolution: ''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS}"
-               echo "$msg" | tee -a /tmp/sunshine-res.log
-               ${pkgs.libnotify}/bin/notify-send "Unable to automatically adjust resolution, see /tmp/sunshine-res.log"
-               ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.HDMI-A-1.mode.1920x1080@60 || true
-            else
-               echo "$(date) successfully adjusted resolution: ''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS}" | tee -a /tmp/sunshine-res.log
-            fi
-            '';
-        in builtins.toJSON [
-          {
-            do = "${autoAdjustRes}";
-            undo = "";
-          }
-        ];
+        #global_prep_cmd = let
+        #  autoAdjustRes = pkgs.writeShellScript "res.sh" ''
+        #    ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.HDMI-A-1.mode.''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS} | grep -q 'not found'
+        #    if [[ "$?" == 0 ]]
+        #    then
+        #       msg="$(date) unable to automatically adjust resolution, falling back to 1080 -- requested resolution: ''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS}"
+        #       echo "$msg" | tee -a /tmp/sunshine-res.log
+        #       ${pkgs.libnotify}/bin/notify-send "Unable to automatically adjust resolution, see /tmp/sunshine-res.log"
+        #       ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.HDMI-A-1.mode.1920x1080@60 || true
+        #    else
+        #       echo "$(date) successfully adjusted resolution: ''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS}" | tee -a /tmp/sunshine-res.log
+        #    fi
+        #    '';
+        #in builtins.toJSON [
+        #  {
+        #    do = "${autoAdjustRes}";
+        #    undo = "";
+        #  }
+        #];
       };
 
       applications = {

@@ -28,7 +28,8 @@ in {
     function aerc
       set aerc_bin (which aerc)
       test -e ~/.1password/session.sh && export (head -1 ~/.1password/session.sh)
-      op-unlock && $aerc_bin $argv
+      test -e ~/.config/aerc/protonmail.txt || op-unlock
+      $aerc_bin $argv
     end
 
     function k9s

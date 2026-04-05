@@ -668,6 +668,7 @@
           heywoodlh.nixos = {
             gaming = true;
             vmware-workstation = true;
+            cachyos-kernel.enable = true;
           };
 
           home-manager.users.heywoodlh = {

@@ -20,11 +20,20 @@
 
   boot.initrd.luks.devices."luks-d99babf3-d98d-4fa4-a368-672cdc27223e".device = "/dev/disk/by-uuid/d99babf3-d98d-4fa4-a368-672cdc27223e";
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/5943-98C8";
+  fileSystems = {
+    "/boot" = {
+      device = "/dev/disk/by-uuid/5943-98C8";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
+    "/mnt/mod0" = {
+      device = "/dev/disk/by-uuid/c166313e-13ea-42eb-9cc2-f84a0f2138ab";
+      fsType = "ext4";
+      options = [
+        "nofail"
+      ];
+    };
+  };
 
   swapDevices = [
     {

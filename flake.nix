@@ -363,6 +363,7 @@
       ./nixos/modules/gaming.nix
       ./nixos/modules/cachyos-kernel.nix
       ./nixos/modules/steam-deck.nix
+      ./nixos/modules/vmware-workstation.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -664,7 +665,10 @@
             ./nixos/hosts/framework-13.nix
           ];
 
-          heywoodlh.nixos.gaming = true;
+          heywoodlh.nixos = {
+            gaming = true;
+            vmware-workstation = true;
+          };
 
           home-manager.users.heywoodlh = {
             heywoodlh.home.llm.homelab = false;

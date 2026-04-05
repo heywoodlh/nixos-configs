@@ -2601,6 +2601,30 @@ string
 
 
 
+## heywoodlh\.nixos\.vmware-workstation
+
+
+
+Enable heywoodlh VMWare host configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vmware-workstation\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vmware-workstation.nix)
+
+
+
 ## heywoodlh\.rayhunter\.enable
 
 
@@ -2813,7 +2837,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/p4qwhcznnkrixkdaj3cn77sbna54749h-source/base/stylix\.nix](/nix/store/p4qwhcznnkrixkdaj3cn77sbna54749h-source/base/stylix.nix)
+ - [/nix/store/9l3wr2ajs2bpx7xb81nm9wjrk6arayqy-source/base/stylix\.nix](/nix/store/9l3wr2ajs2bpx7xb81nm9wjrk6arayqy-source/base/stylix.nix)
 
 
 
@@ -2837,7 +2861,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/p4qwhcznnkrixkdaj3cn77sbna54749h-source/base/stylix\.nix](/nix/store/p4qwhcznnkrixkdaj3cn77sbna54749h-source/base/stylix.nix)
+ - [/nix/store/9l3wr2ajs2bpx7xb81nm9wjrk6arayqy-source/base/stylix\.nix](/nix/store/9l3wr2ajs2bpx7xb81nm9wjrk6arayqy-source/base/stylix.nix)
 
 
 
@@ -2861,7 +2885,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/p4qwhcznnkrixkdaj3cn77sbna54749h-source/base/stylix\.nix](/nix/store/p4qwhcznnkrixkdaj3cn77sbna54749h-source/base/stylix.nix)
+ - [/nix/store/9l3wr2ajs2bpx7xb81nm9wjrk6arayqy-source/base/stylix\.nix](/nix/store/9l3wr2ajs2bpx7xb81nm9wjrk6arayqy-source/base/stylix.nix)
 
 
 

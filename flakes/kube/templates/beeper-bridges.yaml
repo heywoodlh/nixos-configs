@@ -75,6 +75,28 @@ spec:
                 secretKeyRef:
                   name: beeper-key
                   key: password
+        # Set up by sending a DM to: `@sh-telegram-000bot:beeper.local`
+        - name: beeper-telegram
+          securityContext:
+            {}
+          image: "@image@"
+          command:
+            - "/bin/ash"
+            - "-c"
+          volumeMounts:
+            - name: telegram-config
+              mountPath: /data
+          args:
+            - /usr/local/bin/run-bridge.sh sh-telegram-000
+          imagePullPolicy: IfNotPresent
+          resources:
+            {}
+          env:
+            - name: MATRIX_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-key
+                  key: password
         # Set up by sending a DM to: `@sh-googlemessages-000bot:beeper.local`
         - name: beeper-google-messages
           securityContext:
@@ -148,6 +170,10 @@ spec:
       - name: discord-config
         hostPath:
           path: @hostfolder@/discord
+          type: DirectoryOrCreate
+      - name: telegram-config
+        hostPath:
+          path: @hostfolder@/telegram
           type: DirectoryOrCreate
       - name: irc-config
         hostPath:

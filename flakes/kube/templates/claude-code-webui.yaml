@@ -1,4 +1,12 @@
 ---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "claude-code-webui"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/frv6yulia3fh3jpuzfwnvjfmwy"
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -32,6 +40,41 @@ metadata:
   name: claude-code-webui
   namespace: @namespace@
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: claude-init-scripts
+  namespace: @namespace@
+data:
+  claude.sh: |-
+    #!/usr/bin/env bash
+    mkdir -p /home/nix/telegram
+    cd /home/nix/telegram
+
+    # Run telegram bot in tmux, assume telegram bot has been installed with `uv`
+    # Install both tmux and uv with nix
+    if [[ -e /home/nix/.nix-profile/bin/tmux ]] && [[ -e /home/nix/.nix-profile/bin/uv ]]
+    then
+      /home/nix/.nix-profile/bin/tmux new-session -d -s claude /bot.sh
+    fi
+    /entrypoint.sh
+  bot.sh: |-
+    #!/usr/bin/env bash
+
+    if [[ ! -e /home/nix/.nix-profile/bin/uv ]]
+    then
+      echo "Required `uv` package not installed -- please install with `nix profile add nixpkgs#uv`"
+      exit 1
+    fi
+
+    if [[ -n "${BOT_TOKEN}" ]] && [[ -n "${TELEGRAM_ADMIN_ID}" ]] && [[ "${TELEGRAM_USER_IDS}" ]]
+    then
+      /home/nix/.nix-profile/bin/uv tool run --from claude-telegram-bot claude-tg-bot --admin-user-id "${TELEGRAM_ADMIN_ID}" --allowed-user-ids "${TELEGRAM_USER_IDS}"
+    else
+      echo "Required environment variables not set. Exiting."
+      exit 1
+    fi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -52,17 +95,64 @@ spec:
       serviceAccountName: claude-code-webui
       hostname: claude-code-webui
       containers:
-      - image: @image@
-        name: claude-code-webui
-        volumeMounts:
-          - name: claude-code-webui-nix
-            mountPath: /nix
-          - name: claude-code-webui-home
-            mountPath: /home/nix
-        ports:
-          - name: claude-ui
-            containerPort: 8080
-            protocol: TCP
+        - name: dind
+          image: docker.io/docker:dind
+          ports:
+            - name: dind-con-port
+              containerPort: 2376
+              protocol: TCP
+          volumeMounts:
+            - name: claude-dind-certs
+              mountPath: /certs/client
+            - name: claude-dind-storage
+              mountPath: /var/lib/docker
+          tty: true
+          securityContext:
+            privileged: true
+        - image: @image@
+          name: claude-code-webui
+          command: ["/claude.sh"]
+          volumeMounts:
+            - name: claude-code-webui-nix
+              mountPath: /nix
+            - name: claude-code-webui-home
+              mountPath: /home/nix
+            - name: claude-entrypoint
+              mountPath: /claude.sh
+              subPath: claude.sh
+            - name: claude-bot
+              mountPath: /bot.sh
+              subPath: bot.sh
+            - name: claude-dind-certs
+              mountPath: /certs
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: '/certs'
+            - name: DOCKER_CERT_PATH
+              value: '/certs'
+            - name: DOCKER_HOST
+              value: "tcp://localhost:2376"
+            - name: DOCKER_TLS_VERIFY
+              value: "1"
+            - name: BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: claude-code-webui
+                  key: telegram-token
+            - name: TELEGRAM_ADMIN_ID
+              valueFrom:
+                secretKeyRef:
+                  name: claude-code-webui
+                  key: telegram-admin-user-id
+            - name: TELEGRAM_USER_IDS
+              valueFrom:
+                secretKeyRef:
+                  name: claude-code-webui
+                  key: telegram-allowed-user-ids
+          ports:
+            - name: claude-ui
+              containerPort: 8080
+              protocol: TCP
       volumes:
         - name: claude-code-webui-nix
           hostPath:
@@ -72,6 +162,28 @@ spec:
           hostPath:
             path: @hostfolder@/home
             type: DirectoryOrCreate
+        - name: claude-dind-certs
+          hostPath:
+            path: @hostfolder@/docker/certs
+            type: DirectoryOrCreate
+        - name: claude-dind-storage
+          hostPath:
+            path: @hostfolder@/docker/data
+            type: DirectoryOrCreate
+        - name: claude-entrypoint
+          configMap:
+            name: claude-init-scripts
+            defaultMode: 0777
+            items:
+              - key: "claude.sh"
+                path: "claude.sh"
+        - name: claude-bot
+          configMap:
+            name: claude-init-scripts
+            defaultMode: 0777
+            items:
+              - key: "bot.sh"
+                path: "bot.sh"
 ---
 apiVersion: v1
 kind: Service

@@ -197,9 +197,9 @@ in {
   };
 
   heywoodlh.sshd.mfa = true;
-  heywoodlh.nixos.grayjay = {
-    enable = true;
-    volume = "/media/data-ssd/grayjay";
+
+  virtualisation.docker.daemon.settings = {
+    data-root = "/media/data_pool/docker";
   };
 
   # NextDNS

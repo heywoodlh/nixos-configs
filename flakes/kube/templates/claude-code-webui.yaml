@@ -168,10 +168,6 @@ metadata:
   namespace: @namespace@
   labels:
     app: claude-code-webui
-  annotations:
-    tailscale.com/expose: "true"
-    tailscale.com/hostname: "claude"
-    tailscale.com/tags: "tag:adminhttp"
 spec:
   type: ClusterIP
   ports:

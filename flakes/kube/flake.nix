@@ -307,6 +307,14 @@
           replicas = 1;
           image = "docker.io/heywoodlh/dev:2026_01_snapshot";
         };
+        claude-code-webui = mkKubeDrv "claude-code-webui" {
+          src = ./templates/claude-code-webui.yaml;
+          namespace = "machine-learning";
+          image = "docker.io/heywoodlh/claude-code-webui:0.1.56";
+          replicas = 1;
+          hostfolder = "/media/data-ssd/claude-code-webui";
+          nodename = "homelab";
+        };
         cloudflared = mkKubeDrv "cloudflared" {
           src = ./templates/cloudflared.yaml;
           namespace = "cloudflared";

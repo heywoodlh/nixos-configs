@@ -1,0 +1,95 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: claude-code-webui
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["get", "list", "create", "update", "patch", "delete"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: claude-code-webui
+  namespace: @namespace@
+subjects:
+- kind: ServiceAccount
+  name: claude-code-webui
+  namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: claude-code-webui
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: claude-code-webui
+  namespace: @namespace@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: claude-code-webui
+  name: claude-code-webui
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: claude-code-webui
+  template:
+    metadata:
+      labels:
+        app: claude-code-webui
+    spec:
+      serviceAccountName: claude-code-webui
+      hostname: claude-code-webui
+      containers:
+      - image: @image@
+        name: claude-code-webui
+        volumeMounts:
+          - name: claude-code-webui-nix
+            mountPath: /nix
+          - name: claude-code-webui-home
+            mountPath: /home/nix
+        ports:
+          - name: claude-ui
+            containerPort: 8080
+            protocol: TCP
+      volumes:
+        - name: claude-code-webui-nix
+          hostPath:
+            path: @hostfolder@/nix
+            type: DirectoryOrCreate
+        - name: claude-code-webui-home
+          hostPath:
+            path: @hostfolder@/home
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: claude
+  namespace: @namespace@
+  labels:
+    app: claude-code-webui
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "claude"
+    tailscale.com/tags: "tag:adminhttp"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: claude-ui
+  selector:
+    app: claude-code-webui

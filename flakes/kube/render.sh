@@ -20,6 +20,7 @@ applications=(
   "flan-scan"
   "fleetdm"
   "foldingathome"
+  "fuse-device-plugin"
   "ersatztv"
   "grafana"
   "hashcat"

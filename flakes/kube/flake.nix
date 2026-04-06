@@ -427,6 +427,9 @@
           hostfolder = "/media/data-ssd/foldingathome";
           replicas = 1;
         };
+        fuse-device-plugin = mkKubeDrv "fuse-device-plugin" {
+          src = ./templates/fuse-device-plugin.yaml;
+        };
         gomuks = mkKubeDrv "gomuks" {
           src = ./templates/gomuks.yaml;
           namespace = "default";

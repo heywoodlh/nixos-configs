@@ -95,23 +95,17 @@ spec:
       serviceAccountName: claude-code-webui
       hostname: claude-code-webui
       containers:
-        - name: dind
-          image: docker.io/docker:dind
-          ports:
-            - name: dind-con-port
-              containerPort: 2376
-              protocol: TCP
-          volumeMounts:
-            - name: claude-dind-certs
-              mountPath: /certs/client
-            - name: claude-dind-storage
-              mountPath: /var/lib/docker
-          tty: true
-          securityContext:
-            privileged: true
         - image: docker.io/heywoodlh/claude-code-webui:0.1.56
+          imagePullPolicy: Always
           name: claude-code-webui
           command: ["/claude.sh"]
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN # for rootless podman
+          resources:
+            limits:
+              github.com/fuse: 1 # FUSE for rootless podman
           volumeMounts:
             - name: claude-code-webui-nix
               mountPath: /nix
@@ -123,17 +117,7 @@ spec:
             - name: claude-bot
               mountPath: /bot.sh
               subPath: bot.sh
-            - name: claude-dind-certs
-              mountPath: /certs
           env:
-            - name: DOCKER_TLS_CERTDIR
-              value: '/certs'
-            - name: DOCKER_CERT_PATH
-              value: '/certs'
-            - name: DOCKER_HOST
-              value: "tcp://localhost:2376"
-            - name: DOCKER_TLS_VERIFY
-              value: "1"
             - name: BOT_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -161,14 +145,6 @@ spec:
         - name: claude-code-webui-home
           hostPath:
             path: /media/data-ssd/claude-code-webui/home
-            type: DirectoryOrCreate
-        - name: claude-dind-certs
-          hostPath:
-            path: /media/data-ssd/claude-code-webui/docker/certs
-            type: DirectoryOrCreate
-        - name: claude-dind-storage
-          hostPath:
-            path: /media/data-ssd/claude-code-webui/docker/data
             type: DirectoryOrCreate
         - name: claude-entrypoint
           configMap:

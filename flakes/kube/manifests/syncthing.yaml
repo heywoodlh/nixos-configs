@@ -40,7 +40,7 @@ spec:
       volumes:
       - name: syncthing-data
         hostPath:
-          path: /opt/syncthing
+          path: /media/data_pool/syncthing
           type: Directory
 ---
 apiVersion: v1

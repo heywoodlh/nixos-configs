@@ -903,7 +903,7 @@
           src = ./templates/syncthing.yaml;
           namespace = "syncthing";
           nodename = "homelab";
-          hostfolder = "/opt/syncthing";
+          hostfolder = "/media/data_pool/syncthing";
           image = "docker.io/syncthing/syncthing:1.30.0";
           replicas = 1;
         };

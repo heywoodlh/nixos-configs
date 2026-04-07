@@ -719,6 +719,12 @@
           httpd_image = "docker.io/httpd:2.4.66";
           replicas = 1;
         };
+        llama-swap = mkKubeDrv "llama-swap" {
+          src = ./templates/llama-swap.nix;
+          namespace = "default";
+          image = "ghcr.io/mostlygeek/llama-swap:intel";
+          hostfolder = "/media/data-ssd/llama-swap";
+        };
         ollama = mkKubeDrv "ollama" {
           src = ./templates/ollama.yaml;
           namespace = "default";

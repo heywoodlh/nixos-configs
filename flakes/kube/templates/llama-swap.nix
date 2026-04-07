@@ -1,0 +1,98 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llama-swap
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: llama-swap
+    app.kubernetes.io/instance: llama-swap
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "llama-swap"
+    tailscale.com/tags: "tag:llama-swap"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: llama-swap
+      protocol: TCP
+      name: llama-swap
+  selector:
+    app.kubernetes.io/name: llama-swap
+    app.kubernetes.io/instance: llama-swap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: llama-swap-config
+  namespace: @namespace@
+data:
+  config.yaml: |-
+    healthCheckTimeout: 300
+    logLevel: info
+    logToStdout: "proxy"
+
+    models:
+      "llama3.1:8b":
+        proxy: "http://127.0.0.1:${PORT}"
+        cmd: >-
+          llama-server
+          --model /models/llama3.1-8b.gguf
+          --port ${PORT}
+          --host 127.0.0.1
+          --ctx-size 8192
+          --threads 4
+          -ngl 99
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llama-swap
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: llama-swap
+    app.kubernetes.io/instance: llama-swap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: llama-swap
+      app.kubernetes.io/instance: llama-swap
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: llama-swap
+        app.kubernetes.io/instance: llama-swap
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: llama-swap
+          securityContext:
+            privileged: true
+          image: "@image@"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: llama-swap
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: models
+              mountPath: /models
+            - name: llama-swap-config
+              mountPath: /app/config.yaml
+              subPath: config.yaml
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+      volumes:
+        - name: models
+          hostPath:
+            path: @hostfolder@
+            type: Directory
+        - name: llama-swap-config
+          configMap:
+            name: llama-swap-config

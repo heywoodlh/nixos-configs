@@ -32,6 +32,7 @@ applications=(
   "immich-machine-learning"
   "iperf"
   "lancache"
+  "llama-swap"
   "media"
   "meshtastic"
   "minecraft-bedrock"

@@ -80,6 +80,8 @@ spec:
       initContainers:
         - name: model-downloader
           image: docker.io/curlimages/curl
+          securityContext:
+            runAsUser: 1000
           command:
             - "/download.sh"
           volumeMounts:

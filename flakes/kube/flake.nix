@@ -721,7 +721,7 @@
         };
         llama-swap = mkKubeDrv "llama-swap" {
           src = ./templates/llama-swap.nix;
-          namespace = "default";
+          namespace = "machine-learning";
           image = "ghcr.io/mostlygeek/llama-swap:intel";
           hostfolder = "/media/data-ssd/llama-swap";
         };

@@ -10,11 +10,11 @@ metadata:
   annotations:
     tailscale.com/expose: "true"
     tailscale.com/hostname: "llama-swap"
-    tailscale.com/tags: "tag:llama-swap"
+    tailscale.com/tags: "tag:http"
 spec:
   type: ClusterIP
   ports:
-    - port: 8080
+    - port: 80
       targetPort: llama-swap
       protocol: TCP
       name: llama-swap

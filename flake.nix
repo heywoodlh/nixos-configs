@@ -1045,6 +1045,7 @@
         heywoodlh = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
+            homeModules.heywoodlh.home
             #(mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
             ./home/linux.nix
             ./home/desktop.nix # Base desktop config
@@ -1067,14 +1068,13 @@
                 username = "heywoodlh";
                 homeDirectory = "/home/heywoodlh";
               };
+              nix.package = pkgs.nix;
               fonts.fontconfig.enable = true;
               programs.home-manager.enable = true;
               targets.genericLinux.enable = true;
               home.packages = [
-                pkgs.docker-client
                 pkgs.nerd-fonts.jetbrains-mono
                 myFlakes.packages.${system}.git
-                myFlakes.packages.${system}.vim
               ];
               home.file."bin/create-docker" = {
                 enable = true;
@@ -1131,7 +1131,6 @@
                 bash
                 gomuks
                 myFlakes.packages.${system}.git
-                myFlakes.packages.${system}.fish
                 myFlakes.packages.${system}.op-wrapper
                 myFlakes.packages.${system}.tmux
               ];
@@ -1144,6 +1143,7 @@
         heywoodlh-server = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
+            homeModules.heywoodlh.home
             ./home/linux.nix
             ./home/linux/no-desktop.nix
             {
@@ -1161,11 +1161,7 @@
                 username = "heywoodlh";
                 homeDirectory = "/home/heywoodlh";
               };
-              home.packages = [
-                myFlakes.packages.${system}.fish
-                inputs.nixpkgs-backports.legacyPackages.${system}.docker-client
-                myFlakes.packages.${system}.vim
-              ];
+              nix.package = pkgs.nix;
               fonts.fontconfig.enable = true;
               programs.home-manager.enable = true;
               home.file."bin/home-switch" = {

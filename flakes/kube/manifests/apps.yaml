@@ -339,27 +339,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: foldingathome
-  namespace: argo
-spec:
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argo
-  source:
-    repoURL: https://github.com/heywoodlh/nixos-configs.git
-    targetRevision: HEAD
-    path: flakes/kube/manifests
-    directory:
-      include: "foldingathome.yaml"
-  project: default
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
   name: fuse-device-plugin
   namespace: argo
 spec:

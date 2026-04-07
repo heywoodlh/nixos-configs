@@ -19,7 +19,6 @@ applications=(
   "elastic-cloud-elastic-stack"
   "flan-scan"
   "fleetdm"
-  "foldingathome"
   "fuse-device-plugin"
   "ersatztv"
   "grafana"

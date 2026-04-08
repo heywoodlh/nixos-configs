@@ -114,6 +114,12 @@ spec:
             - name: claude-bot
               mountPath: /bot.sh
               subPath: bot.sh
+            - name: flows
+              mountPath: /flows
+              readOnly: true
+            - name: logs
+              mountPath: /logs
+              readOnly: true
           env:
             - name: BOT_TOKEN
               valueFrom:
@@ -157,6 +163,14 @@ spec:
             items:
               - key: "bot.sh"
                 path: "bot.sh"
+        - name: flows
+          hostPath:
+            path: /flows
+            type: DirectoryOrCreate
+        - name: logs
+          hostPath:
+            path: /logs
+            type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service

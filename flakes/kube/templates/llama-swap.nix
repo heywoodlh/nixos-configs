@@ -38,12 +38,22 @@ data:
         proxy: "http://127.0.0.1:${PORT}"
         cmd: >-
           llama-server
-          --model /models/llama3.1-8b.gguf
+          --model /models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf
           --port ${PORT}
           --host 127.0.0.1
           --ctx-size 8192
           --threads 4
           -ngl 99
+  download.sh: |-
+    #!/bin/sh
+    MODEL="/models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
+    URL="https://huggingface.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
+    if [ -f "${MODEL}" ]; then
+      echo "Model already exists, skipping download"
+    else
+      echo "Downloading model..."
+      curl -C - -L "${URL}" -o "${MODEL}"
+    fi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -67,6 +77,19 @@ spec:
     spec:
       securityContext:
         {}
+      initContainers:
+        - name: model-downloader
+          image: docker.io/curlimages/curl
+          securityContext:
+            runAsUser: 1000
+          command:
+            - "/download.sh"
+          volumeMounts:
+            - name: models
+              mountPath: /models
+            - name: llama-swap-downloader
+              mountPath: /download.sh
+              subPath: download.sh
       containers:
         - name: llama-swap
           securityContext:
@@ -92,7 +115,17 @@ spec:
         - name: models
           hostPath:
             path: @hostfolder@
-            type: Directory
+            type: DirectoryOrCreate
         - name: llama-swap-config
           configMap:
             name: llama-swap-config
+            items:
+              - key: config.yaml
+                path: config.yaml
+        - name: llama-swap-downloader
+          configMap:
+            name: llama-swap-config
+            defaultMode: 0777
+            items:
+              - key: download.sh
+                path: download.sh

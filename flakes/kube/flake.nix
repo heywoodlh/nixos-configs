@@ -723,6 +723,8 @@
           src = ./templates/llama-swap.nix;
           namespace = "machine-learning";
           image = "ghcr.io/mostlygeek/llama-swap:intel";
+          litellm_image = "ghcr.io/berriai/litellm:v1.83.3.rc.1";
+          litellm_db_image = "postgres:16";
           hostfolder = "/media/data-ssd/llama-swap";
         };
         ollama = mkKubeDrv "ollama" {

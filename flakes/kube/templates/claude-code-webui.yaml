@@ -109,7 +109,7 @@ spec:
             - name: claude-code-webui-home
               mountPath: /home/nix
             - name: claude-code-webui-supervisord
-              mountPath: /etc/supervisord/conf.d
+              mountPath: /etc/supervisor/conf.d
             - name: claude-entrypoint
               mountPath: /claude.sh
               subPath: claude.sh
@@ -151,6 +151,9 @@ spec:
           ports:
             - name: claude-ui
               containerPort: 8080
+              protocol: TCP
+            - name: openclaw
+              containerPort: 6000
               protocol: TCP
       volumes:
         - name: claude-code-webui-nix
@@ -204,6 +207,27 @@ spec:
   ports:
     - port: 80
       targetPort: 8080
+      protocol: TCP
+      name: claude-ui
+  selector:
+    app: claude-code-webui
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openclaw
+  namespace: @namespace@
+  labels:
+    app: claude-code-webui
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "openclaw"
+    tailscale.com/tags: "tag:adminhttp"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 6000
       protocol: TCP
       name: claude-ui
   selector:

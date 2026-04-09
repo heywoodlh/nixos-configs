@@ -720,7 +720,7 @@
           replicas = 1;
         };
         llama-swap = mkKubeDrv "llama-swap" {
-          src = ./templates/llama-swap.nix;
+          src = ./templates/llama-swap.yaml;
           namespace = "machine-learning";
           image = "ghcr.io/mostlygeek/llama-swap:intel";
           litellm_image = "ghcr.io/berriai/litellm:v1.83.3.rc.1";

@@ -114,7 +114,7 @@ spec:
       volumes:
         - name: models
           hostPath:
-            path: @hostfolder@
+            path: @hostfolder@/models
             type: DirectoryOrCreate
         - name: llama-swap-config
           configMap:
@@ -137,20 +137,6 @@ metadata:
   namespace: @namespace@
 spec:
   itemPath: "vaults/Kubernetes/items/zvj57fg53iipc4vxgobcer5j4q"
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: litellm-config
-  namespace: @namespace@
-data:
-  config.yaml: |-
-    model_list:
-      - model_name: llama3.1:8b
-        litellm_params:
-          model: openai/llama3.1:8b
-          api_base: http://llama-swap
-          api_key: "none"
 ---
 apiVersion: v1
 kind: Service
@@ -200,8 +186,6 @@ spec:
           image: "@litellm_image@"
           imagePullPolicy: IfNotPresent
           args:
-            - --config
-            - /app/config.yaml
             - --port
             - "4000"
           ports:
@@ -244,8 +228,8 @@ spec:
                   name: litellm-db
                   key: master-key
           volumeMounts:
-            - name: litellm-config
-              mountPath: /app/config.yaml
+            - name: litellm-home-config
+              mountPath: /root/.config
               subPath: config.yaml
         - name: postgres
           image: "@litellm_db_image@"
@@ -274,9 +258,10 @@ spec:
             - name: litellm-db
               mountPath: /var/lib/postgresql/data
       volumes:
-        - name: litellm-config
-          configMap:
-            name: litellm-config
+        - name: litellm-home-config
+          hostPath:
+            path: "@hostfolder@/litellm/config"
+            type: DirectoryOrCreate
         - name: litellm-db
           hostPath:
             path: "@hostfolder@/litellm/db"

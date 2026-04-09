@@ -129,3 +129,155 @@ spec:
             items:
               - key: download.sh
                 path: download.sh
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: litellm-db
+  namespace: machine-learning
+spec:
+  itemPath: "vaults/Kubernetes/items/zvj57fg53iipc4vxgobcer5j4q"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: litellm-config
+  namespace: machine-learning
+data:
+  config.yaml: |-
+    model_list:
+      - model_name: llama3.1:8b
+        litellm_params:
+          model: openai/llama3.1:8b
+          api_base: http://llama-swap
+          api_key: "none"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: litellm
+  namespace: machine-learning
+  labels:
+    app.kubernetes.io/name: litellm
+    app.kubernetes.io/instance: litellm
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "litellm"
+    tailscale.com/tags: "tag:adminhttp"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: litellm
+      protocol: TCP
+      name: litellm
+  selector:
+    app.kubernetes.io/name: litellm
+    app.kubernetes.io/instance: litellm
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: litellm
+  namespace: machine-learning
+  labels:
+    app.kubernetes.io/name: litellm
+    app.kubernetes.io/instance: litellm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: litellm
+      app.kubernetes.io/instance: litellm
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: litellm
+        app.kubernetes.io/instance: litellm
+    spec:
+      containers:
+        - name: litellm
+          image: "ghcr.io/berriai/litellm:v1.83.3.rc.1"
+          imagePullPolicy: IfNotPresent
+          args:
+            - --config
+            - /app/config.yaml
+            - --port
+            - "4000"
+          ports:
+            - name: litellm
+              containerPort: 4000
+              protocol: TCP
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: litellm-db
+                  key: db-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: litellm-db
+                  key: db-password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: litellm-db
+                  key: db-name
+            - name: DATABASE_URL
+              value: "postgresql://$(DB_USER):$(DB_PASSWORD)@localhost:5432/$(DB_NAME)"
+            - name: STORE_MODEL_IN_DB
+              value: "True"
+            - name: UI_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: litellm-db
+                  key: username
+            - name: UI_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: litellm-db
+                  key: password
+            - name: LITELLM_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: litellm-db
+                  key: master-key
+          volumeMounts:
+            - name: litellm-config
+              mountPath: /app/config.yaml
+              subPath: config.yaml
+        - name: postgres
+          image: "postgres:16"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: litellm-db
+                  key: db-name
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: litellm-db
+                  key: db-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: litellm-db
+                  key: db-password
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - name: litellm-db
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: litellm-config
+          configMap:
+            name: litellm-config
+        - name: litellm-db
+          hostPath:
+            path: "/media/data-ssd/llama-swap/litellm/db"
+            type: DirectoryOrCreate

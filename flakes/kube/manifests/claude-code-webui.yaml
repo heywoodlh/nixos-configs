@@ -108,6 +108,8 @@ spec:
               mountPath: /nix
             - name: claude-code-webui-home
               mountPath: /home/nix
+            - name: claude-code-webui-supervisord
+              mountPath: /etc/supervisord/conf.d
             - name: claude-entrypoint
               mountPath: /claude.sh
               subPath: claude.sh
@@ -121,6 +123,16 @@ spec:
               mountPath: /logs
               readOnly: true
           env:
+            - name: HTTP_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: claude-code-webui
+                  key: username
+            - name: HTTP_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: claude-code-webui
+                  key: password
             - name: BOT_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -148,6 +160,10 @@ spec:
         - name: claude-code-webui-home
           hostPath:
             path: /media/data-ssd/claude-code-webui/home
+            type: DirectoryOrCreate
+        - name: claude-code-webui-supervisord
+          hostPath:
+            path: /media/data-ssd/claude-code-webui/supervisord
             type: DirectoryOrCreate
         - name: claude-entrypoint
           configMap:
@@ -179,6 +195,10 @@ metadata:
   namespace: machine-learning
   labels:
     app: claude-code-webui
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "claude"
+    tailscale.com/tags: "tag:adminhttp"
 spec:
   type: ClusterIP
   ports:

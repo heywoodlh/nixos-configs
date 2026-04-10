@@ -193,6 +193,8 @@ spec:
               containerPort: 4000
               protocol: TCP
           env:
+            - name: LITELLM_DROP_PARAMS
+              value: "True"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:

@@ -125,7 +125,7 @@ in {
   };
 
   config = mkIf cfg {
-    heywoodlh.home.onepassword.package = mkForce pkgs._1password-gui-beta;
+    heywoodlh.home.onepassword.package = mkForce pkgs._1password-gui;
     home.packages = with pkgs; [
       acpi
       adwaita-icon-theme

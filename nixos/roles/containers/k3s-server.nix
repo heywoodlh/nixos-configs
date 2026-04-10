@@ -18,7 +18,7 @@ in {
       maxPods: 250
     '';
   in {
-    package = pkgs.k3s_1_32;
+    package = pkgs.k3s_1_33;
     enable = true;
     role = "server";
     clusterInit = false;

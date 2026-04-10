@@ -1460,7 +1460,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/47ldssxz80adkd8s7lr6r5a4wckm9k04-tmux/bin/tmux"
+"/nix/store/7i0a8wwmjd0107sgv7fwz6x0mv7f04aj-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -2109,7 +2109,7 @@ package
 *Default:*
 
 ```nix
-<derivation 1password-8.12.6>
+<derivation 1password-8.12.8>
 ```
 
 *Declared by:*
@@ -2837,7 +2837,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/1lkr4w40kaxksw2pv0wf9w9273b6vy4q-source/base/stylix\.nix](/nix/store/1lkr4w40kaxksw2pv0wf9w9273b6vy4q-source/base/stylix.nix)
+ - [/nix/store/6f6c4vzkhiicq9wlw8fq3vw5h1zxgfy1-source/base/stylix\.nix](/nix/store/6f6c4vzkhiicq9wlw8fq3vw5h1zxgfy1-source/base/stylix.nix)
 
 
 
@@ -2861,7 +2861,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/1lkr4w40kaxksw2pv0wf9w9273b6vy4q-source/base/stylix\.nix](/nix/store/1lkr4w40kaxksw2pv0wf9w9273b6vy4q-source/base/stylix.nix)
+ - [/nix/store/6f6c4vzkhiicq9wlw8fq3vw5h1zxgfy1-source/base/stylix\.nix](/nix/store/6f6c4vzkhiicq9wlw8fq3vw5h1zxgfy1-source/base/stylix.nix)
 
 
 
@@ -2885,7 +2885,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/1lkr4w40kaxksw2pv0wf9w9273b6vy4q-source/base/stylix\.nix](/nix/store/1lkr4w40kaxksw2pv0wf9w9273b6vy4q-source/base/stylix.nix)
+ - [/nix/store/6f6c4vzkhiicq9wlw8fq3vw5h1zxgfy1-source/base/stylix\.nix](/nix/store/6f6c4vzkhiicq9wlw8fq3vw5h1zxgfy1-source/base/stylix.nix)
 
 
 

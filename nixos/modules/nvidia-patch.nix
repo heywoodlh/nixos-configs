@@ -49,6 +49,10 @@ in {
       nvidiaSettings = true;
     };
 
+    environment.systemPackages = with pkgs; [
+      nvidia_oc
+    ];
+
     services.xserver.deviceSection = ''
       Option         "TripleBuffer" "on"
       Option         "Coolbits" "28"

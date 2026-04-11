@@ -56,7 +56,7 @@ in {
       settings = {
         resolutions = "[ 1920x1080 ]";
         system_tray = false;
-        fps = "[ 60 120 ]";
+        fps = "[ 60 ]";
         av1_mode = 1;
         #global_prep_cmd = let
         #  autoAdjustRes = pkgs.writeShellScript "res.sh" ''

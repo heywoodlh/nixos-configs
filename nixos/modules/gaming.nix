@@ -104,8 +104,22 @@ in {
       enableRenice = true;
     };
 
+    systemd.services.nvidia_oc = {
+      enable = (config.networking.hostName == "nixos-gaming");
+      description = "NVIDIA Overclocking Service";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        # Get max power limit with `nvidia-smi -q | grep 'Max Power Limit'`
+        ExecStart = "${pkgs.steam-run}/bin/steam-run ${pkgs.nvidia_oc}/bin/nvidia_oc set --index 0 --power-limit 330000 --freq-offset 300 --mem-offset 1500";
+        User = "root";
+        RemainAfterExit = true;
+      };
+    };
+
     environment.systemPackages = with pkgs; [
       protonup-ng
+      mangohud
     ] ++ lib.optionals (system == "x86_64-linux") [
       get-custom-proton
     ] ++ lib.optionals (system == "aarch64-linux") [

@@ -90,6 +90,7 @@ spec:
         - name: redm
           command: [ "/opt/cfx-server/run.sh" ]
           image: @image@
+          imagePullPolicy: Always
           ports:
             - containerPort: 30120
               protocol: TCP

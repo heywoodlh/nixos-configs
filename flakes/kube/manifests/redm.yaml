@@ -89,7 +89,8 @@ spec:
       containers:
         - name: redm
           command: [ "/opt/cfx-server/run.sh" ]
-          image: docker.io/routmoute/fxserver:recommended
+          image: docker.io/routmoute/fxserver:28108
+          imagePullPolicy: Always
           ports:
             - containerPort: 30120
               protocol: TCP

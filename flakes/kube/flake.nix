@@ -587,7 +587,7 @@
         llama = mkKubeDrv "llama" {
           src = ./templates/llama.yaml;
           namespace = "default";
-          image = "ghcr.io/mostlygeek/llama-swap:intel";
+          image = "ghcr.io/mostlygeek/llama-swap:vulkan";
           hostfolder = "/media/data-ssd/llama";
         };
         longhorn = mkKubeDrv "longhorn" {
@@ -722,7 +722,7 @@
         llama-swap = mkKubeDrv "llama-swap" {
           src = ./templates/llama-swap.yaml;
           namespace = "machine-learning";
-          image = "ghcr.io/mostlygeek/llama-swap:intel";
+          image = "ghcr.io/mostlygeek/llama-swap:vulkan";
           litellm_image = "ghcr.io/berriai/litellm:v1.83.3.rc.1";
           litellm_db_image = "postgres:16";
           hostfolder = "/media/data-ssd/llama-swap";

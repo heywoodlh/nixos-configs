@@ -52,8 +52,20 @@ data:
           --port ${PORT}
           --host 127.0.0.1
           --ctx-size 8192
-          --threads 4
+          --threads 8
+          --threads-batch 8
           -ngl 99
+          --batch-size 256
+          --ubatch-size 128
+          --flash-attn on
+          --cont-batching
+          --parallel 2
+          --rope-freq-base 1000000
+          --cache-type-k f16
+          --cache-type-v f16
+          --mlock
+          --no-mmap
+          --no-warmup
   download.sh: |-
     #!/bin/sh
     set -e

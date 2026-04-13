@@ -44,16 +44,41 @@ data:
           --ctx-size 8192
           --threads 4
           -ngl 99
+      "qwen3.5:9b":
+        proxy: "http://127.0.0.1:${PORT}"
+        cmd: >-
+          llama-server
+          --model /models/Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-Q4_K_M.gguf
+          --port ${PORT}
+          --host 127.0.0.1
+          --ctx-size 8192
+          --threads 4
+          -ngl 99
   download.sh: |-
     #!/bin/sh
-    MODEL="/models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
-    URL="https://huggingface.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
-    if [ -f "${MODEL}" ]; then
-      echo "Model already exists, skipping download"
-    else
-      echo "Downloading model..."
-      curl -C - -L "${URL}" -o "${MODEL}"
-    fi
+    set -e
+
+    # Existing llama3.1 model
+    MODEL_LLAMA="/models/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
+    URL_LLAMA="https://huggingface.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"
+
+    # Qwen3.5 model (from the HuggingFace repo provided)
+    MODEL_QWEN="/models/Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-Q4_K_M.gguf"
+    URL_QWEN="https://huggingface.co/HauhauCS/Qwen3.5-9B-Uncensored-HauhauCS-Aggressive/resolve/main/Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-Q4_K_M.gguf"
+
+    download_if_missing() {
+      local MODEL_PATH="$1"
+      local URL="$2"
+      if [ -f "${MODEL_PATH}" ]; then
+        echo "${MODEL_PATH} already exists, skipping download"
+      else
+        echo "Downloading ${MODEL_PATH} from ${URL} ..."
+        curl -C - -L "${URL}" -o "${MODEL_PATH}"
+      fi
+    }
+
+    download_if_missing "${MODEL_LLAMA}" "${URL_LLAMA}"
+    download_if_missing "${MODEL_QWEN}" "${URL_QWEN}"
 ---
 apiVersion: apps/v1
 kind: Deployment

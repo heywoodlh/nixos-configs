@@ -51,7 +51,7 @@ data:
           --model /models/Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-Q4_K_M.gguf
           --port ${PORT}
           --host 127.0.0.1
-          --ctx-size 24576
+          --ctx-size 8192
           --threads 8
           --threads-batch 8
           -ngl 99

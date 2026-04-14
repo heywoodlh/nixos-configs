@@ -27,6 +27,7 @@ let
       | ${pkgs.wl-clipboard}/bin/wl-copy
   '';
   screenrecordScript = pkgs.writeShellScriptBin "screenrecord.sh" ''
+    mkdir -p "${homeDir}/Videos"
     filename="${homeDir}/Videos/$(date +%Y-%m-%d_%H-%M-%S).mp4"
     ${pkgs.wf-recorder}/bin/wf-recorder -g "$(${pkgs.slurp}/bin/slurp)" -t -f $filename
     [[ -e $filename ]] && ${pkgs.libnotify}/bin/notify-send "Screenrecord" "Saved to $filename"

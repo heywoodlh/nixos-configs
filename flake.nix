@@ -804,16 +804,19 @@
           };
 
           home-manager.users.heywoodlh = {
-            heywoodlh.home.autostart = [
-              {
-                name = "Steam";
-                command = "${pkgs.steam}/bin/steam steam://open/bigpicture";
-              }
-              youtube-music-brave
-            ];
-            heywoodlh.home.applications = [
-              youtube-music-brave
-            ];
+            heywoodlh.home = {
+              llm.homelab = lib.mkForce true;
+              autostart = [
+                {
+                  name = "Steam";
+                  command = "${pkgs.steam}/bin/steam steam://open/bigpicture";
+                }
+                youtube-music-brave
+              ];
+              applications = [
+                youtube-music-brave
+              ];
+            };
           };
         };
 

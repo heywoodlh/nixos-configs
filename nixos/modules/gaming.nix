@@ -118,6 +118,7 @@ in {
     };
 
     environment.systemPackages = with pkgs; [
+      dotnet-sdk # For games needing dotnet
       protonup-ng
       mangohud
     ] ++ lib.optionals (system == "x86_64-linux") [

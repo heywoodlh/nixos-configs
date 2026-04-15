@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, myFlakes, ... }:
 
 with lib;
 
@@ -15,7 +15,6 @@ in {
         '';
         type = types.bool;
       };
-      # wait until ollama + tools better supports intel gpus
       homelab = mkOption {
         default = false;
         description = ''
@@ -25,31 +24,28 @@ in {
       };
     };
   };
-
   config = let
-    url = if (cfg.homelab)
-      then "http://ollama.barn-banana.ts.net:11434"
-      else "http://localhost:11434";
+    url = "http://localhost:11434";
+    system = pkgs.stdenv.hostPlatform.system;
+    op-wrapper = "${myFlakes.packages.${system}.op-wrapper}/bin/op-wrapper";
     # Lightweight model to always pull
     model = "llama3.1:8b";
-    myCodexOllama = pkgs.writeShellScriptBin "codex-ollama" ''
-      ${pkgs.codex}/bin/codex --oss --local-provider ollama $@
+    myCodexLitellm = pkgs.writeShellScriptBin "codex-litellm" ''
+      LLM_API_KEY="$(${op-wrapper} item get zvj57fg53iipc4vxgobcer5j4q --fields master-key --reveal)"
+      ${pkgs.codex}/bin/codex --profile "qwen" $@
     '';
     ollamaPkg = if (cfg.homelab == false) then config.services.ollama.package else pkgs.ollama;
     myOllamaPull = pkgs.writeShellScript "ollama-pull" ''
       # Loop 3 times until model is pulled
       (r=3;while ! ${ollamaPkg}/bin/ollama list &>/dev/null ; do ((--r))||exit;sleep 60;done) && ${ollamaPkg}/bin/ollama pull ${model}
     '';
-    myOllama = pkgs.writeShellScriptBin "ollama" ''
-      [[ -z "$OLLAMA_HOST" ]] && export OLLAMA_HOST="${url}"
-      ${ollamaPkg}/bin/ollama $@
-    '';
   in mkIf cfg.enable {
     home.packages = with pkgs; [
-      myCodexOllama
       github-copilot-cli
+      claude-code
+      ollamaPkg
     ] ++ lib.optionals (cfg.homelab) [
-      myOllama
+      myCodexLitellm
     ];
 
     heywoodlh.home.helix.ai = true;
@@ -65,6 +61,8 @@ in {
           view_image_tool = true;
           shell_tool = true; # enable `/shell`
           apply_patch_freeform = true; # freeform patch syntax
+        } // lib.optionalAttrs (cfg.homelab == true) {
+          js_repl = false;
         };
         history = {
           persistence = "save-all";
@@ -89,6 +87,22 @@ in {
           network_access = true;
           exclude_tmpdir_env_var = false;
           exclude_slash_tmp = false;
+        };
+      } // lib.optionalAttrs (cfg.homelab) {
+        model_provider = "llama";
+        model_providers = {
+          llama = {
+            name = "llama";
+            baseURL = "http://llama-swap.barn-banana.ts.net/v1";
+            envKey = "LLM_API_KEY";
+            wire_api = "responses";
+            stream_idle_timeout_ms = 10000000;
+          };
+        };
+        profiles.qwen = {
+          model = "qwen3.5:9b";
+          model_provider = "llama";
+          web_search = "disabled";
         };
       };
     };
@@ -116,7 +130,7 @@ in {
       };
     };
 
-    systemd.user.services.ollama-pull = {
+    systemd.user.services.ollama-pull = lib.optionalAttrs (cfg.homelab == false) {
       Unit = {
         Description = "Automatically pull Ollama images";
         After = [ "ollama.service" ];
@@ -134,7 +148,7 @@ in {
       };
     };
 
-    launchd.agents.ollama-pull = {
+    launchd.agents.ollama-pull = lib.optionalAttrs (cfg.homelab == false) {
       enable = true;
       config = {
         ProgramArguments = [

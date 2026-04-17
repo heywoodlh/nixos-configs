@@ -289,7 +289,7 @@
           src = ./templates/atuin.yaml;
           namespace = "default";
           replicas = 1;
-          image = "ghcr.io/atuinsh/atuin:v18.10.0";
+          image = "ghcr.io/atuinsh/atuin:18.15.2";
           postgres_image = "docker.io/postgres:14";
         };
         beeper-bridges = mkKubeDrv "beeper-bridges" {
@@ -305,7 +305,7 @@
           src = ./templates/dev.yaml;
           namespace = "default";
           replicas = 1;
-          image = "docker.io/heywoodlh/dev:2026_01_snapshot";
+          image = "docker.io/heywoodlh/dev:2026_03_snapshot";
         };
         claude-code-webui = mkKubeDrv "claude-code-webui" {
           src = ./templates/claude-code-webui.yaml;
@@ -332,7 +332,7 @@
           src = ./templates/coder.yaml;
           namespace = "coder";
           version = "2.8.3";
-          image = "ghcr.io/coder/coder:v2.29.0";
+          image = "ghcr.io/coder/coder:v2.32.0";
           access_url = "https://coder.heywoodlh.io";
           replicas = "1";
           port = "80";
@@ -351,7 +351,7 @@
           src = ./templates/coredns.yaml;
           tailnet = "barn-banana.ts.net";
           namespace = "coredns";
-          image = "docker.io/coredns/coredns:1.13.1";
+          image = "docker.io/coredns/coredns:1.14.2";
           replicas = "1";
         };
         coredns-kube-system = mkKubeDrv "coredns-kube-system" {
@@ -374,7 +374,7 @@
         duplicati = mkKubeDrv "duplicati" {
           src = ./templates/duplicati.yaml;
           namespace = "default";
-          image = "docker.io/linuxserver/duplicati:2.2.0";
+          image = "docker.io/linuxserver/duplicati:2.3.0";
           hostfolder = "/media/data-ssd/duplicati";
           nodename = "homelab";
         };
@@ -406,16 +406,16 @@
         flan-scan = mkKubeDrv "flan-scan" {
           src = ./templates/flan-scan.yaml;
           namespace = "monitoring";
-          image = "docker.io/heywoodlh/flan-scan:2025_11";
-          http_image = "docker.io/heywoodlh/http-files:v2.10.2";
+          image = "docker.io/heywoodlh/flan-scan:2025_12";
+          http_image = "docker.io/heywoodlh/http-files:v2.11.2";
           hostfolder = "/media/data-ssd/flan-scan";
           replicas = 1;
         };
         fleetdm = mkKubeDrv "fleetdm" {
           src = ./templates/fleetdm.yaml;
           namespace = "monitoring";
-          image = "docker.io/fleetdm/fleet:v4.78.1";
-          mysql_image = "docker.io/mysql:8.4.7";
+          image = "docker.io/fleetdm/fleet:v4.83.2";
+          mysql_image = "docker.io/mysql:8.4.8";
           redis_image = "docker.io/redis:8.0-M02-alpine3.21";
           replicas = 1;
           logs_hostfolder = "/media/data-ssd/syslog/fleet";
@@ -423,7 +423,7 @@
         foldingathome = mkKubeDrv "foldingathome" {
           src = ./templates/foldingathome.yaml;
           namespace = "foldingathome";
-          image = "lscr.io/linuxserver/foldingathome:8.4.9";
+          image = "lscr.io/linuxserver/foldingathome:8.5.5";
           hostfolder = "/media/data-ssd/foldingathome";
           replicas = 1;
         };
@@ -439,13 +439,13 @@
         grafana = mkKubeDrv "grafana" {
           src = ./templates/grafana.yaml;
           namespace = "monitoring";
-          image = "docker.io/grafana/grafana:11.6.8";
+          image = "docker.io/grafana/grafana:11.6.14";
           storageclass = "local-path";
         };
         grayjay = mkKubeDrv "grayjay" {
           src = ./templates/grayjay.yaml;
           namespace = "default";
-          image = "docker.io/heywoodlh/grayjay:2026_03";
+          image = "docker.io/heywoodlh/grayjay:2026_04";
           nodename = "homelab";
           hostfolder = "/media/data-ssd/grayjay";
         };
@@ -467,7 +467,7 @@
         healthchecks = mkKubeDrv "healthchecks" {
           src = ./templates/healthchecks.yaml;
           namespace = "monitoring";
-          image = "docker.io/curlimages/curl:8.17.0";
+          image = "docker.io/curlimages/curl:8.19.0";
         };
         heralding = mkKubeDrv "heralding" {
           src = ./templates/heralding.yaml;
@@ -479,7 +479,7 @@
           src = ./templates/home-assistant.yaml;
           namespace = "default";
           timezone = "America/Denver";
-          image = "ghcr.io/home-assistant/home-assistant:2025.12.0";
+          image = "ghcr.io/home-assistant/home-assistant:2025.12.5";
           matter_image = "ghcr.io/home-assistant-libs/python-matter-server:8.1";
           go2rtc_image = "docker.io/alexxit/go2rtc:1.9.14";
           frigate_image = "ghcr.io/blakeblackshear/frigate:stable";
@@ -498,13 +498,13 @@
         };
         homepage = mkKubeDrv "homepage" {
           src = ./templates/homepage.yaml;
-          image = "ghcr.io/gethomepage/homepage:v1.7.0";
+          image = "ghcr.io/gethomepage/homepage:v1.12.3";
           namespace = "default";
         };
         http-files = mkKubeDrv "http-files" {
           src = ./templates/http-files.yaml;
           namespace = "default";
-          image = "docker.io/heywoodlh/http-files:v2.10.2";
+          image = "docker.io/heywoodlh/http-files:v2.11.2";
           replicas = 1;
         };
         immich = mkKubeDrv "immich" rec {
@@ -523,7 +523,7 @@
           src = ./templates/immich-ml.yaml;
           namespace = "default";
           timezone = "America/Denver";
-          image = "ghcr.io/immich-app/immich-machine-learning:v2.3.1-openvino";
+          image = "ghcr.io/immich-app/immich-machine-learning:v2.7.5-openvino";
           replicas = 1;
           hostfolder = "/media/data-ssd/immich-ml";
         };
@@ -600,11 +600,11 @@
           namespace = "media";
           replicas = 1;
           media_uid = "995";
-          plex_image = "docker.io/linuxserver/plex:1.42.2";
+          plex_image = "docker.io/linuxserver/plex:1.43.1";
           plex_hostfolder = "/media/config/services/plex";
           radarr_image = "docker.io/linuxserver/radarr:5.28.1-nightly";
           radarr_hostfolder = "/media/config/services/radarr";
-          sonarr_image = "docker.io/linuxserver/sonarr:4.0.16-develop";
+          sonarr_image = "docker.io/linuxserver/sonarr:4.0.17-develop";
           sonarr_hostfolder = "/media/config/services/sonarr";
           lidarr_image = "ghcr.io/hotio/lidarr:pr-plugins";
           lidarr_hostfolder = "/media/config/services/lidarr";
@@ -612,7 +612,7 @@
           readarr_hostfolder = "/media/config/services/readarr";
           sabnzbd_image = "docker.io/linuxserver/sabnzbd:4.5.5";
           sabnzbd_hostfolder = "/media/config/services/sabnzbd";
-          tautulli_image = "docker.io/tautulli/tautulli:v2.16.0";
+          tautulli_image = "docker.io/tautulli/tautulli:v2.17.0";
           tautulli_hostfolder = "/media/config/services/tautulli/config";
           qbittorrent_image = "docker.io/linuxserver/qbittorrent:5.1.4";
           qbittorrent_hostfolder = "/media/config/services/qbittorrent";
@@ -629,7 +629,7 @@
         };
         metrics-server = mkKubeDrv "metrics-server" {
           src = ./templates/metrics-server.yaml;
-          image = "registry.k8s.io/metrics-server/metrics-server:v0.8.0";
+          image = "registry.k8s.io/metrics-server/metrics-server:v0.8.1";
         };
         metube = mkKubeDrv "metube" {
           src = ./templates/metube.yaml;
@@ -654,8 +654,8 @@
         miniflux = mkKubeDrv "miniflux" {
           src = ./templates/miniflux.yaml;
           namespace = "default";
-          image = "docker.io/miniflux/miniflux:2.2.14";
-          postgres_image = "docker.io/postgres:15.15";
+          image = "docker.io/miniflux/miniflux:2.2.19";
+          postgres_image = "docker.io/postgres:15.17";
           postgres_replicas = 1;
           nodename = "homelab";
           hostfolder = "/opt/miniflux";
@@ -706,7 +706,7 @@
         ntfy = mkKubeDrv "ntfy" {
           src = ./templates/ntfy.yaml;
           namespace = "default";
-          image = "docker.io/binwiederhier/ntfy:v2.15.0";
+          image = "docker.io/binwiederhier/ntfy:v2.21.0";
           base_url = "http://ntfy.barn-banana.ts.net";
           timezone = "America/Denver";
           replicas = 1;
@@ -714,8 +714,8 @@
         nuclei = mkKubeDrv "nuclei" {
           src = ./templates/nuclei.yaml;
           namespace = "nuclei";
-          image = "docker.io/heywoodlh/nuclei:v3.5.1";
-          interactsh_image = "docker.io/projectdiscovery/interactsh-server:v1.2.4";
+          image = "docker.io/heywoodlh/nuclei:v3.7.1";
+          interactsh_image = "docker.io/projectdiscovery/interactsh-server:v1.3.1";
           httpd_image = "docker.io/httpd:2.4.66";
           replicas = 1;
         };
@@ -732,14 +732,14 @@
           namespace = "default";
           # TODO switch back to whyvl/ollama-vulkan when issue 26 is fixed
           #image = "docker.io/mthreads/ollama:0.11.5-rc2-23-g52fe8ce-vulkan-amd64";
-          image = "docker.io/ollama/ollama:0.17.5";
+          image = "docker.io/ollama/ollama:0.21.0";
           hostfolder = "/media/data-ssd/ollama";
         };
         open-webui = mkKubeDrv "open-webui" {
           src = ./templates/open-webui.yaml;
           namespace = "open-webui";
-          webui_image = "ghcr.io/open-webui/open-webui:0.6.41";
-          ollama_image = "docker.io/ollama/ollama:0.13.1";
+          webui_image = "ghcr.io/open-webui/open-webui:v0.8.12";
+          ollama_image = "docker.io/ollama/ollama:0.21.0";
           hostfolder = "/opt/open-webui";
         };
         palworld = mkKubeDrv "palworld" {
@@ -766,7 +766,7 @@
             server = {
               image = {
                 repository = "quay.io/prometheus/prometheus";
-                tag = "v3.8.0";
+                tag = "v3.11.2";
               };
               extraFlags = [
                 "storage.tsdb.wal-compression"
@@ -822,7 +822,7 @@
           src = ./templates/protonmail-bridge.yaml;
           namespace = "default";
           image = "docker.io/heywoodlh/tmp:protonmail-bridge-fix-798e66e";
-          ferroxide_image = "docker.io/heywoodlh/ferroxide:2026_01";
+          ferroxide_image = "docker.io/heywoodlh/ferroxide:2026_04";
           nodename = "homelab";
           hostfolder = "/opt/protonmail-bridge";
           replicas = 1;
@@ -839,7 +839,7 @@
           namespace = "gaming";
           replicas = 1;
           image = "docker.io/routmoute/fxserver:28108";
-          mysql_image = "docker.io/mariadb:10.11.15";
+          mysql_image = "docker.io/mariadb:10.11.16";
           hostfolder = "/media/data-ssd/redm";
           nodename = "homelab";
         };
@@ -864,7 +864,7 @@
           image = "docker.io/diygod/rsshub:2025-02-19";
           browserless_image = "docker.io/browserless/chrome:1.61-puppeteer-13.1.3";
           browserless_replicas = 1;
-          redis_image = "docker.io/redis:7.4.7";
+          redis_image = "docker.io/redis:7.4.8";
           redis_replicas = 1;
           nodename = "homelab";
           hostfolder = "/opt/rsshub";
@@ -887,7 +887,7 @@
           src = ./templates/samplicator.yaml;
           namespace = "monitoring";
           image = "docker.io/heywoodlh/samplicator:ceeb1d2-2025_04";
-          kubectl_image = "docker.io/heywoodlh/kubectl:v1.34.2";
+          kubectl_image = "docker.io/heywoodlh/kubectl:v1.35.3";
           replicas = 1;
         };
         silverbullet = mkKubeDrv "silverbullet" {
@@ -913,7 +913,7 @@
         squid = mkKubeDrv "squid" {
           src = ./templates/squid.yaml;
           namespace = "default";
-          image = "docker.io/heywoodlh/squid:6.13";
+          image = "docker.io/heywoodlh/squid:6.14";
           nodename = "homelab";
           hostfolder = "/opt/squid";
           replicas = 1;
@@ -930,7 +930,7 @@
           src = ./templates/syslog.yaml;
           namespace = "monitoring";
           hostfolder = "/media/data-ssd/syslog";
-          image = "docker.io/linuxserver/syslog-ng:4.8.3";
+          image = "docker.io/linuxserver/syslog-ng:4.10.2";
           logbash_image = "docker.io/heywoodlh/logbash:e1d594e";
           lnav_image = "docker.io/heywoodlh/lnav:35c17f9";
           replicas = 1;
@@ -947,7 +947,7 @@
         tailscale-mullvad-socks-router = mkKubeDrv "tailscale-mullvad-socks-router" {
           src = ./templates/mullvad-socks-router.yaml;
           namespace = "default";
-          image = "docker.io/heywoodlh/tailscale-mullvad-router:1.94.2";
+          image = "docker.io/heywoodlh/tailscale-mullvad-router:1.96.5";
           replicas = 1;
           hostfolder = "/opt/tailscale-mullvad-router";
           nodename = "homelab";
@@ -963,7 +963,7 @@
         tor-socks-proxy = mkKubeDrv "tor-socks-proxy" {
           src = ./templates/tor-socks-proxy.yaml;
           namespace = "default";
-          image = "docker.io/heywoodlh/tor-socks-proxy:0.4.8.21";
+          image = "docker.io/heywoodlh/tor-socks-proxy:0.4.9.6";
           replicas = 1;
         };
         uptime = mkKubeDrv "uptime" {

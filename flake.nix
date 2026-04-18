@@ -144,7 +144,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     osquery-fix-nixpkgs = {
-      url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
+      url = "github:nixos/nixpkgs/93b048bdd0015b0c09f366ca5b3db1fc3ac28092";
     };
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";

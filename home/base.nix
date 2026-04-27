@@ -703,6 +703,8 @@ in {
     vimAlias = true;
     viAlias = true;
     vimdiffAlias = true;
+    withPython3 = false;
+    withRuby = false;
   };
 
   heywoodlh.home.docker-credential-1password.enable = true;

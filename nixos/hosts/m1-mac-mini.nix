@@ -20,6 +20,9 @@
   # See https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS
   # Setup after initial install with these commands: https://gist.github.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
   boot.initrd = {
+    # Yubikey challenge-response LUKS is not supported in systemd stage 1;
+    # nixpkgs now defaults boot.initrd.systemd.enable to true, so override it.
+    systemd.enable = false;
     kernelModules = ["vfat" "nls_cp437" "nls_iso8859-1" "usbhid"];
     luks = {
       yubikeySupport = true;

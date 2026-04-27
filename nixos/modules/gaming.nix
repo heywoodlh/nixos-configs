@@ -104,7 +104,7 @@ in {
       enableRenice = true;
     };
 
-    systemd.services.nvidia_oc = {
+    systemd.services.nvidia_oc = lib.optionalAttrs (pkgs.stdenv.isx86_64) {
       enable = (config.networking.hostName == "nixos-gaming");
       description = "NVIDIA Overclocking Service";
       after = [ "network.target" ];

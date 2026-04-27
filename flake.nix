@@ -803,8 +803,11 @@
             openFirewall = true;
           };
 
+          heywoodlh.hyprland = lib.mkForce false;
+
           home-manager.users.heywoodlh = {
             heywoodlh.home = {
+              hyprland = lib.mkForce false;
               llm.homelab = lib.mkForce true;
               autostart = [
                 {

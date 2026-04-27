@@ -52,6 +52,7 @@ applications=(
   "rustdesk"
   "rustdesk-web"
   "samplicator"
+  "scrutiny-proxy"
   "skyrim-together"
   "silverbullet"
   "syncthing"

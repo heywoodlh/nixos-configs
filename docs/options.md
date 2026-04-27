@@ -2529,6 +2529,79 @@ false
 
 
 
+## heywoodlh\.nixos\.scrutiny\.enable
+
+
+
+Enable heywoodlh scrutiny monitoring configuration\.
+Remember to run ` sudo systemctl start scrutiny-collector.timer ` for initial dashboard population\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny.nix)
+
+
+
+## heywoodlh\.nixos\.scrutiny\.ntfy
+
+
+
+URL for NTFY notifications\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny.nix)
+
+
+
+## heywoodlh\.nixos\.scrutiny\.port
+
+
+
+Port for scrutiny web service\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+3050
+```
+
+*Declared by:*
+ - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny.nix)
+
+
+
 ## heywoodlh\.nixos\.steam-deck
 
 
@@ -2837,7 +2910,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/lvc1av7w5cvg2xjkkj683jjmncbhnkrs-source/base/stylix\.nix](/nix/store/lvc1av7w5cvg2xjkkj683jjmncbhnkrs-source/base/stylix.nix)
+ - [/nix/store/nhp7r4mj8n6ij1lf4k9qm89wn2192b80-source/base/stylix\.nix](/nix/store/nhp7r4mj8n6ij1lf4k9qm89wn2192b80-source/base/stylix.nix)
 
 
 
@@ -2861,7 +2934,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/lvc1av7w5cvg2xjkkj683jjmncbhnkrs-source/base/stylix\.nix](/nix/store/lvc1av7w5cvg2xjkkj683jjmncbhnkrs-source/base/stylix.nix)
+ - [/nix/store/nhp7r4mj8n6ij1lf4k9qm89wn2192b80-source/base/stylix\.nix](/nix/store/nhp7r4mj8n6ij1lf4k9qm89wn2192b80-source/base/stylix.nix)
 
 
 
@@ -2885,7 +2958,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/lvc1av7w5cvg2xjkkj683jjmncbhnkrs-source/base/stylix\.nix](/nix/store/lvc1av7w5cvg2xjkkj683jjmncbhnkrs-source/base/stylix.nix)
+ - [/nix/store/nhp7r4mj8n6ij1lf4k9qm89wn2192b80-source/base/stylix\.nix](/nix/store/nhp7r4mj8n6ij1lf4k9qm89wn2192b80-source/base/stylix.nix)
 
 
 

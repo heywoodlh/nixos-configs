@@ -364,6 +364,7 @@
       ./nixos/modules/cachyos-kernel.nix
       ./nixos/modules/steam-deck.nix
       ./nixos/modules/vmware-workstation.nix
+      ./nixos/modules/scrutiny.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -475,7 +476,14 @@
         ./nixos/roles/tailscale.nix
         ./nixos/roles/monitoring/syslog-ng/client.nix
         ./nixos/roles/monitoring/node-exporter.nix
-        { heywoodlh.server = true; }
+        {
+          heywoodlh.server = true;
+          heywoodlh.nixos.scrutiny = {
+            enable = true;
+            port = 3050;
+            ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
+          };
+        }
       ] ++ lib.optionals (machineType == "workstation") [
         ./nixos/roles/hardware/printers.nix
         { heywoodlh.workstation = true; }
@@ -758,6 +766,11 @@
               sunshine.enable = true;
               nvidia-patch = true;
               gaming = true;
+              scrutiny = {
+                enable = true;
+                port = 3050;
+                ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
+              };
             };
           };
           # Machine-specific sunshine configuration

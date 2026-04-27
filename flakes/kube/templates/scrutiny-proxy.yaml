@@ -1,0 +1,158 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scrutiny-proxy
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: scrutiny-proxy
+    app.kubernetes.io/instance: scrutiny-proxy
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "disks"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: scrutiny-proxy
+      protocol: TCP
+      name: scrutiny-proxy
+  selector:
+    app.kubernetes.io/name: scrutiny-proxy
+    app.kubernetes.io/instance: scrutiny-proxy
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scrutiny-proxy-config
+  namespace: @namespace@
+data:
+  Caddyfile: |-
+    :80 {
+        handle / {
+            header Content-Type "text/html; charset=utf-8"
+            respond `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title>scrutiny</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+          background-color: #1A202E;
+          color: #FBFDFE;
+          font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        h1 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          margin-bottom: 2rem;
+          color: #F50057;
+        }
+        .hosts {
+          display: grid;
+          gap: 0.75rem;
+          width: 100%;
+          max-width: 360px;
+          padding: 0 1rem;
+        }
+        a {
+          display: flex;
+          align-items: center;
+          padding: 0.875rem 1.25rem;
+          background-color: #2D3748;
+          border-radius: 0.5rem;
+          color: #FBFDFE;
+          text-decoration: none;
+          font-size: 0.875rem;
+          font-weight: 500;
+          transition: background-color 0.15s;
+        }
+        a:hover { background-color: #3D4A5C; }
+        .dot {
+          width: 8px;
+          height: 8px;
+          background-color: #F50057;
+          border-radius: 50%;
+          margin-right: 0.75rem;
+          flex-shrink: 0;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>scrutiny</h1>
+      <div class="hosts">
+        <a href="/nixos-gaming/"><span class="dot"></span>nixos-gaming</a>
+        <a href="/homelab/"><span class="dot"></span>homelab</a>
+        <a href="/nixos-slc/"><span class="dot"></span>nixos-slc</a>
+        <a href="/nixos-culug/"><span class="dot"></span>nixos-culug</a>
+      </div>
+    </body>
+    </html>` 200
+        }
+
+        handle /nixos-gaming* {
+            reverse_proxy http://nixos-gaming.barn-banana.ts.net:3050
+        }
+
+        handle /homelab* {
+            reverse_proxy http://homelab.barn-banana.ts.net:3050
+        }
+
+        handle /nixos-slc* {
+            reverse_proxy http://nixos-slc.barn-banana.ts.net:3050
+        }
+
+        handle /nixos-culug* {
+            reverse_proxy http://nixos-culug.barn-banana.ts.net:3050
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrutiny-proxy
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: scrutiny-proxy
+    app.kubernetes.io/instance: scrutiny-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: scrutiny-proxy
+      app.kubernetes.io/instance: scrutiny-proxy
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: scrutiny-proxy
+        app.kubernetes.io/instance: scrutiny-proxy
+    spec:
+      dnsPolicy: "Default"
+      containers:
+        - name: scrutiny-proxy
+          image: "@image@"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: scrutiny-proxy
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: scrutiny-proxy-config
+              mountPath: /etc/caddy/Caddyfile
+              subPath: Caddyfile
+      volumes:
+        - name: scrutiny-proxy-config
+          configMap:
+            name: scrutiny-proxy-config
+            items:
+              - key: Caddyfile
+                path: Caddyfile

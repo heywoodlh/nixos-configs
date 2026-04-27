@@ -883,6 +883,12 @@
           image = "docker.io/heywoodlh/rustdesk-web:1.4.4";
           replicas = 1;
         };
+        scrutiny-proxy = mkKubeDrv "scrutiny-proxy" {
+          src = ./templates/scrutiny-proxy.yaml;
+          namespace = "monitoring";
+          image = "docker.io/caddy:2.11-alpine";
+          replicas = 1;
+        };
         samplicator = mkKubeDrv "samplicator" {
           src = ./templates/samplicator.yaml;
           namespace = "monitoring";

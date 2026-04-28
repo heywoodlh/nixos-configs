@@ -5,6 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.11";
+    nixpkgs-nvidia.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-25.05";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     stylix = {
@@ -226,6 +227,7 @@
   outputs = inputs@{ self,
                       nixpkgs,
                       nixpkgs-stable,
+                      nixpkgs-nvidia,
                       nixpkgs-pam-lid-fix,
                       myFlakes,
                       stylix,

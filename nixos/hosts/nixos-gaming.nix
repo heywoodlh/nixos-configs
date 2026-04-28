@@ -1,6 +1,10 @@
 { config, lib, pkgs, modulesPath, ... }:
 
-{
+let
+  clear-crash = pkgs.writeShellScriptBin "clear.sh" ''
+    rm -rf /home/heywoodlh/.cache/drkonqi/crashes
+  '';
+in {
   imports =
     [ (modulesPath + "/profiles/qemu-guest.nix")
     ];
@@ -27,8 +31,15 @@
 
   system.activationScripts.clear-drkonqi-crashes = {
     text = ''
-      rm -rf /home/heywoodlh/.cache/drkonqi/crashes
+      ${clear-crash}/bin/clear.sh
     '';
+  };
+
+  services.cron = {
+    enable = true;
+    systemCronJobs = [
+      "*/5 * * * *      root    ${clear-crash}/bin/clear.sh"
+    ];
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

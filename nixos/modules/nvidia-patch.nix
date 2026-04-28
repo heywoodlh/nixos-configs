@@ -1,11 +1,11 @@
-{ pkgs, config, lib, nvidia-patch, nixpkgs, ... }:
+{ pkgs, config, lib, nvidia-patch, nixpkgs, nixpkgs-nvidia, ... }:
 
 with lib;
 
 let
   cfg = config.heywoodlh.nixos.nvidia-patch;
   system = pkgs.stdenv.hostPlatform.system;
-  pkgs-nvidia = import nixpkgs {
+  pkgs-nvidia = import nixpkgs-nvidia {
     inherit system;
     config.allowUnfree = true;
     overlays = [ nvidia-patch.overlays.default ];

@@ -231,6 +231,7 @@ spec:
           hostPath:
             path: /logs
             type: DirectoryOrCreate
+
 ---
 apiVersion: v1
 kind: Service
@@ -273,3 +274,104 @@ spec:
       name: claude-ui
   selector:
     app: claude-code-webui
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hermes-agent
+  name: hermes-agent
+  namespace: @namespace@
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hermes-agent
+  template:
+    metadata:
+      labels:
+        app: hermes-agent
+    spec:
+      serviceAccountName: claude-code-webui
+      hostname: hermes-agent
+      containers:
+        - image: @hermes_image@
+          imagePullPolicy: Always
+          name: hermes-agent
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN # for rootless podman
+          resources:
+            limits:
+              github.com/fuse: 1 # FUSE for rootless podman
+          volumeMounts:
+            - name: claude-code-webui-nix
+              mountPath: /nix
+            - name: claude-code-webui-home
+              mountPath: /home/nix
+            - name: hermes-supervisord
+              mountPath: /etc/supervisor/conf.d
+            - name: flows
+              mountPath: /flows
+              readOnly: true
+            - name: logs
+              mountPath: /logs
+              readOnly: true
+          env:
+            - name: HTTP_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: claude-code-webui
+                  key: username
+            - name: HTTP_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: claude-code-webui
+                  key: password
+          ports:
+            - name: hermes-ui
+              containerPort: 8080
+              protocol: TCP
+      volumes:
+        - name: claude-code-webui-nix
+          hostPath:
+            path: @hostfolder@/nix
+            type: DirectoryOrCreate
+        - name: claude-code-webui-home
+          hostPath:
+            path: @hostfolder@/home
+            type: DirectoryOrCreate
+        - name: hermes-supervisord
+          hostPath:
+            path: @hostfolder@/hermes-supervisord
+            type: DirectoryOrCreate
+        - name: flows
+          hostPath:
+            path: /flows
+            type: DirectoryOrCreate
+        - name: logs
+          hostPath:
+            path: /logs
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hermes
+  namespace: @namespace@
+  labels:
+    app: claude-code-webui
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "hermes"
+    tailscale.com/tags: "tag:adminhttp"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: hermes-ui
+  selector:
+    app: hermes-agent

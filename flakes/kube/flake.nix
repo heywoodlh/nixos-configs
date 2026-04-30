@@ -311,6 +311,7 @@
           src = ./templates/claude-code-webui.yaml;
           namespace = "machine-learning";
           image = "docker.io/heywoodlh/claude-code-webui:0.1.56";
+          hermes_image = "docker.io/heywoodlh/hermes-agent:2026.4.30";
           replicas = 1;
           hostfolder = "/media/data-ssd/claude-code-webui";
           nodename = "homelab";

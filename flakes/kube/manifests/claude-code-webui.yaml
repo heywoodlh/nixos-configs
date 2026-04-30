@@ -72,6 +72,31 @@ roleRef:
   name: claude-code-webui
   apiGroup: rbac.authorization.k8s.io
 ---
+# Namespace-scoped Role: grants pod exec access ONLY within machine-learning
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: claude-code-webui-exec
+  namespace: machine-learning
+rules:
+- apiGroups: [""]
+  resources: ["pods/exec", "pods/attach"]
+  verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: claude-code-webui-exec
+  namespace: machine-learning
+subjects:
+- kind: ServiceAccount
+  name: claude-code-webui
+  namespace: machine-learning
+roleRef:
+  kind: Role
+  name: claude-code-webui-exec
+  apiGroup: rbac.authorization.k8s.io
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:

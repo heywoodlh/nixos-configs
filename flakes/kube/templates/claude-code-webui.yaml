@@ -406,11 +406,11 @@ spec:
             type: DirectoryOrCreate
         - name: signal-cli-config
           hostPath:
-            path: /home/heywoodlh/.config/signal-cli
+            path: @hostfolder@/hermes-signal-cli/config
             type: DirectoryOrCreate
         - name: signal-cli-local
           hostPath:
-            path: /home/heywoodlh/.local/share/signal-cli
+            path: @hostfolder@/hermes-signal-cli/local
             type: DirectoryOrCreate
         - name: flows
           hostPath:

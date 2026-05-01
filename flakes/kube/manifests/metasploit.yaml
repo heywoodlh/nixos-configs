@@ -1,0 +1,207 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "metasploit-secrets"
+  namespace: "machine-learning"
+spec:
+  itemPath: "vaults/Kubernetes/items/sum7oaopcfyfwjubmi2twvtlu4"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metasploit
+  namespace: machine-learning
+  labels:
+    app.kubernetes.io/name: metasploit
+    app.kubernetes.io/instance: metasploit
+spec:
+  type: ClusterIP
+  ports:
+    - port: 55553
+      targetPort: msfrpcd
+      protocol: TCP
+      name: msfrpcd
+  selector:
+    app.kubernetes.io/name: metasploit
+    app.kubernetes.io/instance: metasploit
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metasploit-db
+  namespace: machine-learning
+  labels:
+    app.kubernetes.io/name: metasploit-db
+    app.kubernetes.io/instance: metasploit-db
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      targetPort: postgresql
+      protocol: TCP
+      name: postgresql
+  selector:
+    app.kubernetes.io/name: metasploit-db
+    app.kubernetes.io/instance: metasploit-db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metasploit
+  namespace: machine-learning
+  labels:
+    app.kubernetes.io/name: metasploit
+    app.kubernetes.io/instance: metasploit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: metasploit
+      app.kubernetes.io/instance: metasploit
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: metasploit
+        app.kubernetes.io/instance: metasploit
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: msfrpcd
+          image: "docker.io/heywoodlh/metasploit:msfrpcd-6.4.132"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+          ports:
+            - name: msfrpcd
+              containerPort: 55553
+              protocol: TCP
+          env:
+            - name: MSF_PORT
+              value: "55553"
+            - name: MSF_SSL
+              value: "false"
+            - name: MSF_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: metasploit-secrets
+                  key: username
+                  optional: false
+            - name: MSF_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: metasploit-secrets
+                  key: password
+                  optional: false
+            - name: DB_ENABLE
+              value: "true"
+            - name: DB_ADAPTER
+              value: "postgresql"
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: metasploit-secrets
+                  key: database-name
+                  optional: false
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: metasploit-secrets
+                  key: database-username
+                  optional: false
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: metasploit-secrets
+                  key: database-password
+                  optional: false
+            - name: DB_HOST
+              value: "metasploit-db.machine-learning.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+          resources:
+            {}
+          volumeMounts:
+            - name: nix-store
+              mountPath: /nix
+            - name: msf-home
+              mountPath: /home/msf
+            - name: msf4-data
+              mountPath: /home/msf/.msf4
+      volumes:
+        - name: nix-store
+          hostPath:
+            path: /media/data-ssd/metasploit/msfrpcd/nix
+            type: DirectoryOrCreate
+        - name: msf-home
+          hostPath:
+            path: /media/data-ssd/metasploit/msfrpcd/home
+            type: DirectoryOrCreate
+        - name: msf4-data
+          hostPath:
+            path: /media/data-ssd/metasploit/msfrpcd/msf4
+            type: DirectoryOrCreate
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metasploit-database
+  namespace: machine-learning
+  labels:
+    app.kubernetes.io/name: metasploit-db
+    app.kubernetes.io/instance: metasploit-db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: metasploit-db
+      app.kubernetes.io/instance: metasploit-db
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: metasploit-db
+        app.kubernetes.io/instance: metasploit-db
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: postgresql
+          image: "docker.io/postgres:14"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: postgresql
+              containerPort: 5432
+              protocol: TCP
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: metasploit-secrets
+                  key: database-name
+                  optional: false
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: metasploit-secrets
+                  key: database-username
+                  optional: false
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: metasploit-secrets
+                  key: database-password
+                  optional: false
+          resources:
+            {}
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-data
+          hostPath:
+            path: /media/data-ssd/metasploit/msfrpcd/db
+            type: DirectoryOrCreate

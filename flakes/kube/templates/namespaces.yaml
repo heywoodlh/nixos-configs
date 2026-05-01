@@ -55,3 +55,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: machine-learning
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sandbox

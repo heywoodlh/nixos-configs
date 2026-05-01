@@ -65,12 +65,31 @@ spec:
         app.kubernetes.io/name: metasploit
         app.kubernetes.io/instance: metasploit
     spec:
+      initContainers:
+        - name: volume-permissions
+          image: docker.io/busybox:stable
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              chown -R 1000:1000 /nix /home/msf
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: nix-store
+              mountPath: /nix
+            - name: msf-home
+              mountPath: /home/msf
       securityContext:
         {}
       containers:
         - name: msfrpcd
           image: "@image@"
           imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
           ports:
             - name: msfrpcd
               containerPort: 55553

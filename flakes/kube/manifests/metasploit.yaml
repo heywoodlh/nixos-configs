@@ -15,6 +15,10 @@ metadata:
   labels:
     app.kubernetes.io/name: metasploit
     app.kubernetes.io/instance: metasploit
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "metasploit"
+    tailscale.com/tags: "tag:metasploit"
 spec:
   type: ClusterIP
   ports:

@@ -342,6 +342,7 @@ spec:
       labels:
         app: hermes-agent
     spec:
+      dnsPolicy: "Default"
       serviceAccountName: claude-code-webui
       hostname: hermes-agent
       containers:
@@ -362,6 +363,10 @@ spec:
               mountPath: /home/nix
             - name: hermes-supervisord
               mountPath: /etc/supervisor/conf.d
+            - name: signal-cli-config
+              mountPath: /home/nix/.config/signal-cli
+            - name: signal-cli-local
+              mountPath: /home/nix/.local/share/signal-cli
             - name: flows
               mountPath: /flows
               readOnly: true
@@ -395,6 +400,14 @@ spec:
         - name: hermes-supervisord
           hostPath:
             path: @hostfolder@/hermes-supervisord
+            type: DirectoryOrCreate
+        - name: signal-cli-config
+          hostPath:
+            path: /home/heywoodlh/.config/signal-cli
+            type: DirectoryOrCreate
+        - name: signal-cli-local
+          hostPath:
+            path: /home/heywoodlh/.local/share/signal-cli
             type: DirectoryOrCreate
         - name: flows
           hostPath:

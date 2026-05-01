@@ -34,6 +34,7 @@ applications=(
   "lancache"
   "llama-swap"
   "media"
+  "metasploit"
   "meshtastic"
   "minecraft-bedrock"
   "minecraft-java"

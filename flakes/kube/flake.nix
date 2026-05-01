@@ -621,6 +621,14 @@
           media_hostfolder = "/media/home-media";
           nodename = "homelab";
         };
+        metasploit = mkKubeDrv "metasploit" {
+          src = ./templates/metasploit.yaml;
+          namespace = "machine-learning";
+          image = "docker.io/heywoodlh/metasploit:msfrpcd-6.4.132";
+          postgres_image = "docker.io/postgres:14";
+          replicas = 1;
+          hostfolder = "/media/data-ssd/metasploit/msfrpcd";
+        };
         meshtastic = mkKubeDrv "meshtastic" {
           src = ./templates/meshtastic.yaml;
           namespace = "default";

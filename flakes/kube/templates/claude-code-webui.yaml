@@ -342,6 +342,9 @@ spec:
       labels:
         app: hermes-agent
     spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
       dnsPolicy: "Default"
       serviceAccountName: claude-code-webui
       hostname: hermes-agent

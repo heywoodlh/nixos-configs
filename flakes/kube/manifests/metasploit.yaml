@@ -3,7 +3,7 @@ apiVersion: onepassword.com/v1
 kind: OnePasswordItem
 metadata:
   name: "metasploit-secrets"
-  namespace: ""
+  namespace: "machine-learning"
 spec:
   itemPath: "vaults/Kubernetes/items/sum7oaopcfyfwjubmi2twvtlu4"
 ---
@@ -11,7 +11,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: metasploit
-  namespace: 
+  namespace: machine-learning
   labels:
     app.kubernetes.io/name: metasploit
     app.kubernetes.io/instance: metasploit
@@ -30,7 +30,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: metasploit-db
-  namespace: 
+  namespace: machine-learning
   labels:
     app.kubernetes.io/name: metasploit-db
     app.kubernetes.io/instance: metasploit-db
@@ -49,12 +49,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: metasploit
-  namespace: 
+  namespace: machine-learning
   labels:
     app.kubernetes.io/name: metasploit
     app.kubernetes.io/instance: metasploit
 spec:
-  replicas: 
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: metasploit
@@ -85,7 +85,7 @@ spec:
         {}
       containers:
         - name: msfrpcd
-          image: ""
+          image: "docker.io/heywoodlh/metasploit:msfrpcd-6.4.132"
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 1000
@@ -134,7 +134,7 @@ spec:
                   key: database-password
                   optional: false
             - name: DB_HOST
-              value: "metasploit-db..svc.cluster.local"
+              value: "metasploit-db.machine-learning.svc.cluster.local"
             - name: DB_PORT
               value: "5432"
           resources:
@@ -147,18 +147,18 @@ spec:
       volumes:
         - name: nix-store
           hostPath:
-            path: /nix
+            path: /media/data-ssd/metasploit/msfrpcd/nix
             type: DirectoryOrCreate
         - name: msf-home
           hostPath:
-            path: /home
+            path: /media/data-ssd/metasploit/msfrpcd/home
             type: DirectoryOrCreate
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: metasploit-database
-  namespace: 
+  namespace: machine-learning
   labels:
     app.kubernetes.io/name: metasploit-db
     app.kubernetes.io/instance: metasploit-db
@@ -180,7 +180,7 @@ spec:
         {}
       containers:
         - name: postgresql
-          image: ""
+          image: "docker.io/postgres:14"
           imagePullPolicy: IfNotPresent
           ports:
             - name: postgresql
@@ -213,5 +213,5 @@ spec:
       volumes:
         - name: db-data
           hostPath:
-            path: /db
+            path: /media/data-ssd/metasploit/msfrpcd/db
             type: DirectoryOrCreate

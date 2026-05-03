@@ -10,9 +10,6 @@ let
       ${pkgs.ollama}/bin/ollama pull "''${model}"
     done
   '';
-  matrix-heartbeat = pkgs.writeShellScriptBin "matrix-heartbeat.sh" ''
-    matrix-commander-rs --message "$(date): homelab-heartbeat"
-  '';
 in {
   imports =
   [ # Include the results of the hardware scan.
@@ -123,8 +120,6 @@ in {
     ollama_pull
     nfdump
     runc
-    matrix-commander-rs
-    matrix-heartbeat
   ];
 
   services = {
@@ -144,7 +139,6 @@ in {
       "3 4 * * 7      root    rm -rf /var/lib/cni/networks/cbr0/"
       "0 0 * * *      root    ${ollama_pull}/bin/ollama-pull"
       "5 4 * * 7      root    shutdown -r now"
-      "0 0 * * *      heywoodlh ${matrix-heartbeat}/bin/matrix-heartbeat.sh"
     ];
   };
 

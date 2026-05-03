@@ -528,10 +528,10 @@
           replicas = 1;
           hostfolder = "/media/data-ssd/immich-ml";
         };
-        intel-device-plugin = mkKubeDrv "http-files" {
+        intel-device-plugin = mkKubeDrv "intel-device-plugin" {
           src = ./templates/intel-device-plugin.yaml;
           namespace = "default";
-          version = "v0.34.0";
+          version = "v0.35.0";
           replicas = 1;
         };
         iperf = mkKubeDrv "iperf" {

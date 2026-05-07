@@ -2501,13 +2501,13 @@
     "user-icon": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-zzP2co4GNiPIoq1XNbwN3qrTYOnQ6dv5NPwM3kPCGBc=",
+        "narHash": "sha256-l/RV3oKHtzQpi17hVLaN0lIvU2Fpe9dgTZClP1vSxS4=",
         "type": "file",
-        "url": "https://avatars.githubusercontent.com/u/18178614?v=4"
+        "url": "https://avatar.tangled.sh/1c796c57a7536e989ab09026df5f0fe7870be6217bc8ae642e48fa449de72f59/did:plc:ycnss4fntzi3rjuueb7loq3x?v=bafkreic"
       },
       "original": {
         "type": "file",
-        "url": "https://avatars.githubusercontent.com/u/18178614?v=4"
+        "url": "https://avatar.tangled.sh/1c796c57a7536e989ab09026df5f0fe7870be6217bc8ae642e48fa449de72f59/did:plc:ycnss4fntzi3rjuueb7loq3x?v=bafkreic"
       }
     },
     "vicinae-nix": {

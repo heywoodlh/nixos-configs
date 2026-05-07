@@ -133,7 +133,7 @@
       inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
     };
     user-icon = {
-      url = "https://avatars.githubusercontent.com/u/18178614?v=4";
+      url = "https://avatar.tangled.sh/1c796c57a7536e989ab09026df5f0fe7870be6217bc8ae642e48fa449de72f59/did:plc:ycnss4fntzi3rjuueb7loq3x?v=bafkreic";
       flake = false;
     };
     ssh-keys = {

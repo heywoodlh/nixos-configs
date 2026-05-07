@@ -278,6 +278,48 @@ let
   wake-sarah-gaming-pc = pkgs.writeShellScriptBin "wake-sarah-gaming-pc.sh" ''
     ${pkgs.openssh}/bin/ssh spencer-router.barn-banana.ts.net /opt/public/wake-sarah-gaming.sh
   '';
+  tangled-sync = pkgs.writeShellScriptBin "tangled-sync.sh" ''
+    # Helper to setup GitHub repo to point to tangled.org
+    # Assumes directory name is repo name, and CWD is GitHub repo
+    # Also assumes repo has been created with same name on tangled.org
+    dir="$(pwd)"
+    name="$(basename $(pwd))"
+    if git -C "$dir" remote -v &>/dev/null
+    then
+      target="git@tangled.org:heywoodlh.io/$name"
+      src="$(git -C $dir remote -v | grep github.com | grep -E "^origin" | grep push | awk '{print $2}')"
+
+      if ! echo "$src" | grep -q "github.com"
+      then
+        echo "Unable to determine src GitHub repo, exiting."
+      fi
+
+      # If fetch origin is GitHub, let's remove origin entirely
+      if git -C "$dir" remote -v | grep -E '^origin' | grep '(fetch)' | grep -q github.com
+      then
+        echo "Source GitHub repo is: $src"
+        git -C "$dir" remote remove origin && git -C "$dir" remote add origin "$target" && echo "Changed origin: [fetch] $src -> $target"
+      fi
+
+      # Re-add GitHub push to origin
+      if ! git -C "$dir" remote -v | grep -E '^origin' | grep -q "$src"
+      then
+        git -C "$dir" remote set-url --add --push origin $src && echo "Added origin (for mirroring): [push] -> $src"
+      fi
+
+      # Re-add Tangled push to origin
+      if ! git -C "$dir" remote -v | grep -E '^origin' | grep push | grep -q "$target"
+      then
+        git -C "$dir" remote set-url --add --push origin $target && echo "Added origin: [push] -> $target"
+      fi
+
+      # Push all branches and tags
+      git push origin --all
+      git push origin --tags
+    else
+      echo "$dir is not pointing to a GitHub repository as primary origin"
+    fi
+  '';
 in {
   # Packages I need installed on every system
   home.packages = with pkgs; [
@@ -346,6 +388,7 @@ in {
     wake-spencer-gaming-pc
     wake-sarah-gaming-pc
     myOpWrapper
+    tangled-sync
   ];
 
   # Enable password-store

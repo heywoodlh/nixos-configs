@@ -195,7 +195,7 @@ in {
           target="git+https://tangled.org/heywoodlh.io/nixos-configs"
         fi
         # Wrapper to use the stable nixos-rebuild
-        sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake "${target}#$(hostname)" ''${@:2}
+        sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake "$target#$(hostname)" ''${@:2}
       '';
       myNixosSwitch = pkgs.writeShellScriptBin "nixos-switch" ''
         ${nixosRebuildWrapper} switch $@

@@ -96,7 +96,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: argo
   source:
-    repoURL: https://github.com/heywoodlh/nixos-configs.git
+    repoURL: https://tangled.org/heywoodlh.io/nixos-configs.git
     targetRevision: HEAD
     path: flakes/kube/manifests
     directory:

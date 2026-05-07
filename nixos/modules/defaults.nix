@@ -188,9 +188,14 @@ in {
     # Stable, system-wide packages
     environment.systemPackages = with stable-pkgs; let
       nixosRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
-        [[ -d $HOME/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs ${homeDir}/opt/nixos-configs
+        if [[ -d $HOME/opt/nixos-configs ]]
+        then
+          target="${homeDir}/opt/nixos-configs"
+        else
+          target="git+https://tangled.org/heywoodlh.io/nixos-configs"
+        fi
         # Wrapper to use the stable nixos-rebuild
-        sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake /home/heywoodlh/opt/nixos-configs#$(hostname) ''${@:2}
+        sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake "${target}#$(hostname)" ''${@:2}
       '';
       myNixosSwitch = pkgs.writeShellScriptBin "nixos-switch" ''
         ${nixosRebuildWrapper} switch $@

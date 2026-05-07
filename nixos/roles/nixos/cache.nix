@@ -20,7 +20,7 @@
       export NIXPKGS_ALLOW_UNFREE=1
       # nixos-configs build
       rm -rf /tmp/nixos-configs
-      ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs.git /tmp/nixos-configs
+      ${pkgs.git}/bin/git clone https://tangled.org/heywoodlh.io/nixos-configs.git /tmp/nixos-configs
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nixos-server-intel --impure
       ${pkgs.nixos-rebuild}/bin/nixos-rebuild build --flake /tmp/nixos-configs#nixos-desktop-intel --impure
 

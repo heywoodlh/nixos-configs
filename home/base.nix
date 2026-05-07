@@ -232,7 +232,7 @@ let
     # Script to test nixos-configs
     nixos_configs="$HOME/opt/nixos-configs"
     # Fallback to git repository if local repo not found
-    [[ ! -d "$nixos_configs" ]] && rm -rf /tmp/nixos-configs && ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /tmp/nixos-configs && nixos_configs="/tmp/nixos-configs"
+    [[ ! -d "$nixos_configs" ]] && rm -rf /tmp/nixos-configs && ${pkgs.git}/bin/git clone https://tangled.org/heywoodlh.io/nixos-configs /tmp/nixos-configs && nixos_configs="/tmp/nixos-configs"
     set -e
     # Test linux
     if echo "$targets" | ${pkgs.gnugrep}/bin/grep -qE 'home-manager|nixos-desktop|nixos-server'

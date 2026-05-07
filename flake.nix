@@ -735,7 +735,7 @@
             Deploy like so:
 
             ```
-            sudo nixos-rebuild switch --flake "github:heywoodlh/nixos-configs#nixos-culug"
+            sudo nixos-rebuild switch --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-culug"
             ```
             Open a PR if you want updates.
 
@@ -1037,7 +1037,12 @@
       # home-manager targets (non NixOS/MacOS, ideally Arch Linux)
       packages.homeConfigurations = let
         homeSwitch = ''
-          ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs ~/opt/nixos-configs &>/dev/null || true
+          if [[ -d $HOME/opt/nixos-configs ]]
+          then
+            target="$HOME/opt/nixos-configs"
+          else
+            target="git+https://tangled.org/heywoodlh.io/nixos-configs"
+          fi
           ## OS-specific support (mostly, Ubuntu vs anything else)
           ## Anything else will use nixpkgs-unstable
           EXTRA_ARGS=""
@@ -1113,7 +1118,7 @@
                 text = ''
                   #!/usr/bin/env bash
                   ${homeSwitch}
-                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
+                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$target#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
                 '';
               };
             }
@@ -1226,7 +1231,7 @@
 
       packages = {
         docs = pkgs.runCommand "options-doc.md" {} ''
-          cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/nixos\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/github.com\/heywoodlh\/nixos-configs\/tree\/master\/home\/modules|g' > $out
+          cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/nixos\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/home\/modules|g' > $out
         '';
         # Applications I want to export and remain consistent with this repo
         helix = myFlakes.packages.${system}.helix;

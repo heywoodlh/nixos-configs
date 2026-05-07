@@ -16,7 +16,8 @@
   ignore_errors: true
 
 - name: install flake if it doesn't exist
-  ansible.builtin.shell: "/nix/var/nix/profiles/default/bin/nix --extra-experimental-features 'nix-command flakes' profile install github:heywoodlh/nixos-configs?dir=flakes#{{ item }} --no-write-lock-file"
+  ansible.builtin.shell: >
+    /nix/var/nix/profiles/default/bin/nix --extra-experimental-features 'nix-command flakes' profile install "git+https://tangled.org/heywoodlh.io/nixos-configs?dir=flakes#{{ item }}" --no-write-lock-file
   when:
     - home_flake_check.rc != 0
     - system_flake_check.rc != 0

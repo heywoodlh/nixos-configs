@@ -5,9 +5,14 @@ let
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
-  darwinRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
-    [[ -d $HOME/opt/nixos-configs ]] || ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs $HOME/opt/nixos-configs
-    /usr/bin/sudo darwin-rebuild $1 --flake $HOME/opt/nixos-configs#$(hostname) ''${@:2}
+  darwinRebuildWrapper = pkgs.writeShellScript "darwin-rebuild-wrapper" ''
+    if [[ -d $HOME/opt/nixos-configs ]]
+    then
+      target="$HOME/opt/nixos-configs"
+    else
+      target="git+https://tangled.org/heywoodlh.io/nixos-configs"
+    fi
+    /usr/bin/sudo darwin-rebuild $1 --flake "$target#$(hostname)" ''${@:2}
   '';
   myDarwinSwitch = pkgs.writeShellScriptBin "darwin-switch" ''
     ${darwinRebuildWrapper} switch $@

@@ -3,7 +3,7 @@ name: build-darwin-env
 on:
   push:
     branches:
-    - 'master'
+    - 'main'
     paths:
     - darwin/**
     - .github/workflows/darwin.yml

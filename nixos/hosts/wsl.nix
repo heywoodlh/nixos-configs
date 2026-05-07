@@ -27,7 +27,7 @@
         #!/usr/bin/env bash
         windows_username="$(cmd.exe /c "echo %USERNAME%")"
         firefox_profile="/mnt/c/Users/$windows_username/AppData/Roaming/Mozilla/Firefox/Profiles"
-        ${pkgs.nix}/bin/nix --extra-experimental-features "flakes nix-command" run "github:heywoodlh/nixos-configs?dir=flakes/firefox#firefox-setup" -- "$firefox_profile"
+        ${pkgs.nix}/bin/nix --extra-experimental-features "flakes nix-command" run "git+https://tangled.org/heywoodlh.io/nixos-configs?dir=flakes/firefox#firefox-setup" -- "$firefox_profile"
       '';
     };
     programs = {

@@ -5,7 +5,7 @@
 
 ## NixOS Configs
 
-This repo stores my NixOS and Nix on Darwin setup.
+This repo stores my NixOS and Nix on Darwin setup. Primary development happens at https://tangled.org/heywoodlh.io/nixos-configs.
 
 NixOS configs are here: [./nixos](./nixos)
 
@@ -61,7 +61,7 @@ Documentation for module options can be viewed here: [options.md](./docs/options
 Check out the outputs for this flake with this command:
 
 ```
-nix flake show github:heywoodlh/nixos-configs
+nix flake show "git+https://tangled.org/heywoodlh.io/nixos-configs"
 ```
 
 For some reason, the `darwinConfigurations` outputs aren't shown properly, so you'll have to manually check out `./flake.nix` to figure out what MacOS outputs are available.
@@ -72,7 +72,7 @@ To install a NixOS configuration, let's assume the `nixos-desktop-intel` output,
 
 ```
 # Initial config to setup Attic cache, enable Tailscale and enable unconfigured Neovim
-sudo nixos-rebuild switch --impure --flake github:heywoodlh/nixos-configs#nixos-init
+sudo nixos-rebuild switch --impure --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-init"
 
 # Tailscale for Attic cache
 sudo tailscale up --qr --advertise-tags="tag:adminworkstation"
@@ -81,7 +81,7 @@ sudo tailscale up --qr --advertise-tags="tag:adminworkstation"
 Then deploy the desired configuration:
 
 ```
-sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-desktop-intel
+sudo nixos-rebuild switch --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-desktop-intel"
 ```
 
 <details>
@@ -91,7 +91,7 @@ sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-desktop-i
 Then run the install on the virtual machine:
 
 ```
-sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-vmware --impure
+sudo nixos-rebuild switch --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-vmware" --impure
 ```
 
 Make the following settings changes to the VM in VMWare Fusion:
@@ -122,7 +122,7 @@ Virtualize > Use Apple Virtualization > Enable Rosetta (x86_64 Emulation)
 After the install, run the following command:
 
 ```
-sudo nixos-rebuild switch --flake github:heywoodlh/nixos-configs#nixos-utm --impure
+sudo nixos-rebuild switch --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-utm" --impure
 ```
 
 </details>
@@ -139,7 +139,7 @@ To install a MacOS configuration, let's assume the `m4-macbook-air` output, do t
 
 ```
 sudo rm -rf /etc/ssh/ssh_config # conflicts with a file in nix-darwin
-sudo nix run "github:LNL7/nix-darwin#packages.aarch64-darwin.darwin-rebuild" -- switch --flake github:heywoodlh/nixos-configs#m4-macbook-air --impure
+sudo nix run "github:LNL7/nix-darwin#packages.aarch64-darwin.darwin-rebuild" -- switch --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#m4-macbook-air" --impure
 ```
 
 ### Other Linux distributions:
@@ -147,11 +147,11 @@ sudo nix run "github:LNL7/nix-darwin#packages.aarch64-darwin.darwin-rebuild" -- 
 Run the following command to use the Home Manager implementation on any Linux distribution with `nix` installed:
 
 ```
-nix --extra-experimental-features 'nix-command flakes' run github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh.activationPackage --impure
+nix --extra-experimental-features 'nix-command flakes' run "git+https://tangled.org/heywoodlh.io/nixos-configs#homeConfigurations.heywoodlh.activationPackage" --impure
 ```
 
 For headless Linux machines:
 
 ```
-nix --extra-experimental-features 'nix-command flakes' run github:heywoodlh/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage --impure
+nix --extra-experimental-features 'nix-command flakes' run "git+https://tangled.org/heywoodlh.io/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" --impure
 ```

@@ -10,7 +10,7 @@ let
   '';
   populateCache = pkgs.writeShellScriptBin "nixos-cache-populate" ''
     rm -rf /tmp/nixos-configs
-    ${pkgs.git}/bin/git clone https://github.com/heywoodlh/nixos-configs /tmp/nixos-configs
+    ${pkgs.git}/bin/git clone https://tangled.org/heywoodlh.io/nixos-configs /tmp/nixos-configs
     cd /tmp/nixos-configs
     # ARM64 builds
     ## Desktop

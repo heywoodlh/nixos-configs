@@ -6,7 +6,7 @@ on:
     - cron: "0 0 * * 2"
   push:
     branches:
-      - master
+      - main
     paths:
       - flakes/kube/**
       - '!flakes/kube/**.md'
@@ -52,20 +52,20 @@ jobs:
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         with:
           commit_message: "GitHub Action automated Kubernetes update"
           file_pattern: 'flakes/kube/manifests/*.yaml'
 
       - name: Install kubectl
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         uses: azure/setup-kubectl@v4
 
         # Get the value for the GitHub Actions secret with these commands:
         # nix shell "github:nixos/nixpkgs/nixpkgs-unstable#coreutils"
         # op read 'op://Kubernetes/s5dqdxlxnvhvdnq4pbyzg22swa/unprotected-kubeconfig' | base64
       - name: Apply kube manifests
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         working-directory: ./flakes
         run: |
           mkdir -p -m 700 $HOME/.kube

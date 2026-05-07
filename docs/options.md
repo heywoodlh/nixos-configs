@@ -18,7 +18,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
 
 
 
@@ -40,7 +40,7 @@ unspecified value
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
 
 
 
@@ -64,7 +64,7 @@ unspecified value
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
 
 
 
@@ -88,7 +88,7 @@ submodule
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
 
 
 
@@ -113,7 +113,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
 
 
 
@@ -138,7 +138,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/asahi.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
 
 
 
@@ -162,7 +162,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/backups\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/backups.nix)
 
 
 
@@ -188,7 +188,7 @@ list of (optionally newline-terminated) single-line string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/backups\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/backups.nix)
 
 
 
@@ -212,7 +212,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/backups\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/backups.nix)
 
 
 
@@ -236,7 +236,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/backups.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/backups\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/backups.nix)
 
 
 
@@ -260,7 +260,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cloudflared\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cloudflared.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/cloudflared\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/cloudflared.nix)
 
 
 
@@ -284,7 +284,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/console\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/console.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/console\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/console.nix)
 
 
 
@@ -308,7 +308,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cosmic\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cosmic.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/cosmic\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/cosmic.nix)
 
 
 
@@ -332,7 +332,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/choose-launcher\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/choose-launcher.nix)
 
 
 
@@ -356,7 +356,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/choose-launcher\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/choose-launcher.nix)
 
 
 
@@ -380,7 +380,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/choose-launcher.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/choose-launcher\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/choose-launcher.nix)
 
 
 
@@ -404,7 +404,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/raycast\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/raycast.nix)
 
 
 
@@ -430,7 +430,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/raycast.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/raycast\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/raycast.nix)
 
 
 
@@ -454,7 +454,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/sketchybar\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/sketchybar.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/sketchybar\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/sketchybar.nix)
 
 
 
@@ -478,7 +478,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/stage-manager\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/stage-manager.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/stage-manager\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/stage-manager.nix)
 
 
 
@@ -502,7 +502,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/yabai\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/yabai.nix)
 
 
 
@@ -526,7 +526,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/yabai\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/yabai.nix)
 
 
 
@@ -550,7 +550,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/darwin/modules/yabai.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/yabai\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/yabai.nix)
 
 
 
@@ -574,7 +574,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -598,7 +598,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -622,7 +622,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -646,7 +646,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -670,7 +670,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -694,7 +694,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -718,7 +718,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -742,7 +742,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -766,7 +766,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -790,7 +790,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -814,7 +814,7 @@ submodule
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -838,7 +838,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -862,7 +862,7 @@ absolute path
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -886,7 +886,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -910,7 +910,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -934,7 +934,7 @@ signed integer
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
 
 
@@ -958,7 +958,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gnome\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gnome.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gnome\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gnome.nix)
 
 
 
@@ -982,7 +982,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/helix.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/helix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/helix.nix)
 
 
 
@@ -1006,7 +1006,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/aerc\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/aerc.nix)
 
 
 
@@ -1030,7 +1030,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/aerc.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/aerc\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/aerc.nix)
 
 
 
@@ -1054,7 +1054,7 @@ list of attribute set of string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/applications\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/applications.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/applications\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/applications.nix)
 
 
 
@@ -1078,7 +1078,7 @@ list of attribute set of string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/linux-autostart\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/linux-autostart.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/linux-autostart\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/linux-autostart.nix)
 
 
 
@@ -1102,7 +1102,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/bluetuith\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/bluetuith.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/bluetuith\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/bluetuith.nix)
 
 
 
@@ -1126,7 +1126,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/btop\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/btop.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/btop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/btop.nix)
 
 
 
@@ -1150,7 +1150,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cava\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cava.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/cava\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/cava.nix)
 
 
 
@@ -1174,7 +1174,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cosmic\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/cosmic.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/cosmic\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/cosmic.nix)
 
 
 
@@ -1198,7 +1198,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults.nix)
 
 
 
@@ -1222,7 +1222,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults.nix)
 
 
 
@@ -1246,7 +1246,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults.nix)
 
 
 
@@ -1270,7 +1270,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-defaults.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults.nix)
 
 
 
@@ -1295,7 +1295,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/disable-spotlight\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/disable-spotlight.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/disable-spotlight\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/disable-spotlight.nix)
 
 
 
@@ -1320,7 +1320,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/nord-terminal\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/nord-terminal.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/nord-terminal\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/nord-terminal.nix)
 
 
 
@@ -1344,7 +1344,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-protondrive-link\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/darwin-protondrive-link.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-protondrive-link\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-protondrive-link.nix)
 
 
 
@@ -1368,7 +1368,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/base\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/base.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/base\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/base.nix)
 
 
 
@@ -1392,7 +1392,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/1password-docker-helper\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/1password-docker-helper.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/1password-docker-helper\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/1password-docker-helper.nix)
 
 
 
@@ -1416,7 +1416,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/docker.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/docker\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/docker.nix)
 
 
 
@@ -1440,7 +1440,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty.nix)
 
 
 
@@ -1460,11 +1460,11 @@ string
 *Default:*
 
 ```nix
-"/nix/store/v73nr2bp4cgrh9hbdzksg55lj8mdr9a8-tmux/bin/tmux"
+"/nix/store/749wilc3pas0i8cmq3ljz5l7i4vk6cmy-tmux/bin/tmux"
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty.nix)
 
 
 
@@ -1488,7 +1488,7 @@ attribute set
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty.nix)
 
 
 
@@ -1508,11 +1508,11 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty.nix)
 
 
 
@@ -1536,7 +1536,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/ghostty.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/ghostty.nix)
 
 
 
@@ -1560,7 +1560,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gh\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gh.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/gh\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/gh.nix)
 
 
 
@@ -1584,7 +1584,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gnome\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/gnome.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/gnome\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/gnome.nix)
 
 
 
@@ -1608,7 +1608,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/guake\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/guake.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/guake\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/guake.nix)
 
 
 
@@ -1632,7 +1632,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix.nix)
 
 
 
@@ -1656,7 +1656,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix.nix)
 
 
 
@@ -1681,7 +1681,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix.nix)
 
 
 
@@ -1705,7 +1705,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix.nix)
 
 
 
@@ -1729,7 +1729,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/helix.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix.nix)
 
 
 
@@ -1753,7 +1753,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/hyprland\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/hyprland.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hyprland\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hyprland.nix)
 
 
 
@@ -1777,7 +1777,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf.nix)
 
 
 
@@ -1801,7 +1801,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf.nix)
 
 
 
@@ -1825,7 +1825,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf.nix)
 
 
 
@@ -1849,7 +1849,7 @@ submodule
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf.nix)
 
 
 
@@ -1873,7 +1873,7 @@ null or string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf.nix)
 
 
 
@@ -1897,7 +1897,7 @@ signed integer
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf.nix)
 
 
 
@@ -1921,7 +1921,7 @@ null
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/librewolf.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf.nix)
 
 
 
@@ -1945,7 +1945,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
 
 
 
@@ -1969,7 +1969,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/lima.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
 
 
 
@@ -1993,7 +1993,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
 
 
 
@@ -2017,7 +2017,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/llm.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
 
 
 
@@ -2041,7 +2041,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/marp\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/marp.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/marp\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/marp.nix)
 
 
 
@@ -2065,7 +2065,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/moonlight\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/moonlight.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/moonlight\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/moonlight.nix)
 
 
 
@@ -2089,7 +2089,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword.nix)
 
 
 
@@ -2113,7 +2113,7 @@ package
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword.nix)
 
 
 
@@ -2137,7 +2137,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword.nix)
 
 
 
@@ -2161,7 +2161,7 @@ true
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword.nix)
 
 
 
@@ -2185,7 +2185,7 @@ package
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/onepassword.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/onepassword.nix)
 
 
 
@@ -2209,7 +2209,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/vicinae\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/home/modules/vicinae.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/vicinae\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/vicinae.nix)
 
 
 
@@ -2233,7 +2233,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/hyprland\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/hyprland.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/hyprland\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/hyprland.nix)
 
 
 
@@ -2257,7 +2257,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/intel-mac\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/intel-mac.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/intel-mac\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/intel-mac.nix)
 
 
 
@@ -2281,7 +2281,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/laptop\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/laptop.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/laptop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/laptop.nix)
 
 
 
@@ -2307,7 +2307,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks.nix)
 
 
 
@@ -2331,7 +2331,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks.nix)
 
 
 
@@ -2356,7 +2356,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks.nix)
 
 
 
@@ -2380,7 +2380,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks.nix)
 
 
 
@@ -2405,7 +2405,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks.nix)
 
 
 
@@ -2429,7 +2429,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/luks.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks.nix)
 
 
 
@@ -2453,7 +2453,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cachyos-kernel\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cachyos-kernel.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/cachyos-kernel\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/cachyos-kernel.nix)
 
 
 
@@ -2477,7 +2477,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cachyos-kernel\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/cachyos-kernel.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/cachyos-kernel\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/cachyos-kernel.nix)
 
 
 
@@ -2501,7 +2501,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gaming\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/gaming.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gaming\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gaming.nix)
 
 
 
@@ -2525,7 +2525,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/nvidia-patch\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/nvidia-patch.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/nvidia-patch\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/nvidia-patch.nix)
 
 
 
@@ -2550,7 +2550,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny.nix)
 
 
 
@@ -2574,7 +2574,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny.nix)
 
 
 
@@ -2598,7 +2598,7 @@ signed integer
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/scrutiny.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny.nix)
 
 
 
@@ -2622,7 +2622,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/steam-deck\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/steam-deck.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/steam-deck\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/steam-deck.nix)
 
 
 
@@ -2646,7 +2646,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sunshine\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sunshine.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine.nix)
 
 
 
@@ -2670,7 +2670,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sunshine\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sunshine.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine.nix)
 
 
 
@@ -2694,7 +2694,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vmware-workstation\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vmware-workstation.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/vmware-workstation\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/vmware-workstation.nix)
 
 
 
@@ -2718,7 +2718,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter.nix)
 
 
 
@@ -2742,7 +2742,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter.nix)
 
 
 
@@ -2766,7 +2766,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter.nix)
 
 
 
@@ -2790,7 +2790,7 @@ signed integer
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter.nix)
 
 
 
@@ -2814,7 +2814,7 @@ string
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/rayhunter.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/rayhunter.nix)
 
 
 
@@ -2838,7 +2838,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/server\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/server.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/server\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/server.nix)
 
 
 
@@ -2862,7 +2862,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd.nix)
 
 
 
@@ -2886,7 +2886,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/sshd.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd.nix)
 
 
 
@@ -2910,7 +2910,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/vv75134l6l8f133y9nghrvs0vaajl7qg-source/base/stylix\.nix](/nix/store/vv75134l6l8f133y9nghrvs0vaajl7qg-source/base/stylix.nix)
+ - [/nix/store/xwx14l4hm4gl4hf289ikrz6givjng55f-source/base/stylix\.nix](/nix/store/xwx14l4hm4gl4hf289ikrz6givjng55f-source/base/stylix.nix)
 
 
 
@@ -2934,7 +2934,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/vv75134l6l8f133y9nghrvs0vaajl7qg-source/base/stylix\.nix](/nix/store/vv75134l6l8f133y9nghrvs0vaajl7qg-source/base/stylix.nix)
+ - [/nix/store/xwx14l4hm4gl4hf289ikrz6givjng55f-source/base/stylix\.nix](/nix/store/xwx14l4hm4gl4hf289ikrz6givjng55f-source/base/stylix.nix)
 
 
 
@@ -2958,7 +2958,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/vv75134l6l8f133y9nghrvs0vaajl7qg-source/base/stylix\.nix](/nix/store/vv75134l6l8f133y9nghrvs0vaajl7qg-source/base/stylix.nix)
+ - [/nix/store/xwx14l4hm4gl4hf289ikrz6givjng55f-source/base/stylix\.nix](/nix/store/xwx14l4hm4gl4hf289ikrz6givjng55f-source/base/stylix.nix)
 
 
 
@@ -2982,7 +2982,7 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vm\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/vm.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/vm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/vm.nix)
 
 
 
@@ -3006,6 +3006,6 @@ false
 ```
 
 *Declared by:*
- - [https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/workstation\.nix](https://github.com/heywoodlh/nixos-configs/tree/master/nixos/modules/workstation.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/workstation\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/workstation.nix)
 
 

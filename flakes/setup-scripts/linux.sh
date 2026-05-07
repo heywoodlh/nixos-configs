@@ -28,7 +28,7 @@ else
 fi
 
 # Flakes variable for all things to reference
-flakes="vim tmux git"
+flakes="helix tmux git op-wrapper"
 
 # Exit if $1 doesn't exist or is not workstation/server/files-only
 system="$1"
@@ -141,23 +141,17 @@ else
         # Install flakes
         for flake in $flakes
         do
-            install-nix-package "${flake}" "github:heywoodlh/nixos-configs?dir=flakes#${flake}"
+            install-nix-package "${flake}" "git+https://tangled.org/heywoodlh.io/nixos-configs?dir=flakes#${flake}"
         done
 
         # Configure Desktop
         if [[ "${system}" == "workstation" ]]
         then
             echo "Configuring GNOME"
-            nix run "github:heywoodlh/nixos-configs?dir=flakes/gnome"
+            nix run "git+https://tangled.org/heywoodlh.io/nixos-configs?dir=flakes/gnome"
             echo "Configuring Firefox"
-            nix run "github:heywoodlh/nixos-configs?dir=flakes/firefox#firefox-setup"
+            nix run "git+https://tangled.org/heywoodlh.io/nixos-configs?dir=flakes/firefox#firefox-setup"
         fi
-
-        # Install 1password
-        install-nix-package "op" "github:heywoodlh/nixos-configs?dir=flakes/1password" "unfree"
-        [[ "${system}" == "workstation" ]] && install-nix-package "1password" "nixpkgs#_1password-gui" "unfree"
-        [[ "${system}" == "workstation" ]] && mkdir -p ~/.config/autostart && ln -s ~/.nix-profile/share/applications/1password.desktop ~/.config/autostart/1password.desktop &>/dev/null
-        [[ "${system}" == "workstation" ]] && nix run "github:heywoodlh/nixos-configs?dir=flakes/1password#op-desktop-setup" && chmod u+w ~/.config/1Password/settings/settings.json
 
         # Install Lima for Docker
         install-nix-package "lima" "nixpkgs#lima"
@@ -178,13 +172,13 @@ else
             if [[ "${system}" == "workstation" ]]
             then
                 echo "Installing home-manager desktop configuration"
-                nix run "github:heywoodlh/nixos-configs/$(nix run nixpkgs#git -- ls-remote https://github.com/heywoodlh/nixos-configs | head -1 | awk '{print $1}')#homeConfigurations.heywoodlh.activationPackage" --impure --no-write-lock-file
+                nix run "git+https://tangled.org/heywoodlh.io/nixos-configs/$(nix run nixpkgs#git -- ls-remote https://tangled.org/heywoodlh.io/nixos-configs | head -1 | awk '{print $1}')#homeConfigurations.heywoodlh.activationPackage" --impure --no-write-lock-file
             fi
 
             if [[ ${system} == "server" ]]
             then
                 echo "Installing home-manager server configuration"
-                nix run "github:heywoodlh/nixos-configs/$(nix run nixpkgs#git -- ls-remote https://github.com/heywoodlh/nixos-configs | head -1 | awk '{print $1}')#homeConfigurations.heywoodlh-server.activationPackage" --impure --no-write-lock-file
+                nix run "git+https://tangled.org/heywoodlh.io/nixos-configs/$(nix run nixpkgs#git -- ls-remote https://tangled.org/heywoodlh.io/nixos-configs | head -1 | awk '{print $1}')#homeConfigurations.heywoodlh-server.activationPackage" --impure --no-write-lock-file
             fi
         fi
     fi
@@ -193,7 +187,7 @@ else
     if [[ "${ansible}" == "true" ]]
     then
         echo "Running ansible playbooks"
-        nix run "github:heywoodlh/nixos-configs/$(git ls-remote https://github.com/heywoodlh/nixos-configs | head -1 | awk '{print $1}')?dir=flakes/ansible#${system}"
+        nix run "git+https://tangled.org/heywoodlh.io/nixos-configs/$(git ls-remote https://tangled.org/heywoodlh.io/nixos-configs | head -1 | awk '{print $1}')?dir=flakes/ansible#${system}"
     fi
 
     # If WSL
@@ -205,7 +199,7 @@ cat > $HOME/bin/windows-firefox-setup << EOL
 #!/usr/bin/env bash
 drive="\$(cmd.exe /c "<nul set /p=%UserProfile%" 2>/dev/null | cut -d':' -f1 | tr [:upper:] [:lower:])"
 firefox_profile="/mnt/\${drive}/\$(cmd.exe /c "<nul set /p=%UserProfile%" 2>/dev/null | sed 's/\\\/\//g' | cut -d':' -f2)/AppData/Roaming/Mozilla/Firefox/Profiles"
-nix --extra-experimental-features "flakes nix-command" run "github:heywoodlh/nixos-configs?dir=flakes/firefox#firefox-setup" -- "\${firefox_profile}"
+nix --extra-experimental-features "flakes nix-command" run "git+https://tangled.org/heywoodlh.io/nixos-configs?dir=flakes/firefox#firefox-setup" -- "\${firefox_profile}"
 EOL
         chmod +x "$HOME/bin/windows-firefox-setup"
     fi

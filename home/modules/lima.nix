@@ -4,17 +4,20 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.lima;
-  system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
-
-  limaArgs = if pkgs.stdenv.isDarwin then "--vm-type=vz" else "";
   startLima = pkgs.writeShellScriptBin "start-lima.sh" ''
-      if [[ -e ~/.lima/docker ]]
-      then
-        ${pkgs.lima}/bin/limactl start docker --mount-writable=true --tty=false
-      else
-        ${pkgs.lima}/bin/limactl start --mount-writable=true --tty=false --name=docker template://docker-rootful
-      fi
+    if [[ -e ~/.lima/docker ]]
+    then
+      ${pkgs.lima}/bin/limactl start docker --mount-writable=true --tty=false
+    else
+      ${pkgs.lima}/bin/limactl start --mount-writable=true --tty=false --name=docker template://docker-rootful
+    fi
+    if ${pkgs.lima}/bin/limactl list | ${pkgs.gnugrep}/bin/grep -E "^docker" | ${pkgs.gnugrep}/bin/grep -q "Broken"
+    then
+      echo "Docker VM broken, restarting"
+      ${pkgs.lima}/bin/limactl stop -f docker
+      ${pkgs.lima}/bin/limactl start docker
+    fi
   '';
 in {
   options = {
@@ -22,14 +25,14 @@ in {
       enable = mkOption {
         default = false;
         description = ''
-          Run a Lima VM as a service.
+          Run a Lima Docker VM as a service.
         '';
         type = types.bool;
       };
-      enableDocker = mkOption {
-        default = false;
+      context = mkOption {
+        default = true;
         description = ''
-          Enable Lima VM Docker context.
+          Configure Lima VM Docker context.
         '';
         type = types.bool;
       };
@@ -75,7 +78,7 @@ in {
       docker-client
       startLima
     ];
-    home.activation.docker-context = mkIf cfg.enableDocker ''
+    home.activation.docker-context = mkIf cfg.context ''
       # Create docker context if it doesn't exist
       # Switch to docker context only if it doesn't exist
       # (don't mess with contexts if it already exists)

@@ -411,7 +411,7 @@
                 # Run Lima VM always in background
                 lima = {
                   enable = true;
-                  enableDocker = true;
+                  context = true;
                 };
               };
             };

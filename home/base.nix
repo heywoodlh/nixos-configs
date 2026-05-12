@@ -282,8 +282,8 @@ let
     # Helper to setup GitHub repo to point to tangled.org
     # Assumes directory name is repo name, and CWD is GitHub repo
     # Also assumes repo has been created with same name on tangled.org
-    dir="$(pwd)"
-    name="$(basename $(pwd))"
+    dir="$(git rev-parse --show-toplevel)"
+    name="$(basename $dir)"
     if git -C "$dir" remote -v &>/dev/null
     then
       target="git@tangled.org:heywoodlh.io/$name"

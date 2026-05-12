@@ -302,6 +302,7 @@
       ./home/modules/llm.nix
       ./home/modules/btop.nix
       ./home/modules/cava.nix
+      ./home/modules/git.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -1100,7 +1101,6 @@
               targets.genericLinux.enable = true;
               home.packages = [
                 pkgs.nerd-fonts.jetbrains-mono
-                myFlakes.packages.${system}.git
               ];
               home.file."bin/create-docker" = {
                 enable = true;
@@ -1156,7 +1156,6 @@
               home.packages = with pkgs; [
                 bash
                 gomuks
-                myFlakes.packages.${system}.git
                 myFlakes.packages.${system}.op-wrapper
                 myFlakes.packages.${system}.tmux
               ];
@@ -1238,6 +1237,7 @@
         fish = myFlakes.packages.${system}.fish;
         tmux = myFlakes.packages.${system}.tmux;
         op-wrapper = myFlakes.packages.${system}.op-wrapper;
+        tangled-sync = pkgs.callPackage ./pkgs/tangled-sync.nix {};
       };
 
       devShell = pkgs.mkShell {
@@ -1247,6 +1247,9 @@
           stable-pkgs.gitleaks # bug in pkgs.gitleaks currently
           pkgs.strip-ansi
         ];
+        shellHook = ''
+          ${(pkgs.callPackage ./pkgs/tangled-sync.nix {})}/bin/tangled-sync.sh
+        '';
       };
     }
   );

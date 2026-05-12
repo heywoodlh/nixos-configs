@@ -50,7 +50,6 @@ in {
 
   environment.systemPackages = [
     myFlakes.packages.${system}.vim
-    myFlakes.packages.${system}.git
   ];
 
   #system-defaults.nix

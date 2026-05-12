@@ -13,7 +13,6 @@ let
   myHelix = myFlakes.packages.${system}.helix;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
-  myGit = myFlakes.packages.${system}.git;
   userType = submodule {
     options = {
       name = mkOption {
@@ -221,7 +220,6 @@ in {
       myNixosBoot
       myNixosBuild
       myNixosListGenerations
-      myGit
       myTmux
       myFish
       myHelix
@@ -335,26 +333,24 @@ in {
 
     # Home-manager configs
     home-manager = let
-        base = {
-          home.activation.docker-rootless-context = ''
-            if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
-            then
-              ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/${builtins.toString userUid}/docker.sock" &> /dev/null || true
-              ${pkgs.docker-client}/bin/docker context use rootless
-            fi
-          '';
-          imports = [
-            ../../home/linux.nix
-          ];
-          home.packages = [
-            myFlakes.packages.${system}.git
-          ];
-          nix.settings.trusted-users = [
-            "root"
-            username
-          ];
-        };
-      in {
+      base = {
+        home.activation.docker-rootless-context = ''
+          if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
+          then
+            ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/${builtins.toString userUid}/docker.sock" &> /dev/null || true
+            ${pkgs.docker-client}/bin/docker context use rootless
+          fi
+        '';
+        imports = [
+          ../../home/linux.nix
+        ];
+        heywoodlh.home.git.enable = true;
+        nix.settings.trusted-users = [
+          "root"
+          username
+        ];
+      };
+    in {
       useGlobalPkgs = true;
       extraSpecialArgs = {
         inherit myFlakes;

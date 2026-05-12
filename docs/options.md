@@ -1540,6 +1540,78 @@ string
 
 
 
+## heywoodlh\.home\.git\.enable
+
+
+
+Enable heywoodlh git configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/git\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/git.nix)
+
+
+
+## heywoodlh\.home\.git\.email
+
+
+
+Email for git operations\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"git@heywoodlh.io"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/git\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/git.nix)
+
+
+
+## heywoodlh\.home\.git\.name
+
+
+
+Name for git operations\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"Spencer Heywood"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/git\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/git.nix)
+
+
+
 ## heywoodlh\.home\.github-cli
 
 
@@ -2337,8 +2409,6 @@ string
 
 ## heywoodlh\.luks\.fido
 
-
-
 Use FIDO device decryption\.
 Setup with: ` sudo systemd-cryptenroll /dev/nvme0n1p2 --fido2-device=auto --fido2-with-user-presence=yes --fido2-with-client-pin=no `
 
@@ -2410,6 +2480,8 @@ string
 
 
 ## heywoodlh\.luks\.yubikey
+
+
 
 Enable Yubikey luks single factor decryption\.
 See the following gist for setup example:
@@ -2910,7 +2982,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/51rg541wxn4bpfwyqawqb7k0plmncbwb-source/base/stylix\.nix](/nix/store/51rg541wxn4bpfwyqawqb7k0plmncbwb-source/base/stylix.nix)
+ - [/nix/store/w1ijrw2i0mf2c6r8rpj1awy6nxp9164p-source/base/stylix\.nix](/nix/store/w1ijrw2i0mf2c6r8rpj1awy6nxp9164p-source/base/stylix.nix)
 
 
 
@@ -2934,7 +3006,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/51rg541wxn4bpfwyqawqb7k0plmncbwb-source/base/stylix\.nix](/nix/store/51rg541wxn4bpfwyqawqb7k0plmncbwb-source/base/stylix.nix)
+ - [/nix/store/w1ijrw2i0mf2c6r8rpj1awy6nxp9164p-source/base/stylix\.nix](/nix/store/w1ijrw2i0mf2c6r8rpj1awy6nxp9164p-source/base/stylix.nix)
 
 
 
@@ -2958,7 +3030,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/51rg541wxn4bpfwyqawqb7k0plmncbwb-source/base/stylix\.nix](/nix/store/51rg541wxn4bpfwyqawqb7k0plmncbwb-source/base/stylix.nix)
+ - [/nix/store/w1ijrw2i0mf2c6r8rpj1awy6nxp9164p-source/base/stylix\.nix](/nix/store/w1ijrw2i0mf2c6r8rpj1awy6nxp9164p-source/base/stylix.nix)
 
 
 

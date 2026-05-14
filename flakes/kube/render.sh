@@ -55,6 +55,7 @@ applications=(
   "samplicator"
   "scrutiny-proxy"
   "skyrim-together"
+  "spindle"
   "silverbullet"
   "syncthing"
   "syslog"
@@ -96,7 +97,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: argo
   source:
-    repoURL: https://tangled.org/heywoodlh.io/nixos-configs.git
+    repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
     targetRevision: HEAD
     path: flakes/kube/manifests
     directory:

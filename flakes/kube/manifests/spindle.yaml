@@ -1,0 +1,130 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: spindle
+    app.kubernetes.io/instance: spindle
+  name: spindle
+  namespace: ci
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: spindle-clusterrolebinding
+  labels:
+    app.kubernetes.io/name: spindle
+    app.kubernetes.io/instance: spindle
+subjects:
+  - kind: ServiceAccount
+    name: spindle
+    namespace: ci
+roleRef:
+  kind: ClusterRole
+  name: spindle-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: spindle
+  namespace: ci
+  labels:
+    app.kubernetes.io/name: spindle
+    app.kubernetes.io/instance: spindle
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: spindle
+  namespace: ci
+  labels:
+    app.kubernetes.io/name: spindle
+    app.kubernetes.io/instance: spindle
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: spindle
+subjects:
+- kind: ServiceAccount
+  name: spindle
+  namespace: ci
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spindle
+  namespace: ci
+  labels:
+    app: spindle
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "spindle"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  ports:
+  - name: spindle
+    port: 80
+    targetPort: 6555
+    protocol: TCP
+  selector:
+    app: spindle
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spindle
+  namespace: ci
+  labels:
+    app: spindle
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: spindle
+  template:
+    metadata:
+      labels:
+        app: spindle
+    spec:
+      serviceAccountName: spindle
+      securityContext:
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: spindle
+        image: "docker.io/heywoodlh/spindle:fdecb379"
+        imagePullPolicy: Always
+        ports:
+        - name: spindle
+          containerPort: 6555
+          protocol: TCP
+        volumeMounts:
+        - name: datadir
+          mountPath: /data
+        - name: dockerdir
+          mountPath: /var/lib/docker
+        env:
+          - name: SPINDLE_SERVER_HOSTNAME
+            value: "spindle.heywoodlh.io"
+          - name: SPINDLE_SERVER_DEV
+            value: 'false'
+          - name: SPINDLE_SERVER_OWNER
+            value: "did:plc:ycnss4fntzi3rjuueb7loq3x"
+        securityContext:
+          privileged: true
+      volumes:
+      - name: datadir
+        hostPath:
+          path: /media/data-ssd/spindle/data
+          type: DirectoryOrCreate
+      - name: dockerdir
+        hostPath:
+          path: /media/data-ssd/spindle/docker
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: homelab

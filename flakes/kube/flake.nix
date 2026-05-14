@@ -925,6 +925,13 @@
           image = "docker.io/jammsen/sons-of-the-forest-dedicated-server:latest";
           hostfolder = "/media/data-ssd/theforest";
         };
+        spindle = mkKubeDrv "spindle" {
+          src = ./templates/spindle.yaml;
+          namespace = "ci";
+          image = "docker.io/heywoodlh/spindle:fdecb379";
+          hostfolder = "/media/data-ssd/spindle";
+          nodename = "homelab";
+        };
         squid = mkKubeDrv "squid" {
           src = ./templates/squid.yaml;
           namespace = "default";

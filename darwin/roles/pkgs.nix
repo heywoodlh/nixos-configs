@@ -54,7 +54,6 @@ in {
       "mas"
       "mosh"
       "newsboat"
-      "opencode"
       "pinentry-mac"
       "spice-gtk"
       "watch"

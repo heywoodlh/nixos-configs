@@ -222,6 +222,22 @@
       inputs.flake-parts.follows = "flake-parts";
       inputs.flake-compat.follows = "devenv/flake-compat";
     };
+    gomod2nix = {
+      url = "github:nix-community/gomod2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    tangled = {
+      url = "git+https://tangled.org/heywoodlh.io/core?ref=spindle-run";
+       inputs.nixpkgs.follows = "nixpkgs";
+       inputs.flake-compat.follows = "devenv/flake-compat";
+       inputs.gomod2nix.follows = "gomod2nix";
+     };
+    spindle-run = {
+      url = "git+https://tangled.org/heywoodlh.io/spindle-run";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.tangled.follows = "tangled";
+    };
   };
 
   outputs = inputs@{ self,
@@ -255,6 +271,7 @@
                       vidhanix,
                       lanzaboote,
                       nix-cachyos-kernel,
+                      spindle-run,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -1238,6 +1255,7 @@
         tmux = myFlakes.packages.${system}.tmux;
         op-wrapper = myFlakes.packages.${system}.op-wrapper;
         tangled-sync = pkgs.callPackage ./pkgs/tangled-sync.nix {};
+        spindle-run = spindle-run.packages.${system}.spindle-run;
       };
 
       devShell = pkgs.mkShell {
@@ -1246,6 +1264,7 @@
           lefthook
           stable-pkgs.gitleaks # bug in pkgs.gitleaks currently
           pkgs.strip-ansi
+          self.packages.${system}.spindle-run
         ];
         shellHook = ''
           ${(pkgs.callPackage ./pkgs/tangled-sync.nix {})}/bin/tangled-sync.sh

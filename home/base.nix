@@ -358,6 +358,9 @@ in {
   programs.password-store = {
     enable = true;
     package = myPass;
+    settings = {
+      PASSWORD_STORE_DIR = "${op-backup-dir-no-format}";
+    };
   };
 
   home.file."tmp/.placeholder.txt" = {
@@ -755,6 +758,8 @@ in {
     "${homeDir}/opt/cart".trust_level = "trusted";
     "${homeDir}/opt/tailscale-acl".trust_level = "trusted";
   };
+
+  gtk.gtk4.theme = config.gtk.theme;
 
   heywoodlh.home = {
     defaults = true;

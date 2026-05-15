@@ -1,0 +1,19 @@
+#when:
+#  - event: ["push", "manual"]
+#    branch: ["main"]
+
+engine: "nixery"
+
+dependencies:
+  nixpkgs:
+    - nix
+    - nixos-rebuild
+
+steps:
+  - name: build nixos server configuration
+    command: |
+      nixos-rebuild build --flake .#nixos-server
+
+  - name: build nixos desktop configuration
+    command: |
+      nixos-rebuild build --flake .#nixos-desktop

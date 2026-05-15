@@ -19,7 +19,6 @@ in {
     gomuks
     libvirt
     meshtastic
-    opencode
     cpuspeed
     ytermusic
   ];

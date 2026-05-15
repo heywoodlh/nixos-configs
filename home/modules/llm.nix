@@ -107,29 +107,6 @@ in {
       };
     };
 
-    programs.opencode = {
-      enable = true;
-      enableMcpIntegration = true;
-      settings = {
-        # Disable default cloud providers
-        "disabled_providers" = [
-          "opencode"
-        ];
-        provider.ollama = {
-          npm = "@ai-sdk/openai-compatible";
-          name = "Ollama (local)";
-          options = {
-            baseURL = "${url}/v1";
-          };
-          models = {
-            "${model}" = {
-              name = "${model}";
-            };
-          };
-        };
-      };
-    };
-
     systemd.user.services.ollama-pull = lib.optionalAttrs (cfg.homelab == false) {
       Unit = {
         Description = "Automatically pull Ollama images";

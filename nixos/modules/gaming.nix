@@ -80,6 +80,21 @@ let
       tar -xf $tarball_name -C "$STEAM_DIR"
     fi
   '';
+  kill-eso-launcher = pkgs.writeShellScriptBin "kill-eso-launcher.sh" ''
+    # Elder Scrolls Online launcher tanks FPS when running in background for some reason
+    # Set following launch options
+    # MANGOHUD_CONFIG="no_display,fps_limit=60,fps_limit_method=early" mangohud %command% & /run/current-system/sw/bin/kill-eso-launcher.sh
+    while true
+    do
+      # Only kill launcher if ESO is running
+      if pgrep -f "eso64.exe"
+      then
+        pkill -9 CrBrowserMain && exit 0
+      else
+        sleep 5
+      fi
+    done
+  '';
 in {
   options.heywoodlh.nixos.gaming = mkOption {
     default = false;
@@ -121,6 +136,7 @@ in {
       dotnet-sdk # For games needing dotnet
       protonup-ng
       mangohud
+      kill-eso-launcher
     ] ++ lib.optionals (system == "x86_64-linux") [
       get-custom-proton
     ] ++ lib.optionals (system == "aarch64-linux") [

@@ -856,6 +856,96 @@
           };
         };
 
+        nixos-gaming-sarah =  let
+          reboot-windows = pkgs.writeShellScriptBin "reboot-windows" ''
+            sudo ${pkgs.systemd}/bin/systemctl --boot-loader-entry=auto-windows reboot
+          '';
+        in nixosConfig "workstation" "nixos-gaming-sarah" {
+          imports = [
+            ./nixos/hosts/gaming-sarah.nix
+          ];
+          environment.systemPackages = with pkgs; [
+            steam-run
+            reboot-windows
+            clonehero
+          ];
+          heywoodlh = {
+            server = true;
+            nixos = {
+              sunshine.enable = true;
+              nvidia-patch = true;
+              gaming = true;
+              scrutiny = {
+                enable = true;
+                port = 3050;
+                ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
+              };
+            };
+          };
+          # Machine-specific sunshine configuration
+          services.sunshine.settings = {
+            sunshine_name = "sarah-linux";
+            output_name = 0;
+            encoder = "nvenc";
+            nvenc_preset = 1;
+          };
+          networking = {
+            interfaces = {
+              enp4s0 = {
+                wakeOnLan.enable = true;
+              };
+            };
+            firewall = {
+              allowedUDPPorts = [
+                9
+                5353 # shanocast
+              ];
+            };
+          };
+
+          # Allow mdns for shanocast
+          services.avahi = {
+            enable = true;
+            reflector = true;
+            openFirewall = true;
+          };
+
+          heywoodlh.hyprland = lib.mkForce false;
+
+          home-manager.users.heywoodlh = {
+            heywoodlh.home = {
+              hyprland = lib.mkForce false;
+              llm.homelab = lib.mkForce true;
+              autostart = [
+                {
+                  name = "Steam";
+                  command = "${pkgs.steam}/bin/steam steam://open/bigpicture";
+                }
+              ];
+            };
+          };
+          fileSystems."/mnt/ssd0" = {
+            device = "/dev/disk/by-uuid/767C97A37C975D25";
+            fsType = "ntfs-3g";
+            options = [ "rw" "uid=1000" "nofail" ];
+          };
+          fileSystems."/mnt/windows" = {
+            device = "/dev/disk/by-uuid/C2E61A2DE61A21E9";
+            fsType = "ntfs-3g";
+            options = [ "rw" "uid=1000" "nofail" ];
+          };
+          fileSystems."/mnt/hdd0" = {
+            device = "/dev/disk/by-uuid/00CA2333CA2323FE";
+            fsType = "ntfs-3g";
+            options = [ "rw" "uid=1000" "nofail" ];
+          };
+          fileSystems."/mnt/hdd1" = {
+            device = "/dev/disk/by-uuid/3008899808895E2A";
+            fsType = "ntfs-3g";
+            options = [ "rw" "uid=1000" "nofail" ];
+          };
+        };
+
         nixos-blade = nixosConfig "laptop" "nixos-blade" {
           imports = [
             ./nixos/hosts/razer-blade-14.nix

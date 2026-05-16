@@ -2467,10 +2467,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1778871877,
-        "narHash": "sha256-q0sJvOIoakEiKrXM4bXCN4yFPB6qZWe9+pu5U/FF8vg=",
+        "lastModified": 1778878487,
+        "narHash": "sha256-tqoSr9tAH3IEzWZeB617SpwhnongFTI+iUIFsI6Felk=",
         "ref": "refs/heads/main",
-        "rev": "6db5a16a36627e4820f18d963bc559831839dfd2",
+        "rev": "68588c59c68bfc20e60054052587096632454037",
         "revCount": 1,
         "type": "git",
         "url": "https://tangled.org/heywoodlh.io/spindle-run"

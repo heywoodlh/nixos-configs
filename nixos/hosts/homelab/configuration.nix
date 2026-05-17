@@ -10,6 +10,13 @@ let
       ${pkgs.ollama}/bin/ollama pull "''${model}"
     done
   '';
+  fixIntelSymlink = pkgs.writeShellScriptBin "fix-intel-symlink.sh" ''
+    if [ ! -e "/dev/dri/by-path/pci-0000:03:00.0-platform-simple-framebuffer.0-card" ]
+    then
+      echo "Removing broken symlink to GPU"
+      sudo rm /dev/dri/by-path/pci-0000:03:00.0-platform-simple-framebuffer.0-card
+    fi
+  '';
 in {
   imports =
   [ # Include the results of the hardware scan.
@@ -120,6 +127,7 @@ in {
     ollama_pull
     nfdump
     runc
+    fixIntelSymlink
   ];
 
   services = {
@@ -139,6 +147,7 @@ in {
       "3 4 * * 7      root    rm -rf /var/lib/cni/networks/cbr0/"
       "0 0 * * *      root    ${ollama_pull}/bin/ollama-pull"
       "5 4 * * 7      root    shutdown -r now"
+      "*/5 * * * *    root    ${fixIntelSymlink}/bin/fix-intel-symlink.sh"
     ];
   };
 

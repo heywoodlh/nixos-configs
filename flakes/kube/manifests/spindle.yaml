@@ -97,7 +97,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: spindle
-        image: "docker.io/heywoodlh/spindle:fdecb379"
+        image: "docker.io/heywoodlh/spindle:f927a787"
         imagePullPolicy: Always
         ports:
         - name: spindle

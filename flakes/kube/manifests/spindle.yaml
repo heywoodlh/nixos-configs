@@ -115,6 +115,8 @@ spec:
             value: 'false'
           - name: SPINDLE_SERVER_OWNER
             value: "did:plc:ycnss4fntzi3rjuueb7loq3x"
+          - name: SPINDLE_SERVER_DOCKER_SOCKET
+            value: "/run/user/1000/docker.sock"
         securityContext:
           privileged: true
       volumes:

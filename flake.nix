@@ -228,7 +228,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     tangled = {
-      url = "git+https://tangled.org/heywoodlh.io/core?ref=spindle-run";
+      url = "git+https://tangled.org/tangled.org/core";
        inputs.nixpkgs.follows = "nixpkgs";
        inputs.flake-compat.follows = "devenv/flake-compat";
        inputs.gomod2nix.follows = "gomod2nix";
@@ -762,12 +762,6 @@
         };
 
         nixos-gaming =  let
-          youtube-music-brave = {
-            name = "YouTube Music";
-            command = ''
-              ${pkgs.brave}/bin/brave --proxy-server="socks5://10.64.0.1:1080" --app=https://music.youtube.com --window-position=0,0
-            '';
-          };
           reboot-windows = pkgs.writeShellScriptBin "reboot-windows" ''
             sudo ${pkgs.systemd}/bin/systemctl --boot-loader-entry=auto-windows reboot
           '';
@@ -839,18 +833,21 @@
           heywoodlh.hyprland = lib.mkForce false;
 
           home-manager.users.heywoodlh = {
+            home.packages = with pkgs; [
+              ytmdesktop
+            ];
             heywoodlh.home = {
               hyprland = lib.mkForce false;
               llm.homelab = lib.mkForce true;
               autostart = [
                 {
                   name = "Steam";
-                  command = "${pkgs.steam}/bin/steam steam://open/bigpicture";
+                  command = "${pkgs.bash}/bin/bash -c \"sleep 5 && ${pkgs.steam}/bin/steam -dev steam://open/bigpicture\"";
                 }
-                youtube-music-brave
-              ];
-              applications = [
-                youtube-music-brave
+                {
+                  name = "Youtube Music";
+                  command = "${pkgs.ytmdesktop}/bin/ytmdesktop";
+                }
               ];
             };
           };
@@ -912,15 +909,27 @@
 
           heywoodlh.hyprland = lib.mkForce false;
 
-          home-manager.users.heywoodlh = {
+          home-manager.users.heywoodlh = let
+            apple-music = pkgs.writeShellScriptBin "apple-music" ''
+              ${pkgs.google-chrome}/bin/google-chrome-stable --password-store=basic --app=https://music.apple.com
+            '';
+            apple-music-desktop = {
+              name = "Apple Music";
+              command = "${apple-music}/bin/apple-music";
+            };
+          in {
             heywoodlh.home = {
               hyprland = lib.mkForce false;
               llm.homelab = lib.mkForce true;
+              applications = [
+                apple-music-desktop
+              ];
               autostart = [
                 {
                   name = "Steam";
-                  command = "${pkgs.steam}/bin/steam steam://open/bigpicture";
+                  command = "${pkgs.bash}/bin/bash -c \"sleep 5 && ${pkgs.steam}/bin/steam -dev steam://open/bigpicture\"";
                 }
+                apple-music-desktop
               ];
             };
           };

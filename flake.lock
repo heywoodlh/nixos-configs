@@ -2467,11 +2467,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779143635,
-        "narHash": "sha256-hDwO1um4uZFawi8UKrh1jwfhliBUAbfkkWFdiDt3gHE=",
+        "lastModified": 1779207981,
+        "narHash": "sha256-G5n6KjINYYrbiPn0/+5O2d/UiLPrzGKvU+44wrJrIJo=",
         "ref": "refs/heads/main",
-        "rev": "37aca8cb39482ab75607b48121268d207877c1a6",
-        "revCount": 5,
+        "rev": "b00edaf1c3f604ab1174b9305c8ab07e41bfec36",
+        "revCount": 8,
         "type": "git",
         "url": "https://tangled.org/heywoodlh.io/spindle-run"
       },
@@ -2585,18 +2585,17 @@
         "sqlite-lib-src": "sqlite-lib-src"
       },
       "locked": {
-        "lastModified": 1778866020,
-        "narHash": "sha256-AGrSeV9CznKcKcrCjPJnvFFzRb2OkItYVi8cV13l1Rw=",
-        "ref": "spindle-run",
-        "rev": "bea5c8e76458c3e921a681e77f972e5c72191ae5",
-        "revCount": 2439,
+        "lastModified": 1779201325,
+        "narHash": "sha256-bqPvfJ7z3HvBxv78cLczeB8N72D7YlxZgpwhhqAO/Ng=",
+        "ref": "refs/heads/master",
+        "rev": "886425c7c3a7734baa848c2f1072f162179ede41",
+        "revCount": 2485,
         "type": "git",
-        "url": "https://tangled.org/heywoodlh.io/core"
+        "url": "https://tangled.org/tangled.org/core"
       },
       "original": {
-        "ref": "spindle-run",
         "type": "git",
-        "url": "https://tangled.org/heywoodlh.io/core"
+        "url": "https://tangled.org/tangled.org/core"
       }
     },
     "tinted-foot": {

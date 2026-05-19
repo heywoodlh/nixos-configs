@@ -8,12 +8,30 @@ dependencies:
   nixpkgs:
     - nix
     - nixos-rebuild
+    - busybox
+    - coreutils
+    - gnugrep
 
 steps:
-  - name: build nixos server configuration
+  - name: configure attic
+    command:
+      mkdir -p ~/.config/attic
+      printf "default-server = \"kube\"\n\n[servers.kube]\nendpoint = \"http://attic\"\ntoken = \"$ATTIC_TOKEN\"" > ~/.config/attic/config.toml
+
+  - name: build and cache nixos server configuration
     command: |
       nixos-rebuild build --flake .#nixos-server
+      nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
 
   - name: build nixos desktop configuration
     command: |
       nixos-rebuild build --flake .#nixos-desktop
+      nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
+
+  - name: build nixos-gaming desktop configuration
+    command: |
+      if arch | grep -q x86_64
+      then
+        nixos-rebuild build --flake .#nixos-desktop
+        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
+      fi

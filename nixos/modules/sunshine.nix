@@ -58,6 +58,7 @@ in {
         system_tray = false;
         fps = "[ 60 ]";
         av1_mode = 1;
+        back_button_timeout = 2000; # hold select for two seconds for home button
         #global_prep_cmd = let
         #  autoAdjustRes = pkgs.writeShellScript "res.sh" ''
         #    ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.HDMI-A-1.mode.''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS} | grep -q 'not found'

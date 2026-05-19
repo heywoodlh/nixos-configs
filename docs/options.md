@@ -1460,7 +1460,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/v73nr2bp4cgrh9hbdzksg55lj8mdr9a8-tmux/bin/tmux"
+"/nix/store/749wilc3pas0i8cmq3ljz5l7i4vk6cmy-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1508,7 +1508,7 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
@@ -2982,7 +2982,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/c52jvrhgqxb0hfiicgkzlf1hfg7jy4nn-source/base/stylix\.nix](/nix/store/c52jvrhgqxb0hfiicgkzlf1hfg7jy4nn-source/base/stylix.nix)
+ - [/nix/store/n6axaha4210qyfqsrb0368j49rg9byyz-source/base/stylix\.nix](/nix/store/n6axaha4210qyfqsrb0368j49rg9byyz-source/base/stylix.nix)
 
 
 
@@ -3006,7 +3006,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/c52jvrhgqxb0hfiicgkzlf1hfg7jy4nn-source/base/stylix\.nix](/nix/store/c52jvrhgqxb0hfiicgkzlf1hfg7jy4nn-source/base/stylix.nix)
+ - [/nix/store/n6axaha4210qyfqsrb0368j49rg9byyz-source/base/stylix\.nix](/nix/store/n6axaha4210qyfqsrb0368j49rg9byyz-source/base/stylix.nix)
 
 
 
@@ -3030,7 +3030,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/c52jvrhgqxb0hfiicgkzlf1hfg7jy4nn-source/base/stylix\.nix](/nix/store/c52jvrhgqxb0hfiicgkzlf1hfg7jy4nn-source/base/stylix.nix)
+ - [/nix/store/n6axaha4210qyfqsrb0368j49rg9byyz-source/base/stylix\.nix](/nix/store/n6axaha4210qyfqsrb0368j49rg9byyz-source/base/stylix.nix)
 
 
 

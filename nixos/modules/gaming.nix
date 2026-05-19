@@ -95,6 +95,23 @@ let
       fi
     done
   '';
+  # decky-loader patches for NixOS compatibility:
+  # 1. localplatformlinux.py: run() strips PATH from subprocesses (env={"LD_LIBRARY_PATH":""}),
+  #    causing service_stop() to fail finding systemctl
+  # 2. helpers.py: get_system_pythonpaths() calls bare "python3" with env={}, not found on NixOS
+  decky-loader-patched = pkgs.decky-loader.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace backend/decky_loader/localplatform/localplatformlinux.py \
+        --replace-fail \
+          'env: ENV | None = {"LD_LIBRARY_PATH": ""}' \
+          'env: ENV | None = {"LD_LIBRARY_PATH": "", "PATH": os.environ.get("PATH", "")}'
+
+      substituteInPlace backend/decky_loader/helpers.py \
+        --replace-fail \
+          '"python3" if localplatform.ON_LINUX else "python"' \
+          '"${pkgs.python3}/bin/python3" if localplatform.ON_LINUX else "python"'
+    '';
+  });
 in {
   options.heywoodlh.nixos.gaming = mkOption {
     default = false;
@@ -268,6 +285,7 @@ in {
     # Requires enabling CEF remote debugging on the Developer menu settings to work.
     jovian.decky-loader = {
       enable = true;
+      package = decky-loader-patched;
       user = config.heywoodlh.defaults.user.name;
       extraPackages = with pkgs; [
         power-profiles-daemon

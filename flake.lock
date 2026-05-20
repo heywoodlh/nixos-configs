@@ -2284,6 +2284,7 @@
         "signal-ntfy": "signal-ntfy",
         "spindle-run": "spindle-run",
         "ssh-keys": "ssh-keys",
+        "stackpkgs": "stackpkgs",
         "stylix": "stylix",
         "tangled": "tangled",
         "treefmt-nix": "treefmt-nix",
@@ -2503,6 +2504,26 @@
       "original": {
         "type": "file",
         "url": "https://github.com/heywoodlh.keys"
+      }
+    },
+    "stackpkgs": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1776118604,
+        "narHash": "sha256-CxdP2+FQXIW7ySbz+ygUhxPB9DoatRj1DvGVtb30+80=",
+        "ref": "refs/heads/main",
+        "rev": "bae2ebef1a9a17d7f0a1f0cd7d629282179212e8",
+        "revCount": 99,
+        "type": "git",
+        "url": "https://code.thishorsie.rocks/ryze/stackpkgs"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://code.thishorsie.rocks/ryze/stackpkgs"
       }
     },
     "stylix": {

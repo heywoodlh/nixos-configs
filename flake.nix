@@ -238,6 +238,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.tangled.follows = "tangled";
     };
+    stackpkgs = {
+      url = "git+https://code.thishorsie.rocks/ryze/stackpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self,
@@ -272,6 +276,7 @@
                       lanzaboote,
                       nix-cachyos-kernel,
                       spindle-run,
+                      stackpkgs,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -801,9 +806,13 @@
               };
             };
             firewall = {
+              allowedTCPPorts = [
+                59100 # AudioRelay
+              ];
               allowedUDPPorts = [
                 9
-                5353 # shanocast
+                59100 # AudioRelay
+                59200 # AudioRelay server discovery
               ];
             };
           };
@@ -835,6 +844,7 @@
           home-manager.users.heywoodlh = {
             home.packages = with pkgs; [
               ytmdesktop
+              (pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {})
             ];
             heywoodlh.home = {
               hyprland = lib.mkForce false;
@@ -845,8 +855,8 @@
                   command = "${pkgs.bash}/bin/bash -c \"sleep 5 && ${pkgs.steam}/bin/steam -dev steam://open/bigpicture\"";
                 }
                 {
-                  name = "Youtube Music";
-                  command = "${pkgs.ytmdesktop}/bin/ytmdesktop";
+                  name = "AudioRelay";
+                  command = "${pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {}}/bin/audiorelay";
                 }
               ];
             };

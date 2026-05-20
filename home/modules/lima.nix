@@ -65,10 +65,10 @@ in {
         };
       };
       timers."start-lima" = {
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = "*:0/1"; # Re-run every minute
+        Unit.Description = "timer for battery_status service";
+        Timer = {
           Unit = "start-lima.service";
+          OnCalendar = "*:0/1"; # Re-run every minute
         };
       };
     };

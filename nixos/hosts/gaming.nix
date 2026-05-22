@@ -99,13 +99,5 @@
       ytmdesktop
       (pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {})
     ];
-    heywoodlh.home = {
-      autostart = [
-        {
-          name = "AudioRelay";
-          command = "${pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {}}/bin/audiorelay";
-        }
-      ];
-    };
   };
 }

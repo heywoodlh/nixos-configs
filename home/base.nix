@@ -719,7 +719,11 @@ in {
   heywoodlh.home.docker-credential-1password.enable = true;
 
   home.file.".config/browsh/config.toml".text = ''
-    default_search_engine_base = "https://leta.mullvad.net/search?q="
+    browsh_supporter = "♥"
+    default_search_engine_base = "https://lite.duckduckgo.com/lite/?q="
+
+    [firefox]
+    path = "${pkgs.firefox}/bin/firefox"
   '';
 
   # Proxychains configs

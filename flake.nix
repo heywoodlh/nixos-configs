@@ -242,6 +242,10 @@
       url = "git+https://code.thishorsie.rocks/ryze/stackpkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    helium = {
+      url = "github:oxcl/nix-flake-helium-browser";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self,
@@ -277,6 +281,7 @@
                       nix-cachyos-kernel,
                       spindle-run,
                       stackpkgs,
+                      helium,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -420,6 +425,7 @@
           ];
           home-manager = {
             useGlobalPkgs = true;
+            extraSpecialArgs = inputs;
             users.heywoodlh = { ... }: {
               imports = [
                 homeModules.heywoodlh.home
@@ -483,6 +489,7 @@
             };
             hostname = myHostname;
           };
+          home-manager.extraSpecialArgs = inputs;
           home-manager.users.heywoodlh = { ... }: {
             imports = [
               homeModules.heywoodlh.home

@@ -63,7 +63,6 @@ in {
       pkgs.busybox
       pkgs.ifuse
       pkgs.fbterm
-      pkgs.firefox # for browsh
       pkgs.w3m
       battpop
       timepop

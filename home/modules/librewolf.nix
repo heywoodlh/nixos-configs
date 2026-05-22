@@ -232,6 +232,9 @@ in {
           "dom.events.asyncClipboard.readText" = false;
           # Split screen
           "browser.tabs.splitView.enabled" = true;
+          "browser.sessionstore.resume_from_crash" = false; # don't restore from crash (by default, browser saves state every 15 seconds)
+        } // lib.optionalAttrs pkgs.stdenv.isLinux {
+          "browser.cache.disk.parent_directory" = "/run/user/1000/librewolf"; # store cache in RAM, i.e. reset on reboot
         } // lib.optionalAttrs (cfg.socks.proxy != null) {
           "network.proxy.no_proxies_on" = cfg.socks.noproxy;
           "network.proxy.socks" = cfg.socks.proxy;

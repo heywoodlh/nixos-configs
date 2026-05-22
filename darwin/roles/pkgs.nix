@@ -73,12 +73,12 @@ in {
     casks = [
       "1password"
       "android-platform-tools"
-      "brave-browser"
       "blockblock"
       "cursorcerer"
       "font-jetbrains-mono-nerd-font"
       "font-microsoft-office"
       "ghostty@tip"
+      "helium-browser"
       "hiddenbar"
       "iterm2"
       "knockknock"

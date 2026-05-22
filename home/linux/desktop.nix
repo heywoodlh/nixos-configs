@@ -1,34 +1,15 @@
-{ config, pkgs, home-manager, myFlakes, dark-wallpaper, ... }:
+{ config, pkgs, nixpkgs-stable, myFlakes, dark-wallpaper, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
-  homeDir = config.home.homeDirectory;
   snowflake = ../../assets/nixos-snowflake.png;
   captive-portal = pkgs.writeShellScriptBin "captive-portal" ''
    ${pkgs.xdg-utils}/bin/xdg-open "http://$(${pkgs.iproute2}/bin/ip --oneline route get 1.1.1.1 | ${pkgs.gawk}/bin/awk '{print $3}')"
   '';
-  zen-wrapper = pkgs.writeShellScriptBin "zen" ''
-    set -ex
-    ${pkgs.flatpak}/bin/flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo || ${pkgs.libnotify}/bin/notify-send "Failed to add flathub repo"
-    if ! ${pkgs.flatpak}/bin/flatpak list --user | grep -iq app.zen_browser.zen
-    then
-      ${pkgs.libnotify}/bin/notify-send "Installing Zen Browser flatpak"
-      ${pkgs.flatpak}/bin/flatpak install --noninteractive --user flathub app.zen_browser.zen || ${pkgs.libnotify}/bin/notify-send "Failed to install zen"
-      ${pkgs.libnotify}/bin/notify-send "Installed Zen Browser flatpak"
-    fi
-    ${pkgs.flatpak}/bin/flatpak run --user app.zen_browser.zen || ${pkgs.libnotify}/bin/notify-send "Failed to launch Zen Browser"
-  '';
-  rustdesk-wrapper = pkgs.writeShellScriptBin "rustdesk" ''
-    set -ex
-    ${pkgs.flatpak}/bin/flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    if ! ${pkgs.flatpak}/bin/flatpak list --user | grep -iq com.rustdesk.RustDesk
-    then
-      ${pkgs.libnotify}/bin/notify-send "Installing RustDesk flatpak"
-      ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.rustdesk.RustDesk || ${pkgs.libnotify}/bin/notify-send "Failed to install RustDesk"
-      ${pkgs.libnotify}/bin/notify-send "Installed RustDesk flatpak"
-    fi
-    ${pkgs.flatpak}/bin/flatpak run --user com.rustdesk.RustDesk || ${pkgs.libnotify}/bin/notify-send "Failed to launch RustDesk"
-  '';
+  pkgs-stable = import nixpkgs-stable {
+    inherit system;
+    config.allowUnfree = true;
+  };
 in {
   # Nix snowflake icon
   home.file.".icons/snowflake.png" = {
@@ -57,7 +38,6 @@ in {
   home.packages = [
     pkgs.acpi
     pkgs.arch-install-scripts
-    pkgs.brave
     pkgs.flatpak
     pkgs.gnome-screenshot
     pkgs.guake
@@ -76,7 +56,7 @@ in {
     pkgs.ghostty
     pkgs.scrcpy
     captive-portal
-    zen-wrapper
+    pkgs-stable.rustdesk-flutter
   ] ++ pkgs.lib.optionals (config.heywoodlh.home.onepassword.enable) [
     config.heywoodlh.home.onepassword.package
   ] ++ pkgs.lib.optionals (system == "aarch64-linux") [
@@ -151,17 +131,6 @@ in {
       }
     '';
   };
-
-  heywoodlh.home.applications = [
-    {
-      name = "Zen Browser";
-      command = "${zen-wrapper}/bin/zen";
-    }
-    {
-      name = "RustDesk";
-      command = "${rustdesk-wrapper}/bin/rustdesk";
-    }
-  ];
 
   # Enable fontconfig
   fonts.fontconfig.enable = true;

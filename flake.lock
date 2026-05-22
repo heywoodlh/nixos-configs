@@ -688,6 +688,26 @@
         "url": "https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-webfonts.tar.gz"
       }
     },
+    "helium": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779362613,
+        "narHash": "sha256-gYJQTjBYuYOB/yii5bd9xGkxph+eL+mq4kj4F8PC/aA=",
+        "owner": "oxcl",
+        "repo": "nix-flake-helium-browser",
+        "rev": "c1db1cc295118e95923a95fbcd2346a619fbe159",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxcl",
+        "repo": "nix-flake-helium-browser",
+        "type": "github"
+      }
+    },
     "helix-flake": {
       "inputs": {
         "flake-utils": [
@@ -2253,6 +2273,7 @@
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "gomod2nix": "gomod2nix",
+        "helium": "helium",
         "helix-src": "helix-src",
         "hexstrike-ai": "hexstrike-ai",
         "home-manager": "home-manager",

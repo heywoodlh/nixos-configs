@@ -241,12 +241,6 @@ in {
       "plugins/plugin-12/items" = ["-switch-user" "-separator" "-suspend" "-hibernate" "-hybrid-sleep" "-separator" "-separator" "+logout" "-lock-screen" "-restart" "-shutdown" "-logout-dialog"];
     };
   };
-  # Tweaks for speeding up Firefox
-  # https://wiki.archlinux.org/title/Firefox/Tweaks
-  programs.firefox.profiles.home-manager.settings = {
-    "browser.cache.disk.parent_directory" = "/run/user/1000/firefox"; # store cache in RAM, i.e. reset on reboot
-    "browser.sessionstore.resume_from_crash" = false; # don't restore from crash (by default, firefox saves state every 15 seconds)
-  };
   heywoodlh.home.autostart = [
     {
       name = "1Password";

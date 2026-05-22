@@ -1,8 +1,8 @@
-{ config, pkgs, lib, home-manager, nur, myFlakes, ... }:
+{ pkgs, lib, helium, ... }:
+
+with lib;
 
 let
-  system = pkgs.stdenv.hostPlatform.system;
-  homeDir = config.home.homeDirectory;
   vscodeSettingsDir = if pkgs.stdenv.isDarwin then
     "Library/Application Support/Code/User"
   else
@@ -10,42 +10,14 @@ let
   code-reset = pkgs.writeShellScriptBin "code-reset" ''
     rm -rf ~/.vscode ~/Documents/Code ${vscodeSettingsDir}
   '';
-  arc-settings = ./share/arc-browser.plist;
+  system = pkgs.stdenv.hostPlatform.system;
 in {
   home.packages = [
     code-reset
     pkgs.mdp
+  ] ++ optionals (pkgs.stdenv.isLinux) [
+    helium.packages.${system}.helium
   ];
-
-  # post-install jobs for MacOS or Linux
-  home.activation = if pkgs.stdenv.isDarwin then {
-    # configure arc on macos
-    arcConfiguration = ''
-      /usr/bin/plutil -convert binary1 ${arc-settings} -o ~/Library/Preferences/company.thebrowser.Browser.plist
-    '';
-  } else {};
-
-  # Add my custom docker executables
-  heywoodlh.home.dockerBins.enable = true;
-
-  # Enable Marp
-  heywoodlh.home.marp.enable = true;
-
-  # Enable ghostty
-  heywoodlh.home.ghostty.enable = true;
-
-  # Enable cava on Linux
-  heywoodlh.home.cava = pkgs.stdenv.isLinux;
-
-  # Enable librewolf
-  heywoodlh.home.librewolf = {
-    enable = true;
-    search = "kagi";
-    socks = {
-      proxy = "10.64.0.1";
-      port = 1080;
-    };
-  };
 
   # Enable syncthing
   services.syncthing.enable = true;
@@ -58,5 +30,20 @@ in {
         kubectl exec -it -n monitoring $(kubectl get pods -n monitoring | grep -i logbash | head -1 | awk '{print $1}') -- logbash $argv
       end
     '';
+  };
+
+  heywoodlh.home = {
+    dockerBins.enable = true;
+    marp.enable = true;
+    ghostty.enable = true;
+    cava = pkgs.stdenv.isLinux;
+    librewolf = {
+      enable = true;
+      search = "kagi";
+      socks = {
+        proxy = "10.64.0.1";
+        port = 1080;
+      };
+    };
   };
 }

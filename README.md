@@ -17,6 +17,8 @@ Standalone flakes: [./flakes](./flakes)
 
 ## Using custom modules
 
+> Note: I don't plan to support external usage of my modules, but instead have it publicly available for reference.
+
 My custom modules expose a `heywoodlh` configuration parameter. Here's an incomplete example snippet for using my modules in a flake:
 
 ```
@@ -25,7 +27,7 @@ My custom modules expose a `heywoodlh` configuration parameter. Here's an incomp
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     darwin.url = "github:LnL7/nix-darwin/master";
-    heywoodlh-configs.url = "/Users/heywoodlh/opt/nixos-configs";
+    heywoodlh-configs.url = "git+https://tangled.org/heywoodlh.io/nixos-configs";
   };
 
   outputs = inputs@{ self, nixpkgs, darwin, heywoodlh-configs, ... }: {

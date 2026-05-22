@@ -382,6 +382,12 @@ in {
     # Helix
     heywoodlh.helix = true;
 
+    # Allow 1Password to use other browsers
+    environment.etc."1password/custom_allowed_browsers".text = lib.mkAfter ''
+      helium
+      librewolf
+    '';
+
     # NixOS version
     system.stateVersion = "25.05";
   };

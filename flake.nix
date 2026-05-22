@@ -706,7 +706,7 @@
           ];
 
           heywoodlh.nixos = {
-            gaming = true;
+            gaming.enable = true;
             vmware-workstation = true;
             cachyos-kernel.enable = true;
           };
@@ -773,203 +773,16 @@
           '';
         };
 
-        nixos-gaming =  let
-          reboot-windows = pkgs.writeShellScriptBin "reboot-windows" ''
-            sudo ${pkgs.systemd}/bin/systemctl --boot-loader-entry=auto-windows reboot
-          '';
-        in nixosConfig "workstation" "nixos-gaming" {
+        nixos-gaming =  nixosConfig "workstation" "nixos-gaming" {
           imports = [
             ./nixos/hosts/gaming.nix
           ];
-          environment.systemPackages = with pkgs; [
-            steam-run
-            reboot-windows
-            clonehero
-          ];
-          heywoodlh = {
-            server = true;
-            nixos = {
-              sunshine.enable = true;
-              nvidia-patch = true;
-              gaming = true;
-              scrutiny = {
-                enable = true;
-                port = 3050;
-                ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
-              };
-            };
-          };
-          # Machine-specific sunshine configuration
-          services.sunshine.settings = {
-            sunshine_name = "nixos-gaming";
-            output_name = 0;
-            encoder = "nvenc";
-            nvenc_preset = 1;
-          };
-          networking = {
-            interfaces = {
-              enp4s0 = {
-                wakeOnLan.enable = true;
-              };
-            };
-            firewall = {
-              allowedTCPPorts = [
-                59100 # AudioRelay
-              ];
-              allowedUDPPorts = [
-                9
-                59100 # AudioRelay
-                59200 # AudioRelay server discovery
-              ];
-            };
-          };
-          fileSystems."/mnt/hdd0" = {
-            device = "/dev/disk/by-uuid/2292D29C92D273AF";
-            fsType = "ntfs-3g";
-            options = [ "rw" "uid=1000" "nofail" ];
-          };
-          fileSystems."/mnt/ssd0" = {
-            device = "/dev/disk/by-uuid/5D8A245A63983818";
-            fsType = "ntfs-3g";
-            options = [ "rw" "uid=1000" "nofail" ];
-          };
-          fileSystems."/mnt/windows" = {
-            device = "/dev/disk/by-uuid/360C7E6F0C7E29CF";
-            fsType = "ntfs-3g";
-            options = [ "rw" "uid=1000" "nofail" ];
-          };
-
-          # Allow mdns for shanocast
-          services.avahi = {
-            enable = true;
-            reflector = true;
-            openFirewall = true;
-          };
-
-          heywoodlh.hyprland = lib.mkForce false;
-
-          home-manager.users.heywoodlh = {
-            home.packages = with pkgs; [
-              ytmdesktop
-              (pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {})
-            ];
-            heywoodlh.home = {
-              hyprland = lib.mkForce false;
-              llm.homelab = lib.mkForce true;
-              autostart = [
-                {
-                  name = "Steam";
-                  command = "${pkgs.bash}/bin/bash -c \"sleep 5 && ${pkgs.steam}/bin/steam -dev steam://open/bigpicture\"";
-                }
-                {
-                  name = "AudioRelay";
-                  command = "${pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {}}/bin/audiorelay";
-                }
-              ];
-            };
-          };
         };
 
-        nixos-gaming-sarah =  let
-          reboot-windows = pkgs.writeShellScriptBin "reboot-windows" ''
-            sudo ${pkgs.systemd}/bin/systemctl --boot-loader-entry=auto-windows reboot
-          '';
-        in nixosConfig "workstation" "nixos-gaming-sarah" {
+        nixos-gaming-sarah =  nixosConfig "workstation" "nixos-gaming-sarah" {
           imports = [
             ./nixos/hosts/gaming-sarah.nix
           ];
-          environment.systemPackages = with pkgs; [
-            steam-run
-            reboot-windows
-            clonehero
-          ];
-          heywoodlh = {
-            server = true;
-            nixos = {
-              sunshine.enable = true;
-              nvidia-patch = true;
-              gaming = true;
-              scrutiny = {
-                enable = true;
-                port = 3050;
-                ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
-              };
-            };
-          };
-          # Machine-specific sunshine configuration
-          services.sunshine.settings = {
-            sunshine_name = "sarah-linux";
-            output_name = 0;
-            encoder = "nvenc";
-            nvenc_preset = 1;
-          };
-          networking = {
-            interfaces = {
-              enp4s0 = {
-                wakeOnLan.enable = true;
-              };
-            };
-            firewall = {
-              allowedUDPPorts = [
-                9
-                5353 # shanocast
-              ];
-            };
-          };
-
-          # Allow mdns for shanocast
-          services.avahi = {
-            enable = true;
-            reflector = true;
-            openFirewall = true;
-          };
-
-          heywoodlh.hyprland = lib.mkForce false;
-
-          home-manager.users.heywoodlh = let
-            apple-music = pkgs.writeShellScriptBin "apple-music" ''
-              ${pkgs.google-chrome}/bin/google-chrome-stable --password-store=basic --app=https://music.apple.com
-            '';
-            apple-music-desktop = {
-              name = "Apple Music";
-              command = "${apple-music}/bin/apple-music";
-            };
-          in {
-            heywoodlh.home = {
-              hyprland = lib.mkForce false;
-              llm.homelab = lib.mkForce true;
-              applications = [
-                apple-music-desktop
-              ];
-              autostart = [
-                {
-                  name = "Steam";
-                  command = "${pkgs.bash}/bin/bash -c \"sleep 5 && ${pkgs.steam}/bin/steam -dev steam://open/bigpicture\"";
-                }
-                apple-music-desktop
-              ];
-            };
-          };
-          fileSystems."/mnt/ssd0" = {
-            device = "/dev/disk/by-uuid/767C97A37C975D25";
-            fsType = "ntfs-3g";
-            options = [ "rw" "uid=1000" "nofail" ];
-          };
-          fileSystems."/mnt/windows" = {
-            device = "/dev/disk/by-uuid/C2E61A2DE61A21E9";
-            fsType = "ntfs-3g";
-            options = [ "rw" "uid=1000" "nofail" ];
-          };
-          fileSystems."/mnt/hdd0" = {
-            device = "/dev/disk/by-uuid/00CA2333CA2323FE";
-            fsType = "ntfs-3g";
-            options = [ "rw" "uid=1000" "nofail" ];
-          };
-          fileSystems."/mnt/hdd1" = {
-            device = "/dev/disk/by-uuid/3008899808895E2A";
-            fsType = "ntfs-3g";
-            options = [ "rw" "uid=1000" "nofail" ];
-          };
         };
 
         nixos-blade = nixosConfig "laptop" "nixos-blade" {
@@ -985,7 +798,7 @@
 
           heywoodlh.nixos = {
             nvidia-patch = true;
-            gaming = true;
+            gaming.enable = true;
           };
 
           environment.systemPackages = with pkgs; [
@@ -1011,7 +824,7 @@
           ];
           heywoodlh = {
             sshd.enable = true;
-            nixos.gaming = true;
+            nixos.gaming.enable = true;
             apple-silicon = {
               enable = true;
               cachefile = "kernelcache.release.mac13g";

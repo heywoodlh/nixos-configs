@@ -13,7 +13,7 @@ in {
     type = types.bool;
   };
   config = mkIf cfg {
-    heywoodlh.nixos.gaming = true;
+    heywoodlh.nixos.gaming.enable = true;
     jovian = {
       steam = {
         enable = true;

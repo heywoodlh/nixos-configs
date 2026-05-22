@@ -2553,11 +2553,35 @@ string
 
 
 
-## heywoodlh\.nixos\.gaming
+## heywoodlh\.nixos\.gaming\.enable
 
 
 
 Enable heywoodlh gaming configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gaming\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gaming.nix)
+
+
+
+## heywoodlh\.nixos\.gaming\.console
+
+
+
+Enable heywoodlh dedicated console-like gaming configuration\.
 
 
 
@@ -2982,7 +3006,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/1l9xjlgplmsah81dwbd69xa03dnnwk8z-source/base/stylix\.nix](/nix/store/1l9xjlgplmsah81dwbd69xa03dnnwk8z-source/base/stylix.nix)
+ - [/nix/store/52a6zkvg6jpwjmx4sf9nmkqzzvi3x2lb-source/base/stylix\.nix](/nix/store/52a6zkvg6jpwjmx4sf9nmkqzzvi3x2lb-source/base/stylix.nix)
 
 
 
@@ -3006,7 +3030,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/1l9xjlgplmsah81dwbd69xa03dnnwk8z-source/base/stylix\.nix](/nix/store/1l9xjlgplmsah81dwbd69xa03dnnwk8z-source/base/stylix.nix)
+ - [/nix/store/52a6zkvg6jpwjmx4sf9nmkqzzvi3x2lb-source/base/stylix\.nix](/nix/store/52a6zkvg6jpwjmx4sf9nmkqzzvi3x2lb-source/base/stylix.nix)
 
 
 
@@ -3030,7 +3054,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/1l9xjlgplmsah81dwbd69xa03dnnwk8z-source/base/stylix\.nix](/nix/store/1l9xjlgplmsah81dwbd69xa03dnnwk8z-source/base/stylix.nix)
+ - [/nix/store/52a6zkvg6jpwjmx4sf9nmkqzzvi3x2lb-source/base/stylix\.nix](/nix/store/52a6zkvg6jpwjmx4sf9nmkqzzvi3x2lb-source/base/stylix.nix)
 
 
 

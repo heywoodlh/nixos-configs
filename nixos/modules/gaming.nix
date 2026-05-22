@@ -113,15 +113,24 @@ let
     '';
   });
 in {
-  options.heywoodlh.nixos.gaming = mkOption {
-    default = false;
-    description = ''
-      Enable heywoodlh gaming configuration.
-    '';
-    type = types.bool;
+  options.heywoodlh.nixos.gaming = {
+    enable = mkOption {
+      default = false;
+      description = ''
+        Enable heywoodlh gaming configuration.
+      '';
+      type = types.bool;
+    };
+    console = mkOption {
+      default = false;
+      description = ''
+        Enable heywoodlh dedicated console-like gaming configuration.
+      '';
+      type = types.bool;
+    };
   };
 
-  config = mkIf cfg {
+  config = mkIf cfg.enable {
     programs.steam = {
       enable = true;
       package = if (system == "aarch64-linux") then
@@ -131,9 +140,30 @@ in {
       localNetworkGameTransfers.openFirewall = true;
     };
 
+    heywoodlh = mkIf cfg.console {
+      hyprland = lib.mkForce false;
+      server = true;
+      nixos = {
+        sunshine.enable = true;
+        nvidia-patch = true;
+        scrutiny = {
+          enable = true;
+          port = 3050;
+          ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
+        };
+      };
+    };
+
     programs.gamemode = {
       enable = true;
       enableRenice = true;
+    };
+
+    # For performance, try these launch options
+    # gamescope --filter nis -W 1920 -H 1080 -r 60 -- %command%
+    programs.gamescope = {
+      enable = true;
+      capSysNice = true;
     };
 
     systemd.services.nvidia_oc = lib.optionalAttrs (pkgs.stdenv.isx86_64) {
@@ -274,12 +304,25 @@ in {
       '';
     };
 
-    home-manager.users.${config.heywoodlh.defaults.user.name}.home.activation.get-latest-proton = lib.optionalString (system == "x86_64-linux") ''
-      # GloriousEggroll
-      ${get-custom-proton}/bin/proton-custom.sh "GloriousEggroll/proton-ge-custom"
-      # CachyOS proton
-      ${get-custom-proton}/bin/proton-custom.sh "CachyOS/proton-cachyos"
-    '';
+    home-manager.users.${config.heywoodlh.defaults.user.name} = {
+      home.activation.get-latest-proton = lib.optionalString (system == "x86_64-linux") ''
+        # GloriousEggroll
+        ${get-custom-proton}/bin/proton-custom.sh "GloriousEggroll/proton-ge-custom"
+        # CachyOS proton
+        ${get-custom-proton}/bin/proton-custom.sh "CachyOS/proton-cachyos"
+      '';
+
+      heywoodlh.home = mkIf cfg.console {
+        hyprland = lib.mkForce false;
+        llm.homelab = lib.mkForce true;
+        autostart = [
+          {
+            name = "Steam";
+            command = "${pkgs.steam}/bin/steam steam://open/bigpicture";
+          }
+        ];
+      };
+    };
 
     # Use Decky loader if Gamescope is enabled for Steam Deck like UX
     # Requires enabling CEF remote debugging on the Developer menu settings to work.

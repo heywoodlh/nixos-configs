@@ -1,8 +1,15 @@
-{ pkgs, config, lib, plasma-manager, ... }:
+{ pkgs, nixpkgs-sunshine, config, lib, plasma-manager, ... }:
 with lib;
 
 let
   cfg = config.heywoodlh.nixos.sunshine;
+  system = pkgs.stdenv.hostPlatform.system;
+  sunshine-pkgs = import nixpkgs-sunshine {
+    inherit system;
+    config = {
+      allowUnfree = true;
+    };
+  };
 in {
   options.heywoodlh.nixos.sunshine = {
     enable = mkOption {
@@ -48,7 +55,7 @@ in {
 
     services.sunshine = {
       enable = true;
-      package = pkgs.sunshine.override {
+      package = sunshine-pkgs.sunshine.override {
         cudaSupport = true;
         cudaPackages = pkgs.cudaPackages;
       };
@@ -58,7 +65,7 @@ in {
         system_tray = false;
         fps = "[ 60 ]";
         av1_mode = 1;
-        back_button_timeout = 2000; # hold select for two seconds for home button
+        back_button_timeout = -1; # disabled; positive values steal controller input
         #global_prep_cmd = let
         #  autoAdjustRes = pkgs.writeShellScript "res.sh" ''
         #    ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.HDMI-A-1.mode.''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS} | grep -q 'not found'

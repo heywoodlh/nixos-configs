@@ -318,7 +318,7 @@ in {
         autostart = [
           {
             name = "Steam";
-            command = "${pkgs.steam}/bin/steam steam://open/bigpicture";
+            command = "steam -start steam://open/bigpicture";
           }
         ];
       };
@@ -327,7 +327,7 @@ in {
     # Use Decky loader if Gamescope is enabled for Steam Deck like UX
     # Requires enabling CEF remote debugging on the Developer menu settings to work.
     jovian.decky-loader = {
-      enable = true;
+      enable = false;
       package = decky-loader-patched;
       user = config.heywoodlh.defaults.user.name;
       extraPackages = with pkgs; [

@@ -70,6 +70,22 @@ For some reason, the `darwinConfigurations` outputs aren't shown properly, so yo
 
 ### NixOS:
 
+An installer ISO with SSH, Tailscale, Attic, etc. is available. Build it like so (on Linux):
+
+```
+nix build .#iso
+```
+
+After booting, enable Tailscale:
+
+```
+sudo tailscale up --qr --hostname="nixos-installer" --advertise-tags="tag:adminworkstation,tag:sshd"
+```
+
+Remember to `sudo tailscale logout` before exiting (or manually remove the host from the Tailscale UI).
+
+That will allow SSH, Attic, and other Tailnet services to be available during the install.
+
 To install a NixOS configuration, let's assume the `nixos-desktop-intel` output, go through the NixOS graphical installer and then run the following commands:
 
 ```

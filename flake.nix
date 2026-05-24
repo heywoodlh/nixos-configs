@@ -148,9 +148,11 @@
     osquery-fix-nixpkgs = {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
+    # jovian-nixos requires a specific nixpkgs for its custom packages (mesa, pipewire, etc.)
+    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/f83fc3c307e74bc5fd5adb7eb6b8b13ffd2a36e1";
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-jovian-nixos";
     };
     nur = {
       url = "github:nix-community/NUR";
@@ -284,6 +286,7 @@
                       spindle-run,
                       stackpkgs,
                       helium,
+                      nixpkgs-jovian-nixos,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -397,6 +400,7 @@
       ./nixos/modules/steam-deck.nix
       ./nixos/modules/vmware-workstation.nix
       ./nixos/modules/scrutiny.nix
+      ./nixos/modules/kde.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -472,7 +476,7 @@
       ] ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
     };
 
-    nixosConfig = machineType: myHostname: extraConf: nixpkgs.lib.nixosSystem {
+    nixosConfigWith = nixpkgsPkgs: machineType: myHostname: extraConf: nixpkgsPkgs.lib.nixosSystem {
       inherit system;
       specialArgs = inputs;
       modules = [
@@ -529,6 +533,7 @@
         { heywoodlh.console = true; }
       ];
     };
+    nixosConfig = nixosConfigWith nixpkgs;
 
     eval = pkgs.lib.evalModules {
       specialArgs = { inherit pkgs; inherit myFlakes; };
@@ -775,6 +780,14 @@
           '';
         };
 
+        # steam-deck uses Jovian's pinned nixpkgs as the primary nixpkgs so its
+        # custom packages (mesa, pipewire, etc.) have their version requirements met.
+        steam-deck = nixosConfigWith nixpkgs-jovian-nixos "workstation" "steam-deck" {
+          imports = [
+            ./nixos/hosts/steam-deck.nix
+          ];
+        };
+
         nixos-gaming =  nixosConfig "workstation" "nixos-gaming" {
           imports = [
             ./nixos/hosts/gaming.nix
@@ -914,6 +927,31 @@
                 dataDir = "/home/heywoodlh/Sync";
                 configDir = "/home/heywoodlh/.config/syncthing";
               };
+            }
+          ];
+        };
+
+        nixos-iso = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = inputs;
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
+            ./nixos/roles/nixos/attic.nix
+            {
+              programs.neovim = {
+                enable = true;
+                vimAlias = true;
+                viAlias = true;
+              };
+              environment.systemPackages = with pkgs; [
+                git
+                helix
+                msedit
+                nano
+              ];
+              services.tailscale.enable = true;
+              services.openssh.enable = true;
+              users.users.nixos.openssh.authorizedKeys.keyFiles = [ ssh-keys ];
             }
           ];
         };
@@ -1187,6 +1225,8 @@
         op-wrapper = myFlakes.packages.${system}.op-wrapper;
         tangled-sync = pkgs.callPackage ./pkgs/tangled-sync.nix {};
         spindle-run = spindle-run.packages.${system}.spindle-run;
+        # iso package is only buildable on Linux
+        iso = self.packages.${system}.nixosConfigurations.nixos-iso.config.system.build.isoImage;
       };
 
       devShell = pkgs.mkShell {

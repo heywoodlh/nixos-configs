@@ -19,6 +19,8 @@ in {
     home.stateVersion = "25.05";
     home.enableNixpkgsReleaseCheck = false;
 
+    systemd.user.startServices = true;
+
     nix = {
       extraOptions = ''
         extra-experimental-features = nix-command flakes pipe-operators

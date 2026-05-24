@@ -2601,6 +2601,78 @@ false
 
 
 
+## heywoodlh\.nixos\.gaming\.user
+
+
+
+User for heywoodlh configuration\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gaming\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gaming.nix)
+
+
+
+## heywoodlh\.nixos\.kde\.enable
+
+
+
+Enable heywoodlh sunshine configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/kde\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/kde.nix)
+
+
+
+## heywoodlh\.nixos\.kde\.user
+
+
+
+User for heywoodlh configuration\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/kde\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/kde.nix)
+
+
+
 ## heywoodlh\.nixos\.nvidia-patch
 
 
@@ -2698,7 +2770,7 @@ signed integer
 
 
 
-## heywoodlh\.nixos\.steam-deck
+## heywoodlh\.nixos\.steam-deck\.enable
 
 
 
@@ -2715,6 +2787,30 @@ boolean
 
 ```nix
 false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/steam-deck\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/steam-deck.nix)
+
+
+
+## heywoodlh\.nixos\.steam-deck\.user
+
+
+
+User for heywoodlh configuration\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
 ```
 
 *Declared by:*
@@ -3006,7 +3102,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/5j9nr87pjix323874mdx86av0prm96qg-source/base/stylix\.nix](/nix/store/5j9nr87pjix323874mdx86av0prm96qg-source/base/stylix.nix)
+ - [/nix/store/hgqjdr731z8pqgbpmrmd7f6fblqw00yv-source/base/stylix\.nix](/nix/store/hgqjdr731z8pqgbpmrmd7f6fblqw00yv-source/base/stylix.nix)
 
 
 
@@ -3030,7 +3126,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/5j9nr87pjix323874mdx86av0prm96qg-source/base/stylix\.nix](/nix/store/5j9nr87pjix323874mdx86av0prm96qg-source/base/stylix.nix)
+ - [/nix/store/hgqjdr731z8pqgbpmrmd7f6fblqw00yv-source/base/stylix\.nix](/nix/store/hgqjdr731z8pqgbpmrmd7f6fblqw00yv-source/base/stylix.nix)
 
 
 
@@ -3054,7 +3150,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/5j9nr87pjix323874mdx86av0prm96qg-source/base/stylix\.nix](/nix/store/5j9nr87pjix323874mdx86av0prm96qg-source/base/stylix.nix)
+ - [/nix/store/hgqjdr731z8pqgbpmrmd7f6fblqw00yv-source/base/stylix\.nix](/nix/store/hgqjdr731z8pqgbpmrmd7f6fblqw00yv-source/base/stylix.nix)
 
 
 

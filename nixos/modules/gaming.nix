@@ -121,6 +121,13 @@ in {
       '';
       type = types.bool;
     };
+    user = mkOption {
+      default = "heywoodlh";
+      description = ''
+        User for heywoodlh configuration.
+      '';
+      type = types.str;
+    };
     console = mkOption {
       default = false;
       description = ''
@@ -304,7 +311,7 @@ in {
       '';
     };
 
-    home-manager.users.${config.heywoodlh.defaults.user.name} = {
+    home-manager.users.${cfg.user} = {
       home.activation.get-latest-proton = lib.optionalString (system == "x86_64-linux") ''
         # GloriousEggroll
         ${get-custom-proton}/bin/proton-custom.sh "GloriousEggroll/proton-ge-custom"
@@ -324,33 +331,6 @@ in {
       };
     };
 
-    # Use Decky loader if Gamescope is enabled for Steam Deck like UX
-    # Requires enabling CEF remote debugging on the Developer menu settings to work.
-    jovian.decky-loader = {
-      enable = false;
-      package = decky-loader-patched;
-      user = config.heywoodlh.defaults.user.name;
-      extraPackages = with pkgs; [
-        power-profiles-daemon
-        inotify-tools
-        libpulseaudio
-        coreutils
-        gamescope
-        gamemode
-        mangohud
-        pciutils
-        systemd
-        gnugrep
-        python3
-        gnused
-        procps
-        gawk
-        file
-      ];
-      extraPythonPackages = pythonPkgs: with pythonPkgs; [
-        click
-      ];
-    };
     services.pipewire = {
       extraConfig = {
         pipewire."92-low-latency" = {

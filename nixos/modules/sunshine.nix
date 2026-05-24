@@ -35,8 +35,9 @@ in {
       "autovt@tty1".enable = false;
     };
 
+    heywoodlh.nixos.kde.enable = true;
+
     # Use KDE autologin
-    services.xserver.enable = true;
     services.displayManager = {
       gdm.enable = lib.mkForce false;
       defaultSession = lib.mkForce "plasma";
@@ -45,9 +46,6 @@ in {
         wayland.enable = true;
       };
     };
-    services.desktopManager.plasma6.enable = true;
-    programs.ssh.askPassword = lib.mkForce "${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass";
-
     services.displayManager.autoLogin = {
       enable = true;
       user = cfg.user;
@@ -123,13 +121,7 @@ in {
         programs.ashell.enable = lib.mkForce false;
         # Ensure to disable screen dim on Nvidia systems: https://bugs.kde.org/show_bug.cgi?id=460341
         programs.plasma = {
-          enable = true;
           kscreenlocker.autoLock = false;
-          desktop.icons.size = 1;
-          session = {
-            sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
-            general.askForConfirmationOnLogout = false;
-          };
           powerdevil.AC = {
             powerProfile = "performance";
             autoSuspend.action = "nothing";
@@ -147,7 +139,16 @@ in {
           wineWow64Packages.stable # support both 32-bit and 64-bit applications
           winetricks
         ];
-        systemd.user.startServices = true;
+
+        home.activation.fix-sunshine-service = ''
+          # fix sunshine systemd service
+          if [ ! -e "/home/${cfg.user}/.config/systemd/user/sunshine.service" ]
+          then
+            rm -f /home/${cfg.user}/.config/systemd/user/sunshine.service
+            systemctl --user disable sunshine.service || true
+            systemctl --user enable --now sunshine.service || true
+          fi
+        '';
       };
     };
   };

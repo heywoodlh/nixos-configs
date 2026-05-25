@@ -91,6 +91,7 @@ in {
       "rustdesk"
       "shortcat"
       "soduto"
+      "tailscale"
     ];
     masApps = {
       "Meshtastic" = 1586432531;

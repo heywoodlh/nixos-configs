@@ -3082,6 +3082,30 @@ false
 
 
 
+## heywoodlh\.sshd\.tailscale
+
+
+
+Restrict SSH to Tailscale\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd.nix)
+
+
+
 ## heywoodlh\.stylix\.enable
 
 
@@ -3102,7 +3126,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/njynvjb12mrzkbv5g738w7a4g30q8w43-source/base/stylix\.nix](/nix/store/njynvjb12mrzkbv5g738w7a4g30q8w43-source/base/stylix.nix)
+ - [/nix/store/8cy3n6nrcgr09m0lqbpfl7qd7j18am30-source/base/stylix\.nix](/nix/store/8cy3n6nrcgr09m0lqbpfl7qd7j18am30-source/base/stylix.nix)
 
 
 
@@ -3126,7 +3150,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/njynvjb12mrzkbv5g738w7a4g30q8w43-source/base/stylix\.nix](/nix/store/njynvjb12mrzkbv5g738w7a4g30q8w43-source/base/stylix.nix)
+ - [/nix/store/8cy3n6nrcgr09m0lqbpfl7qd7j18am30-source/base/stylix\.nix](/nix/store/8cy3n6nrcgr09m0lqbpfl7qd7j18am30-source/base/stylix.nix)
 
 
 
@@ -3150,7 +3174,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/njynvjb12mrzkbv5g738w7a4g30q8w43-source/base/stylix\.nix](/nix/store/njynvjb12mrzkbv5g738w7a4g30q8w43-source/base/stylix.nix)
+ - [/nix/store/8cy3n6nrcgr09m0lqbpfl7qd7j18am30-source/base/stylix\.nix](/nix/store/8cy3n6nrcgr09m0lqbpfl7qd7j18am30-source/base/stylix.nix)
 
 
 

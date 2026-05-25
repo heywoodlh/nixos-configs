@@ -27,17 +27,33 @@ in {
       '';
       type = types.bool;
     };
+    tailscale = mkOption {
+      default = false;
+      description = ''
+        Restrict SSH to Tailscale.
+      '';
+      type = types.bool;
+    };
   };
 
   config = mkIf cfg.enable {
     heywoodlh.defaults.enable = true;
     networking.firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 ];
+      allowedTCPPorts = lib.optionals (cfg.tailscale == false) [ 22 ];
       # For Mosh
-      allowedUDPPortRanges = [
+      allowedUDPPortRanges = lib.optionals (cfg.tailscale == false) [
         { from = 60000; to = 61000; }
       ];
+      # Always allow on Tailscale
+      interfaces.tailscale0 = {
+        allowedTCPPorts = [
+          22
+        ];
+        allowedUDPPortRanges = [
+          { from = 60000; to = 61000; }
+        ];
+      };
     };
 
     # Duo for MFA, disabled in favor of google authenticator module

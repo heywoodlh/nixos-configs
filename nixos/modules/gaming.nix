@@ -138,6 +138,12 @@ in {
   };
 
   config = mkIf cfg.enable {
+    nixpkgs.overlays = lib.mkAfter [
+      (final: prev: {
+        steam = prev.steam.override { extraArgs = "-dev"; };
+      })
+    ];
+
     programs.steam = {
       enable = true;
       package = if (system == "aarch64-linux") then
@@ -329,6 +335,34 @@ in {
           }
         ];
       };
+    };
+
+    # Use Decky loader if Gamescope is enabled for Steam Deck like UX
+    # Requires enabling CEF remote debugging on the Developer menu settings to work.
+    jovian.decky-loader = {
+      enable = true;
+      user = "decky";
+      package = decky-loader-patched;
+      extraPackages = with pkgs; [
+        power-profiles-daemon
+        inotify-tools
+        libpulseaudio
+        coreutils
+        gamescope
+        gamemode
+        mangohud
+        pciutils
+        systemd
+        gnugrep
+        python3
+        gnused
+        procps
+        gawk
+        file
+      ];
+      extraPythonPackages = pythonPkgs: with pythonPkgs; [
+        click
+      ];
     };
 
     services.pipewire = {

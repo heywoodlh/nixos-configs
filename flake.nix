@@ -948,10 +948,12 @@
                 helix
                 msedit
                 nano
+                e2fsprogs
               ];
               services.tailscale.enable = true;
               services.openssh.enable = true;
               users.users.nixos.openssh.authorizedKeys.keyFiles = [ ssh-keys ];
+              nix.settings.experimental-features = [ "nix-command" "flakes" ];
             }
           ];
         };

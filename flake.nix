@@ -536,7 +536,7 @@
     nixosConfig = nixosConfigWith nixpkgs;
 
     eval = pkgs.lib.evalModules {
-      specialArgs = { inherit pkgs; inherit myFlakes; };
+      specialArgs = { inherit pkgs; inherit myFlakes; inherit self; };
       modules = [
         darwinModules.heywoodlh.darwin { config._module.check = false; }
         homeModules.docs { config._module.check = false; }

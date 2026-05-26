@@ -1,4 +1,4 @@
-{ config, lib, pkgs, myFlakes, ... }:
+{ config, lib, pkgs, myFlakes, self, ... }:
 
 with lib;
 
@@ -6,7 +6,7 @@ let
   cfg = config.heywoodlh.home.ghostty;
   stdenv = pkgs.stdenv;
   system = stdenv.hostPlatform.system;
-  myTmux = myFlakes.packages.${system}.tmux;
+  myTmux = self.packages.${system}.tmux;
 in {
   options = {
     heywoodlh.home.ghostty = {

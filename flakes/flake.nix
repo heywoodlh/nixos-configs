@@ -18,7 +18,6 @@
     helix-src = {
       url = "github:alevinval/helix/issue-2719";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
     };
     helix-flake = {
       url = "./helix";

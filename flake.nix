@@ -87,12 +87,25 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.rust-overlay.follows = "lanzaboote/rust-overlay";
     };
+    fish-flake = {
+      url = ./flakes/fish;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    helix-flake = {
+      url = ./flakes/helix;
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.helix-src.follows = "helix-src";
+    };
     myFlakes = {
       url = ./flakes;
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs-stable";
       inputs.flake-utils.follows = "flake-utils";
       inputs.helix-src.follows = "helix-src";
+      inputs.fish-flake.follows = "fish-flake";
+      inputs.helix-flake.follows = "helix-flake";
     };
     # for dependents of ashell
     ashell = {

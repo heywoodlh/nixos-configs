@@ -1,4 +1,4 @@
-name: build-linux-bundles
+name: build-bundles
 
 on:
   workflow_dispatch:
@@ -8,14 +8,14 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/linux-bundles.yml
+      - .github/workflows/bundles.yml
 
 jobs:
   build-multiarch-bundles:
     name: Build multiarch bundles
     strategy:
       matrix:
-        os: [ubuntu-24.04, ubuntu-24.04-arm]
+        os: [ubuntu-24.04, ubuntu-24.04-arm, macos-latest]
         flake: [helix, fish, tmux, spindle-run]
     runs-on: ${{ matrix.os }}
     steps:
@@ -44,7 +44,8 @@ jobs:
           extra-trusted-public-keys = $ATTIC_PUBKEY
           EOF
 
-      - name: Build ${{ matrix.flake }} flake bundles
+      - name: Build ${{ matrix.flake }} flake bundles for linux
+        if: ${{ matrix.os != 'macos-latest' }}
         run: |
           mkdir -p appimage deb
           nix bundle -o "./${{ matrix.os }}-${{ matrix.out }}-appimage" --bundler github:ralismark/nix-appimage ".#${{ matrix.flake }}"
@@ -53,12 +54,28 @@ jobs:
           cp "./${{ matrix.os }}-${{ matrix.flake }}-deb"/*.deb "./deb/${{ matrix.flake }}-amd64.deb"
           nix run nixpkgs#tree
 
+      - name: Build ${{ matrix.flake }} flake bundles for macos
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          mkdir -p macos
+          nix run "github:niklaskorz/nix-bundle-darwin" -- -- -o "./${{ matrix.flake }}" .#${{ matrix.flake }}
+          tar chzvf "macos/${{ matrix.flake }}.tar.gz" "${{ matrix.flake }}"
+          nix run nixpkgs#tree
+
       - uses: actions/upload-artifact@v4
+        if: ${{ matrix.os != 'macos-latest' }}
         with:
           name: ${{ matrix.os }}-${{ matrix.flake }}
           path: |
             ./appimage/*.appimage
             ./deb/*.deb
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ matrix.os == 'macos-latest' }}
+        with:
+          name: ${{ matrix.os }}-${{ matrix.flake }}
+          path: |
+            ./macos/*.tar.gz
 
   push-releases:
     name: Push releases
@@ -109,5 +126,13 @@ jobs:
         with:
           artifacts: "./*/deb/*.deb"
           tag: "packages"
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create macos release with flake executables
+        uses: ncipollo/release-action@v1.20.0
+        with:
+          artifacts: './*/macos/*.tar.gz'
+          tag: "macos"
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}

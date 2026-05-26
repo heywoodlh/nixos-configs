@@ -443,25 +443,21 @@
     "fish-flake": {
       "inputs": {
         "flake-utils": [
-          "myFlakes",
           "flake-utils"
         ],
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ]
       },
       "locked": {
-        "path": "./fish",
+        "path": "flakes/fish",
         "type": "path"
       },
       "original": {
-        "path": "./fish",
+        "path": "flakes/fish",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "flake-compat": {
       "flake": false,
@@ -709,29 +705,24 @@
     "helix-flake": {
       "inputs": {
         "flake-utils": [
-          "myFlakes",
           "flake-utils"
         ],
         "helix-src": [
-          "myFlakes",
           "helix-src"
         ],
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs-stable"
         ]
       },
       "locked": {
-        "path": "./helix",
+        "path": "flakes/helix",
         "type": "path"
       },
       "original": {
-        "path": "./helix",
+        "path": "flakes/helix",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "helix-src": {
       "inputs": {
@@ -1461,13 +1452,17 @@
     "myFlakes": {
       "inputs": {
         "chromium-widevine-flake": "chromium-widevine-flake",
-        "fish-flake": "fish-flake",
+        "fish-flake": [
+          "fish-flake"
+        ],
         "flake-utils": [
           "flake-utils"
         ],
         "git-flake": "git-flake",
         "gnome-flake": "gnome-flake",
-        "helix-flake": "helix-flake",
+        "helix-flake": [
+          "helix-flake"
+        ],
         "helix-src": [
           "helix-src"
         ],
@@ -2300,10 +2295,12 @@
         "dark-wallpaper": "dark-wallpaper",
         "darwin": "darwin",
         "devenv": "devenv",
+        "fish-flake": "fish-flake",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "gomod2nix": "gomod2nix",
         "helium": "helium",
+        "helix-flake": "helix-flake",
         "helix-src": "helix-src",
         "hexstrike-ai": "hexstrike-ai",
         "home-manager": "home-manager",
@@ -2824,11 +2821,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1763934927,
-        "narHash": "sha256-orsv0YJ6e6Sm6/ft56spin/npDf2xXKls1B7HauJ4dk=",
+        "lastModified": 1779754603,
+        "narHash": "sha256-pHIgilXJkISxdoA7p3WF7V/vFmWJNfjTOALSLpmTL4Q=",
         "owner": "vicinaehq",
         "repo": "vicinae",
-        "rev": "63304cee4a967f30eeca7d875f6c9a8ff4454050",
+        "rev": "e9b8e1d520d7fde5e3ab4aaff68badeeb61fc8d5",
         "type": "github"
       },
       "original": {

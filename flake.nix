@@ -750,6 +750,12 @@
           };
         };
 
+        nixos-oracle-arm64 = nixosConfig "server" "nixos-oracle-arm64" {
+          imports = [
+            /etc/nixos/hardware-configuration.nix
+          ];
+        };
+
         nixos-culug = nixosConfig "server" "nixos-culug" {
           imports = [
             ./nixos/hosts/culug.nix

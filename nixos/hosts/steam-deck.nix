@@ -1,4 +1,4 @@
-{ modulesPath, lib, config, ... }:
+{ modulesPath, lib, config, pkgs, ... }:
 with lib;
 
 {
@@ -10,6 +10,10 @@ with lib;
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+
+  environment.systemPackages = with pkgs; [
+    moonlight-qt
+  ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/adf380ab-a702-4976-b107-cb6547629a1e";

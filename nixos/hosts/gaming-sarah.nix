@@ -1,9 +1,18 @@
 { config, lib, pkgs, modulesPath, ... }:
 
-{
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+let
+  aveyond = pkgs.writeShellScriptBin "aveyond.sh" ''
+    WINEPREFIX=$HOME/.wine \
+    WINEDLLOVERRIDES="quartz=d" \
+      ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond/Game.exe
+  '';
+  aveyond-eans-quest = pkgs.writeShellScriptBin "aveyond-eans-quest.sh" ''
+    ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond\ 2\ -\ Ean\'s\ Quest/Aveyond\ 2.exe
+  '';
+in {
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "vmd" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
@@ -21,15 +30,14 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  swapDevices = [ ];
+  swapDevices = [
+    {
+      device = "/swap";
+      size = 16 * 1024;
+    }
+  ];
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp0s31f6.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp2s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -39,16 +47,20 @@
     console = true;
   };
 
+  #boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
+  boot.loader.systemd-boot.windows."11".efiDeviceHandle = "HD1i32768a1";
+
   environment.systemPackages = let
     reboot-windows = pkgs.writeShellScriptBin "reboot-windows" ''
-      sudo ${pkgs.systemd}/bin/systemctl --boot-loader-entry=auto-windows reboot
+      sudo ${pkgs.systemd}/bin/systemctl --boot-loader-entry="windows_11.conf" reboot
     '';
   in with pkgs; [
     steam-run
     reboot-windows
     clonehero
+    aveyond
+    aveyond-eans-quest
   ];
-
 
   # Machine-specific sunshine configuration
   services.sunshine.settings = {
@@ -96,6 +108,13 @@
       ];
     };
   };
+
+  security.sudo.extraConfig = ''
+    heywoodlh ALL=(ALL) NOPASSWD:/run/current-system/sw/bin/reboot-windows
+  '';
+
+  # Enable 32 bit audio for Aveyond/older games
+  services.pulseaudio.support32Bit = true;
 
   fileSystems."/mnt/ssd0" = {
     device = "/dev/disk/by-uuid/767C97A37C975D25";

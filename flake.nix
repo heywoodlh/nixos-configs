@@ -752,7 +752,7 @@
 
         nixos-arm64 = nixosConfig "server" "nixos-arm64" {
           imports = [
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/nixos-arm64.nix
           ];
         };
 

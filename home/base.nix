@@ -317,9 +317,9 @@ in {
     libarchive
     lima
     msedit
-    nil
-    nixos-rebuild-ng
+    nixd
     nixfmt
+    nixos-rebuild-ng
     nmap
     openssl
     pciutils

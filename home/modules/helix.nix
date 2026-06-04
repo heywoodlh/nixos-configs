@@ -73,7 +73,7 @@ in {
         gopls
         harper
         marksman
-        nil
+        nixd
         ty
       ] ++ optionals (cfg.ai) [
         lsp-ai

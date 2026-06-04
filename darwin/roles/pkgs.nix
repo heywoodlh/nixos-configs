@@ -1,7 +1,6 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
-  system = pkgs.stdenv.hostPlatform.system;
   linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
     sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
   '';
@@ -28,12 +27,13 @@ let
   '';
 in {
   #nix packages
-  environment.systemPackages = [
+  environment.systemPackages = with pkgs; [
     linuxBuilderSsh
     myDarwinSwitch
     myDarwinBoot
     myDarwinBuild
     myDarwinSwitchWithFlakes
+    tailscale
   ];
 
   nix.settings = {
@@ -43,9 +43,14 @@ in {
   #homebrew packages
   homebrew = {
     enable = true;
-    onActivation.autoUpdate = true;
-    onActivation.upgrade = true;
-    onActivation.cleanup = "zap";
+    onActivation = {
+      autoUpdate = true;
+      upgrade = true;
+      cleanup = "zap";
+      extraFlags = [
+        "--force-cleanup"
+      ];
+    };
     brews = [
       "bash"
       "choose-gui"

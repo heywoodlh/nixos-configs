@@ -1400,30 +1400,6 @@
         "url": "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/wallpapers/nix-wallpaper-simple-light-gray.png"
       }
     },
-    "lima-flake": {
-      "inputs": {
-        "flake-utils": [
-          "myFlakes",
-          "flake-utils"
-        ],
-        "nixos-generators": "nixos-generators",
-        "nixpkgs": [
-          "myFlakes",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "path": "./nixos-lima",
-        "type": "path"
-      },
-      "original": {
-        "path": "./nixos-lima",
-        "type": "path"
-      },
-      "parent": [
-        "myFlakes"
-      ]
-    },
     "lucide-src": {
       "flake": false,
       "locked": {
@@ -1467,7 +1443,6 @@
           "helix-src"
         ],
         "jujutsu-flake": "jujutsu-flake",
-        "lima-flake": "lima-flake",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -1676,11 +1651,11 @@
     },
     "nixlib": {
       "locked": {
-        "lastModified": 1712450863,
-        "narHash": "sha256-K6IkdtMtq9xktmYPj0uaYc8NsIqHuaAoRBaMgu9Fvrw=",
+        "lastModified": 1736643958,
+        "narHash": "sha256-tmpqTSWVRJVhpvfSN9KXBvKEXplrwKnSZNAoNPf/S/s=",
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
-        "rev": "3c62b6a12571c9a7f65ab037173ee153d539905f",
+        "rev": "1418bc28a52126761c02dd3d89b2d8ca0f521181",
         "type": "github"
       },
       "original": {
@@ -1717,17 +1692,16 @@
       "inputs": {
         "nixlib": "nixlib",
         "nixpkgs": [
-          "myFlakes",
-          "lima-flake",
+          "nixos-lima",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1718025593,
-        "narHash": "sha256-WZ1gdKq/9u1Ns/oXuNsDm+W0salonVA0VY1amw8urJ4=",
+        "lastModified": 1769813415,
+        "narHash": "sha256-nnVmNNKBi1YiBNPhKclNYDORoHkuKipoz7EtVnXO50A=",
         "owner": "nix-community",
         "repo": "nixos-generators",
-        "rev": "35c20ba421dfa5059e20e0ef2343c875372bdcf3",
+        "rev": "8946737ff703382fda7623b9fab071d037e897d5",
         "type": "github"
       },
       "original": {
@@ -1749,6 +1723,30 @@
         "owner": "NixOS",
         "ref": "master",
         "repo": "nixos-hardware",
+        "type": "github"
+      }
+    },
+    "nixos-lima": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixos-generators": "nixos-generators",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780600846,
+        "narHash": "sha256-qbtqonMGVxrMBzT5w/Cpf7WaZ8tSAkyfKZIF8d/43sc=",
+        "owner": "nixos-lima",
+        "repo": "nixos-lima",
+        "rev": "4b4ba760fe0dc0b094edd4d88d0790f93244cb3b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos-lima",
+        "repo": "nixos-lima",
         "type": "github"
       }
     },
@@ -2316,6 +2314,7 @@
         "nix-on-droid": "nix-on-droid",
         "nixos-apple-silicon": "nixos-apple-silicon",
         "nixos-hardware": "nixos-hardware",
+        "nixos-lima": "nixos-lima",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
         "nixpkgs-backports": "nixpkgs-backports",

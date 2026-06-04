@@ -51,11 +51,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    lima-flake = {
-      url = "./nixos-lima";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     chromium-widevine-flake = {
       url = "./chromium-widevine";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -95,7 +90,6 @@
     helix-flake,
     vscode-flake,
     op-flake,
-    lima-flake,
     chromium-widevine-flake,
     vicinae-nix,
     gnome-flake,
@@ -122,8 +116,6 @@
         vscode-bin = vscode-flake.packages.${system}.code-bin;
         op = op-flake.packages.${system}.op;
         op-desktop-setup = op-flake.packages.${system}.op-desktop-setup;
-        nixos-vm = lima-flake.packages.${system}.runVm;
-        lima-nixos-img = lima-flake.packages.${system}.img;
         chromium-widevine = chromium-widevine-flake.packages.aarch64-linux.chromium-widevine;
         gnome = gnome-flake.packages.${system}.gnome-desktop-setup;
         gnome-dconf = gnome-flake.packages.${system}.dconf;

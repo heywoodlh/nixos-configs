@@ -1460,7 +1460,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/749wilc3pas0i8cmq3ljz5l7i4vk6cmy-tmux/bin/tmux"
+"/nix/store/v73nr2bp4cgrh9hbdzksg55lj8mdr9a8-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1508,7 +1508,7 @@ signed integer
 *Default:*
 
 ```nix
-16
+14
 ```
 
 *Declared by:*
@@ -2001,7 +2001,7 @@ null
 
 
 
-Run a Lima Docker VM as a service\.
+Enable Lima for Virtual Machines\.
 
 
 
@@ -2021,11 +2021,35 @@ false
 
 
 
-## heywoodlh\.home\.lima\.context
+## heywoodlh\.home\.lima\.docker
 
 
 
-Configure Lima VM Docker context\.
+Lima Docker configuration\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
+
+
+
+## heywoodlh\.home\.lima\.docker\.enable
+
+
+
+Configure Docker Lima VM\.
 
 
 
@@ -2038,6 +2062,127 @@ boolean
 
 ```nix
 true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
+
+
+
+## heywoodlh\.home\.lima\.docker\.context
+
+
+
+Configure Lima VM Docker context automatically\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
+
+
+
+## heywoodlh\.home\.lima\.nixos
+
+
+
+Run a NixOS Lima VM\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
+
+
+
+## heywoodlh\.home\.lima\.nixos\.enable
+
+
+
+Enable NixOS Lima VM\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
+
+
+
+## heywoodlh\.home\.lima\.nixos\.memory
+
+
+
+NixOS VM RAM\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+4
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
+
+
+
+## heywoodlh\.home\.lima\.nixos\.nixos-rebuild
+
+
+
+Enable ` nixos-rebuild ` wrapper in Lima\.
+Likely should not be enabled on NixOS\.
+
+
+
+*Type:*
+unspecified value
+
+
+
+*Default:*
+
+```nix
+false
 ```
 
 *Declared by:*
@@ -2263,8 +2408,6 @@ package
 
 ## heywoodlh\.home\.vicinae\.enable
 
-
-
 Enable heywoodlh vicinae configuration\.
 
 
@@ -2408,6 +2551,8 @@ string
 
 
 ## heywoodlh\.luks\.fido
+
+
 
 Use FIDO device decryption\.
 Setup with: ` sudo systemd-cryptenroll /dev/nvme0n1p2 --fido2-device=auto --fido2-with-user-presence=yes --fido2-with-client-pin=no `
@@ -3126,7 +3271,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/i5dawy5ajsx68i5cw5a01csc8121pfal-source/base/stylix\.nix](/nix/store/i5dawy5ajsx68i5cw5a01csc8121pfal-source/base/stylix.nix)
+ - [/nix/store/ai24lyipmzrl7jj5cb7vs9l883s0rwbs-source/base/stylix\.nix](/nix/store/ai24lyipmzrl7jj5cb7vs9l883s0rwbs-source/base/stylix.nix)
 
 
 
@@ -3150,7 +3295,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/i5dawy5ajsx68i5cw5a01csc8121pfal-source/base/stylix\.nix](/nix/store/i5dawy5ajsx68i5cw5a01csc8121pfal-source/base/stylix.nix)
+ - [/nix/store/ai24lyipmzrl7jj5cb7vs9l883s0rwbs-source/base/stylix\.nix](/nix/store/ai24lyipmzrl7jj5cb7vs9l883s0rwbs-source/base/stylix.nix)
 
 
 
@@ -3174,7 +3319,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/i5dawy5ajsx68i5cw5a01csc8121pfal-source/base/stylix\.nix](/nix/store/i5dawy5ajsx68i5cw5a01csc8121pfal-source/base/stylix.nix)
+ - [/nix/store/ai24lyipmzrl7jj5cb7vs9l883s0rwbs-source/base/stylix\.nix](/nix/store/ai24lyipmzrl7jj5cb7vs9l883s0rwbs-source/base/stylix.nix)
 
 
 

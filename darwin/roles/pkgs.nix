@@ -1,9 +1,6 @@
 { pkgs, ... }:
 
 let
-  linuxBuilderSsh = pkgs.writeShellScriptBin "linux-builder-ssh" ''
-    sudo ssh -i /etc/nix/builder_ed25519 builder@linux-builder
-  '';
   darwinRebuildWrapper = pkgs.writeShellScript "darwin-rebuild-wrapper" ''
     if [[ -d $HOME/opt/nixos-configs ]]
     then
@@ -28,7 +25,6 @@ let
 in {
   #nix packages
   environment.systemPackages = with pkgs; [
-    linuxBuilderSsh
     myDarwinSwitch
     myDarwinBoot
     myDarwinBuild
@@ -96,7 +92,7 @@ in {
       "rustdesk"
       "shortcat"
       "soduto"
-      "tailscale"
+      "tailscale-app"
     ];
     masApps = {
       "Meshtastic" = 1586432531;

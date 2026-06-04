@@ -14,23 +14,6 @@ in {
         "@admin"
       ];
     };
-    linux-builder = {
-      enable = false; # Disable Linux builder -- transition to something more consistent
-      package = pkgs.darwin.linux-builder;
-      ephemeral = true; # Wipe on every reboot
-      systems = [
-        "aarch64-linux"
-      ];
-      config = {
-        environment.systemPackages = [
-          myFlakes.packages.aarch64-linux.vim
-        ];
-        nix = {
-          package = determinate.packages.aarch64-linux.default;
-          settings.experimental-features = [ "nix-command" "flakes" ];
-        };
-      };
-    };
   };
 
   system.activationScripts.chownLinuxBuilderKey = {

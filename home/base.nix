@@ -76,7 +76,6 @@ let
     export PASSWORD_STORE_DIR="${op-backup-dir-no-format}"
     ${pkgs.pass.withExtensions (exts: [ exts.pass-otp ])}/bin/pass $@
   '';
-  limaTemplate = ./share/ubuntu.yaml;
   tor-proxychains-conf = pkgs.writeText "proxychains.conf" ''
     strict_chain
     proxy_dns
@@ -180,7 +179,7 @@ let
     if echo "$targets" | grep -q 'nixos-desktop'
     then
       printf "\nTesting NixOS Desktop build\n"
-      nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-desktop" --impure
+      nixos-rebuild build --flake "/tmp/nixos-configs#nixos-desktop" --impure
       echo "$targets" | grep -q 'skip-cache' || nix run "nixpkgs#attic-client" -- push nixos ./result
       rm -f result
 
@@ -188,7 +187,7 @@ let
       if arch | grep -q x86_64
       then
         printf "\nTesting NixOS Nvidia Desktop build\n"
-        nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-blade" --impure
+        nixos-rebuild build --flake "/tmp/nixos-configs#nixos-blade" --impure
         echo "$targets" | grep -q 'skip-cache' || nix run "nixpkgs#attic-client" -- push nixos ./result
         rm -f result
       fi
@@ -197,7 +196,7 @@ let
       if arch | grep -q aarch64
       then
         printf "\nTesting NixOS Nvidia Desktop build\n"
-        nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-m1-mac-mini" --impure
+        nixos-rebuild build --flake "/tmp/nixos-configs#nixos-m1-mac-mini" --impure
         echo "$targets" | grep -q 'skip-cache' || nix run "nixpkgs#attic-client" -- push nixos ./result
         rm -f result
       fi
@@ -206,7 +205,7 @@ let
     if echo "$targets" | grep -q 'nixos-server'
     then
       printf "\nTesting NixOS Server build\n"
-      nix run nixpkgs#nixos-rebuild -- build --flake "/tmp/nixos-configs#nixos-server"
+      nixos-rebuild build --flake "/tmp/nixos-configs#nixos-server"
       echo "$targets" | grep -q 'skip-cache' || nix run "nixpkgs#attic-client" -- push nixos ./result
       rm -f result
     fi
@@ -315,11 +314,9 @@ in {
     lefthook
     less
     libarchive
-    lima
     msedit
     nixd
     nixfmt
-    nixos-rebuild-ng
     nmap
     openssl
     pciutils
@@ -658,21 +655,6 @@ in {
     text = ''
       #!/${pkgs.fish}/bin/fish
       ${pkgs.aerc}/bin/aerc "$argv"
-    '';
-  };
-
-  # lima wrapper
-  home.file."bin/linux.sh" = {
-    executable = true;
-    text = ''
-      #!/usr/bin/env bash
-      if [[ -e ~/.lima/default ]]
-      then
-        ${pkgs.lima}/bin/limactl start default
-      else
-        ${pkgs.lima}/bin/limactl start --name=default ${limaTemplate}
-      fi
-      ${pkgs.lima}/bin/limactl start-at-login default
     '';
   };
 

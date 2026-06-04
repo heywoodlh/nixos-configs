@@ -750,7 +750,7 @@
           };
         };
 
-        nixos-oracle-arm64 = nixosConfig "server" "nixos-oracle-arm64" {
+        nixos-arm64 = nixosConfig "server" "nixos-arm64" {
           imports = [
             /etc/nixos/hardware-configuration.nix
           ];
@@ -928,6 +928,14 @@
             /etc/nixos/hardware-configuration.nix
             /etc/nixos/configuration.nix
             {
+              services.openssh.enable = true;
+              users.users = let
+                sshKeys = ssh-keys.outPath;
+              in {
+                heywoodlh.openssh.authorizedKeys.keyFiles = [ sshKeys ];
+                root.openssh.authorizedKeys.keyFiles = [ sshKeys ];
+              };
+
               programs.neovim = {
                 enable = true;
                 vimAlias = true;

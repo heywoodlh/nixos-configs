@@ -2,10 +2,10 @@
   description = "heywoodlh nix config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-lts.url = "github:nixos/nixpkgs/nixpkgs-unstable"; # Separate input for overriding
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-lts.url = "github:nixos/nixpkgs/nixos-unstable"; # Separate input for overriding
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.11";
-    nixpkgs-nvidia.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-nvidia.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-sunshine.url = "github:Qubasa/nixpkgs/update_sunshine";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-25.05";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
@@ -162,7 +162,7 @@
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
     # jovian-nixos requires a specific nixpkgs for its custom packages (mesa, pipewire, etc.)
-    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/f83fc3c307e74bc5fd5adb7eb6b8b13ffd2a36e1";
+    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/331800de5053fcebacf6813adb5db9c9dca22a0c";
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs-jovian-nixos";

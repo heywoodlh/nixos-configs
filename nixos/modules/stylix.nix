@@ -11,6 +11,8 @@ in {
         logo = ../../assets/catppuccin-nix.png;
         logoAnimated = false;
       };
+      # kmscon options (extraConfig, fonts) were removed in newer nixpkgs
+      targets.kmscon.enable = false;
     };
     fonts = {
       enableDefaultPackages = true;

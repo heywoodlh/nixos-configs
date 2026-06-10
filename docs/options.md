@@ -805,14 +805,6 @@ User for heywoodlh configuration\.
 *Type:*
 submodule
 
-
-
-*Default:*
-
-```nix
-{ }
-```
-
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
 
@@ -1460,7 +1452,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/v73nr2bp4cgrh9hbdzksg55lj8mdr9a8-tmux/bin/tmux"
+"/nix/store/my074b4j3a39lgi06pzbhkqiqixmg45b-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1508,7 +1500,7 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
@@ -1912,14 +1904,6 @@ User for heywoodlh configuration\.
 *Type:*
 submodule
 
-
-
-*Default:*
-
-```nix
-{ }
-```
-
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/librewolf.nix)
 
@@ -2032,14 +2016,6 @@ Lima Docker configuration\.
 *Type:*
 submodule
 
-
-
-*Default:*
-
-```nix
-{ }
-```
-
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
 
@@ -2103,14 +2079,6 @@ Run a NixOS Lima VM\.
 
 *Type:*
 submodule
-
-
-
-*Default:*
-
-```nix
-{ }
-```
 
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/lima.nix)
@@ -2326,7 +2294,7 @@ package
 *Default:*
 
 ```nix
-<derivation 1password-8.12.8>
+<derivation 1password-8.12.21>
 ```
 
 *Declared by:*
@@ -3271,7 +3239,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/sia945wz0n410k9nbbgph5f3dljh5nvg-source/base/stylix\.nix](/nix/store/sia945wz0n410k9nbbgph5f3dljh5nvg-source/base/stylix.nix)
+ - [/nix/store/jz8w0w8s665snjhk50i82j10vkzqqp8y-source/base/stylix\.nix](/nix/store/jz8w0w8s665snjhk50i82j10vkzqqp8y-source/base/stylix.nix)
 
 
 
@@ -3295,7 +3263,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/sia945wz0n410k9nbbgph5f3dljh5nvg-source/base/stylix\.nix](/nix/store/sia945wz0n410k9nbbgph5f3dljh5nvg-source/base/stylix.nix)
+ - [/nix/store/jz8w0w8s665snjhk50i82j10vkzqqp8y-source/base/stylix\.nix](/nix/store/jz8w0w8s665snjhk50i82j10vkzqqp8y-source/base/stylix.nix)
 
 
 
@@ -3319,7 +3287,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/sia945wz0n410k9nbbgph5f3dljh5nvg-source/base/stylix\.nix](/nix/store/sia945wz0n410k9nbbgph5f3dljh5nvg-source/base/stylix.nix)
+ - [/nix/store/jz8w0w8s665snjhk50i82j10vkzqqp8y-source/base/stylix\.nix](/nix/store/jz8w0w8s665snjhk50i82j10vkzqqp8y-source/base/stylix.nix)
 
 
 

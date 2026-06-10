@@ -161,7 +161,7 @@ let
     ${pkgs.nix}/bin/nix --builders "${myBuilders}" $@
   '';
   system-fetch = pkgs.writeShellScriptBin "neofetch" ''
-    ${pkgs.leaf}/bin/leaf $@
+    ${pkgs.fastfetch}/bin/fastfetch $@
   '';
   test-linux = pkgs.writeText "test-linux.sh" ''
     #!/usr/bin/env -S nix shell "github:nixos/nixpkgs/nixpkgs-unstable#bash" "github:nixos/nixpkgs/nixpkgs-unstable#nix" "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" --command bash
@@ -744,8 +744,6 @@ in {
     "${homeDir}/opt/cart".trust_level = "trusted";
     "${homeDir}/opt/tailscale-acl".trust_level = "trusted";
   };
-
-  gtk.gtk4.theme = config.gtk.theme;
 
   heywoodlh.home = {
     defaults = true;

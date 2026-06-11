@@ -22,6 +22,8 @@ in {
 
   config = mkIf cfg {
     home.file."opt/.stignore".text = ''
+      nixpkgs/**
+      forks/nixpkgs/**
       result/**
       .direnv/**
     '';

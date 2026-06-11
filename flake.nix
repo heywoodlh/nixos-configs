@@ -510,10 +510,7 @@
               user = "heywoodlh";
             };
           };
-          services.container = {
-            enable = true;
-            user = "heywoodlh";
-          };
+          services.container.enable = true;
           system.stateVersion = 6;
         }
       ] ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];

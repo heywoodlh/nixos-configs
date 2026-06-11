@@ -153,16 +153,6 @@ in {
       ];
     };
 
-    services = {
-      logind.settings.Login.RuntimeDirectorySize = "10G";
-      syncthing = {
-        enable = true;
-        user = "heywoodlh";
-        dataDir = "${homeDir}/Sync";
-        configDir = "${homeDir}/.config/syncthing";
-      };
-    };
-
     # Enable ergodox ez/moonlander keyboard tools
     hardware.keyboard.zsa.enable = true;
 

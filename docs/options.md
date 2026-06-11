@@ -2374,7 +2374,31 @@ package
 
 
 
+## heywoodlh\.home\.syncthing
+
+Enable heywoodlh syncthing configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/syncthing\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/syncthing.nix)
+
+
+
 ## heywoodlh\.home\.vicinae\.enable
+
+
 
 Enable heywoodlh vicinae configuration\.
 
@@ -3239,7 +3263,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/xc50qqdrnra8s90h9bpbg8l49xsh7qdz-source/base/stylix\.nix](/nix/store/xc50qqdrnra8s90h9bpbg8l49xsh7qdz-source/base/stylix.nix)
+ - [/nix/store/qhxlagg453isciy9va844mf8gf04yg4k-source/base/stylix\.nix](/nix/store/qhxlagg453isciy9va844mf8gf04yg4k-source/base/stylix.nix)
 
 
 
@@ -3263,7 +3287,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/xc50qqdrnra8s90h9bpbg8l49xsh7qdz-source/base/stylix\.nix](/nix/store/xc50qqdrnra8s90h9bpbg8l49xsh7qdz-source/base/stylix.nix)
+ - [/nix/store/qhxlagg453isciy9va844mf8gf04yg4k-source/base/stylix\.nix](/nix/store/qhxlagg453isciy9va844mf8gf04yg4k-source/base/stylix.nix)
 
 
 
@@ -3287,7 +3311,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/xc50qqdrnra8s90h9bpbg8l49xsh7qdz-source/base/stylix\.nix](/nix/store/xc50qqdrnra8s90h9bpbg8l49xsh7qdz-source/base/stylix.nix)
+ - [/nix/store/qhxlagg453isciy9va844mf8gf04yg4k-source/base/stylix\.nix](/nix/store/qhxlagg453isciy9va844mf8gf04yg4k-source/base/stylix.nix)
 
 
 

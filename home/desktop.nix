@@ -19,9 +19,6 @@ in {
     helium.packages.${system}.helium
   ];
 
-  # Enable syncthing
-  services.syncthing.enable = true;
-
   # Logbash wrapper
   home.file.".config/fish/config.fish" = {
     enable = true;

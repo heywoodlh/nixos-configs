@@ -267,6 +267,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
+    gh-gitignore = {
+      url = "github:github/gitignore";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ self,
@@ -306,6 +310,7 @@
                       helium,
                       nixpkgs-jovian-nixos,
                       nixos-lima,
+                      gh-gitignore,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -354,6 +359,7 @@
       ./home/modules/btop.nix
       ./home/modules/cava.nix
       ./home/modules/git.nix
+      ./home/modules/syncthing.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix

@@ -759,5 +759,6 @@ in {
       accounts = true;
     };
     btop = true;
+    syncthing = true;
   };
 }

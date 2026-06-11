@@ -544,6 +544,22 @@
         "type": "github"
       }
     },
+    "gh-gitignore": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779407372,
+        "narHash": "sha256-6iCmlbxb27MGtHqQGj98LUnmK17QCdCYCwgIlyYC6MM=",
+        "owner": "github",
+        "repo": "gitignore",
+        "rev": "dcc0fc7bc2b5ba480cf117ad1be31bafceeaff46",
+        "type": "github"
+      },
+      "original": {
+        "owner": "github",
+        "repo": "gitignore",
+        "type": "github"
+      }
+    },
     "git-flake": {
       "inputs": {
         "flake-utils": [
@@ -2296,6 +2312,7 @@
         "fish-flake": "fish-flake",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
+        "gh-gitignore": "gh-gitignore",
         "gomod2nix": "gomod2nix",
         "helium": "helium",
         "helix-flake": "helix-flake",

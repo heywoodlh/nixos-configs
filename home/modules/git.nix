@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, gh-gitignore, ... }:
 
 with lib;
 let
   cfg = config.heywoodlh.home.git;
+  readIgnoreFile =
+    path:
+    builtins.filter (line: line != "" && !lib.hasPrefix "#" line && !lib.hasPrefix "Icon[" line) (
+      lib.splitString "\n" (builtins.readFile path)
+    );
+  gitignore = gh-gitignore;
 in {
   options = {
     heywoodlh.home.git = {
@@ -39,11 +45,20 @@ in {
       enable = true;
       package = pkgs.git;
 
-      ignores = [
-        # Direnv
-        ".envrc"
-        ".direnv"
-      ];
+      ignores =
+        readIgnoreFile "${gitignore}/Nix.gitignore"
+        ++ readIgnoreFile "${gitignore}/Global/Linux.gitignore"
+        ++ readIgnoreFile "${gitignore}/Global/macOS.gitignore"
+        ++ readIgnoreFile "${gitignore}/Global/Vim.gitignore"
+        ++ readIgnoreFile "${gitignore}/Global/VisualStudioCode.gitignore"
+        ++ readIgnoreFile "${gitignore}/Global/Xcode.gitignore"
+        ++ readIgnoreFile "${gitignore}/Global/Agents.gitignore"
+        ++ [
+          # Direnv
+          ".envrc"
+          ".direnv"
+          ".claude"
+        ];
 
       includes = [
         { path = "~/.gitconfig"; }

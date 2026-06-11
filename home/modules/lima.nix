@@ -42,7 +42,7 @@ let
       echo "Usage: start-lima.sh [docker|nixos]" && exit 0
     fi
 
-    if [[ -e "~/.lima/$vm" ]]
+    if [[ -e "$HOME/.lima/$vm" ]]
     then
       ${pkgs.lima}/bin/limactl start "$vm" --mount-writable=true --tty=false
     else

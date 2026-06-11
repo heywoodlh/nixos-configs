@@ -64,12 +64,12 @@ in {
       cask_args appdir: "~/Applications"
     '';
     taps = [
-      "amar1729/formulae"
-      "colindean/fonts-nonfree"
-      "kidonng/malt"
-      "aaronraimist/homebrew-tap"
-      "aaronraimist/tap"
-      "akdev1l/apps" # librewolf
+      { name = "amar1729/formulae"; trusted = true; }
+      { name = "colindean/fonts-nonfree"; trusted = true; }
+      { name = "kidonng/malt"; trusted = true; }
+      { name = "aaronraimist/homebrew-tap"; trusted = true; }
+      { name = "aaronraimist/tap"; trusted = true; }
+      { name = "akdev1l/apps"; trusted = true; } # librewolf
     ];
     casks = [
       "1password"

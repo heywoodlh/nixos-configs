@@ -138,7 +138,7 @@
       inputs.vscode-server.follows = "";
     };
     darwin = {
-      url = "github:heywoodlh/nix-darwin/container-init";
+      url = "github:heywoodlh/nix-darwin/heywoodlh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl = {
@@ -505,7 +505,7 @@
             };
           };
           services.container = {
-            enable = null;
+            enable = true;
             user = "heywoodlh";
           };
           system.stateVersion = 6;

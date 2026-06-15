@@ -265,7 +265,7 @@ let
   '';
   attic-setup = pkgs.writeShellScriptBin "attic-setup" ''
     mkdir -p ~/.config/attic
-    ${op-wrapper} read 'op://Kubernetes/za3oirjkd6ehdlnzvisb445hga/normal-config' > ~/.config/attic/config.toml
+    [[ -e "$HOME/.config/attic/config.toml" ]] || ${op-wrapper} read 'op://Kubernetes/za3oirjkd6ehdlnzvisb445hga/normal-config' > ~/.config/attic/config.toml
   '';
   myProxychains = pkgs.writeShellScriptBin "proxychains" ''
     ${pkgs.proxychains-ng}/bin/proxychains4 -q "$@"

@@ -2,10 +2,10 @@
   description = "heywoodlh nix config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
     nixpkgs-lts.url = "github:nixos/nixpkgs/nixos-unstable"; # Separate input for overriding
-    nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.11";
-    nixpkgs-nvidia.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-26.05-chilled/0.1";
+    nixpkgs-nvidia.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
     nixpkgs-sunshine.url = "github:Qubasa/nixpkgs/update_sunshine";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-25.05";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";

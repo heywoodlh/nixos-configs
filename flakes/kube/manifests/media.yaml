@@ -180,7 +180,7 @@ spec:
               mountPath: /run.sh
               subPath: run.sh
       containers:
-      - image: docker.io/linuxserver/plex:1.42.2
+      - image: docker.io/linuxserver/plex:1.43.2
         name: plex
         ports:
         - name: plex

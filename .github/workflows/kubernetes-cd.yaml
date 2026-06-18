@@ -59,7 +59,7 @@ jobs:
 
       - name: Install kubectl
         if: github.ref == 'refs/heads/main'
-        uses: azure/setup-kubectl@v4
+        uses: azure/setup-kubectl@v5
 
         # Get the value for the GitHub Actions secret with these commands:
         # nix shell "github:nixos/nixpkgs/nixpkgs-unstable#coreutils"

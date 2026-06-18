@@ -90,7 +90,7 @@ To install a NixOS configuration, let's assume the `nixos-desktop-intel` output,
 
 ```
 # Initial config to setup Attic cache, enable Tailscale and enable unconfigured Neovim
-sudo nixos-rebuild switch --impure --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-init"
+sudo nixos-rebuild switch --accept-flake-config --impure --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-init"
 
 # Tailscale for Attic cache
 sudo tailscale up --qr --advertise-tags="tag:adminworkstation"
@@ -99,7 +99,7 @@ sudo tailscale up --qr --advertise-tags="tag:adminworkstation"
 Then deploy the desired configuration:
 
 ```
-sudo nixos-rebuild switch --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-desktop-intel"
+sudo nixos-rebuild switch --accept-flake-config --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-desktop-intel"
 ```
 
 <details>

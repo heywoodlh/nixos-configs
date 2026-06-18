@@ -10,7 +10,7 @@ pre-commit:
         fi
     gen-docs:
       run: |
-        nix build .#docs
+        nix build --accept-flake-config .#docs
         cp -f ./result docs/options.md
         git add ./docs/options.md
         git update-index --add ./docs/options.md

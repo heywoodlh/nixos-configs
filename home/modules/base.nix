@@ -27,6 +27,8 @@ in {
       '';
       settings = {
         auto-optimise-store = true;
+        fallback = true;
+        connect-timeout = 5;
         trusted-users = [
           config.home.username
         ];

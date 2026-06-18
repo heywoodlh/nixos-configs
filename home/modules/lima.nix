@@ -9,6 +9,7 @@ let
   nixosLimaVersion = "0.0.5";
   memory = toString cfg.nixos.memory;
   nixosYaml = pkgs.writeText "nixos.yaml" ''
+    # This is managed with `heywoodlh.home.lima` -- any persistent changes should go in that module
     images:
       - location: "https://github.com/nixos-lima/nixos-lima/releases/download/v${nixosLimaVersion}/nixos-lima-v${nixosLimaVersion}-aarch64.qcow2"
         arch: "aarch64"
@@ -44,13 +45,13 @@ let
 
     if [[ -e "$HOME/.lima/$vm" ]]
     then
-      ${pkgs.lima}/bin/limactl start "$vm" --mount-writable=true --tty=false
+      ${pkgs.lima}/bin/limactl start "$vm" --mount-writable=true --tty=false &>/dev/null
     else
       template=""
       [[ "$vm" == "docker" ]] && template="template://docker-rootful"
       [[ "$vm" == "nixos" ]] && template="${nixosYaml}"
 
-      ${pkgs.lima}/bin/limactl start --mount-writable=true --tty=false --name="$vm" "$template"
+      ${pkgs.lima}/bin/limactl start --mount-writable=true --tty=false --name="$vm" "$template" &>/dev/null
     fi
     if ${pkgs.lima}/bin/limactl list | ${pkgs.gnugrep}/bin/grep -E "^"$vm"" | ${pkgs.gnugrep}/bin/grep -q "Broken"
     then
@@ -116,7 +117,7 @@ let
       echo "Waiting for nixos VM to be started..."
       sleep 5
     done
-    ${pkgs.lima}/bin/limactl shell nixos
+    ${pkgs.lima}/bin/limactl shell --workdir $HOME nixos $@
   '';
   limaNixosRebuild = pkgs.writeShellScriptBin "nixos-rebuild" ''
     ${pkgs.lima}/bin/limactl shell nixos nixos-rebuild $@
@@ -213,25 +214,32 @@ in {
     home.packages = with pkgs; [
       lima
       # Include docker and nixos starters for dev/testing
-      # (will be unused if docker.enable or nixos.enable are false)
+      # (will not be enabled by default if docker.enable or nixos.enable are false)
       startDocker
       startNixos
       enterNixos
+      socat
     ] ++ lib.optionals cfg.docker.enable [
       docker-client
     ] ++ lib.optionals cfg.nixos.nixos-rebuild [
       limaNixosRebuild
     ];
 
-    home.activation.docker-context = mkIf (cfg.docker.enable && cfg.docker.context) ''
-      # Create docker context if it doesn't exist
-      # Switch to docker context only if it doesn't exist
-      # (don't mess with contexts if it already exists)
-      if ! ${pkgs.docker-client}/bin/docker context ls | grep -q docker-lima &> /dev/null
-      then
-        ${pkgs.docker-client}/bin/docker context create docker-lima --docker "host=unix://${homeDir}/.lima/docker/sock/docker.sock" &> /dev/null
-        ${pkgs.docker-client}/bin/docker context use docker-lima &> /dev/null
-      fi
-    '';
+    home.activation = {
+      docker-context = mkIf (cfg.docker.enable && cfg.docker.context) ''
+        # Create docker context if it doesn't exist
+        # Switch to docker context only if it doesn't exist
+        # (don't mess with contexts if it already exists)
+        if ! ${pkgs.docker-client}/bin/docker context ls | grep -q docker-lima &> /dev/null
+        then
+          ${pkgs.docker-client}/bin/docker context create docker-lima --docker "host=unix://${homeDir}/.lima/docker/sock/docker.sock" &> /dev/null
+          ${pkgs.docker-client}/bin/docker context use docker-lima &> /dev/null
+        fi
+      '';
+      nixos-config = mkIf (cfg.nixos.enable) ''
+        mkdir -p ${homeDir}/.lima/nixos
+        cp -f ${nixosYaml} ${homeDir}/.lima/nixos/lima.yaml
+      '';
+    };
   };
 }

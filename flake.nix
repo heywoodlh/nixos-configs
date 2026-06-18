@@ -1,4 +1,4 @@
-{
+rec {
   description = "heywoodlh nix config";
 
   inputs = {
@@ -273,6 +273,23 @@
     };
   };
 
+  nixConfig = {
+    fallback = true;
+    connect-timeout = 5;
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+      "http://attic.barn-banana.ts.net/nixos"
+      "http://attic.barn-banana.ts.net/nix-darwin"
+      "https://heywoodlh-helix.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "nixos:4q9iokR56gpJfsHh0UKn9Hj1cPplvM879XVgnRstpNU="
+      "nix-darwin:hBC1vKJgE6O9S5jiasCHUepCV/cBvUtPEtV2sumBF6A="
+      "heywoodlh-helix.cachix.org-1:qHDV95nI/wX9pidAukzMzgeok1415rgjMAXinDsbb7M="
+    ];
+  };
+
   outputs = inputs@{ self,
                       nixpkgs,
                       nixpkgs-stable,
@@ -327,7 +344,6 @@
     };
     lib = pkgs.lib;
     arch = pkgs.stdenv.hostPlatform.uname.processor;
-    linuxSystem = "${arch}-linux"; # set linuxSystem for MacOS linux-builder
     darwinSystem = "${arch}-darwin";
     # Modules for NixOS and Nix-Darwin
     commonModules = [
@@ -450,6 +466,7 @@
         ./darwin/roles/network.nix
         extraConf
         {
+          nix.settings = nixConfig;
           # Import nur as nixpkgs.overlays
           nixpkgs.overlays = [
             nur.overlays.default
@@ -463,26 +480,25 @@
               ];
               home.packages = let
                 nixos-switch = pkgs.writeShellScriptBin "nixos-switch" ''
-                  limactl shell nixos sudo nixos-rebuild boot --flake $HOME/opt/nixos-configs#nixos-lima --impure $@
-                  echo "Rebooting VM..."
-                  limactl shell nixos sudo shutdown -r now
+                  #limactl shell nixos sudo nixos-rebuild boot --accept-flake-config --flake $HOME/opt/nixos-configs#nixos-lima --impure $@ && echo "Rebooting VM..." && limactl shell nixos sudo shutdown -r now
+                  limactl shell nixos nix run "github:nix-community/home-manager" -- switch --flake $HOME/opt/nixos-configs#heywoodlh-lima
                 '';
                 nixos-build = pkgs.writeShellScriptBin "nixos-build" ''
                   attic-setup
                   limactl shell nixos mkdir -p /home/heywoodlh.guest/.config/attic
                   scp -F $HOME/.lima/nixos/ssh.config $HOME/.config/attic/config.toml lima-nixos:/home/heywoodlh.guest/.config/attic/attic.toml
                   # Desktop
-                  ${pkgs.lima}/bin/limactl shell nixos nixos-rebuild build --flake $HOME/opt/nixos-configs#nixos-desktop
+                  ${pkgs.lima}/bin/limactl shell nixos nixos-rebuild build --accept-flake-config --flake $HOME/opt/nixos-configs#nixos-desktop
                   ${pkgs.lima}/bin/limactl shell nixos nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
                   # Server
-                  ${pkgs.lima}/bin/limactl shell nixos nixos-rebuild build --flake $HOME/opt/nixos-configs#nixos-server
+                  ${pkgs.lima}/bin/limactl shell nixos nixos-rebuild build --accept-flake-config --flake $HOME/opt/nixos-configs#nixos-server
                   ${pkgs.lima}/bin/limactl shell nixos nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
                   # Asahi
                   ## Kernel
-                  ${pkgs.lima}/bin/limactl shell nixos nix build $HOME/opt/nixos-configs#nixosConfigurations.nixos-m1-mac-mini.config.boot.kernelPackages.kernel
+                  ${pkgs.lima}/bin/limactl shell nixos nix build --accept-flake-config $HOME/opt/nixos-configs#nixosConfigurations.nixos-m1-mac-mini.config.boot.kernelPackages.kernel
                   ${pkgs.lima}/bin/limactl shell nixos nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
                   ## Mesa
-                  ${pkgs.lima}/bin/limactl shell nixos nix build $HOME/opt/nixos-configs#nixosConfigurations.nixos-m1-mac-mini.config.hardware.opengl.package
+                  ${pkgs.lima}/bin/limactl shell nixos nix build --accept-flake-config $HOME/opt/nixos-configs#nixosConfigurations.nixos-m1-mac-mini.config.hardware.opengl.package
                   ${pkgs.lima}/bin/limactl shell nixos nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
                 '';
               in [
@@ -578,6 +594,9 @@
             port = 3050;
             ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
           };
+          nix.settings = {
+            auto-optimise-store = true;
+          } // nixConfig;
         }
       ] ++ lib.optionals (machineType == "workstation") [
         ./nixos/roles/hardware/printers.nix
@@ -590,28 +609,21 @@
         nixos-lima.nixosModules.lima
         (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
         {
-          heywoodlh.server = true;
-
-          # Disable services that should be on host
-          services.tailscale.enable = lib.mkForce false;
-          services.syncthing.enable = lib.mkForce false;
-
-          # Enable lima-init, lima-guestagent, other config needed for Lima support (via `nixos-lima.nixosModules.lima`)
-          services.lima.enable = true;
-
-          # Include Lima's auto-generated SSH key so connectivity survives nixos-rebuild switch.
-          # Requires --impure at build time (path is outside the flake).
-          users.users.heywoodlh.openssh.authorizedKeys.keyFiles =
-            lib.optionals (builtins.pathExists /Users/heywoodlh/.lima/_config/user.pub) [
-              /Users/heywoodlh/.lima/_config/user.pub
-            ];
-
-          home-manager.users.heywoodlh = {
-            heywoodlh.home.syncthing = lib.mkForce false;
+          heywoodlh = {
+            sshd.enable = true;
+            defaults = {
+              enable = true;
+              # Disable services that should be on host
+              tailscale = false;
+              syncthing = false;
+            };
           };
 
-          # system mounts
-          # These settings match the image file generated by the NixOS Lima VM image generator
+          # Lima configuration from https://github.com/nixos-lima/nixos-lima/blob/master/lima.nix
+          services.lima.enable = true;
+          security = {
+            sudo.wheelNeedsPassword = false;
+          };
           boot.loader = {
             systemd-boot.enable = lib.mkForce false;
             efi.canTouchEfiVariables = lib.mkForce false;
@@ -622,7 +634,7 @@
             };
           };
           fileSystems."/boot" = {
-            device = lib.mkForce "/dev/vda1";  # /dev/disk/by-label/ESP
+            device = lib.mkForce "/dev/vda1";
             fsType = "vfat";
           };
           fileSystems."/" = {
@@ -670,14 +682,79 @@
           "Screens 5: VNC Remote Desktop" = 1663047912;
         };
       };
-      #home-manager.users.heywoodlh = {
-      #  heywoodlh.home.applications = [
-      #    {
-      #      name = "Moonlight";
-      #      command = "${pkgs.moonlight-qt}/bin/moonlight";
-      #    }
-      #  ];
-      #};
+    };
+
+    # Base home configuration
+    homeConfig = target: user: homeDir: extraConf: home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = inputs;
+      modules = [
+        homeModules.heywoodlh.home
+        ./home/linux.nix
+        {
+          home = {
+            username = "${user}";
+            homeDirectory = "${homeDir}";
+          };
+          nixpkgs.config.permittedInsecurePackages = [
+            "olm-3.2.16"
+          ];
+          # Home-Manager specific nixpkgs config
+          nixpkgs.config = {
+            allowUnfree = true;
+            # Allow olm for gomuks until issues are resolved
+            overlays = [
+              nur.overlays.default
+            ];
+          };
+          nix.package = pkgs.nix;
+          fonts.fontconfig.enable = true;
+          programs.home-manager.enable = true;
+          targets.genericLinux.enable = true;
+
+          home.packages = let
+            homeSwitch = pkgs.writeShellScriptBin "home-switch" ''
+              if [[ -d $HOME/opt/nixos-configs ]]
+              then
+                target="$HOME/opt/nixos-configs"
+              else
+                target="git+https://tangled.org/heywoodlh.io/nixos-configs"
+              fi
+              ## OS-specific support (mostly, Ubuntu vs anything else)
+              ## Anything else will use nixpkgs-unstable
+              EXTRA_ARGS=""
+              if ${pkgs.gnugrep}/bin/grep -iq Ubuntu /etc/os-release
+              then
+                version="$(${pkgs.gnugrep}/bin/grep VERSION_ID /etc/os-release | ${pkgs.coreutils}/bin/cut -d'=' -f2 | ${pkgs.coreutils}/bin/tr -d '"')"
+                ## Support for Ubuntu 22
+                if echo "$version" | ${pkgs.gnugrep}/bin/grep -qE '22'
+                then
+                  EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-22.05"
+                fi
+                ## Support for Ubuntu 23
+                if echo "$version" | ${pkgs.gnugrep}/bin/grep -qE '23'
+                then
+                  EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-23.05"
+                fi
+                ## Support for Ubuntu 24-25, TODO support 25 standalone after May 2025
+                if echo "$version" | ${pkgs.gnugrep}/bin/grep -q '24|25'
+                then
+                  EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-24.05"
+                fi
+                ## Support for Ubuntu 24-25, TODO support 25 standalone after May 2025
+                if echo "$version" | ${pkgs.gnugrep}/bin/grep -q '26'
+                then
+                  EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-26.05"
+                fi
+              fi
+              ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$target#homeConfigurations.${target}.activationPackage" $EXTRA_ARGS --impure $@
+            '';
+          in [
+            homeSwitch
+          ];
+        }
+        extraConf
+      ];
     };
     in {
       formatter = pkgs.alejandra;
@@ -1150,180 +1227,60 @@
         nixos-lima = nixosConfig "lima" "nixos-lima" {};
       };
       # home-manager targets (non NixOS/MacOS, ideally Arch Linux)
-      packages.homeConfigurations = let
-        homeSwitch = ''
-          if [[ -d $HOME/opt/nixos-configs ]]
-          then
-            target="$HOME/opt/nixos-configs"
-          else
-            target="git+https://tangled.org/heywoodlh.io/nixos-configs"
-          fi
-          ## OS-specific support (mostly, Ubuntu vs anything else)
-          ## Anything else will use nixpkgs-unstable
-          EXTRA_ARGS=""
-          if ${pkgs.gnugrep}/bin/grep -iq Ubuntu /etc/os-release
-          then
-            version="$(${pkgs.gnugrep}/bin/grep VERSION_ID /etc/os-release | ${pkgs.coreutils}/bin/cut -d'=' -f2 | ${pkgs.coreutils}/bin/tr -d '"')"
-            ## Support for Ubuntu 22
-            if echo "$version" | ${pkgs.gnugrep}/bin/grep -qE '22'
-            then
-              EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-22.05"
-            fi
-            ## Support for Ubuntu 23
-            if echo "$version" | ${pkgs.gnugrep}/bin/grep -qE '23'
-            then
-              EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-23.05"
-            fi
-            ## Support for Ubuntu 24-25, TODO support 25 standalone after May 2025
-            if echo "$version" | ${pkgs.gnugrep}/bin/grep -q '24|25'
-            then
-              EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-24.05"
-            fi
-          fi
-        '';
-      in {
-        # Used in CI
-        heywoodlh = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [
-            homeModules.heywoodlh.home
-            #(mullvad-browser-home-manager + /modules/programs/mullvad-browser.nix)
-            ./home/linux.nix
+      packages.homeConfigurations = {
+        heywoodlh = homeConfig "heywoodlh" "heywoodlh" "/home/heywoodlh" {
+          imports = [
             ./home/desktop.nix # Base desktop config
             ./home/linux/desktop.nix # Linux-specific desktop config
-            {
-              nixpkgs.config.permittedInsecurePackages = [
-                "olm-3.2.16"
-              ];
-              heywoodlh.home.onepassword.enable = true;
-              heywoodlh.home.gnome = true;
-              # Home-Manager specific nixpkgs config
-              nixpkgs.config = {
-                allowUnfree = true;
-                # Allow olm for gomuks until issues are resolved
-                overlays = [
-                  nur.overlays.default
-                ];
-              };
-              home = {
-                username = "heywoodlh";
-                homeDirectory = "/home/heywoodlh";
-              };
-              nix.package = pkgs.nix;
-              fonts.fontconfig.enable = true;
-              programs.home-manager.enable = true;
-              targets.genericLinux.enable = true;
-              home.packages = [
-                pkgs.nerd-fonts.jetbrains-mono
-              ];
-              home.file."bin/create-docker" = {
-                enable = true;
-                executable = true;
-                text = ''
-                  #!/usr/bin/env bash
-                  ${pkgs.lima}/bin/limactl list | grep default | grep -q Running || ${pkgs.lima}/bin/limactl start --name=default template://docker # Start/create default lima instance if not running/created
-                  ${pkgs.docker-client}/bin/docker context create lima-default --docker "host=unix:///Users/heywoodlh/.lima/default/sock/docker.sock"
-                  ${pkgs.docker-client}/bin/docker context use lima-default
-                '';
-              };
-              home.file."bin/home-switch" = {
-                enable = true;
-                executable = true;
-                text = ''
-                  #!/usr/bin/env bash
-                  ${homeSwitch}
-                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$target#homeConfigurations.heywoodlh.activationPackage" $EXTRA_ARGS --impure $@
-                '';
-              };
-            }
           ];
-          extraSpecialArgs = inputs;
+          heywoodlh.home.onepassword.enable = true;
+          heywoodlh.home.gnome = true;
+          home.packages = [
+            pkgs.nerd-fonts.jetbrains-mono
+          ];
+          home.file."bin/create-docker" = {
+            enable = true;
+            executable = true;
+            text = ''
+              #!/usr/bin/env bash
+              ${pkgs.lima}/bin/limactl list | grep default | grep -q Running || ${pkgs.lima}/bin/limactl start --name=default template://docker # Start/create default lima instance if not running/created
+              ${pkgs.docker-client}/bin/docker context create lima-default --docker "host=unix:///Users/heywoodlh/.lima/default/sock/docker.sock"
+              ${pkgs.docker-client}/bin/docker context use lima-default
+            '';
+          };
         };
 
-        # Absolute bare-minimum env
-        heywoodlh-minimal = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [
-            homeModules.heywoodlh.home
-            {
-              nixpkgs.config.permittedInsecurePackages = [
-                "olm-3.2.16"
-              ];
-              home = {
-                username = "heywoodlh";
-                homeDirectory = if pkgs.stdenv.isDarwin then
-                "/Users/heywoodlh" else
-                "/home/heywoodlh";
-              };
-              heywoodlh.home = {
-                defaults = true;
-                aerc = {
-                  enable = true;
-                  accounts = false; # assume accounts will be setup manually
-                };
-                helix = {
-                  enable = true;
-                  ai = true;
-                  homelab = true;
-                };
-              };
-              home.packages = with pkgs; [
-                bash
-                gomuks
-                myFlakes.packages.${system}.op-wrapper
-                myFlakes.packages.${system}.tmux
-              ];
-            }
-          ];
-
-          extraSpecialArgs = inputs;
-        };
-
-        heywoodlh-server = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [
-            homeModules.heywoodlh.home
-            ./home/linux.nix
+        heywoodlh-server = homeConfig "heywoodlh-server" "heywoodlh" "/home/heywoodlh" {
+          imports = [
             ./home/linux/no-desktop.nix
-            {
-              # Home-Manager specific nixpkgs config
-              nixpkgs.config = {
-                allowUnfree = true;
-                permittedInsecurePackages = [
-                  "olm-3.2.16"
-                ];
-                overlays = [
-                  nur.overlays.default
-                ];
-              };
-              home = {
-                username = "heywoodlh";
-                homeDirectory = "/home/heywoodlh";
-              };
-              nix.package = pkgs.nix;
-              fonts.fontconfig.enable = true;
-              programs.home-manager.enable = true;
-              home.file."bin/home-switch" = {
-                enable = true;
-                executable = true;
-                text = ''
-                  #!/usr/bin/env bash
-                  ${homeSwitch}
-                  ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$HOME/opt/nixos-configs#homeConfigurations.heywoodlh-server.activationPackage" $EXTRA_ARGS --impure $@
-                '';
-              };
-              # Logbash wrapper
-              home.file.".config/fish/config.fish" = {
-                enable = true;
-                text = ''
-                  function logbash
-                    kubectl exec -it -n monitoring $(kubectl get pods -A | grep -i logbash | awk '{print $2}') -- logbash $argv
-                  end
-                '';
-              };
-            }
           ];
-          extraSpecialArgs = inputs;
+        };
+
+        heywoodlh-lima = homeConfig "heywoodlh-lima" "heywoodlh" "/home/heywoodlh.guest" {
+          imports = [
+            ./home/linux/no-desktop.nix
+          ];
+          programs.bash = {
+            enable = true;
+            initExtra = ''
+              [ -z $TMUX ] && { ${self.packages.${system}.tmux}/bin/tmux new-session -A -s main && exit;}
+            '';
+          };
+
+          home.file.".config/fish/config.fish".text = let
+            starship_config = pkgs.writeText "starship.toml" ''
+              [character]
+              success_symbol = ' [❯](bold white)'
+              error_symbol = ' [❯](bold red)'
+
+              [container]
+              disabled = true
+            '';
+          in ''
+            # Custom Starship prompt to remind me I'm in a VM
+            set -gx STARSHIP_CONFIG "${starship_config}"
+            ${pkgs.starship}/bin/starship init fish | source
+          '';
         };
       };
 
@@ -1369,6 +1326,7 @@
           ${(pkgs.callPackage ./pkgs/tangled-sync.nix {})}/bin/tangled-sync.sh
         '';
       };
+
     }
   );
 }

@@ -314,6 +314,7 @@ in {
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland; # use nixpkgs-provided hyprland
+      configType = "hyprlang";
       extraConfig = ''
         # Fix blurry X11 apps, hidpi
         monitor=,preferred,auto,1

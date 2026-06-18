@@ -159,12 +159,6 @@ in {
         trusted-users = [
           "${username}"
         ];
-        extra-substituters = [
-          "https://nix-community.cachix.org"
-        ];
-        trusted-public-keys = [
-          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        ];
       };
     };
 
@@ -194,7 +188,7 @@ in {
           target="git+https://tangled.org/heywoodlh.io/nixos-configs"
         fi
         # Wrapper to use the stable nixos-rebuild
-        sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --flake "$target#$(hostname)" ''${@:2}
+        sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --accept-flake-config --flake "$target#$(hostname)" ''${@:2}
       '';
       myNixosSwitch = pkgs.writeShellScriptBin "nixos-switch" ''
         ${nixosRebuildWrapper} switch $@
@@ -358,7 +352,9 @@ in {
         inherit nixpkgs-lts;
       };
       backupFileExtension = ".bak";
-      users.${username} = { ... }: base;
+      users.${username} = { ... }: base // {
+        heywoodlh.home.syncthing = lib.mkForce cfg.syncthing;
+      };
       users.root = { ... }: base // {
         stylix.targets.helix.enable = false;
       };

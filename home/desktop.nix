@@ -15,7 +15,7 @@ in {
   home.packages = [
     code-reset
     pkgs.mdp
-  ] ++ optionals (pkgs.stdenv.isLinux) [
+  ] ++ optionals (pkgs.stdenv.isLinux && pkgs.stdenv.isx86_64) [
     helium.packages.${system}.helium
   ];
 

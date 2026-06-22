@@ -480,11 +480,10 @@
           src = ./templates/home-assistant.yaml;
           namespace = "default";
           timezone = "America/Denver";
-          image = "ghcr.io/home-assistant/home-assistant:2025.12.0";
+          image = "ghcr.io/home-assistant/home-assistant:2026.6.3";
           matter_image = "ghcr.io/home-assistant-libs/python-matter-server:8.1";
-          go2rtc_image = "docker.io/alexxit/go2rtc:1.9.14";
           frigate_image = "ghcr.io/blakeblackshear/frigate:stable";
-          eufy_image = "docker.io/bropat/eufy-security-ws:1.9";
+          eufy_image = "docker.io/bropat/eufy-security-ws:latest";
           port = 80;
           replicas = 1;
           nodename = "homelab";

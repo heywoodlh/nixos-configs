@@ -198,3 +198,188 @@ spec:
       targetPort: 5580
   selector:
     app: matter-server
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "frigate"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/5r2mzxzqbozrmctx6qthzqgouy"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: frigate
+  name: frigate
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: frigate
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: frigate
+    spec:
+      containers:
+        - env:
+            - name: TZ
+              value: "@timezone@"
+          image: @frigate_image@
+          ports:
+            - containerPort: 8971
+              protocol: TCP
+            - containerPort: 8554
+              protocol: TCP
+            - containerPort: 8555
+              protocol: TCP
+            - containerPort: 8555
+              protocol: UDP
+          name: frigate
+          volumeMounts:
+            - mountPath: /config
+              name: frigate-config
+            - mountPath: /media/frigate
+              name: frigate-storage
+            - mountPath: /dev/shm
+              name: frigate-shm
+            - mountPath: /tmp/cache
+              name: frigate-tmpfs
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              gpu.intel.com/i915: "1"
+            limits:
+              gpu.intel.com/i915: "1"
+          env:
+            - name: FRIGATE_RTSP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: frigate
+                  key: rtsp-password
+      restartPolicy: Always
+      volumes:
+        - name: frigate-config
+          hostPath:
+            path: @hostfolder@/frigate/config
+            type: DirectoryOrCreate
+        - name: frigate-storage
+          hostPath:
+            path: @hostfolder@/frigate/storage
+            type: DirectoryOrCreate
+        - name: frigate-shm
+          emptyDir:
+             medium: Memory
+        - name: frigate-tmpfs
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: frigate
+  name: frigate
+  namespace: @namespace@
+spec:
+  ports:
+    - name: "frigate"
+      port: 80
+      targetPort: 8971
+    - name: "frigate-rtsp"
+      port: 8554
+      targetPort: 8554
+    - name: "frigate-wrtc"
+      port: 8555
+      targetPort: 8555
+      protocol: TCP
+    - name: "frigate-wrtc-udp"
+      port: 8555
+      targetPort: 8555
+      protocol: UDP
+  selector:
+    app: frigate
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "eufy"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/2bt7kfmjowtpqsvdvqvewn7ase"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: eufy
+  name: eufy
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: eufy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: eufy
+    spec:
+      containers:
+        - env:
+            - name: TZ
+              value: "@timezone@"
+          image: @eufy_image@
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          name: eufy
+          volumeMounts:
+            - mountPath: /data
+              name: eufy-data
+          env:
+            - name: COUNTRY
+              value: "US"
+            - name: PORT
+              value: "3000"
+            - name: USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: eufy
+                  key: username
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: eufy
+                  key: password
+      restartPolicy: Always
+      volumes:
+        - name: eufy-data
+          hostPath:
+            path: @hostfolder@/eufy
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: eufy
+  name: eufy
+  namespace: @namespace@
+spec:
+  clusterIP: 10.43.9.155
+  ports:
+    - name: "eufy"
+      port: 3000
+      targetPort: 3000
+  selector:
+    app: eufy

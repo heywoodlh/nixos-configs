@@ -66,6 +66,21 @@ let
   startNixos = pkgs.writeShellScriptBin "lima-nixos.sh" ''
     ${startLima} nixos
   '';
+  stopLima = pkgs.writeShellScript "stop-lima.sh" ''
+    vm="$1"
+    if ${pkgs.lima}/bin/limactl list | ${pkgs.gnugrep}/bin/grep -E "^$vm" | ${pkgs.gnugrep}/bin/grep -qv "Stopped"
+    then
+      ${pkgs.lima}/bin/limactl stop "$vm" &>/dev/null
+    fi
+  '';
+  limaSleepScript = pkgs.writeShellScript "lima-sleep.sh" ''
+    ${lib.optionalString cfg.docker.enable "${stopLima} docker"}
+    ${lib.optionalString cfg.nixos.enable "${stopLima} nixos"}
+  '';
+  limaWakeScript = pkgs.writeShellScript "lima-wake.sh" ''
+    ${lib.optionalString cfg.docker.enable "${startDocker}/bin/lima-docker.sh"}
+    ${lib.optionalString cfg.nixos.enable "${startNixos}/bin/lima-nixos.sh"}
+  '';
   dockerType = submodule {
     options = {
       enable = mkOption {
@@ -163,6 +178,18 @@ in {
           AbandonProcessGroup = true;
         };
       };
+      lima-sleepwatcher = {
+        enable = cfg.docker.enable || cfg.nixos.enable;
+        config = {
+          ProgramArguments = [
+            "${pkgs.sleepwatcher}/bin/sleepwatcher"
+            "--sleep" "${limaSleepScript}"
+            "--wakeup" "${limaWakeScript}"
+          ];
+          RunAtLoad = true;
+          KeepAlive = true;
+        };
+      };
     };
 
     systemd.user = lib.optionalAttrs pkgs.stdenv.isLinux {
@@ -219,6 +246,8 @@ in {
       startNixos
       enterNixos
       socat
+    ] ++ lib.optionals pkgs.stdenv.isDarwin [
+      sleepwatcher
     ] ++ lib.optionals cfg.docker.enable [
       docker-client
     ] ++ lib.optionals cfg.nixos.nixos-rebuild [

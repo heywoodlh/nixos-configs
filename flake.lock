@@ -179,6 +179,70 @@
         "type": "github"
       }
     },
+    "blueprint": {
+      "inputs": {
+        "nixpkgs": [
+          "kyle",
+          "llm-agents",
+          "nixpkgs"
+        ],
+        "systems": [
+          "kyle",
+          "llm-agents",
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1776249299,
+        "narHash": "sha256-Dt9t1TGRmJFc0xVYhttNBD6QsAgHOHCArqGa0AyjrJY=",
+        "owner": "numtide",
+        "repo": "blueprint",
+        "rev": "56131e8628f173d24a27f6d27c0215eff57e40dd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "blueprint",
+        "type": "github"
+      }
+    },
+    "bun2nix": {
+      "inputs": {
+        "flake-parts": [
+          "kyle",
+          "llm-agents",
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "kyle",
+          "llm-agents",
+          "nixpkgs"
+        ],
+        "systems": [
+          "kyle",
+          "llm-agents",
+          "systems"
+        ],
+        "treefmt-nix": [
+          "kyle",
+          "llm-agents",
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1778446047,
+        "narHash": "sha256-oQvcadh2BCkrog+SGrG6YffKJrveYpjj3TdQJWaKhaM=",
+        "owner": "nix-community",
+        "repo": "bun2nix",
+        "rev": "f2bc12af1a6369648aac41041ceeaa0b866599c6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "bun2nix",
+        "type": "github"
+      }
+    },
     "cachix": {
       "inputs": {
         "devenv": [
@@ -765,6 +829,41 @@
         "type": "github"
       }
     },
+    "hermes-agent": {
+      "inputs": {
+        "flake-parts": [
+          "kyle",
+          "teslamate-src",
+          "devenv",
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "kyle",
+          "nixpkgs"
+        ],
+        "npm-lockfile-fix": "npm-lockfile-fix",
+        "pyproject-build-systems": "pyproject-build-systems",
+        "pyproject-nix": [
+          "pyproject-nix"
+        ],
+        "uv2nix": [
+          "uv2nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1781534794,
+        "narHash": "sha256-lrPY3GfZc6BdhAOkUrvpqtNVU/mkW6AQW62v0yZ5s2s=",
+        "owner": "NousResearch",
+        "repo": "hermes-agent",
+        "rev": "3e7e9b24d40c6ff62e50936ba8b8184ad61da322",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NousResearch",
+        "repo": "hermes-agent",
+        "type": "github"
+      }
+    },
     "hexstrike-ai": {
       "inputs": {
         "autorecon-src": "autorecon-src",
@@ -776,7 +875,9 @@
           "nixpkgs"
         ],
         "paramspider-src": "paramspider-src",
-        "pyproject-nix": "pyproject-nix",
+        "pyproject-nix": [
+          "pyproject-nix"
+        ],
         "scout-suite-src": "scout-suite-src"
       },
       "locked": {
@@ -1327,10 +1428,12 @@
           "ashell"
         ],
         "doom-d": [],
+        "hermes-agent": "hermes-agent",
         "home-manager": [
           "home-manager"
         ],
         "kdub": "kdub",
+        "llm-agents": "llm-agents",
         "neovim-config": "neovim-config",
         "nixos-apple-silicon": [
           "nixos-apple-silicon"
@@ -1351,11 +1454,11 @@
         "vscode-server": []
       },
       "locked": {
-        "lastModified": 1772856202,
-        "narHash": "sha256-KQ22CpiIvpQ2YSimC8i7Rdu79Gc6aHlBj8zH5KT2p+Y=",
+        "lastModified": 1782248393,
+        "narHash": "sha256-a9qUCAwKvqL6WykfapHccH+Gx9LXWUQrzfVue71A9JI=",
         "owner": "kylesferrazza",
         "repo": "nix-configs",
-        "rev": "a1f8cba023297ecf0c6bdb715d28b6eb0695ea4d",
+        "rev": "fc30e154d8899d0231b31de90f99b5d1964b516b",
         "type": "gitlab"
       },
       "original": {
@@ -1414,6 +1517,46 @@
       "original": {
         "type": "file",
         "url": "https://raw.githubusercontent.com/NixOS/nixos-artwork/e3a74d1c40086393f2b1b9f218497da2db0ff3ae/wallpapers/nix-wallpaper-simple-light-gray.png"
+      }
+    },
+    "llm-agents": {
+      "inputs": {
+        "blueprint": "blueprint",
+        "bun2nix": "bun2nix",
+        "flake-parts": [
+          "kyle",
+          "teslamate-src",
+          "devenv",
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "kyle",
+          "nixpkgs"
+        ],
+        "systems": [
+          "kyle",
+          "vscode-server",
+          "flake-utils",
+          "systems"
+        ],
+        "treefmt-nix": [
+          "kyle",
+          "teslamate-src",
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1781503187,
+        "narHash": "sha256-pLA0eFk5bQtU7C+PtenLwfULE53KPFofCacI1t+YNiM=",
+        "owner": "numtide",
+        "repo": "llm-agents.nix",
+        "rev": "43a729a5df4827fd76c8c65795ee07bcd7c5a015",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "llm-agents.nix",
+        "type": "github"
       }
     },
     "lucide-src": {
@@ -1691,11 +1834,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1772952158,
-        "narHash": "sha256-RDR+7v1vaojweHI3FdPnuYPy4wRGfTKgeD5GXrXbfT0=",
+        "lastModified": 1781520503,
+        "narHash": "sha256-XuqQQG1qRyc3o8ld937sDLQNx+QrGV852KJ0dNglJDg=",
         "owner": "nix-community",
         "repo": "nixos-apple-silicon",
-        "rev": "55b7c3c03e9b778d96a71f44400bbdda9a4cfda7",
+        "rev": "43043ad207529650f9fa68e1705f7cf9c08bfdeb",
         "type": "github"
       },
       "original": {
@@ -1918,11 +2061,11 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1771312263,
-        "narHash": "sha256-vMhdmHvt4Dr8dom4/bLBYMkYuT5onE9O7AjgFIQNWMY=",
+        "lastModified": 1781534241,
+        "narHash": "sha256-DkSyl/78CDF8weNoS/moHO2Jri50ocaxIaDBkRjizkQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "43f46807e2b43aec03cf7a71d6b5e658e4a8a97a",
+        "rev": "c30d3456ec51e510e957adc1e87a1ce645e01bd8",
         "type": "github"
       },
       "original": {
@@ -2054,15 +2197,16 @@
         "noctalia-qs": "noctalia-qs"
       },
       "locked": {
-        "lastModified": 1772393032,
-        "narHash": "sha256-5DIMoRWkT8B53H2h9a/LWin0414VpxAuv7PsZQgaR/8=",
+        "lastModified": 1778694557,
+        "narHash": "sha256-QszLpoDPD7JEv8B/w1U2u1ksBw/CYBDmwUTLhJrekF0=",
         "owner": "noctalia-dev",
         "repo": "noctalia-shell",
-        "rev": "67430971f05913378147f407139ec8cd8c0d6e17",
+        "rev": "3abfa1fc09b62dc4cdeeb7b787886f075696f0b7",
         "type": "github"
       },
       "original": {
         "owner": "noctalia-dev",
+        "ref": "v4.7.7",
         "repo": "noctalia-shell",
         "type": "github"
       }
@@ -2072,14 +2216,25 @@
         "nixpkgs": [
           "kyle",
           "nixpkgs"
+        ],
+        "systems": [
+          "kyle",
+          "vscode-server",
+          "flake-utils",
+          "systems"
+        ],
+        "treefmt-nix": [
+          "kyle",
+          "teslamate-src",
+          "treefmt-nix"
         ]
       },
       "locked": {
-        "lastModified": 1772227064,
-        "narHash": "sha256-f821ZSoGpa/aXrWq0gPpea9qBnX8KDyavGKkptz2Mog=",
+        "lastModified": 1778377995,
+        "narHash": "sha256-uUzHDHqQF1rdVNiTa05L0mML3/d7fpbAShjCRWxbrBQ=",
         "owner": "noctalia-dev",
         "repo": "noctalia-qs",
-        "rev": "0741d27d2f7db567270f139c5d1684614ecf9863",
+        "rev": "d8327a723eed6dd9aebe8e0b162126f390e827df",
         "type": "github"
       },
       "original": {
@@ -2099,6 +2254,28 @@
       "original": {
         "type": "tarball",
         "url": "https://github.com/EliverLara/Nordic/releases/download/v2.2.0/Nordic.tar.xz"
+      }
+    },
+    "npm-lockfile-fix": {
+      "inputs": {
+        "nixpkgs": [
+          "kyle",
+          "hermes-agent",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775903712,
+        "narHash": "sha256-2GV79U6iVH4gKAPWYrxUReB0S41ty/Y3dBLquU8AlaA=",
+        "owner": "jeslie0",
+        "repo": "npm-lockfile-fix",
+        "rev": "c6093acb0c0548e0f9b8b3d82918823721930fe8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jeslie0",
+        "repo": "npm-lockfile-fix",
+        "type": "github"
       }
     },
     "nur": {
@@ -2274,19 +2451,46 @@
         "type": "github"
       }
     },
+    "pyproject-build-systems": {
+      "inputs": {
+        "nixpkgs": [
+          "kyle",
+          "hermes-agent",
+          "nixpkgs"
+        ],
+        "pyproject-nix": [
+          "pyproject-nix"
+        ],
+        "uv2nix": [
+          "uv2nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1772555609,
+        "narHash": "sha256-3BA3HnUvJSbHJAlJj6XSy0Jmu7RyP2gyB/0fL7XuEDo=",
+        "owner": "pyproject-nix",
+        "repo": "build-system-pkgs",
+        "rev": "c37f66a953535c394244888598947679af231863",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "build-system-pkgs",
+        "type": "github"
+      }
+    },
     "pyproject-nix": {
       "inputs": {
         "nixpkgs": [
-          "hexstrike-ai",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1757246327,
-        "narHash": "sha256-6pNlGhwOIMfhe/RLjHdpXveKS4FyLHvlGe+KtjDild4=",
+        "lastModified": 1782089418,
+        "narHash": "sha256-LRD1SuQWr49fGq3A+8GLXfsLE2xqIpQA440YDZwms3M=",
         "owner": "nix-community",
         "repo": "pyproject.nix",
-        "rev": "8d77f342d66ad1601cdb9d97e9388b69f64d4c8e",
+        "rev": "43f0b40edd0a74c63f66b7b48d969ae6b740d611",
         "type": "github"
       },
       "original": {
@@ -2341,6 +2545,7 @@
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs",
         "plasma-manager": "plasma-manager",
         "pre-commit-hooks": "pre-commit-hooks",
+        "pyproject-nix": "pyproject-nix",
         "signal-ntfy": "signal-ntfy",
         "spindle-run": "spindle-run",
         "ssh-keys": "ssh-keys",
@@ -2349,6 +2554,7 @@
         "tangled": "tangled",
         "treefmt-nix": "treefmt-nix",
         "user-icon": "user-icon",
+        "uv2nix": "uv2nix",
         "vidhanix": "vidhanix"
       }
     },
@@ -2816,6 +3022,29 @@
       "original": {
         "type": "file",
         "url": "https://avatar.tangled.sh/1c796c57a7536e989ab09026df5f0fe7870be6217bc8ae642e48fa449de72f59/did:plc:ycnss4fntzi3rjuueb7loq3x?v=bafkreic"
+      }
+    },
+    "uv2nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "pyproject-nix": [
+          "pyproject-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782100052,
+        "narHash": "sha256-UfyLY3Hfwb3JqxCcj0953GxTFI5dEL85EKEe6DAFiVs=",
+        "owner": "pyproject-nix",
+        "repo": "uv2nix",
+        "rev": "920fc6dfaf9f10ec56de93b184055e1a9f380d5e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pyproject-nix",
+        "repo": "uv2nix",
+        "type": "github"
       }
     },
     "vicinae-nix": {

@@ -136,6 +136,10 @@ rec {
       inputs.stylix.follows = "";
       inputs.doom-d.follows = "";
       inputs.vscode-server.follows = "";
+      inputs.hermes-agent.inputs.pyproject-nix.follows = "pyproject-nix";
+      inputs.hermes-agent.inputs.uv2nix.follows = "uv2nix";
+      inputs.hermes-agent.inputs.pyproject-build-systems.inputs.pyproject-nix.follows = "pyproject-nix";
+      inputs.hermes-agent.inputs.pyproject-build-systems.inputs.uv2nix.follows = "uv2nix";
     };
     darwin = {
       url = "github:heywoodlh/nix-darwin/heywoodlh";
@@ -201,6 +205,18 @@ rec {
       url = "github:heywoodlh/hexstrike-ai/nix-flake-init";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
+      inputs.pyproject-nix.follows = "pyproject-nix";
+    };
+    # only to sync dependents that use pyproject-nix
+    pyproject-nix = {
+      url = "github:nix-community/pyproject.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # only to sync dependents that use uv2nix
+    uv2nix = {
+      url = "github:pyproject-nix/uv2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.pyproject-nix.follows = "pyproject-nix";
     };
     # only to sync dependents that use pre-commit-hooks
     pre-commit-hooks = {
@@ -551,7 +567,7 @@ rec {
 
     nixosConfigWith = nixpkgsPkgs: machineType: myHostname: extraConf: nixpkgsPkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = inputs;
+      specialArgs = inputs // { inherit inputs; };
       modules = [
         nixosModules.heywoodlh
         home-manager.nixosModules.home-manager

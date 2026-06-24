@@ -20,9 +20,53 @@ on:
   - cron: "0 0 * * Sat"
 
 jobs:
-  build-linux-env:
-    name: Build Linux outputs (x86_64)
-    runs-on: [ubuntu-24.04]
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: nixos-server-amd64
+            runner: ubuntu-24.04
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.nixos-server.config.system.build.toplevel
+
+          - name: nixos-desktop-amd64
+            runner: ubuntu-24.04
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
+
+          - name: nixos-server-arm64
+            runner: ubuntu-24.04-arm
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.nixos-server.config.system.build.toplevel
+
+          - name: nixos-desktop-arm64
+            runner: ubuntu-24.04-arm
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
+
+          - name: gaming-kernel-amd64
+            runner: ubuntu-24.04
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.nixos-gaming.config.boot.kernelPackages.kernel
+
+          - name: gaming-gpu-driver-amd64
+            runner: ubuntu-24.04
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.nixos-gaming.config.hardware.nvidia.package
+
+          - name: steam-deck-kernel-amd64
+            runner: ubuntu-24.04
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.steam-deck.config.boot.kernelPackages.kernel
+
+          - name: steam-deck-mesa-amd64
+            runner: ubuntu-24.04
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.steam-deck.config.hardware.opengl.package
+
+          - name: asahi-kernel-arm64
+            runner: ubuntu-24.04-arm
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.nixos-m1-mac-mini.config.boot.kernelPackages.kernel
+
+          - name: asahi-mesa-arm64
+            runner: ubuntu-24.04-arm
+            build_cmd: nix build --accept-flake-config .#nixosConfigurations.nixos-m1-mac-mini.config.hardware.opengl.package
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v6
@@ -52,56 +96,15 @@ jobs:
     - name: Free disk space
       uses: jlumbroso/free-disk-space@main
 
-    - name: Build Linux outputs
-      shell: bash
+    - name: Configure attic
       env:
         ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
       run: |
         mkdir -p ~/.config/attic
         printf "default-server = \"kube\"\n\n[servers.kube]\nendpoint = \"http://attic\"\ntoken = \"$ATTIC_TOKEN\"" > ~/.config/attic/config.toml
-        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server
-        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
-        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop --impure
-        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
-        # nixos-gaming output for nvidia driver and cachyos kernel
-        nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-gaming --impure
-        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
-        nix run nixpkgs#nixos-rebuild -- build --flake .#steam-deck --impure
-        nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
 
-  #build-linux-arm64-env:
-  #  name: Build Linux outputs (ARM64)
-  #  runs-on: [ubuntu-24.04-arm]
-  #  steps:
-  #  - name: Checkout repository
-  #    uses: actions/checkout@v6
+    - name: Build ${{ matrix.name }}
+      run: ${{ matrix.build_cmd }}
 
-  #  - name: Login to Tailnet
-  #    uses: tailscale/github-action@v3
-  #    with:
-  #      oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-  #      oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-  #      tags: tag:ci
-
-  #  - name: Install Nix
-  #    uses: cachix/install-nix-action@v27
-  #    with:
-  #      nix_path: nixpkgs=channel:nixpkgs-unstable
-  #      extra_nix_config: |
-  #        extra-substituters = http://attic/nixos
-  #        extra-trusted-public-keys = nixos:uRCswSsap/ho6e2Vp4HXpH9SMdN4rW62N8Uq3r+mQ5E=
-
-  #  - name: Free disk space
-  #    uses: jlumbroso/free-disk-space@main
-
-  #  - name: Build Linux outputs
-  #    shell: bash
-  #    env:
-  #      ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
-  #    run: |
-  #      mkdir -p ~/.config/attic
-  #      printf "default-server = \"kube\"\n\n[servers.kube]\nendpoint = \"http://attic\"\ntoken = \"$ATTIC_TOKEN\"" > ~/.config/attic/config.toml
-  #      nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-server
-  #      nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
-  #      nix run nixpkgs#nixos-rebuild -- build --flake .#nixos-desktop --impure
-  #      nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
+    - name: Push ${{ matrix.name }} to attic
+      run: nix run nixpkgs#attic-client -- push nixos ./result*

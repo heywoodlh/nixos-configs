@@ -2370,6 +2370,22 @@
         "myFlakes"
       ]
     },
+    "opencode-ssh": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1778830893,
+        "narHash": "sha256-OOQedab4X5wSv6ShdB+Kp85ps24ct6Wxs+X3sIfO/00=",
+        "owner": "snez",
+        "repo": "opencode-ssh",
+        "rev": "28b70252873e90b6e7f6a29826214e0414558e73",
+        "type": "github"
+      },
+      "original": {
+        "owner": "snez",
+        "repo": "opencode-ssh",
+        "type": "github"
+      }
+    },
     "osquery-fix-nixpkgs": {
       "locked": {
         "lastModified": 1690997355,
@@ -2542,6 +2558,7 @@
         "nmd": "nmd",
         "nur": "nur",
         "nvidia-patch": "nvidia-patch",
+        "opencode-ssh": "opencode-ssh",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs",
         "plasma-manager": "plasma-manager",
         "pre-commit-hooks": "pre-commit-hooks",

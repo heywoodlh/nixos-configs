@@ -287,6 +287,10 @@ rec {
       url = "github:github/gitignore";
       flake = false;
     };
+    opencode-ssh = {
+      url = "github:snez/opencode-ssh";
+      flake = false;
+    };
   };
 
   nixConfig = {
@@ -344,6 +348,7 @@ rec {
                       nixpkgs-jovian-nixos,
                       nixos-lima,
                       gh-gitignore,
+                      opencode-ssh,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

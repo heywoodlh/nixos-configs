@@ -1,10 +1,84 @@
-{ config, pkgs, lib, myFlakes, ... }:
+{ config, pkgs, lib, myFlakes, opencode-ssh, ... }:
 
 with lib;
+with lib.types;
 
 let
   cfg = config.heywoodlh.home.llm;
   homeDir = config.home.homeDirectory;
+  opencodeType = submodule {
+    options = {
+      enable = mkOption {
+        default = true;
+        description = ''
+          Configure OpenCode.
+        '';
+        type = bool;
+      };
+      ssh = mkOption {
+        default = true;
+        description = ''
+          Enable opencode-ssh.
+        '';
+        type = bool;
+      };
+      ollama = let
+        ollamaType = submodule {
+          options = {
+            enable = mkOption {
+              default = true;
+              description = ''
+                Enable local ollama for OpenCode (named `ollama-local` by default).
+              '';
+              type = bool;
+            };
+            name = mkOption {
+              default = "ollama-local";
+              description = ''
+                Provider name in OpenCode.
+              '';
+              type = str;
+            };
+            model = let
+              modelType = submodule {
+                options = {
+                  name = mkOption {
+                    default = "qwen3.5:9b";
+                    description = ''
+                      Tool-calling model to use for OpenCode.
+                    '';
+                    type = str;
+                  };
+                  alias = mkOption {
+                    default = "qwen";
+                    description = ''
+                      Human-readable name for model in OpenCode.
+                    '';
+                    type = str;
+                  };
+                };
+              };
+            in mkOption {
+              default = {};
+              description = "Local model to pull in Ollama.";
+              type = modelType;
+            };
+          };
+        };
+      in mkOption {
+        default = {};
+        description = "Enable local Ollama + OpenCode.";
+        type = ollamaType;
+      };
+      extraConf = mkOption {
+        default = {};
+        description = ''
+          Extra configuration of `programs.opencode`.
+        '';
+        type = attrs;
+      };
+    };
+  };
 in {
   options = {
     heywoodlh.home.llm = {
@@ -13,14 +87,19 @@ in {
         description = ''
           Enable heywoodlh llm configuration.
         '';
-        type = types.bool;
+        type = bool;
       };
       homelab = mkOption {
         default = false;
         description = ''
           This option is only useful to author.
         '';
-        type = types.bool;
+        type = bool;
+      };
+      opencode = mkOption {
+        default = {};
+        description = "Enable local OpenCode configuration.";
+        type = opencodeType;
       };
     };
   };
@@ -34,10 +113,12 @@ in {
       LLM_API_KEY="$(${op-wrapper} item get zvj57fg53iipc4vxgobcer5j4q --fields master-key --reveal)"
       ${pkgs.codex}/bin/codex --profile "qwen" $@
     '';
-    ollamaPkg = if (cfg.homelab == false) then config.services.ollama.package else pkgs.ollama;
+    ollamaPkg = if (cfg.homelab == false || cfg.opencode.ollama.enable) then config.services.ollama.package else pkgs.ollama;
     myOllamaPull = pkgs.writeShellScript "ollama-pull" ''
-      # Loop 3 times until model is pulled
-      (r=3;while ! ${ollamaPkg}/bin/ollama list &>/dev/null ; do ((--r))||exit;sleep 60;done) && ${ollamaPkg}/bin/ollama pull ${model}
+      # Loop 3 times until ollama is ready
+      (r=3;while ! ${ollamaPkg}/bin/ollama list &>/dev/null ; do ((--r))||exit;sleep 60;done) || exit 1
+      ${lib.optionalString cfg.homelab "${ollamaPkg}/bin/ollama pull ${model}"}
+      ${lib.optionalString cfg.opencode.ollama.enable "${ollamaPkg}/bin/ollama pull ${cfg.opencode.ollama.model.name}"}
     '';
   in mkIf cfg.enable {
     home.packages = with pkgs; [
@@ -107,7 +188,7 @@ in {
       };
     };
 
-    systemd.user.services.ollama-pull = lib.optionalAttrs (cfg.homelab == false) {
+    systemd.user.services.ollama-pull = lib.optionalAttrs (cfg.homelab == false || cfg.opencode.ollama.enable) {
       Unit = {
         Description = "Automatically pull Ollama images";
         After = [ "ollama.service" ];
@@ -142,11 +223,45 @@ in {
       };
     };
 
-    services.ollama = lib.optionalAttrs (cfg.homelab == false) {
+    services.ollama = lib.optionalAttrs (cfg.homelab == false || cfg.opencode.ollama.enable) {
       enable = true;
       environmentVariables = {
         OLLAMA_VULKAN = "1";
       };
+    };
+
+    home.file.".config/opencode/plugins/remote.ts" = {
+      enable = (cfg.opencode.enable && cfg.opencode.ssh);
+      text = builtins.readFile "${opencode-ssh}/src/index.ts";
+    };
+
+    home.file.".opencode/agent/remote.md" = {
+      enable = (cfg.opencode.enable && cfg.opencode.ssh);
+      text = ''
+        ---
+        description: Run commands on a remote server via SSH
+        color: primary
+        mode: primary
+        ---
+        When the user says "ssh <host>", use `ssh_connect` with the host name.
+        When they say "local", use `ssh_disconnect`.
+      '';
+    };
+
+    programs.opencode =  optionalAttrs (cfg.opencode.enable) {
+      enable = cfg.opencode.enable;
+      settings.provider.ollama = optionalAttrs (cfg.opencode.enable && cfg.opencode.ollama.enable) {
+        npm = "@ai-sdk/openai-compatible";
+        name = "${cfg.opencode.ollama.name}";
+        options.baseURL = "http://localhost:11434/v1";
+        models = {
+          "${cfg.opencode.ollama.model.name}" = {
+            name = "${cfg.opencode.ollama.model.alias}";
+            tool_call = true;
+            options.think = false;
+          };
+        };
+      } // optionalAttrs (cfg.opencode.enable) cfg.opencode.extraConf;
     };
   };
 }

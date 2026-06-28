@@ -745,6 +745,54 @@ in {
     "${homeDir}/opt/tailscale-acl".trust_level = "trusted";
   };
 
+  home.file."opt/.stignore".text = ''
+    nixpkgs/**
+    forks/nixpkgs/**
+    result/**
+    .direnv/**
+  '';
+
+  services.syncthing.settings = {
+    folders = {
+      "opt" = {
+        devices = [
+          "k8s"
+        ];
+        id = "opt";
+        path = "${homeDir}/opt";
+      };
+      "Pictures" = {
+        devices = [
+          "k8s"
+        ];
+        id = "Pictures";
+        path = "${homeDir}/Pictures";
+      };
+      "notes-personal" = {
+        devices = [
+          "k8s"
+        ];
+        id = "notes-personal";
+        path = "${homeDir}/Documents/notes-personal";
+      };
+      "notes-pro" = {
+        devices = [
+          "k8s"
+        ];
+        id = "notes-pro";
+        path = "${homeDir}/Documents/notes-pro";
+      };
+    };
+    devices = {
+      k8s = {
+        addresses = [
+          "tcp://syncthing.barn-banana.ts.net:22000"
+        ];
+        id = "6HE3ZO4-PWG4ZYB-EQHAED7-ELFI5AL-25WRYGV-BK6ZBJM-6IWVZRL-6ADQCQD";
+      };
+    };
+  };
+
   heywoodlh.home = {
     defaults = true;
     git.enable = true;

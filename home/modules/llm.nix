@@ -26,7 +26,7 @@ let
         ollamaType = submodule {
           options = {
             enable = mkOption {
-              default = true;
+              default = false;
               description = ''
                 Enable local ollama for OpenCode (named `ollama-local` by default).
               '';
@@ -38,6 +38,13 @@ let
                 Provider name in OpenCode.
               '';
               type = str;
+            };
+            context_length = mkOption {
+              default = 64000;
+              description = ''
+                Context length to launch Ollama with.
+              '';
+              type = int;
             };
             model = let
               modelType = submodule {
@@ -196,7 +203,9 @@ in {
 
       Service = {
         ExecStart = "${myOllamaPull}";
-        Environment = if (cfg.homelab == false) then config.systemd.user.services.ollama.Service.Environment else [
+        Environment = if (cfg.homelab == false) then config.systemd.user.services.ollama.Service.Environment
+          ++ [ "OLLAMA_CONTEXT_LENGTH=${toString cfg.ollama.context_length}" ]
+        else [
           "OLLAMA_HOST=${url}"
         ];
       };
@@ -212,7 +221,9 @@ in {
         ProgramArguments = [
           "${myOllamaPull}"
         ];
-        EnvironmentVariables = if (cfg.homelab == false) then config.launchd.agents.ollama.config.EnvironmentVariables else {
+        EnvironmentVariables = if (cfg.homelab == false) then config.launchd.agents.ollama.config.EnvironmentVariables
+          ++ [ "OLLAMA_CONTEXT_LENGTH=${toString cfg.ollama.context_length}" ]
+        else {
           OLLAMA_HOST = url;
         };
         KeepAlive = {

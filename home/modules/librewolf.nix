@@ -95,8 +95,8 @@ in {
         bookmarks = {
           force = true;
           settings = [
+            # nixos folder
             {
-              # nixos folder
               name = "nixos";
               bookmarks = [
                 {
@@ -118,6 +118,46 @@ in {
                 {
                   name = "nixos discourse";
                   url = "https://discourse.nixos.org/";
+                }
+              ];
+            }
+            # security folder
+            {
+              name = "security";
+              bookmarks = [
+                {
+                  name = "public wifi map";
+                  url = "www.wifimap.io";
+                }
+                {
+                  name = "shodan";
+                  url = "https://shodan.io";
+                }
+                {
+                  name = "censys";
+                  url = "https://platform.censys.io/home";
+                }
+                {
+                  name = "kali tools";
+                  url = "https://www.kali.org/tools/";
+                }
+              ];
+            }
+            # privacy folder
+            {
+              name = "privacy";
+              bookmarks = [
+                {
+                  name = "privacyguides.org";
+                  url = "privacyguides.org";
+                }
+                {
+                  name = "mullvad";
+                  url = "https://mullvad.net";
+                }
+                {
+                  name = "tailscale";
+                  url = "https://login.tailscale.com/admin";
                 }
               ];
             }

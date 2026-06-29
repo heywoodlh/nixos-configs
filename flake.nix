@@ -408,6 +408,7 @@ rec {
       ./home/modules/onepassword.nix
       ./home/modules/bluetuith.nix
       ./home/modules/moonlight.nix
+      ./home/modules/kde-windows.nix
     ];
     macosHomeModules = [
       ./home/modules/darwin-defaults.nix
@@ -1099,6 +1100,12 @@ rec {
             /etc/nixos/hardware-configuration.nix
           ];
           boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
+
+          # Enable KDE for interoperability
+          heywoodlh.nixos.kde = {
+            enable = true;
+            windows = true;
+          };
         };
 
         family-mac-mini = nixosConfig "workstation" "family-mac-mini" {

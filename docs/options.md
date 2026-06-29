@@ -1452,7 +1452,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/gi77i64sg0aw3hyif2zq4dd96wivjgfz-tmux/bin/tmux"
+"/nix/store/qd246vvmilngy2baz3df30ydv28m9yx6-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1500,7 +1500,7 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
@@ -1818,6 +1818,54 @@ false
 
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hyprland\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hyprland.nix)
+
+
+
+## heywoodlh\.home\.kde-windows\.enable
+
+
+
+Configure KDE to look like Windows 11\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kde-windows\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kde-windows.nix)
+
+
+
+## heywoodlh\.home\.kde-windows\.active
+
+
+
+Set Windows 11 as the default theme\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kde-windows\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kde-windows.nix)
 
 
 
@@ -2304,8 +2352,6 @@ submodule
 
 ## heywoodlh\.home\.llm\.opencode\.ollama\.enable
 
-
-
 Enable local ollama for OpenCode (named ` ollama-local ` by default)\.
 
 
@@ -2318,7 +2364,31 @@ boolean
 *Default:*
 
 ```nix
-true
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.opencode\.ollama\.context_length
+
+
+
+Context length to launch Ollama with\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+64000
 ```
 
 *Declared by:*
@@ -2375,6 +2445,8 @@ string
 
 
 ## heywoodlh\.home\.llm\.opencode\.ollama\.model\.name
+
+
 
 Tool-calling model to use for OpenCode\.
 
@@ -3006,7 +3078,7 @@ string
 
 
 
-Enable heywoodlh sunshine configuration\.
+Enable heywoodlh KDE configuration\.
 
 
 
@@ -3043,6 +3115,30 @@ string
 
 ```nix
 "heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/kde\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/kde.nix)
+
+
+
+## heywoodlh\.nixos\.kde\.windows
+
+
+
+Configure KDE to look and feel like Windows\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
 ```
 
 *Declared by:*
@@ -3503,7 +3599,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/ivsppgjzwz6wqqfnjzdr5hsj681is6pd-source/base/stylix\.nix](/nix/store/ivsppgjzwz6wqqfnjzdr5hsj681is6pd-source/base/stylix.nix)
+ - [/nix/store/yk3saxl5v4by27vks1lrd7x9vqqn9c9l-source/base/stylix\.nix](/nix/store/yk3saxl5v4by27vks1lrd7x9vqqn9c9l-source/base/stylix.nix)
 
 
 
@@ -3527,7 +3623,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/ivsppgjzwz6wqqfnjzdr5hsj681is6pd-source/base/stylix\.nix](/nix/store/ivsppgjzwz6wqqfnjzdr5hsj681is6pd-source/base/stylix.nix)
+ - [/nix/store/yk3saxl5v4by27vks1lrd7x9vqqn9c9l-source/base/stylix\.nix](/nix/store/yk3saxl5v4by27vks1lrd7x9vqqn9c9l-source/base/stylix.nix)
 
 
 
@@ -3551,7 +3647,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/ivsppgjzwz6wqqfnjzdr5hsj681is6pd-source/base/stylix\.nix](/nix/store/ivsppgjzwz6wqqfnjzdr5hsj681is6pd-source/base/stylix.nix)
+ - [/nix/store/yk3saxl5v4by27vks1lrd7x9vqqn9c9l-source/base/stylix\.nix](/nix/store/yk3saxl5v4by27vks1lrd7x9vqqn9c9l-source/base/stylix.nix)
 
 
 

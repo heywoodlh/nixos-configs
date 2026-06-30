@@ -163,7 +163,7 @@ rec {
       inputs.nixpkgs.follows = "nixpkgs";
     };
     osquery-fix-nixpkgs = {
-      url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
+      url = "github:nixos/nixpkgs/c6cb610ddd80bfeb584f9bd8113821d41558c347";
     };
     # jovian-nixos requires a specific nixpkgs for its custom packages (mesa, pipewire, etc.)
     nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/331800de5053fcebacf6813adb5db9c9dca22a0c";

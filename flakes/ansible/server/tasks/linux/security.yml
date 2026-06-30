@@ -12,9 +12,9 @@
 - name: setup sshd-alert systemd monitoring script
   when: ansible_os_family != 'Alpine'
   block:
-  - name: create /opt/scripts directory
+  - name: create scripts directory
     ansible.builtin.file:
-      path: /opt/scripts
+      path: "{{ ansible_base_path | default('/opt') }}/scripts"
       state: directory
       owner: root
       group: root
@@ -23,7 +23,7 @@
   - name: create sshd-alert.sh script
     ansible.builtin.template:
       src: sshd-alert.sh.j2
-      dest: /opt/scripts/sshd-alert.sh
+      dest: "{{ ansible_base_path | default('/opt') }}/scripts/sshd-alert.sh"
       owner: root
       group: root
       mode: '0700'

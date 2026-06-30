@@ -1,26 +1,36 @@
 ---
-- name: create /opt
+
+- name: check if running on Unifi Dream Machine
+  ansible.builtin.stat:
+    path: /usr/bin/ubios-udapi-server
+  register: udm_check
+
+- name: set ansible_base_path for unifi
+  ansible.builtin.set_fact:
+    ansible_base_path: "/data/ansible"
+  when: udm_check.stat.exists
+
+- name: set ansible_base_path for linux systems
+  ansible.builtin.set_fact:
+    ansible_base_path: "/opt/ansible"
+  when: not udm_check.stat.exists
+
+- name: create base ansible directory
   ansible.builtin.file:
-    path: /opt/
+    path: "{{ ansible_base_path }}"
     state: directory
     mode: 0755
-
-- name: create /opt/scripts
-  ansible.builtin.file:
-    path: /opt/scripts
-    state: directory
-    mode: 0700
 
 - name: add install-ansible.sh script
   ansible.builtin.copy:
     src: scripts/install-ansible.sh
-    dest: /opt/scripts/install-ansible.sh
+    dest: "{{ ansible_base_path }}/install-ansible.sh"
     mode: 0700
 
 - name: add ansible-pull.sh script
   ansible.builtin.copy:
     src: scripts/ansible-pull.sh
-    dest: /opt/scripts/ansible-pull.sh
+    dest: "{{ ansible_base_path }}/ansible-pull.sh"
     mode: 0700
 
 - name: Check if Nix store exists
@@ -32,7 +42,7 @@
   ansible.builtin.cron:
     name: "ansible-pull"
     special_time: hourly
-    job: "/opt/scripts/ansible-pull.sh &>/dev/null"
+    job: "{{ ansible_base_path }}/ansible-pull.sh &>/dev/null"
 
 - name: Setup Nix crons
   when: nix_store_check.stat.exists
@@ -40,14 +50,14 @@
   - name: add nix-collect-garbage.sh script
     ansible.builtin.copy:
       src: scripts/nix-collect-garbage.sh
-      dest: /opt/scripts/nix-collect-garbage.sh
+      dest: "{{ ansible_base_path }}/nix-collect-garbage.sh"
       mode: 0700
 
   - name: cron job to regularly run nix-collect-garbage
     ansible.builtin.cron:
       name: "nix-collect-garbage"
       special_time: weekly
-      job: "/opt/scripts/nix-collect-garbage.sh &>/dev/null"
+      job: "{{ ansible_base_path }}/nix-collect-garbage.sh &>/dev/null"
 
   - name: import archlinux tasks
     include_tasks: ../../../common/tasks/archlinux.yml

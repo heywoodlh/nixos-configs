@@ -1,4 +1,32 @@
 ---
+- name: copy udm-boot.service file
+  ansible.builtin.copy:
+    src: udm/udm-boot.service
+    dest: /etc/systemd/system/udm-boot.service
+    mode: "0644"
+    force: true
+
+- name: copy and run udm boot install script
+  ansible.builtin.script: udm/install.sh
+
+- name: create ansible directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "/data/ansible"
+    - "/data/public"
+
+- name: ensure ansible-pull.sh runs on boot
+  ansible.builtin.copy:
+    src: "scripts/{{ item }}"
+    dest: "/data/on_boot.d/{{ item }}"
+    mode: "0644"
+    force: true
+  loop:
+    - "ansible-pull.sh"
+
 - name: remove broken apt repository reference
   ansible.builtin.lineinfile:
     path: /etc/apt/sources.list
@@ -87,7 +115,11 @@
 
     - name: install osquery package
       ansible.builtin.apt:
-        deb: "https://pkg.osquery.io/deb/osquery_5.17.0-1.linux_arm64.deb"
+        deb: "https://pkg.osquery.io/deb/osquery_{{ osquery_version }}.linux_{{ osquery_arch }}.deb"
+      vars:
+        osquery_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}"
+        osquery_version: "5.23.0-1"
+
 
     - name: mask journald audit socket (to reduce performance issues)
       ansible.builtin.systemd_service:

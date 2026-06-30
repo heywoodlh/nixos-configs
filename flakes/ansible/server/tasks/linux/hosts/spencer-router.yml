@@ -1,14 +1,14 @@
 ---
-- name: Create /opt/public directory
+- name: Create public scripts directory
   ansible.builtin.file:
     state: directory
-    path: "/opt/public"
+    path: "/data/public"
     mode: "0755"
 
 - name: Copy wakeonlan scripts
   ansible.builtin.copy:
     src: "files/scripts/{{ item }}"
-    dest: "/opt/public/{{ item }}"
+    dest: "/data/public/{{ item }}"
     mode: "0755"
   loop:
     - "wake-spencer-gaming.sh"
@@ -21,8 +21,8 @@
     hour: "2-4"
     job: "{{ item }}"
   loop:
-    - "/opt/public/wake-spencer-gaming.sh"
-    - "/opt/public/wake-sarah-gaming.sh"
+    - "/data/public/wake-spencer-gaming.sh"
+    - "/data/public/wake-sarah-gaming.sh"
 
 - name: create unprivileged shortcuts user
   ansible.builtin.user:

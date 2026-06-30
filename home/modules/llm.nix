@@ -264,8 +264,7 @@ in {
       };
     };
 
-    systemd.user.services.vllm = {
-      enable = cfg.opencode.vllm.enable;
+    systemd.user.services.vllm = mkIf cfg.opencode.vllm.enable {
       Unit = {
         Description = "vllm server";
         After = [ "network.target" ];

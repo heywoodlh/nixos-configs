@@ -464,6 +464,7 @@ rec {
       ./nixos/modules/vmware-workstation.nix
       ./nixos/modules/scrutiny.nix
       ./nixos/modules/kde.nix
+      ./nixos/modules/tor.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -1104,10 +1105,13 @@ rec {
           ];
           boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
 
-          # Enable KDE for interoperability
-          heywoodlh.nixos.kde = {
-            enable = true;
-            windows = true;
+          # Enable KDE for interoperability amongst machines
+          heywoodlh.nixos = {
+            tor.enable = true;
+            kde = {
+              enable = true;
+              windows = true;
+            };
           };
         };
 

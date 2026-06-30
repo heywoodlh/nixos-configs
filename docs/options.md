@@ -1452,7 +1452,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/qd246vvmilngy2baz3df30ydv28m9yx6-tmux/bin/tmux"
+"/nix/store/gi77i64sg0aw3hyif2zq4dd96wivjgfz-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1500,7 +1500,7 @@ signed integer
 *Default:*
 
 ```nix
-16
+14
 ```
 
 *Declared by:*
@@ -3413,6 +3413,102 @@ string
 
 
 
+## heywoodlh\.nixos\.tor\.enable
+
+
+
+Enable heywoodlh Tor client configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor.nix)
+
+
+
+## heywoodlh\.nixos\.tor\.entryNodes
+
+
+
+Entry node countries\. Set to US for speed (but less privacy)\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"{US} StrictNodes 1"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor.nix)
+
+
+
+## heywoodlh\.nixos\.tor\.exitNodes
+
+
+
+Exit node countries\. Set to US for speed (but less privacy)\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"{US} StrictNodes 1"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor.nix)
+
+
+
+## heywoodlh\.nixos\.tor\.socksPort
+
+
+
+Local SOCKS proxy port\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+9050
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor.nix)
+
+
+
 ## heywoodlh\.nixos\.vmware-workstation
 
 
@@ -3673,7 +3769,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/fzcfvg30f0gcs9f14zdnka99mqprcilg-source/base/stylix\.nix](/nix/store/fzcfvg30f0gcs9f14zdnka99mqprcilg-source/base/stylix.nix)
+ - [/nix/store/6arwnlnzc2v00bzcsjsg84x3gh9ik9x3-source/base/stylix\.nix](/nix/store/6arwnlnzc2v00bzcsjsg84x3gh9ik9x3-source/base/stylix.nix)
 
 
 
@@ -3697,7 +3793,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/fzcfvg30f0gcs9f14zdnka99mqprcilg-source/base/stylix\.nix](/nix/store/fzcfvg30f0gcs9f14zdnka99mqprcilg-source/base/stylix.nix)
+ - [/nix/store/6arwnlnzc2v00bzcsjsg84x3gh9ik9x3-source/base/stylix\.nix](/nix/store/6arwnlnzc2v00bzcsjsg84x3gh9ik9x3-source/base/stylix.nix)
 
 
 
@@ -3721,7 +3817,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/fzcfvg30f0gcs9f14zdnka99mqprcilg-source/base/stylix\.nix](/nix/store/fzcfvg30f0gcs9f14zdnka99mqprcilg-source/base/stylix.nix)
+ - [/nix/store/6arwnlnzc2v00bzcsjsg84x3gh9ik9x3-source/base/stylix\.nix](/nix/store/6arwnlnzc2v00bzcsjsg84x3gh9ik9x3-source/base/stylix.nix)
 
 
 

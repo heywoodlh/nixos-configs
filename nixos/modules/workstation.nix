@@ -71,6 +71,9 @@ in {
     };
     services.displayManager.sessionPackages = [ fbtermSessionPkg ];
 
+    # Enable TOR for privacy
+    heywoodlh.nixos.tor.enable = true;
+
     # Enable the X11 windowing system.
     services.xserver.enable = true;
 

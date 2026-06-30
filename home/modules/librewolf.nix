@@ -127,7 +127,7 @@ in {
               bookmarks = [
                 {
                   name = "public wifi map";
-                  url = "www.wifimap.io";
+                  url = "https://www.wifimap.io";
                 }
                 {
                   name = "shodan";
@@ -149,7 +149,7 @@ in {
               bookmarks = [
                 {
                   name = "privacyguides.org";
-                  url = "privacyguides.org";
+                  url = "https://privacyguides.org";
                 }
                 {
                   name = "mullvad";

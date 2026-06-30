@@ -126,7 +126,7 @@ let
       extraConf = mkOption {
         default = {};
         description = ''
-          Extra configuration of `programs.opencode`.
+          Extra configuration of `programs.opencode.settings`.
         '';
         type = attrs;
       };
@@ -282,22 +282,24 @@ in {
 
     programs.opencode = optionalAttrs (cfg.opencode.enable) {
       enable = cfg.opencode.enable;
-      settings.provider.vllm = optionalAttrs (cfg.opencode.enable && cfg.opencode.vllm.enable) {
-        npm = "@ai-sdk/openai-compatible";
-        name = "${cfg.opencode.vllm.name}";
-        options.baseURL = "http://localhost:${toString cfg.opencode.vllm.port}/v1";
-        models = {
-          "${cfg.opencode.vllm.model.name}" = {
-            name = "${cfg.opencode.vllm.model.alias}";
-            tool_call = true;
-            options.think = false;
-            limit = {
-              context = cfg.opencode.vllm.model.contextTokens;
-              output = cfg.opencode.vllm.model.outputTokens;
+      settings = cfg.opencode.extraConf // optionalAttrs (cfg.opencode.enable && cfg.opencode.vllm.enable) {
+        provider.vllm = {
+          npm = "@ai-sdk/openai-compatible";
+          name = "${cfg.opencode.vllm.name}";
+          options.baseURL = "http://localhost:${toString cfg.opencode.vllm.port}/v1";
+          models = {
+            "${cfg.opencode.vllm.model.name}" = {
+              name = "${cfg.opencode.vllm.model.alias}";
+              tool_call = true;
+              options.think = false;
+              limit = {
+                context = cfg.opencode.vllm.model.contextTokens;
+                output = cfg.opencode.vllm.model.outputTokens;
+              };
             };
           };
         };
-      } // optionalAttrs (cfg.opencode.enable) cfg.opencode.extraConf;
+      };
     };
   };
 }

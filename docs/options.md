@@ -2306,7 +2306,7 @@ true
 
 
 
-Extra configuration of ` programs.opencode `\.
+Extra configuration of ` programs.opencode.settings `\.
 
 
 
@@ -3673,7 +3673,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix\.nix](/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix.nix)
+ - [/nix/store/61lx8vcq4qfa8cr4bz7cqr8gi1qbjak4-source/base/stylix\.nix](/nix/store/61lx8vcq4qfa8cr4bz7cqr8gi1qbjak4-source/base/stylix.nix)
 
 
 
@@ -3697,7 +3697,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix\.nix](/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix.nix)
+ - [/nix/store/61lx8vcq4qfa8cr4bz7cqr8gi1qbjak4-source/base/stylix\.nix](/nix/store/61lx8vcq4qfa8cr4bz7cqr8gi1qbjak4-source/base/stylix.nix)
 
 
 
@@ -3721,7 +3721,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix\.nix](/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix.nix)
+ - [/nix/store/61lx8vcq4qfa8cr4bz7cqr8gi1qbjak4-source/base/stylix\.nix](/nix/store/61lx8vcq4qfa8cr4bz7cqr8gi1qbjak4-source/base/stylix.nix)
 
 
 

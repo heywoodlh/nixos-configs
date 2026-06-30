@@ -6,6 +6,29 @@ with lib.types;
 let
   cfg = config.heywoodlh.home.llm;
   homeDir = config.home.homeDirectory;
+  vllmLogDir = "${homeDir}/.local/share/vllm/logs";
+  vllmModelsDir = "${homeDir}/.local/share/vllm/models";
+  vllm-metal-src = pkgs.fetchFromGitHub {
+    owner = "vllm-project";
+    repo = "vllm-metal";
+    rev = "0348cd334482dc6b03028b14abd08c92ef32ba8f";
+    hash = "sha256-ro1ne9kLGdQtGcp06CG9yJE3dV2Y1bSRzLfoasSRQtU=";
+  };
+  vllmPkg = pkgs.writeShellScriptBin "vllm" (if pkgs.stdenv.isDarwin then ''
+    VENV="$HOME/.venv-vllm-metal"
+    if [ ! -f "$VENV/bin/vllm" ]; then
+      INSTALL_TMP=$(mktemp)
+      cp ${vllm-metal-src}/install.sh "$INSTALL_TMP"
+      bash "$INSTALL_TMP"
+      rm -f "$INSTALL_TMP"
+    fi
+    exec "$VENV/bin/vllm" "$@"
+  '' else ''
+    ${pkgs.pipx}/bin/pipx run vllm $@
+  '');
+  runVllm = pkgs.writeShellScript "vllm.sh" ''
+    ${vllmPkg}/bin/vllm serve "${cfg.opencode.vllm.model.name}" --download-dir "${vllmModelsDir}" --port ${toString cfg.opencode.vllm.port} ${cfg.opencode.vllm.extraArgs}
+  '';
   opencodeType = submodule {
     options = {
       enable = mkOption {
@@ -22,60 +45,83 @@ let
         '';
         type = bool;
       };
-      ollama = let
-        ollamaType = submodule {
+      vllm = let
+        vllmType = submodule {
           options = {
             enable = mkOption {
               default = false;
               description = ''
-                Enable local ollama for OpenCode (named `ollama-local` by default).
+                Enable local vllm for OpenCode (named `vllm-local` by default).
               '';
               type = bool;
             };
             name = mkOption {
-              default = "ollama-local";
+              default = "vllm-local";
               description = ''
                 Provider name in OpenCode.
               '';
               type = str;
             };
-            context_length = mkOption {
-              default = 64000;
+            port = mkOption {
+              default = 11435;
               description = ''
-                Context length to launch Ollama with.
+                Port to run vllm on.
               '';
               type = int;
+            };
+            extraArgs = lib.mkOption {
+              type = str;
+              default = "--max-model-len 8192 --max-num-batched-tokens 8192 --gpu-memory-utilization 0.50 --tool-call-parser openai --enable-auto-tool-choice";
+              description = ''
+                CLI flags after `vllm serve MODEL --host … --port …`.
+              '';
             };
             model = let
               modelType = submodule {
                 options = {
                   name = mkOption {
-                    default = "qwen3.5:9b";
+                    default = "Qwen/Qwen2.5-Coder-3B-Instruct";
                     description = ''
-                      Tool-calling model to use for OpenCode.
+                      Name of Model on HuggingFace for vllm.
+                      Found at "Use this model" > "vLLM".
                     '';
                     type = str;
                   };
                   alias = mkOption {
-                    default = "qwen";
+                    default = "qwen-coder";
                     description = ''
                       Human-readable name for model in OpenCode.
                     '';
                     type = str;
                   };
+                  outputTokens = mkOption {
+                    default = 2048;
+                    description = ''
+                      Value for `limit.output` of model in OpenCode configuration.
+                      Should not exceed the vllm --max-model-len value.
+                    '';
+                    type = int;
+                  };
+                  contextTokens = mkOption {
+                    default = 6144;
+                    description = ''
+                      Value for `limit.context` of model in OpenCode configuration.
+                    '';
+                    type = int;
+                  };
                 };
               };
             in mkOption {
               default = {};
-              description = "Local model to pull in Ollama.";
+              description = "Local model to pull in vllm.";
               type = modelType;
             };
           };
         };
       in mkOption {
         default = {};
-        description = "Enable local Ollama + OpenCode.";
-        type = ollamaType;
+        description = "Enable local vllm + OpenCode.";
+        type = vllmType;
       };
       extraConf = mkOption {
         default = {};
@@ -120,18 +166,10 @@ in {
       LLM_API_KEY="$(${op-wrapper} item get zvj57fg53iipc4vxgobcer5j4q --fields master-key --reveal)"
       ${pkgs.codex}/bin/codex --profile "qwen" $@
     '';
-    ollamaPkg = if (cfg.homelab == false || cfg.opencode.ollama.enable) then config.services.ollama.package else pkgs.ollama;
-    myOllamaPull = pkgs.writeShellScript "ollama-pull" ''
-      # Loop 3 times until ollama is ready
-      (r=3;while ! ${ollamaPkg}/bin/ollama list &>/dev/null ; do ((--r))||exit;sleep 60;done) || exit 1
-      ${lib.optionalString cfg.homelab "${ollamaPkg}/bin/ollama pull ${model}"}
-      ${lib.optionalString cfg.opencode.ollama.enable "${ollamaPkg}/bin/ollama pull ${cfg.opencode.ollama.model.name}"}
-    '';
   in mkIf cfg.enable {
     home.packages = with pkgs; [
       github-copilot-cli
       claude-code
-      ollamaPkg
     ] ++ lib.optionals (cfg.homelab) [
       myCodexLitellm
     ];
@@ -195,52 +233,6 @@ in {
       };
     };
 
-    systemd.user.services.ollama-pull = lib.optionalAttrs (cfg.homelab == false || cfg.opencode.ollama.enable) {
-      Unit = {
-        Description = "Automatically pull Ollama images";
-        After = [ "ollama.service" ];
-      };
-
-      Service = {
-        ExecStart = "${myOllamaPull}";
-        Environment = if (cfg.homelab == false) then config.systemd.user.services.ollama.Service.Environment
-          ++ [ "OLLAMA_CONTEXT_LENGTH=${toString cfg.ollama.context_length}" ]
-        else [
-          "OLLAMA_HOST=${url}"
-        ];
-      };
-
-      Install = {
-        WantedBy = [ "default.target" ];
-      };
-    };
-
-    launchd.agents.ollama-pull = lib.optionalAttrs (cfg.homelab == false) {
-      enable = true;
-      config = {
-        ProgramArguments = [
-          "${myOllamaPull}"
-        ];
-        EnvironmentVariables = if (cfg.homelab == false) then config.launchd.agents.ollama.config.EnvironmentVariables
-          ++ [ "OLLAMA_CONTEXT_LENGTH=${toString cfg.ollama.context_length}" ]
-        else {
-          OLLAMA_HOST = url;
-        };
-        KeepAlive = {
-          Crashed = true;
-          SuccessfulExit = true;
-        };
-        ProcessType = "Background";
-      };
-    };
-
-    services.ollama = lib.optionalAttrs (cfg.homelab == false || cfg.opencode.ollama.enable) {
-      enable = true;
-      environmentVariables = {
-        OLLAMA_VULKAN = "1";
-      };
-    };
-
     home.file.".config/opencode/plugins/remote.ts" = {
       enable = (cfg.opencode.enable && cfg.opencode.ssh);
       text = builtins.readFile "${opencode-ssh}/src/index.ts";
@@ -259,17 +251,50 @@ in {
       '';
     };
 
-    programs.opencode =  optionalAttrs (cfg.opencode.enable) {
+    launchd.agents.vllm = {
+      enable = cfg.opencode.vllm.enable;
+      config = {
+        ProgramArguments = [
+          "${runVllm}"
+        ];
+        RunAtLoad = true;
+        KeepAlive = true;
+        StandardOutPath = "${vllmLogDir}/stdout.log";
+        StandardErrorPath = "${vllmLogDir}/stderr.log";
+      };
+    };
+
+    systemd.user.services.vllm = {
+      enable = cfg.opencode.vllm.enable;
+      Unit = {
+        Description = "vllm server";
+        After = [ "network.target" ];
+      };
+
+      Service = {
+        Type = "idle";
+        KillSignal = "SIGINT";
+        ExecStart = "${runVllm}";
+        Restart = "always";
+        RestartSec = 300;
+      };
+    };
+
+    programs.opencode = optionalAttrs (cfg.opencode.enable) {
       enable = cfg.opencode.enable;
-      settings.provider.ollama = optionalAttrs (cfg.opencode.enable && cfg.opencode.ollama.enable) {
+      settings.provider.vllm = optionalAttrs (cfg.opencode.enable && cfg.opencode.vllm.enable) {
         npm = "@ai-sdk/openai-compatible";
-        name = "${cfg.opencode.ollama.name}";
-        options.baseURL = "http://localhost:11434/v1";
+        name = "${cfg.opencode.vllm.name}";
+        options.baseURL = "http://localhost:${toString cfg.opencode.vllm.port}/v1";
         models = {
-          "${cfg.opencode.ollama.model.name}" = {
-            name = "${cfg.opencode.ollama.model.alias}";
+          "${cfg.opencode.vllm.model.name}" = {
+            name = "${cfg.opencode.vllm.model.alias}";
             tool_call = true;
             options.think = false;
+            limit = {
+              context = cfg.opencode.vllm.model.contextTokens;
+              output = cfg.opencode.vllm.model.outputTokens;
+            };
           };
         };
       } // optionalAttrs (cfg.opencode.enable) cfg.opencode.extraConf;

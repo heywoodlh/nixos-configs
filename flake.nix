@@ -849,7 +849,10 @@ rec {
                 ];
               };
               home-manager.users.heywoodlh = {
-                heywoodlh.home.lima.nixos.memory = 12;
+                heywoodlh.home = {
+                  llm.opencode.vllm.enable = true;
+                  lima.nixos.memory = 12;
+                };
               };
             }
           ];

@@ -1452,7 +1452,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/gi77i64sg0aw3hyif2zq4dd96wivjgfz-tmux/bin/tmux"
+"/nix/store/qd246vvmilngy2baz3df30ydv28m9yx6-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1500,7 +1500,7 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
@@ -2326,11 +2326,35 @@ attribute set
 
 
 
-## heywoodlh\.home\.llm\.opencode\.ollama
+## heywoodlh\.home\.llm\.opencode\.ssh
 
 
 
-Enable local Ollama + OpenCode\.
+Enable opencode-ssh\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.opencode\.vllm
+
+
+
+Enable local vllm + OpenCode\.
 
 
 
@@ -2350,9 +2374,9 @@ submodule
 
 
 
-## heywoodlh\.home\.llm\.opencode\.ollama\.enable
+## heywoodlh\.home\.llm\.opencode\.vllm\.enable
 
-Enable local ollama for OpenCode (named ` ollama-local ` by default)\.
+Enable local vllm for OpenCode (named ` vllm-local ` by default)\.
 
 
 
@@ -2372,23 +2396,23 @@ false
 
 
 
-## heywoodlh\.home\.llm\.opencode\.ollama\.context_length
+## heywoodlh\.home\.llm\.opencode\.vllm\.extraArgs
 
 
 
-Context length to launch Ollama with\.
+CLI flags after ` vllm serve MODEL --host … --port … `\.
 
 
 
 *Type:*
-signed integer
+string
 
 
 
 *Default:*
 
 ```nix
-64000
+"--max-model-len 8192 --max-num-batched-tokens 8192 --gpu-memory-utilization 0.50 --tool-call-parser openai --enable-auto-tool-choice"
 ```
 
 *Declared by:*
@@ -2396,11 +2420,11 @@ signed integer
 
 
 
-## heywoodlh\.home\.llm\.opencode\.ollama\.model
+## heywoodlh\.home\.llm\.opencode\.vllm\.model
 
 
 
-Local model to pull in Ollama\.
+Local model to pull in vllm\.
 
 
 
@@ -2420,7 +2444,7 @@ submodule
 
 
 
-## heywoodlh\.home\.llm\.opencode\.ollama\.model\.alias
+## heywoodlh\.home\.llm\.opencode\.vllm\.model\.alias
 
 
 
@@ -2436,7 +2460,7 @@ string
 *Default:*
 
 ```nix
-"qwen"
+"qwen-coder"
 ```
 
 *Declared by:*
@@ -2444,11 +2468,36 @@ string
 
 
 
-## heywoodlh\.home\.llm\.opencode\.ollama\.model\.name
+## heywoodlh\.home\.llm\.opencode\.vllm\.model\.contextTokens
 
 
 
-Tool-calling model to use for OpenCode\.
+Value for ` limit.context ` of model in OpenCode configuration\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+6144
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.opencode\.vllm\.model\.name
+
+
+
+Name of Model on HuggingFace for vllm\.
+Found at “Use this model” > “vLLM”\.
 
 
 
@@ -2460,7 +2509,7 @@ string
 *Default:*
 
 ```nix
-"qwen3.5:9b"
+"Qwen/Qwen2.5-Coder-3B-Instruct"
 ```
 
 *Declared by:*
@@ -2468,7 +2517,32 @@ string
 
 
 
-## heywoodlh\.home\.llm\.opencode\.ollama\.name
+## heywoodlh\.home\.llm\.opencode\.vllm\.model\.outputTokens
+
+
+
+Value for ` limit.output ` of model in OpenCode configuration\.
+Should not exceed the vllm --max-model-len value\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+2048
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.opencode\.vllm\.name
 
 
 
@@ -2484,7 +2558,7 @@ string
 *Default:*
 
 ```nix
-"ollama-local"
+"vllm-local"
 ```
 
 *Declared by:*
@@ -2492,23 +2566,23 @@ string
 
 
 
-## heywoodlh\.home\.llm\.opencode\.ssh
+## heywoodlh\.home\.llm\.opencode\.vllm\.port
 
 
 
-Enable opencode-ssh\.
+Port to run vllm on\.
 
 
 
 *Type:*
-boolean
+signed integer
 
 
 
 *Default:*
 
 ```nix
-true
+11435
 ```
 
 *Declared by:*
@@ -3599,7 +3673,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/d15dsfsin82f8j45vbvnv573xhridaph-source/base/stylix\.nix](/nix/store/d15dsfsin82f8j45vbvnv573xhridaph-source/base/stylix.nix)
+ - [/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix\.nix](/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix.nix)
 
 
 
@@ -3623,7 +3697,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d15dsfsin82f8j45vbvnv573xhridaph-source/base/stylix\.nix](/nix/store/d15dsfsin82f8j45vbvnv573xhridaph-source/base/stylix.nix)
+ - [/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix\.nix](/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix.nix)
 
 
 
@@ -3647,7 +3721,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d15dsfsin82f8j45vbvnv573xhridaph-source/base/stylix\.nix](/nix/store/d15dsfsin82f8j45vbvnv573xhridaph-source/base/stylix.nix)
+ - [/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix\.nix](/nix/store/0xifc9bq32imp7rvr19ris7g300xn0c8-source/base/stylix.nix)
 
 
 

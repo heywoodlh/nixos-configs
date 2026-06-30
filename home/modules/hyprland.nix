@@ -416,6 +416,9 @@ in {
           }
         }
 
+        # Hide hardware cursor
+        cursor:no_hardware_cursors = 0
+
         # General Keybindings
         $mainMod = SUPER
         # Terminal

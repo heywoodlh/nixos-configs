@@ -90,12 +90,13 @@ in {
     # Desktop packages
     environment.systemPackages = with pkgs; [
       busybox
+      ente-auth
       lsof
+      gnome-boxes
       gnome-screenshot
       ifuse
-      usbutils
-      ente-auth
       meshtastic
+      usbutils
       myFlakes.packages.${system}.tmux
       myFlakes.packages.${system}.helix
     ];

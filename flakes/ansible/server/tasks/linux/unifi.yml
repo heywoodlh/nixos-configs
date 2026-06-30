@@ -22,7 +22,7 @@
   ansible.builtin.copy:
     src: "scripts/{{ item }}"
     dest: "/data/on_boot.d/{{ item }}"
-    mode: "0644"
+    mode: "0755"
     force: true
   loop:
     - "ansible-pull.sh"

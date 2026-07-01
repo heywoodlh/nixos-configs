@@ -376,11 +376,195 @@ string
 *Default:*
 
 ```nix
-""
+"heywoodlh"
 ```
 
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/choose-launcher\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/choose-launcher.nix)
+
+
+
+## heywoodlh\.darwin\.defaults\.enable
+
+
+
+Enable heywoodlh defaults\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
+
+
+
+## heywoodlh\.darwin\.defaults\.user
+
+
+
+User for heywoodlh configuration\.
+
+
+
+*Type:*
+submodule
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
+
+
+
+## heywoodlh\.darwin\.defaults\.user\.description
+
+
+
+Full name of user for heywoodlh defaults\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"Spencer Heywood"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
+
+
+
+## heywoodlh\.darwin\.defaults\.user\.homeDir
+
+
+
+Home directory for user for heywoodlh defaults\.
+
+
+
+*Type:*
+absolute path
+
+
+
+*Default:*
+
+```nix
+"/Users/heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
+
+
+
+## heywoodlh\.darwin\.defaults\.user\.name
+
+
+
+Username for heywoodlh defaults\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
+
+
+
+## heywoodlh\.darwin\.defaults\.user\.uid
+
+
+
+UID for user for heywoodlh defaults\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+501
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
+
+
+
+## heywoodlh\.darwin\.lmstudio\.enable
+
+
+
+Enable LM Studio configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/lmstudio\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/lmstudio.nix)
+
+
+
+## heywoodlh\.darwin\.lmstudio\.user
+
+
+
+User to configure LM Studio for\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/lmstudio\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/lmstudio.nix)
 
 
 
@@ -426,7 +610,7 @@ string
 *Default:*
 
 ```nix
-""
+"heywoodlh"
 ```
 
 *Declared by:*
@@ -1218,6 +1402,30 @@ true
 
 
 
+## heywoodlh\.home\.darwin\.defaults\.screenshotDir
+
+
+
+Destination directory for screenshots
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"~/Pictures/Screenshots"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/darwin-defaults.nix)
+
+
+
 ## heywoodlh\.home\.darwin\.defaults\.security
 
 
@@ -1452,7 +1660,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/gi77i64sg0aw3hyif2zq4dd96wivjgfz-tmux/bin/tmux"
+"/nix/store/qd246vvmilngy2baz3df30ydv28m9yx6-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1500,7 +1708,7 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
@@ -2159,8 +2367,6 @@ false
 
 ## heywoodlh\.home\.lima\.nixos\.memory
 
-
-
 NixOS VM RAM\.
 
 
@@ -2247,6 +2453,198 @@ boolean
 
 ```nix
 false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.lmstudio
+
+
+
+LM Studio configuration\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.lmstudio\.enable
+
+
+
+Install LM Studio\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.lmstudio\.model
+
+
+
+Local model configuration for LM Studio\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.lmstudio\.model\.alias
+
+
+
+Human-readable name for model in OpenCode\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"gemma-4"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.lmstudio\.model\.context_length
+
+
+
+Context length for the model in OpenCode\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+32768
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.lmstudio\.model\.max_tokens
+
+
+
+Maximum number of output tokens for the model in OpenCode\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+8192
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.lmstudio\.model\.name
+
+
+
+Model identifier on LM Studio Hub\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"google/gemma-4-e4b"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.lmstudio\.name
+
+
+
+Provider name in OpenCode (if enabled)\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"lmstudio-local"
 ```
 
 *Declared by:*
@@ -2375,6 +2773,8 @@ submodule
 
 
 ## heywoodlh\.home\.llm\.opencode\.vllm\.enable
+
+
 
 Enable local vllm for OpenCode (named ` vllm-local ` by default)\.
 
@@ -3793,7 +4193,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix\.nix](/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix.nix)
+ - [/nix/store/d1ia77hg9jx4bvr2kg6m718qvd2kzgcj-source/base/stylix\.nix](/nix/store/d1ia77hg9jx4bvr2kg6m718qvd2kzgcj-source/base/stylix.nix)
 
 
 
@@ -3817,7 +4217,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix\.nix](/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix.nix)
+ - [/nix/store/d1ia77hg9jx4bvr2kg6m718qvd2kzgcj-source/base/stylix\.nix](/nix/store/d1ia77hg9jx4bvr2kg6m718qvd2kzgcj-source/base/stylix.nix)
 
 
 
@@ -3841,7 +4241,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix\.nix](/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix.nix)
+ - [/nix/store/d1ia77hg9jx4bvr2kg6m718qvd2kzgcj-source/base/stylix\.nix](/nix/store/d1ia77hg9jx4bvr2kg6m718qvd2kzgcj-source/base/stylix.nix)
 
 
 

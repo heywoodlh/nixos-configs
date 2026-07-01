@@ -99,6 +99,7 @@ with lib;
   };
 
   home-manager.users.heywoodlh = {
+    heywoodlh.home.llm.lmstudio = false;
     home.packages = with pkgs; [
       ytmdesktop
       (pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {})

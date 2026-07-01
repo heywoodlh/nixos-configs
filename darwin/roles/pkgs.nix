@@ -32,21 +32,8 @@ in {
     tailscale
   ];
 
-  nix.settings = {
-    auto-optimise-store = false; # Breaks things
-  };
-
   #homebrew packages
   homebrew = {
-    enable = true;
-    onActivation = {
-      autoUpdate = true;
-      upgrade = true;
-      cleanup = "zap";
-      extraFlags = [
-        "--force-cleanup"
-      ];
-    };
     brews = [
       "bash"
       "choose-gui"

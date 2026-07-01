@@ -372,12 +372,14 @@ rec {
     ];
     darwinModules.heywoodlh.darwin = { config, pkgs, ... }: {
       imports = [
+        ./darwin/modules/defaults.nix
         ./darwin/modules/sketchybar.nix
         ./darwin/modules/yabai.nix
         ./darwin/modules/stage-manager.nix
         ./darwin/modules/choose-launcher.nix
         ./darwin/modules/raycast.nix
         ./darwin/modules/stylix.nix
+        ./darwin/modules/lmstudio.nix
       ] ++ commonModules;
     };
     commonHomeModules = [
@@ -495,6 +497,14 @@ rec {
           nixpkgs.overlays = [
             nur.overlays.default
           ];
+
+          heywoodlh = {
+            darwin = {
+              defaults.enable = true;
+              lmstudio.enable = true;
+            };
+          };
+
           home-manager = {
             useGlobalPkgs = true;
             extraSpecialArgs = inputs;
@@ -530,47 +540,16 @@ rec {
                 nixos-switch
               ];
               heywoodlh.home = {
-                darwin = {
-                  nord-terminal = true;
-                  defaults.enable = true;
-                  protondrive = true;
-                };
-
-                # Run Lima VM always in background
-                lima = {
-                  enable = true;
-                  docker = {
-                    enable = true;
-                    context = true;
-                  };
-                  nixos = {
-                    enable = true;
-                    nixos-rebuild = true;
-                  };
-                };
+                darwin.protondrive = true;
               };
             };
           };
 
           networking.hostName = myHostname;
           networking.computerName = myHostname;
-          heywoodlh.stylix.enable = true;
-          heywoodlh.darwin = {
-            sketchybar.enable = true;
-            yabai.enable = true;
-            choose-launcher = {
-              enable = false; # keeping around for documentation
-              user = "heywoodlh";
-            };
-            raycast = {
-              enable = false;
-              user = "heywoodlh";
-            };
-          };
-          services.container.enable = true;
           system.stateVersion = 6;
         }
-      ] ++ pkgs.lib.optionals pkgs.stdenv.isAarch64 [ ./darwin/roles/m1.nix ];
+      ];
     };
 
     nixosConfigWith = nixpkgsPkgs: machineType: myHostname: extraConf: nixpkgsPkgs.lib.nixosSystem {
@@ -851,10 +830,7 @@ rec {
                 ];
               };
               home-manager.users.heywoodlh = {
-                heywoodlh.home = {
-                  llm.opencode.vllm.enable = true;
-                  lima.nixos.memory = 12;
-                };
+                heywoodlh.home.lima.nixos.memory = 12;
               };
             }
           ];

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -15,7 +15,7 @@ in {
         type = types.bool;
       };
       user = mkOption {
-        default = "";
+        default = config.heywoodlh.darwin.defaults.user.name;
         description = ''
           Which user to change Cmd+Space shortcut for Spotlight to Ctrl+Shift+Space.
           If unset, does not change shortcut.

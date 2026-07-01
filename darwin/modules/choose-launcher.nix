@@ -40,7 +40,7 @@ in {
         type = types.bool;
       };
       user = mkOption {
-        default = "";
+        default = config.heywoodlh.darwin.defaults.user.name;
         description = ''
           Which user to enable choose-launcher for.
         '';

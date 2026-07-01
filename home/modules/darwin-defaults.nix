@@ -1,12 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 # For whatever reason, home-manager and nix-darwin modules don't apply defaults settings?
 with lib;
 
 let
   cfg = config.heywoodlh.home.darwin.defaults;
-  system = pkgs.stdenv.hostPlatform.system;
-  homeDir = config.home.homeDirectory;
+  homeDir = if config ? home then config.home.homeDirectory else "~";
 in {
   options = {
     heywoodlh.home.darwin.defaults = {
@@ -38,6 +37,11 @@ in {
         '';
         type = types.bool;
       };
+      screenshotDir = mkOption {
+        default = "${homeDir}/Pictures/Screenshots";
+        description = "Destination directory for screenshots";
+        type = types.str;
+      };
     };
   };
 
@@ -46,6 +50,15 @@ in {
       enable = true;
       homelab = false; # use local ollama instance
     };
+
+    home.activation.screenshots = ''
+      # Use PNG for screenshot format
+      /usr/bin/defaults -currentHost write com.apple.screencapture type -string "png"
+
+      mkdir -p "${cfg.screenshotDir}"
+      /usr/bin/defaults write com.apple.screencapture location -string "${cfg.screenshotDir}"
+    '';
+
     # Helpful resources:
     # - https://github.com/kentcdodds/dotfiles/blob/1e59ac84911eee898b3b9ceab904df9ad243fdd4/.macos#L674
     # - https://macos-defaults.com, specifically checkout the `diff.sh` script in the repo:
@@ -110,9 +123,6 @@ in {
 
       # Set home directory as default path in Finder
       /usr/bin/defaults -currentHost write com.apple.finder NewWindowTargetPath -string "file://${homeDir}"
-
-      # Use PNG for screenshot format
-      /usr/bin/defaults -currentHost write com.apple.screencapture type -string "png"
 
       # Use CMD + Shift + s to take screenshot area to clipboard
       /usr/bin/defaults -currentHost write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 31 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>115</integer><integer>1</integer><integer>1179648</integer></array><key>type</key><string>standard</string></dict></dict>"

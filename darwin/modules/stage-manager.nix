@@ -1,10 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
 let
   cfg = config.heywoodlh.darwin.stage-manager;
-  system = pkgs.stdenv.hostPlatform.system;
 in {
   options = {
     heywoodlh.darwin.stage-manager = {

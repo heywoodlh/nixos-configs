@@ -3533,30 +3533,6 @@ string
 
 
 
-## heywoodlh\.nixos\.tor\.socksPort
-
-
-
-Local SOCKS proxy port\.
-
-
-
-*Type:*
-signed integer
-
-
-
-*Default:*
-
-```nix
-9050
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tor.nix)
-
-
-
 ## heywoodlh\.nixos\.vmware-workstation
 
 
@@ -3817,7 +3793,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/95canhg9cq906nwjbqcchs9ylciazska-source/base/stylix\.nix](/nix/store/95canhg9cq906nwjbqcchs9ylciazska-source/base/stylix.nix)
+ - [/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix\.nix](/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix.nix)
 
 
 
@@ -3841,7 +3817,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/95canhg9cq906nwjbqcchs9ylciazska-source/base/stylix\.nix](/nix/store/95canhg9cq906nwjbqcchs9ylciazska-source/base/stylix.nix)
+ - [/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix\.nix](/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix.nix)
 
 
 
@@ -3865,7 +3841,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/95canhg9cq906nwjbqcchs9ylciazska-source/base/stylix\.nix](/nix/store/95canhg9cq906nwjbqcchs9ylciazska-source/base/stylix.nix)
+ - [/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix\.nix](/nix/store/n6xkian18xh4fswm9rmv11vbk85y89zx-source/base/stylix.nix)
 
 
 

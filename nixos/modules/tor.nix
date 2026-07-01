@@ -23,11 +23,6 @@ in {
       description = "Exit node countries. Set to US for speed (but less privacy).";
       type = str;
     };
-    socksPort = mkOption {
-      default = 9050;
-      description = "Local SOCKS proxy port.";
-      type = int;
-    };
   };
 
   config = mkIf cfg.enable {
@@ -37,7 +32,7 @@ in {
         enable = true;
         socks = {
           proxy = mkForce "127.0.0.1";
-          port = mkForce cfg.socksPort;
+          port = mkForce 9050;
         };
       };
     };
@@ -46,27 +41,12 @@ in {
       pkgs.tor-browser
     ];
     services.tor = {
+      enable = true;
       torsocks.enable = true;
-      client = {
-        enable = true;
-        socksListenAddress = {
-          IsolateDestAddr = true;
-          addr = "127.0.0.1";
-          port = cfg.socksPort;
-        };
-      };
+      client.enable = true;
       settings = {
         EntryNodes = cfg.entryNodes;
         ExitNodes = cfg.exitNodes;
-        StrictNodes = true;
-        ClientOnly = true;
-        LearnCircuitBuildTimeout = true;
-        CircuitBuildTimeout = 10;
-        NumEntryGuards = 8;
-        NumPreemptiveCircuits = 10;
-        MaxClientCircuitsPending = 48;
-        FetchDirInfoEarly = true;
-        FetchDirInfoExtraEarly = true;
       };
     };
   };

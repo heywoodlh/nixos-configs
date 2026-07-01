@@ -1109,18 +1109,11 @@ rec {
 
           # Enable KDE for interoperability amongst machines
           heywoodlh = {
-            hyprland = pkgs.lib.mkForce false;
             sshd = {
               enable = true;
               tailscale = true;
             };
-            nixos = {
-              tor.enable = true;
-              kde = {
-                enable = true;
-                windows = true;
-              };
-            };
+            nixos.tor.enable = true;
           };
         };
 

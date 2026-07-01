@@ -295,7 +295,7 @@ rec {
 
   nixConfig = {
     fallback = true;
-    connect-timeout = 5;
+    connect-timeout = 1;
     extra-substituters = [
       "https://nix-community.cachix.org"
       "http://attic.barn-banana.ts.net/nixos"
@@ -465,6 +465,7 @@ rec {
       ./nixos/modules/scrutiny.nix
       ./nixos/modules/kde.nix
       ./nixos/modules/tor.nix
+      ./nixos/modules/libvirtd.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -928,6 +929,7 @@ rec {
             gaming.enable = true;
             vmware-workstation = true;
             cachyos-kernel.enable = true;
+            libvirtd.enable = true;
           };
 
           home-manager.users.heywoodlh = {

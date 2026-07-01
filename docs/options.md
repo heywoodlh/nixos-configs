@@ -1452,7 +1452,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/qd246vvmilngy2baz3df30ydv28m9yx6-tmux/bin/tmux"
+"/nix/store/gi77i64sg0aw3hyif2zq4dd96wivjgfz-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1500,7 +1500,7 @@ signed integer
 *Default:*
 
 ```nix
-16
+14
 ```
 
 *Declared by:*
@@ -3220,6 +3220,54 @@ false
 
 
 
+## heywoodlh\.nixos\.libvirtd\.enable
+
+
+
+Enable libvirt virtualization\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/libvirtd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/libvirtd.nix)
+
+
+
+## heywoodlh\.nixos\.libvirtd\.username
+
+
+
+Non-root user that will run libvirt\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/libvirtd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/libvirtd.nix)
+
+
+
 ## heywoodlh\.nixos\.nvidia-patch
 
 
@@ -3769,7 +3817,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/d2dwwd79fxcjf1qh41jfvr8yr7z68ws7-source/base/stylix\.nix](/nix/store/d2dwwd79fxcjf1qh41jfvr8yr7z68ws7-source/base/stylix.nix)
+ - [/nix/store/qdhap9isi0c2fv8l1ngnh09yb9nzjhhh-source/base/stylix\.nix](/nix/store/qdhap9isi0c2fv8l1ngnh09yb9nzjhhh-source/base/stylix.nix)
 
 
 
@@ -3793,7 +3841,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d2dwwd79fxcjf1qh41jfvr8yr7z68ws7-source/base/stylix\.nix](/nix/store/d2dwwd79fxcjf1qh41jfvr8yr7z68ws7-source/base/stylix.nix)
+ - [/nix/store/qdhap9isi0c2fv8l1ngnh09yb9nzjhhh-source/base/stylix\.nix](/nix/store/qdhap9isi0c2fv8l1ngnh09yb9nzjhhh-source/base/stylix.nix)
 
 
 
@@ -3817,7 +3865,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d2dwwd79fxcjf1qh41jfvr8yr7z68ws7-source/base/stylix\.nix](/nix/store/d2dwwd79fxcjf1qh41jfvr8yr7z68ws7-source/base/stylix.nix)
+ - [/nix/store/qdhap9isi0c2fv8l1ngnh09yb9nzjhhh-source/base/stylix\.nix](/nix/store/qdhap9isi0c2fv8l1ngnh09yb9nzjhhh-source/base/stylix.nix)
 
 
 

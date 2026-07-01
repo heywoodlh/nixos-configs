@@ -57,10 +57,10 @@ in {
                 </dhcp>
               </ip>
             </network>
-          ''} || true
+          ''} &>/dev/null || true
       fi
-      ${pkgs.libvirt}/bin/virsh net-start default || true
-      ${pkgs.libvirt}/bin/virsh net-autostart default || true
+      ${pkgs.libvirt}/bin/virsh net-start default &>/dev/null || true
+      ${pkgs.libvirt}/bin/virsh net-autostart default &>/dev/null || true
     '';
   };
 }

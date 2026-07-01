@@ -51,12 +51,24 @@ in {
       mkdir -p "$KVANTUM_DIR"
       mkdir -p "$WALLPAPER_DIR"
 
-      cp -r ${kdeWin11}/aurorae/* "$AURORAE_DIR"
-      cp -r ${kdeWin11}/color-schemes/*.colors "$SCHEMES_DIR"
-      cp -r ${kdeWin11}/Kvantum/* "$KVANTUM_DIR"
-      cp -r ${kdeWin11}/plasma/desktoptheme/* "$PLASMA_DIR"
-      cp -r ${kdeWin11}/plasma/look-and-feel/* "$LOOKFEEL_DIR"
-      cp -r ${kdeWin11}/wallpaper/* "$WALLPAPER_DIR"
+      find ${homeDir}/.local/share/aurorae -type d -exec chmod 0755 {} \; &>/dev/null
+      find ${homeDir}/.local/share/color-schemes -type d -exec chmod 0755 {} \; &>/dev/null
+      find ${homeDir}/.local/share/plasma -type d -exec chmod 0755 {} \; &>/dev/null
+      find ${homeDir}/.config/Kvantum -type d -exec chmod 0755 {} \; &>/dev/null
+      find ${homeDir}/.local/share/wallpapers -type d -exec chmod 0755 {} \; &>/dev/null
+
+      find ${homeDir}/.local/share/aurorae -type f -exec chmod 0644 {} \; &>/dev/null
+      find ${homeDir}/.local/share/color-schemes -type f -exec chmod 0644 {} \; &>/dev/null
+      find ${homeDir}/.local/share/plasma -type f -exec chmod 0644 {} \; &>/dev/null
+      find ${homeDir}/.config/Kvantum -type f -exec chmod 0644 {} \; &>/dev/null
+      find ${homeDir}/.local/share/wallpapers -type f -exec chmod 0644 {} \; &>/dev/null
+
+      cp -rf ${kdeWin11}/aurorae/* "$AURORAE_DIR"
+      cp -rf ${kdeWin11}/color-schemes/*.colors "$SCHEMES_DIR"
+      cp -rf ${kdeWin11}/Kvantum/* "$KVANTUM_DIR"
+      cp -rf ${kdeWin11}/plasma/desktoptheme/* "$PLASMA_DIR"
+      cp -rf ${kdeWin11}/plasma/look-and-feel/* "$LOOKFEEL_DIR"
+      cp -rf ${kdeWin11}/wallpaper/* "$WALLPAPER_DIR"
     '' + lib.optionalString (cfg.active) ''
       ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Win11OS
     '';

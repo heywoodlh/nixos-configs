@@ -1103,16 +1103,23 @@ rec {
         nixos-usb = nixosConfig "workstation" "nixos-usb" {
           imports = [
             (nixpkgs + "/nixos/modules/profiles/all-hardware.nix")
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/usb.nix
           ];
           boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
 
           # Enable KDE for interoperability amongst machines
-          heywoodlh.nixos = {
-            tor.enable = true;
-            kde = {
+          heywoodlh = {
+            hyprland = pkgs.lib.mkForce false;
+            sshd = {
               enable = true;
-              windows = true;
+              tailscale = true;
+            };
+            nixos = {
+              tor.enable = true;
+              kde = {
+                enable = true;
+                windows = true;
+              };
             };
           };
         };

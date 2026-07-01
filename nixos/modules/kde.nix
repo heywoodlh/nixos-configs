@@ -49,15 +49,14 @@ in {
     services.desktopManager.plasma6.enable = true;
     programs.ssh.askPassword = lib.mkForce "${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass";
 
-    environment.systemPackages = lib.optionals (cfg.windows) [
-      win11-sddm
-    ];
-
     services.displayManager = lib.optionalAttrs (cfg.windows) {
       gdm.enable = lib.mkForce false;
       defaultSession = lib.mkForce "plasma";
       sddm = {
         enable = true;
+        extraPackages = [
+          win11-sddm
+        ];
         wayland.enable = true;
         settings.Theme.Current = "win11";
       };

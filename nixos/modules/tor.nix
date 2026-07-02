@@ -37,7 +37,7 @@ in {
       };
     };
 
-    environment.systemPackages = [
+    environment.systemPackages = lib.optionals (pkgs.stdenv.isx86_64) [
       pkgs.tor-browser
     ];
     services.tor = {

@@ -19,7 +19,7 @@ in {
   config = mkIf cfg {
     home.activation.protondrive-link = ''
       mkdir -p "${homeDir}"/mnt
-      if [[ -e "${homeDir}"/Library/CloudStorage ]]
+      if [[ -e "${homeDir}"/Library/CloudStorage/ProtonDrive-* ]]
       then
         for file in "${homeDir}"/Library/CloudStorage/ProtonDrive-*
         do

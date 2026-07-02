@@ -59,7 +59,10 @@ in {
       };
     };
 
-    heywoodlh.stylix.enable = true;
+    heywoodlh.stylix = {
+      enable = true;
+      username = cfg.user.name;
+    };
     heywoodlh.darwin = {
       sketchybar.enable = true;
       yabai.enable = true;

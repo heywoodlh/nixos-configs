@@ -197,9 +197,9 @@ in {
       protonup-ng
       mangohud
       kill-eso-launcher
-      umu-launcher
     ] ++ lib.optionals (system == "x86_64-linux") [
       get-custom-proton
+      umu-launcher
     ] ++ lib.optionals (system == "aarch64-linux") [
       fex
       fuse
@@ -340,7 +340,7 @@ in {
 
     # Use Decky loader if Gamescope is enabled for Steam Deck like UX
     # Requires enabling CEF remote debugging on the Developer menu settings to work.
-    jovian.decky-loader = {
+    jovian.decky-loader = lib.mkIf (system == "x86_64-linux") {
       enable = true;
       user = "decky";
       package = decky-loader-patched;

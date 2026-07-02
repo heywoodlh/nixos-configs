@@ -1090,7 +1090,7 @@ rec {
           ];
           heywoodlh = {
             sshd.enable = true;
-            nixos.gaming.enable = true;
+            nixos.gaming.enable = false;
             apple-silicon = {
               enable = true;
               cachefile = "kernelcache.release.mac13g";

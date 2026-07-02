@@ -1098,7 +1098,7 @@ rec {
                 # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/kernelcache.release.mac13g)`
                 cache = "sha256-SYR/EaaIDjeGfvhfzlTqgOihXNQQdBgqJbBJbq+wC9g=";
                 # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/all_firmware.tar.gz)`
-                firmware = "sha256-ydzrhKfH/8iYo1PyNDnXmjcniMaete8DnN/yXYJ7mT4=";
+                firmware = "sha256-fJf6nF3bCevhURf45wt0NfqxLfBhrcO50lck/l6uE4o=";
               };
             };
           };

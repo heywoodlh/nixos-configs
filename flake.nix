@@ -136,10 +136,7 @@ rec {
       inputs.stylix.follows = "";
       inputs.doom-d.follows = "";
       inputs.vscode-server.follows = "";
-      inputs.hermes-agent.inputs.pyproject-nix.follows = "pyproject-nix";
-      inputs.hermes-agent.inputs.uv2nix.follows = "uv2nix";
-      inputs.hermes-agent.inputs.pyproject-build-systems.inputs.pyproject-nix.follows = "pyproject-nix";
-      inputs.hermes-agent.inputs.pyproject-build-systems.inputs.uv2nix.follows = "uv2nix";
+      inputs.hermes-agent.follows = "";
     };
     darwin = {
       url = "github:heywoodlh/nix-darwin/heywoodlh";

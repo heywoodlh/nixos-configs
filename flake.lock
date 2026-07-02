@@ -829,41 +829,6 @@
         "type": "github"
       }
     },
-    "hermes-agent": {
-      "inputs": {
-        "flake-parts": [
-          "kyle",
-          "teslamate-src",
-          "devenv",
-          "flake-parts"
-        ],
-        "nixpkgs": [
-          "kyle",
-          "nixpkgs"
-        ],
-        "npm-lockfile-fix": "npm-lockfile-fix",
-        "pyproject-build-systems": "pyproject-build-systems",
-        "pyproject-nix": [
-          "pyproject-nix"
-        ],
-        "uv2nix": [
-          "uv2nix"
-        ]
-      },
-      "locked": {
-        "lastModified": 1781534794,
-        "narHash": "sha256-lrPY3GfZc6BdhAOkUrvpqtNVU/mkW6AQW62v0yZ5s2s=",
-        "owner": "NousResearch",
-        "repo": "hermes-agent",
-        "rev": "3e7e9b24d40c6ff62e50936ba8b8184ad61da322",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NousResearch",
-        "repo": "hermes-agent",
-        "type": "github"
-      }
-    },
     "hexstrike-ai": {
       "inputs": {
         "autorecon-src": "autorecon-src",
@@ -1428,7 +1393,7 @@
           "ashell"
         ],
         "doom-d": [],
-        "hermes-agent": "hermes-agent",
+        "hermes-agent": [],
         "home-manager": [
           "home-manager"
         ],
@@ -2256,28 +2221,6 @@
         "url": "https://github.com/EliverLara/Nordic/releases/download/v2.2.0/Nordic.tar.xz"
       }
     },
-    "npm-lockfile-fix": {
-      "inputs": {
-        "nixpkgs": [
-          "kyle",
-          "hermes-agent",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1775903712,
-        "narHash": "sha256-2GV79U6iVH4gKAPWYrxUReB0S41ty/Y3dBLquU8AlaA=",
-        "owner": "jeslie0",
-        "repo": "npm-lockfile-fix",
-        "rev": "c6093acb0c0548e0f9b8b3d82918823721930fe8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jeslie0",
-        "repo": "npm-lockfile-fix",
-        "type": "github"
-      }
-    },
     "nur": {
       "inputs": {
         "flake-parts": [
@@ -2464,34 +2407,6 @@
       "original": {
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "type": "github"
-      }
-    },
-    "pyproject-build-systems": {
-      "inputs": {
-        "nixpkgs": [
-          "kyle",
-          "hermes-agent",
-          "nixpkgs"
-        ],
-        "pyproject-nix": [
-          "pyproject-nix"
-        ],
-        "uv2nix": [
-          "uv2nix"
-        ]
-      },
-      "locked": {
-        "lastModified": 1772555609,
-        "narHash": "sha256-3BA3HnUvJSbHJAlJj6XSy0Jmu7RyP2gyB/0fL7XuEDo=",
-        "owner": "pyproject-nix",
-        "repo": "build-system-pkgs",
-        "rev": "c37f66a953535c394244888598947679af231863",
-        "type": "github"
-      },
-      "original": {
-        "owner": "pyproject-nix",
-        "repo": "build-system-pkgs",
         "type": "github"
       }
     },

@@ -30,11 +30,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    jujutsu-flake = {
-      url = "./jj";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     vscode-flake = {
       url = "./vscode";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -83,7 +78,6 @@
     flake-utils,
     fish-flake,
     git-flake,
-    jujutsu-flake,
     nushell-flake,
     vim-flake,
     helix-src,
@@ -102,8 +96,6 @@
         fish = fish-flake.packages.${system}.fish;
         nushell = nushell-flake.packages.${system}.nushell;
         git = git-flake.packages.${system}.git;
-        jujutsu = jujutsu-flake.packages.${system}.jujutsu;
-        jujutsu-config = jujutsu-flake.packages.${system}.config;
         tmux = fish-flake.packages.${system}.tmux;
         ghostty = fish-flake.packages.${system}.ghostty;
         ghostty-config = fish-flake.packages.${system}.ghostty-config;

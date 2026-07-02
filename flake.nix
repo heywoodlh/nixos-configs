@@ -98,6 +98,55 @@ rec {
       inputs.flake-utils.follows = "flake-utils";
       inputs.helix-src.follows = "helix-src";
     };
+    vim-flake = {
+      url = ./flakes/vim;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    chromium-widevine-flake = {
+      url = ./flakes/chromium-widevine;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    vicinae-nix = {
+      url = "github:vicinaehq/vicinae";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "flake-utils/systems";
+    };
+    gnome-flake = {
+      url = ./flakes/gnome;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.fish-flake.follows = "fish-flake";
+      inputs.vim-flake.follows = "vim-flake";
+      inputs.vicinae-nix.follows = "vicinae-nix";
+    };
+    git-flake = {
+      url = ./flakes/git;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    vscode-flake = {
+      url = ./flakes/vscode;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.fish-flake.follows = "fish-flake";
+    };
+    nushell-flake = {
+      url = ./flakes/nushell;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    op-flake = {
+      url = ./flakes/1password;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    ttyd-flake = {
+      url = ./flakes/ttyd-nerd;
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     myFlakes = {
       url = ./flakes;
       inputs.nixpkgs.follows = "nixpkgs";
@@ -106,6 +155,15 @@ rec {
       inputs.helix-src.follows = "helix-src";
       inputs.fish-flake.follows = "fish-flake";
       inputs.helix-flake.follows = "helix-flake";
+      inputs.vim-flake.follows = "vim-flake";
+      inputs.chromium-widevine-flake.follows = "chromium-widevine-flake";
+      inputs.gnome-flake.follows = "gnome-flake";
+      inputs.vicinae-nix.follows = "vicinae-nix";
+      inputs.git-flake.follows = "git-flake";
+      inputs.vscode-flake.follows = "vscode-flake";
+      inputs.nushell-flake.follows = "nushell-flake";
+      inputs.op-flake.follows = "op-flake";
+      inputs.ttyd-flake.follows = "ttyd-flake";
     };
     # for dependents of ashell
     ashell = {

@@ -339,21 +339,18 @@
         "asahi-widevine": "asahi-widevine",
         "lacros": "lacros",
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ]
       },
       "locked": {
-        "path": "./chromium-widevine",
+        "path": "flakes/chromium-widevine",
         "type": "path"
       },
       "original": {
-        "path": "./chromium-widevine",
+        "path": "flakes/chromium-widevine",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "crane": {
       "locked": {
@@ -627,25 +624,21 @@
     "git-flake": {
       "inputs": {
         "flake-utils": [
-          "myFlakes",
           "flake-utils"
         ],
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ]
       },
       "locked": {
-        "path": "./git",
+        "path": "flakes/git",
         "type": "path"
       },
       "original": {
-        "path": "./git",
+        "path": "flakes/git",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "gitignore": {
       "inputs": {
@@ -671,43 +664,35 @@
     "gnome-flake": {
       "inputs": {
         "fish-flake": [
-          "myFlakes",
           "fish-flake"
         ],
         "flake-utils": [
-          "myFlakes",
           "flake-utils"
         ],
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ],
         "nixpkgs-stable": [
-          "myFlakes",
           "nixpkgs-stable"
         ],
         "nordic": "nordic",
         "vicinae-nix": [
-          "myFlakes",
           "vicinae-nix"
         ],
         "vim-flake": [
-          "myFlakes",
           "vim-flake"
         ],
         "vim-ime": "vim-ime"
       },
       "locked": {
-        "path": "./gnome",
+        "path": "flakes/gnome",
         "type": "path"
       },
       "original": {
-        "path": "./gnome",
+        "path": "flakes/gnome",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "gnome-shell": {
       "flake": false,
@@ -1342,30 +1327,6 @@
         "type": "github"
       }
     },
-    "jujutsu-flake": {
-      "inputs": {
-        "flake-utils": [
-          "myFlakes",
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "myFlakes",
-          "nixpkgs"
-        ],
-        "toml-merge": "toml-merge"
-      },
-      "locked": {
-        "path": "./jj",
-        "type": "path"
-      },
-      "original": {
-        "path": "./jj",
-        "type": "path"
-      },
-      "parent": [
-        "myFlakes"
-      ]
-    },
     "kdub": {
       "inputs": {
         "nixpkgs": [
@@ -1551,34 +1512,51 @@
     },
     "myFlakes": {
       "inputs": {
-        "chromium-widevine-flake": "chromium-widevine-flake",
+        "chromium-widevine-flake": [
+          "chromium-widevine-flake"
+        ],
         "fish-flake": [
           "fish-flake"
         ],
         "flake-utils": [
           "flake-utils"
         ],
-        "git-flake": "git-flake",
-        "gnome-flake": "gnome-flake",
+        "git-flake": [
+          "git-flake"
+        ],
+        "gnome-flake": [
+          "gnome-flake"
+        ],
         "helix-flake": [
           "helix-flake"
         ],
         "helix-src": [
           "helix-src"
         ],
-        "jujutsu-flake": "jujutsu-flake",
         "nixpkgs": [
           "nixpkgs"
         ],
         "nixpkgs-stable": [
           "nixpkgs-stable"
         ],
-        "nushell-flake": "nushell-flake",
-        "op-flake": "op-flake",
-        "ttyd-flake": "ttyd-flake",
-        "vicinae-nix": "vicinae-nix",
-        "vim-flake": "vim-flake",
-        "vscode-flake": "vscode-flake"
+        "nushell-flake": [
+          "nushell-flake"
+        ],
+        "op-flake": [
+          "op-flake"
+        ],
+        "ttyd-flake": [
+          "ttyd-flake"
+        ],
+        "vicinae-nix": [
+          "vicinae-nix"
+        ],
+        "vim-flake": [
+          "vim-flake"
+        ],
+        "vscode-flake": [
+          "vscode-flake"
+        ]
       },
       "locked": {
         "path": "flakes",
@@ -1754,7 +1732,6 @@
     "nix-vscode-extensions": {
       "inputs": {
         "nixpkgs": [
-          "myFlakes",
           "vscode-flake",
           "nixpkgs"
         ]
@@ -2247,25 +2224,21 @@
     "nushell-flake": {
       "inputs": {
         "flake-utils": [
-          "myFlakes",
           "flake-utils"
         ],
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ]
       },
       "locked": {
-        "path": "./nushell",
+        "path": "flakes/nushell",
         "type": "path"
       },
       "original": {
-        "path": "./nushell",
+        "path": "flakes/nushell",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "nvidia-patch": {
       "inputs": {
@@ -2293,25 +2266,21 @@
     "op-flake": {
       "inputs": {
         "flake-utils": [
-          "myFlakes",
           "flake-utils"
         ],
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ]
       },
       "locked": {
-        "path": "./1password",
+        "path": "flakes/1password",
         "type": "path"
       },
       "original": {
-        "path": "./1password",
+        "path": "flakes/1password",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "opencode-ssh": {
       "flake": false,
@@ -2434,6 +2403,7 @@
       "inputs": {
         "ashell": "ashell",
         "cart": "cart",
+        "chromium-widevine-flake": "chromium-widevine-flake",
         "crane": "crane",
         "dark-wallpaper": "dark-wallpaper",
         "darwin": "darwin",
@@ -2442,6 +2412,8 @@
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "gh-gitignore": "gh-gitignore",
+        "git-flake": "git-flake",
+        "gnome-flake": "gnome-flake",
         "gomod2nix": "gomod2nix",
         "helium": "helium",
         "helix-flake": "helix-flake",
@@ -2472,7 +2444,9 @@
         "nixpkgs-sunshine": "nixpkgs-sunshine",
         "nmd": "nmd",
         "nur": "nur",
+        "nushell-flake": "nushell-flake",
         "nvidia-patch": "nvidia-patch",
+        "op-flake": "op-flake",
         "opencode-ssh": "opencode-ssh",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs",
         "plasma-manager": "plasma-manager",
@@ -2485,9 +2459,13 @@
         "stylix": "stylix",
         "tangled": "tangled",
         "treefmt-nix": "treefmt-nix",
+        "ttyd-flake": "ttyd-flake",
         "user-icon": "user-icon",
         "uv2nix": "uv2nix",
-        "vidhanix": "vidhanix"
+        "vicinae-nix": "vicinae-nix",
+        "vidhanix": "vidhanix",
+        "vim-flake": "vim-flake",
+        "vscode-flake": "vscode-flake"
       }
     },
     "rust-analyzer-src": {
@@ -2880,23 +2858,6 @@
         "type": "github"
       }
     },
-    "toml-merge": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1505377034,
-        "narHash": "sha256-ySYI/PYWKmo2AuvqRZpOgF6FMQ6x5Ok7t0Ejf3E+dpQ=",
-        "owner": "boivie",
-        "repo": "toml-merge",
-        "rev": "f2aa4e21a75bbfc46a61568e32a51b220d7c00ee",
-        "type": "github"
-      },
-      "original": {
-        "owner": "boivie",
-        "ref": "1.0.0-rc.1",
-        "repo": "toml-merge",
-        "type": "github"
-      }
-    },
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
@@ -2920,29 +2881,25 @@
     "ttyd-flake": {
       "inputs": {
         "flake-utils": [
-          "myFlakes",
           "flake-utils"
         ],
         "hack": "hack",
         "iosevka": "iosevka",
         "jetbrains": "jetbrains",
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ],
         "source-code-pro": "source-code-pro"
       },
       "locked": {
-        "path": "./ttyd-nerd",
+        "path": "flakes/ttyd-nerd",
         "type": "path"
       },
       "original": {
-        "path": "./ttyd-nerd",
+        "path": "flakes/ttyd-nerd",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "user-icon": {
       "flake": false,
@@ -2982,21 +2939,19 @@
     "vicinae-nix": {
       "inputs": {
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ],
         "systems": [
-          "myFlakes",
           "flake-utils",
           "systems"
         ]
       },
       "locked": {
-        "lastModified": 1779754603,
-        "narHash": "sha256-pHIgilXJkISxdoA7p3WF7V/vFmWJNfjTOALSLpmTL4Q=",
+        "lastModified": 1783021095,
+        "narHash": "sha256-vCoQxgOsl38lIF1+23z8mtCZkwNNwjMNhyAHh46FHSk=",
         "owner": "vicinaehq",
         "repo": "vicinae",
-        "rev": "e9b8e1d520d7fde5e3ab4aaff68badeeb61fc8d5",
+        "rev": "5e11767728758d8bf2ccd5a25044c217adcf293c",
         "type": "github"
       },
       "original": {
@@ -3070,25 +3025,21 @@
     "vim-flake": {
       "inputs": {
         "flake-utils": [
-          "myFlakes",
           "flake-utils"
         ],
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ]
       },
       "locked": {
-        "path": "./vim",
+        "path": "flakes/vim",
         "type": "path"
       },
       "original": {
-        "path": "./vim",
+        "path": "flakes/vim",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "vim-ime": {
       "flake": false,
@@ -3109,30 +3060,25 @@
     "vscode-flake": {
       "inputs": {
         "fish-flake": [
-          "myFlakes",
           "fish-flake"
         ],
         "flake-utils": [
-          "myFlakes",
           "flake-utils"
         ],
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": [
-          "myFlakes",
           "nixpkgs"
         ]
       },
       "locked": {
-        "path": "./vscode",
+        "path": "flakes/vscode",
         "type": "path"
       },
       "original": {
-        "path": "./vscode",
+        "path": "flakes/vscode",
         "type": "path"
       },
-      "parent": [
-        "myFlakes"
-      ]
+      "parent": []
     },
     "xdph": {
       "inputs": {

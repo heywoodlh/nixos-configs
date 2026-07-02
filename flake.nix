@@ -912,8 +912,8 @@ rec {
 
         nixos-intel-mac-mini = nixosConfig "workstation" "nixos-intel-mac-mini" {
           imports = [
-            ./nixos/hosts/intel-mac-mini.nix
-            #./nixos/roles/monitoring/osquery.nix
+            #./nixos/hosts/intel-mac-mini.nix
+            /etc/nixos/hardware-configuration.nix
           ];
           swapDevices = [
             {
@@ -926,15 +926,15 @@ rec {
             ${pkgs.pciutils}/bin/setpci -s 00:1f.0 0xa4.b=0
           '';
 
-          heywoodlh.intel-mac = true;
-          heywoodlh.sshd.enable = true;
-          # Automatic LUKS decryption with Yubikey
-          heywoodlh.luks = {
-            enable = false;
-            boot = "/dev/nvme0n1p1";
-            name = "luks";
-            uuid = "4d5af1ae-c207-417b-a0f6-f2edc7de77a2";
-            fido = true;
+          environment.systemPackages = with pkgs; [
+            plex-htpc
+            moonlight-qt
+          ];
+
+          heywoodlh = {
+            nixos.steam-deck.enable = true;
+            intel-mac = true;
+            sshd.enable = true;
           };
         };
 

@@ -3837,6 +3837,30 @@ false
 
 
 
+## heywoodlh\.nixos\.sunshine\.extraConfig
+
+
+
+Extra settings for Sunshine to be placed in ` services.sunshine.settings `\.
+
+
+
+*Type:*
+attribute set
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine.nix)
+
+
+
 ## heywoodlh\.nixos\.sunshine\.user
 
 
@@ -4241,7 +4265,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix\.nix](/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix.nix)
+ - [/nix/store/j2gr8scyw90xav5h67ah6mifvaqkla1y-source/base/stylix\.nix](/nix/store/j2gr8scyw90xav5h67ah6mifvaqkla1y-source/base/stylix.nix)
 
 
 
@@ -4265,7 +4289,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix\.nix](/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix.nix)
+ - [/nix/store/j2gr8scyw90xav5h67ah6mifvaqkla1y-source/base/stylix\.nix](/nix/store/j2gr8scyw90xav5h67ah6mifvaqkla1y-source/base/stylix.nix)
 
 
 
@@ -4289,7 +4313,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix\.nix](/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix.nix)
+ - [/nix/store/j2gr8scyw90xav5h67ah6mifvaqkla1y-source/base/stylix\.nix](/nix/store/j2gr8scyw90xav5h67ah6mifvaqkla1y-source/base/stylix.nix)
 
 
 

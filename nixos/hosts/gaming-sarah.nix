@@ -1,5 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
+with lib;
+
 let
   aveyond = pkgs.writeShellScriptBin "aveyond.sh" ''
     WINEPREFIX=$HOME/.wine \
@@ -42,9 +44,21 @@ in {
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-  heywoodlh.nixos.gaming = {
-    enable = true;
-    console = true;
+  heywoodlh.nixos = {
+    tor.enable = mkForce false;
+    gaming = {
+      enable = true;
+      console = true;
+    };
+    libvirtd.enable = false;
+    # Machine-specific sunshine configuration
+    sunshine.extraConfig = {
+      sunshine_name = "sarah-linux";
+      output_name = 0;
+      encoder = "nvenc";
+      nvenc_preset = 1;
+      csrf_allowed_origins = "https://nixos-gaming-sarah.barn-banana.ts.net:47990,https://192.168.1.196:47990,https://sunshine-sarah.heywoodlh.io";
+    };
   };
 
   #boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
@@ -62,13 +76,6 @@ in {
     aveyond-eans-quest
   ];
 
-  # Machine-specific sunshine configuration
-  services.sunshine.settings = {
-    sunshine_name = "sarah-linux";
-    output_name = 0;
-    encoder = "nvenc";
-    nvenc_preset = 1;
-  };
   networking = {
     interfaces = {
       enp4s0 = {
@@ -76,6 +83,7 @@ in {
       };
     };
     firewall = {
+      interfaces.enp2s0.allowedTCPPorts = [ 47990 ];
       allowedUDPPorts = [
         9
         5353 # shanocast

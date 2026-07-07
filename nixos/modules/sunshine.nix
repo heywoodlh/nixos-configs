@@ -1,5 +1,7 @@
 { pkgs, nixpkgs-sunshine, config, lib, plasma-manager, ... }:
+
 with lib;
+with lib.types;
 
 let
   cfg = config.heywoodlh.nixos.sunshine;
@@ -17,14 +19,21 @@ in {
       description = ''
         Enable heywoodlh sunshine configuration.
       '';
-      type = types.bool;
+      type = bool;
     };
     user = mkOption {
       default = "heywoodlh";
       description = ''
         User for heywoodlh configuration.
       '';
-      type = types.str;
+      type = str;
+    };
+    extraConfig = mkOption {
+      default = {};
+      description = ''
+        Extra settings for Sunshine to be placed in `services.sunshine.settings`.
+      '';
+      type = attrs;
     };
   };
 
@@ -58,7 +67,7 @@ in {
         cudaPackages = pkgs.cudaPackages;
       };
 
-      settings = {
+      settings = cfg.extraConfig // {
         resolutions = "[ 1920x1080 ]";
         system_tray = false;
         fps = "[ 60 ]";
@@ -105,14 +114,10 @@ in {
           }
         ];
       };
-
       autoStart = true;
       capSysAdmin = true;
-      openFirewall = false; # disable on LAN
+      openFirewall = true;
     };
-
-    # Only allow Sunshine over Tailscale
-    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 47990 ];
 
     home-manager = {
       users."${cfg.user}" = { ... }: {

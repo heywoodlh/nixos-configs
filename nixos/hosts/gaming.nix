@@ -40,6 +40,15 @@ with lib;
       enable = true;
       console = true;
     };
+    libvirtd.enable = false;
+    # Machine-specific sunshine configuration
+    sunshine.extraConfig = {
+      sunshine_name = "spencer-linux";
+      output_name = 0;
+      encoder = "nvenc";
+      nvenc_preset = 1;
+      csrf_allowed_origins = "https://nixos-gaming.barn-banana.ts.net:47990,https://192.168.1.231:47990,https://sunshine.heywoodlh.io";
+    };
   };
 
   environment.systemPackages = let
@@ -51,13 +60,7 @@ with lib;
     reboot-windows
     clonehero
   ];
-  # Machine-specific sunshine configuration
-  services.sunshine.settings = {
-    sunshine_name = "nixos-gaming";
-    output_name = 0;
-    encoder = "nvenc";
-    nvenc_preset = 1;
-  };
+
   networking = {
     interfaces = {
       enp4s0 = {
@@ -65,6 +68,7 @@ with lib;
       };
     };
     firewall = {
+      interfaces.enp4s0.allowedTCPPorts = [ 47990 ];
       allowedTCPPorts = [
         59100 # AudioRelay
       ];
@@ -98,8 +102,9 @@ with lib;
     openFirewall = true;
   };
 
+
   home-manager.users.heywoodlh = {
-    heywoodlh.home.llm.lmstudio = false;
+    heywoodlh.home.llm.lmstudio.enable = false;
     home.packages = with pkgs; [
       ytmdesktop
       (pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {})

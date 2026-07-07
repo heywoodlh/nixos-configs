@@ -523,6 +523,7 @@ rec {
       ./nixos/modules/kde.nix
       ./nixos/modules/tor.nix
       ./nixos/modules/libvirtd.nix
+      ./nixos/modules/tv.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -704,6 +705,10 @@ rec {
         }
       ] ++ lib.optionals (machineType == "console") [
         { heywoodlh.console = true; }
+      ] ++ lib.optionals (machineType == "tv") [
+        {
+          heywoodlh.nixos.tv.enable = true;
+        }
       ];
     };
     nixosConfig = nixosConfigWith nixpkgs;
@@ -910,10 +915,9 @@ rec {
           ];
         };
 
-        nixos-intel-mac-mini = nixosConfig "workstation" "nixos-intel-mac-mini" {
+        nixos-intel-mac-mini = nixosConfig "tv" "nixos-intel-mac-mini" {
           imports = [
-            #./nixos/hosts/intel-mac-mini.nix
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/intel-mac-mini.nix
           ];
           swapDevices = [
             {
@@ -926,15 +930,8 @@ rec {
             ${pkgs.pciutils}/bin/setpci -s 00:1f.0 0xa4.b=0
           '';
 
-          environment.systemPackages = with pkgs; [
-            plex-htpc
-            moonlight-qt
-          ];
-
           heywoodlh = {
-            nixos.steam-deck.enable = true;
             intel-mac = true;
-            sshd.enable = true;
           };
         };
 

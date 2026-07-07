@@ -1660,7 +1660,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/i0aaa2ma6pi4f1vhdzk047vf4f3c1xaw-tmux/bin/tmux"
+"/nix/store/gi77i64sg0aw3hyif2zq4dd96wivjgfz-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -3933,6 +3933,54 @@ string
 
 
 
+## heywoodlh\.nixos\.tv\.enable
+
+
+
+Enable heywoodlh TV configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tv\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tv.nix)
+
+
+
+## heywoodlh\.nixos\.tv\.user
+
+
+
+User for heywoodlh configuration\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tv\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tv.nix)
+
+
+
 ## heywoodlh\.nixos\.vmware-workstation
 
 
@@ -4193,7 +4241,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/hq38pdv06prvh1ag1pavhz03syrmk8xk-source/base/stylix\.nix](/nix/store/hq38pdv06prvh1ag1pavhz03syrmk8xk-source/base/stylix.nix)
+ - [/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix\.nix](/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix.nix)
 
 
 
@@ -4217,7 +4265,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/hq38pdv06prvh1ag1pavhz03syrmk8xk-source/base/stylix\.nix](/nix/store/hq38pdv06prvh1ag1pavhz03syrmk8xk-source/base/stylix.nix)
+ - [/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix\.nix](/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix.nix)
 
 
 
@@ -4241,7 +4289,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/hq38pdv06prvh1ag1pavhz03syrmk8xk-source/base/stylix\.nix](/nix/store/hq38pdv06prvh1ag1pavhz03syrmk8xk-source/base/stylix.nix)
+ - [/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix\.nix](/nix/store/ahhk27ghhgq59mh03zki0qn1k20yshbg-source/base/stylix.nix)
 
 
 

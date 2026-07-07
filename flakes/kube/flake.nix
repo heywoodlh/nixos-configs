@@ -375,7 +375,7 @@
         duplicati = mkKubeDrv "duplicati" {
           src = ./templates/duplicati.yaml;
           namespace = "default";
-          image = "docker.io/linuxserver/duplicati:2.2.0";
+          image = "docker.io/linuxserver/duplicati:2.3.0";
           hostfolder = "/media/data-ssd/duplicati";
           nodename = "homelab";
         };

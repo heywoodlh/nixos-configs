@@ -68,7 +68,7 @@ spec:
         kubernetes.io/hostname: homelab
       serviceAccountName: duplicati
       containers:
-        - image: docker.io/linuxserver/duplicati:2.2.0
+        - image: docker.io/linuxserver/duplicati:2.3.0
           name: duplicati
           ports:
           - containerPort: 8200

@@ -102,6 +102,7 @@ in {
         1984 # go2rtc home-assistant
         32001 # immich
         25565 # minecraft bedrock
+        32222 # homebridge eufy security
       ];
       extraCommands = "iptables -t nat -A POSTROUTING -d 10.64.0.1 -p tcp -m tcp --dport 1080 -j MASQUERADE";
     };

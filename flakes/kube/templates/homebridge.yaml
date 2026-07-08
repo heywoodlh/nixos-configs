@@ -29,6 +29,9 @@ spec:
             - name: homebridge
               containerPort: 8581
               protocol: TCP
+            - name: eufy
+              containerPort: 32222
+              protocol: TCP
           resources:
             limits:
               cpu: 2000m
@@ -39,6 +42,8 @@ spec:
           volumeMounts:
             - mountPath: /homebridge
               name: homebridge-data
+          securityContext:
+            privileged: true
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       volumes:
@@ -46,6 +51,18 @@ spec:
           hostPath:
             path: @hostfolder@
             type: DirectoryOrCreate
+        - name: dbus
+          hostPath:
+            path: /var/run/dbus
+            type: DirectoryOrCreate
+        - name: avahi-socket
+          hostPath:
+            path: /var/run/avahi-daemon/socket
+            type: Socket
+        - name: usb-devices
+          hostPath:
+            path: /dev/bus/usb
+            type: Directory
 ---
 apiVersion: v1
 kind: Service

@@ -1034,6 +1034,22 @@ rec {
           imports = [
             ./nixos/hosts/steam-deck.nix
           ];
+          heywoodlh.nixos = {
+            steam-deck.enable = true;
+            gaming.enable = true;
+          };
+        };
+
+        # steam-deck uses Jovian's pinned nixpkgs as the primary nixpkgs so its
+        # custom packages (mesa, pipewire, etc.) have their version requirements met.
+        tv = nixosConfigWith nixpkgs-jovian-nixos "workstation" "tv" {
+          imports = [
+            /etc/nixos/hardware-configuration.nix
+          ];
+          heywoodlh.nixos = {
+            steam-deck.enable = true;
+            gaming.enable = true;
+          };
         };
 
         nixos-gaming =  nixosConfig "workstation" "nixos-gaming" {
@@ -1209,10 +1225,13 @@ rec {
                 viAlias = true;
               };
               environment.systemPackages = with pkgs; [
+                calamares-nixos
+                calamares-nixos-extensions
                 git
                 helix
                 msedit
                 nano
+                nixos-install
                 e2fsprogs
               ];
               services.tailscale.enable = true;

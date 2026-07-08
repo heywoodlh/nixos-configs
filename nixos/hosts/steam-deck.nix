@@ -43,9 +43,4 @@ with lib;
 
   nixpkgs.hostPlatform = mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
-
-  heywoodlh.nixos = {
-    steam-deck.enable = true;
-    gaming.enable = true;
-  };
 }

@@ -28,25 +28,6 @@ in {
       options btusb enable_autosuspend=0
     '';
 
-    services.sunshine = {
-      enable = true;
-      settings = {
-        resolutions = "[ 1920x1080 ]";
-        system_tray = false;
-        fps = "[ 60 ]";
-        av1_mode = 1;
-        back_button_timeout = 2000;
-        origin_web_ui_allowed = "wan";
-      };
-
-      autoStart = true;
-      capSysAdmin = true;
-      openFirewall = false; # disable on LAN
-    };
-
-    # Only allow Sunshine over Tailscale
-    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 47990 ];
-
     services.pipewire.wireplumber.extraConfig."51-hdmi-default" = {
       "monitor.alsa.rules" = [
         {
@@ -56,10 +37,20 @@ in {
       ];
     };
 
+    services.logind.settings.Login = {
+      HandlePowerKey = "hibernate";
+    };
+
     heywoodlh = {
       stylix.enable = true;
       hyprland = lib.mkForce false;
-      nixos.kde.enable = true;
+      nixos = {
+        kde.enable = true;
+        gaming = {
+          enable = true;
+          console = true;
+        };
+      };
       defaults = {
         bluetooth = true;
         audio = true;
@@ -76,7 +67,7 @@ in {
       defaultSession = lib.mkForce "plasma";
       sddm = {
         enable = true;
-        wayland.enable = false;
+        wayland.enable = lib.mkForce false;
       };
     };
     services.displayManager.autoLogin = {
@@ -111,18 +102,15 @@ in {
 
 
     home-manager.users.${cfg.user} = {
-      home.packages = with pkgs; [
-        sunshine
-      ];
       heywoodlh.home = {
         hyprland = lib.mkForce false;
         llm.homelab = lib.mkForce true;
-        autostart = [
-          {
-            name = "flex-launcher";
-            command = "${pkgs.flex-launcher}/bin/flex-launcher";
-          }
-        ];
+        #autostart = [
+        #  {
+        #    name = "flex-launcher";
+        #    command = "${pkgs.flex-launcher}/bin/flex-launcher";
+        #  }
+        #];
       };
 
       home.file.".config/flex-launcher/config.ini".text = ''
@@ -255,15 +243,6 @@ in {
       home.file.".config/fish/config.fish".text = ''
         export XDG_RUNTIME_DIR="/run/user/$(id -u)"
         export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-      '';
-      home.activation.fix-sunshine-service = ''
-        # fix sunshine systemd service
-        if [ ! -e "/home/${cfg.user}/.config/systemd/user/sunshine.service" ]
-        then
-          rm -f /home/${cfg.user}/.config/systemd/user/sunshine.service
-          systemctl --user disable sunshine.service || true
-          systemctl --user enable --now sunshine.service || true
-        fi
       '';
     };
   };

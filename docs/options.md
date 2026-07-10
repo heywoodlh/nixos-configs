@@ -4005,6 +4005,30 @@ false
 
 
 
+## heywoodlh\.nixos\.tv\.remote
+
+
+
+Enable Makima configuration for Air Mouse Remote MX3 Pro\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tv\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tv.nix)
+
+
+
 ## heywoodlh\.nixos\.tv\.user
 
 
@@ -4289,7 +4313,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix\.nix](/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix.nix)
+ - [/nix/store/204738nbin6rrxdwvzwdkgdvv3sc3x01-source/base/stylix\.nix](/nix/store/204738nbin6rrxdwvzwdkgdvv3sc3x01-source/base/stylix.nix)
 
 
 
@@ -4313,7 +4337,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix\.nix](/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix.nix)
+ - [/nix/store/204738nbin6rrxdwvzwdkgdvv3sc3x01-source/base/stylix\.nix](/nix/store/204738nbin6rrxdwvzwdkgdvv3sc3x01-source/base/stylix.nix)
 
 
 
@@ -4337,7 +4361,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix\.nix](/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix.nix)
+ - [/nix/store/204738nbin6rrxdwvzwdkgdvv3sc3x01-source/base/stylix\.nix](/nix/store/204738nbin6rrxdwvzwdkgdvv3sc3x01-source/base/stylix.nix)
 
 
 

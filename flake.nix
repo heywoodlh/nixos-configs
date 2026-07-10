@@ -464,7 +464,6 @@ rec {
       ./home/modules/linux-autostart.nix
       ./home/modules/onepassword.nix
       ./home/modules/bluetuith.nix
-      ./home/modules/moonlight.nix
       ./home/modules/kde-windows.nix
     ];
     macosHomeModules = [
@@ -524,6 +523,7 @@ rec {
       ./nixos/modules/tor.nix
       ./nixos/modules/libvirtd.nix
       ./nixos/modules/tv.nix
+      ./nixos/modules/moonlight.nix
     ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
@@ -1034,22 +1034,15 @@ rec {
           imports = [
             ./nixos/hosts/steam-deck.nix
           ];
-          heywoodlh.nixos = {
-            steam-deck.enable = true;
-            gaming.enable = true;
-          };
+          heywoodlh.nixos.steam-deck.enable = true;
         };
 
         # steam-deck uses Jovian's pinned nixpkgs as the primary nixpkgs so its
         # custom packages (mesa, pipewire, etc.) have their version requirements met.
-        tv = nixosConfigWith nixpkgs-jovian-nixos "workstation" "tv" {
+        tv = nixosConfigWith nixpkgs-jovian-nixos "tv" "tv" {
           imports = [
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/tv.nix
           ];
-          heywoodlh.nixos = {
-            steam-deck.enable = true;
-            gaming.enable = true;
-          };
         };
 
         nixos-gaming =  nixosConfig "workstation" "nixos-gaming" {
@@ -1103,7 +1096,10 @@ rec {
           ];
           heywoodlh = {
             sshd.enable = true;
-            nixos.gaming.enable = false;
+            nixos = {
+              gaming.enable = false;
+              moonlight.enable = true;
+            };
             apple-silicon = {
               enable = true;
               cachefile = "kernelcache.release.mac13g";
@@ -1128,8 +1124,6 @@ rec {
           };
 
           home-manager.users.heywoodlh = {
-            heywoodlh.home.moonlight = true;
-
             wayland.windowManager.hyprland.extraConfig = ''
               # change monitor to high resolution, the last argument is the scale factor
               monitor = , highres, auto, 1

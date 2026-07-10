@@ -5,6 +5,9 @@ with lib.types;
 
 let
   cfg = config.heywoodlh.home.onepassword;
+  op-setup = pkgs.writeShellScriptBin "op-setup" ''
+    ${cfg.package}/bin/op account add
+  '';
 in {
   options = {
     heywoodlh.home.onepassword = {
@@ -51,6 +54,7 @@ in {
   config = mkIf cfg.enable {
     heywoodlh.home.onepassword.extraArgs = optionalString (cfg.gpu == false) "--disable-gpu";
     home.packages = [
+      op-setup
       cfg.wrapper
     ];
   };

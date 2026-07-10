@@ -3014,30 +3014,6 @@ false
 
 
 
-## heywoodlh\.home\.moonlight
-
-
-
-Use more recent build of Moonlight\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-false
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/moonlight\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/moonlight.nix)
-
-
-
 ## heywoodlh\.home\.onepassword\.enable
 
 
@@ -3668,6 +3644,54 @@ string
 
 
 
+## heywoodlh\.nixos\.moonlight\.enable
+
+
+
+Install Moonlight-QT Flatpak for\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/moonlight\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/moonlight.nix)
+
+
+
+## heywoodlh\.nixos\.moonlight\.user
+
+
+
+User to install Moonlight-QT Flatpak for\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/moonlight\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/moonlight.nix)
+
+
+
 ## heywoodlh\.nixos\.nvidia-patch
 
 
@@ -4265,7 +4289,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/gjdbk92bppqzqqph625rh7v4hb6r035i-source/base/stylix\.nix](/nix/store/gjdbk92bppqzqqph625rh7v4hb6r035i-source/base/stylix.nix)
+ - [/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix\.nix](/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix.nix)
 
 
 
@@ -4289,7 +4313,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/gjdbk92bppqzqqph625rh7v4hb6r035i-source/base/stylix\.nix](/nix/store/gjdbk92bppqzqqph625rh7v4hb6r035i-source/base/stylix.nix)
+ - [/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix\.nix](/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix.nix)
 
 
 
@@ -4313,7 +4337,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/gjdbk92bppqzqqph625rh7v4hb6r035i-source/base/stylix\.nix](/nix/store/gjdbk92bppqzqqph625rh7v4hb6r035i-source/base/stylix.nix)
+ - [/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix\.nix](/nix/store/24s0ir94nfm661pz62dvkmy617ib38md-source/base/stylix.nix)
 
 
 

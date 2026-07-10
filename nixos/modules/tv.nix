@@ -1,9 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, nur, dark-wallpaper, light-wallpaper, ... }:
 with lib;
 
 let
   cfg = config.heywoodlh.nixos.tv;
-
 in {
   options.heywoodlh.nixos.tv = {
     enable = mkOption {
@@ -23,227 +22,119 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # Fix bluetooth continuously resetting on Intel Mac Mini
-    boot.extraModprobeConfig = ''
-      options btusb enable_autosuspend=0
-    '';
-
-    services.pipewire.wireplumber.extraConfig."51-hdmi-default" = {
-      "monitor.alsa.rules" = [
-        {
-          matches = [ { "node.name" = "~alsa_output.*hdmi.*"; } ];
-          actions.update-props."priority.session" = 2000;
-        }
-      ];
+    environment.systemPackages = with pkgs; [
+      libcec
+    ];
+    hardware.graphics = {
+      enable = true;
+      enable32Bit = true;
     };
-
+    services.fwupd.enable = lib.mkForce false;
+    powerManagement = {
+      enable = true;
+      resumeCommands = "${pkgs.bluez}/bin/bluetoothctl power on";
+    };
+    hardware.bluetooth.powerOnBoot = true;
+    services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{power/wakeup}="enabled"
+    '';
     services.logind.settings.Login = {
-      HandlePowerKey = "hibernate";
+      IdleAction = "suspend";
+      IdleActionSec = "15min";
     };
 
     heywoodlh = {
-      stylix.enable = true;
-      hyprland = lib.mkForce false;
-      nixos = {
-        kde.enable = true;
-        gaming = {
-          enable = true;
-          console = true;
-        };
-      };
       defaults = {
-        bluetooth = true;
         audio = true;
-        keyring = true;
+        bluetooth = true;
         quietBoot = true;
       };
-      sshd.enable = true;
-    };
-
-
-    # Use KDE autologin
-    services.displayManager = {
-      gdm.enable = lib.mkForce false;
-      defaultSession = lib.mkForce "plasma";
-      sddm = {
-        enable = true;
-        wayland.enable = lib.mkForce false;
+      nixos = {
+        steam-deck.enable = true;
+        cachyos-kernel.enable = true;
       };
     };
-    services.displayManager.autoLogin = {
-      enable = true;
-      user = cfg.user;
-    };
 
-    boot.plymouth.enable = true;
+    # We don't need Steam Deck tweaks
+    jovian.devices.steamdeck.enable = lib.mkForce false;
 
-    environment.systemPackages = with pkgs; [
-      flex-launcher
-      plex-htpc
-      moonlight-qt
-    ];
+    systemd.user.services.cec-volume-sync = {
+      description = "Sync PipeWire volume to TV via CEC";
+      after = [ "pipewire-pulse.service" "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = pkgs.writeShellScript "cec-volume-sync" ''
+          get_volume() {
+            ${pkgs.pulseaudio}/bin/pactl get-sink-volume @DEFAULT_SINK@ \
+              | grep -o '[0-9]*%' | head -1 | tr -d '%'
+          }
 
-    # Gamepad support in userland
-    services.udev = {
-      packages = with pkgs; [
-        game-devices-udev-rules
-      ];
-    };
-    environment.sessionVariables = {
-      SDL_GAMECONTROLLERCONFIG =
-        pkgs.fetchFromGitHub {
-          owner = "mdqinc";
-          repo = "SDL_GameControllerDB";
-          rev = "992a0caf690e32a332a9707c355a4444516a2764";
-          sha256 = "sha256-hv1xtAXpSQlzO1nSUkFaeoth4o0V7aUjzZgqnehezaY=";
-        }
-        + "/gamecontrollerdb.txt";
-    };
+          send_cec() {
+            local cmd=$1 count=$2 i=0
+            {
+              while [ "$i" -lt "$count" ]; do
+                printf '%s\n' "$cmd"
+                i=$((i + 1))
+              done
+              printf 'q\n'
+            } | ${pkgs.libcec}/bin/cec-client -d 1
+          }
 
+          prev_vol=$(get_volume)
 
-    home-manager.users.${cfg.user} = {
-      heywoodlh.home = {
-        hyprland = lib.mkForce false;
-        llm.homelab = lib.mkForce true;
-        #autostart = [
-        #  {
-        #    name = "flex-launcher";
-        #    command = "${pkgs.flex-launcher}/bin/flex-launcher";
-        #  }
-        #];
+          ${pkgs.pulseaudio}/bin/pactl subscribe 2>/dev/null | while IFS= read -r line; do
+            case "$line" in
+              *"'change' on sink"*)
+                curr_vol=$(get_volume)
+                if [ -n "$curr_vol" ] && [ "$curr_vol" != "$prev_vol" ]; then
+                  delta=$((curr_vol - prev_vol))
+                  if [ "$delta" -gt 0 ]; then
+                    send_cec volup "$delta"
+                  elif [ "$delta" -lt 0 ]; then
+                    send_cec voldown "$((0 - delta))"
+                  fi
+                  prev_vol=$curr_vol
+                fi
+                ;;
+            esac
+          done
+        '';
+        Restart = "on-failure";
+        RestartSec = "5s";
       };
+    };
 
-      home.file.".config/flex-launcher/config.ini".text = ''
-        [General]
-        DefaultMenu=Main
-        VSync=true
-        #FPSLimit=
-        #ApplicationTimeout=15
-        OnLaunch=None
-        WrapEntries=false
-        ResetOnBack=false
-        MouseSelect=true
-        InhibitOSScreensaver=false
-        #StartupCmd=
-        #QuitCmd=
-
-        [Background]
-        #Mode=Image
-        #Color=#000000
-        #Image=/example.png
-        #SlideshowDirectory=
-        #SlideshowImageDuration=30
-        #SlideshowTransitionTime=3
-        #ChromaKeyColor=#010101
-        Overlay=false
-        OverlayColor=#000000
-        OverlayOpacity=50%
-
-        [Layout]
-        MaxButtons=8
-        IconSize=256
-        IconSpacing=15%
-        VCenter=50%
-
-        [Titles]
-        Enabled=true
-        Font=${pkgs.flex-launcher}/share/flex-launcher/assets/fonts/OpenSans-Regular.ttf
-        FontSize=36
-        Color=#FFFFFF
-        Opacity=90%
-        Shadows=true
-        ShadowColor=#8aadf4
-        OversizeMode=Shrink
-        Padding=20
-
-        [Highlight]
-        Enabled=true
-        FillColor=#FFFFFF
-        FillOpacity=25%
-        OutlineSize=0
-        OutlineColor=#0000FF
-        OutlineOpacity=100%
-        CornerRadius=30
-        VPadding=30
-        HPadding=30
-
-        [Scroll Indicators]
-        Enabled=true
-        FillColor=#FFFFFF
-        OutlineSize=0
-        OutlineColor=#000000
-        Opacity=100%
-
-        [Clock]
-        Enabled=true
-        ShowDate=true
-        Alignment=Right
-        Font=${pkgs.flex-launcher}/share/flex-launcher/assets/fonts/SourceSansPro-Regular.ttf
-        FontSize=50
-        FontColor=#FFFFFF
-        Shadows=false
-        ShadowColor=#000000
-        Margin=5%
-        Opacity=100%
-        TimeFormat=Auto
-        DateFormat=Auto
-        IncludeWeekday=true
-
-        [Screensaver]
-        Enabled=false
-        IdleTime=300
-        Intensity=70%
-        PauseSlideshow=true
-
-        [Hotkeys]
-        # Esc to quit
-        Hotkey1=#1B;:quit
-
-        [Gamepad]
-        Enabled=true
-        DeviceIndex=-1
-        #ControllerMappingsFile=
-        LStickX-=:left
-        LStickX+=:right
-        #LStickY-=
-        #LStickY+=
-        #RStickX-=
-        #RStickX+=
-        #RStickY-=
-        #RStickY+=
-        #LTrigger=
-        #RTrigger=
-        ButtonA=:select
-        ButtonB=:back
-        #ButtonX=
-        #ButtonY=
-        #ButtonBack=
-        #ButtonGuide=
-        #ButtonStart=
-        #ButtonLeftStick=
-        #ButtonRightStick=
-        #ButtonLeftShoulder=
-        #ButtonRightShoulder=
-        #ButtonDPadUp=
-        #ButtonDPadDown=
-        ButtonDPadLeft=:left
-        ButtonDPadRight=:right
-
-        # Menu configurations
-        [Main]
-        Entry1=Plex;${pkgs.flex-launcher}/share/flex-launcher/assets/icons/plex.png;DISABLE_WAYLAND=1 plex-htpc
-        Entry2=Moonlight;${pkgs.moonlight-qt}/share/icons/hicolor/scalable/apps/moonlight.svg;moonlight
-
-        [System]
-        Entry1=Exit;${pkgs.flex-launcher}/share/flex-launcher/assets/exit.png;:quit
-        Entry2=Shutdown;${pkgs.flex-launcher}/share/flex-launcher/assets/icons/system.png;:shutdown
-        Entry3=Restart;${pkgs.flex-launcher}/share/flex-launcher/assets/icons/restart.png;:restart
-        Entry4=Sleep;${pkgs.flex-launcher}/share/flex-launcher/assets/icons/sleep.png;:sleep
-      '';
-      home.file.".config/fish/config.fish".text = ''
-        export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-        export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-      '';
+    # Home-manager configs
+    home-manager = {
+      extraSpecialArgs = {
+        inherit nur;
+        inherit light-wallpaper;
+        inherit dark-wallpaper;
+      };
+      users.${cfg.user} = { ... }: {
+        imports = [
+          ../../home/desktop.nix # base desktop.nix
+          ../../home/linux/desktop.nix # linux-specific desktop.nix
+        ];
+        heywoodlh.home.onepassword.enable = true;
+        heywoodlh.home.llm = {
+          enable = true;
+          homelab = true;
+          lmstudio.enable = false;
+        };
+        home.packages = let
+          plex-htpc = pkgs.writeShellScriptBin "plex-htpc" ''
+            QT_STYLE_OVERRIDE="" ${pkgs.flatpak}/bin/flatpak run --user tv.plex.PlexHTPC
+          '';
+        in [
+          plex-htpc
+        ];
+        home.activation.install-plex-htpc = ''
+          ${pkgs.flatpak}/bin/flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo &>/dev/null
+          ${pkgs.flatpak}/bin/flatpak install -y --noninteractive --user flathub tv.plex.PlexHTPC
+        '';
+      };
     };
   };
 }

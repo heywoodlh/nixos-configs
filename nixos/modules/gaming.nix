@@ -197,6 +197,7 @@ in {
       protonup-ng
       mangohud
       kill-eso-launcher
+      sgdboop
     ] ++ lib.optionals (system == "x86_64-linux") [
       get-custom-proton
       umu-launcher

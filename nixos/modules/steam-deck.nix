@@ -53,6 +53,10 @@ in {
           enable = true;
           user = cfg.user;
         };
+        moonlight = {
+          enable = true;
+          user = cfg.user;
+        };
       };
     };
 

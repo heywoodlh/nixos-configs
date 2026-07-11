@@ -2465,7 +2465,8 @@
         "vicinae-nix": "vicinae-nix",
         "vidhanix": "vidhanix",
         "vim-flake": "vim-flake",
-        "vscode-flake": "vscode-flake"
+        "vscode-flake": "vscode-flake",
+        "youtube-htpc": "youtube-htpc"
       }
     },
     "rust-analyzer-src": {
@@ -3118,6 +3119,27 @@
       "original": {
         "owner": "hyprwm",
         "repo": "xdg-desktop-portal-hyprland",
+        "type": "github"
+      }
+    },
+    "youtube-htpc": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783731101,
+        "narHash": "sha256-xFx8An/to6n6SeOcPcKtxN+UEAuGo8T1NQJrqoa+OzU=",
+        "owner": "heywoodlh",
+        "repo": "HTPC-YT",
+        "rev": "457a6eb44748c4da087ab74962f4dee66e5e1d07",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "nix-support",
+        "repo": "HTPC-YT",
         "type": "github"
       }
     }

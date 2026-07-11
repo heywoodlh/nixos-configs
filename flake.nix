@@ -346,6 +346,10 @@ rec {
       url = "github:snez/opencode-ssh";
       flake = false;
     };
+    youtube-htpc = {
+      url = "github:heywoodlh/HTPC-YT/nix-support";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {
@@ -404,6 +408,7 @@ rec {
                       nixos-lima,
                       gh-gitignore,
                       opencode-ssh,
+                      youtube-htpc,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {

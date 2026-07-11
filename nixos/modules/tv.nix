@@ -1,9 +1,10 @@
-{ config, pkgs, lib, nur, dark-wallpaper, light-wallpaper, ... }:
+{ config, pkgs, lib, nur, dark-wallpaper, light-wallpaper, youtube-htpc, ... }:
 with lib;
 with lib.types;
 
 let
   cfg = config.heywoodlh.nixos.tv;
+  system = pkgs.stdenv.hostPlatform.system;
 in {
   options.heywoodlh.nixos.tv = {
     enable = mkOption {
@@ -34,7 +35,6 @@ in {
       enable = true;
       enable32Bit = true;
     };
-    services.fwupd.enable = lib.mkForce false;
     powerManagement = {
       enable = true;
       resumeCommands = ''
@@ -62,8 +62,20 @@ in {
       };
     };
 
-    # We don't need Steam Deck tweaks
+    environment.systemPackages = let
+      # produces `htpc-yt`
+      youtube-htpc-bin = pkgs.writeShellScriptBin "youtube-htpc" ''
+        export DISPLAY=:0
+        export XDG_RUNTIME_DIR=/run/user/$(id -u)
+        ${youtube-htpc.packages.${system}.default}/bin/htpc-yt --ozone-platform=x11 --no-sandbox --password-store=basic $@ &>/tmp/youtube.log
+      '';
+    in [
+      youtube-htpc-bin
+    ];
+
+    # Jovian-NixOS tweaks
     jovian.devices.steamdeck.enable = lib.mkForce false;
+    services.fwupd.enable = lib.mkForce false;
 
     # Makima needs access to /dev/input/event* to remap devices
     users.users.${cfg.user}.extraGroups = [ "input" ];

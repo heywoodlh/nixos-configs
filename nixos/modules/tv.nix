@@ -95,7 +95,6 @@ in {
         heywoodlh.home.onepassword.enable = true;
         heywoodlh.home.llm = {
           enable = true;
-          homelab = true;
           lmstudio.enable = false;
         };
         home.packages = let

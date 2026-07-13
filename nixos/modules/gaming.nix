@@ -329,7 +329,6 @@ in {
 
       heywoodlh.home = mkIf cfg.console {
         hyprland = lib.mkForce false;
-        llm.homelab = lib.mkForce true;
         autostart = [
           {
             name = "Steam";

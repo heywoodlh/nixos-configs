@@ -85,6 +85,24 @@ let
       };
     };
   };
+  codexType = submodule {
+    options = {
+      enable = mkOption {
+        default = true;
+        description = ''
+          Configure Codex.
+        '';
+        type = bool;
+      };
+      extraConf = mkOption {
+        default = {};
+        description = ''
+          Extra configuration of `programs.codex.settings`.
+        '';
+        type = attrs;
+      };
+    };
+  };
   opencodeType = submodule {
     options = {
       enable = mkOption {
@@ -198,13 +216,6 @@ in {
         '';
         type = bool;
       };
-      homelab = mkOption {
-        default = false;
-        description = ''
-          This option is only useful to author.
-        '';
-        type = bool;
-      };
       lmstudio = mkOption {
         default = {};
         description = "LM Studio configuration.";
@@ -215,21 +226,17 @@ in {
         description = "Enable local OpenCode configuration.";
         type = opencodeType;
       };
+      codex = mkOption {
+        default = {};
+        description = "Enable Codex configuration.";
+        type = codexType;
+      };
     };
   };
-  config = let
-    system = pkgs.stdenv.hostPlatform.system;
-    op-wrapper = "${myFlakes.packages.${system}.op-wrapper}/bin/op-wrapper";
-    myCodexLitellm = pkgs.writeShellScriptBin "codex-litellm" ''
-      LLM_API_KEY="$(${op-wrapper} item get zvj57fg53iipc4vxgobcer5j4q --fields master-key --reveal)"
-      ${pkgs.codex}/bin/codex --profile "qwen" $@
-    '';
-  in mkIf cfg.enable {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
       github-copilot-cli
       claude-code
-    ] ++ lib.optionals (cfg.homelab) [
-      myCodexLitellm
     ] ++ lib.optionals (cfg.lmstudio.enable) [
       lmstudio
     ];
@@ -247,8 +254,6 @@ in {
           view_image_tool = true;
           shell_tool = true; # enable `/shell`
           apply_patch_freeform = true; # freeform patch syntax
-        } // lib.optionalAttrs (cfg.homelab == true) {
-          js_repl = false;
         };
         history = {
           persistence = "save-all";
@@ -274,23 +279,7 @@ in {
           exclude_tmpdir_env_var = false;
           exclude_slash_tmp = false;
         };
-      } // lib.optionalAttrs (cfg.homelab) {
-        model_provider = "llama";
-        model_providers = {
-          llama = {
-            name = "llama";
-            baseURL = "http://llama-swap.barn-banana.ts.net/v1";
-            envKey = "LLM_API_KEY";
-            wire_api = "responses";
-            stream_idle_timeout_ms = 10000000;
-          };
-        };
-        profiles.qwen = {
-          model = "qwen3.5:9b";
-          model_provider = "llama";
-          web_search = "disabled";
-        };
-      };
+      } // cfg.codex.extraConf;
     };
 
     home.file.".config/opencode/plugins/remote.ts" = {

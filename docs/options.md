@@ -1660,7 +1660,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/gi77i64sg0aw3hyif2zq4dd96wivjgfz-tmux/bin/tmux"
+"/nix/store/i0aaa2ma6pi4f1vhdzk047vf4f3c1xaw-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -2436,11 +2436,35 @@ false
 
 
 
-## heywoodlh\.home\.llm\.homelab
+## heywoodlh\.home\.llm\.codex
 
 
 
-This option is only useful to author\.
+Enable Codex configuration\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.codex\.enable
+
+
+
+Configure Codex\.
 
 
 
@@ -2452,7 +2476,31 @@ boolean
 *Default:*
 
 ```nix
-false
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.codex\.extraConf
+
+
+
+Extra configuration of ` programs.codex.settings `\.
+
+
+
+*Type:*
+attribute set
+
+
+
+*Default:*
+
+```nix
+{ }
 ```
 
 *Declared by:*
@@ -4313,7 +4361,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/5kmlwng5inhpq3zqraksdaffk2k3d8kn-source/base/stylix\.nix](/nix/store/5kmlwng5inhpq3zqraksdaffk2k3d8kn-source/base/stylix.nix)
+ - [/nix/store/88ca0x36y2yhy1kx2dahk9c1c25720p4-source/base/stylix\.nix](/nix/store/88ca0x36y2yhy1kx2dahk9c1c25720p4-source/base/stylix.nix)
 
 
 
@@ -4337,7 +4385,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/5kmlwng5inhpq3zqraksdaffk2k3d8kn-source/base/stylix\.nix](/nix/store/5kmlwng5inhpq3zqraksdaffk2k3d8kn-source/base/stylix.nix)
+ - [/nix/store/88ca0x36y2yhy1kx2dahk9c1c25720p4-source/base/stylix\.nix](/nix/store/88ca0x36y2yhy1kx2dahk9c1c25720p4-source/base/stylix.nix)
 
 
 
@@ -4361,7 +4409,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/5kmlwng5inhpq3zqraksdaffk2k3d8kn-source/base/stylix\.nix](/nix/store/5kmlwng5inhpq3zqraksdaffk2k3d8kn-source/base/stylix.nix)
+ - [/nix/store/88ca0x36y2yhy1kx2dahk9c1c25720p4-source/base/stylix\.nix](/nix/store/88ca0x36y2yhy1kx2dahk9c1c25720p4-source/base/stylix.nix)
 
 
 

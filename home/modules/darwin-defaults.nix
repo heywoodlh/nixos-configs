@@ -46,10 +46,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    heywoodlh.home.llm = {
-      enable = true;
-      homelab = false; # use local ollama instance
-    };
+    heywoodlh.home.llm.enable = true;
 
     home.activation.screenshots = ''
       # Use PNG for screenshot format

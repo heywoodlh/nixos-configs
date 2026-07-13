@@ -190,11 +190,7 @@ in {
         ];
         heywoodlh.home.onepassword.enable = true;
         heywoodlh.home.gnome = mkForce config.heywoodlh.gnome;
-        # Use local ollama instance
-        heywoodlh.home.llm = {
-          enable = true;
-          homelab = false;
-        };
+        heywoodlh.home.llm.enable = true;
       };
     };
   };

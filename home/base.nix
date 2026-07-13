@@ -780,7 +780,6 @@ in {
     helix = {
       enable = true;
       ai = true;
-      homelab = true;
     };
     aerc = {
       enable = true;

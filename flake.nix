@@ -305,7 +305,7 @@ rec {
     };
     nix-cachyos-kernel = {
       url = "github:xddxdd/nix-cachyos-kernel/release";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-nvidia"; # assume cachyos-kernel enabled machines are gaming machines
       inputs.flake-parts.follows = "flake-parts";
       inputs.flake-compat.follows = "devenv/flake-compat";
     };

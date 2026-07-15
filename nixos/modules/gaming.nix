@@ -378,5 +378,13 @@ in {
         };
       };
     };
+
+    # vm.swappiness=150 is a CachyOS tuning for zram; without zram the OOM
+    # killer fires under memory pressure instead of compressing pages.
+    zramSwap = {
+      enable = true;
+      algorithm = "zstd";
+      memoryPercent = 50;
+    };
   };
 }

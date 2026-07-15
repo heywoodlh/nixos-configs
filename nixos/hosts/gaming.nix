@@ -51,13 +51,8 @@ with lib;
     };
   };
 
-  environment.systemPackages = let
-    reboot-windows = pkgs.writeShellScriptBin "reboot-windows" ''
-      sudo ${pkgs.systemd}/bin/systemctl --boot-loader-entry=auto-windows reboot
-    '';
-  in with pkgs; [
+  environment.systemPackages = with pkgs; [
     steam-run
-    reboot-windows
     clonehero
   ];
 
@@ -81,18 +76,18 @@ with lib;
   };
   fileSystems."/mnt/hdd0" = {
     device = "/dev/disk/by-uuid/2292D29C92D273AF";
-    fsType = "ntfs-3g";
+    fsType = "ntfs3";
     options = [ "rw" "uid=1000" "nofail" ];
   };
   fileSystems."/mnt/ssd0" = {
-    device = "/dev/disk/by-uuid/5D8A245A63983818";
-    fsType = "ntfs-3g";
-    options = [ "rw" "uid=1000" "nofail" ];
+    device = "/dev/disk/by-uuid/8eaf3cfd-1647-4454-9ad0-da35433582dd";
+    fsType = "ext4";
+    options = [ "defaults" "noatime" "nofail" ];
   };
-  fileSystems."/mnt/windows" = {
-    device = "/dev/disk/by-uuid/360C7E6F0C7E29CF";
-    fsType = "ntfs-3g";
-    options = [ "rw" "uid=1000" "nofail" ];
+  fileSystems."/mnt/internal" = {
+    device = "/dev/disk/by-uuid/04c84a72-52b7-4de9-b736-a3d79d1ed80f";
+    fsType = "ext4";
+    options = [ "defaults" "noatime" "nofail" ];
   };
 
   # Allow mdns for shanocast

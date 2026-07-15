@@ -1,0 +1,265 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "hermes-agent"
+  namespace: "machine-learning"
+spec:
+  itemPath: "vaults/Kubernetes/items/frv6yulia3fh3jpuzfwnvjfmwy"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: hermes-agent
+rules:
+# Core API resources (read-only, no exec)
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets", "persistentvolumes", "persistentvolumeclaims", "nodes", "namespaces", "events", "endpoints", "serviceaccounts"]
+  verbs: ["get", "list", "watch"]
+# Apps API resources
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets", "statefulsets", "daemonsets"]
+  verbs: ["get", "list", "watch"]
+# Extensions API resources
+- apiGroups: ["extensions"]
+  resources: ["deployments", "replicasets", "daemonsets", "ingresses"]
+  verbs: ["get", "list", "watch"]
+# Networking API resources
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses", "networkpolicies", "ingressclasses"]
+  verbs: ["get", "list", "watch"]
+# RBAC API resources
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+  verbs: ["get", "list", "watch"]
+# Metrics API resources
+- apiGroups: ["metrics.k8s.io"]
+  resources: ["pods", "nodes"]
+  verbs: ["get", "list"]
+# Custom Resource Definitions
+- apiGroups: ["apiextensions.k8s.io"]
+  resources: ["customresourcedefinitions"]
+  verbs: ["get", "list", "watch"]
+# Storage API resources
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses", "volumeattachments"]
+  verbs: ["get", "list", "watch"]
+# Batch API resources
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch"]
+# Autoscaling API resources
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["get", "list", "watch"]
+# Policy API resources
+- apiGroups: ["policy"]
+  resources: ["poddisruptionbudgets", "podsecuritypolicies"]
+  verbs: ["get", "list", "watch"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: hermes-agent
+  namespace: machine-learning
+subjects:
+- kind: ServiceAccount
+  name: hermes-agent
+  namespace: machine-learning
+roleRef:
+  kind: ClusterRole
+  name: hermes-agent
+  apiGroup: rbac.authorization.k8s.io
+---
+# Namespace-scoped Role: grants pod exec access ONLY within machine-learning
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: hermes-agent-exec
+  namespace: machine-learning
+rules:
+- apiGroups: [""]
+  resources: ["pods/exec", "pods/attach"]
+  verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hermes-agent-exec
+  namespace: machine-learning
+subjects:
+- kind: ServiceAccount
+  name: hermes-agent
+  namespace: machine-learning
+roleRef:
+  kind: Role
+  name: hermes-agent-exec
+  apiGroup: rbac.authorization.k8s.io
+---
+# Namespace-scoped Role: grants full access within sandbox namespace for testing
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: hermes-agent-sandbox-admin
+  namespace: sandbox
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hermes-agent-sandbox-admin
+  namespace: sandbox
+subjects:
+- kind: ServiceAccount
+  name: hermes-agent
+  namespace: machine-learning
+roleRef:
+  kind: Role
+  name: hermes-agent-sandbox-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hermes-agent
+  namespace: machine-learning
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hermes-agent
+  name: hermes-agent
+  namespace: machine-learning
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hermes-agent
+  template:
+    metadata:
+      labels:
+        app: hermes-agent
+    spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
+      dnsPolicy: "Default"
+      serviceAccountName: hermes-agent
+      hostname: hermes-agent
+      containers:
+        - image: docker.io/heywoodlh/hermes-agent:2026.4.30
+          imagePullPolicy: Always
+          name: hermes-agent
+          securityContext:
+            capabilities:
+              add:
+                - SYS_ADMIN # for rootless podman
+          resources:
+            limits:
+              github.com/fuse: 1 # FUSE for rootless podman
+          volumeMounts:
+            - name: hermes-agent-nix
+              mountPath: /nix
+            - name: hermes-agent-home
+              mountPath: /home/nix
+            - name: hermes-supervisord
+              mountPath: /etc/supervisor/conf.d
+            - name: signal-cli-config
+              mountPath: /home/nix/.config/signal-cli
+            - name: signal-cli-local
+              mountPath: /home/nix/.local/share/signal-cli
+            - name: flows
+              mountPath: /flows
+              readOnly: true
+            - name: logs
+              mountPath: /logs
+              readOnly: true
+            - name: syncthing
+              mountPath: /syncthing
+              readOnly: true
+            - name: syncthing-opt-hermes
+              mountPath: /syncthing/opt/hermes
+            - name: syncthing-notes-pro-hermes
+              mountPath: /syncthing/notes-pro/hermes
+          env:
+            - name: HTTP_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hermes-agent
+                  key: username
+            - name: HTTP_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hermes-agent
+                  key: password
+          ports:
+            - name: hermes-ui
+              containerPort: 8080
+              protocol: TCP
+      volumes:
+        - name: hermes-agent-nix
+          hostPath:
+            path: /media/data-ssd/hermes-agent/nix
+            type: DirectoryOrCreate
+        - name: hermes-agent-home
+          hostPath:
+            path: /media/data-ssd/hermes-agent/home
+            type: DirectoryOrCreate
+        - name: hermes-supervisord
+          hostPath:
+            path: /media/data-ssd/hermes-agent/hermes-supervisord
+            type: DirectoryOrCreate
+        - name: signal-cli-config
+          hostPath:
+            path: /media/data-ssd/hermes-agent/hermes-signal-cli/config
+            type: DirectoryOrCreate
+        - name: signal-cli-local
+          hostPath:
+            path: /media/data-ssd/hermes-agent/hermes-signal-cli/local
+            type: DirectoryOrCreate
+        - name: flows
+          hostPath:
+            path: /flows
+            type: DirectoryOrCreate
+        - name: logs
+          hostPath:
+            path: /logs
+            type: DirectoryOrCreate
+        - name: syncthing
+          hostPath:
+            path: /media/data_pool/syncthing
+            type: Directory
+        - name: syncthing-opt-hermes
+          hostPath:
+            path: /media/data_pool/syncthing/opt/hermes
+            type: DirectoryOrCreate
+        - name: syncthing-notes-pro-hermes
+          hostPath:
+            path: /media/data_pool/syncthing/notes-pro/hermes
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hermes
+  namespace: machine-learning
+  labels:
+    app: hermes-agent
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "hermes"
+    tailscale.com/tags: "tag:adminhttp"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: hermes-ui
+  selector:
+    app: hermes-agent

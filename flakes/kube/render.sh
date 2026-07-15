@@ -7,7 +7,7 @@ applications=(
   "attic"
   "argo"
   "beeper-bridges"
-  "claude-code-webui"
+  "hermes-agent"
   "cloudflared"
   "coredns"
   "comfyui"

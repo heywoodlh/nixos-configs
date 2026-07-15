@@ -307,15 +307,6 @@
           replicas = 1;
           image = "docker.io/heywoodlh/dev:2026_01_snapshot";
         };
-        claude-code-webui = mkKubeDrv "claude-code-webui" {
-          src = ./templates/claude-code-webui.yaml;
-          namespace = "machine-learning";
-          image = "docker.io/heywoodlh/claude-code-webui:0.1.56";
-          hermes_image = "docker.io/heywoodlh/hermes-agent:2026.4.30";
-          replicas = 1;
-          hostfolder = "/media/data-ssd/claude-code-webui";
-          nodename = "homelab";
-        };
         cloudflared = mkKubeDrv "cloudflared" {
           src = ./templates/cloudflared.yaml;
           namespace = "cloudflared";
@@ -475,6 +466,15 @@
           namespace = "default";
           image = "docker.io/heywoodlh/heralding:1.0.7";
           replicas = 1;
+        };
+        hermes-agent = mkKubeDrv "hermes-agent" {
+          src = ./templates/hermes-agent.yaml;
+          namespace = "machine-learning";
+          image = "docker.io/heywoodlh/hermes-agent:2026.4.30";
+          replicas = 1;
+          hostfolder = "/media/data-ssd/hermes-agent";
+          syncthing = "/media/data_pool/syncthing";
+          nodename = "homelab";
         };
         home-assistant = mkKubeDrv "home-assistant" {
           src = ./templates/home-assistant.yaml;

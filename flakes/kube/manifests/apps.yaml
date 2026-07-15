@@ -87,27 +87,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: claude-code-webui
-  namespace: argo
-spec:
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argo
-  source:
-    repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
-    targetRevision: HEAD
-    path: flakes/kube/manifests
-    directory:
-      include: "claude-code-webui.yaml"
-  project: default
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
   name: cloudflared
   namespace: argo
 spec:
@@ -435,6 +414,27 @@ spec:
     path: flakes/kube/manifests
     directory:
       include: "healthchecks.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hermes-agent
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "hermes-agent.yaml"
   project: default
   syncPolicy:
     automated:

@@ -201,6 +201,9 @@ spec:
             - name: hermes-ui
               containerPort: 8080
               protocol: TCP
+            - name: hermes-persona
+              containerPort: 8765
+              protocol: TCP
       volumes:
         - name: hermes-agent-nix
           hostPath:
@@ -261,5 +264,26 @@ spec:
       targetPort: 8080
       protocol: TCP
       name: hermes-ui
+  selector:
+    app: hermes-agent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hermes-persona
+  namespace: machine-learning
+  labels:
+    app: hermes-agent
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "voice"
+    tailscale.com/tags: "tag:adminhttp"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8765
+      protocol: TCP
+      name: hermes-persona
   selector:
     app: hermes-agent

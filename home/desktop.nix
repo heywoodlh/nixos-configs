@@ -39,7 +39,7 @@ in {
     in [
       {
         name = "Hermes";
-        command = "${browser} --app=https://voice.heywoodlh.io";
+        command = "${browser} --app=https://voice.heywoodlh.io/?wake=1 --disable-application-cache --media-cache-size=1 --disk-cache-size=1";
       }
     ];
     librewolf = {

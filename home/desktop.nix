@@ -34,6 +34,14 @@ in {
     marp.enable = true;
     ghostty.enable = true;
     cava = pkgs.stdenv.isLinux;
+    applications = let
+      browser = if pkgs.stdenv.isDarwin then "/Applications/Helium.app/Contents/MacOS/Helium" else "${pkgs.chromium}/bin/chromium";
+    in [
+      {
+        name = "Hermes";
+        command = "${browser} --app=https://voice.heywoodlh.io";
+      }
+    ];
     librewolf = {
       enable = true;
       search = "kagi";

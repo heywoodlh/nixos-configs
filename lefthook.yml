@@ -16,4 +16,4 @@ pre-commit:
         git update-index --add ./docs/options.md
     gitleaks:
       run: |
-        gitleaks detect --verbose --redact
+        gitleaks protect --staged --verbose --redact

@@ -1660,7 +1660,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/gi77i64sg0aw3hyif2zq4dd96wivjgfz-tmux/bin/tmux"
+"/nix/store/i0aaa2ma6pi4f1vhdzk047vf4f3c1xaw-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1925,31 +1925,6 @@ boolean
 
 ```nix
 true
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/helix.nix)
-
-
-
-## heywoodlh\.home\.helix\.homelab
-
-
-
-Enable heywoodlh homelab-dependent configuration\.
-Will only be useful to author\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-false
 ```
 
 *Declared by:*
@@ -2367,6 +2342,8 @@ false
 
 ## heywoodlh\.home\.lima\.nixos\.memory
 
+
+
 NixOS VM RAM\.
 
 
@@ -2388,8 +2365,6 @@ signed integer
 
 
 ## heywoodlh\.home\.lima\.nixos\.nixos-rebuild
-
-
 
 Enable ` nixos-rebuild ` wrapper in Lima\.
 Likely should not be enabled on NixOS\.
@@ -4361,7 +4336,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/mr5b0dckssfk8yy1whfn80lph41czzyn-source/base/stylix\.nix](/nix/store/mr5b0dckssfk8yy1whfn80lph41czzyn-source/base/stylix.nix)
+ - [/nix/store/jf4hn0fjpwdgc67chc33l3rk3x5852d8-source/base/stylix\.nix](/nix/store/jf4hn0fjpwdgc67chc33l3rk3x5852d8-source/base/stylix.nix)
 
 
 
@@ -4385,7 +4360,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/mr5b0dckssfk8yy1whfn80lph41czzyn-source/base/stylix\.nix](/nix/store/mr5b0dckssfk8yy1whfn80lph41czzyn-source/base/stylix.nix)
+ - [/nix/store/jf4hn0fjpwdgc67chc33l3rk3x5852d8-source/base/stylix\.nix](/nix/store/jf4hn0fjpwdgc67chc33l3rk3x5852d8-source/base/stylix.nix)
 
 
 
@@ -4409,7 +4384,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/mr5b0dckssfk8yy1whfn80lph41czzyn-source/base/stylix\.nix](/nix/store/mr5b0dckssfk8yy1whfn80lph41czzyn-source/base/stylix.nix)
+ - [/nix/store/jf4hn0fjpwdgc67chc33l3rk3x5852d8-source/base/stylix\.nix](/nix/store/jf4hn0fjpwdgc67chc33l3rk3x5852d8-source/base/stylix.nix)
 
 
 

@@ -17,14 +17,6 @@ in {
         '';
         type = types.bool;
       };
-      homelab = mkOption {
-        default = false;
-        description = ''
-          Enable heywoodlh homelab-dependent configuration.
-          Will only be useful to author.
-        '';
-        type = types.bool;
-      };
       ai = mkOption {
         default = true;
         description = ''
@@ -238,7 +230,7 @@ in {
               ];
               models = {
                 ollama = let
-                  url = if cfg.homelab then "http://ollama.barn-banana.ts.net:11434" else "http://127.0.0.1:11434";
+                  url = "http://127.0.0.1:11434";
                 in {
                   type = "ollama";
                   model = "${cfg.model}";

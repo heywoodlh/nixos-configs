@@ -126,22 +126,22 @@ in {
 
   fileSystems."/mnt/ssd0" = {
     device = "/dev/disk/by-uuid/767C97A37C975D25";
-    fsType = "ntfs-3g";
+    fsType = "ntfs3";
     options = [ "rw" "uid=1000" "nofail" ];
   };
   fileSystems."/mnt/windows" = {
     device = "/dev/disk/by-uuid/C2E61A2DE61A21E9";
-    fsType = "ntfs-3g";
+    fsType = "ntfs3";
     options = [ "rw" "uid=1000" "nofail" ];
   };
   fileSystems."/mnt/hdd0" = {
     device = "/dev/disk/by-uuid/00CA2333CA2323FE";
-    fsType = "ntfs-3g";
+    fsType = "ntfs3";
     options = [ "rw" "uid=1000" "nofail" ];
   };
   fileSystems."/mnt/hdd1" = {
     device = "/dev/disk/by-uuid/3008899808895E2A";
-    fsType = "ntfs-3g";
+    fsType = "ntfs3";
     options = [ "rw" "uid=1000" "nofail" ];
   };
 }

@@ -11,10 +11,13 @@ let
     done
   '';
   fixIntelSymlink = pkgs.writeShellScriptBin "fix-intel-symlink.sh" ''
-    if [ ! -e "/dev/dri/by-path/pci-0000:03:00.0-platform-simple-framebuffer.0-card" ]
+    symlink="/dev/dri/by-path/pci-0000:03:00.0-platform-simple-framebuffer.0-card"
+    if [ -L "$symlink" ] && [ ! -e "$symlink" ]
     then
+      sudo systemctl stop k3s.service
       echo "Removing broken symlink to GPU"
-      sudo rm /dev/dri/by-path/pci-0000:03:00.0-platform-simple-framebuffer.0-card
+      sudo rm "$symlink"
+      sudo systemctl start k3s.service
     fi
   '';
 in {
@@ -128,7 +131,6 @@ in {
     ollama_pull
     nfdump
     runc
-    fixIntelSymlink
   ];
 
   services = {
@@ -145,11 +147,35 @@ in {
   services.cron = {
     enable = true;
     systemCronJobs = [
-      "3 4 * * 7      root    rm -rf /var/lib/cni/networks/cbr0/"
       "0 0 * * *      root    ${ollama_pull}/bin/ollama-pull"
-      "5 4 * * 7      root    shutdown -r now"
       "*/5 * * * *    root    ${fixIntelSymlink}/bin/fix-intel-symlink.sh"
     ];
+  };
+
+  # Weekly k3s maintenance: stop k3s cleanly before CNI cleanup, then restart
+  # Previously done via cron (rm cbr0 at 4:03, reboot at 4:05) which left k3s
+  # in an inconsistent state — etcd vs CNI mismatch required a second manual reboot.
+  systemd.timers."k3s-weekly-maintenance" = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "Sun *-*-* 04:00:00";
+      Unit = "k3s-weekly-maintenance.service";
+      Persistent = true;
+    };
+  };
+
+  systemd.services."k3s-weekly-maintenance" = {
+    description = "Weekly k3s maintenance: stop k3s, clean CNI state, restart k3s";
+    script = ''
+      systemctl stop k3s.service
+      rm -rf /var/lib/cni/networks/cbr0/
+      systemctl start k3s.service
+    '';
+    path = with pkgs; [ systemd coreutils ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
   };
 
   # Resolve too many open files error

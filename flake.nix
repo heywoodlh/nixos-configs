@@ -1122,6 +1122,16 @@ rec {
           # Apple Magic keyboard (makes useless globe key ctrl)
           boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
 
+          # Xbox controller Bluetooth input support for Moonlight
+          boot.kernelModules = [ "hid_microsoft" "uinput" ];
+          services.udev.packages = [
+            (pkgs.writeTextFile {
+              name = "xbox-hidraw-udev-rules";
+              text = ''KERNEL=="hidraw*", TAG+="uaccess"'';
+              destination = "/etc/udev/rules.d/60-xbox-hidraw.rules";
+            })
+          ];
+
           fileSystems."/mnt/m1-mac-mini" = {
             device = "/dev/disk/by-uuid/6968-012B";
             fsType = "exfat";

@@ -815,3 +815,71 @@ spec:
   selector:
     app: openaudible
   type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: seerr
+  name: seerr
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seerr
+  template:
+    metadata:
+      labels:
+        app: seerr
+    spec:
+      securityContext:
+        runAsUser: 995
+        runAsGroup: 995
+        fsGroup: 995
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      containers:
+      - image: ghcr.io/seerr-team/seerr:v3.3.0
+        name: seerr
+        ports:
+        - name: http
+          containerPort: 5055
+        volumeMounts:
+        - name: seerr-config
+          mountPath: /app/config
+        - name: media
+          mountPath: /media/home-media
+        env:
+          - name: TZ
+            value: America/Denver
+      volumes:
+      - name: seerr-config
+        hostPath:
+          path: /media/config/services/seerr
+          type: Directory
+      - name: media
+        hostPath:
+          path: /media/home-media
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: seerr
+  name: seerr
+  namespace: media
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "seerr"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: seerr
+  type: ClusterIP

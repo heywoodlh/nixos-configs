@@ -618,6 +618,8 @@
           qbittorrent_hostfolder = "/media/config/services/qbittorrent";
           openaudible_image = "docker.io/openaudible/openaudible:latest";
           openaudible_hostfolder = "/media/config/services/openaudible";
+          seerr_image = "ghcr.io/seerr-team/seerr:v3.3.0";
+          seerr_hostfolder = "/media/config/services/seerr";
           media_hostfolder = "/media/home-media";
           nodename = "homelab";
         };

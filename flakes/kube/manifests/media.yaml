@@ -776,8 +776,10 @@ spec:
         - name: http
           containerPort: 3000
         volumeMounts:
+        - name: openaudible-app
+          mountPath: /app/OpenAudible
         - name: openaudible-config
-          mountPath: /config/OpenAudible
+          mountPath: /config
         - name: media
           mountPath: /media/home-media
         env:
@@ -786,6 +788,10 @@ spec:
           - name: PGID
             value: "995"
       volumes:
+      - name: openaudible-app
+        hostPath:
+          path: /media/config/services/openaudible/OpenAudible
+          type: Directory
       - name: openaudible-config
         hostPath:
           path: /media/config/services/openaudible

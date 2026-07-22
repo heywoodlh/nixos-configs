@@ -34,6 +34,9 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = let
       moonlight-qt-unstable = pkgs.writeShellScriptBin "moonlight" ''
+        export DISPLAY=:0
+        export XDG_RUNTIME_DIR=/run/user/$(id -u)
+        export QT_QPA_PLATFORM=xcb
         ${pkgs.flatpak}/bin/flatpak --user run com.moonlight_stream.Moonlight
       '';
     in [

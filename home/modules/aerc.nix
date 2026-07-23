@@ -17,6 +17,10 @@ let
   '';
   cred = pkgs.writeShellScript "cred.sh" ''
     mkdir -p ~/.config/aerc
+
+    # Remove file if empty
+    [[ -s ~/.config/aerc/protonmail.txt ]] || rm -f ~/.config/aerc/protonmail.txt
+
     if [[ ! -e ~/.config/aerc/protonmail.txt ]]
     then
       ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge' > ~/.config/aerc/protonmail.txt

@@ -929,7 +929,7 @@
         spindle = mkKubeDrv "spindle" {
           src = ./templates/spindle.yaml;
           namespace = "ci";
-          image = "docker.io/heywoodlh/spindle:c38881b4";
+          image = "docker.io/heywoodlh/spindle:50574018";
           hostfolder = "/media/data-ssd/spindle";
           nodename = "homelab";
         };

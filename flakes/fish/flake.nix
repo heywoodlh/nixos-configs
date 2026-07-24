@@ -384,7 +384,7 @@
 	ghostty-config = ghosttyConf;
         tmux = pkgs.writeShellScriptBin "tmux" ''
           # Include BASH (for appimage to work properly)
-          PATH=${pkgs.bash}/bin:$PATH
+          PATH=${pkgs.bashInteractive}/bin:$PATH
           if env | grep -i en_US
           then
             # If running on normal system

@@ -1155,9 +1155,9 @@ rec {
 
         nixos-usb = nixosConfig "workstation" "nixos-usb" {
           imports = [
-            (nixpkgs + "/nixos/modules/profiles/all-hardware.nix")
             ./nixos/hosts/usb.nix
           ];
+          hardware.enableAllHardware = true;
           boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
 
           # Enable KDE for interoperability amongst machines

@@ -180,7 +180,7 @@ spec:
               mountPath: /run.sh
               subPath: run.sh
       containers:
-      - image: docker.io/linuxserver/plex:1.43.2
+      - image: docker.io/linuxserver/plex:1.43.3
         name: plex
         ports:
         - name: plex
@@ -268,7 +268,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/linuxserver/radarr:5.28.1-nightly
+      - image: docker.io/linuxserver/radarr:6.4.0-nightly
         name: radarr
         ports:
         - name: http
@@ -335,7 +335,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/linuxserver/sonarr:4.0.16-develop
+      - image: docker.io/linuxserver/sonarr:4.0.19
         name: sonarr
         ports:
         - name: http
@@ -403,7 +403,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/linuxserver/sabnzbd:4.5.5
+      - image: docker.io/linuxserver/sabnzbd:5.0.4
         name: sabnzbd
         ports:
         - name: http
@@ -621,7 +621,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/tautulli/tautulli:v2.16.0
+      - image: docker.io/tautulli/tautulli:v2.17.2
         name: tautulli
         ports:
         - name: http
@@ -684,7 +684,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/linuxserver/qbittorrent:5.1.4
+      - image: docker.io/linuxserver/qbittorrent:5.2.3
         name: qbittorrent
         ports:
         - name: http
@@ -748,79 +748,72 @@ spec:
   selector:
     app: qbittorrent
   type: ClusterIP
-# openaudible
+# libation (audible)
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: openaudible
-  name: openaudible
+    app: libation
+  name: libation
   namespace: media
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: openaudible
+      app: libation
   template:
     metadata:
       labels:
-        app: openaudible
+        app: libation
     spec:
+      securityContext:
+        runAsUser: 995
+        runAsGroup: 995
+        fsGroup: 995
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/openaudible/openaudible:latest
-        name: openaudible
+      - image: docker.io/rmcrackan/libation:13.4.9
+        name: libation
+        # For setting up the account initially
+        # I couldn't get this to work, so I just logged in via desktop app and copied `~/.local/share/Libation` (Linux path) contents to `/config` in pod
+        #command: [ "/bin/bash", "-c", "--" ]
+        #args: [ "while true; do sleep 30; done;" ]
+        env:
+        - name: LIBATION_CONFIG_DIR
+          value: /config
+        - name: LIBATION_BOOKS_DIR
+          value: /data
+        - name: LIBATION_DB_DIR
+          value: /db
+        - name: SLEEP_TIME
+          value: 10m
+        - name: PATH
+          value: "/libation:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
         ports:
         - name: http
           containerPort: 3000
         volumeMounts:
-        - name: openaudible-app
-          mountPath: /app/OpenAudible
-        - name: openaudible-config
+        - name: libation-config
           mountPath: /config
-        - name: media
-          mountPath: /media/home-media
-        env:
-          - name: PUID
-            value: "995"
-          - name: PGID
-            value: "995"
+        - name: libation-db
+          mountPath: /db
+        - name: books
+          mountPath: /data
       volumes:
-      - name: openaudible-app
+      - name: libation-config
         hostPath:
-          path: /media/config/services/openaudible/OpenAudible
+          path: /media/config/services/libation/config
           type: Directory
-      - name: openaudible-config
+      - name: libation-db
         hostPath:
-          path: /media/config/services/openaudible
+          path: /media/config/services/libation/db
           type: Directory
-      - name: media
+      - name: books
         hostPath:
-          path: /media/home-media
+          path: /media/home-media/disk2/books
           type: Directory
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: openaudible
-  name: openaudible
-  namespace: media
-  annotations:
-    tailscale.com/expose: "true"
-    tailscale.com/hostname: "openaudible"
-    tailscale.com/tags: "tag:http"
-spec:
-  ports:
-  - name: web-ui
-    port: 80
-    protocol: TCP
-    targetPort: http
-  selector:
-    app: openaudible
-  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment

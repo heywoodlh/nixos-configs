@@ -1,0 +1,206 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "rocketchat"
+  namespace: "@namespace@"
+spec:
+  itemPath: "vaults/Kubernetes/items/tlmzlhvrlrmzxbx6f3ei77sahu"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: rocketchat
+    app.kubernetes.io/instance: rocketchat
+  name: rocketchat
+  namespace: @namespace@
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: rocketchat-clusterrolebinding
+  labels:
+    app.kubernetes.io/name: rocketchat
+    app.kubernetes.io/instance: rocketchat
+subjects:
+  - kind: ServiceAccount
+    name: rocketchat
+    namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: rocketchat-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: rocketchat
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: rocketchat
+    app.kubernetes.io/instance: rocketchat
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rocketchat
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: rocketchat
+    app.kubernetes.io/instance: rocketchat
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: rocketchat
+subjects:
+- kind: ServiceAccount
+  name: rocketchat
+  namespace: @namespace@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocketchat
+  namespace: @namespace@
+  labels:
+    app: rocketchat
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rocketchat
+  template:
+    metadata:
+      labels:
+        app: rocketchat
+    spec:
+      serviceAccountName: rocketchat
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: rocketchat
+        image: "@image@"
+        ports:
+        - name: rocketchat
+          containerPort: 3000
+          protocol: TCP
+        env:
+          - name: MONGO_URL
+            value: "mongodb://rocketchat-db:27017/rocketchat?replicaSet=rs0"
+          - name: MONGO_OPLOG_URL
+            value: "mongodb://rocketchat-db:27017/local?replicaSet=rs0"
+          - name: ROOT_URL
+            value: "https://rocketchat.heywoodlh.io"
+          - name: MAIL_URL
+            valueFrom:
+              secretKeyRef:
+                name: rocketchat
+                key: mail-url
+          - name: ADMIN_NAME
+            value: "Spencer Heywood"
+          - name: ADMIN_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: rocketchat
+                key: handle
+          - name: ADMIN_PASS
+            valueFrom:
+              secretKeyRef:
+                name: rocketchat
+                key: password
+          - name: ADMIN_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: rocketchat
+                key: email
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rocketchat
+  namespace: @namespace@
+  labels:
+    app: rocketchat
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "rocketchat"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  ports:
+  - name: rocketchat
+    port: 80
+    targetPort: rocketchat
+    protocol: TCP
+  selector:
+    app: rocketchat
+---
+# Set up db with: `mongosh --eval "rs.initiate({_id:'rs0',members:[{_id:0,host:'rocketchat-db:27017'}]})"`
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocketchat-db
+  namespace: @namespace@
+  labels:
+    app: rocketchat-db
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rocketchat-db
+  template:
+    metadata:
+      labels:
+        app: rocketchat-db
+    spec:
+      serviceAccountName: rocketchat
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: rocketchat-db
+        image: "@mongodb_image@"
+        args:
+          - "--replSet"
+          - "rs0"
+          - "--oplogSize"
+          - "128"
+        ports:
+        - name: mongo
+          containerPort: 27017
+          protocol: TCP
+        volumeMounts:
+        - name: dbdir
+          mountPath: /data/db
+        env:
+          - name: MONGO_URL
+            value: "mongodb://rocketchat-db:27017/rocketchat?replicaSet=rs0"
+      volumes:
+      - name: dbdir
+        hostPath:
+          path: @hostfolder@/db
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rocketchat-db
+  namespace: @namespace@
+  labels:
+    app: rocketchat-db
+spec:
+  type: ClusterIP
+  ports:
+  - name: rocketchat-db
+    port: 27017
+    targetPort: mongo
+    protocol: TCP
+  selector:
+    app: rocketchat-db

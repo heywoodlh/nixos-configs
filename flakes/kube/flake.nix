@@ -867,6 +867,15 @@
           hostfolder = "/opt/retroarcher";
           replicas = 1;
         };
+        rocketchat = mkKubeDrv "rocketchat" {
+          src = ./templates/rocketchat.yaml;
+          namespace = "family";
+          image = "docker.io/rocketchat/rocket.chat:8.5.1";
+          mongodb_image = "docker.io/mongo:8.2";
+          nodename = "homelab";
+          hostfolder = "/media/services_pool/rocketchat";
+          replicas = 1;
+        };
         rsshub = mkKubeDrv "rsshub" {
           src = ./templates/rsshub.yaml;
           namespace = "default";

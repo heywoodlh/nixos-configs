@@ -65,3 +65,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: ci
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: family

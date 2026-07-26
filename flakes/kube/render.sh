@@ -49,6 +49,7 @@ applications=(
   "prometheus"
   "protonmail-bridge"
   "redm"
+  "rocketchat"
   "rsshub"
   "rustdesk"
   "rustdesk-web"

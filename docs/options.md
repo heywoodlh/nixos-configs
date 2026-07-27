@@ -142,6 +142,94 @@ string
 
 
 
+## heywoodlh\.apple-silicon\.steam
+
+
+
+Enable Asahi Steam configuration\.
+
+
+
+*Type:*
+submodule
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam\.enable
+
+
+
+Enable Steam for Asahi\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam\.memory
+
+
+
+Memory allowed for Steam\. Set to 6144 for 8GB machines\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+0
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam\.user
+
+
+
+User for Steam configuration\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
 ## heywoodlh\.backup\.enable
 
 
@@ -1660,7 +1748,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/gi77i64sg0aw3hyif2zq4dd96wivjgfz-tmux/bin/tmux"
+"/nix/store/i0aaa2ma6pi4f1vhdzk047vf4f3c1xaw-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -2214,8 +2302,6 @@ null
 
 ## heywoodlh\.home\.lima\.enable
 
-
-
 Enable Lima for Virtual Machines\.
 
 
@@ -2365,6 +2451,8 @@ signed integer
 
 
 ## heywoodlh\.home\.lima\.nixos\.nixos-rebuild
+
+
 
 Enable ` nixos-rebuild ` wrapper in Lima\.
 Likely should not be enabled on NixOS\.
@@ -4336,7 +4424,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/m8q1lh1gvd975696igz5wfhx1q91rqkn-source/base/stylix\.nix](/nix/store/m8q1lh1gvd975696igz5wfhx1q91rqkn-source/base/stylix.nix)
+ - [/nix/store/nb5ys83sg8ji81dcslhs79ndn29naswx-source/base/stylix\.nix](/nix/store/nb5ys83sg8ji81dcslhs79ndn29naswx-source/base/stylix.nix)
 
 
 
@@ -4360,7 +4448,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/m8q1lh1gvd975696igz5wfhx1q91rqkn-source/base/stylix\.nix](/nix/store/m8q1lh1gvd975696igz5wfhx1q91rqkn-source/base/stylix.nix)
+ - [/nix/store/nb5ys83sg8ji81dcslhs79ndn29naswx-source/base/stylix\.nix](/nix/store/nb5ys83sg8ji81dcslhs79ndn29naswx-source/base/stylix.nix)
 
 
 
@@ -4384,7 +4472,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/m8q1lh1gvd975696igz5wfhx1q91rqkn-source/base/stylix\.nix](/nix/store/m8q1lh1gvd975696igz5wfhx1q91rqkn-source/base/stylix.nix)
+ - [/nix/store/nb5ys83sg8ji81dcslhs79ndn29naswx-source/base/stylix\.nix](/nix/store/nb5ys83sg8ji81dcslhs79ndn29naswx-source/base/stylix.nix)
 
 
 

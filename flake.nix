@@ -45,31 +45,9 @@ rec {
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # For Steam on Apple Silicon
-    vidhanix = {
-      url = "github:vidhanio/vidhanix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        nixpkgs-lib.follows = "nixpkgs";
-        flake-parts.follows = "flake-parts";
-        home-manager.follows = "home-manager";
-        hyprland.follows = "hyprland";
-        nixos-apple-silicon.follows = "nixos-apple-silicon";
-        stylix.follows = "stylix";
-        systems.follows = "flake-utils/systems";
-        treefmt-nix.follows = "treefmt-nix";
-        git-hooks-nix.follows = "pre-commit-hooks";
-        agenix.follows = "";
-        disko.follows = "";
-        vidhan-fonts.follows = "";
-        vscode-extensions.follows = "";
-        spicetify-nix.follows = "";
-        ghostty-shader-playground.follows = "";
-        nixvim.follows = "";
-        impermanence.follows = "";
-        nixcord.follows = "";
-        nix-index-database.follows = "";
-        nix-cachyos-kernel.follows = "";
-      };
+    steam-asahi = {
+      url = "github:sm-idk/steam-asahi";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # only to sync dependents that use nix
     nix = {
@@ -398,7 +376,7 @@ rec {
                       hexstrike-ai,
                       hyprland,
                       nix-on-droid,
-                      vidhanix,
+                      steam-asahi,
                       lanzaboote,
                       nix-cachyos-kernel,
                       spindle-run,
@@ -497,6 +475,8 @@ rec {
       kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
       jovian-nixos.nixosModules.default
+    ] ++ lib.optionals (pkgs.stdenv.isAarch64) [
+      steam-asahi.nixosModules.default
     ];
     myNixOSModules = [
       ./nixos/modules/defaults.nix

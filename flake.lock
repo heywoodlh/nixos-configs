@@ -470,21 +470,6 @@
         "type": "github"
       }
     },
-    "files": {
-      "locked": {
-        "lastModified": 1762767848,
-        "narHash": "sha256-trF2WXzH57uSkA1zeI8FTz8tU6vPYrklkTjh/7DZy/M=",
-        "owner": "mightyiam",
-        "repo": "files",
-        "rev": "2d9d4937e94006ad8f165dfab9dff87cfab7eb2b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mightyiam",
-        "repo": "files",
-        "type": "github"
-      }
-    },
     "firefox-gnome-theme": {
       "flake": false,
       "locked": {
@@ -533,21 +518,6 @@
       "original": {
         "owner": "edolstra",
         "repo": "flake-compat",
-        "type": "github"
-      }
-    },
-    "flake-file": {
-      "locked": {
-        "lastModified": 1773224147,
-        "narHash": "sha256-w9RQyKZSTfqoZPRzIf7H4qVHy2N6uFk1MUU+c1K4c40=",
-        "owner": "vic",
-        "repo": "flake-file",
-        "rev": "97bd69ff570dddccd704077830446ec1ca3a6988",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vic",
-        "repo": "flake-file",
         "type": "github"
       }
     },
@@ -1226,21 +1196,6 @@
       "original": {
         "type": "tarball",
         "url": "https://github.com/IBM/plex/releases/download/@ibm%2Fplex-mono@1.1.0/ibm-plex-mono.zip"
-      }
-    },
-    "import-tree": {
-      "locked": {
-        "lastModified": 1772999353,
-        "narHash": "sha256-dPb0WxUhFaz6wuR3B6ysqFJpsu8txKDPZvS47AT2XLI=",
-        "owner": "vic",
-        "repo": "import-tree",
-        "rev": "545a4df146fce44d155573e47f5a777985acf912",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vic",
-        "repo": "import-tree",
-        "type": "github"
       }
     },
     "indigo": {
@@ -2456,6 +2411,7 @@
         "spindle-run": "spindle-run",
         "ssh-keys": "ssh-keys",
         "stackpkgs": "stackpkgs",
+        "steam-asahi": "steam-asahi",
         "stylix": "stylix",
         "tangled": "tangled",
         "treefmt-nix": "treefmt-nix",
@@ -2463,7 +2419,6 @@
         "user-icon": "user-icon",
         "uv2nix": "uv2nix",
         "vicinae-nix": "vicinae-nix",
-        "vidhanix": "vidhanix",
         "vim-flake": "vim-flake",
         "vscode-flake": "vscode-flake",
         "youtube-htpc": "youtube-htpc"
@@ -2701,6 +2656,26 @@
       "original": {
         "type": "git",
         "url": "https://code.thishorsie.rocks/ryze/stackpkgs"
+      }
+    },
+    "steam-asahi": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783937169,
+        "narHash": "sha256-d+0Bfwtt7HmLW2Usnw9XHA/uyNVHy3G1wT1yNQWuyCs=",
+        "owner": "sm-idk",
+        "repo": "steam-asahi",
+        "rev": "5e538015e267bfd57ccf49e5ed0660ac7fd9f8ea",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sm-idk",
+        "repo": "steam-asahi",
+        "type": "github"
       }
     },
     "stylix": {
@@ -2958,68 +2933,6 @@
       "original": {
         "owner": "vicinaehq",
         "repo": "vicinae",
-        "type": "github"
-      }
-    },
-    "vidhanix": {
-      "inputs": {
-        "agenix": [],
-        "disko": [],
-        "files": "files",
-        "flake-file": "flake-file",
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "ghostty-shader-playground": [],
-        "git-hooks-nix": [
-          "pre-commit-hooks"
-        ],
-        "home-manager": [
-          "home-manager"
-        ],
-        "hyprland": [
-          "hyprland"
-        ],
-        "impermanence": [],
-        "import-tree": "import-tree",
-        "nix-cachyos-kernel": [],
-        "nix-index-database": [],
-        "nixcord": [],
-        "nixos-apple-silicon": [
-          "nixos-apple-silicon"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-lib": [
-          "nixpkgs"
-        ],
-        "nixvim": [],
-        "spicetify-nix": [],
-        "stylix": [
-          "stylix"
-        ],
-        "systems": [
-          "flake-utils",
-          "systems"
-        ],
-        "treefmt-nix": [
-          "treefmt-nix"
-        ],
-        "vidhan-fonts": [],
-        "vscode-extensions": []
-      },
-      "locked": {
-        "lastModified": 1773005477,
-        "narHash": "sha256-zcY4tYJfgJlmhXU31xWLXaf2KUc0euAX1dNkX8vOWr4=",
-        "owner": "vidhanio",
-        "repo": "vidhanix",
-        "rev": "6b12a4420120c766745c3475e11eb1414593e152",
-        "type": "github"
-      },
-      "original": {
-        "owner": "vidhanio",
-        "repo": "vidhanix",
         "type": "github"
       }
     },

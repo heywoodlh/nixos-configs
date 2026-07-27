@@ -198,6 +198,7 @@ in {
       mangohud
       kill-eso-launcher
       sgdboop
+      wl-clipboard
     ] ++ lib.optionals (system == "x86_64-linux") [
       get-custom-proton
       umu-launcher

@@ -20,6 +20,27 @@ let
       sudo systemctl start k3s.service
     fi
   '';
+  k3s-health = pkgs.writeShellScriptBin "k3s-health.sh" ''
+    # Script to check if k3s is healthy, reboot after five minutes if not
+    export KUBECONFIG="''${KUBECONFIG:-/etc/rancher/k3s/k3s.yaml}"
+
+    echo "Using KUBECONFIG: $KUBECONFIG"
+
+    MAX_RETRIES=60
+    for (( i=1; i<=MAX_RETRIES; i++ )); do
+        if sudo --preserve-env=KUBECONFIG kubectl get nodes &> /dev/null
+        then
+          echo "Successfully connected to Kubernetes cluster."
+          exit 0
+        fi
+        if [ $i -lt $MAX_RETRIES ]; then
+          echo "Command failed. Retrying in 10 seconds..."
+          sleep 10
+        fi
+    done
+    echo "Failed to connect to cluster after maximum retries (10 minutes reached). Rebooting."
+    sudo shutdown -r now
+  '';
 in {
   imports =
   [ # Include the results of the hardware scan.
@@ -131,6 +152,7 @@ in {
     ollama_pull
     nfdump
     runc
+    k3s-health
   ];
 
   services = {
@@ -149,12 +171,10 @@ in {
     systemCronJobs = [
       "0 0 * * *      root    ${ollama_pull}/bin/ollama-pull"
       "*/5 * * * *    root    ${fixIntelSymlink}/bin/fix-intel-symlink.sh"
+      "*/5 4-6 * * 0  root    ${k3s-health}/bin/k3s-health.sh"
     ];
   };
 
-  # Weekly k3s maintenance: stop k3s cleanly before CNI cleanup, then restart
-  # Previously done via cron (rm cbr0 at 4:03, reboot at 4:05) which left k3s
-  # in an inconsistent state — etcd vs CNI mismatch required a second manual reboot.
   systemd.timers."k3s-weekly-maintenance" = {
     wantedBy = [ "timers.target" ];
     timerConfig = {

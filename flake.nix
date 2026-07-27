@@ -633,16 +633,7 @@ rec {
             hostname = myHostname;
           };
           home-manager.extraSpecialArgs = inputs;
-          home-manager.users.heywoodlh = { ... }: {
-            imports = [
-              homeModules.heywoodlh.home
-            ];
-          };
-          home-manager.users.root = { ... }: {
-            imports = [
-              homeModules.heywoodlh.home
-            ];
-          };
+          home-manager.sharedModules = [ homeModules.heywoodlh.home ];
           heywoodlh.stylix.enable = true;
         }
         extraConf
@@ -661,6 +652,7 @@ rec {
           nix.settings = {
             auto-optimise-store = true;
           } // nixConfig;
+          home-manager.sharedModules = [ ./home/linux/no-desktop.nix ];
         }
       ] ++ lib.optionals (machineType == "workstation") [
         ./nixos/roles/hardware/printers.nix
@@ -1347,6 +1339,7 @@ rec {
           imports = [
             ./home/linux/no-desktop.nix
           ];
+          programs.starship.enable = lib.mkForce false;
         };
 
         heywoodlh-lima = homeConfig "heywoodlh-lima" "heywoodlh" "/home/heywoodlh.guest" {

@@ -787,5 +787,6 @@ in {
     };
     btop = true;
     syncthing = true;
+    llm.enable = true;
   };
 }

@@ -99,7 +99,36 @@ with lib;
 
 
   home-manager.users.heywoodlh = {
-    heywoodlh.home.llm.lmstudio.enable = false;
+    heywoodlh.home = {
+      llm.lmstudio.enable = false;
+      applications = let
+        jackify = pkgs.writeShellScript "jackify" ''
+          if nix profile list | grep -iq jackify
+          then
+            echo "Jackify already installed!"
+          else
+            notify-send "Downloading Jackify"
+            nix profile add github:keygenesis/Jackify
+          fi
+          if [[ -e $HOME/.nix-profile/bin/jackify ]]
+          then
+            $HOME/.nix-profile/bin/jackify
+          else
+            notify-send "Jackify installation not found."
+            exit 3
+          fi
+        '';
+      in [
+        {
+          name = "Vortex";
+          command = "${pkgs.umu-launcher}/bin/umu-run /mnt/ssd0/proton-apps/vortex/Vortex.exe";
+        }
+        {
+          name = "Jackify";
+          command = "${jackify}";
+        }
+      ];
+    };
     home.packages = with pkgs; [
       ytmdesktop
       (pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {})

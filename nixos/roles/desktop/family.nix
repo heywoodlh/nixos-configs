@@ -1,5 +1,5 @@
 # Configuration loaded for family systems
-{ config, pkgs, home-manager, ... }:
+{ config, pkgs, lib, home-manager, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
@@ -287,8 +287,8 @@ in {
     };
   };
 
-  services.displayManager.ly.enable = pkgs.lib.mkForce false;
-  services.displayManager.gdm.enable = pkgs.lib.mkForce true;
+  services.displayManager.ly.enable = lib.mkForce false;
+  services.displayManager.gdm.enable = lib.mkForce true;
 
   users.extraGroups.lp.members = [ "family" ];
   users.extraGroups.scanner.members = [ "family" ];

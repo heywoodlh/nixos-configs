@@ -490,7 +490,6 @@ rec {
       ./nixos/modules/cosmic.nix
       ./nixos/modules/vm.nix
       ./nixos/modules/sshd.nix
-      ./nixos/modules/asahi.nix
       ./nixos/modules/helix.nix
       ./nixos/modules/luks.nix
       ./nixos/modules/backups.nix
@@ -509,7 +508,10 @@ rec {
       ./nixos/modules/libvirtd.nix
       ./nixos/modules/tv.nix
       ./nixos/modules/moonlight.nix
-    ] ++ commonModules;
+    ] ++ commonModules
+    ++ lib.optionals (pkgs.stdenv.isAarch64) [
+      ./nixos/modules/asahi.nix
+    ];
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
     };
@@ -1142,16 +1144,26 @@ rec {
           };
         };
 
-        family-mac-mini = nixosConfig "workstation" "family-mac-mini" {
+        family = nixosConfig "workstation" "family" {
           imports = [
-            ./nixos/hosts/family-mac-mini.nix
+            /etc/nixos/hardware-configuration.nix
             ./nixos/roles/desktop/family.nix
             ./nixos/roles/monitoring/osquery.nix
           ];
-
-          boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
-          heywoodlh.sshd.enable = true;
-          heywoodlh.intel-mac = true;
+          swapDevices = [{
+            device = "/swap";
+            size = 16 * 1024; # 8GB
+          }];
+          heywoodlh = {
+            sshd.enable = true;
+            nixos = {
+              gaming = {
+                enable = true;
+                user = "family";
+              };
+              nvidia-patch = true;
+            };
+          };
         };
 
         # generic build for initial setup

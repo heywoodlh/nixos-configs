@@ -153,8 +153,6 @@ in {
       "org/gnome/desktop/background" = {
         color-shading = "solid";
         picture-options = "zoom";
-        picture-uri = "${dark-wallpaper}";
-        picture-uri-dark = "${dark-wallpaper}";
       };
 
       "org/gnome/desktop/input-sources" = {
@@ -168,8 +166,6 @@ in {
         enable-hot-corners = false;
         font-antialiasing = "grayscale";
         font-hinting = "slight";
-        gtk-theme = "Nordic";
-        icon-theme = "Nordic-darker";
         toolkit-accessibility = true;
       };
 
@@ -372,10 +368,6 @@ in {
       "org/gnome/shell/extensions/space-bar/behavior" = {
         indicator-style = "current-workspace";
         smart-workspace-names = false;
-      };
-
-      "org/gnome/shell/extensions/user-theme" = {
-        name = "Nordic-darker";
       };
 
       "org/gnome/shell/keybindings" = {

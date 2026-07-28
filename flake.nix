@@ -1146,7 +1146,7 @@ rec {
 
         family = nixosConfig "workstation" "family" {
           imports = [
-            /etc/nixos/hardware-configuration.nix
+            ./nixos/hosts/family.nix
             ./nixos/roles/desktop/family.nix
             ./nixos/roles/monitoring/osquery.nix
           ];

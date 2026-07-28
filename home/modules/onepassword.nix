@@ -6,7 +6,7 @@ with lib.types;
 let
   cfg = config.heywoodlh.home.onepassword;
   op-setup = pkgs.writeShellScriptBin "op-setup" ''
-    ${cfg.package}/bin/op account add
+    ${pkgs._1password-cli}/bin/op account add
   '';
 in {
   options = {

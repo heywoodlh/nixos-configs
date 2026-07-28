@@ -119,6 +119,8 @@ in {
     extraGroups  = [ "networkmanager" ];
   };
 
+  users.users.heywoodlh.extraGroups = ["docker"];
+
   home-manager = {
     backupFileExtension = ".bak";
     users.family = { ... }: {
@@ -137,6 +139,8 @@ in {
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.valvesoftware.SteamLink
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.jeffser.Alpaca
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.vinegarhq.Vinegar
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.vinegarhq.Sober
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.prismlauncher.PrismLauncher
         echo "Completed installation of Flatpaks..."
       '';
       home.file.".local/share/applications/org.mozilla.firefox.desktop".text = ''
@@ -151,6 +155,43 @@ in {
         Icon=org.mozilla.firefox
         Categories=Network;
       '';
+
+      home.file.".local/share/applications/minecraft-java.desktop".text = ''
+        [Desktop Entry]
+        Name=Minecraft: Java
+        GenericName=minecraft
+        Comment=minecraft
+        Exec=${pkgs.flatpak}/bin/flatpak run org.prismlauncher.PrismLauncher
+        Terminal=false
+        Type=Application
+        Icon=${../../../assets/nixos-snowflake.png}
+        Categories=Games;
+      '';
+
+      home.file.".local/share/applications/roblox.desktop".text = ''
+        [Desktop Entry]
+        Name=Roblox
+        GenericName=roblox
+        Comment=roblox
+        Exec=${pkgs.flatpak}/bin/flatpak run org.vinegarhq.Sober
+        Terminal=false
+        Type=Application
+        Icon=${../../../assets/nixos-snowflake.png}
+        Categories=Games;
+      '';
+
+      home.file.".local/share/applications/roblox-studio.desktop".text = ''
+        [Desktop Entry]
+        Name=Roblox Studio
+        GenericName=robloxstudio
+        Comment=roblox studio
+        Exec=${pkgs.flatpak}/bin/flatpak run org.vinegarhq.Vinegar
+        Terminal=false
+        Type=Application
+        Icon=${../../../assets/nixos-snowflake.png}
+        Categories=Games;
+      '';
+
       home.file.".config/autostart/configure-firefox.desktop".text = ''
         [Desktop Entry]
         Name=Configure Firefox
@@ -318,6 +359,11 @@ in {
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
 
+  # Ensure docker-squid uses system-wide docker
+  systemd.services.docker-squid.environment = {
+    DOCKER_HOST = "unix:///var/run/docker.sock";
+  };
+
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
@@ -450,6 +496,14 @@ in {
       ];
       add-cpe-id = "9ad2ce";
     };
+  };
+
+  services.displayManager.defaultSession = lib.mkForce "gnome";
+
+  heywoodlh = {
+    gnome = true;
+    hyprland = lib.mkForce false;
+    cosmic = lib.mkForce false;
   };
 
   #environment.systemPackages = with pkgs; [

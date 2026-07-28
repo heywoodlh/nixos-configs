@@ -38,10 +38,6 @@
       url = "github:truecharts/charts";
       flake = false;
     };
-    open-webui = {
-      url = "github:open-webui/open-webui";
-      flake = false;
-    };
     coredns = {
       url = "github:coredns/helm";
       flake = false;
@@ -80,7 +76,6 @@
     tailscale,
     cloudflared-helm,
     truecharts-helm,
-    open-webui,
     coredns,
     wazuh,
     crossplane,
@@ -748,9 +743,8 @@
         open-webui = mkKubeDrv "open-webui" {
           src = ./templates/open-webui.yaml;
           namespace = "open-webui";
-          webui_image = "ghcr.io/open-webui/open-webui:0.6.41";
-          ollama_image = "docker.io/ollama/ollama:0.13.1";
-          hostfolder = "/opt/open-webui";
+          webui_image = "ghcr.io/open-webui/open-webui:0.11.0";
+          hostfolder = "/media/data-ssd/open-webui";
         };
         palworld = mkKubeDrv "palworld" {
           src = ./templates/palworld.yaml;

@@ -294,22 +294,6 @@
         "type": "github"
       }
     },
-    "open-webui": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1763954193,
-        "narHash": "sha256-rT8lLkjpzSsU/eWa/+ByxhsnULiw5OyPQ8WgDQRCSGc=",
-        "owner": "open-webui",
-        "repo": "open-webui",
-        "rev": "fc05e0a6c5d39da60b603b4d520f800d6e36f748",
-        "type": "github"
-      },
-      "original": {
-        "owner": "open-webui",
-        "repo": "open-webui",
-        "type": "github"
-      }
-    },
     "poetry2nix": {
       "inputs": {
         "flake-utils": [
@@ -356,7 +340,6 @@
         "nixhelm": "nixhelm",
         "nixpkgs": "nixpkgs",
         "nixpkgs-old": "nixpkgs-old",
-        "open-webui": "open-webui",
         "tailscale": "tailscale",
         "truecharts-helm": "truecharts-helm",
         "wazuh": "wazuh"

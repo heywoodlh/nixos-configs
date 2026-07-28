@@ -10,7 +10,6 @@ applications=(
   "hermes-agent"
   "cloudflared"
   "coredns"
-  "comfyui"
   "coredns-kube-system"
   "crossplane"
   "drawio"

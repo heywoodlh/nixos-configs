@@ -129,7 +129,13 @@ with lib;
         }
       ];
     };
-    home.packages = with pkgs; [
+    home.packages = let
+      gamma-install = pkgs.writeShellScriptBin "gamma-install.sh" ''
+        ${pkgs.gamma-launcher}/bin/gamma-launcher full-install --anomaly /mnt/ssd0/STALKER/ANOMALY --gamma /mnt/ssd0/STALKER/GAMMA --cache-directory /mnt/ssd0/STALKER/gamma-launcher-cache
+        ${pkgs.gamma-launcher}/bin/gamma-launcher remove-reshade --anomaly /mnt/ssd0/STALKER/ANOMALY
+      '';
+    in with pkgs; [
+      gamma-install
       ytmdesktop
       (pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {})
     ];

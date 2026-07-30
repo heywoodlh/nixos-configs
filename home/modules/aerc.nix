@@ -76,8 +76,8 @@ in {
         default = "INBOX";
         copy-to = "Sent";
         from = "Spencer Heywood <spencer@heywoodlh.io>";
-        aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>, Spencer Heywood <heywoodlh@heywoodlh.io>";
-        signature-file = "${pkgs.writeText "signature.txt" "- Spencer"}";
+        aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>,LaMar Heywood <wgu@heywoodlh.io>,Spencer Heywood <heywoodlh@heywoodlh.io>";
+        signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
         address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
       };
     };

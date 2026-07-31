@@ -206,7 +206,6 @@ in {
         sudo ${pkgs.nix}/bin/nix-env --list-generations --profile /nix/var/nix/profiles/system
       '';
     in [
-      android-tools
       usbutils
       gptfdisk
       myNixosSwitch

@@ -60,7 +60,6 @@ in {
     ];
     casks = [
       "1password"
-      "android-platform-tools"
       "blockblock"
       "cursorcerer"
       "font-jetbrains-mono-nerd-font"

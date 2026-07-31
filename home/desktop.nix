@@ -12,7 +12,8 @@ let
   '';
   system = pkgs.stdenv.hostPlatform.system;
 in {
-  home.packages = [
+  home.packages = with pkgs; [
+    android-tools
     code-reset
     pkgs.mdp
   ] ++ optionals (pkgs.stdenv.isLinux && pkgs.stdenv.isx86_64) [

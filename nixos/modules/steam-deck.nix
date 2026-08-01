@@ -53,12 +53,12 @@ in {
           enable = true;
           user = cfg.user;
         };
-        moonlight = {
-          enable = true;
-          user = cfg.user;
-        };
       };
     };
+
+    environment.systemPackages = with pkgs; [
+      moonlight-qt
+    ];
 
     stylix.targets.plymouth.enable = mkForce false;
 

@@ -84,9 +84,9 @@ spec:
             type: Directory
         - name: notes-personal
           hostPath:
-            path: /opt/syncthing/notes-personal
+            path: /media/data_pool/syncthing/notes-personal
             type: Directory
         - name: notes-pro
           hostPath:
-            path: /opt/syncthing/notes-pro
+            path: /media/data_pool/syncthing/notes-pro
             type: Directory

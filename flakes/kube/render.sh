@@ -4,6 +4,7 @@ root_dir="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 applications=(
   "actual"
+  "android"
   "attic"
   "argo"
   "beeper-bridges"
@@ -68,6 +69,8 @@ applications=(
 set -ex
 
 gen_list=true
+
+error="false"
 if [[ -n "${1}" ]]
 then
     applications=("${1}")
@@ -79,13 +82,13 @@ fi
 for app in "${applications[@]}"
 do
     #nix build --option substitute false "${root_dir}#${app}"
-    nix build "${root_dir}#${app}"
-    cp ./result "${root_dir}/manifests/${app}.yaml" # Copy file instead of using symlink
-    chmod 644 "${root_dir}/manifests/${app}.yaml"
+    nix build "${root_dir}#${app}" || error="true"
+    cp ./result "${root_dir}/manifests/${app}.yaml" || error="true" # Copy file instead of using symlink
+    chmod 644 "${root_dir}/manifests/${app}.yaml" || error="true"
 
     if [[ "${gen_list}" == true ]]
     then
-cat >> ${root_dir}/manifests/apps.yaml << EOL
+cat >> ${root_dir}/manifests/apps.yaml << EOL || error="true"
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -108,5 +111,12 @@ spec:
       prune: true
       selfHeal: true
 EOL
+    fi
+    # Halt and restore if failure encountered
+    if [[ "${error}" == "true" ]]
+    then
+      printf "Error processing app \"%s\", halting execution and restoring %s/manifests" "${app}" "${root_dir}"
+      git restore "${root_dir}/manifests"
+      exit 1
     fi
 done

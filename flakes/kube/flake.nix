@@ -168,6 +168,16 @@
           };
         });
         "1password-item" = onepassworditem;
+        # Intentionally wrong derivation for testing errors, i.e. `nix build .#invalid`
+        invalid = pkgs.runCommand "invalid" {} "exit 1";
+        android = mkKubeDrv "android" {
+          src = ./templates/android.yaml;
+          namespace = "machine-learning";
+          image = "docker.io/budtmo/docker-android:emulator_14.0_v3.5.2-p0";
+          replicas = 1;
+          hostfolder = "/media/data-ssd/android";
+          nodename = "homelab";
+        };
         arma-reforger = mkKubeDrv "arma-reforger" {
           src = ./templates/arma-reforger.yaml;
           namespace = "gaming";

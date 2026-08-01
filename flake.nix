@@ -437,6 +437,7 @@ rec {
       ./home/modules/cava.nix
       ./home/modules/git.nix
       ./home/modules/syncthing.nix
+      ./home/modules/pandoc.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix

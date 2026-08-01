@@ -55,6 +55,7 @@ in {
     pkgs.xdotool
     pkgs.ghostty
     pkgs.scrcpy
+    pkgs.abiword
     captive-portal
     pkgs-stable.rustdesk-flutter
   ] ++ pkgs.lib.optionals (config.heywoodlh.home.onepassword.enable) [

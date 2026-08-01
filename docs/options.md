@@ -3245,6 +3245,30 @@ package
 
 
 
+## heywoodlh\.home\.pandoc
+
+
+
+Enable heywoodlh pandoc tooling\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/pandoc\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/pandoc.nix)
+
+
+
 ## heywoodlh\.home\.syncthing
 
 
@@ -4424,7 +4448,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/hwsyfvz782l3blbyqpwrikpbpr3xfysa-source/base/stylix\.nix](/nix/store/hwsyfvz782l3blbyqpwrikpbpr3xfysa-source/base/stylix.nix)
+ - [/nix/store/g9vb9l9n7xf5d9g972w1f573b4wwm552-source/base/stylix\.nix](/nix/store/g9vb9l9n7xf5d9g972w1f573b4wwm552-source/base/stylix.nix)
 
 
 
@@ -4448,7 +4472,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/hwsyfvz782l3blbyqpwrikpbpr3xfysa-source/base/stylix\.nix](/nix/store/hwsyfvz782l3blbyqpwrikpbpr3xfysa-source/base/stylix.nix)
+ - [/nix/store/g9vb9l9n7xf5d9g972w1f573b4wwm552-source/base/stylix\.nix](/nix/store/g9vb9l9n7xf5d9g972w1f573b4wwm552-source/base/stylix.nix)
 
 
 
@@ -4472,7 +4496,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/hwsyfvz782l3blbyqpwrikpbpr3xfysa-source/base/stylix\.nix](/nix/store/hwsyfvz782l3blbyqpwrikpbpr3xfysa-source/base/stylix.nix)
+ - [/nix/store/g9vb9l9n7xf5d9g972w1f573b4wwm552-source/base/stylix\.nix](/nix/store/g9vb9l9n7xf5d9g972w1f573b4wwm552-source/base/stylix.nix)
 
 
 

@@ -149,6 +149,7 @@ in {
       wireplumber
       wl-clipboard
       xdg-desktop-portal-hyprland
+      ydotool
     ] ++ [
       screenshotScript
       screenrecordScript
@@ -330,6 +331,7 @@ in {
         exec-once = ${pkgs.dunst}/bin/dunst
         exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
         exec-once = ${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets
+        exec-once = ${pkgs.ydotool}/bin/ydotoold
 
         # DBUS
         exec-once = ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
@@ -492,13 +494,13 @@ in {
         binde = ,l,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 10 0
         binde = ,h,exec,${pkgs.wlrctl}/bin/wlrctl pointer move -10 0
         # Left button
-        binde = ,s,exec,${pkgs.wlrctl}/bin/wlrctl pointer click left
-        binde = ,y,exec,${pkgs.wlrctl}/bin/wlrctl pointer click left
+        binde = ,s,exec,${pkgs.ydotool}/bin/ydotool click 0xC0
+        binde = ,y,exec,${pkgs.ydotool}/bin/ydotool click 0xC0
         # Middle button
-        binde = ,d,exec,${pkgs.wlrctl}/bin/wlrctl pointer click middle
+        binde = ,d,exec,${pkgs.ydotool}/bin/ydotool click 0xC2
         # Right button
-        binde = ,f,exec,${pkgs.wlrctl}/bin/wlrctl pointer click right
-        binde = ,u,exec,${pkgs.wlrctl}/bin/wlrctl pointer click right
+        binde = ,f,exec,${pkgs.ydotool}/bin/ydotool click 0xC1
+        binde = ,u,exec,${pkgs.ydotool}/bin/ydotool click 0xC1
         # Scroll up and down
         binde = ,e,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 10 0
         binde = ,r,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll -10 0

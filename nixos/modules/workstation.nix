@@ -150,6 +150,12 @@ in {
     users.extraGroups.vboxusers.members = [ "${username}" ];
     users.extraGroups.disk.members = [ "${username}" ];
     users.extraGroups.video.members = [ "${username}" ];
+    users.extraGroups.input.members = [ "${username}" ];
+
+    # Allow ydotoold to access /dev/uinput (needed for ydotool pointer click simulation)
+    services.udev.extraRules = ''
+      KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
+    '';
 
     users.users.${username} = {
       packages = with pkgs; [

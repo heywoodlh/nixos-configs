@@ -39,6 +39,7 @@ with lib;
     gaming = {
       enable = true;
       console = true;
+      soulframe = true;
     };
     libvirtd.enable = false;
     # Machine-specific sunshine configuration

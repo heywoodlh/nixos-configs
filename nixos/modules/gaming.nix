@@ -112,6 +112,68 @@ let
           '"${pkgs.python3}/bin/python3" if localplatform.ON_LINUX else "python"'
     '';
   });
+  soulFrameAutoFill = pkgs.writeShellScriptBin "soulframe-autofill.sh" ''
+      PASSFILE="$HOME/.local/share/soulframe.txt"
+      POSFILE="$HOME/.local/share/soulframe-pos.txt"
+
+      if [[ "$1" == "--setup" ]]; then
+        echo "Find the pixel coordinates of the SoulFrame password field."
+        echo "Tip: run 'spectacle -r' and hover over the field — it shows live coordinates."
+        read -rp "X: " click_x
+        read -rp "Y: " click_y
+        echo "$click_x $click_y" > "$POSFILE"
+        echo "Saved password field position: $click_x $click_y"
+        exit 0
+      fi
+
+      if [[ ! -e "$PASSFILE" ]]; then
+        echo "$PASSFILE does not exist. Exiting."
+        exit 1
+      fi
+      if [[ ! -e "$POSFILE" ]]; then
+        echo "No position saved. Run: soulframe-autofill.sh --setup"
+        exit 1
+      fi
+
+      SF_PASS="$(cat $PASSFILE)"
+      click_x=$(awk '{print $1}' "$POSFILE")
+      click_y=$(awk '{print $2}' "$POSFILE")
+
+      export WAYLAND_DISPLAY=wayland-0
+      TMPIMG=$(mktemp /tmp/sf_check.XXXXXX.png)
+      trap 'rm -f "$TMPIMG"' EXIT
+
+      wait_for_login_screen() {
+        while true; do
+          WAYLAND_DISPLAY=wayland-0 ${pkgs.kdePackages.spectacle}/bin/spectacle -b -f -o "$TMPIMG" 2>/dev/null
+          ${pkgs.imagemagick}/bin/magick "$TMPIMG" -gravity SouthEast -crop 35%x35%+0+0 +repage "$TMPIMG" 2>/dev/null
+          if ${pkgs.tesseract}/bin/tesseract "$TMPIMG" stdout 2>/dev/null | grep -qiE "forgot|sign up|signup"; then
+            return 0
+          fi
+          sleep 5
+          echo "$(date) Waiting for login screen..."
+        done
+      }
+
+      while true; do
+        until pgrep -f "Soulframe.x64.exe" > /dev/null 2>&1; do
+          sleep 2
+          echo "Waiting for SoulFrame to launch..."
+        done
+
+        wait_for_login_screen
+
+        echo "Login screen detected — clicking password field and typing password..."
+        ${pkgs.ydotool}/bin/ydotool mousemove --absolute -x "$click_x" -y "$click_y"
+        ${pkgs.ydotool}/bin/ydotool click 0xC0
+        sleep 0.5
+        ${pkgs.ydotool}/bin/ydotool type --key-delay=50 "$SF_PASS"
+        ${pkgs.ydotool}/bin/ydotool key Return
+
+        echo "Done. Exiting."
+        exit 0
+      done
+    '';
 in {
   options.heywoodlh.nixos.gaming = {
     enable = mkOption {
@@ -132,6 +194,13 @@ in {
       default = false;
       description = ''
         Enable heywoodlh dedicated console-like gaming configuration.
+      '';
+      type = types.bool;
+    };
+    soulframe = mkOption {
+      default = false;
+      description = ''
+        Enable tooling around SoulFrame as a non-Steam game.
       '';
       type = types.bool;
     };
@@ -199,6 +268,7 @@ in {
       kill-eso-launcher
       sgdboop
       wl-clipboard
+      tesseract
     ] ++ lib.optionals (system == "x86_64-linux") [
       get-custom-proton
       umu-launcher
@@ -208,6 +278,8 @@ in {
       muvm
       squashfuse
       fexFetcher
+    ] ++ lib.optionals (cfg.soulframe) [
+      soulFrameAutoFill
     ];
 
     # FUSE required for FEX (FEX is part of muvm-steam)
@@ -251,13 +323,17 @@ in {
       '';
       kernelModules = [
         "hid_microsoft" # Xbox One Elite 2 controller driver preferred by Steam
-        "uinput"
         "bfq"
         "ntsync"
+        "uinput"
       ] ++ lib.optionals (system == "aarch64-linux") [
         "fuse"
       ];
     };
+
+    # Input stuff for automation
+    users.users.${cfg.user}.extraGroups = [ "input" ];
+
     services.udev = {
       extraRules = ''
         ACTION=="add|change", KERNEL=="sd[a-z]*", ATTR{queue/rotational}=="1", \
@@ -279,6 +355,11 @@ in {
           name = "ntsync-udev-rules";
           text = ''KERNEL=="ntsync", MODE="0660", TAG+="uaccess"'';
           destination = "/etc/udev/rules.d/70-ntsync.rules";
+        })
+        (pkgs.writeTextFile {
+          name = "uinput-udev-rules";
+          text = ''KERNEL=="uinput", GROUP="input", MODE="0660"'';
+          destination = "/etc/udev/rules.d/70-uinput.rules";
         })
       ];
     };
@@ -336,6 +417,20 @@ in {
             command = "steam -start steam://open/bigpicture";
           }
         ];
+      };
+
+      systemd.user.services.ydotoold = {
+        Unit = {
+          Description = "ydotool daemon";
+          After = [ "graphical-session.target" ];
+        };
+        Service = {
+          ExecStart = "${pkgs.ydotool}/bin/ydotoold";
+          Restart = "always";
+        };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
       };
     };
 

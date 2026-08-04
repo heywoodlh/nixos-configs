@@ -34,11 +34,11 @@ in {
     nix.settings = {
       substituters = [
         "https://attic.xuyh0120.win/lantian"
-        "https://cache.garnix.io"
+        "https://cache.xinux.uz"
       ];
       trusted-public-keys = [
         "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-        "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+        "cache.xinux.uz:BXCrtqejFjWzWEB9YuGB7X2MV4ttBur1N8BkwQRdH+0="
       ];
     };
   };

@@ -111,7 +111,10 @@ in {
   '';
 
   # Use touch ID for sudo auth
-  security.pam.services.sudo_local.touchIdAuth = true;
+  security.pam.services.sudo_local = {
+    enable = true;
+    touchIdAuth = true;
+  };
 
   # Enable firewall
   networking.applicationFirewall = {

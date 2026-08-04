@@ -82,6 +82,8 @@ in {
     ];
     masApps = {
       "Meshtastic" = 1586432531;
+      "Pages" = 361309726;
+      "Numbers" = 361304891;
     };
   };
 }

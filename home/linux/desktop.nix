@@ -57,6 +57,7 @@ in {
     pkgs.scrcpy
     pkgs.abiword
     captive-portal
+  ] ++ pkgs.lib.optionals (system == "x86_64-linux") [
     pkgs-stable.rustdesk-flutter
   ] ++ pkgs.lib.optionals (config.heywoodlh.home.onepassword.enable) [
     config.heywoodlh.home.onepassword.package
@@ -132,6 +133,11 @@ in {
       }
     '';
   };
+
+  home.activation.flatpak = pkgs.lib.optionalString (system == "aarch64-linux") ''
+    ${pkgs.flatpak}/bin/flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.rustdesk.RustDesk
+  '';
 
   # Enable fontconfig
   fonts.fontconfig.enable = true;

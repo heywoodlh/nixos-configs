@@ -34,17 +34,17 @@
     "iosevka": {
       "flake": false,
       "locked": {
-        "lastModified": 1733020388,
-        "narHash": "sha256-qJr0YS8sMg1vK8ZmcSOrlJAvSJHUX5nJCh3BwQWgru8=",
+        "lastModified": 1776829755,
+        "narHash": "sha256-fBTIVnSnm2sOKsmobYFiZZYuIdSnNewefrFEGm0zsQo=",
         "owner": "iosevka-webfonts",
         "repo": "iosevka",
-        "rev": "26bd341f7eacd904c8a76f1e6ec62385bced74a5",
+        "rev": "13f0fec8a7af4f7f8e24df083caff924901f4ea7",
         "type": "github"
       },
       "original": {
         "owner": "iosevka-webfonts",
         "repo": "iosevka",
-        "rev": "26bd341f7eacd904c8a76f1e6ec62385bced74a5",
+        "rev": "13f0fec8a7af4f7f8e24df083caff924901f4ea7",
         "type": "github"
       }
     },

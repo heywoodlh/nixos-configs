@@ -9,7 +9,7 @@
       flake = false;
     };
     iosevka = {
-      url = "github:iosevka-webfonts/iosevka/26bd341f7eacd904c8a76f1e6ec62385bced74a5";
+      url = "github:iosevka-webfonts/iosevka/13f0fec8a7af4f7f8e24df083caff924901f4ea7";
       flake = false;
     };
     source-code-pro = {

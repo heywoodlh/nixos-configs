@@ -409,6 +409,12 @@ in {
         ${get-custom-proton}/bin/proton-custom.sh "CachyOS/proton-cachyos"
       '';
 
+      home.activation.flatpak = pkgs.lib.optionalString (system == "aarch64-linux") ''
+        ${pkgs.flatpak}/bin/flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        # Roblox
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.vinegarhq.Sober
+      '';
+
       heywoodlh.home = mkIf cfg.console {
         hyprland = lib.mkForce false;
         autostart = [

@@ -13,6 +13,7 @@ applications=(
   "coredns"
   "coredns-kube-system"
   "crossplane"
+  "davmail"
   "drawio"
   "duplicati"
   "elastic-cloud-operator"

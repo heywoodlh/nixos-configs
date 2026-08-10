@@ -80,9 +80,17 @@ in {
         signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
         address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
       };
+      #wgu = {
+      #  source = "imap+insecure://lheywo3%40wgu.edu@davmail.barn-banana.ts.net:143";
+      #  outgoing = "smtp+insecure://lheywo3%40wgu.edu@davmail.barn-banana.ts.net:25";
+      #  default = "INBOX";
+      #  copy-to = "Sent";
+      #  from = "LaMar Heywood <lheywo3@wgu.edu>";
+      #  signature-file = "${pkgs.writeText "signature.txt" "- LaMar Heywood"}";
+      #};
     };
 
-    home.packages = with pkgs; lib.optionals (cfg.accounts) [
+    home.packages = with pkgs; [
       khard
     ];
 

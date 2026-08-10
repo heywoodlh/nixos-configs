@@ -1,0 +1,147 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: davmail
+    app.kubernetes.io/instance: davmail
+  name: davmail
+  namespace: @namespace@
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: davmail-clusterrolebinding
+  labels:
+    app.kubernetes.io/name: davmail
+    app.kubernetes.io/instance: davmail
+subjects:
+  - kind: ServiceAccount
+    name: davmail
+    namespace: @namespace@
+roleRef:
+  kind: ClusterRole
+  name: davmail-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: davmail
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: davmail
+    app.kubernetes.io/instance: davmail
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: davmail
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: davmail
+    app.kubernetes.io/instance: davmail
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: davmail
+subjects:
+- kind: ServiceAccount
+  name: davmail
+  namespace: @namespace@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: davmail
+  namespace: @namespace@
+  labels:
+    app: davmail
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: davmail
+  template:
+    metadata:
+      labels:
+        app: davmail
+    spec:
+      serviceAccountName: davmail
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: davmail
+        image: "@image@"
+        ports:
+        - name: kasmvnc
+          containerPort: 3000
+          protocol: TCP
+        - name: smtp
+          containerPort: 1025
+          protocol: TCP
+        - name: pop3
+          containerPort: 1110
+          protocol: TCP
+        - name: imap
+          containerPort: 1143
+          protocol: TCP
+        - name: ldap
+          containerPort: 1389
+          protocol: TCP
+        - name: dav
+          containerPort: 1080
+          protocol: TCP
+        volumeMounts:
+        - name: davmail-config
+          mountPath: /config
+      volumes:
+      - name: davmail-config
+        hostPath:
+          path: @hostfolder@
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: davmail
+  namespace: @namespace@
+  labels:
+    app: davmail
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "davmail"
+    tailscale.com/tags: "tag:davmail"
+spec:
+  type: ClusterIP
+  ports:
+  - name: davmail
+    port: 80
+    targetPort: kasmvnc
+    protocol: TCP
+  - name: smtp
+    port: 25
+    targetPort: smtp
+    protocol: TCP
+  - name: pop3
+    port: 110
+    targetPort: pop3
+    protocol: TCP
+  - name: imap
+    port: 143
+    targetPort: imap
+    protocol: TCP
+  - name: ldap
+    port: 1389
+    targetPort: ldap
+    protocol: TCP
+  - name: dav
+    port: 1080
+    targetPort: dav
+    protocol: TCP
+  selector:
+    app: davmail

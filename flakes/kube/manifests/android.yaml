@@ -71,7 +71,7 @@ spec:
     spec:
       serviceAccountName: android
       securityContext:
-        fsGroup: 1000
+        fsGroup: 1301
       initContainers:
       - name: docker-android-init
         image: docker.io/budtmo/docker-android:emulator_14.0_v3.5.2-p0

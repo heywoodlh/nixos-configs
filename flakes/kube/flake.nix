@@ -361,6 +361,13 @@
           namespace = "upbound-system";
           values = {};
         });
+        davmail = mkKubeDrv "davmail" {
+          src = ./templates/davmail.yaml;
+          namespace = "default";
+          image = "docker.io/heywoodlh/davmail:6.8.1";
+          hostfolder = "/media/data-ssd/davmail";
+          nodename = "homelab";
+        };
         drawio = mkKubeDrv "drawio" {
           src = ./templates/draw-io.yaml;
           namespace = "drawio";

@@ -98,6 +98,19 @@ with lib;
     openFirewall = true;
   };
 
+  systemd.services.ntfsfix-startup = {
+    description = "Fix NTFS dirty bit on /dev/sda1 before mounting";
+    wantedBy = [ "mnt-hdd0.mount" ];
+    before = [ "mnt-hdd0.mount" ];
+    path = with pkgs; [ ntfsprogs util-linux ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      ntfsfix --clear-dirty /dev/sda1
+    '';
+  };
 
   home-manager.users.heywoodlh = {
     heywoodlh.home = {

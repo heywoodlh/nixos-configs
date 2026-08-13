@@ -144,4 +144,71 @@ in {
     fsType = "ntfs3";
     options = [ "rw" "uid=1000" "nofail" ];
   };
+
+  systemd.services = {
+    ntfsfix-ssd0-startup = {
+      description = "Fix NTFS dirty bit on /mnt/ssd0 before mounting";
+      wantedBy = [ "mnt-ssd0.mount" ];
+      before = [ "mnt-ssd0.mount" ];
+      path = with pkgs; [
+        ntfsprogs
+        util-linux
+      ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        ntfsfix --clear-dirty /dev/disk/by-uuid/767C97A37C975D25
+      '';
+    };
+    ntfsfix-windows-startup = {
+      description = "Fix NTFS dirty bit on /mnt/windows before mounting";
+      wantedBy = [ "mnt-windows.mount" ];
+      before = [ "mnt-windows.mount" ];
+      path = with pkgs; [
+        ntfsprogs
+        util-linux
+      ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        ntfsfix --clear-dirty /dev/disk/by-uuid/C2E61A2DE61A21E9
+      '';
+    };
+    ntfsfix-hdd0-startup = {
+      description = "Fix NTFS dirty bit on /mnt/hdd0 before mounting";
+      wantedBy = [ "mnt-hdd0.mount" ];
+      before = [ "mnt-hdd0.mount" ];
+      path = with pkgs; [
+        ntfsprogs
+        util-linux
+      ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        ntfsfix --clear-dirty /dev/disk/by-uuid/00CA2333CA2323FE
+      '';
+    };
+    ntfsfix-hdd1-startup = {
+      description = "Fix NTFS dirty bit on /mnt/hdd1 before mounting";
+      wantedBy = [ "mnt-hdd1.mount" ];
+      before = [ "mnt-hdd1.mount" ];
+      path = with pkgs; [
+        ntfsprogs
+        util-linux
+      ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        ntfsfix --clear-dirty /dev/disk/by-uuid/3008899808895E2A
+      '';
+    };
+  };
 }

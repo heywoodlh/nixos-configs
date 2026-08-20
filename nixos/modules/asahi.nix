@@ -47,9 +47,9 @@ in {
       '';
     };
     firmwarefile = mkOption {
-      default = "all_firmware.tar.gz";
+      default = "firmware.cpio";
       description = ''
-        Asahi Linux all firmware file name in `/boot`.
+        Asahi Linux peripheral firmware file name in `/boot`.
       '';
     };
     hash = let
@@ -66,7 +66,7 @@ in {
           firmware = mkOption {
             description = ''
               Hash for firmware file.
-              Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/all_firmware.tar.gz)`.
+              Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/vendorfw/firmware.cpio)`.
             '';
             default = "";
             type = str;
@@ -91,7 +91,7 @@ in {
         name = cfg.cachefile;
         hash = cfg.hash.cache;
       };
-      allfirmware = {
+      peripheralFirmware = {
         name = cfg.firmwarefile;
         hash = cfg.hash.firmware;
       };

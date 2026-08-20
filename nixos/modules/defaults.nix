@@ -260,12 +260,6 @@ in {
       usbmuxd.enable = true;
     } // optionalAttrs (cfg.syncthing) {
       logind.settings.Login.RuntimeDirectorySize = "10G";
-      syncthing = {
-        enable = cfg.syncthing;
-        user = "${username}";
-        dataDir = "${homeDir}/Sync";
-        configDir = "${homeDir}/.config/syncthing";
-      };
     } // optionalAttrs (cfg.audio) {
       pulseaudio.enable = false;
       pipewire = {

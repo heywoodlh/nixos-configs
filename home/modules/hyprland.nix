@@ -137,7 +137,6 @@ in {
       hyprmon
       kdePackages.polkit-kde-agent-1
       libnotify
-      nordic
       pavucontrol
       playerctl
       procps

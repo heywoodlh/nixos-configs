@@ -55,4 +55,16 @@
     ];
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+
+  # The kyle appleSilicon module sets HAMRADIO = lib.mkForce lib.kernel.no (non-optional),
+  # but this option doesn't exist in the Asahi kernel. Override it with higher priority
+  # (mkOverride 49 beats mkForce's 50) to make it optional and prevent the config build
+  # from failing. Add other options here if future kernel bumps break on them too.
+  boot.kernelPatches = [{
+    name = "asahi-kernel-compat";
+    patch = null;
+    structuredExtraConfig = {
+      HAMRADIO = lib.mkOverride 49 (lib.kernel.option lib.kernel.no);
+    };
+  }];
 }

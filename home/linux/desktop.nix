@@ -46,7 +46,6 @@ in {
     pkgs.keyutils
     pkgs.libnotify #(notify-send)
     pkgs.nixos-install-tools
-    pkgs.nordic
     pkgs.remmina
     pkgs.rofi
     pkgs.tailscale

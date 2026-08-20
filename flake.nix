@@ -18,7 +18,7 @@ rec {
     };
     nvidia-patch = {
       url = "github:icewind1991/nvidia-patch-nixos";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-nvidia";
       inputs.utils.follows = "flake-utils";
     };
     # only to sync dependents that use flake-utils
@@ -27,11 +27,6 @@ rec {
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
-    nixos-apple-silicon = {
-      url = "github:nix-community/nixos-apple-silicon";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "devenv/flake-compat";
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v1.0.0";
@@ -54,7 +49,6 @@ rec {
       url = "github:nixos/nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
       inputs.git-hooks-nix.follows = "pre-commit-hooks";
     };
     # for dependents of crane
@@ -158,6 +152,7 @@ rec {
       inputs.flake-parts.follows = "flake-parts";
       inputs.nix.follows = "nix";
       inputs.git-hooks.follows = "pre-commit-hooks";
+      inputs.flake-compat.follows = "nix/flake-compat";
       inputs.nixd.follows = "";
     };
     kyle = {
@@ -166,13 +161,13 @@ rec {
       inputs.ashell.follows = "ashell";
       inputs.home-manager.follows = "home-manager";
       inputs.nur.follows = "nur";
-      inputs.nixos-apple-silicon.follows = "nixos-apple-silicon";
       inputs.teslamate-src.follows = "";
       inputs.opnix.follows = "";
       inputs.stylix.follows = "";
       inputs.doom-d.follows = "";
       inputs.vscode-server.follows = "";
       inputs.hermes-agent.follows = "";
+      inputs.systems.follows = "flake-utils/systems";
     };
     darwin = {
       url = "github:heywoodlh/nix-darwin/heywoodlh";
@@ -181,7 +176,7 @@ rec {
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs-stable";
-      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
+      inputs.flake-compat.follows = "nix/flake-compat";
     };
     user-icon = {
       url = "https://avatar.tangled.sh/1c796c57a7536e989ab09026df5f0fe7870be6217bc8ae642e48fa449de72f59/did:plc:ycnss4fntzi3rjuueb7loq3x?v=bafkreic";
@@ -199,7 +194,7 @@ rec {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
     # jovian-nixos requires a specific nixpkgs for its custom packages (mesa, pipewire, etc.)
-    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/9ae611a455b90cf061d8f332b977e387bda8e1ca";
+    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/867dcbc30bafe3c862ef88620f2e7a109d7d3be5";
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs-jovian-nixos";
@@ -255,7 +250,7 @@ rec {
     pre-commit-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "nixos-apple-silicon/flake-compat";
+      inputs.flake-compat.follows = "nix/flake-compat";
     };
     hyprland = {
       url = "github:hyprwm/hyprland";
@@ -285,7 +280,7 @@ rec {
       url = "github:xddxdd/nix-cachyos-kernel/release";
       inputs.nixpkgs.follows = "nixpkgs-nvidia"; # assume cachyos-kernel enabled machines are gaming machines
       inputs.flake-parts.follows = "flake-parts";
-      inputs.flake-compat.follows = "devenv/flake-compat";
+      inputs.flake-compat.follows = "nix/flake-compat";
     };
     gomod2nix = {
       url = "github:nix-community/gomod2nix";
@@ -598,7 +593,9 @@ rec {
 
     nixosConfigWith = nixpkgsPkgs: machineType: myHostname: extraConf: nixpkgsPkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = inputs // { inherit inputs; };
+      specialArgs = let
+        mergedInputs = inputs.kyle.inputs // inputs;
+      in mergedInputs // { inputs = mergedInputs; };
       modules = [
         nixosModules.heywoodlh
         home-manager.nixosModules.home-manager
@@ -1086,9 +1083,15 @@ rec {
               hash = {
                 # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/kernelcache.release.mac13g)`
                 cache = "sha256-SYR/EaaIDjeGfvhfzlTqgOihXNQQdBgqJbBJbq+wC9g=";
-                # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/all_firmware.tar.gz)`
-                firmware = "sha256-fJf6nF3bCevhURf45wt0NfqxLfBhrcO50lck/l6uE4o=";
+                # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/vendorfw/firmware.cpio)`
+                firmware = "sha256-Q/WI5j9fltdGN5osDzk66iVkWgS9SpD4dqpHLOSeebc=";
               };
+              # If nixos-rebuild fails with a requireFile error for kernelcache or firmware,
+              # the files need to be manually added to the Nix store before rebuilding:
+              #   nix store add --mode flat --hash-algo sha256 /boot/asahi/kernelcache.release.mac13g
+              #   nix store add --mode flat --hash-algo sha256 /boot/vendorfw/firmware.cpio
+              # If the hashes above no longer match (e.g. after an Asahi update), update them
+              # using the commands in the comments above, then re-run the nix store add commands.
             };
           };
           # Bootloader

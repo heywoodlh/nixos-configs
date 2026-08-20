@@ -74,6 +74,7 @@ in {
         PasswordAuthentication = false;
         AuthenticationMethods = if (cfg.mfa) then "publickey,keyboard-interactive" else "publickey";
         UsePAM = cfg.mfa;
+        AcceptEnv = ["FORCE_TMUX_STATUS"];
       };
       extraConfig = lib.optionalString (config.security.duosec.ssh.enable) ''
         ForceCommand /usr/bin/env login_duo

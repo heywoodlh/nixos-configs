@@ -1949,12 +1949,12 @@
     },
     "nixpkgs-nvidia": {
       "locked": {
-        "lastModified": 1782723713,
-        "narHash": "sha256-oPXCU/SSUokcGaJREHibG1CBX3+s/W7orDWQOZDsEeQ=",
-        "rev": "b5aa0fbd538984f6e3d201be0005b4463d8b09f8",
-        "revCount": 1024265,
+        "lastModified": 1786247143,
+        "narHash": "sha256-8S3Kcxs7D4UtxJxSJZz0m14CGhuW0MxfrIwJxeGWGnQ=",
+        "rev": "279b4a8275f032c566576b3f181fa0f27197f588",
+        "revCount": 1050399,
         "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.1024265%2Brev-b5aa0fbd538984f6e3d201be0005b4463d8b09f8/019f3b54-a452-7bf0-9017-aa0cf4ad1907/source.tar.gz"
+        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.1050399%2Brev-279b4a8275f032c566576b3f181fa0f27197f588/01a01364-0c36-7a91-b20d-31b3a834ddeb/source.tar.gz"
       },
       "original": {
         "type": "tarball",

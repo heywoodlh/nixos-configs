@@ -314,215 +314,227 @@ in {
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.hyprland; # use nixpkgs-provided hyprland
-      configType = "hyprlang";
+      configType = "lua";
       extraConfig = ''
-        # Fix blurry X11 apps, hidpi
-        monitor=,preferred,auto,1
-        env = XCURSOR_SIZE, 24
+        -- Fix blurry X11 apps, hidpi
+        hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+        hl.env("XCURSOR_SIZE", "24")
 
-        general {
-          no_focus_fallback = true
-        }
+        hl.config({
+          general = {
+            no_focus_fallback = true,
+          },
+        })
 
-        # Apps to start on login
-        exec-once = ${pkgs.hyprland}/bin/hyprctl setcursor Adwaita 24
-        exec-once = ${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland
-        exec-once = ${pkgs.dunst}/bin/dunst
-        exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1
-        exec-once = ${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets
-        exec-once = ${pkgs.ydotool}/bin/ydotoold
+        -- Apps to start on login
+        hl.on("hyprland.start", function()
+          hl.exec_cmd("${pkgs.hyprland}/bin/hyprctl setcursor Adwaita 24")
+          hl.exec_cmd("${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland")
+          hl.exec_cmd("${pkgs.dunst}/bin/dunst")
+          hl.exec_cmd("${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1")
+          hl.exec_cmd("${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets")
+          hl.exec_cmd("${pkgs.ydotool}/bin/ydotoold")
 
-        # DBUS
-        exec-once = ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
+          -- DBUS
+          hl.exec_cmd("${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all")
 
-        # Dark mode for apps
-        exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+          -- Workarounds
+          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user hypridle.service")
+          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user ashell.service")
+          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user hyprpaper.service")
+          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user kdeconnect.service")
+        end)
 
-        # Workarounds
-        exec-once = /run/current-system/sw/bin/systemctl restart --user hypridle.service
-        exec-once = /run/current-system/sw/bin/systemctl restart --user ashell.service
-        exec-once = /run/current-system/sw/bin/systemctl restart --user hyprpaper.service
-        exec-once = /run/current-system/sw/bin/systemctl restart --user kdeconnect.service
+        -- Dark mode for apps
+        hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'")
 
-        # Start terminal in special workspace so I can toggle it
-        #exec-once = [workspace special:terminal] ${pkgs.ghostty}/bin/ghostty
-        workspace = special:terminal, on-created-empty:${pkgs.ghostty}/bin/ghostty --font-size=12
+        -- Start terminal in special workspace so I can toggle it
+        hl.workspace_rule({
+          workspace = "special:terminal",
+          on_created_empty = "${pkgs.ghostty}/bin/ghostty --font-size=12",
+        })
 
-        windowrule {
-          name = special-terminal-whitelist
-          match:workspace = s[true]n[e:terminal]
-          match:class = negative:^(com.mitchellh.ghostty|1password|emote)$
-          workspace = previous silent
-        }
+        hl.window_rule({
+          name  = "special-terminal-whitelist",
+          match = {
+            workspace = "s[true]n[e:terminal]",
+            class     = "negative:^(com.mitchellh.ghostty|1password|emote)$",
+          },
+          workspace = "previous silent",
+        })
 
-        windowrule {
-          name = ghostty
-          match:class = ^(com.mitchellh.ghostty)$
-        }
+        hl.window_rule({
+          name  = "ghostty",
+          match = { class = "^(com.mitchellh.ghostty)$" },
+        })
 
-        # Animations
-        animations {
-          enabled = yes
-          bezier = md3_standard, 0.2, 0.0, 0, 1.0
-          bezier = md3_decel, 0.05, 0.7, 0.1, 1
-          bezier = md3_accel, 0.3, 0, 0.8, 0.15
-          bezier = overshot, 0.05, 0.9, 0.1, 1.05
-          bezier = hyprnostretch, 0.05, 0.9, 0.1, 1.0
-          bezier = win10, 0, 0, 0, 1
-          bezier = gnome, 0, 0.85, 0.3, 1
-          bezier = funky, 0.46, 0.35, -0.2, 1.2
-          animation = windows, 1, 2, overshot, slide
-          animation = border, 1, 10, default
-          animation = fade, 1, 0.0000001, default
-          animation = workspaces, 1, 4, md3_decel, slide
-        }
+        -- Animations
+        hl.config({
+          animations = {
+            enabled = true,
+          },
+        })
+        hl.curve("md3_standard",  { type = "bezier", points = { { 0.2,  0.0  }, { 0,    1.0  } } })
+        hl.curve("md3_decel",     { type = "bezier", points = { { 0.05, 0.7  }, { 0.1,  1    } } })
+        hl.curve("md3_accel",     { type = "bezier", points = { { 0.3,  0    }, { 0.8,  0.15 } } })
+        hl.curve("overshot",      { type = "bezier", points = { { 0.05, 0.9  }, { 0.1,  1.05 } } })
+        hl.curve("hyprnostretch", { type = "bezier", points = { { 0.05, 0.9  }, { 0.1,  1.0  } } })
+        hl.curve("win10",         { type = "bezier", points = { { 0,    0    }, { 0,    1    } } })
+        hl.curve("gnome",         { type = "bezier", points = { { 0,    0.85 }, { 0.3,  1    } } })
+        hl.curve("funky",         { type = "bezier", points = { { 0.46, 0.35 }, { -0.2, 1.2  } } })
+        hl.animation({ leaf = "windows",    enabled = true, speed = 2,         bezier = "overshot",  style = "slide" })
+        hl.animation({ leaf = "border",     enabled = true, speed = 10,        bezier = "default" })
+        hl.animation({ leaf = "fade",       enabled = true, speed = 0.0000001, bezier = "default" })
+        hl.animation({ leaf = "workspaces", enabled = true, speed = 4,         bezier = "md3_decel", style = "slide" })
 
-        misc {
-          disable_hyprland_logo = true
-          disable_splash_rendering = true
-          #suppress_portal_warnings = true
-        }
+        hl.config({
+          misc = {
+            disable_hyprland_logo = true,
+            disable_splash_rendering = true,
+            -- suppress_portal_warnings = true,
+          },
+          ecosystem = {
+            no_update_news = true,
+            no_donation_nag = true,
+          },
+        })
 
-        ecosystem {
-          no_update_news = true
-          no_donation_nag = true
-        }
+        -- 1Password Quick Access
+        hl.window_rule({
+          name  = "1password-quick-access",
+          match = { title = "^(Quick Access — 1Password)$" },
+          float = true,
+          stay_focused = true,
+        })
 
-        # 1Password Quick Access
-        windowrule {
-          name = 1password-quick-access
-          match:title = ^(Quick Access — 1Password)$
-          float = yes
-          stay_focused = on
-        }
+        -- Firefox PiP
+        hl.window_rule({
+          name  = "firefox-pip",
+          match = { title = "^(Picture-in-Picture)$" },
+          move = "((monitor_w*0.68)) ((monitor_h*0.02))",
+          float = true,
+          opacity = "0.95 0.75",
+          pin = true,
+          keep_aspect_ratio = true,
+        })
 
-        # Firefox PiP
-        windowrule {
-          name = firefox-pip
-          move = ((monitor_w*0.68)) ((monitor_h*0.02))
-          float = on
-          opacity = 0.95 0.75
-          pin = on
-          keep_aspect_ratio = on
-          match:title = ^(Picture-in-Picture)$
-        }
+        -- Gestures
+        hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
 
-        # Gestures
-        gesture = 3, horizontal, workspace
+        hl.config({
+          input = {
+            touchpad = {
+              natural_scroll = true,
+              disable_while_typing = true,
+            },
+          },
+        })
 
-        input {
-          touchpad {
-            natural_scroll = yes
-            disable_while_typing = true
-          }
-        }
+        -- Hide hardware cursor (0 = Disabled)
+        hl.config({ cursor = { no_hardware_cursors = 0 } })
 
-        # Hide hardware cursor
-        cursor:no_hardware_cursors = 0
+        -- General Keybindings
+        local mainMod = "SUPER"
+        -- Terminal
+        hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd("${pkgs.foot}/bin/foot"))
+        hl.bind("CTRL + ALT + T", hl.dsp.exec_cmd("${pkgs.foot}/bin/foot"))
+        hl.bind("CTRL + grave", hl.dsp.workspace.toggle_special("terminal"))
+        -- Emote picker
+        hl.bind("CTRL + SUPER + Space", hl.dsp.exec_cmd("${pkgs.emote}/bin/emote"))
+        -- Launcher
+        hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("${pkgs.fuzzel}/bin/fuzzel -I"))
+        -- Lock screen
+        hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("${lockCmd}"))
+        -- Remap caps lock to super
+        hl.config({ input = { kb_options = "caps:super" } })
+        -- Audio
+        hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), { locked = true, repeating = true })
+        hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -t \"1000\" -e \"Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)\""), { repeating = true })
+        hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
+        hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -t \"1000\" -e \"Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)\""), { repeating = true })
+        hl.bind("XF86AudioMute", hl.dsp.exec_cmd("${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true, repeating = true })
+        hl.bind("XF86AudioMute", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -t \"1000\" -e \"Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)\""), { repeating = true })
+        hl.bind("CTRL + SHIFT + Space", hl.dsp.exec_cmd("${pkgs.playerctl}/bin/playerctl play-pause"))
+        hl.bind("CTRL + SHIFT + Space", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Media: $(playerctl status)\""))
+        hl.bind("CTRL + SHIFT + N", hl.dsp.exec_cmd("${pkgs.playerctl}/bin/playerctl next"))
+        hl.bind("CTRL + SHIFT + N", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Media: next track\""))
+        hl.bind("CTRL + SHIFT + P", hl.dsp.exec_cmd("${pkgs.playerctl}/bin/playerctl previous"))
+        hl.bind("CTRL + SHIFT + P", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Media: previous track\""))
 
-        # General Keybindings
-        $mainMod = SUPER
-        # Terminal
-        bind = $mainMod, Return, exec, ${pkgs.foot}/bin/foot
-        bind = CTRL_ALT, t, exec, ${pkgs.foot}/bin/foot
-        bind = CTRL, grave, exec, ${pkgs.hyprland}/bin/hyprctl dispatch togglespecialworkspace terminal
-        # Emote picker
-        bind = CTRL_SUPER, Space, exec, ${pkgs.emote}/bin/emote
-        # Launcher
-        bind = $mainMod, Space, exec, ${pkgs.fuzzel}/bin/fuzzel -I
-        # Lock screen
-        bind = $mainMod, l, exec, ${lockCmd}
-        # Remap caps lock to super
-        input {
-          kb_options = caps:super
-        }
-        # Audio
-        bindle =,XF86AudioLowerVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-        binde =,XF86AudioLowerVolume, exec, ${pkgs.libnotify}/bin/notify-send -t "1000" -e "Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)"
-        bindle =,XF86AudioRaiseVolume, exec, ${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+
-        binde =,XF86AudioRaiseVolume, exec, ${pkgs.libnotify}/bin/notify-send -t "1000" -e "Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)"
-        bindle =,XF86AudioMute, exec, ${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-        binde =,XF86AudioMute, exec, ${pkgs.libnotify}/bin/notify-send -t "1000" -e "Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)"
-        bind = CTRL_SHIFT, space, exec, ${pkgs.playerctl}/bin/playerctl play-pause
-        bind = CTRL_SHIFT, space, exec, ${pkgs.libnotify}/bin/notify-send -e "Media: $(playerctl status)"
-        bind = CTRL_SHIFT, n, exec, ${pkgs.playerctl}/bin/playerctl next
-        bind = CTRL_SHIFT, n, exec, ${pkgs.libnotify}/bin/notify-send -e "Media: next track"
-        bind = CTRL_SHIFT, p, exec, ${pkgs.playerctl}/bin/playerctl previous
-        bind = CTRL_SHIFT, p, exec, ${pkgs.libnotify}/bin/notify-send -e "Media: previous track"
+        -- Backlight
+        hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("${pkgs.brillo}/bin/brillo -A 5"), { repeating = true })
+        hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Brightness: $(${pkgs.brillo}/bin/brillo)\""), { repeating = true })
+        hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("${pkgs.brillo}/bin/brillo -U 5"), { repeating = true })
+        hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Brightness: $(${pkgs.brillo}/bin/brillo)\""), { repeating = true })
 
-        # Backlight
-        bindle = , XF86MonBrightnessUp, exec, ${pkgs.brillo}/bin/brillo -A 5
-        binde = , XF86MonBrightnessUp, exec, ${pkgs.libnotify}/bin/notify-send -e "Brightness: $(${pkgs.brillo}/bin/brillo)"
-        bindle = , XF86MonBrightnessDown, exec, ${pkgs.brillo}/bin/brillo -U 5
-        binde = , XF86MonBrightnessDown, exec, ${pkgs.libnotify}/bin/notify-send -e "Brightness: $(${pkgs.brillo}/bin/brillo)"
+        -- Productivity
+        hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd("${screenshotScript}/bin/screenshot.sh"))
+        hl.bind("CTRL + SHIFT + B", hl.dsp.exec_cmd("${battpopScript}/bin/battpop.sh"))
+        hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("${applicationsScript}/bin/applications.sh"))
+        hl.bind("CTRL + SHIFT + E", hl.dsp.exit())
+        hl.bind("CTRL + SHIFT + D", hl.dsp.exec_cmd("${pkgs.bash}/bin/bash -c '${pkgs.libnotify}/bin/notify-send $(date \"+%T\")'"))
+        hl.bind("CTRL + SUPER + H", hl.dsp.exec_cmd("${keybindHelper}/bin/keybind-helper.sh"))
 
-        # Productivity
-        bind = SUPER_SHIFT, s, exec, ${screenshotScript}/bin/screenshot.sh
-        bind = CTRL_SHIFT, b, exec, ${battpopScript}/bin/battpop.sh
-        bind = $mainMod, Tab, exec, ${applicationsScript}/bin/applications.sh
-        bind = CTRL_SHIFT, e, exec, hyprctl dispatch exit
-        bind = CTRL_SHIFT, b, exec, ${battpopScript}/bin/battpop.sh
-        bind = CTRL_SHIFT, d, exec, ${pkgs.bash}/bin/bash -c '${pkgs.libnotify}/bin/notify-send $(date "+%T")'
-        bind = CTRL_SUPER, h, exec, ${keybindHelper}/bin/keybind-helper.sh
+        -- Navigation
+        hl.bind(mainMod .. " + 1", hl.dsp.focus({ workspace = 1 }))
+        hl.bind(mainMod .. " + 2", hl.dsp.focus({ workspace = 2 }))
+        hl.bind(mainMod .. " + 3", hl.dsp.focus({ workspace = 3 }))
+        hl.bind(mainMod .. " + 4", hl.dsp.focus({ workspace = 4 }))
+        hl.bind("CTRL + SHIFT + 1", hl.dsp.window.move({ workspace = 1 }))
+        hl.bind("CTRL + SHIFT + 2", hl.dsp.window.move({ workspace = 2 }))
+        hl.bind("CTRL + SHIFT + 3", hl.dsp.window.move({ workspace = 3 }))
+        hl.bind("CTRL + SHIFT + 4", hl.dsp.window.move({ workspace = 4 }))
+        hl.bind(mainMod .. " + bracketleft", hl.dsp.focus({ workspace = "r-1" }))
+        hl.bind(mainMod .. " + bracketright", hl.dsp.focus({ workspace = "r+1" }))
+        hl.bind("CTRL + SHIFT + bracketleft", hl.dsp.focus({ monitor = "left" }))
+        hl.bind("CTRL + SHIFT + bracketright", hl.dsp.focus({ monitor = "right" }))
+        hl.bind("CTRL + ALT + left", hl.dsp.window.move({ direction = "left" }))
+        hl.bind("CTRL + ALT + right", hl.dsp.window.move({ direction = "right" }))
+        hl.bind("CTRL + ALT + up", hl.dsp.window.move({ direction = "up" }))
+        hl.bind("CTRL + ALT + down", hl.dsp.window.move({ direction = "down" }))
 
-        # Navigation
-        bind = $mainMod, 1, workspace, 1
-        bind = $mainMod, 1, workspace, 2
-        bind = $mainMod, 1, workspace, 3
-        bind = $mainMod, 1, workspace, 4
-        bind = CTRL_SHIFT, 1, movetoworkspace, 1
-        bind = CTRL_SHIFT, 2, movetoworkspace, 2
-        bind = CTRL_SHIFT, 3, movetoworkspace, 3
-        bind = CTRL_SHIFT, 4, movetoworkspace, 4
-        bind = $mainMod, bracketleft, workspace, r-1
-        bind = $mainMod, bracketright, workspace, r+1
-        bind = CTRL_SHIFT, bracketleft, focusmonitor, left
-        bind = CTRL_SHIFT, bracketright, focusmonitor, right
-        bind = CTRL_ALT, left, exec, ${pkgs.hyprland}/bin/hyprctl dispatch movewindow l
-        bind = CTRL_ALT, right, exec, ${pkgs.hyprland}/bin/hyprctl dispatch movewindow r
-        bind = CTRL_ALT, up, exec, ${pkgs.hyprland}/bin/hyprctl dispatch movewindow u
-        bind = CTRL_ALT, down, exec, ${pkgs.hyprland}/bin/hyprctl dispatch movewindow d
+        -- Keyboard-driven mouse
+        hl.define_submap("cursor", function()
+          -- Jump cursor to a position
+          hl.bind("a", hl.dsp.exec_cmd("${pkgs.hyprland}/bin/hyprctl dispatch submap reset && ${pkgs.wl-kbptr}/bin/wl-kbptr && ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor"))
+          -- Cursor movement
+          hl.bind("j", hl.dsp.exec_cmd("${pkgs.wlrctl}/bin/wlrctl pointer move 0 10"), { repeating = true })
+          hl.bind("k", hl.dsp.exec_cmd("${pkgs.wlrctl}/bin/wlrctl pointer move 0 -10"), { repeating = true })
+          hl.bind("l", hl.dsp.exec_cmd("${pkgs.wlrctl}/bin/wlrctl pointer move 10 0"), { repeating = true })
+          hl.bind("h", hl.dsp.exec_cmd("${pkgs.wlrctl}/bin/wlrctl pointer move -10 0"), { repeating = true })
+          -- Left button
+          hl.bind("s", hl.dsp.exec_cmd("${pkgs.ydotool}/bin/ydotool click 0xC0"), { repeating = true })
+          hl.bind("y", hl.dsp.exec_cmd("${pkgs.ydotool}/bin/ydotool click 0xC0"), { repeating = true })
+          -- Middle button
+          hl.bind("d", hl.dsp.exec_cmd("${pkgs.ydotool}/bin/ydotool click 0xC2"), { repeating = true })
+          -- Right button
+          hl.bind("f", hl.dsp.exec_cmd("${pkgs.ydotool}/bin/ydotool click 0xC1"), { repeating = true })
+          hl.bind("u", hl.dsp.exec_cmd("${pkgs.ydotool}/bin/ydotool click 0xC1"), { repeating = true })
+          -- Scroll up and down
+          hl.bind("e", hl.dsp.exec_cmd("${pkgs.wlrctl}/bin/wlrctl pointer scroll 10 0"), { repeating = true })
+          hl.bind("r", hl.dsp.exec_cmd("${pkgs.wlrctl}/bin/wlrctl pointer scroll -10 0"), { repeating = true })
+          -- Scroll left and right
+          hl.bind("t", hl.dsp.exec_cmd("${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 -10"), { repeating = true })
+          hl.bind("g", hl.dsp.exec_cmd("${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 10"), { repeating = true })
+          -- Exit cursor submap
+          -- If you do not use cursor timeout or cursor:hide_on_key_press, you can delete its respective calls.
+          hl.bind("escape", hl.dsp.exec_cmd("${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 3; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press true; ${pkgs.hyprland}/bin/hyprctl dispatch submap reset"))
+        end)
+        -- Entrypoint
+        -- If you do not use cursor timeout or cursor:hide_on_key_press, you can delete its respective calls.
+        hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 0; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press false; ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor"))
 
-        # Keyboard-driven mouse
-        submap = cursor
-        # Jump cursor to a position
-        bind = ,a,exec,${pkgs.hyprland}/bin/hyprctl dispatch submap reset && ${pkgs.wl-kbptr}/bin/wl-kbptr && ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor
-        # Cursor movement
-        binde = ,j,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 0 10
-        binde = ,k,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 0 -10
-        binde = ,l,exec,${pkgs.wlrctl}/bin/wlrctl pointer move 10 0
-        binde = ,h,exec,${pkgs.wlrctl}/bin/wlrctl pointer move -10 0
-        # Left button
-        binde = ,s,exec,${pkgs.ydotool}/bin/ydotool click 0xC0
-        binde = ,y,exec,${pkgs.ydotool}/bin/ydotool click 0xC0
-        # Middle button
-        binde = ,d,exec,${pkgs.ydotool}/bin/ydotool click 0xC2
-        # Right button
-        binde = ,f,exec,${pkgs.ydotool}/bin/ydotool click 0xC1
-        binde = ,u,exec,${pkgs.ydotool}/bin/ydotool click 0xC1
-        # Scroll up and down
-        binde = ,e,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 10 0
-        binde = ,r,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll -10 0
-        # Scroll left and right
-        binde = ,t,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 -10
-        binde = ,g,exec,${pkgs.wlrctl}/bin/wlrctl pointer scroll 0 10
-        # Exit cursor submap
-        # If you do not use cursor timeout or cursor:hide_on_key_press, you can delete its respective calls.
-        bind = ,escape,exec,${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 3; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press true; ${pkgs.hyprland}/bin/hyprctl dispatch submap reset 
-        submap  =  reset
-        # Entrypoint
-        # If you do not use cursor timeout or cursor:hide_on_key_press, you can delete its respective calls.
-        bind = $mainMod,g,exec,${pkgs.hyprland}/bin/hyprctl keyword cursor:inactive_timeout 0; ${pkgs.hyprland}/bin/hyprctl keyword cursor:hide_on_key_press false; ${pkgs.hyprland}/bin/hyprctl dispatch submap cursor
-
-        # Cursor
-        cursor {
-          inactive_timeout = 3
-        }
+        -- Cursor
+        hl.config({ cursor = { inactive_timeout = 3 } })
       '' + optionalString (config.heywoodlh.home.onepassword.enable) ''
-        exec-once = ${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --silent
-        bind = CTRL_SUPER, s, exec, ${onepasswordToggle}/bin/1password-toggle.sh
+        hl.on("hyprland.start", function()
+          hl.exec_cmd("${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --silent")
+        end)
+        hl.bind("CTRL + SUPER + S", hl.dsp.exec_cmd("${onepasswordToggle}/bin/1password-toggle.sh"))
       '' + optionalString (config.heywoodlh.home.librewolf.enable) ''
-        exec-once = ${pkgs.xdg-utils}/bin/xdg-settings set default-web-browser librewolf.desktop
+        hl.on("hyprland.start", function()
+          hl.exec_cmd("${pkgs.xdg-utils}/bin/xdg-settings set default-web-browser librewolf.desktop")
+        end)
       '';
       xwayland = {
         enable = true;

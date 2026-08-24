@@ -1,4 +1,238 @@
+## heywoodlh\.apple-silicon\.enable
+
+
+
+Enable heywoodlh apple-silicon configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.cachefile
+
+Asahi Linux cache file name in ` /boot `\.
+
+
+
+*Type:*
+unspecified value
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.firmwarefile
+
+
+
+Asahi Linux peripheral firmware file name in ` /boot `\.
+
+
+
+*Type:*
+unspecified value
+
+
+
+*Default:*
+
+```nix
+"firmware.cpio"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.hash
+
+
+
+Hashes for firmware files\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.hash\.cache
+
+
+
+Hash for kernel cache\.
+Retrieve with ` nix hash convert --hash-algo sha256 $(nix-prefetch-url /boot/asahi/<cachefile>) `\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.hash\.firmware
+
+
+
+Hash for firmware file\.
+Retrieve with ` nix hash convert --hash-algo sha256 $(nix-prefetch-url /boot/vendorfw/firmware.cpio) `\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam
+
+
+
+Enable Asahi Steam configuration\.
+
+
+
+*Type:*
+submodule
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam\.enable
+
+
+
+Enable Steam for Asahi\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam\.memory
+
+
+
+Memory allowed for Steam\. Set to 6144 for 8GB machines\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+0
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam\.user
+
+
+
+User for Steam configuration\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
 ## heywoodlh\.backup\.enable
+
+
 
 Enable heywoodlh backup client configuration\.
 
@@ -1514,7 +1748,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/ha1klcwf545s6cl8v8bdrvj764wkgqzb-tmux/bin/tmux"
+"/nix/store/534h6dccr7wsmxh4v7vpk97h4rsqlpwy-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -2068,8 +2302,6 @@ null
 
 ## heywoodlh\.home\.lima\.enable
 
-
-
 Enable Lima for Virtual Machines\.
 
 
@@ -2364,6 +2596,8 @@ submodule
 
 
 ## heywoodlh\.home\.llm\.lmstudio\.enable
+
+
 
 Install LM Studio\.
 
@@ -4238,7 +4472,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/i1r8hfhriwzik4nndnb5bz1b47qidxmq-source/base/stylix\.nix](/nix/store/i1r8hfhriwzik4nndnb5bz1b47qidxmq-source/base/stylix.nix)
+ - [/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix\.nix](/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix.nix)
 
 
 
@@ -4262,7 +4496,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/i1r8hfhriwzik4nndnb5bz1b47qidxmq-source/base/stylix\.nix](/nix/store/i1r8hfhriwzik4nndnb5bz1b47qidxmq-source/base/stylix.nix)
+ - [/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix\.nix](/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix.nix)
 
 
 
@@ -4286,7 +4520,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/i1r8hfhriwzik4nndnb5bz1b47qidxmq-source/base/stylix\.nix](/nix/store/i1r8hfhriwzik4nndnb5bz1b47qidxmq-source/base/stylix.nix)
+ - [/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix\.nix](/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix.nix)
 
 
 

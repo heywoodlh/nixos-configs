@@ -41,7 +41,7 @@ in {
       heywoodlh.home.hyprland = true;
       wayland.windowManager.hyprland = {
         extraConfig = ''
-          env = NIXOS_OZONE_WL, 1
+          hl.env("NIXOS_OZONE_WL", "1")
         '';
         systemd.enable = false;
       };

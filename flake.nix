@@ -940,15 +940,13 @@ rec {
           home-manager.users.heywoodlh = {
             heywoodlh.home.llm.homelab = false;
             wayland.windowManager.hyprland.extraConfig = ''
-              # change monitor to high resolution, the last argument is the scale factor
-              monitor = , highres, auto, 1.6
-              # unscale XWayland
-              xwayland {
-                force_zero_scaling = true
-              }
-              # toolkit-specific scale
-              env = GDK_SCALE,2
-              env = XCURSOR_SIZE,24
+              -- change monitor to high resolution, the last argument is the scale factor
+              hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1.6 })
+              -- unscale XWayland
+              hl.config({ xwayland = { force_zero_scaling = true } })
+              -- toolkit-specific scale
+              hl.env("GDK_SCALE", "2")
+              hl.env("XCURSOR_SIZE", "24")
             '';
             home.packages = with pkgs; [
               moonlight-qt
@@ -1055,15 +1053,13 @@ rec {
           ];
           home-manager.users.heywoodlh = {
             wayland.windowManager.hyprland.extraConfig = ''
-              # change monitor to high resolution, the last argument is the scale factor
-              monitor = , highres, auto, 1.6
-              # unscale XWayland
-              xwayland {
-                force_zero_scaling = true
-              }
-              # toolkit-specific scale
-              env = GDK_SCALE,2
-              env = XCURSOR_SIZE,24
+              -- change monitor to high resolution, the last argument is the scale factor
+              hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1.6 })
+              -- unscale XWayland
+              hl.config({ xwayland = { force_zero_scaling = true } })
+              -- toolkit-specific scale
+              hl.env("GDK_SCALE", "2")
+              hl.env("XCURSOR_SIZE", "24")
             '';
           };
         };
@@ -1118,15 +1114,13 @@ rec {
 
           home-manager.users.heywoodlh = {
             wayland.windowManager.hyprland.extraConfig = ''
-              # change monitor to high resolution, the last argument is the scale factor
-              monitor = , highres, auto, 1
-              # unscale XWayland
-              xwayland {
-                force_zero_scaling = true
-              }
-              # toolkit-specific scale
-              env = GDK_SCALE,2
-              env = XCURSOR_SIZE,24
+              -- change monitor to high resolution, the last argument is the scale factor
+              hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1 })
+              -- unscale XWayland
+              hl.config({ xwayland = { force_zero_scaling = true } })
+              -- toolkit-specific scale
+              hl.env("GDK_SCALE", "2")
+              hl.env("XCURSOR_SIZE", "24")
             '';
           };
         };

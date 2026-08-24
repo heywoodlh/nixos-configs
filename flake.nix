@@ -323,6 +323,10 @@ rec {
       url = "github:heywoodlh/HTPC-YT/nix-support";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    paseo = {
+      url = "github:getpaseo/paseo";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {
@@ -382,6 +386,7 @@ rec {
                       gh-gitignore,
                       opencode-ssh,
                       youtube-htpc,
+                      paseo,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -433,6 +438,7 @@ rec {
       ./home/modules/git.nix
       ./home/modules/syncthing.nix
       ./home/modules/pandoc.nix
+      ./home/modules/paseo.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -938,7 +944,6 @@ rec {
           };
 
           home-manager.users.heywoodlh = {
-            heywoodlh.home.llm.homelab = false;
             wayland.windowManager.hyprland.extraConfig = ''
               -- change monitor to high resolution, the last argument is the scale factor
               hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1.6 })
@@ -1113,6 +1118,18 @@ rec {
           };
 
           home-manager.users.heywoodlh = {
+            heywoodlh.home.paseo = {
+              desktop = true;
+              server = {
+                enable = true;
+                address = "100.109.94.126:6767";
+                hostnames = [
+                  "nixos-m1-mac-mini"
+                  "nixos-m1-mac-mini.barn-banana.ts.net"
+                ];
+              };
+            };
+
             wayland.windowManager.hyprland.extraConfig = ''
               -- change monitor to high resolution, the last argument is the scale factor
               hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1 })

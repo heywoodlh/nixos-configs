@@ -282,6 +282,62 @@ let
     git push origin --all
     git push origin --tags
   '';
+  sharedAgentsFile = pkgs.writeTextFile {
+    name = "AGENTS.md";
+    text = ''
+      # Agent Context
+
+      This file gives coding agents context about how this user's systems and
+      projects are organized. It is installed to both `~/.pi/agent/AGENTS.md`
+      and `~/.claude/CLAUDE.md`.
+
+      ## Projects
+
+      All projects live in `~/opt`. Notable ones:
+
+      - `~/opt/nixos-configs`: NixOS, nix-darwin, and home-manager
+        configuration for all machines. See `~/opt/nixos-configs/AGENTS.md`
+        for its internal layout.
+        - `~/opt/nixos-configs/flakes/kube`: Kubernetes manifests deployed
+          via ArgoCD to the homelab cluster. See
+          `~/opt/nixos-configs/flakes/kube/AGENTS.md` for its internal
+          layout.
+      - `~/opt/dockerfiles`: Dockerfile collection for custom container
+        images.
+      - `~/opt/infrastructure`: infrastructure-as-code, separate from the
+        NixOS/Kubernetes configs above.
+      - `~/opt/tailscale-acl`: Tailscale ACL policy for the tailnet.
+      - `~/opt/cart` / `~/opt/nix-cart`: the "cart" project and its Nix
+        packaging.
+      - `~/opt/actions`: shared GitHub Actions workflows/definitions.
+      - `~/opt/heywoodlh.io`, `~/opt/deconstructingdogma.org`: personal
+        websites.
+      - `~/opt/forks`: forked upstream repos (e.g. nixpkgs).
+      - `~/opt/hermes`, `~/opt/logbash`, `~/opt/spindle-run`: smaller
+        personal projects.
+
+      Most of `~/opt` is synced across machines via Syncthing.
+
+      ## Notes
+
+      - `~/Documents/notes-pro`: work/professional notes.
+      - `~/Documents/notes-personal`: personal notes.
+
+      Both are synced across machines via Syncthing.
+
+      ## Credentials
+
+      All credentials are stored in 1Password. Never look for or store
+      plaintext secrets in these repos — use the `op` CLI (wrapped as
+      `op-wrapper` in this user's shell) to fetch secrets at runtime.
+
+      ## Networking
+
+      All of this user's hosts are connected to each other via Tailscale
+      (tailnet: `barn-banana.ts.net`). Use `<hostname>.barn-banana.ts.net`
+      for cross-host SSH/HTTP access.
+    '';
+  };
 in {
   # Packages I need installed on every system
   home.packages = with pkgs; [
@@ -361,6 +417,10 @@ in {
   home.file."tmp/.placeholder.txt" = {
     text = "";
   };
+
+  # Shared agent context, used by multiple AI coding tools
+  home.file.".pi/agent/AGENTS.md".source = sharedAgentsFile;
+  home.file.".claude/CLAUDE.md".source = sharedAgentsFile;
 
   # Enable nix-direnv
   home.file.".config/direnv/direnvrc" = {

@@ -2259,6 +2259,26 @@
         "type": "github"
       }
     },
+    "paseo": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787507174,
+        "narHash": "sha256-0hmtCYJVDj1eAG1ahlauZh01T83dcJYIvFXcDJcrWUg=",
+        "owner": "getpaseo",
+        "repo": "paseo",
+        "rev": "4f796181bf9d7e6b5ea2067ece4eace7213938cb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "getpaseo",
+        "repo": "paseo",
+        "type": "github"
+      }
+    },
     "plasma-manager": {
       "inputs": {
         "home-manager": [
@@ -2376,6 +2396,7 @@
         "op-flake": "op-flake",
         "opencode-ssh": "opencode-ssh",
         "osquery-fix-nixpkgs": "osquery-fix-nixpkgs",
+        "paseo": "paseo",
         "plasma-manager": "plasma-manager",
         "pre-commit-hooks": "pre-commit-hooks",
         "pyproject-nix": "pyproject-nix",

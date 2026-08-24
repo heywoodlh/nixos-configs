@@ -3269,6 +3269,152 @@ true
 
 
 
+## heywoodlh\.home\.paseo\.desktop
+
+
+
+Install Paseo desktop client\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo.nix)
+
+
+
+## heywoodlh\.home\.paseo\.server
+
+
+
+Paseo server configuration\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo.nix)
+
+
+
+## heywoodlh\.home\.paseo\.server\.enable
+
+
+
+Enable Paseo server configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo.nix)
+
+
+
+## heywoodlh\.home\.paseo\.server\.address
+
+
+
+Server address for Paseo to listen on\. Required if server enabled\.
+Example: “100\.101\.102\.103:6767”\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo.nix)
+
+
+
+## heywoodlh\.home\.paseo\.server\.hostnames
+
+
+
+Daemon hostnames\. Passed to Paseo as a comma-separated list\.
+Example: \[ “myhost” “\.example\.com” ] or \[ “true” ] for any\.
+
+
+
+*Type:*
+list of string
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo.nix)
+
+
+
+## heywoodlh\.home\.paseo\.server\.webui
+
+
+
+Enable Paseo daemon web UI\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/paseo.nix)
+
+
+
 ## heywoodlh\.home\.syncthing
 
 
@@ -4472,7 +4618,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix\.nix](/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix.nix)
+ - [/nix/store/vk1z1pyh278rkiinmvivwwjc3jmqss9r-source/base/stylix\.nix](/nix/store/vk1z1pyh278rkiinmvivwwjc3jmqss9r-source/base/stylix.nix)
 
 
 
@@ -4496,7 +4642,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix\.nix](/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix.nix)
+ - [/nix/store/vk1z1pyh278rkiinmvivwwjc3jmqss9r-source/base/stylix\.nix](/nix/store/vk1z1pyh278rkiinmvivwwjc3jmqss9r-source/base/stylix.nix)
 
 
 
@@ -4520,7 +4666,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix\.nix](/nix/store/8cjj3s3vxc2q40rlfgmag717mrpn8j02-source/base/stylix.nix)
+ - [/nix/store/vk1z1pyh278rkiinmvivwwjc3jmqss9r-source/base/stylix\.nix](/nix/store/vk1z1pyh278rkiinmvivwwjc3jmqss9r-source/base/stylix.nix)
 
 
 

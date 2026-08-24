@@ -237,6 +237,7 @@ in {
     home.packages = with pkgs; [
       github-copilot-cli
       claude-code
+      pi-coding-agent
     ] ++ lib.optionals (cfg.lmstudio.enable) [
       lmstudio
     ];

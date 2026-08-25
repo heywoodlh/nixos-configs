@@ -1017,12 +1017,56 @@ rec {
           heywoodlh.nixos.steam-deck.enable = true;
         };
 
-        # steam-deck uses Jovian's pinned nixpkgs as the primary nixpkgs so its
-        # custom packages (mesa, pipewire, etc.) have their version requirements met.
-        tv = nixosConfigWith nixpkgs-jovian-nixos "tv" "tv" {
+        nixos-nuc = nixosConfigWith nixpkgs-jovian-nixos "workstation" "nixos-nuc" {
           imports = [
-            ./nixos/hosts/tv.nix
+            ./nixos/hosts/nuc.nix
           ];
+
+          heywoodlh = {
+            sshd.enable = true;
+            nixos = {
+              gaming.enable = true;
+              moonlight.enable = true;
+            };
+          };
+
+          # Apple Magic keyboard (makes useless globe key ctrl)
+          boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
+
+          # Xbox controller Bluetooth input support for Moonlight
+          boot.kernelModules = [ "hid_microsoft" "uinput" ];
+          services.udev.packages = [
+            (pkgs.writeTextFile {
+              name = "xbox-hidraw-udev-rules";
+              text = ''KERNEL=="hidraw*", TAG+="uaccess"'';
+              destination = "/etc/udev/rules.d/60-xbox-hidraw.rules";
+            })
+          ];
+
+
+          home-manager.users.heywoodlh = {
+            heywoodlh.home.paseo = {
+              desktop = true;
+              server = {
+                enable = true;
+                address = "100.74.91.97:6767";
+                hostnames = [
+                  "nixos-nuc"
+                  "nixos-nuc.barn-banana.ts.net"
+                ];
+              };
+            };
+
+            wayland.windowManager.hyprland.extraConfig = ''
+              -- change monitor to high resolution, the last argument is the scale factor
+              hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1 })
+              -- unscale XWayland
+              hl.config({ xwayland = { force_zero_scaling = true } })
+              -- toolkit-specific scale
+              hl.env("GDK_SCALE", "2")
+              hl.env("XCURSOR_SIZE", "24")
+            '';
+          };
         };
 
         nixos-gaming =  nixosConfig "workstation" "nixos-gaming" {

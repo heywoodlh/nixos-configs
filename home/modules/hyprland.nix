@@ -135,7 +135,6 @@ in {
       dunst
       grim
       hyprmon
-      kdePackages.polkit-kde-agent-1
       libnotify
       pavucontrol
       playerctl
@@ -331,7 +330,6 @@ in {
           hl.exec_cmd("${pkgs.hyprland}/bin/hyprctl setcursor Adwaita 24")
           hl.exec_cmd("${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland")
           hl.exec_cmd("${pkgs.dunst}/bin/dunst")
-          hl.exec_cmd("${pkgs.kdePackages.polkit-kde-agent-1}/bin/polkit-kde-authentication-agent-1")
           hl.exec_cmd("${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets")
           hl.exec_cmd("${pkgs.ydotool}/bin/ydotoold")
 
@@ -343,6 +341,7 @@ in {
           hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user ashell.service")
           hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user hyprpaper.service")
           hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user kdeconnect.service")
+          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user hyprpolkitagent.service")
         end)
 
         -- Dark mode for apps
@@ -550,12 +549,15 @@ in {
     # KDE Connect
     services.kdeconnect.enable = true;
 
+    # Polkit authentication agent
+    services.hyprpolkitagent.enable = true;
+
     # Idle/suspend daemon
     services.hypridle = {
       enable = true;
       settings = {
         general = {
-          after_sleep_cmd = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on";
+          after_sleep_cmd = "${pkgs.hyprland}/bin/hyprctl eval \"hl.dispatch(hl.dsp.dpms('on'))\"";
           ignore_dbus_inhibit = false;
           lock_cmd = "${lockCmd}";
           unlock_cmd = "/run/current-system/sw/bin/systemctl --user restart ashell.service";
@@ -569,8 +571,8 @@ in {
           }
           {
             timeout = 1200;
-            on-timeout = "${pkgs.hyprland}/bin/hyprctl dispatch dpms off";
-            on-resume = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on";
+            on-timeout = "${pkgs.hyprland}/bin/hyprctl eval \"hl.dispatch(hl.dsp.dpms('off'))\"";
+            on-resume = "${pkgs.hyprland}/bin/hyprctl eval \"hl.dispatch(hl.dsp.dpms('on'))\"";
           }
         ];
       };

@@ -12,39 +12,27 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "usb_storage" ];
 
-  # LUKS partition, Yubikey support
-  # See https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS
-  # Setup after initial install with these commands: https://gist.github.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
-  boot.initrd = {
+  # LUKS stuff all in flake.nix now
+  #boot.initrd = {
     # Yubikey challenge-response LUKS is not supported in systemd stage 1;
     # nixpkgs now defaults boot.initrd.systemd.enable to true, so override it.
-    #systemd.enable = false;
-    #kernelModules = ["vfat" "nls_cp437" "nls_iso8859-1" "usbhid"];
-    luks = {
-      #yubikeySupport = true;
-      devices."luks" = {
-        device = "/dev/disk/by-uuid/22d52b85-5679-4d18-a245-974fab33bf7f";
-        #yubikey = {
-        #  slot = 2;
-        #  twoFactor = false; # Set to false for 1FA
-        #  gracePeriod = 30; # Time in seconds to wait for Yubikey to be inserted
-        #  keyLength = 64; # Set to $KEY_LENGTH/8
-        #  saltLength = 16; # Set to $SALT_LENGTH
-        #  storage = {
-        #    device = "/dev/nvme0n1p4"; # Unencrypted /boot device
-        #    fsType = "vfat";
-        #    path = "/crypt-storage/default"; # Path relative to /boot
-        #  };
-        #};
-      };
-    };
-  };  
+    #luks = {
+    #  devices."luks" = {
+    #    device = "/dev/disk/by-uuid/22d52b85-5679-4d18-a245-974fab33bf7f";
+    #  };
+    #};
+  #};
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/337C-1416";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
+
+  # This ESP is only 476M; each kernel+initrd pair is ~90M. Without a limit,
+  # systemd-boot keeps every generation's entry until it runs out of space,
+  # which silently corrupts the newest write (see 2026-08-25 boot failures).
+  boot.loader.systemd-boot.configurationLimit = 3;
 
   swapDevices =
     [

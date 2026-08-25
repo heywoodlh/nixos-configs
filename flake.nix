@@ -1073,6 +1073,14 @@ rec {
             ./nixos/hosts/m1-mac-mini.nix
           ];
           heywoodlh = {
+            luks = {
+              enable = true;
+              uuid = "22d52b85-5679-4d18-a245-974fab33bf7f";
+              keyfile = {
+                enable = true;
+                uuid = "337C-1416";
+              };
+            };
             sshd.enable = true;
             nixos = {
               gaming.enable = false;

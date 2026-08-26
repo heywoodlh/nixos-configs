@@ -345,6 +345,8 @@ spec:
           mountPath: /config
         - name: media
           mountPath: /media/home-media
+        - name: recycling-bin
+          mountPath: /media/data_pool/plex-recycling-bin/sonarr
         env:
           - name: PUID
             value: "995"
@@ -359,6 +361,9 @@ spec:
         hostPath:
           path: /media/home-media
           type: Directory
+      - name: recycling-bin
+        hostPath:
+          path: /media/data_pool/plex-recycling-bin/sonarr
 ---
 apiVersion: v1
 kind: Service

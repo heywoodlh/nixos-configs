@@ -347,6 +347,10 @@ in {
       backupFileExtension = ".bak";
       users.${username} = { ... }: base // {
         heywoodlh.home.syncthing = lib.mkForce cfg.syncthing;
+        home.file.".config/fish/config.fish".text = ''
+          export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+          export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+        '';
       };
       users.root = { ... }: base // {
         stylix.targets.helix.enable = false;

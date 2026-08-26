@@ -1030,6 +1030,12 @@ rec {
             };
           };
 
+          # Disable sleep
+          systemd.targets.sleep.enable = false;
+          systemd.targets.suspend.enable = false;
+          systemd.targets.hibernate.enable = false;
+          systemd.targets.hybrid-sleep.enable = false;
+
           # Apple Magic keyboard (makes useless globe key ctrl)
           boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
 

@@ -211,6 +211,7 @@ in {
         gnomeExtensions.just-perfection
         gnomeExtensions.search-light
         gnomeExtensions.space-bar
+        shotcut
       ];
       dconf.settings = {
         "org.gnome.shell" = {

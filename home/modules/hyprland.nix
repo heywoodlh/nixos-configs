@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  nixpkgs-stable,
   lib,
   ...
 }:
@@ -9,6 +10,12 @@ with lib;
 
 let
   cfg = config.heywoodlh.home.hyprland;
+  pkgs-stable = import nixpkgs-stable {
+    system = pkgs.stdenv.hostPlatform.system;
+    config = {
+      allowUnfree = true;
+    };
+  };
   onepasswordCfg = config.heywoodlh.home.onepassword;
   homeDir = config.home.homeDirectory;
   onepasswordToggle = pkgs.writeShellScriptBin "1password-toggle.sh" ''
@@ -29,7 +36,7 @@ let
   screenrecordScript = pkgs.writeShellScriptBin "screenrecord.sh" ''
     mkdir -p "${homeDir}/Videos"
     filename="${homeDir}/Videos/$(date +%Y-%m-%d_%H-%M-%S).mp4"
-    ${pkgs.wf-recorder}/bin/wf-recorder -g "$(${pkgs.slurp}/bin/slurp)" -t -f $filename
+    ${pkgs-stable.wf-recorder}/bin/wf-recorder -g "$(${pkgs-stable.slurp}/bin/slurp)" -t -f $filename
     [[ -e $filename ]] && ${pkgs.libnotify}/bin/notify-send "Screenrecord" "Saved to $filename"
   '';
   screenrecordKillScript = pkgs.writeShellScriptBin "screenrecord-kill.sh" ''
@@ -143,7 +150,7 @@ in {
       slurp
       swaybg
       util-linux
-      wf-recorder
+      pkgs-stable.wf-recorder
       wireplumber
       wl-clipboard
       xdg-desktop-portal-hyprland

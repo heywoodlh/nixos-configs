@@ -507,6 +507,7 @@ rec {
       ./nixos/modules/scrutiny.nix
       ./nixos/modules/kde.nix
       ./nixos/modules/tor.nix
+      ./nixos/modules/portmaster.nix
       ./nixos/modules/libvirtd.nix
       ./nixos/modules/tv.nix
       ./nixos/modules/moonlight.nix
@@ -642,7 +643,19 @@ rec {
         }
       ] ++ lib.optionals (machineType == "workstation") [
         ./nixos/roles/hardware/printers.nix
-        { heywoodlh.workstation = true; }
+        ({ config, lib, ... }: {
+          heywoodlh.workstation = true;
+          heywoodlh.nixos.portmaster.enable = true;
+          heywoodlh.nixos.portmaster.dns = [
+            # Global resolver: NextDNS (profile 93c264) over DoT.
+            "dot://45.90.28.89:853?verify=93c264.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
+            "dot://45.90.30.89:853?verify=93c264.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
+            # Tailscale MagicDNS, restricted to .ts.net names only.
+            "dns://100.100.100.100?name=TailscaleDNS&search=barn-banana.ts.net&search-only"
+          ];
+          # Replicate MagicDNS if Portmaster is enabled
+          networking.search = lib.mkIf (config.heywoodlh.nixos.portmaster.enable && config.services.tailscale.enable) [ "barn-banana.ts.net" ];
+        })
       ] ++ lib.optionals (machineType == "laptop") [
         { heywoodlh.laptop = true; }
       ] ++ lib.optionals (machineType == "vm") [

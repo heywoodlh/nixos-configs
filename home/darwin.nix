@@ -10,11 +10,12 @@ in {
     ./desktop.nix
   ];
 
-  home.packages = [
-    pkgs.fleetctl
-    pkgs.m-cli
-    pkgs.mas
-    pkgs.pinentry_mac
+  home.packages = with pkgs; [
+    fleetctl
+    gomuks
+    m-cli
+    mas
+    pinentry_mac
   ];
 
   home.shellAliases = {
@@ -59,6 +60,7 @@ in {
 
   home.activation = {
     aerc-link = ''
+      mkdir -p ${homeDir}/.config/aerc
       ln -s ${homeDir}/.config/aerc ${homeDir}/Library/Preferences/aerc &>/dev/null || true
     '';
   };

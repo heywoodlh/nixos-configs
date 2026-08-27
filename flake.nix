@@ -728,9 +728,9 @@ rec {
     # shared config among darwin workstations
     darwinWorkstationConfig = {
       homebrew = {
-        brews = [
-          "libolm"
-        ];
+        #brews = [
+        #  "libolm"
+        #];
         casks = [
           "beeper"
           "legcord"

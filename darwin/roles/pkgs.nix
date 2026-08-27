@@ -38,7 +38,6 @@ in {
       "bash"
       "choose-gui"
       "cliclick"
-      "aaronraimist/tap/gomuks"
       "mas"
       "mosh"
       "newsboat"

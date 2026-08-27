@@ -911,7 +911,7 @@ rec {
           ];
         };
 
-        nixos-intel-mac-mini = nixosConfig "tv" "nixos-intel-mac-mini" {
+        nixos-ops = nixosConfig "workstation" "nixos-ops" {
           imports = [
             ./nixos/hosts/intel-mac-mini.nix
           ];
@@ -926,8 +926,48 @@ rec {
             ${pkgs.pciutils}/bin/setpci -s 00:1f.0 0xa4.b=0
           '';
 
+          # Disable sleep
+          systemd.targets.sleep.enable = false;
+          systemd.targets.suspend.enable = false;
+          systemd.targets.hibernate.enable = false;
+          systemd.targets.hybrid-sleep.enable = false;
+
           heywoodlh = {
             intel-mac = true;
+          };
+
+          users.users.ops = {
+            isNormalUser = true;
+            description = "Ops user";
+            extraGroups = [
+              "adbusers"
+              "networkmanager"
+            ];
+            shell = pkgs.bashInteractive;
+            homeMode = "755";
+          };
+
+          home-manager.users.ops = {
+            home.stateVersion = "25.05";
+            heywoodlh.home.paseo = {
+              desktop = true;
+              server = {
+                enable = true;
+                address = "100.67.47.0:6767";
+                webui = true;
+                hostnames = [
+                  "nixos-ops"
+                  "nixos-ops.barn-banana.ts.net"
+                ];
+              };
+            };
+            home.activation.docker-rootless-context = ''
+              if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
+              then
+                ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/$(id -u)/docker.sock" &> /dev/null || true
+                ${pkgs.docker-client}/bin/docker context use rootless
+              fi
+            '';
           };
         };
 
@@ -1242,9 +1282,16 @@ rec {
           }];
           heywoodlh = {
             sshd.enable = true;
+            nixos.portmaster.dns = [
+              # Global resolver: NextDNS (profile 93c264) over DoT.
+              "dot://45.90.30.0:853?verify=9ad2ce.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
+              "dot://45.90.28.0:853?verify=9ad2ce.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
+              # Tailscale MagicDNS, restricted to .ts.net names only.
+              "dns://100.100.100.100?name=TailscaleDNS&search=barn-banana.ts.net&search-only"
+            ];
             nixos = {
               gaming = {
-                enable = true;
+                enable = false;
                 user = "family";
               };
               nvidia-patch = true;

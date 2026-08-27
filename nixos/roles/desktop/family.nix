@@ -141,6 +141,7 @@ in {
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.vinegarhq.Vinegar
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.vinegarhq.Sober
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.prismlauncher.PrismLauncher
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.shotcut.Shotcut
         echo "Completed installation of Flatpaks..."
       '';
       home.file.".local/share/applications/org.mozilla.firefox.desktop".text = ''
@@ -476,9 +477,6 @@ in {
       };
     };
   };
-  services.tailscale.extraSetFlags = [
-    "--accept-dns=false"
-  ];
 
   # Use dnsmasq
   networking.networkmanager.dns = "dnsmasq";

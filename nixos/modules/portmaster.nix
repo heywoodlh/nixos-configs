@@ -55,6 +55,20 @@ in {
 
     (mkIf config.services.tailscale.enable {
       services.tailscale.extraSetFlags = [ "--accept-dns=false" ];
+
+      # Allow incoming connections over tailscale0. Portmaster "Incoming Rules"
+      # match by network, not interface, so permit the tailnet ranges (CGNAT
+      # IPv4 + Tailscale ULA IPv6) and deny incoming from every other network.
+      # "Force Block Incoming Connections" (filter/blockInbound) overrides these
+      # rules, so it must be off for them to take effect.
+      services.portmaster.settings = {
+        "filter/blockInbound" = false;
+        "filter/serviceEndpoints" = [
+          "+ 100.64.0.0/10"
+          "+ fd7a:115c:a1e0::/48"
+          "- *"
+        ];
+      };
     })
   ]);
 }

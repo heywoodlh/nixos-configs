@@ -115,6 +115,10 @@ in {
       "olm"
     ];
 
+    networking.firewall.trustedInterfaces = [
+      "tailscale0"
+    ];
+
     boot = {
       tmp.cleanOnBoot = true;
       supportedFilesystems = [ "ntfs" "exfat" ];

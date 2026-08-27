@@ -72,6 +72,7 @@ in {
       "lulu"
       "moonlight"
       "oversight"
+      "paseo"
       "proton-drive"
       "remoteviewer"
       "rustdesk"

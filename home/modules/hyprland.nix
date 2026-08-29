@@ -541,6 +541,10 @@ in {
         hl.on("hyprland.start", function()
           hl.exec_cmd("${pkgs.xdg-utils}/bin/xdg-settings set default-web-browser librewolf.desktop")
         end)
+      '' + optionalString (config.heywoodlh.home.hypr-rdp.enable) ''
+        hl.on("hyprland.start", function()
+          hl.exec_cmd("${config.heywoodlh.home.hypr-rdp.package}/bin/hypr-rdp")
+        end)
       '';
       xwayland = {
         enable = true;

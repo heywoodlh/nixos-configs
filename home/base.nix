@@ -338,6 +338,16 @@ let
       for cross-host SSH/HTTP access.
     '';
   };
+  paseoSetup = pkgs.writeShellScriptBin "paseo-setup" ''
+    mkdir -p $HOME/.paseo
+    ${op-wrapper} read "op://Personal/7bkci4xv2d3irixcw2ulqzsqxi/notesPlain" > $HOME/.paseo/.env
+    chmod 600 $HOME/.paseo/.env
+    if systemctl --user list-units | grep -q paseo.service
+    then
+      echo "Restarting paseo to apply environment variables"
+      systemctl --user restart paseo.service
+    fi
+  '';
 in {
   # Packages I need installed on every system
   home.packages = with pkgs; [
@@ -403,6 +413,7 @@ in {
     wake-sarah-gaming-pc
     myOpWrapper
     tangledSyncWrapper
+    paseoSetup
   ];
 
   # Enable password-store
@@ -419,8 +430,10 @@ in {
   };
 
   # Shared agent context, used by multiple AI coding tools
-  home.file.".pi/agent/AGENTS.md".source = sharedAgentsFile;
-  home.file.".claude/CLAUDE.md".source = sharedAgentsFile;
+  home.file = {
+    ".pi/agent/AGENTS.md".source = sharedAgentsFile;
+    ".claude/CLAUDE.md".source = sharedAgentsFile;
+  };
 
   # Enable nix-direnv
   home.file.".config/direnv/direnvrc" = {
@@ -848,5 +861,13 @@ in {
     btop = true;
     syncthing = true;
     llm.enable = true;
+    paseo.extraConf = {
+      agents.providers = {
+        github-ll = {
+          extends = "copilot";
+          label = "github-ll";
+        };
+      };
+    };
   };
 }

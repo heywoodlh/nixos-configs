@@ -110,9 +110,14 @@ in {
 
     networking.hostName = hostname;
 
-    # Allow olm for gomuks until issues are resolved
+    # Single insecure-package allowlist. This predicate can only be defined
+    # once (functions don't merge across modules), so per-host allowances go
+    # here rather than in individual modules.
+    #   - olm: for gomuks until issues are resolved
+    #   - broadcom-sta: wl wifi module on Intel Macs (heywoodlh.intel-mac)
     nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
       "olm"
+      "broadcom-sta"
     ];
 
     networking.firewall.trustedInterfaces = [
@@ -372,6 +377,9 @@ in {
 
     users.extraGroups.disk.members = [ "${username}" ];
     users.extraGroups.video.members = [ "${username}" ];
+    # render group grants access to /dev/dri/renderD* for VA-API (e.g. hardware
+    # video encoding in hypr-rdp).
+    users.extraGroups.render.members = [ "${username}" ];
 
     # Seahorse (Gnome Keyring)
     programs.seahorse.enable = cfg.keyring;

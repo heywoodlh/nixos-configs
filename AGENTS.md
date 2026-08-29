@@ -16,3 +16,16 @@
   - `home/linux.nix`: applied to Linux.
   - `home/linux`: more things applied to Linux.
 - `flakes/kube`: Kubernetes deployment manifests. See `flakes/kube/AGENTS.md`.
+
+## Building
+
+- NixOS configurations are usually built with a helper script called
+  `nixos-switch`, which runs
+  `sudo nixos-rebuild switch --flake ~/opt/nixos-configs#$(hostname)`.
+
+## Flake inputs
+
+- When adding or updating flake inputs, scan `flake.lock` for duplicate
+  inputs with `grep _2 flake.lock` (duplicates show up with a `_2`
+  suffix). Add appropriate `follows` (e.g. `inputs.nixpkgs.follows =
+  "nixpkgs"`) to deduplicate them.

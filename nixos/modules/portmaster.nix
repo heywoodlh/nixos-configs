@@ -66,6 +66,12 @@ in {
         "filter/serviceEndpoints" = [
           "+ 100.64.0.0/10"
           "+ fd7a:115c:a1e0::/48"
+          # Tailscale direct (NAT-traversal) connections arrive as UDP on
+          # tailscaled's port (41641 by default, incrementing if taken) from
+          # peers' real (non-tailnet) IPs, so they don't match the tailnet CIDRs
+          # above. Without this allow rule the "- *" below blocks hole-punching
+          # and every peer falls back to a high-latency DERP relay.
+          "+ * UDP/41641-41651"
           "- *"
         ];
       };

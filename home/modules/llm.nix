@@ -372,5 +372,32 @@ in {
         };
       };
     };
+
+    home.file.".pi/agent/models.json".text = builtins.toJSON {
+      providers = lib.optionalAttrs (cfg.lmstudio.enable) {
+        lmstudio = {
+          baseUrl = "http://localhost:1234/v1";
+          api = "openai-completions";
+          apiKey = "local";
+          compat.supportsDeveloperRole = false;
+          models = [
+            {
+              id = cfg.lmstudio.model.alias;
+              name = cfg.lmstudio.model.name;
+              reasoning = true;
+              input = [ "text" ];
+              contextWindow = cfg.lmstudio.model.context_length;
+              maxTokens = cfg.lmstudio.model.max_tokens;
+              cost = {
+                input = 0;
+                output = 0;
+                cacheRead = 0;
+                cacheWrite = 0;
+              };
+            }
+          ];
+        };
+      };
+    };
   };
 }

@@ -32,11 +32,14 @@ in {
       ];
     };
 
-    boot.kernelPackages = lib.mkForce intel-mac-pkgs.linuxKernel.packages.linux_xanmod_latest;
+    # Use the default kernel from the same nixpkgs as the NixOS modules (`pkgs`).
+    # A kernel from a different (older) nixpkgs lacks passthru attrs the modules
+    # now read (e.g. kernel.buildDTBs, kernel.target), which breaks evaluation.
+    boot.kernelPackages = lib.mkForce pkgs.linuxPackages;
     boot.kernelModules = lib.mkForce [ "kvm-intel" "wl" ];
-    boot.extraModulePackages = lib.mkForce [ intel-mac-pkgs.linuxKernel.packages.linux_xanmod_latest.broadcom_sta ];
+    boot.extraModulePackages = lib.mkForce [ pkgs.linuxPackages.broadcom_sta ];
 
-    nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) ["broadcom-sta"];
+    # broadcom-sta is allowed via the single predicate in defaults.nix
     environment.sessionVariables.LIBVA_DRIVER_NAME = "i965";
   };
 }

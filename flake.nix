@@ -327,6 +327,10 @@ rec {
       url = "github:getpaseo/paseo";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hypr-rdp = {
+      url = "github:MuNeNICK/hypr-rdp";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {
@@ -387,6 +391,7 @@ rec {
                       opencode-ssh,
                       youtube-htpc,
                       paseo,
+                      hypr-rdp,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -450,6 +455,7 @@ rec {
       ./home/modules/onepassword.nix
       ./home/modules/bluetuith.nix
       ./home/modules/kde-windows.nix
+      ./home/modules/hypr-rdp.nix
     ];
     macosHomeModules = [
       ./home/modules/darwin-defaults.nix
@@ -933,12 +939,16 @@ rec {
           systemd.targets.hybrid-sleep.enable = false;
 
           heywoodlh = {
+            sshd.enable = true;
             intel-mac = true;
           };
 
           users.users.ops = {
             isNormalUser = true;
             description = "Ops user";
+            # Start the user systemd instance at boot so rootless Docker
+            # (and other user services) run without an interactive login
+            linger = true;
             extraGroups = [
               "adbusers"
               "networkmanager"
@@ -949,6 +959,7 @@ rec {
 
           home-manager.users.ops = {
             home.stateVersion = "25.05";
+            systemd.user.enable = true;
             heywoodlh.home.paseo = {
               desktop = true;
               server = {
@@ -1102,23 +1113,35 @@ rec {
             })
           ];
 
+          # Enable auto-login for hypr-rdp
+          services.displayManager.autoLogin = {
+            enable = true;
+            user = "heywoodlh";
+          };
 
           home-manager.users.heywoodlh = {
-            heywoodlh.home.paseo = {
-              desktop = true;
-              server = {
+            heywoodlh.home = {
+              hypr-rdp = {
                 enable = true;
-                address = "100.74.91.97:6767";
-                hostnames = [
-                  "nixos-nuc"
-                  "nixos-nuc.barn-banana.ts.net"
-                ];
+              };
+              paseo = {
+                desktop = true;
+                server = {
+                  enable = true;
+                  address = "100.74.91.97:6767";
+                  hostnames = [
+                    "nixos-nuc"
+                    "nixos-nuc.barn-banana.ts.net"
+                  ];
+                };
               };
             };
 
             wayland.windowManager.hyprland.extraConfig = ''
-              -- change monitor to high resolution, the last argument is the scale factor
-              hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1 })
+              -- The HDMI dummy is mirrored over RDP (hypr-rdp). Render natively at
+              -- half the iPad Pro panel resolution so hypr-rdp captures without
+              -- scaling and it displays crisply at 2x on the client.
+              hl.monitor({ output = "HDMI-A-1", mode = "1376x1032@60", position = "0x0", scale = 1 })
               -- unscale XWayland
               hl.config({ xwayland = { force_zero_scaling = true } })
               -- toolkit-specific scale

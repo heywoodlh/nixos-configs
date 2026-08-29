@@ -13,7 +13,7 @@ let
         description = ''
           Enable Paseo server configuration.
         '';
-        type = types.bool;
+        type = bool;
       };
       address = mkOption {
         default = "";
@@ -21,12 +21,12 @@ let
           Server address for Paseo to listen on. Required if server enabled.
           Example: "100.101.102.103:6767".
         '';
-        type = types.str;
+        type = str;
       };
       webui = mkOption {
         default = false;
         description = "Enable Paseo daemon web UI.";
-        type = types.bool;
+        type = bool;
       };
       hostnames = mkOption {
         default = [];
@@ -34,7 +34,7 @@ let
           Daemon hostnames. Passed to Paseo as a comma-separated list.
           Example: [ "myhost" ".example.com" ] or [ "true" ] for any.
         '';
-        type = types.listOf types.str;
+        type = listOf str;
       };
     };
   };
@@ -55,7 +55,14 @@ in {
       description = ''
         Install Paseo desktop client.
       '';
-      type = types.bool;
+      type = bool;
+    };
+    extraConf = mkOption {
+      default = false;
+      description = ''
+        Extra configuration to add to `~/.paseo/config.json`.
+      '';
+      type = attrs;
     };
   };
 
@@ -85,6 +92,15 @@ in {
       };
     };
 
+    home.file.".paseo/config.json".text = builtins.toJSON ({
+      "$schema" = "https://paseo.sh/schemas/paseo.config.v1.json";
+      version = 1;
+      app.baseUrl = cfg.server.address; # is overridden by the `--listen` arg, but we'll keep it
+      daemon = {
+        relay.enabled = true;
+      };
+    } // cfg.extraConf);
+
     systemd.user = lib.optionalAttrs pkgs.stdenv.isLinux {
       enable = true;
       services = {
@@ -98,6 +114,7 @@ in {
           Service = {
             ExecStart = "${startPaseo}";
             Type = "simple";
+            EnvironmentFile = "-%h/.config/paseo/.env";
             Environment = mkIf cfg.server.webui [
               "PASEO_WEB_UI_ENABLED=true"
             ];

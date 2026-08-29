@@ -835,6 +835,26 @@
         "url": "https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.2"
       }
     },
+    "hypr-rdp": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787808412,
+        "narHash": "sha256-8LbJbaFr/5Fc4f7fJsPBV3zO+cd1IezAn4uW/cw6L+I=",
+        "owner": "MuNeNICK",
+        "repo": "hypr-rdp",
+        "rev": "393f2d38722435b7845ec5f133e8f0e607e0b7fc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MuNeNICK",
+        "repo": "hypr-rdp",
+        "type": "github"
+      }
+    },
     "hyprcursor": {
       "inputs": {
         "hyprlang": [
@@ -2368,6 +2388,7 @@
         "helix-src": "helix-src",
         "hexstrike-ai": "hexstrike-ai",
         "home-manager": "home-manager",
+        "hypr-rdp": "hypr-rdp",
         "hyprland": "hyprland",
         "jovian-nixos": "jovian-nixos",
         "kyle": "kyle",

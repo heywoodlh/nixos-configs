@@ -5,6 +5,7 @@ with lib.types;
 
 let
   cfg = config.heywoodlh.home.llm;
+  stdenv = pkgs.stdenv;
   homeDir = config.home.homeDirectory;
   vllmLogDir = "${homeDir}/.local/share/vllm/logs";
   vllmModelsDir = "${homeDir}/.local/share/vllm/models";
@@ -98,6 +99,38 @@ let
         default = {};
         description = ''
           Extra configuration of `programs.codex.settings`.
+        '';
+        type = attrs;
+      };
+    };
+  };
+  piType = submodule {
+    options = {
+      enable = mkOption {
+        default = true;
+        description = ''
+          Configure Pi coding agent.
+        '';
+        type = bool;
+      };
+      package = mkOption {
+        default = pkgs.pi-coding-agent;
+        description = ''
+          Package for pi-coding-agent.
+        '';
+        type = package;
+      };
+      extensions = mkOption {
+        default = [];
+        description = ''
+          Extensions to install for Pi coding agent.
+        '';
+        type = listOf str;
+      };
+      extraConf = mkOption {
+        default = {};
+        description = ''
+          Extra configuration to be added to `.pi/agents/settings.json`.
         '';
         type = attrs;
       };
@@ -231,15 +264,25 @@ in {
         description = "Enable Codex configuration.";
         type = codexType;
       };
+      pi = mkOption {
+        default = {};
+        description = "Enable pi-coding-agent configuration.";
+        type = piType;
+      };
     };
   };
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       github-copilot-cli
       claude-code
-      pi-coding-agent
+      socat
+      ripgrep
+    ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      bubblewrap
     ] ++ lib.optionals (cfg.lmstudio.enable) [
       lmstudio
+    ] ++ lib.optionals (cfg.pi.enable) [
+      cfg.pi.package
     ];
 
     heywoodlh.home.helix.ai = true;
@@ -371,6 +414,22 @@ in {
           };
         };
       };
+    };
+
+    home.file.".pi/agent/settings.json".text = builtins.toJSON {
+      defaultProvider = if cfg.lmstudio.enable then "lmstudio" else "openrouter";
+      defaultModel = if cfg.lmstudio.enable then cfg.lmstudio.model.alias else "deepseek/deepseek-v4-flash-0731";
+      defaultTools = ["read" "write" "edit" "bash" "grep" "find" "ls"];
+      npmCommand = ["${pkgs.nodejs}/bin/npm"];
+      theme = "dark";
+      defaultThinkingLevel = "medium";
+      packages = [
+        "npm:pi-mcp-adapter"
+        "npm:pi-web-access"
+        "npm:pi-subagents"
+        "npm:pi-background-tasks"
+        "npm:@dietrichgebert/ponytail"
+      ] ++ cfg.pi.extensions;
     };
 
     home.file.".pi/agent/models.json".text = builtins.toJSON {

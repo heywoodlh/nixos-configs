@@ -34,7 +34,7 @@ let
             read passphrase
             echo -n $passphrase | sudo tee /etc/luks-admin-key &>/dev/null
             sudo chmod 400 /etc/luks-admin-key
-            # then: nixos-rebuild switch
+            sudo nixos-rebuild switch ...
 
           The activation script uses /etc/luks-admin-key to authorize
           enrolling a new keyfile (systemd-cryptenroll has no plain-keyfile

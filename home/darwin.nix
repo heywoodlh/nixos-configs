@@ -29,8 +29,7 @@ in {
 
   home.file.".zshenv" = {
     text = ''
-      # Managed with home-manager, check `~/opt/nixos-configs/home/darwin.nix`
-      # Start Tmux on ssh (i.e. ensure Terminal.app does not use tmux for testing tmux-less environment)
+      test -f /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
       if [[ ''${SSH_TTY} ]]
       then
           [ -z $TMUX ] && { ${myTmux}/bin/tmux new-session && exit;}

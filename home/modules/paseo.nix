@@ -88,6 +88,9 @@ in {
           RunAtLoad = true;
           StartInterval = 60; # Re-run every minute
           AbandonProcessGroup = true;
+          EnvironmentVariables = {
+            PATH = "/run/current-system/sw/bin:$HOME/.nix-profile/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin";
+          };
         };
       };
     };

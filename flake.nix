@@ -893,7 +893,17 @@ rec {
                 ];
               };
               home-manager.users.heywoodlh = {
-                heywoodlh.home.lima.nixos.memory = 12;
+                heywoodlh.home = {
+                  lima.nixos.memory = 12;
+                  paseo.server = {
+                    enable = true;
+                    address = "100.125.243.118:6767";
+                    hostnames = [
+                      "m1-mac-mini"
+                      "m1-mac-mini.barn-banana.ts.net"
+                    ];
+                  };
+                };
               };
             }
           ];

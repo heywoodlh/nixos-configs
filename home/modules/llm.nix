@@ -418,7 +418,7 @@ in {
 
     home.file.".pi/agent/settings.json".text = builtins.toJSON {
       defaultProvider = if cfg.lmstudio.enable then "lmstudio" else "openrouter";
-      defaultModel = if cfg.lmstudio.enable then cfg.lmstudio.model.alias else "deepseek/deepseek-v4-flash-0731";
+      defaultModel = if cfg.lmstudio.enable then cfg.lmstudio.model.name else "deepseek/deepseek-v4-flash-0731";
       defaultTools = ["read" "write" "edit" "bash" "grep" "find" "ls"];
       npmCommand = ["${pkgs.nodejs}/bin/npm"];
       theme = "dark";

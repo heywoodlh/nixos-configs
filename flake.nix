@@ -444,6 +444,7 @@ rec {
       ./home/modules/syncthing.nix
       ./home/modules/pandoc.nix
       ./home/modules/paseo.nix
+      ./home/modules/onepassword.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -452,7 +453,6 @@ rec {
       ./home/modules/hyprland.nix
       ./home/modules/vicinae.nix
       ./home/modules/linux-autostart.nix
-      ./home/modules/onepassword.nix
       ./home/modules/bluetuith.nix
       ./home/modules/kde-windows.nix
       ./home/modules/hypr-rdp.nix
@@ -593,6 +593,7 @@ rec {
               ];
               heywoodlh.home = {
                 darwin.protondrive = true;
+                onepassword.enable = true;
               };
             };
           };

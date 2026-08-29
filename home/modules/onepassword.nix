@@ -8,6 +8,7 @@ let
   op-setup = pkgs.writeShellScriptBin "op-setup" ''
     ${pkgs._1password-cli}/bin/op account add
   '';
+  stdenv = pkgs.stdenv;
 in {
   options = {
     heywoodlh.home.onepassword = {
@@ -52,9 +53,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    heywoodlh.home.onepassword.extraArgs = optionalString (cfg.gpu == false) "--disable-gpu";
+    heywoodlh.home.onepassword.extraArgs = optionalString (cfg.gpu == false && stdenv.hostPlatform.isLinux) "--disable-gpu";
     home.packages = [
       op-setup
+    ] ++ optionals (stdenv.hostPlatform.isLinux) [
       cfg.wrapper
     ];
   };

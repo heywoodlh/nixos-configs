@@ -736,8 +736,12 @@ in {
     builders = if stdenv.isLinux then "mac-mini intel-mac-vm ${altBuilder}" else "homelab ubuntu-arm64 ${altBuilder}";
   in ''
     # User-wide SSH config for nix builders
-      Host ${builders}
-        IdentityAgent "${authSock}"
+    Host ${builders}
+      IdentityAgent "${authSock}"
+
+    # TODO figure out how to make tangled happy with 1password
+    Host tangled.org
+      IdentityAgent "${homeDir}/.ssh/agent.sock"
   '';
   nix.settings.builders = myBuilders;
 

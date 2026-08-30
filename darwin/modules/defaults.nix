@@ -4,7 +4,7 @@ with lib;
 with lib.types;
 
 let
-  cfg = config.heywoodlh.darwin.defaults;
+  cfg = config.heywoodlh.defaults;
   userType = submodule {
     options = {
       name = mkOption {
@@ -23,14 +23,14 @@ let
         type = int;
       };
       homeDir = mkOption {
-        default = "/Users/${config.heywoodlh.darwin.defaults.user.name}";
+        default = "/Users/${config.heywoodlh.defaults.user.name}";
         description = "Home directory for user for heywoodlh defaults.";
         type = path;
       };
     };
   };
 in {
-  options.heywoodlh.darwin.defaults = {
+  options.heywoodlh.defaults = {
     enable = mkOption {
       default = false;
       description = "Enable heywoodlh defaults.";

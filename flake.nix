@@ -412,6 +412,7 @@ rec {
     # Modules for NixOS and Nix-Darwin
     commonModules = [
       ./base/stylix.nix
+      ./base/sshd.nix
     ];
     darwinModules.heywoodlh.darwin = { config, pkgs, ... }: {
       imports = [
@@ -497,7 +498,6 @@ rec {
       ./nixos/modules/laptop.nix
       ./nixos/modules/cosmic.nix
       ./nixos/modules/vm.nix
-      ./nixos/modules/sshd.nix
       ./nixos/modules/helix.nix
       ./nixos/modules/luks.nix
       ./nixos/modules/backups.nix
@@ -517,6 +517,7 @@ rec {
       ./nixos/modules/libvirtd.nix
       ./nixos/modules/tv.nix
       ./nixos/modules/moonlight.nix
+      ./nixos/modules/sshd.nix
     ] ++ commonModules
     ++ lib.optionals (pkgs.stdenv.isAarch64) [
       ./nixos/modules/asahi.nix
@@ -551,8 +552,8 @@ rec {
           ];
 
           heywoodlh = {
+            defaults.enable = true;
             darwin = {
-              defaults.enable = true;
               lmstudio.enable = true;
             };
           };
@@ -871,6 +872,7 @@ rec {
             ./darwin/roles/mac-mini.nix
             darwinWorkstationConfig
             {
+              heywoodlh.sshd.enable = true;
               # Firewall needs to be lenient for VNC/SSH
               networking.applicationFirewall = {
                 enable = lib.mkForce false;

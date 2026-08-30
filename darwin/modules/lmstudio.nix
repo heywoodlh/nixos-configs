@@ -13,7 +13,7 @@ in {
       type = bool;
     };
     user = mkOption {
-      default = config.heywoodlh.darwin.defaults.user.name;
+      default = config.heywoodlh.defaults.user.name;
       description = "User to configure LM Studio for.";
       type = str;
     };

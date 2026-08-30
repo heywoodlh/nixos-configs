@@ -27,15 +27,9 @@ in {
     source = ../assets/nord-apple.png;
   };
 
-  home.file.".zshenv" = {
-    text = ''
-      test -f /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
-      if [[ ''${SSH_TTY} ]]
-      then
-          [ -z $TMUX ] && { ${myTmux}/bin/tmux new-session && exit;}
-      fi
-    '';
-  };
+  home.file.".zshenv".text = ''
+    test -f /opt/homebrew/bin/brew && eval "$(/opt/homebrew/bin/brew shellenv)"
+  '';
 
   home.file.".config/iterm2/iterm2-profiles.json" = {
     text = import ./iterm/iterm2-profiles.nix { inherit myTmux; };

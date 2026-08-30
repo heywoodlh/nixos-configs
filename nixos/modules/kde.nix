@@ -80,6 +80,7 @@ in {
             sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
             general.askForConfirmationOnLogout = false;
           };
+          configFile."baloofilerc"."Basic Settings"."Indexing-Enabled" = false;
         };
       };
     };

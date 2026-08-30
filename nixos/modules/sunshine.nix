@@ -119,6 +119,11 @@ in {
       openFirewall = true;
     };
 
+    # capSysAdmin only grants cap_sys_admin; add cap_sys_nice so Sunshine's
+    # encoder/capture threads can get elevated scheduling priority (EGL HIGH
+    # context) instead of being starved under CPU contention.
+    security.wrappers.sunshine.capabilities = lib.mkForce "cap_sys_admin+p cap_sys_nice+p";
+
     home-manager = {
       users."${cfg.user}" = { ... }: {
         imports = [

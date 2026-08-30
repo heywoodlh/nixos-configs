@@ -64,5 +64,20 @@ in {
         initExtra = tmuxInit;
       };
     };
+
+    system.activationScripts.postActivation.text = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      /usr/bin/pmset -a autorestart 1 disablesleep 1 displaysleep 10 powernap 0
+      {
+        fw=/usr/libexec/ApplicationFirewall/socketfilterfw
+        mosh_server=${pkgs.mosh}/bin/mosh-server
+        stale=$("$fw" --listapps 2>/dev/null | grep -oE '/nix/store/[^ ]*mosh[^ ]*/bin/mosh-server' || true)
+        for old in $stale; do
+          [ "$old" = "$mosh_server" ] || "$fw" --remove "$old" >/dev/null 2>&1 || true
+        done
+        "$fw" --add "$mosh_server" >/dev/null 2>&1 || true
+        "$fw" --unblockapp "$mosh_server" >/dev/null 2>&1 || true
+        echo "Allowed mosh-server through Application Firewall: $mosh_server"
+      } || true
+    '';
   };
 }

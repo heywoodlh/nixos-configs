@@ -119,9 +119,6 @@ in {
       openFirewall = true;
     };
 
-    # capSysAdmin only grants cap_sys_admin; add cap_sys_nice so Sunshine's
-    # encoder/capture threads can get elevated scheduling priority (EGL HIGH
-    # context) instead of being starved under CPU contention.
     security.wrappers.sunshine.capabilities = lib.mkForce "cap_sys_admin+p cap_sys_nice+p";
 
     home-manager = {
@@ -152,12 +149,14 @@ in {
         ];
 
         home.activation.fix-sunshine-service = ''
-          # fix sunshine systemd service
-          if [ ! -e "/home/${cfg.user}/.config/systemd/user/sunshine.service" ]
+          # services.sunshine installs its unit to /etc/systemd/user (system-wide, not
+          # per-user), so restart it here on every activation -- otherwise a rebuild that
+          # changes the sunshine package/config just rewrites the unit file on disk while
+          # the already-running service keeps serving the stale one.
+          if [ -e "/etc/systemd/user/sunshine.service" ]
           then
-            rm -f /home/${cfg.user}/.config/systemd/user/sunshine.service
-            systemctl --user disable sunshine.service || true
-            systemctl --user enable --now sunshine.service || true
+            ${pkgs.systemd}/bin/systemctl --user daemon-reload || true
+            ${pkgs.systemd}/bin/systemctl --user restart sunshine.service || true
           fi
         '';
       };

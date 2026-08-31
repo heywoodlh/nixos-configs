@@ -228,6 +228,7 @@ in {
       nixos = {
         sunshine.enable = true;
         nvidia-patch = true;
+        portmaster.enable = lib.mkForce false;
         scrutiny = {
           enable = true;
           port = 3050;

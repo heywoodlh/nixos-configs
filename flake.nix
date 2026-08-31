@@ -411,6 +411,7 @@ rec {
     darwinSystem = "${arch}-darwin";
     # Modules for NixOS and Nix-Darwin
     commonModules = [
+      ./base/defaults.nix
       ./base/stylix.nix
       ./base/sshd.nix
     ];
@@ -552,7 +553,13 @@ rec {
           ];
 
           heywoodlh = {
-            defaults.enable = true;
+            defaults = {
+              enable = true;
+              user = {
+                uid = 501;
+                homeDir = "/Users/heywoodlh";
+              };
+            };
             darwin = {
               lmstudio.enable = true;
             };

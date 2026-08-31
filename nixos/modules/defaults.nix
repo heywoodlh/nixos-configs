@@ -13,42 +13,8 @@ let
   myHelix = myFlakes.packages.${system}.helix;
   myTmux = myFlakes.packages.${system}.tmux;
   myFish = myFlakes.packages.${system}.fish;
-  userType = submodule {
-    options = {
-      name = mkOption {
-        default = "heywoodlh";
-        description = "Username for heywoodlh defaults.";
-        type = str;
-      };
-      description = mkOption {
-        default = "Spencer Heywood";
-        description = "Full name of user for heywoodlh defaults.";
-        type = str;
-      };
-      uid = mkOption {
-        default = 1000;
-        description = "UID for user for heywoodlh defaults.";
-        type = int;
-      };
-      homeDir = mkOption {
-        default = "/home/heywoodlh";
-        description = "Home directory for user for heywoodlh defaults.";
-        type = path;
-      };
-      icon = mkOption {
-        default = "";
-        description = "Icon for user.";
-        type = str;
-      };
-    };
-  };
 in {
   options.heywoodlh.defaults = {
-    enable = mkOption {
-      default = false;
-      description = "Enable heywoodlh defaults.";
-      type = bool;
-    };
     quietBoot = mkOption {
       default = false;
       description = "Suppress boot output.";
@@ -94,12 +60,7 @@ in {
       description = "Set system timezone.";
       type = str;
     };
-    user = mkOption {
-      description = "User for heywoodlh configuration.";
-      type = userType;
-    };
   };
-
   config = let
     hostname = cfg.hostname;
     username = cfg.user.name;

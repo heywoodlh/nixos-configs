@@ -5,43 +5,7 @@ with lib.types;
 
 let
   cfg = config.heywoodlh.defaults;
-  userType = submodule {
-    options = {
-      name = mkOption {
-        default = "heywoodlh";
-        description = "Username for heywoodlh defaults.";
-        type = str;
-      };
-      description = mkOption {
-        default = "Spencer Heywood";
-        description = "Full name of user for heywoodlh defaults.";
-        type = str;
-      };
-      uid = mkOption {
-        default = 501;
-        description = "UID for user for heywoodlh defaults.";
-        type = int;
-      };
-      homeDir = mkOption {
-        default = "/Users/${config.heywoodlh.defaults.user.name}";
-        description = "Home directory for user for heywoodlh defaults.";
-        type = path;
-      };
-    };
-  };
 in {
-  options.heywoodlh.defaults = {
-    enable = mkOption {
-      default = false;
-      description = "Enable heywoodlh defaults.";
-      type = bool;
-    };
-    user = mkOption {
-      description = "User for heywoodlh configuration.";
-      type = userType;
-    };
-  };
-
   config = mkIf cfg.enable {
     nix.settings = {
       auto-optimise-store = false; # Breaks things

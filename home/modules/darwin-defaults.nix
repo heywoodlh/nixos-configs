@@ -38,7 +38,7 @@ in {
         type = types.bool;
       };
       screenshotDir = mkOption {
-        default = "${homeDir}/Pictures/Screenshots";
+        default = "${homeDir}/Pictures/screenshots";
         description = "Destination directory for screenshots";
         type = types.str;
       };

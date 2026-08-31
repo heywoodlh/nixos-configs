@@ -472,142 +472,6 @@ string
 
 
 
-## heywoodlh\.darwin\.defaults\.enable
-
-
-
-Enable heywoodlh defaults\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-false
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
-
-
-
-## heywoodlh\.darwin\.defaults\.user
-
-
-
-User for heywoodlh configuration\.
-
-
-
-*Type:*
-submodule
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
-
-
-
-## heywoodlh\.darwin\.defaults\.user\.description
-
-
-
-Full name of user for heywoodlh defaults\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-"Spencer Heywood"
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
-
-
-
-## heywoodlh\.darwin\.defaults\.user\.homeDir
-
-
-
-Home directory for user for heywoodlh defaults\.
-
-
-
-*Type:*
-absolute path
-
-
-
-*Default:*
-
-```nix
-"/Users/heywoodlh"
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
-
-
-
-## heywoodlh\.darwin\.defaults\.user\.name
-
-
-
-Username for heywoodlh defaults\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-"heywoodlh"
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
-
-
-
-## heywoodlh\.darwin\.defaults\.user\.uid
-
-
-
-UID for user for heywoodlh defaults\.
-
-
-
-*Type:*
-signed integer
-
-
-
-*Default:*
-
-```nix
-501
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/darwin/modules/defaults.nix)
-
-
-
 ## heywoodlh\.darwin\.lmstudio\.enable
 
 
@@ -846,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults.nix)
 
 
 
@@ -1078,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults.nix)
 
 
 
@@ -1102,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults.nix)
 
 
 
@@ -1126,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults.nix)
 
 
 
@@ -1134,7 +998,7 @@ absolute path
 
 
 
-Icon for user\.
+Icon for user (unused on MacOS)\.
 
 
 
@@ -1150,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults.nix)
 
 
 
@@ -1174,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults.nix)
 
 
 
@@ -1198,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/defaults.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/defaults.nix)
 
 
 
@@ -1506,7 +1370,7 @@ string
 *Default:*
 
 ```nix
-"~/Pictures/Screenshots"
+"~/Pictures/screenshots"
 ```
 
 *Declared by:*
@@ -2409,6 +2273,8 @@ false
 
 ## heywoodlh\.home\.lima\.docker
 
+
+
 Lima Docker configuration\.
 
 
@@ -2510,8 +2376,6 @@ false
 
 
 ## heywoodlh\.home\.lima\.nixos\.memory
-
-
 
 NixOS VM RAM\.
 
@@ -4834,6 +4698,8 @@ true
 
 ## heywoodlh\.nixos\.tv\.user
 
+
+
 User for heywoodlh configuration\.
 
 
@@ -4976,8 +4842,6 @@ signed integer
 
 ## heywoodlh\.rayhunter\.user
 
-
-
 User to run the reverse proxy\.
 
 
@@ -5042,7 +4906,7 @@ false
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/sshd\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/sshd.nix)
 
 
 
@@ -5114,7 +4978,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/xyiaq3ydb63gys7mcs8a48lnn9hl85ab-source/base/stylix\.nix](/nix/store/xyiaq3ydb63gys7mcs8a48lnn9hl85ab-source/base/stylix.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/stylix\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/stylix.nix)
 
 
 
@@ -5138,7 +5002,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/xyiaq3ydb63gys7mcs8a48lnn9hl85ab-source/base/stylix\.nix](/nix/store/xyiaq3ydb63gys7mcs8a48lnn9hl85ab-source/base/stylix.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/stylix\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/stylix.nix)
 
 
 
@@ -5162,7 +5026,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/xyiaq3ydb63gys7mcs8a48lnn9hl85ab-source/base/stylix\.nix](/nix/store/xyiaq3ydb63gys7mcs8a48lnn9hl85ab-source/base/stylix.nix)
+ - [/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/stylix\.nix](/nix/store/mlm5scld5qaa2sjadxk7f8viaw67h1l4-source/base/stylix.nix)
 
 
 

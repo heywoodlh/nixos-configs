@@ -742,6 +742,10 @@ in {
     # TODO figure out how to make tangled happy with 1password
     Host tangled.org
       IdentityAgent "${homeDir}/.ssh/agent.sock"
+
+    # Respect SSH_AUTH_SOCK var
+    Host *
+      IdentityAgent SSH_AUTH_SOCK
   '';
   nix.settings.builders = myBuilders;
 

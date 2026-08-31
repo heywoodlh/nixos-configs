@@ -54,7 +54,7 @@ in {
       '';
     in {
       home.file.".zshenv".text = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-        if [[ ''${SSH_TTY} ]]
+        if [[ ''${SSH_TTY} ]] && [[ -o interactive ]]
         then
           ${tmuxInit}
         fi

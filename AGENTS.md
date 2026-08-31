@@ -29,3 +29,7 @@
   inputs with `grep _2 flake.lock` (duplicates show up with a `_2`
   suffix). Add appropriate `follows` (e.g. `inputs.nixpkgs.follows =
   "nixpkgs"`) to deduplicate them.
+
+# Code
+
+Do not add multi-line comments ever. Code that is self-explanatory should not have comments.

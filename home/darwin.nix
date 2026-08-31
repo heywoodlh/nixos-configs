@@ -61,5 +61,12 @@ in {
   home.file.".config/fish/config.fish".text = ''
     # Fix for "too many files open" error on MacOS
     builtin ulimit -n 10240
+
+    if test -n "$SSH_CONNECTION"
+      set -gx SSH_AUTH_SOCK $HOME/.ssh/agent.sock
+      set -gx GIT_CONFIG_COUNT 1
+      set -gx GIT_CONFIG_KEY_0 gpg.ssh.program
+      set -gx GIT_CONFIG_VALUE_0 ssh-keygen
+    end
   '';
 }

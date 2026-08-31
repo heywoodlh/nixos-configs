@@ -239,6 +239,27 @@ in {
     programs.gamemode = {
       enable = true;
       enableRenice = true;
+      settings = {
+        general = {
+          renice = 15;
+          desiredgov = "performance";
+          softrealtime = "auto";
+          ioprio = 0;
+        };
+        # Requires Coolbits (set in nvidia-patch.nix) for GPU powermizer control.
+        gpu = {
+          apply_gpu_optimisations = "accept-responsibility";
+          gpu_device = 0;
+          nv_powermizer_mode = 1;
+        };
+      };
+    };
+
+    # Sched-ext scheduler tuned for interactive/foreground latency; the
+    # cachyos kernel keeps SCHED_CLASS_EXT enabled specifically for this.
+    services.scx = lib.optionalAttrs (system == "x86_64-linux") {
+      enable = true;
+      scheduler = "scx_lavd";
     };
 
     # For performance, try these launch options
@@ -305,13 +326,17 @@ in {
     powerManagement.scsiLinkPolicy = "max_performance";
 
     boot = {
+      # Recovers CPU throughput on affected microarchitectures at the cost of
+      # Spectre/Meltdown-class mitigations; opt-in tradeoff, gated to the
+      # dedicated console-like gaming configuration only.
+      kernelParams = lib.mkIf cfg.console [ "mitigations=off" ];
       kernel.sysctl = {
         "vm.swappiness" = 150;
         "vm.vfs_cache_pressure" = 50;
         "vm.dirty_bytes" = 268435456;
         "vm.page-cluster" = 0;
         "vm.dirty_background_bytes" = 67108864;
-        "vm.dirty_writeback-centisecs" = 1500;
+        "vm.dirty_writeback_centisecs" = 1500;
         "kernel.nmi_watchdog" = 0;
         "kernel.unprivileged_userns_clone" = 1;
         "kernel.kptr_restrict" = 2;
@@ -485,7 +510,7 @@ in {
     # killer fires under memory pressure instead of compressing pages.
     zramSwap = {
       enable = true;
-      algorithm = "zstd";
+      algorithm = "lz4";
       memoryPercent = 50;
     };
   };

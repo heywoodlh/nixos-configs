@@ -1,238 +1,4 @@
-## heywoodlh\.apple-silicon\.enable
-
-
-
-Enable heywoodlh apple-silicon configuration\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-false
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
-## heywoodlh\.apple-silicon\.cachefile
-
-Asahi Linux cache file name in ` /boot `\.
-
-
-
-*Type:*
-unspecified value
-
-
-
-*Default:*
-
-```nix
-""
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
-## heywoodlh\.apple-silicon\.firmwarefile
-
-
-
-Asahi Linux peripheral firmware file name in ` /boot `\.
-
-
-
-*Type:*
-unspecified value
-
-
-
-*Default:*
-
-```nix
-"firmware.cpio"
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
-## heywoodlh\.apple-silicon\.hash
-
-
-
-Hashes for firmware files\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{ }
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
-## heywoodlh\.apple-silicon\.hash\.cache
-
-
-
-Hash for kernel cache\.
-Retrieve with ` nix hash convert --hash-algo sha256 $(nix-prefetch-url /boot/asahi/<cachefile>) `\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-""
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
-## heywoodlh\.apple-silicon\.hash\.firmware
-
-
-
-Hash for firmware file\.
-Retrieve with ` nix hash convert --hash-algo sha256 $(nix-prefetch-url /boot/vendorfw/firmware.cpio) `\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-""
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
-## heywoodlh\.apple-silicon\.steam
-
-
-
-Enable Asahi Steam configuration\.
-
-
-
-*Type:*
-submodule
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
-## heywoodlh\.apple-silicon\.steam\.enable
-
-
-
-Enable Steam for Asahi\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-true
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
-## heywoodlh\.apple-silicon\.steam\.memory
-
-
-
-Memory allowed for Steam\. Set to 6144 for 8GB machines\.
-
-
-
-*Type:*
-signed integer
-
-
-
-*Default:*
-
-```nix
-0
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
-## heywoodlh\.apple-silicon\.steam\.user
-
-
-
-User for Steam configuration\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-"heywoodlh"
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
-
-
-
 ## heywoodlh\.backup\.enable
-
-
 
 Enable heywoodlh backup client configuration\.
 
@@ -710,7 +476,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults.nix)
 
 
 
@@ -942,7 +708,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults.nix)
 
 
 
@@ -966,7 +732,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults.nix)
 
 
 
@@ -990,7 +756,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults.nix)
 
 
 
@@ -1014,7 +780,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults.nix)
 
 
 
@@ -1038,7 +804,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults.nix)
 
 
 
@@ -1062,7 +828,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/defaults.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/defaults.nix)
 
 
 
@@ -1612,7 +1378,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/l0m7y5bxpz3p5xdk1air3jizi7nz4z0q-tmux/bin/tmux"
+"/nix/store/g8ahqkvkdflf8pwwrbxj9qyf1asyxa7c-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1660,7 +1426,7 @@ signed integer
 *Default:*
 
 ```nix
-16
+14
 ```
 
 *Declared by:*
@@ -2377,6 +2143,8 @@ false
 
 ## heywoodlh\.home\.lima\.nixos\.memory
 
+
+
 NixOS VM RAM\.
 
 
@@ -2615,8 +2383,6 @@ string
 
 
 ## heywoodlh\.home\.llm\.lmstudio\.model\.context_length
-
-
 
 Context length for the model in OpenCode\.
 
@@ -3232,7 +2998,7 @@ package
 *Default:*
 
 ```nix
-<derivation 1password-8.12.33>
+<derivation 1password-8.12.32>
 ```
 
 *Declared by:*
@@ -4842,6 +4608,8 @@ signed integer
 
 ## heywoodlh\.rayhunter\.user
 
+
+
 User to run the reverse proxy\.
 
 
@@ -4906,7 +4674,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/sshd\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/sshd.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/sshd\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/sshd.nix)
 
 
 
@@ -4978,7 +4746,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/stylix\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/stylix.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/stylix\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/stylix.nix)
 
 
 
@@ -5002,7 +4770,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/stylix\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/stylix.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/stylix\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/stylix.nix)
 
 
 
@@ -5026,7 +4794,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/stylix\.nix](/nix/store/pyjgs5z3q8y35s5f9z8i351kfqifii7j-source/base/stylix.nix)
+ - [/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/stylix\.nix](/nix/store/2f0b79nnisf8n68ivk1a5z9x4frni85z-source/base/stylix.nix)
 
 
 

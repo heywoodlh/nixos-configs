@@ -229,6 +229,7 @@ in {
         sunshine.enable = true;
         nvidia-patch = true;
         portmaster.enable = lib.mkForce false;
+        cachyos-kernel.kernel = "linuxPackages-cachyos-bore-zen4";
         scrutiny = {
           enable = true;
           port = 3050;
@@ -261,6 +262,15 @@ in {
     services.scx = lib.optionalAttrs (system == "x86_64-linux") {
       enable = true;
       scheduler = "scx_lavd";
+    };
+
+    environment.sessionVariables = {
+      # Uses the already-loaded ntsync kernel module for Wine sync primitives
+      # instead of esync/fsync; cheaper on the CPU under sync-heavy titles.
+      PROTON_USE_NTSYNC = "1";
+    } // lib.optionalAttrs (system == "x86_64-linux" && config.heywoodlh.nixos.nvidia-patch) {
+      # Required by some titles for DLSS to activate under Proton.
+      PROTON_ENABLE_NVAPI = "1";
     };
 
     # For performance, try these launch options
@@ -343,6 +353,14 @@ in {
         "kernel.kptr_restrict" = 2;
         "net.core.netdev_max_backlog" = 4096;
         "fs.file-max" = 2097152;
+      } // lib.optionalAttrs (system == "x86_64-linux") {
+        # Split-lock detection single-threads the offending process on trap;
+        # several Proton titles hit this constantly and stutter as a result.
+        "kernel.split_lock_mitigate" = 0;
+      } // lib.optionalAttrs config.heywoodlh.nixos.cachyos-kernel.enable {
+        # Only valid when the selected cachyos kernel package is actually
+        # built with CONFIG_SCHED_BORE (see cachyos-kernel.kernel above).
+        "kernel.sched_bore" = "1";
       };
       extraModprobeConfig = ''
         blacklist sp5100_tco

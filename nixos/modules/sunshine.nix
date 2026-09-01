@@ -127,14 +127,8 @@ in {
           (plasma-manager + /modules/default.nix)
         ];
         programs.ashell.enable = lib.mkForce false;
-        # Ensure to disable screen dim on Nvidia systems: https://bugs.kde.org/show_bug.cgi?id=460341
         programs.plasma = {
           kscreenlocker.autoLock = false;
-          powerdevil.AC = {
-            powerProfile = "performance";
-            autoSuspend.action = "nothing";
-            whenSleepingEnter = "hybridSleep";
-          };
         };
         home.file.".config/fish/config.fish".text = ''
           export XDG_RUNTIME_DIR="/run/user/$(id -u)"

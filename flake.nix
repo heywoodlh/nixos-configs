@@ -1187,6 +1187,7 @@ rec {
           heywoodlh.nixos = {
             nvidia-patch = true;
             gaming.enable = true;
+            cachyos-kernel.kernel = "linuxPackages-cachyos-bore-zen4";
           };
 
           environment.systemPackages = with pkgs; [

@@ -357,7 +357,7 @@ in {
         # Split-lock detection single-threads the offending process on trap;
         # several Proton titles hit this constantly and stutter as a result.
         "kernel.split_lock_mitigate" = 0;
-      } // lib.optionalAttrs config.heywoodlh.nixos.cachyos-kernel.enable {
+      } // lib.optionalAttrs (config.heywoodlh.nixos.cachyos-kernel.enable && lib.hasInfix "bore" config.heywoodlh.nixos.cachyos-kernel.kernel) {
         # Only valid when the selected cachyos kernel package is actually
         # built with CONFIG_SCHED_BORE (see cachyos-kernel.kernel above).
         "kernel.sched_bore" = "1";

@@ -428,7 +428,6 @@ in {
         "npm:pi-web-access"
         "npm:pi-subagents"
         "npm:pi-background-tasks"
-        "npm:@erichll/pi-sandbox"
         "npm:@dietrichgebert/ponytail"
       ] ++ cfg.pi.extensions;
     };

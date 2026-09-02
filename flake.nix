@@ -1099,6 +1099,7 @@ rec {
           heywoodlh = {
             sshd.enable = true;
             nixos = {
+              portmaster.enable = lib.mkForce false;
               gaming.enable = true;
               moonlight.enable = true;
             };
@@ -1131,9 +1132,7 @@ rec {
 
           home-manager.users.heywoodlh = {
             heywoodlh.home = {
-              hypr-rdp = {
-                enable = true;
-              };
+              hypr-rdp.enable = true;
               paseo = {
                 desktop = true;
                 server = {

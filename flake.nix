@@ -194,7 +194,7 @@ rec {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
     # jovian-nixos requires a specific nixpkgs for its custom packages (mesa, pipewire, etc.)
-    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/867dcbc30bafe3c862ef88620f2e7a109d7d3be5";
+    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/15a1295c38077f554182010ce15237cc6b45f83c";
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs-jovian-nixos";

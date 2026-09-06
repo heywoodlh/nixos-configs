@@ -35,6 +35,20 @@ in {
       '';
       type = attrs;
     };
+    resolutions = mkOption {
+      default = "[ 1920x1080 ]";
+      description = ''
+        Allowed resolutions.
+      '';
+      type = str;
+    };
+    dynamic = mkOption {
+      default = false;
+      description = ''
+        Automatically adjust resolution based on the connecting client's resolution.
+      '';
+      type = bool;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -45,6 +59,15 @@ in {
     };
 
     heywoodlh.nixos.kde.enable = true;
+
+    # Add input rules comparable to Steam for Sunshine to work with/without Steam
+    services.udev.packages = [
+      (pkgs.writeTextFile {
+        name = "sunshine-uinput-uaccess";
+        text = ''KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"'';
+        destination = "/etc/udev/rules.d/60-sunshine-uinput.rules";
+      })
+    ];
 
     # Use KDE autologin
     services.displayManager = {
@@ -60,45 +83,92 @@ in {
       user = cfg.user;
     };
 
+    # https://github.com/orgs/LizardByte/discussions/439#discussioncomment-15813284
+    security.wrappers.conntrack = lib.mkIf config.services.sunshine.enable {
+      source = "${pkgs.conntrack-tools}/bin/conntrack";
+      # conntrack needs cap_net_admin to run as a normal user
+      capabilities = "cap_net_admin+ep";
+      owner = "root"; group = "root";
+    };
+    systemd.user.services.sunshine-wake-monitor= lib.mkIf config.services.sunshine.enable {
+      description = "Monitor Sunshine TCP connections and wake monitors";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      serviceConfig = {
+        ExecStart = pkgs.writeShellScript "sunshine_wake_monitor" ''
+          ${config.security.wrapperDir}/conntrack -E -e new -p tcp --dport ${toString (config.services.sunshine.settings.port - 5)} | \
+          while read line; do
+            echo "New Sunshine connection detected, waking up the monitors"
+            ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor -d on
+            sleep 5
+          done
+        '';
+        Restart = "on-failure";
+      };
+    };
+
     services.sunshine = {
       enable = true;
       package = sunshine-pkgs.sunshine.override {
         cudaSupport = true;
         cudaPackages = pkgs.cudaPackages;
+        libva = pkgs.libva;
       };
 
       settings = cfg.extraConfig // {
-        resolutions = "[ 1920x1080 ]";
+        resolutions = cfg.resolutions;
         system_tray = false;
         fps = "[ 60 ]";
         av1_mode = 1;
         back_button_timeout = 2000;
         origin_web_ui_allowed = "wan";
-        #global_prep_cmd = let
-        #  autoAdjustRes = pkgs.writeShellScript "res.sh" ''
-        #    ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.HDMI-A-1.mode.''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS} | grep -q 'not found'
-        #    if [[ "$?" == 0 ]]
-        #    then
-        #       msg="$(date) unable to automatically adjust resolution, falling back to 1080 -- requested resolution: ''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS}"
-        #       echo "$msg" | tee -a /tmp/sunshine-res.log
-        #       ${pkgs.libnotify}/bin/notify-send "Unable to automatically adjust resolution, see /tmp/sunshine-res.log"
-        #       ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor output.HDMI-A-1.mode.1920x1080@60 || true
-        #    else
-        #       echo "$(date) successfully adjusted resolution: ''${SUNSHINE_CLIENT_WIDTH}x''${SUNSHINE_CLIENT_HEIGHT}@''${SUNSHINE_CLIENT_FPS}" | tee -a /tmp/sunshine-res.log
-        #    fi
-        #    '';
-        #in builtins.toJSON [
-        #  {
-        #    do = "${autoAdjustRes}";
-        #    undo = "";
-        #  }
-        #];
+      } // lib.optionalAttrs cfg.dynamic {
+        global_prep_cmd = let
+          autoAdjustRes = pkgs.writeShellScript "res.sh" ''
+            output="HDMI-A-1"
+            width="''${SUNSHINE_CLIENT_WIDTH}"
+            height="''${SUNSHINE_CLIENT_HEIGHT}"
+            fps="''${SUNSHINE_CLIENT_FPS}"
+
+            # Dummy HDMI adapters only advertise a fixed EDID mode list, so a
+            # resolution outside that set (e.g. a tablet's native panel res)
+            # has to be injected as a custom mode before kscreen-doctor can
+            # switch to it. Check for an existing mode of this size first so
+            # repeated connects don't pile up duplicate custom modes.
+            have_mode="$(${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor -j | ${pkgs.jq}/bin/jq -r --arg o "$output" --argjson w "$width" --argjson h "$height" '.outputs[] | select(.name == $o) | .modes[] | select(.size.width == $w and .size.height == $h) | .id' | head -n1)"
+            if [[ -z "$have_mode" ]]
+            then
+              ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor "output.$output.addCustomMode.$width.$height.$((''${fps%%.*} * 1000)).reduced"
+            fi
+
+            ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor "output.$output.mode.''${width}x''${height}@''${fps}" | grep -q 'not found'
+            if [[ "$?" == 0 ]]
+            then
+               msg="$(date) unable to automatically adjust resolution, falling back to 1080 -- requested resolution: ''${width}x''${height}@''${fps}"
+               echo "$msg" | tee -a /tmp/sunshine-res.log
+               ${pkgs.libnotify}/bin/notify-send "Unable to automatically adjust resolution, see /tmp/sunshine-res.log"
+               ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor "output.$output.mode.1920x1080@60" || true
+            else
+               echo "$(date) successfully adjusted resolution: ''${width}x''${height}@''${fps}" | tee -a /tmp/sunshine-res.log
+            fi
+            '';
+        in builtins.toJSON [
+          {
+            do = "${autoAdjustRes}";
+            undo = "";
+          }
+        ];
       };
 
       applications = {
         apps = [
           {
             name = "Desktop";
+            prep-cmd = {
+              do = "QT_QPA_PLATFORM=wayland DISPLAY=:0 ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor --dpms on";
+              undo = [ "" ];
+            };
             image-path = "desktop.png";
           }
         ] ++ lib.optionals (config.programs.steam.enable) [
@@ -107,7 +177,7 @@ in {
             detached = [ "${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/bigpicture" ];
             output = "/tmp/steam.txt";
             prep-cmd = {
-              do = "";
+              do = "QT_QPA_PLATFORM=wayland DISPLAY=:0 ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor --dpms on";
               undo = [ "${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://close/bigpicture" ];
             };
             image-path = "steam.png";
@@ -135,8 +205,9 @@ in {
           export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
         '';
         home.packages = with pkgs; [
-          steamtinkerlaunch
           sunshine
+        ] ++ lib.optionals (config.programs.steam.enable) [
+          steamtinkerlaunch
           wget # winetricks requires GNU wget
           wineWow64Packages.stable # support both 32-bit and 64-bit applications
           winetricks

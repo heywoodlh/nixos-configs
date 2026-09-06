@@ -49,6 +49,13 @@ in {
     services.desktopManager.plasma6.enable = true;
     programs.ssh.askPassword = lib.mkForce "${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass";
 
+    # if enabling KDE, assume all other desktops not desired
+    heywoodlh = {
+      gnome = lib.mkForce false;
+      hyprland = lib.mkForce false;
+      cosmic = lib.mkForce false;
+    };
+
     services.displayManager = lib.optionalAttrs (cfg.windows) {
       gdm.enable = lib.mkForce false;
       defaultSession = lib.mkForce "plasma";

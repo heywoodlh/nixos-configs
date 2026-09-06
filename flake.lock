@@ -1233,11 +1233,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787070575,
-        "narHash": "sha256-97M3+IVhghoUms/LbqDbF3IHSd4pQroYvBQ+jbDllSg=",
+        "lastModified": 1787899316,
+        "narHash": "sha256-1y0aG4j8ZzUWiUlnAdnC6VZxkqbp7UDuFE222f3u/MQ=",
         "owner": "Jovian-Experiments",
         "repo": "Jovian-NixOS",
-        "rev": "0db409803f69e84c87361efcc6fccb04f41afc0c",
+        "rev": "9ffc5dc5af266c2e44066f22e5496274cf93a1a6",
         "type": "github"
       },
       "original": {
@@ -1887,17 +1887,17 @@
     },
     "nixpkgs-jovian-nixos": {
       "locked": {
-        "lastModified": 1786514691,
-        "narHash": "sha256-9dkt1i5JNbEfPb+EjLcSDNs8zqEHQ/1JlSaKgj0SBAg=",
+        "lastModified": 1787498568,
+        "narHash": "sha256-9i/VTdusq/+NM/tz+J1Re+ojkMB8MBf0QshnYfzHz30=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "867dcbc30bafe3c862ef88620f2e7a109d7d3be5",
+        "rev": "56c02bc00adcf003215cc4bd996d6efaf4cff188",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "867dcbc30bafe3c862ef88620f2e7a109d7d3be5",
+        "rev": "56c02bc00adcf003215cc4bd996d6efaf4cff188",
         "type": "github"
       }
     },
@@ -2609,7 +2609,7 @@
     "ssh-keys": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-5GA19+3+veUNfKNUkVBh759+PZy0RvHU4sf9QSLJVjU=",
+        "narHash": "sha256-hOeGv9+GJgwzfzQKvYliQBKFcPryAZJIsEgKlaHCHv4=",
         "type": "file",
         "url": "https://github.com/heywoodlh.keys"
       },

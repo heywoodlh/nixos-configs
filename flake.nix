@@ -194,7 +194,7 @@ rec {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
     };
     # jovian-nixos requires a specific nixpkgs for its custom packages (mesa, pipewire, etc.)
-    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/867dcbc30bafe3c862ef88620f2e7a109d7d3be5";
+    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/56c02bc00adcf003215cc4bd996d6efaf4cff188";
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs-jovian-nixos";
@@ -1089,6 +1089,7 @@ rec {
             ./nixos/hosts/steam-deck.nix
           ];
           heywoodlh.nixos.steam-deck.enable = true;
+          hardware.printers.ensurePrinters = lib.mkForce [];
         };
 
         nixos-nuc = nixosConfigWith nixpkgs-jovian-nixos "workstation" "nixos-nuc" {
@@ -1096,12 +1097,26 @@ rec {
             ./nixos/hosts/nuc.nix
           ];
 
+          hardware.graphics = {
+            enable = true;
+            enable32Bit = true;
+          };
+
           heywoodlh = {
             sshd.enable = true;
             nixos = {
               portmaster.enable = lib.mkForce false;
-              gaming.enable = true;
-              moonlight.enable = true;
+              sunshine = {
+                enable = true;
+                resolutions = "[ 1920x1080, 2752x2064]";
+                dynamic = true;
+                extraConfig = {
+                  sunshine_name = "nixos-nuc";
+                  output_name = 0;
+                  encoder = "vaapi";
+                  csrf_allowed_origins = "https://nixos-nuc.barn-banana.ts.net:47990,https://nixos-nuc:47990";
+                };
+              };
             };
           };
 
@@ -1114,25 +1129,8 @@ rec {
           # Apple Magic keyboard (makes useless globe key ctrl)
           boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
 
-          # Xbox controller Bluetooth input support for Moonlight
-          boot.kernelModules = [ "hid_microsoft" "uinput" ];
-          services.udev.packages = [
-            (pkgs.writeTextFile {
-              name = "xbox-hidraw-udev-rules";
-              text = ''KERNEL=="hidraw*", TAG+="uaccess"'';
-              destination = "/etc/udev/rules.d/60-xbox-hidraw.rules";
-            })
-          ];
-
-          # Enable auto-login for hypr-rdp
-          services.displayManager.autoLogin = {
-            enable = true;
-            user = "heywoodlh";
-          };
-
           home-manager.users.heywoodlh = {
             heywoodlh.home = {
-              hypr-rdp.enable = true;
               paseo = {
                 desktop = true;
                 server = {

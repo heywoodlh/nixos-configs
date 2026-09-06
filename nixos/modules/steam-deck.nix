@@ -80,9 +80,10 @@ in {
       };
     };
 
-    # No need for extra DE stuff on Deck
+    # No need for extra stuff on Deck
     heywoodlh.hyprland = mkForce false;
     heywoodlh.cosmic = mkForce false;
+    heywoodlh.nixos.portmaster.enable = lib.mkForce false;
 
     jovian = {
       steam = {

@@ -152,7 +152,7 @@ spec:
       serviceAccountName: hermes-agent
       hostname: hermes-agent
       containers:
-        - image: docker.io/heywoodlh/hermes-agent:2026.4.30
+        - image: docker.io/heywoodlh/hermes-agent:2026.8.31
           imagePullPolicy: Always
           name: hermes-agent
           securityContext:

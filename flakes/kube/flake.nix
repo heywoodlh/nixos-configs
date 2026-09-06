@@ -482,7 +482,7 @@
         hermes-agent = mkKubeDrv "hermes-agent" {
           src = ./templates/hermes-agent.yaml;
           namespace = "machine-learning";
-          image = "docker.io/heywoodlh/hermes-agent:2026.4.30";
+          image = "docker.io/heywoodlh/hermes-agent:2026.8.31";
           replicas = 1;
           hostfolder = "/media/data-ssd/hermes-agent";
           syncthing = "/media/data_pool/syncthing";

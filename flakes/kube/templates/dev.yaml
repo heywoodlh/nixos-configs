@@ -650,7 +650,7 @@ spec:
             claimName: dev-host-keys
         - name: syncthing-data
           hostPath:
-            path: /opt/syncthing
+            path: /media/data_pool/syncthing
             type: Directory
         - name: dev-nix-conf
           configMap:

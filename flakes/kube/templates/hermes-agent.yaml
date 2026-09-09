@@ -15,7 +15,7 @@ metadata:
 rules:
 # Core API resources (read-only, no exec)
 - apiGroups: [""]
-  resources: ["pods", "services", "configmaps", "secrets", "persistentvolumes", "persistentvolumeclaims", "nodes", "namespaces", "events", "endpoints", "serviceaccounts"]
+  resources: ["pods", "services", "configmaps", "persistentvolumes", "persistentvolumeclaims", "nodes", "namespaces", "events", "endpoints", "serviceaccounts"]
   verbs: ["get", "list", "watch"]
 # Apps API resources
 - apiGroups: ["apps"]

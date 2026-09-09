@@ -653,6 +653,7 @@ rec {
         }
         extraConf
       ] ++ lib.optionals (machineType == "server") [
+        ./nixos/roles/nixos/daily-flake-switch.nix
         ./nixos/roles/security/sshd-monitor.nix
         ./nixos/roles/tailscale.nix
         ./nixos/roles/monitoring/syslog-ng/client.nix

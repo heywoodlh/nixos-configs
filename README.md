@@ -1,7 +1,6 @@
 [![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
 
-[![Linux builds](https://github.com/heywoodlh/nixos-configs/actions/workflows/linux.yml/badge.svg)](https://github.com/heywoodlh/nixos-configs/actions/workflows/linux.yml)
-[![Darwin builds](https://github.com/heywoodlh/nixos-configs/actions/workflows/darwin.yml/badge.svg)](https://github.com/heywoodlh/nixos-configs/actions/workflows/darwin.yml)
+[![Nix configuration builds](https://github.com/heywoodlh/nixos-configs/actions/workflows/nix-builds.yml/badge.svg)](https://github.com/heywoodlh/nixos-configs/actions/workflows/nix-builds.yml)
 
 ## NixOS Configs
 

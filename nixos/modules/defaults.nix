@@ -297,6 +297,11 @@ in {
     users.users.${username} = {
       isNormalUser = true;
       description = "${userDesc}";
+      # Keep systemd --user (and /run/user/<uid>) alive without a logind
+      # session. SSH logins don't create one on hosts where sshd runs with
+      # UsePAM no (heywoodlh.sshd.mfa = false), so user services like
+      # syncthing would otherwise be unreachable over SSH.
+      linger = true;
       extraGroups = [
         "wheel"
         "adbusers"

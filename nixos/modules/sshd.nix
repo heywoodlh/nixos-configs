@@ -85,7 +85,7 @@ in {
     '';
 
     environment.systemPackages = lib.optionals (cfg.mfa) [
-      google-authenticator
+      pkgs.google-authenticator
     ];
 
     boot.postBootCommands = optionalString (cfg.mfa) ''

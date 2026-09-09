@@ -1,0 +1,171 @@
+name: build-and-cache-nix-configurations
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      linux: ${{ steps.filter.outputs.linux == 'true' || github.event_name == 'workflow_dispatch' }}
+      darwin: ${{ steps.filter.outputs.darwin == 'true' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            linux:
+              - 'nixos/**'
+              - 'home/linux.nix'
+              - 'home/desktop.nix'
+              - 'home/base.nix'
+              - 'home/linux/**'
+              - 'home/modules/**'
+              - 'base/**'
+              - 'pkgs/**'
+              - 'assets/**'
+              - 'flake.nix'
+              - 'flake.lock'
+              - '.github/workflows/nix-builds.yml'
+            darwin:
+              - 'darwin/**'
+              - 'home/darwin.nix'
+              - 'home/desktop.nix'
+              - 'home/base.nix'
+              - 'home/modules/**'
+              - 'base/**'
+              - 'pkgs/**'
+              - 'assets/**'
+              - 'flake.nix'
+              - 'flake.lock'
+              - '.github/workflows/nix-builds.yml'
+
+  linux:
+    needs: changes
+    if: needs.changes.outputs.linux == 'true'
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: build-linux-amd64
+            runner: ubuntu-24.04
+            targets: >-
+              .#nixosConfigurations.nixos-server.config.system.build.toplevel
+              .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
+              .#nixosConfigurations.nixos-gaming.config.system.build.toplevel
+              .#nixosConfigurations.homelab.config.system.build.toplevel
+              .#homeConfigurations.heywoodlh-server.activationPackage
+              .#homeConfigurations.heywoodlh.activationPackage
+          - name: build-linux-arm64
+            runner: ubuntu-24.04-arm
+            targets: >-
+              .#nixosConfigurations.nixos-server.config.system.build.toplevel
+              .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Login to Tailnet
+        if: github.event_name == 'push'
+        uses: tailscale/github-action@v4.1.0
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: true
+
+      - name: Configure Nix cache
+        if: github.event_name == 'push'
+        env:
+          ATTIC_PUBKEY: ${{ secrets.ATTIC_LINUX_PUBKEY }}
+          ATTIC_CACHE: http://attic/nixos
+        run: |
+          sudo tee -a /etc/nix/nix.conf > /dev/null <<EOF
+          extra-substituters = $ATTIC_CACHE
+          extra-trusted-public-keys = $ATTIC_PUBKEY
+          EOF
+
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@main
+
+      - name: Build configurations
+        run: |
+          nix build --accept-flake-config --print-out-paths ${{ matrix.targets }} | tee build-paths.txt
+
+      - name: Configure Attic
+        if: github.event_name == 'push'
+        env:
+          ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
+        run: |
+          mkdir -p ~/.config/attic
+          printf 'default-server = "kube"\n\n[servers.kube]\nendpoint = "http://attic"\ntoken = "%s"\n' "$ATTIC_TOKEN" > ~/.config/attic/config.toml
+
+      - name: Cache build outputs
+        if: github.event_name == 'push'
+        run: xargs -r nix run nixpkgs#attic-client -- push nixos < build-paths.txt
+
+  darwin:
+    needs: changes
+    if: needs.changes.outputs.darwin == 'true'
+    name: build-darwin-arm64
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Login to Tailnet
+        if: github.event_name == 'push'
+        uses: tailscale/github-action@v4.1.0
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: true
+
+      - name: Configure Nix cache
+        if: github.event_name == 'push'
+        env:
+          ATTIC_PUBKEY: ${{ secrets.ATTIC_DARWIN_PUBKEY }}
+          ATTIC_CACHE: http://attic/nix-darwin
+        run: |
+          sudo tee -a /etc/nix/nix.conf > /dev/null <<EOF
+          extra-substituters = $ATTIC_CACHE
+          extra-trusted-public-keys = $ATTIC_PUBKEY
+          EOF
+
+      - name: Create Darwin run directory
+        run: |
+          echo -e 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf > /dev/null
+          /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t > /dev/null 2>&1 || true
+
+      - name: Build configuration
+        run: |
+          nix build --accept-flake-config --print-out-paths .#darwinConfigurations.m1-mac-mini.system | tee build-paths.txt
+
+      - name: Configure Attic
+        if: github.event_name == 'push'
+        env:
+          ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
+        run: |
+          mkdir -p ~/.config/attic
+          printf 'default-server = "kube"\n\n[servers.kube]\nendpoint = "http://attic"\ntoken = "%s"\n' "$ATTIC_TOKEN" > ~/.config/attic/config.toml
+
+      - name: Cache build output
+        if: github.event_name == 'push'
+        run: xargs -r nix run nixpkgs#attic-client -- push nix-darwin < build-paths.txt

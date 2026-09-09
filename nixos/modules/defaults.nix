@@ -138,6 +138,18 @@ in {
 
     environment.homeBinInPath = true;
 
+    # Ensure every user (not just those with a full PAM/logind session) can
+    # reach their systemd --user instance and session bus. Guarded on the
+    # runtime dir existing so we never point root (or a session-less login)
+    # at a /run/user/<uid> that logind never created.
+    environment.extraInit = ''
+      if [ -d "/run/user/$(id -u)" ]
+      then
+        export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+        export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+      fi
+    '';
+
     # virtualization
     virtualisation = {
       docker.rootless = {
@@ -176,6 +188,7 @@ in {
         sudo ${pkgs.nix}/bin/nix-env --list-generations --profile /nix/var/nix/profiles/system
       '';
     in [
+      android-tools
       usbutils
       gptfdisk
       myNixosSwitch
@@ -228,6 +241,13 @@ in {
       gnome.gnome-keyring.enable = cfg.keyring;
       # iPhone usb support
       usbmuxd.enable = true;
+      udev.extraRules = ''
+        SUBSYSTEM=="usb", ENV{ID_DEBUG_APPLIANCE}=="android", GROUP="adbusers", MODE="0660"
+      '' + optionalString (cfg.audio) ''
+        KERNEL=="rtc0", GROUP="audio"
+        KERNEL=="hpet", GROUP="audio"
+        DEVPATH=="/devices/virtual/misc/cpu_dma_latency", OWNER="root", GROUP="audio", MODE="0660"
+      '';
     } // optionalAttrs (cfg.syncthing) {
       logind.settings.Login.RuntimeDirectorySize = "10G";
     } // optionalAttrs (cfg.audio) {
@@ -238,11 +258,6 @@ in {
         alsa.support32Bit = true;
         pulse.enable = true;
       };
-      udev.extraRules = ''
-        KERNEL=="rtc0", GROUP="audio"
-        KERNEL=="hpet", GROUP="audio"
-        DEVPATH=="/devices/virtual/misc/cpu_dma_latency", OWNER="root", GROUP="audio", MODE="0660"
-      '';
     };
 
     security = {
@@ -274,6 +289,10 @@ in {
         }
       ];
     };
+
+    # Created by programs.adb.enable until it was removed from nixpkgs in
+    # 26.11; still referenced by extraGroups here and in flake.nix.
+    users.groups.adbusers = { };
 
     users.users.${username} = {
       isNormalUser = true;

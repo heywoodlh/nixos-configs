@@ -166,7 +166,7 @@ rec {
       inputs.stylix.follows = "";
       inputs.doom-d.follows = "";
       inputs.vscode-server.follows = "";
-      inputs.hermes-agent.follows = "";
+      inputs.hermes-agent.follows = "hermes-agent";
       inputs.systems.follows = "flake-utils/systems";
     };
     darwin = {
@@ -331,6 +331,14 @@ rec {
       url = "github:MuNeNICK/hypr-rdp";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.uv2nix.follows = "uv2nix";
+      inputs.pyproject-nix.follows = "pyproject-nix";
+    };
   };
 
   nixConfig = {
@@ -392,6 +400,7 @@ rec {
                       youtube-htpc,
                       paseo,
                       hypr-rdp,
+                      hermes-agent,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -427,6 +436,9 @@ rec {
         ./darwin/modules/lmstudio.nix
       ] ++ commonModules;
     };
+    extHomeModules = [
+      hermes-agent.homeManagerModules.default
+    ];
     commonHomeModules = [
       ./home/modules/base.nix
       ./home/modules/docker.nix
@@ -447,6 +459,7 @@ rec {
       ./home/modules/pandoc.nix
       ./home/modules/paseo.nix
       ./home/modules/onepassword.nix
+      ./home/modules/hermes.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -472,11 +485,11 @@ rec {
     else
       commonHomeModules ++ linuxHomeModules
     ;
-    homeModules.heywoodlh.home = { config, pkgs, ... }: {
-      imports = platformHomeModules;
+    homeModules.heywoodlh.home = { ... }: {
+      imports = platformHomeModules ++ extHomeModules;
     };
     # For docs only (to enumerate _all_ home modules regardless of platform)
-    homeModules.docs = { config, pkgs, ... }: {
+    homeModules.docs = { ... }: {
       imports = myHomeModules;
     };
     extNixOSModules = [
@@ -942,6 +955,14 @@ rec {
             ${pkgs.pciutils}/bin/setpci -s 00:1f.0 0xa4.b=0
           '';
 
+          security.sudo.extraConfig = ''
+            heywoodlh  ALL=(ALL:ALL)    NOPASSWD:SETENV: ALL
+          '';
+
+          networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+            9119
+          ];
+
           # Disable sleep
           systemd.targets.sleep.enable = false;
           systemd.targets.suspend.enable = false;
@@ -951,35 +972,60 @@ rec {
           heywoodlh = {
             sshd.enable = true;
             intel-mac = true;
+            nixos.portmaster.enable = lib.mkForce false;
           };
 
           users.users.ops = {
             isNormalUser = true;
             description = "Ops user";
-            # Start the user systemd instance at boot so rootless Docker
-            # (and other user services) run without an interactive login
             linger = true;
             extraGroups = [
               "adbusers"
               "networkmanager"
+              "libvirtd"
             ];
             shell = pkgs.bashInteractive;
             homeMode = "755";
+            openssh.authorizedKeys.keyFiles = [ ssh-keys.outPath ];
           };
 
           home-manager.users.ops = {
             home.stateVersion = "25.05";
             systemd.user.enable = true;
-            heywoodlh.home.paseo = {
-              desktop = true;
-              server = {
+            heywoodlh.home = {
+              paseo = {
+                desktop = true;
+                server = {
+                  enable = true;
+                  address = "100.67.47.0:6767";
+                  webui = true;
+                  hostnames = [
+                    "nixos-ops"
+                    "nixos-ops.barn-banana.ts.net"
+                  ];
+                };
+              };
+              hermes = {
                 enable = true;
-                address = "100.67.47.0:6767";
-                webui = true;
-                hostnames = [
-                  "nixos-ops"
-                  "nixos-ops.barn-banana.ts.net"
+                dashboard = {
+                  enable = true;
+                  address = "100.67.47.0";
+                };
+                model = {
+                  default = "gpt-5.6-terra";
+                  provider = "copilot";
+                };
+                environmentFiles = [
+                  "/home/ops/.hermes.env"
                 ];
+                settings = {
+                  #platform_toolsets = {
+                  #  discord = [
+                  #    "hermes-discord"
+                  #    "discord"
+                  #  ];
+                  #};
+                };
               };
             };
             home.activation.docker-rootless-context = ''

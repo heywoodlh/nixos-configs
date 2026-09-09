@@ -58,7 +58,7 @@ in {
       type = bool;
     };
     extraConf = mkOption {
-      default = false;
+      default = {};
       description = ''
         Extra configuration to add to `~/.paseo/config.json`.
       '';

@@ -6,6 +6,16 @@ with lib.types;
 let
   cfg = config.heywoodlh.nixos.portmaster;
 
+  # Portmaster filters loopback like any other network, and a client reaching a
+  # server over localhost shows up as an *incoming* connection to that server.
+  # Any deny-by-default incoming policy therefore breaks local client/server
+  # pairs -- adb's daemon on 127.0.0.1:5037 hangs this way. Loopback traffic
+  # cannot originate off-host, so allowing it outright costs nothing.
+  localhostRules = [
+    "+ 127.0.0.0/8"
+    "+ ::1/128"
+  ];
+
 in {
   options.heywoodlh.nixos.portmaster = {
     enable = mkOption {
@@ -47,7 +57,15 @@ in {
         {
           enable = true;
           profilePrefix = cfg.profilePrefix;
-          settings."dns/nameservers" = cfg.dns;
+          settings = {
+            "dns/nameservers" = cfg.dns;
+            # "Force Block Device-Local Connections" is stronger than the rule
+            # lists, so it has to be off for the localhost rules to apply.
+            "filter/blockLocal" = false;
+            # Outgoing rules. Connections matching nothing here fall through to
+            # the default action, so this only ever adds an allow.
+            "filter/endpoints" = localhostRules;
+          };
         }
         cfg.extraConf
       ];
@@ -63,7 +81,7 @@ in {
       # rules, so it must be off for them to take effect.
       services.portmaster.settings = {
         "filter/blockInbound" = false;
-        "filter/serviceEndpoints" = [
+        "filter/serviceEndpoints" = localhostRules ++ [
           "+ 100.64.0.0/10"
           "+ fd7a:115c:a1e0::/48"
           # Tailscale direct (NAT-traversal) connections arrive as UDP on

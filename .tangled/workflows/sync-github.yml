@@ -1,0 +1,20 @@
+when:
+  - event: ["push", "manual"]
+    branch: ["main"]
+
+engine: "nixery"
+
+dependencies:
+  nixpkgs:
+    - git
+
+steps:
+  - name: Configure GitHub credentials
+    command: |
+      git config --global credential.helper store
+      printf 'https://x-access-token:%s@github.com\n' "$GITHUB_TOKEN" > ~/.git-credentials
+
+  - name: Push main to GitHub
+    command: |
+      git remote add github https://github.com/heywoodlh/nixos-configs.git
+      git push github HEAD:refs/heads/main

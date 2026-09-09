@@ -1,0 +1,34 @@
+name: sync-main-to-tangled
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-main-to-tangled
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.TANGLED_SSH_PRIVATE_KEY }}
+
+      - name: Trust Tangled host key
+        run: ssh-keyscan tangled.org >> ~/.ssh/known_hosts
+
+      - name: Push main to Tangled
+        run: |
+          git remote add tangled git@tangled.org:heywoodlh.io/nixos-configs
+          git push tangled HEAD:refs/heads/main

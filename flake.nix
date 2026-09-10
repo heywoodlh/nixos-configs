@@ -3,7 +3,7 @@ rec {
 
   inputs = {
     nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
-    nixpkgs-lts.url = "github:nixos/nixpkgs/nixos-unstable"; # Separate input for overriding
+    nixpkgs-lts.follows = "nixpkgs";
     nixpkgs-stable.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-26.05-chilled/0.1";
     nixpkgs-nvidia.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
     nixpkgs-sunshine.url = "github:Qubasa/nixpkgs/update_sunshine";
@@ -480,7 +480,7 @@ rec {
     ];
     myHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
     # Combine all modules, excluding modules not relevant to platform
-    platformHomeModules = if pkgs.stdenv.isDarwin then
+    platformHomeModules = if pkgs.stdenv.hostPlatform.isDarwin then
       commonHomeModules ++ macosHomeModules
     else
       commonHomeModules ++ linuxHomeModules
@@ -498,7 +498,7 @@ rec {
       kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
       jovian-nixos.nixosModules.default
-    ] ++ lib.optionals (pkgs.stdenv.isAarch64) [
+    ] ++ lib.optionals (pkgs.stdenv.hostPlatform.isAarch64) [
       steam-asahi.nixosModules.default
     ];
     myNixOSModules = [
@@ -533,7 +533,7 @@ rec {
       ./nixos/modules/moonlight.nix
       ./nixos/modules/sshd.nix
     ] ++ commonModules
-    ++ lib.optionals (pkgs.stdenv.isAarch64) [
+    ++ lib.optionals (pkgs.stdenv.hostPlatform.isAarch64) [
       ./nixos/modules/asahi.nix
     ];
     nixosModules.heywoodlh = { config, pkgs, ... }: {

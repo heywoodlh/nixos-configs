@@ -80,7 +80,7 @@ in {
       paseoPkgs.desktop
     ];
 
-    launchd.agents = lib.optionalAttrs pkgs.stdenv.isDarwin {
+    launchd.agents = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
       paseo = {
         enable = cfg.server.enable;
         config = {
@@ -104,7 +104,7 @@ in {
       };
     } // cfg.extraConf);
 
-    systemd.user = lib.optionalAttrs pkgs.stdenv.isLinux {
+    systemd.user = lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
       enable = true;
       services = {
         paseo = lib.optionalAttrs cfg.server.enable {

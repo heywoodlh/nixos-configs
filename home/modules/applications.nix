@@ -25,7 +25,7 @@ let
     '';
   };
 
-  createApp = { name, command }: if pkgs.stdenv.isDarwin then {
+  createApp = { name, command }: if pkgs.stdenv.hostPlatform.isDarwin then {
     "Applications/${name}.app/Contents/MacOS/${name}" = {
       enable = true;
       source = pkgs.writeShellScript "${name}" ''

@@ -25,7 +25,7 @@ in {
         type = types.str;
       };
       fontSize = mkOption {
-        default = if stdenv.isDarwin then 16 else 14;
+        default = if stdenv.hostPlatform.isDarwin then 16 else 14;
         description = ''
           Ghostty font size.
         '';
@@ -51,14 +51,14 @@ in {
   config = mkIf cfg.enable {
     programs.ghostty = {
       enable = true;
-      package = if stdenv.isDarwin then null else pkgs.ghostty;
+      package = if stdenv.hostPlatform.isDarwin then null else pkgs.ghostty;
       settings = {
         command = cfg.command;
         auto-update = "off";
         font-size = cfg.fontSize;
         bell-features = "no-system,no-audio,attention,title,border";
         background-opacity = 0.95;
-      } // optionalAttrs (stdenv.isDarwin) {
+      } // optionalAttrs (stdenv.hostPlatform.isDarwin) {
         macos-window-shadow = false;
         initial-window = false;
         window-decoration = "auto";
@@ -70,7 +70,7 @@ in {
         keybind = [
           cfg.quickTerminalKeybind
         ];
-      } // optionalAttrs (stdenv.isLinux) {
+      } // optionalAttrs (stdenv.hostPlatform.isLinux) {
       } // cfg.extraSettings;
     };
   };

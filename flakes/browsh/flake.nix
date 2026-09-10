@@ -19,9 +19,9 @@
       '';
     in {
       packages = rec {
-        browshWrapper = if pkgs.stdenv.isLinux then browshWrapperBin else null;
+        browshWrapper = if pkgs.stdenv.hostPlatform.isLinux then browshWrapperBin else null;
         browsh = browshPackage;
-        default = if pkgs.stdenv.isLinux then browshWrapper else browsh;
+        default = if pkgs.stdenv.hostPlatform.isLinux then browshWrapper else browsh;
       };
       formatter = pkgs.nixfmt;
     });

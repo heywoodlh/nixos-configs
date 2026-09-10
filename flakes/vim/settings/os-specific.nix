@@ -1,7 +1,7 @@
 { stdenv, xclip, wl-clipboard, ... }:
 
 {
-  rc = if stdenv.isDarwin then ''
+  rc = if stdenv.hostPlatform.isDarwin then ''
     " MacOS specific config
     " Yank to system clipboard with Ctrl + y
     noremap <silent> <C-y> "*y

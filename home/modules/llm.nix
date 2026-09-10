@@ -15,7 +15,7 @@ let
     rev = "0348cd334482dc6b03028b14abd08c92ef32ba8f";
     hash = "sha256-ro1ne9kLGdQtGcp06CG9yJE3dV2Y1bSRzLfoasSRQtU=";
   };
-  vllmPkg = pkgs.writeShellScriptBin "vllm" (if pkgs.stdenv.isDarwin then ''
+  vllmPkg = pkgs.writeShellScriptBin "vllm" (if pkgs.stdenv.hostPlatform.isDarwin then ''
     VENV="$HOME/.venv-vllm-metal"
     if [ ! -f "$VENV/bin/vllm" ]; then
       INSTALL_TMP=$(mktemp)
@@ -373,7 +373,7 @@ in {
     };
 
     home.activation.pull-llmstudio-model = let
-      lmsBin = if pkgs.stdenv.isDarwin then "/Applications/LM Studio.app/Contents/Resources/app/.webpack/lms" else "${pkgs.lmstudio}/bin/lms";
+      lmsBin = if pkgs.stdenv.hostPlatform.isDarwin then "/Applications/LM Studio.app/Contents/Resources/app/.webpack/lms" else "${pkgs.lmstudio}/bin/lms";
     in mkIf cfg.lmstudio.enable ''
       if [[ -e "${lmsBin}" ]] && "${lmsBin}" ls &>/dev/null
       then

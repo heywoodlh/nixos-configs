@@ -3,7 +3,7 @@
 with lib;
 
 let
-  vscodeSettingsDir = if pkgs.stdenv.isDarwin then
+  vscodeSettingsDir = if pkgs.stdenv.hostPlatform.isDarwin then
     "Library/Application Support/Code/User"
   else
     ".config/Code/User";
@@ -16,7 +16,7 @@ in {
     android-tools
     code-reset
     pkgs.mdp
-  ] ++ optionals (pkgs.stdenv.isLinux && pkgs.stdenv.isx86_64) [
+  ] ++ optionals (pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86_64) [
     helium.packages.${system}.helium
   ];
 
@@ -34,9 +34,9 @@ in {
     dockerBins.enable = true;
     marp.enable = true;
     ghostty.enable = true;
-    cava = pkgs.stdenv.isLinux;
+    cava = pkgs.stdenv.hostPlatform.isLinux;
     applications = let
-      browser = if pkgs.stdenv.isDarwin then "/Applications/Helium.app/Contents/MacOS/Helium" else "${pkgs.chromium}/bin/chromium";
+      browser = if pkgs.stdenv.hostPlatform.isDarwin then "/Applications/Helium.app/Contents/MacOS/Helium" else "${pkgs.chromium}/bin/chromium";
     in [
       {
         name = "Hermes";

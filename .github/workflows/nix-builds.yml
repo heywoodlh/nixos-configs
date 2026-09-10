@@ -63,15 +63,14 @@ jobs:
               .#nixosConfigurations.nixos-server.config.system.build.toplevel
               .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
               .#nixosConfigurations.nixos-gaming.config.system.build.toplevel
+              .#nixosConfigurations.homelab.config.system.build.toplevel
               .#homeConfigurations.heywoodlh-server.activationPackage
               .#homeConfigurations.heywoodlh.activationPackage
-            build_homelab: true
           - name: build-linux-arm64
             runner: ubuntu-24.04-arm
             targets: >-
               .#nixosConfigurations.nixos-server.config.system.build.toplevel
               .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
-            build_homelab: false
     steps:
       - uses: actions/checkout@v6
 
@@ -103,12 +102,7 @@ jobs:
         uses: jlumbroso/free-disk-space@main
 
       - name: Build configurations
-        run: |
-          nix build --accept-flake-config --print-out-paths ${{ matrix.targets }} | tee build-paths.txt
-          if [[ "${{ matrix.build_homelab }}" == "true" ]]; then
-            NIXPKGS_ALLOW_BROKEN=1 nix build --impure --accept-flake-config --print-out-paths \
-              .#nixosConfigurations.homelab.config.system.build.toplevel | tee -a build-paths.txt
-          fi
+        run: nix build --accept-flake-config --print-out-paths ${{ matrix.targets }} | tee build-paths.txt
 
       - name: Configure Attic
         if: github.event_name == 'push'

@@ -27,13 +27,13 @@ let
       fi
     fi
   '';
-  newsboat_browser_config = if stdenv.isDarwin then ''
+  newsboat_browser_config = if stdenv.hostPlatform.isDarwin then ''
     browser "open %u"
   ''
   else ''
     browser "${pkgs.xdg-utils}/bin/xdg-open %u"
   '';
-  gomuks_keybindings_file = if stdenv.isDarwin
+  gomuks_keybindings_file = if stdenv.hostPlatform.isDarwin
   then "Library/Application Support/gomuks/keybindings.yaml"
   else ".config/gomuks/keybindings.yaml";
   myOpWrapper = myFlakes.packages.${system}.op-wrapper;
@@ -42,11 +42,11 @@ let
     url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/c938124eff5dddd3aad226a5a5a6ae65441211b7/backup.sh";
     sha256 = "sha256:12cbni566245m513r2w8lng11gzbl148mlnlscwzwbkxhpacwz9d";
   };
-  op-backup-dir = if stdenv.isDarwin then
+  op-backup-dir = if stdenv.hostPlatform.isDarwin then
     "${homeDir}/Library/Mobile\\ Documents/com~apple~CloudDocs/password-store"
   else
     "${homeDir}/.password-store";
-  op-backup-dir-no-format = if stdenv.isDarwin then
+  op-backup-dir-no-format = if stdenv.hostPlatform.isDarwin then
     "${homeDir}/Library/Mobile Documents/com~apple~CloudDocs/password-store"
   else
     "${homeDir}/.password-store";
@@ -142,8 +142,8 @@ let
   '';
   altDarwin = if system == "aarch64-darwin" then "ssh://heywoodlh@intel-mac-vm x86_64-darwin" else "ssh://heywoodlh@mac-mini aarch64-darwin"; # MacOS builder on opposite arch
   altLinux = if system == "x86_64-linux" then "ssh://heywoodlh@ubuntu-arm64 aarch64-linux" else "ssh://heywoodlh@homelab x86_64-linux"; # Linux builder on opposite arch
-  altBuilder = if stdenv.isDarwin then "${altLinux}" else "${altDarwin}";
-  myBuilders = if stdenv.isDarwin then "ssh://heywoodlh@homelab x86_64-linux ; ssh://builder@linux-builder aarch64-linux ; ${altDarwin}" else "ssh://heywoodlh@mac-mini aarch64-darwin ; ${altLinux}";
+  altBuilder = if stdenv.hostPlatform.isDarwin then "${altLinux}" else "${altDarwin}";
+  myBuilders = if stdenv.hostPlatform.isDarwin then "ssh://heywoodlh@homelab x86_64-linux ; ssh://builder@linux-builder aarch64-linux ; ${altDarwin}" else "ssh://heywoodlh@mac-mini aarch64-darwin ; ${altLinux}";
   builder-pop = pkgs.writeShellScriptBin "builders.sh" ''
     set -ex
     # Shell script to populate SSH host keys
@@ -511,7 +511,7 @@ in {
 
   programs.newsboat = {
     enable = true;
-    package = if pkgs.stdenv.isDarwin then null else pkgs.newsboat;
+    package = if pkgs.stdenv.hostPlatform.isDarwin then null else pkgs.newsboat;
     extraConfig = ''
       urls-source "miniflux"
       miniflux-url "http://miniflux"
@@ -731,9 +731,9 @@ in {
 
   home.file.".ssh/config".text = let
     # Lazy: assume I'm either on Apple Silicon MacOS or Intel Linux
-    altBuilder = if stdenv.isLinux then "ubuntu-arm64" else "intel-mac-vm";
-    authSock = if stdenv.isLinux then "${homeDir}/.ssh/agent.sock" else "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"; # always assume 1password on MacOS
-    builders = if stdenv.isLinux then "mac-mini intel-mac-vm ${altBuilder}" else "homelab ubuntu-arm64 ${altBuilder}";
+    altBuilder = if stdenv.hostPlatform.isLinux then "ubuntu-arm64" else "intel-mac-vm";
+    authSock = if stdenv.hostPlatform.isLinux then "${homeDir}/.ssh/agent.sock" else "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"; # always assume 1password on MacOS
+    builders = if stdenv.hostPlatform.isLinux then "mac-mini intel-mac-vm ${altBuilder}" else "homelab ubuntu-arm64 ${altBuilder}";
   in ''
     # User-wide SSH config for nix builders
     Host ${builders}

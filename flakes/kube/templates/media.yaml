@@ -75,7 +75,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       name: plex-cloudflare-token
-                      key: password
+                      key: api-token
                 - name: CLOUDFLARE_EMAIL
                   valueFrom:
                     secretKeyRef:

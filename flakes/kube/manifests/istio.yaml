@@ -20936,8 +20936,8 @@ spec:
           # Otherwise, assume it lives in our namespace
           # Also, check for an explicit ENV override (legacy approach) and prefer that
           # if present
-
-
+          
+          
           - name: CA_TRUSTED_NODE_ACCOUNTS
             value: "istio-system/ztunnel"
           - name: PILOT_TRACE_SAMPLING

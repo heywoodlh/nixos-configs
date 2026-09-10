@@ -10,14 +10,14 @@ applications=(
   "beeper-bridges"
   "hermes-agent"
   "cloudflared"
+  "cert-manager"
+  "crowdsec"
   "coredns"
   "coredns-kube-system"
   "crossplane"
   "davmail"
   "drawio"
   "duplicati"
-  "elastic-cloud-operator"
-  "elastic-cloud-elastic-stack"
   "flan-scan"
   "fleetdm"
   "fuse-device-plugin"
@@ -31,6 +31,7 @@ applications=(
   "http-files"
   "immich"
   "immich-machine-learning"
+  "istio"
   "iperf"
   "lancache"
   "llama-swap"
@@ -82,6 +83,13 @@ fi
 
 for app in "${applications[@]}"
 do
+    destination_namespace="argo"
+    # The CrowdSec Helm charts omit metadata.namespace. Its Application must
+    # supply the security namespace so LAPI and bouncer can use their synced Secret.
+    if [[ "${app}" == "crowdsec" ]]
+    then
+      destination_namespace="security"
+    fi
     #nix build --option substitute false "${root_dir}#${app}"
     nix build "${root_dir}#${app}" || error="true"
     cp ./result "${root_dir}/manifests/${app}.yaml" || error="true" # Copy file instead of using symlink
@@ -99,7 +107,7 @@ metadata:
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: argo
+    namespace: ${destination_namespace}
   source:
     repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
     targetRevision: HEAD

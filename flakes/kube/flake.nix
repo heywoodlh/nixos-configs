@@ -14,6 +14,8 @@
       url = "github:cloudflare/helm-charts";
       flake = false;
     };
+    crowdsec-helm = { url = "github:crowdsecurity/helm-charts/crowdsec-0.24.2"; flake = false; };
+    envoy-bouncer-helm = { url = "github:kdwils/envoy-proxy-crowdsec-bouncer/v0.8.1"; flake = false; };
     nfs-helm = {
       url = "github:kubernetes-sigs/nfs-subdir-external-provisioner";
       flake = false;
@@ -73,6 +75,8 @@
     nfs-helm,
     nix-kube-generators,
     nixhelm,
+    crowdsec-helm,
+    envoy-bouncer-helm,
     tailscale,
     cloudflared-helm,
     truecharts-helm,
@@ -151,6 +155,23 @@
       '';
     in {
       packages = {
+        "cert-manager" = kubelib.buildHelmChart { name = "cert-manager"; chart = (nixhelm.charts { inherit pkgs; }).jetstack.cert-manager; namespace = "cert-manager"; values = { crds.enabled = true; prometheus.enabled = false; }; };
+        crowdsec = let
+          core = kubelib.buildHelmChart { name = "crowdsec"; chart = "${crowdsec-helm}/charts/crowdsec"; namespace = "security"; values = { container_runtime = "containerd"; agent.enabled = false; appsec.enabled = false; tls.enabled = false; lapi = { resources = { limits = null; requests = { cpu = "10m"; memory = "64Mi"; }; }; env = [{ name = "BOUNCER_KEY_istio"; valueFrom.secretKeyRef = { name = "crowdsec-bouncer-key"; key = "password"; }; }]; }; }; };
+          bouncerCredentials = pkgs.writeText "crowdsec-bouncer-credentials.yaml" ''
+            apiVersion: onepassword.com/v1
+            kind: OnePasswordItem
+            metadata:
+              name: crowdsec-bouncer-key
+              namespace: security
+            spec:
+              itemPath: "vaults/Kubernetes/items/f2lulift3dcnyqxcqqrsq65fku"
+            ---
+          '';
+          bouncer = kubelib.buildHelmChart { name = "crowdsec-bouncer"; chart = "${envoy-bouncer-helm}/charts/envoy-proxy-bouncer"; namespace = "security"; values = { nameOverride = "crowdsec-bouncer"; image.tag = "v0.8.1"; resources = { limits = null; requests = { cpu = "10m"; memory = "64Mi"; }; }; config.bouncer = { lapiURL = "http://crowdsec-service.security.svc.cluster.local:8080"; apiKeySecretRef = { name = "crowdsec-bouncer-key"; key = "password"; }; tls.enabled = false; }; }; };
+        in pkgs.runCommand "crowdsec" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
+          cat ${bouncerCredentials} ${core} ${bouncer} | yq eval 'select(.kind != null) | .metadata.namespace = "security"' - > $out
+        '';
         "1password-connect" = (kubelib.buildHelmChart {
           name = "1password-connect";
           chart = (nixhelm.charts { inherit pkgs; })."1password".connect;
@@ -573,6 +594,7 @@
             };
           };
         });
+        istio = import ./istio.nix { inherit pkgs kubelib nixhelm mkKubeDrv; };
         kubevirt = mkKubeDrv "kubevirt" {
           src = ./templates/kubevirt.yaml;
           version = "v1.4.0";
@@ -612,25 +634,25 @@
           namespace = "media";
           replicas = 1;
           media_uid = "995";
-          plex_image = "docker.io/linuxserver/plex:1.43.3";
+          plex_image = "docker.io/linuxserver/plex:1.43.3.10896-cb3ebc72d-ls323";
           plex_hostfolder = "/media/config/services/plex";
-          radarr_image = "docker.io/linuxserver/radarr:6.4.0-nightly";
+          radarr_image = "docker.io/linuxserver/radarr:6.3.0.10514-ls315";
           radarr_hostfolder = "/media/config/services/radarr";
-          sonarr_image = "docker.io/linuxserver/sonarr:4.0.19";
+          sonarr_image = "docker.io/linuxserver/sonarr:4.0.19.2979-ls323";
           sonarr_hostfolder = "/media/config/services/sonarr";
-          lidarr_image = "ghcr.io/hotio/lidarr:pr-plugins";
+          lidarr_image = "ghcr.io/hotio/lidarr:release-3.1.0.4875";
           lidarr_hostfolder = "/media/config/services/lidarr";
-          readarr_image = "docker.io/linuxserver/readarr:0.4.19-nightly";
+          readarr_image = "docker.io/linuxserver/readarr:nightly-version-0.4.19.2811";
           readarr_hostfolder = "/media/config/services/readarr";
-          sabnzbd_image = "docker.io/linuxserver/sabnzbd:5.0.4";
+          sabnzbd_image = "docker.io/linuxserver/sabnzbd:5.1.3-ls273";
           sabnzbd_hostfolder = "/media/config/services/sabnzbd";
-          tautulli_image = "docker.io/tautulli/tautulli:v2.17.2";
+          tautulli_image = "docker.io/tautulli/tautulli:v2.18.1";
           tautulli_hostfolder = "/media/config/services/tautulli/config";
-          qbittorrent_image = "docker.io/linuxserver/qbittorrent:5.2.3";
+          qbittorrent_image = "docker.io/linuxserver/qbittorrent:5.2.3_v2.0.14-ls475";
           qbittorrent_hostfolder = "/media/config/services/qbittorrent";
-          libation_image = "docker.io/rmcrackan/libation:13.4.9";
+          libation_image = "docker.io/rmcrackan/libation:14.2.0";
           libation_hostfolder = "/media/config/services/libation";
-          seerr_image = "ghcr.io/seerr-team/seerr:v3.3.0";
+          seerr_image = "ghcr.io/seerr-team/seerr:v3.4.1";
           seerr_hostfolder = "/media/config/services/seerr";
           media_hostfolder = "/media/home-media";
           nodename = "homelab";

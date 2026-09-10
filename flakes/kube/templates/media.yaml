@@ -16,7 +16,7 @@ metadata:
 data:
   run.sh: |-
     #!/usr/bin/env ash
-    printf "dns_cloudflare_email = $CLOUDFLARE_EMAIL\ndns_cloudflare_api_key = $CLOUDFLARE_TOKEN\n" > /cloudflare.ini
+    printf "dns_cloudflare_api_token = $CLOUDFLARE_TOKEN\n" > /cloudflare.ini
     chmod 600 /cloudflare.ini
     if [ -e /letsencrypt/config/live/plex.heywoodlh.io/fullchain.pem ]
     then
@@ -62,7 +62,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: letsencrypt
-              image: docker.io/certbot/dns-cloudflare:latest
+              image: docker.io/certbot/dns-cloudflare:v5.8.0
               command:
                 - "/bin/ash"
                 - "-c"
@@ -75,7 +75,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       name: plex-cloudflare-token
-                      key: password
+                      key: api-token
                 - name: CLOUDFLARE_EMAIL
                   valueFrom:
                     secretKeyRef:
@@ -130,7 +130,7 @@ spec:
         kubernetes.io/hostname: @nodename@
       initContainers:
         - name: bundle-downloader
-          image: docker.io/alpine/git
+          image: docker.io/alpine/git:v2.54.0
           command:
             - "/bin/ash"
             - "-c"
@@ -144,7 +144,7 @@ spec:
             - name: plex-config
               mountPath: /config
         - name: letsencrypt
-          image: docker.io/certbot/dns-cloudflare:latest
+          image: docker.io/certbot/dns-cloudflare:v5.8.0
           command:
             - "/bin/ash"
             - "-c"
@@ -228,24 +228,15 @@ metadata:
     app: plex
   name: plex
   namespace: @namespace@
-  annotations:
-    tailscale.com/expose: "true"
-    tailscale.com/hostname: "plex"
-    tailscale.com/tags: "tag:plex"
 spec:
   ports:
   - name: plex
     port: 32400
     protocol: TCP
     targetPort: plex
-    nodePort: 32400
   selector:
     app: plex
-  type: LoadBalancer
-status:
-  loadBalancer:
-    ingress:
-    - ip: 192.168.1.22
+  type: ClusterIP
 # Radarr
 ---
 apiVersion: apps/v1
@@ -887,3 +878,165 @@ spec:
   selector:
     app: seerr
   type: ClusterIP
+
+# Plex Istio ingress and CrowdSec authorization
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: plex-cloudflare-token
+  namespace: istio-system
+spec:
+  itemPath: "vaults/Kubernetes/items/73gahgdaks7s3hl4dsjoxjzflq"
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: plex-acme
+  namespace: istio-system
+spec:
+  acme:
+    email: github-bot@heywoodlh.io
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: plex-acme-account
+    solvers:
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: plex-cloudflare-token
+              key: password
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-tls
+  namespace: istio-system
+spec:
+  secretName: plex-tls
+  issuerRef:
+    name: plex-acme
+    kind: Issuer
+  dnsNames:
+    - plex.heywoodlh.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: plex-selfsigned
+  namespace: istio-system
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-selfsigned-tls
+  namespace: istio-system
+spec:
+  secretName: plex-selfsigned-tls
+  commonName: plex.heywoodlh.io
+  dnsNames:
+    - plex.heywoodlh.io
+    - plex.barn-banana.ts.net
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: plex-selfsigned
+    kind: Issuer
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: plex
+  namespace: istio-system
+spec:
+  selector:
+    app.kubernetes.io/name: plex-gateway
+  servers:
+    # The ACME certificate is not issued yet, so use the browser-acceptable
+    # self-signed certificate until Cloudflare DNS-01 issuance succeeds.
+    - port:
+        number: 32400
+        name: https-plex-public
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: plex-selfsigned-tls
+      hosts:
+        - plex.heywoodlh.io
+    # The same self-signed certificate covers the Tailnet hostname.
+    - port:
+        number: 32400
+        name: https-plex-tailscale
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: plex-selfsigned-tls
+      hosts:
+        - plex.barn-banana.ts.net
+    # Preserve direct IP access. An IP is not in the certificate SAN list, so
+    # it continues to require a browser warning override.
+    - port:
+        number: 32400
+        name: https-plex-fallback
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: plex-selfsigned-tls
+      hosts:
+        - "*"
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: plex-crowdsec
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: plex-gateway
+  action: CUSTOM
+  provider:
+    name: crowdsec
+  rules:
+    - to:
+        - operation:
+            ports:
+              - "32400"
+---
+# Plex serves HTTPS on 32400. The gateway terminates client TLS so CrowdSec can
+# authorize HTTP, then Istio originates TLS again to the Plex backend.
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: plex
+  namespace: istio-system
+spec:
+  host: plex.media.svc.cluster.local
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 32400
+        tls:
+          mode: SIMPLE
+          # Plex's backend certificate name does not match its cluster DNS name.
+          insecureSkipVerify: true
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: plex
+  namespace: istio-system
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - plex
+  http:
+    - route:
+        - destination:
+            host: plex.media.svc.cluster.local
+            port:
+              number: 32400

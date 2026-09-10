@@ -49,6 +49,23 @@
         "type": "github"
       }
     },
+    "crowdsec-helm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788509165,
+        "narHash": "sha256-kwCnjT3JgxFvZshUNBII9HstCXLWXCrnCsP+fe1etYg=",
+        "owner": "crowdsecurity",
+        "repo": "helm-charts",
+        "rev": "a7ab2f0e38d89be6192353460c2a44586bc69cd8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "crowdsecurity",
+        "ref": "crowdsec-0.24.2",
+        "repo": "helm-charts",
+        "type": "github"
+      }
+    },
     "elastic-cloud": {
       "flake": false,
       "locked": {
@@ -63,6 +80,23 @@
         "owner": "elastic",
         "ref": "v3.0.0",
         "repo": "cloud-on-k8s",
+        "type": "github"
+      }
+    },
+    "envoy-bouncer-helm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788819281,
+        "narHash": "sha256-42wLzrWvJlkySuncXufVSpKBBcRDd16VL+lpS//rkQ8=",
+        "owner": "kdwils",
+        "repo": "envoy-proxy-crowdsec-bouncer",
+        "rev": "8705867f93fed916a277ecb0f61873cc30235b42",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kdwils",
+        "ref": "v0.8.1",
+        "repo": "envoy-proxy-crowdsec-bouncer",
         "type": "github"
       }
     },
@@ -330,7 +364,9 @@
         "cloudflared-helm": "cloudflared-helm",
         "coredns": "coredns",
         "crossplane": "crossplane",
+        "crowdsec-helm": "crowdsec-helm",
         "elastic-cloud": "elastic-cloud",
+        "envoy-bouncer-helm": "envoy-bouncer-helm",
         "fish-flake": "fish-flake",
         "flake-utils": "flake-utils",
         "kasmweb": "kasmweb",

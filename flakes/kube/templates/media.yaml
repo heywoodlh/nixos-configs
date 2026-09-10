@@ -62,7 +62,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: letsencrypt
-              image: docker.io/certbot/dns-cloudflare:latest
+              image: docker.io/certbot/dns-cloudflare:v5.8.0
               command:
                 - "/bin/ash"
                 - "-c"
@@ -130,7 +130,7 @@ spec:
         kubernetes.io/hostname: @nodename@
       initContainers:
         - name: bundle-downloader
-          image: docker.io/alpine/git
+          image: docker.io/alpine/git:v2.54.0
           command:
             - "/bin/ash"
             - "-c"
@@ -144,7 +144,7 @@ spec:
             - name: plex-config
               mountPath: /config
         - name: letsencrypt
-          image: docker.io/certbot/dns-cloudflare:latest
+          image: docker.io/certbot/dns-cloudflare:v5.8.0
           command:
             - "/bin/ash"
             - "-c"
@@ -228,24 +228,15 @@ metadata:
     app: plex
   name: plex
   namespace: @namespace@
-  annotations:
-    tailscale.com/expose: "true"
-    tailscale.com/hostname: "plex"
-    tailscale.com/tags: "tag:plex"
 spec:
   ports:
   - name: plex
     port: 32400
     protocol: TCP
     targetPort: plex
-    nodePort: 32400
   selector:
     app: plex
-  type: LoadBalancer
-status:
-  loadBalancer:
-    ingress:
-    - ip: 192.168.1.22
+  type: ClusterIP
 # Radarr
 ---
 apiVersion: apps/v1

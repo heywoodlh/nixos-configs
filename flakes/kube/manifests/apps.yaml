@@ -150,6 +150,48 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: cert-manager
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "cert-manager.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crowdsec
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "crowdsec.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: coredns
   namespace: argo
 spec:
@@ -582,6 +624,27 @@ spec:
     path: flakes/kube/manifests
     directory:
       include: "immich-machine-learning.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  source:
+    repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "istio.yaml"
   project: default
   syncPolicy:
     automated:

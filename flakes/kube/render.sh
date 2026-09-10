@@ -18,8 +18,6 @@ applications=(
   "davmail"
   "drawio"
   "duplicati"
-  "elastic-cloud-operator"
-  "elastic-cloud-elastic-stack"
   "flan-scan"
   "fleetdm"
   "fuse-device-plugin"

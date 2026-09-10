@@ -161,6 +161,8 @@ spec:
                 - SYS_ADMIN # for rootless podman
           resources:
             limits:
+              cpu: 250m
+              memory: 2Gi
               github.com/fuse: 1 # FUSE for rootless podman
           volumeMounts:
             - name: hermes-agent-nix

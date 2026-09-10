@@ -103,7 +103,9 @@ spec:
               containerPort: 8080
               protocol: TCP
           resources:
-            {}
+            limits:
+              cpu: 100m
+              memory: 6784Mi
           volumeMounts:
             - name: server-toml
               mountPath: /var/empty/.config/attic/server.toml

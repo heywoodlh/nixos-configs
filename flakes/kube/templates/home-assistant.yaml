@@ -91,7 +91,10 @@ spec:
           tcpSocket:
             port: 8123
           timeoutSeconds: 1
-        resources: {}
+        resources:
+          limits:
+            cpu: 250m
+            memory: 2Gi
         startupProbe:
           failureThreshold: 30
           initialDelaySeconds: 0
@@ -156,6 +159,10 @@ spec:
             - containerPort: 5580
               protocol: TCP
           name: matter-server
+          resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
           securityContext:
             privileged: true
             capabilities:
@@ -256,6 +263,8 @@ spec:
             requests:
               gpu.intel.com/i915: "1"
             limits:
+              cpu: 250m
+              memory: 2Gi
               gpu.intel.com/i915: "1"
           env:
             - name: FRIGATE_RTSP_PASSWORD

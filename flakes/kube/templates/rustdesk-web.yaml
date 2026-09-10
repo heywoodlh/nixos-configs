@@ -68,6 +68,10 @@ spec:
                 secretKeyRef:
                   name: rustdesk-web
                   key: password
+          resources:
+            limits:
+              cpu: 250m
+              memory: 2Gi
           ports:
             - name: vnc
               containerPort: 6901

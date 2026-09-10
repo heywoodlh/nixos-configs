@@ -129,6 +129,9 @@ spec:
           - name: SERVER_PASS
             value: "malia"
         resources:
+          limits:
+            cpu: 500m
+            memory: 3Gi
           requests:
             cpu: 500m
             memory: 512Mi

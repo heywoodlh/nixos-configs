@@ -122,6 +122,10 @@ spec:
               protocol: TCP
             - containerPort: 443
               protocol: TCP
+          resources:
+            limits:
+              cpu: 250m
+              memory: 3Gi
           volumeMounts:
             - mountPath: /data/cache
               name: monolithic-cache

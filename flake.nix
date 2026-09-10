@@ -1152,7 +1152,6 @@ rec {
           heywoodlh = {
             sshd.enable = true;
             nixos = {
-              portmaster.enable = lib.mkForce false;
               sunshine = {
                 enable = true;
                 resolutions = "[ 1920x1080, 2752x2064]";

@@ -10,8 +10,8 @@ metadata:
     version: v1
 type: Opaque
 data:
-  csLapiSecret: KS1CIm54Rzg2MktxRHpZJFomdlc7T0gmSClJYWswYltmYlVMS1hEZkJRR2AwXSckQ3FxREkiaTdGd3EqUy5pVQ==
-  registrationToken: ZG55cHNEdmQzcjlrb1pHRGhWV0hTN3QwenZ6ZmpSSWl0VFA5MTZObjY1TlVNYmh6
+  csLapiSecret: XVhpWWg/WHlSKHZQayV+IUQsdWUmVFNxeVZaPyNjXF0nLXtRR0JbPCoqRkBPaFNUcmcge0xJSj53ZUw1SGJgew==
+  registrationToken: ODd0a3BLZzBBZENSV3Yzb3NtU0RsTjlaYWUxbG1aQlNpczN3QzQ3ZDlmNk5wbkdG
 ---
 # Source: crowdsec/templates/docker-start-configmap.yaml
 apiVersion: v1
@@ -487,7 +487,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/lapi-secret: 7afd42f7403412529957242838153544573f0b8ee0587f0e661b042b288753aa
+        checksum/lapi-secret: 3b8b51d74bc17423a923d3268980d13681759f01ee6b5cc60fadf344c6e9da5c
         checksum/lapi-configmap: 5f81bdc08f32bc76fdb8210fa8afd96c741d1bb334f2cbf5d3a76cd7cd8e4ba7
       labels:
         k8s-app: crowdsec
@@ -520,6 +520,11 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
+          - name: BOUNCER_KEY_istio
+            valueFrom:
+              secretKeyRef:
+                key: api-key
+                name: crowdsec-bouncer-key
         resources:
           limits:
             cpu: 500m
@@ -654,6 +659,9 @@ metadata:
 data:
   config.yaml: |
     bouncer:
+      apiKeySecretRef:
+        key: api-key
+        name: crowdsec-bouncer-key
       enabled: true
       lapiURL: http://crowdsec-service.crowdsec.svc.cluster.local:8080
       metrics: false
@@ -748,7 +756,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: ccd31e0cf14a8a0573edb44eee645874f64d973824c8c787965684e471fb2874
+        checksum/config: adefb8a6b5e850fff9e42dd2ff943694258f8ea1e88aa18be638ff0066aee6fd
       labels:
         helm.sh/chart: envoy-proxy-bouncer-0.8.1
         app.kubernetes.io/name: crowdsec-bouncer
@@ -793,6 +801,11 @@ spec:
             timeoutSeconds: 5
             failureThreshold: 3
           env:
+            - name: ENVOY_BOUNCER_BOUNCER_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: "crowdsec-bouncer-key"
+                  key: "api-key"
           resources:
             requests:
               cpu: 10m

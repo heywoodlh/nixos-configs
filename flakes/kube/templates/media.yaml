@@ -920,6 +920,31 @@ spec:
   dnsNames:
     - plex.heywoodlh.io
 ---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: plex-tailscale-selfsigned
+  namespace: istio-system
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-tailscale-tls
+  namespace: istio-system
+spec:
+  secretName: plex-tailscale-tls
+  commonName: plex.barn-banana.ts.net
+  dnsNames:
+    - plex.barn-banana.ts.net
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: plex-tailscale-selfsigned
+    kind: Issuer
+---
 apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
@@ -929,9 +954,32 @@ spec:
   selector:
     app.kubernetes.io/name: plex-gateway
   servers:
+    # SNI selects the publicly trusted certificate issued through Cloudflare.
     - port:
         number: 32400
-        name: https-plex
+        name: https-plex-public
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: plex-tls
+      hosts:
+        - plex.heywoodlh.io
+    # This certificate matches the Tailnet hostname but is deliberately
+    # self-signed, so clients must accept its browser warning once.
+    - port:
+        number: 32400
+        name: https-plex-tailscale
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: plex-tailscale-tls
+      hosts:
+        - plex.barn-banana.ts.net
+    # Preserve direct IP access. It uses the public certificate and therefore
+    # still requires a warning override because an IP is not in its SAN list.
+    - port:
+        number: 32400
+        name: https-plex-fallback
         protocol: HTTPS
       tls:
         mode: SIMPLE

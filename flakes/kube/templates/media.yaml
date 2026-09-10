@@ -36,7 +36,7 @@ data:
         --config-dir /letsencrypt/config \
         --work-dir /letsencrypt/work \
         --logs-dir /letsencrypt/logs \
-        -m github-bot@heywoodlh.io \
+        -m $CLOUDFLARE_EMAIL \
         -d $CLOUDFLARE_DOMAIN
     fi
     openssl pkcs12 -export \
@@ -76,6 +76,11 @@ spec:
                     secretKeyRef:
                       name: plex-cloudflare-token
                       key: password
+                - name: CLOUDFLARE_EMAIL
+                  valueFrom:
+                    secretKeyRef:
+                      name: plex-cloudflare-token
+                      key: username
                 - name: CLOUDFLARE_DOMAIN
                   valueFrom:
                     secretKeyRef:
@@ -153,6 +158,11 @@ spec:
                 secretKeyRef:
                   name: plex-cloudflare-token
                   key: password
+            - name: CLOUDFLARE_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: plex-cloudflare-token
+                  key: username
             - name: CLOUDFLARE_DOMAIN
               valueFrom:
                 secretKeyRef:

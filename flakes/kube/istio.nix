@@ -34,6 +34,13 @@ let
     values = {
       replicaCount = 1;
       autoscaling.enabled = false;
+      resources = {
+        limits = null;
+        requests = {
+          cpu = "10m";
+          memory = "64Mi";
+        };
+      };
       nodeSelector."kubernetes.io/hostname" = "homelab";
       service = {
         type = "LoadBalancer";

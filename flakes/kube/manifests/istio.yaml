@@ -21451,12 +21451,10 @@ spec:
             protocol: TCP
             name: http-envoy-prom
           resources:
-            limits:
-              cpu: 2000m
-              memory: 1024Mi
+            limits: null
             requests:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 10m
+              memory: 64Mi
       nodeSelector:
         kubernetes.io/hostname: homelab
       terminationGracePeriodSeconds: 30

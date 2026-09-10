@@ -10,8 +10,8 @@ metadata:
     version: v1
 type: Opaque
 data:
-  csLapiSecret: fSlsdWVHc3RTZ214TSIjfC53WX4lX2dzJXlZMElIVFdPZiJsISx2T2ZOfXEqejI4XjwvVGpaTXd2dU1tP14sUQ==
-  registrationToken: b09hRGNIQzg2ZHp1TFlHbzVqNE8xaGd0VUVtSnJtU1BTajlrQkxlaVhwVGVYdm02
+  csLapiSecret: KS1CIm54Rzg2MktxRHpZJFomdlc7T0gmSClJYWswYltmYlVMS1hEZkJRR2AwXSckQ3FxREkiaTdGd3EqUy5pVQ==
+  registrationToken: ZG55cHNEdmQzcjlrb1pHRGhWV0hTN3QwenZ6ZmpSSWl0VFA5MTZObjY1TlVNYmh6
 ---
 # Source: crowdsec/templates/docker-start-configmap.yaml
 apiVersion: v1
@@ -487,7 +487,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/lapi-secret: cd2ed0d68c792ec018c1f2bff727e91e120572acf4e5b4a4a584374539505120
+        checksum/lapi-secret: 7afd42f7403412529957242838153544573f0b8ee0587f0e661b042b288753aa
         checksum/lapi-configmap: 5f81bdc08f32bc76fdb8210fa8afd96c741d1bb334f2cbf5d3a76cd7cd8e4ba7
       labels:
         k8s-app: crowdsec
@@ -500,21 +500,9 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
           - name: LOCAL_API_URL
-            value: https://localhost:8080
+            value: http://localhost:8080
           - name: DISABLE_AGENT
             value: "true"
-          - name: USE_TLS
-            value: "true"
-          - name: LAPI_CERT_FILE
-            value: /etc/ssl/crowdsec-lapi/tls.crt
-          - name: LAPI_KEY_FILE
-            value: /etc/ssl/crowdsec-lapi/tls.key
-          - name: CLIENT_CERT_FILE
-            value: /etc/ssl/crowdsec-agent/tls.crt
-          - name: CLIENT_KEY_FILE
-            value: /etc/ssl/crowdsec-agent/tls.key
-          - name: CACERT_FILE
-            value: /etc/ssl/crowdsec-lapi/ca.crt
           - name: INSECURE_SKIP_VERIFY
             value: "false"
 
@@ -548,7 +536,7 @@ spec:
           httpGet:
             path: /health
             port: lapi
-            scheme: HTTPS
+            scheme: HTTP
         readinessProbe:
           failureThreshold: 3
           periodSeconds: 10
@@ -557,7 +545,7 @@ spec:
           httpGet:
             path: /health
             port: lapi
-            scheme: HTTPS
+            scheme: HTTP
         startupProbe:
           failureThreshold: 30
           periodSeconds: 10
@@ -566,7 +554,7 @@ spec:
           httpGet:
             path: /health
             port: lapi
-            scheme: HTTPS
+            scheme: HTTP
 
         securityContext:
           allowPrivilegeEscalation: false
@@ -586,10 +574,6 @@ spec:
           - name: crowdsec-docker-start-script
             mountPath: /docker_start.sh
             subPath: docker_start.sh
-          - name: crowdsec-lapi-tls
-            mountPath: /etc/ssl/crowdsec-lapi
-          - name: crowdsec-agent-tls
-            mountPath: /etc/ssl/crowdsec-agent
 
           - name: crowdsec-db
             mountPath: /var/lib/crowdsec/data
@@ -623,89 +607,7 @@ spec:
       - name: crowdsec-config-local-volume
         configMap:
           name: crowdsec-config-local
-      - name: crowdsec-lapi-tls
-        secret:
-          secretName: crowdsec-lapi-tls
-      - name: crowdsec-agent-tls
-        secret:
-          secretName: crowdsec-agent-tls
       priorityClassName:
----
-# Source: crowdsec/templates/tls/bouncer-certificate.yaml
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: crowdsec-bouncer
-  namespace: crowdsec
-spec:
-  commonName: CrowdSec Bouncer
-  secretName: crowdsec-bouncer-tls
-  duration: 2160h
-  renewBefore: 720h
-  secretTemplate:
-
-
-  issuerRef:
-
-    name: crowdsec-ca-issuer
-
-  subject:
-    organizationalUnits:
-      - bouncer-ou
----
-# Source: crowdsec/templates/tls/ca-certificate.yaml
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: crowdsec-ca
-  namespace: crowdsec
-spec:
-  isCA: true
-  commonName: crowdsec-ca
-  secretName: crowdsec-root-secret
-  privateKey:
-    algorithm: ECDSA
-    size: 256
-  issuerRef:
-    name: crowdsec-root-issuer
-    kind: ClusterIssuer
-    group: cert-manager.io
----
-# Source: crowdsec/templates/tls/lapi-certificate.yaml
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: crowdsec-lapi
-  namespace: crowdsec
-spec:
-  dnsNames:
-    - crowdsec-service.crowdsec
-    - crowdsec-service.crowdsec.svc.cluster.local
-    - localhost
-  secretName: crowdsec-lapi-tls
-  duration: 2160h
-  renewBefore: 720h
-  issuerRef:
-
-    name: crowdsec-ca-issuer
----
-# Source: crowdsec/templates/tls/crowdsec-clusterIssuer.yaml
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: crowdsec-root-issuer
-spec:
-  selfSigned: {}
----
-# Source: crowdsec/templates/tls/ca-issuer.yaml
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: crowdsec-ca-issuer
-  namespace: crowdsec
-spec:
-  ca:
-    secretName: crowdsec-root-secret
 ---
 # Source: crowdsec/templates/tests/test_lapi_up.yaml
 apiVersion: v1
@@ -753,21 +655,20 @@ data:
   config.yaml: |
     bouncer:
       enabled: true
-      lapiURL: https://crowdsec-service.crowdsec.svc.cluster.local:8080
+      lapiURL: http://crowdsec-service.crowdsec.svc.cluster.local:8080
       metrics: false
       metricsInterval: 10m
       tickerInterval: 10s
       tls:
         caPath: /app/tls/ca.crt
         certPath: /app/tls/tls.crt
-        enabled: true
+        enabled: false
         insecureSkipVerify: false
         keyPath: /app/tls/tls.key
       tlsSecretRef:
         caKey: ca.crt
         certKey: tls.crt
         keyKey: tls.key
-        name: crowdsec-bouncer-tls
     captcha:
       challengeDuration: 5m
       disableChallengeReplayProtection: false
@@ -847,7 +748,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: aca8898c973f9ff787c549b533cd0695573fccfae323598ddb0e20ef54aee296
+        checksum/config: ccd31e0cf14a8a0573edb44eee645874f64d973824c8c787965684e471fb2874
       labels:
         helm.sh/chart: envoy-proxy-bouncer-0.8.1
         app.kubernetes.io/name: crowdsec-bouncer
@@ -900,13 +801,7 @@ spec:
             - name: bouncer-config
               mountPath: /app/config
               readOnly: true
-            - name: bouncer-tls
-              mountPath: /app/tls
-              readOnly: true
       volumes:
         - name: bouncer-config
           configMap:
             name: crowdsec-bouncer-config
-        - name: bouncer-tls
-          secret:
-            secretName: "crowdsec-bouncer-tls"

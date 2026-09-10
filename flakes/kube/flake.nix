@@ -157,8 +157,8 @@
       packages = {
         "cert-manager" = kubelib.buildHelmChart { name = "cert-manager"; chart = (nixhelm.charts { inherit pkgs; }).jetstack.cert-manager; namespace = "cert-manager"; values = { crds.enabled = true; prometheus.enabled = false; }; };
         crowdsec = let
-          core = kubelib.buildHelmChart { name = "crowdsec"; chart = "${crowdsec-helm}/charts/crowdsec"; namespace = "crowdsec"; values = { container_runtime = "containerd"; agent.enabled = false; appsec.enabled = false; tls = { enabled = true; certManager.enabled = true; }; }; };
-          bouncer = kubelib.buildHelmChart { name = "crowdsec-bouncer"; chart = "${envoy-bouncer-helm}/charts/envoy-proxy-bouncer"; namespace = "crowdsec"; values = { nameOverride = "crowdsec-bouncer"; image.tag = "v0.8.1"; resources = { limits = null; requests = { cpu = "10m"; memory = "64Mi"; }; }; config.bouncer = { lapiURL = "https://crowdsec-service.crowdsec.svc.cluster.local:8080"; tlsSecretRef = { name = "crowdsec-bouncer-tls"; certKey = "tls.crt"; keyKey = "tls.key"; caKey = "ca.crt"; }; tls.enabled = true; }; }; };
+          core = kubelib.buildHelmChart { name = "crowdsec"; chart = "${crowdsec-helm}/charts/crowdsec"; namespace = "crowdsec"; values = { container_runtime = "containerd"; agent.enabled = false; appsec.enabled = false; tls.enabled = false; }; };
+          bouncer = kubelib.buildHelmChart { name = "crowdsec-bouncer"; chart = "${envoy-bouncer-helm}/charts/envoy-proxy-bouncer"; namespace = "crowdsec"; values = { nameOverride = "crowdsec-bouncer"; image.tag = "v0.8.1"; resources = { limits = null; requests = { cpu = "10m"; memory = "64Mi"; }; }; config.bouncer = { lapiURL = "http://crowdsec-service.crowdsec.svc.cluster.local:8080"; tls.enabled = false; }; }; };
         in pkgs.runCommand "crowdsec" {} ''cat ${core} ${bouncer} > $out'';
         "1password-connect" = (kubelib.buildHelmChart {
           name = "1password-connect";

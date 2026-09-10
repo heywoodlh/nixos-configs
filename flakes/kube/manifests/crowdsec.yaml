@@ -763,15 +763,11 @@ data:
         enabled: true
         insecureSkipVerify: false
         keyPath: /app/tls/tls.key
-        tlsSecretRef:
-          caKey: ca.crt
-          certKey: tls.crt
-          keyKey: tls.key
-          name: crowdsec-bouncer-tls
       tlsSecretRef:
         caKey: ca.crt
         certKey: tls.crt
         keyKey: tls.key
+        name: crowdsec-bouncer-tls
     captcha:
       challengeDuration: 5m
       disableChallengeReplayProtection: false
@@ -851,7 +847,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: e3c97021c4e931647cb9118692488b1869a4d34e297f77c3a7007e62470af224
+        checksum/config: aca8898c973f9ff787c549b533cd0695573fccfae323598ddb0e20ef54aee296
       labels:
         helm.sh/chart: envoy-proxy-bouncer-0.8.1
         app.kubernetes.io/name: crowdsec-bouncer
@@ -897,14 +893,20 @@ spec:
             failureThreshold: 3
           env:
           resources:
-            limits:
-              cpu: 100m
-              memory: 128Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
           volumeMounts:
             - name: bouncer-config
               mountPath: /app/config
+              readOnly: true
+            - name: bouncer-tls
+              mountPath: /app/tls
               readOnly: true
       volumes:
         - name: bouncer-config
           configMap:
             name: crowdsec-bouncer-config
+        - name: bouncer-tls
+          secret:
+            secretName: "crowdsec-bouncer-tls"

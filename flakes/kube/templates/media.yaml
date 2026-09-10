@@ -923,7 +923,7 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: plex-tailscale-selfsigned
+  name: plex-selfsigned
   namespace: istio-system
 spec:
   selfSigned: {}
@@ -931,18 +931,19 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: plex-tailscale-tls
+  name: plex-selfsigned-tls
   namespace: istio-system
 spec:
-  secretName: plex-tailscale-tls
-  commonName: plex.barn-banana.ts.net
+  secretName: plex-selfsigned-tls
+  commonName: plex.heywoodlh.io
   dnsNames:
+    - plex.heywoodlh.io
     - plex.barn-banana.ts.net
   privateKey:
     algorithm: ECDSA
     size: 256
   issuerRef:
-    name: plex-tailscale-selfsigned
+    name: plex-selfsigned
     kind: Issuer
 ---
 apiVersion: networking.istio.io/v1
@@ -954,36 +955,36 @@ spec:
   selector:
     app.kubernetes.io/name: plex-gateway
   servers:
-    # SNI selects the publicly trusted certificate issued through Cloudflare.
+    # The ACME certificate is not issued yet, so use the browser-acceptable
+    # self-signed certificate until Cloudflare DNS-01 issuance succeeds.
     - port:
         number: 32400
         name: https-plex-public
         protocol: HTTPS
       tls:
         mode: SIMPLE
-        credentialName: plex-tls
+        credentialName: plex-selfsigned-tls
       hosts:
         - plex.heywoodlh.io
-    # This certificate matches the Tailnet hostname but is deliberately
-    # self-signed, so clients must accept its browser warning once.
+    # The same self-signed certificate covers the Tailnet hostname.
     - port:
         number: 32400
         name: https-plex-tailscale
         protocol: HTTPS
       tls:
         mode: SIMPLE
-        credentialName: plex-tailscale-tls
+        credentialName: plex-selfsigned-tls
       hosts:
         - plex.barn-banana.ts.net
-    # Preserve direct IP access. It uses the public certificate and therefore
-    # still requires a warning override because an IP is not in its SAN list.
+    # Preserve direct IP access. An IP is not in the certificate SAN list, so
+    # it continues to require a browser warning override.
     - port:
         number: 32400
         name: https-plex-fallback
         protocol: HTTPS
       tls:
         mode: SIMPLE
-        credentialName: plex-tls
+        credentialName: plex-selfsigned-tls
       hosts:
         - "*"
 ---

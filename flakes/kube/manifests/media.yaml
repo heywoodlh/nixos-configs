@@ -1006,6 +1006,24 @@ spec:
             ports:
               - "32400"
 ---
+# Plex serves HTTPS on 32400. The gateway terminates client TLS so CrowdSec can
+# authorize HTTP, then Istio originates TLS again to the Plex backend.
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: plex
+  namespace: istio-system
+spec:
+  host: plex.media.svc.cluster.local
+  trafficPolicy:
+    portLevelSettings:
+      - port:
+          number: 32400
+        tls:
+          mode: SIMPLE
+          # Plex's backend certificate name does not match its cluster DNS name.
+          insecureSkipVerify: true
+---
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:

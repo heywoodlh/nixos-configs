@@ -148,7 +148,7 @@ in {
       signal-cli
     ];
 
-    launchd.agents = lib.optionalAttrs pkgs.stdenv.isDarwin {
+    launchd.agents = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
       signal-cli-daemon = {
         enable = cfg.signal;
         config = {
@@ -160,7 +160,7 @@ in {
       };
     };
 
-    systemd.user = lib.optionalAttrs (pkgs.stdenv.isLinux && cfg.signal) {
+    systemd.user = lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && cfg.signal) {
       enable = true;
       services = {
         signal-cli-daemon = {

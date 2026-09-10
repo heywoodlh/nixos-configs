@@ -16,7 +16,7 @@ in {
 
   config = mkIf cfg {
     home.file."Pictures/.stignore" = {
-      enable = pkgs.stdenv.isDarwin;
+      enable = pkgs.stdenv.hostPlatform.isDarwin;
       text = ''
         ### macOS ###
         .AppleDouble

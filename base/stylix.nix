@@ -33,7 +33,7 @@ in {
     stylix = {
       enable = true;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/${cfg.theme}.yaml";
-      image = if pkgs.stdenv.isDarwin then ../assets/catppuccin-apple.png else ../assets/catppuccin-nix.png;
+      image = if pkgs.stdenv.hostPlatform.isDarwin then ../assets/catppuccin-apple.png else ../assets/catppuccin-nix.png;
       polarity = "dark";
       fonts = {
         serif = {

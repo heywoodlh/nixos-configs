@@ -800,11 +800,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780679734,
-        "narHash": "sha256-KmRNvpNOb7QEORa06bVgjW9kITcx0VhsI7w0vhmZyD8=",
+        "lastModified": 1788988965,
+        "narHash": "sha256-7xl3XjXv2uVxe/18efxaKYsMD7skQqCx/YSWw/lI3w8=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "b2b7db486e06e098711dc291bb25db82850e1d16",
+        "rev": "448c15a7fe6aa7693f63b9e8d1803bdc3dd6368d",
         "type": "github"
       },
       "original": {
@@ -1559,11 +1559,11 @@
         "nixpkgs-regression": "nixpkgs-regression"
       },
       "locked": {
-        "lastModified": 1786571168,
-        "narHash": "sha256-Isq1+//jI1AZUIjPbkO2r5PKQbFIP6EgJPS2jfpTZrI=",
+        "lastModified": 1788987410,
+        "narHash": "sha256-7n91Vs2cog4yTT1ityDE9HojPY/tnQ02AjbLJtf7hHw=",
         "owner": "nixos",
         "repo": "nix",
-        "rev": "6274126b2c4a793aa28839b64125edecba5d106a",
+        "rev": "1469ead59fa12163f0e24e67da6cb448586cb75e",
         "type": "github"
       },
       "original": {
@@ -1829,12 +1829,12 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1786862985,
-        "narHash": "sha256-FBJRXmbGXiSUDvYEbfLYRkckayyZ6SK1UEqhCrIZ2Cs=",
-        "rev": "e5bdc4a41d4c072fe1e3787eaa0320a384741d44",
-        "revCount": 1055335,
+        "lastModified": 1788179007,
+        "narHash": "sha256-hn1oU2rue2SYK8dAr8+WNZWtbsz1S2W5mnHlSEuh3bo=",
+        "rev": "34ab99075ac4f7e40cf037eef32cb1c360bb85e9",
+        "revCount": 1064949,
         "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.1055335%2Brev-e5bdc4a41d4c072fe1e3787eaa0320a384741d44/01a03771-351f-7d82-8fbd-a6c2e080c338/source.tar.gz"
+        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.1064949%2Brev-34ab99075ac4f7e40cf037eef32cb1c360bb85e9/01a07f85-6cc4-7701-8bcf-aa05a24774e1/source.tar.gz"
       },
       "original": {
         "type": "tarball",
@@ -1937,22 +1937,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-lts": {
-      "locked": {
-        "lastModified": 1780243769,
-        "narHash": "sha256-x5UQuRsH3MqI0U9afaXSNqzTPSeZlRLvFAav2Ux1pNw=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "331800de5053fcebacf6813adb5db9c9dca22a0c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-master": {
       "locked": {
         "lastModified": 1786319342,
@@ -1971,12 +1955,12 @@
     },
     "nixpkgs-nvidia": {
       "locked": {
-        "lastModified": 1786862985,
-        "narHash": "sha256-FBJRXmbGXiSUDvYEbfLYRkckayyZ6SK1UEqhCrIZ2Cs=",
-        "rev": "e5bdc4a41d4c072fe1e3787eaa0320a384741d44",
-        "revCount": 1055335,
+        "lastModified": 1788179007,
+        "narHash": "sha256-hn1oU2rue2SYK8dAr8+WNZWtbsz1S2W5mnHlSEuh3bo=",
+        "rev": "34ab99075ac4f7e40cf037eef32cb1c360bb85e9",
+        "revCount": 1064949,
         "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.1055335%2Brev-e5bdc4a41d4c072fe1e3787eaa0320a384741d44/01a03771-351f-7d82-8fbd-a6c2e080c338/source.tar.gz"
+        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.1064949%2Brev-34ab99075ac4f7e40cf037eef32cb1c360bb85e9/01a07f85-6cc4-7701-8bcf-aa05a24774e1/source.tar.gz"
       },
       "original": {
         "type": "tarball",
@@ -2179,11 +2163,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785366718,
-        "narHash": "sha256-Ojh/r8JkPjj323G6TaZTKeLO+AsdluDSu0pYkdXeikE=",
+        "lastModified": 1788993620,
+        "narHash": "sha256-/1cbKewE+mKoiFwsxfD2xLABYCKLQTGvjVkKbZxcgZo=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "3972777b98a679997db29f5c14864831c7c36ab0",
+        "rev": "a3ce0d9a2251267821b62b557b0e1c674d5b8c8e",
         "type": "github"
       },
       "original": {
@@ -2458,7 +2442,9 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-backports": "nixpkgs-backports",
         "nixpkgs-jovian-nixos": "nixpkgs-jovian-nixos",
-        "nixpkgs-lts": "nixpkgs-lts",
+        "nixpkgs-lts": [
+          "nixpkgs"
+        ],
         "nixpkgs-nvidia": "nixpkgs-nvidia",
         "nixpkgs-pam-lid-fix": "nixpkgs-pam-lid-fix",
         "nixpkgs-stable": "nixpkgs-stable",

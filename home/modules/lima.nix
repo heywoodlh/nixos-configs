@@ -159,7 +159,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    launchd.agents = lib.optionalAttrs pkgs.stdenv.isDarwin {
+    launchd.agents = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
       start-lima-docker = {
         enable = cfg.docker.enable;
         config = {
@@ -192,7 +192,7 @@ in {
       };
     };
 
-    systemd.user = lib.optionalAttrs pkgs.stdenv.isLinux {
+    systemd.user = lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
       enable = true;
       services = {
         start-lima-docker = lib.optionalAttrs cfg.docker.enable {
@@ -246,7 +246,7 @@ in {
       startNixos
       enterNixos
       socat
-    ] ++ lib.optionals pkgs.stdenv.isDarwin [
+    ] ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       sleepwatcher
     ] ++ lib.optionals cfg.docker.enable [
       docker-client

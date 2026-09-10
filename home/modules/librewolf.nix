@@ -66,7 +66,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.activation.make-default-browser = if pkgs.stdenv.isDarwin then ''
+    home.activation.make-default-browser = if pkgs.stdenv.hostPlatform.isDarwin then ''
       /usr/bin/osascript <<-AS
         do shell script "${pkgs.defaultbrowser}/bin/defaultbrowser librewolf"
         try
@@ -87,7 +87,7 @@ in {
 
     programs.librewolf = {
       enable = true;
-      package = if pkgs.stdenv.isDarwin then null else pkgs.librewolf;
+      package = if pkgs.stdenv.hostPlatform.isDarwin then null else pkgs.librewolf;
 
       profiles.home-manager = {
         isDefault = true;
@@ -274,7 +274,7 @@ in {
           # Split screen
           "browser.tabs.splitView.enabled" = true;
           "browser.sessionstore.resume_from_crash" = false; # don't restore from crash (by default, browser saves state every 15 seconds)
-        } // lib.optionalAttrs pkgs.stdenv.isLinux {
+        } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
           "browser.cache.disk.parent_directory" = "/run/user/1000/librewolf"; # store cache in RAM, i.e. reset on reboot
         } // lib.optionalAttrs (cfg.socks.proxy != null) {
           "network.proxy.no_proxies_on" = cfg.socks.noproxy;

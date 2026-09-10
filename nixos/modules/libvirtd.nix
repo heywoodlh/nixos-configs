@@ -22,7 +22,7 @@ in {
   config = mkIf cfg.enable {
     users.users.${cfg.username}.extraGroups = [ "libvirtd" ];
 
-    boot.kernelModules = lib.optionals (pkgs.stdenv.isx86_64) [
+    boot.kernelModules = lib.optionals (pkgs.stdenv.hostPlatform.isx86_64) [
       "kvm-amd"
       "kvm-intel"
     ];

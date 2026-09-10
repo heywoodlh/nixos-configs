@@ -55,8 +55,8 @@
       '';
       # nixpkgs provided `ps` produces error on MacOS: "ps: time: requires entitlement", so just use MacOS' ps when on Darwin
       # Additional, pkgs.ps on MacOS expects different arguments than Linux
-      ps = if pkgs.stdenv.isDarwin then "/bin/ps" else "${pkgs.ps}/bin/ps";
-      psFlags = if pkgs.stdenv.isDarwin then "-U $USER" else "-fjH -u $USER";
+      ps = if pkgs.stdenv.hostPlatform.isDarwin then "/bin/ps" else "${pkgs.ps}/bin/ps";
+      psFlags = if pkgs.stdenv.hostPlatform.isDarwin then "-U $USER" else "-fjH -u $USER";
       opUnlockerText = ''
         ${pkgs.coreutils}/bin/mkdir -p -m 700 $HOME/.1password
         test -e $HOME/.1password/session.sh && ${pkgs.gnugrep}/bin/grep -iqE "^OP_SESSION" $HOME/.1password/session.sh && export (${pkgs.coreutils}/bin/head -1 $HOME/.1password/session.sh)
@@ -219,7 +219,7 @@
         ${pkgs.fish}/bin/fish --init-command="source ${fish_config}" $@
       '';
       # Tmux configs
-      myClip = if pkgs.stdenv.isDarwin then pkgs.writeShellScript "myClip" ''
+      myClip = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.writeShellScript "myClip" ''
         stdin=$(cat)
 
         /usr/bin/printf "%s" "$stdin" | /usr/bin/pbcopy
@@ -343,7 +343,7 @@
         pane_frames false
         scrollback_editor "${zellijEditor}"
       '';
-      ghosttyOsConf = if pkgs.stdenv.isDarwin then ''
+      ghosttyOsConf = if pkgs.stdenv.hostPlatform.isDarwin then ''
         # macos ghostty config
         font-size = 16
         macos-window-shadow = false

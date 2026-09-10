@@ -280,7 +280,7 @@ in {
       capSysNice = true;
     };
 
-    systemd.services.nvidia_oc = lib.optionalAttrs (pkgs.stdenv.isx86_64) {
+    systemd.services.nvidia_oc = lib.optionalAttrs (pkgs.stdenv.hostPlatform.isx86_64) {
       enable = (config.networking.hostName == "nixos-gaming");
       description = "NVIDIA Overclocking Service";
       after = [ "network.target" ];

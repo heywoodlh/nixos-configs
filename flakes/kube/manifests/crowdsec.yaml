@@ -18,8 +18,8 @@ metadata:
   namespace: security
 type: Opaque
 data:
-  csLapiSecret: Z04rQClJbUpfW2w/KUMmZmA8WSpCcF9RJ2lrJTpPOnZZckJwKVdpZjk0RVg8PngoRkM+Jy12Jyl6O3Q6VWJlNw==
-  registrationToken: RlBwbGVoWHg2SThkQ1BxN2JLWnBMMVU0c3dpa1c5R1BZMXMxMXJzQ2YyUGdTZk4x
+  csLapiSecret: ZWExNnkuLUQoIndNKSFHPmYhLkBDLnRFfGh2e2NCflAlLWRQZjBUPiYgTDFffjYjc1pkPGQ6U0F6Py9BVXJvcg==
+  registrationToken: TVJaV1JyaEtDNU5aVGpUcjZLMnRVSnJ2VHlpTmM4RjQ2Q2ptRHFDM2tHVXpyaUZh
 ---
 # Source: crowdsec/templates/docker-start-configmap.yaml
 apiVersion: v1
@@ -500,7 +500,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/lapi-secret: 7292fdc28ad9dec82d257f3101b6f245e9b966dd7197e19e62c05eaa99ce483a
+        checksum/lapi-secret: 0d7f87a15f45a3f0ebacd55fcd9818214250ef55f4b06c30d9dfafaa79b7889f
         checksum/lapi-configmap: 5f81bdc08f32bc76fdb8210fa8afd96c741d1bb334f2cbf5d3a76cd7cd8e4ba7
       labels:
         k8s-app: crowdsec
@@ -538,12 +538,9 @@ spec:
                   key: password
                   name: crowdsec-bouncer-key
           resources:
-            limits:
-              cpu: 500m
-              memory: 500Mi
             requests:
-              cpu: 500m
-              memory: 500Mi
+              cpu: 10m
+              memory: 64Mi
           livenessProbe:
             failureThreshold: 3
             periodSeconds: 10

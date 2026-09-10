@@ -85,6 +85,13 @@ fi
 
 for app in "${applications[@]}"
 do
+    destination_namespace="argo"
+    # The CrowdSec Helm charts omit metadata.namespace. Its Application must
+    # supply the namespace so LAPI and bouncer can use their synced Secret.
+    if [[ "${app}" == "crowdsec" ]]
+    then
+      destination_namespace="crowdsec"
+    fi
     #nix build --option substitute false "${root_dir}#${app}"
     nix build "${root_dir}#${app}" || error="true"
     cp ./result "${root_dir}/manifests/${app}.yaml" || error="true" # Copy file instead of using symlink
@@ -102,7 +109,7 @@ metadata:
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: argo
+    namespace: ${destination_namespace}
   source:
     repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
     targetRevision: HEAD

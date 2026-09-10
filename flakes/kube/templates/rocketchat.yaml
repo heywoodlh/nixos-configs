@@ -87,6 +87,10 @@ spec:
         - name: rocketchat
           containerPort: 3000
           protocol: TCP
+        resources:
+          limits:
+            cpu: 250m
+            memory: 2Gi
         env:
           - name: MONGO_URL
             value: "mongodb://rocketchat-db:27017/rocketchat?replicaSet=rs0"
@@ -177,6 +181,10 @@ spec:
         volumeMounts:
         - name: dbdir
           mountPath: /data/db
+        resources:
+          limits:
+            cpu: 250m
+            memory: 2Gi
         env:
           - name: MONGO_URL
             value: "mongodb://rocketchat-db:27017/rocketchat?replicaSet=rs0"

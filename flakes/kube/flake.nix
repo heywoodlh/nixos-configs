@@ -157,19 +157,21 @@
       packages = {
         "cert-manager" = kubelib.buildHelmChart { name = "cert-manager"; chart = (nixhelm.charts { inherit pkgs; }).jetstack.cert-manager; namespace = "cert-manager"; values = { crds.enabled = true; prometheus.enabled = false; }; };
         crowdsec = let
-          core = kubelib.buildHelmChart { name = "crowdsec"; chart = "${crowdsec-helm}/charts/crowdsec"; namespace = "crowdsec"; values = { container_runtime = "containerd"; agent.enabled = false; appsec.enabled = false; tls.enabled = false; lapi.env = [{ name = "BOUNCER_KEY_istio"; valueFrom.secretKeyRef = { name = "crowdsec-bouncer-key"; key = "password"; }; }]; }; };
+          core = kubelib.buildHelmChart { name = "crowdsec"; chart = "${crowdsec-helm}/charts/crowdsec"; namespace = "security"; values = { container_runtime = "containerd"; agent.enabled = false; appsec.enabled = false; tls.enabled = false; lapi.env = [{ name = "BOUNCER_KEY_istio"; valueFrom.secretKeyRef = { name = "crowdsec-bouncer-key"; key = "password"; }; }]; }; };
           bouncerCredentials = pkgs.writeText "crowdsec-bouncer-credentials.yaml" ''
             apiVersion: onepassword.com/v1
             kind: OnePasswordItem
             metadata:
               name: crowdsec-bouncer-key
-              namespace: crowdsec
+              namespace: security
             spec:
               itemPath: "vaults/Kubernetes/items/f2lulift3dcnyqxcqqrsq65fku"
             ---
           '';
-          bouncer = kubelib.buildHelmChart { name = "crowdsec-bouncer"; chart = "${envoy-bouncer-helm}/charts/envoy-proxy-bouncer"; namespace = "crowdsec"; values = { nameOverride = "crowdsec-bouncer"; image.tag = "v0.8.1"; resources = { limits = null; requests = { cpu = "10m"; memory = "64Mi"; }; }; config.bouncer = { lapiURL = "http://crowdsec-service.crowdsec.svc.cluster.local:8080"; apiKeySecretRef = { name = "crowdsec-bouncer-key"; key = "password"; }; tls.enabled = false; }; }; };
-        in pkgs.runCommand "crowdsec" {} ''cat ${bouncerCredentials} ${core} ${bouncer} > $out'';
+          bouncer = kubelib.buildHelmChart { name = "crowdsec-bouncer"; chart = "${envoy-bouncer-helm}/charts/envoy-proxy-bouncer"; namespace = "security"; values = { nameOverride = "crowdsec-bouncer"; image.tag = "v0.8.1"; resources = { limits = null; requests = { cpu = "10m"; memory = "64Mi"; }; }; config.bouncer = { lapiURL = "http://crowdsec-service.security.svc.cluster.local:8080"; apiKeySecretRef = { name = "crowdsec-bouncer-key"; key = "password"; }; tls.enabled = false; }; }; };
+        in pkgs.runCommand "crowdsec" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
+          cat ${bouncerCredentials} ${core} ${bouncer} | yq eval 'select(.kind != null) | .metadata.namespace = "security"' - > $out
+        '';
         "1password-connect" = (kubelib.buildHelmChart {
           name = "1password-connect";
           chart = (nixhelm.charts { inherit pkgs; })."1password".connect;

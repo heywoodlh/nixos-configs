@@ -176,7 +176,7 @@ metadata:
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: crowdsec
+    namespace: security
   source:
     repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
     targetRevision: HEAD

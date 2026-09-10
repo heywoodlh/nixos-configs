@@ -21,7 +21,7 @@ let
       meshConfig.extensionProviders = [{
         name = "crowdsec";
         envoyExtAuthzGrpc = {
-          service = "crowdsec-bouncer.crowdsec.svc.cluster.local";
+          service = "crowdsec-bouncer.security.svc.cluster.local";
           port = 8080;
         };
       }];

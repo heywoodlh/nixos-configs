@@ -17957,7 +17957,7 @@ data:
           {
             "envoyExtAuthzGrpc": {
               "port": 8080,
-              "service": "crowdsec-bouncer.crowdsec.svc.cluster.local"
+              "service": "crowdsec-bouncer.security.svc.cluster.local"
             },
             "name": "crowdsec"
           }
@@ -18132,7 +18132,7 @@ data:
           {
             "envoyExtAuthzGrpc": {
               "port": 8080,
-              "service": "crowdsec-bouncer.crowdsec.svc.cluster.local"
+              "service": "crowdsec-bouncer.security.svc.cluster.local"
             },
             "name": "crowdsec"
           }
@@ -18232,7 +18232,7 @@ data:
     extensionProviders:
     - envoyExtAuthzGrpc:
         port: 8080
-        service: crowdsec-bouncer.crowdsec.svc.cluster.local
+        service: crowdsec-bouncer.security.svc.cluster.local
       name: crowdsec
     rootNamespace: istio-system
     trustDomain: cluster.local

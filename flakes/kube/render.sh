@@ -87,10 +87,10 @@ for app in "${applications[@]}"
 do
     destination_namespace="argo"
     # The CrowdSec Helm charts omit metadata.namespace. Its Application must
-    # supply the namespace so LAPI and bouncer can use their synced Secret.
+    # supply the security namespace so LAPI and bouncer can use their synced Secret.
     if [[ "${app}" == "crowdsec" ]]
     then
-      destination_namespace="crowdsec"
+      destination_namespace="security"
     fi
     #nix build --option substitute false "${root_dir}#${app}"
     nix build "${root_dir}#${app}" || error="true"

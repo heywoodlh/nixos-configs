@@ -10,13 +10,22 @@ let
     name = "istiod";
     chart = (nixhelm.charts { inherit pkgs; }).istio.istiod;
     namespace = "istio-system";
-    values.meshConfig.extensionProviders = [{
-      name = "crowdsec";
-      envoyExtAuthzGrpc = {
-        service = "crowdsec-bouncer.crowdsec.svc.cluster.local";
-        port = 8080;
+    values = {
+      resources = {
+        requests = {
+          cpu = "100m";
+          memory = "512Mi";
+        };
+        limits = { };
       };
-    }];
+      meshConfig.extensionProviders = [{
+        name = "crowdsec";
+        envoyExtAuthzGrpc = {
+          service = "crowdsec-bouncer.crowdsec.svc.cluster.local";
+          port = 8080;
+        };
+      }];
+    };
   };
   gateway = kubelib.buildHelmChart {
     name = "plex-gateway";
@@ -42,7 +51,6 @@ let
       };
     };
   };
-  routing = mkKubeDrv "istio-routing" { src = ./templates/istio.yaml; };
 in pkgs.runCommand "istio" { } ''
-  cat ${base} ${control} ${gateway} ${routing} > $out
+  cat ${base} ${control} ${gateway} > $out
 ''

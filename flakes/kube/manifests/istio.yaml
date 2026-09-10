@@ -17962,6 +17962,13 @@ data:
             "name": "crowdsec"
           }
         ]
+      },
+      "resources": {
+        "limits": {},
+        "requests": {
+          "cpu": "100m",
+          "memory": "512Mi"
+        }
       }
     }
   merged-values: |-
@@ -18141,9 +18148,10 @@ data:
       "podLabels": {},
       "replicaCount": 1,
       "resources": {
+        "limits": {},
         "requests": {
-          "cpu": "500m",
-          "memory": "2048Mi"
+          "cpu": "100m",
+          "memory": "512Mi"
         }
       },
       "revision": "",
@@ -20954,9 +20962,10 @@ spec:
           - name: PLATFORM
             value: ""
           resources:
+            limits: {}
             requests:
-              cpu: 500m
-              memory: 2048Mi
+              cpu: 100m
+              memory: 512Mi
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -21454,97 +21463,3 @@ spec:
 ---
 # Source: gateway/templates/zzz_profile.yaml
 #  Flatten globals, if defined on a per-chart basis
----
-apiVersion: onepassword.com/v1
-kind: OnePasswordItem
-metadata:
-  name: plex-cloudflare-token
-  namespace: istio-system
-spec:
-  itemPath: "vaults/Kubernetes/items/73gahgdaks7s3hl4dsjoxjzflq"
----
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: plex-acme
-  namespace: istio-system
-spec:
-  acme:
-    email: github-bot@heywoodlh.io
-    server: https://acme-v02.api.letsencrypt.org/directory
-    privateKeySecretRef:
-      name: plex-acme-account
-    solvers:
-      - dns01:
-          cloudflare:
-            apiKeySecretRef:
-              name: plex-cloudflare-token
-              key: password
-            email: github-bot@heywoodlh.io
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: plex-tls
-  namespace: istio-system
-spec:
-  secretName: plex-tls
-  issuerRef:
-    name: plex-acme
-    kind: Issuer
-  dnsNames:
-    - plex.heywoodlh.io
----
-apiVersion: networking.istio.io/v1
-kind: Gateway
-metadata:
-  name: plex
-  namespace: istio-system
-spec:
-  selector:
-    app.kubernetes.io/name: plex-gateway
-  servers:
-    - port:
-        number: 32400
-        name: https-plex
-        protocol: HTTPS
-      tls:
-        mode: SIMPLE
-        credentialName: plex-tls
-      hosts:
-        - "*"
----
-apiVersion: security.istio.io/v1
-kind: AuthorizationPolicy
-metadata:
-  name: plex-crowdsec
-  namespace: istio-system
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: plex-gateway
-  action: CUSTOM
-  provider:
-    name: crowdsec
-  rules:
-    - to:
-        - operation:
-            ports:
-              - "32400"
----
-apiVersion: networking.istio.io/v1
-kind: VirtualService
-metadata:
-  name: plex
-  namespace: istio-system
-spec:
-  hosts:
-    - "*"
-  gateways:
-    - plex
-  http:
-    - route:
-        - destination:
-            host: plex.media.svc.cluster.local
-            port:
-              number: 32400

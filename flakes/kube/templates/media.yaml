@@ -16,7 +16,7 @@ metadata:
 data:
   run.sh: |-
     #!/usr/bin/env ash
-    printf "dns_cloudflare_email = $CLOUDFLARE_EMAIL\ndns_cloudflare_api_key = $CLOUDFLARE_TOKEN\n" > /cloudflare.ini
+    printf "dns_cloudflare_api_token = $CLOUDFLARE_TOKEN\n" > /cloudflare.ini
     chmod 600 /cloudflare.ini
     if [ -e /letsencrypt/config/live/plex.heywoodlh.io/fullchain.pem ]
     then
@@ -36,7 +36,7 @@ data:
         --config-dir /letsencrypt/config \
         --work-dir /letsencrypt/work \
         --logs-dir /letsencrypt/logs \
-        -m $CLOUDFLARE_EMAIL \
+        -m github-bot@heywoodlh.io \
         -d $CLOUDFLARE_DOMAIN
     fi
     openssl pkcs12 -export \
@@ -76,11 +76,6 @@ spec:
                     secretKeyRef:
                       name: plex-cloudflare-token
                       key: password
-                - name: CLOUDFLARE_EMAIL
-                  valueFrom:
-                    secretKeyRef:
-                      name: plex-cloudflare-token
-                      key: username
                 - name: CLOUDFLARE_DOMAIN
                   valueFrom:
                     secretKeyRef:
@@ -903,10 +898,9 @@ spec:
     solvers:
       - dns01:
           cloudflare:
-            apiKeySecretRef:
+            apiTokenSecretRef:
               name: plex-cloudflare-token
               key: password
-            email: github-bot@heywoodlh.io
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate

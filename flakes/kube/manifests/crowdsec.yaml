@@ -1,3 +1,11 @@
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: crowdsec-bouncer-key
+  namespace: crowdsec
+spec:
+  itemPath: "vaults/Kubernetes/items/f2lulift3dcnyqxcqqrsq65fku"
+---
 ---
 # Source: crowdsec/templates/lapi-secrets.yaml
 apiVersion: v1
@@ -10,8 +18,8 @@ metadata:
     version: v1
 type: Opaque
 data:
-  csLapiSecret: XVhpWWg/WHlSKHZQayV+IUQsdWUmVFNxeVZaPyNjXF0nLXtRR0JbPCoqRkBPaFNUcmcge0xJSj53ZUw1SGJgew==
-  registrationToken: ODd0a3BLZzBBZENSV3Yzb3NtU0RsTjlaYWUxbG1aQlNpczN3QzQ3ZDlmNk5wbkdG
+  csLapiSecret: dj91ZSxTNXpmZmQyaiZTO0RRS0peeHl8J1NdcXlVVyBmOW4qMy8/PVl1Znw6N01LVys4ZUZqUUZFICM+LTNSRw==
+  registrationToken: T2ZLZ0treGtXamh2Q29rOG1mbnd6Mkx1SWpaNWM2WGFaNUlhZ0NzdXBUYThwNVQ5
 ---
 # Source: crowdsec/templates/docker-start-configmap.yaml
 apiVersion: v1
@@ -487,7 +495,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/lapi-secret: 3b8b51d74bc17423a923d3268980d13681759f01ee6b5cc60fadf344c6e9da5c
+        checksum/lapi-secret: 06178500de48f08d66ec5306042b2754f3d985ddf6177078bcc41cff53113258
         checksum/lapi-configmap: 5f81bdc08f32bc76fdb8210fa8afd96c741d1bb334f2cbf5d3a76cd7cd8e4ba7
       labels:
         k8s-app: crowdsec
@@ -523,7 +531,7 @@ spec:
           - name: BOUNCER_KEY_istio
             valueFrom:
               secretKeyRef:
-                key: api-key
+                key: password
                 name: crowdsec-bouncer-key
         resources:
           limits:
@@ -660,7 +668,7 @@ data:
   config.yaml: |
     bouncer:
       apiKeySecretRef:
-        key: api-key
+        key: password
         name: crowdsec-bouncer-key
       enabled: true
       lapiURL: http://crowdsec-service.crowdsec.svc.cluster.local:8080
@@ -756,7 +764,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: adefb8a6b5e850fff9e42dd2ff943694258f8ea1e88aa18be638ff0066aee6fd
+        checksum/config: 386595883fbabea2b01f9ebcd9f5bc034de4d563855d4bdde58ba0121d2d8751
       labels:
         helm.sh/chart: envoy-proxy-bouncer-0.8.1
         app.kubernetes.io/name: crowdsec-bouncer
@@ -805,7 +813,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: "crowdsec-bouncer-key"
-                  key: "api-key"
+                  key: "password"
           resources:
             requests:
               cpu: 10m

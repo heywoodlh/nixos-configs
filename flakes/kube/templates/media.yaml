@@ -153,11 +153,6 @@ spec:
                 secretKeyRef:
                   name: plex-cloudflare-token
                   key: password
-            - name: CLOUDFLARE_EMAIL
-              valueFrom:
-                secretKeyRef:
-                  name: plex-cloudflare-token
-                  key: username
             - name: CLOUDFLARE_DOMAIN
               valueFrom:
                 secretKeyRef:

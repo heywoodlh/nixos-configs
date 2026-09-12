@@ -1923,17 +1923,17 @@
     },
     "nixpkgs-jovian-nixos": {
       "locked": {
-        "lastModified": 1787498568,
-        "narHash": "sha256-9i/VTdusq/+NM/tz+J1Re+ojkMB8MBf0QshnYfzHz30=",
+        "lastModified": 1789218530,
+        "narHash": "sha256-x1YJbec65AYSIqrHC5QR0IjJfe9cDXP5sC+Zxae0Cvw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "56c02bc00adcf003215cc4bd996d6efaf4cff188",
+        "rev": "d632378ba62323b7b21bee8dbb18ce02ed14b967",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "56c02bc00adcf003215cc4bd996d6efaf4cff188",
+        "rev": "d632378ba62323b7b21bee8dbb18ce02ed14b967",
         "type": "github"
       }
     },

@@ -725,7 +725,9 @@ in {
     executable = true;
     text = ''
       #!/${pkgs.fish}/bin/fish
-      ${pkgs.aerc}/bin/aerc "$argv"
+      ${pkgs.isync}/bin/mbsync --all
+      and ${pkgs.notmuch}/bin/notmuch new
+      and ${pkgs.aerc}/bin/aerc "$argv"
     '';
   };
 

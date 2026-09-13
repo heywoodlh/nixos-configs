@@ -16,6 +16,7 @@ let
       -o display_link_number=true
   '';
   cred = pkgs.writeShellScript "cred.sh" ''
+    umask 077
     mkdir -p ~/.config/aerc
 
     # Remove file if empty
@@ -23,13 +24,22 @@ let
 
     if [[ ! -e ~/.config/aerc/protonmail.txt ]]
     then
-      ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge' > ~/.config/aerc/protonmail.txt
+      credential_file="$(mktemp ~/.config/aerc/protonmail.txt.XXXXXX)"
+      trap 'rm -f "$credential_file"' EXIT
+      if ! ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge' > "$credential_file" || [[ ! -s "$credential_file" ]]
+      then
+        echo "Unable to populate credentials. Exiting." >&2
+        exit 1
+      fi
+      mv "$credential_file" ~/.config/aerc/protonmail.txt
+      trap - EXIT
     fi
-    if [[ -e ~/.config/aerc/protonmail.txt ]]
+    if [[ -s ~/.config/aerc/protonmail.txt ]]
     then
+      chmod 600 ~/.config/aerc/protonmail.txt
       cat ~/.config/aerc/protonmail.txt
     else
-      echo "Unable to populate credentials. Exiting."
+      echo "Unable to populate credentials. Exiting." >&2
       exit 1
     fi
   '';
@@ -67,27 +77,44 @@ in {
         "text/plain" = "${pkgs.coreutils}/bin/fold -w 80";
       };
     };
-    programs.aerc.extraAccounts = lib.optionalAttrs (cfg.accounts) {
-      protonmail = {
-        source = "imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143";
-        source-cred-cmd = "${cred}";
-        outgoing = "smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25";
-        outgoing-cred-cmd = "${cred}";
-        default = "INBOX";
-        copy-to = "Sent";
-        from = "Spencer Heywood <spencer@heywoodlh.io>";
-        aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>,LaMar Heywood <wgu@heywoodlh.io>,Spencer Heywood <heywoodlh@heywoodlh.io>";
-        signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
-        address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
+    programs.mbsync.enable = cfg.accounts;
+    programs.notmuch.enable = cfg.accounts;
+
+    accounts.email = lib.mkIf cfg.accounts {
+      maildirBasePath = "${config.home.homeDirectory}/.mail";
+      accounts.protonmail = {
+        enable = true;
+        primary = true;
+        address = "spencer@heywoodlh.io";
+        realName = "Spencer Heywood";
+        userName = "l.spencer.heywood@protonmail.com";
+        aliases = [ "*@protonmail.com" "*@pm.me" "wgu@heywoodlh.io" "heywoodlh@heywoodlh.io" ];
+        passwordCommand = [ "${cred}" ];
+        imap = {
+          host = "protonmail-bridge.barn-banana.ts.net";
+          port = 143;
+          tls.enable = false;
+        };
+        smtp = {
+          host = "protonmail-bridge.barn-banana.ts.net";
+          port = 25;
+          tls.enable = false;
+        };
+        mbsync = {
+          enable = true;
+          create = "maildir";
+          patterns = [ "INBOX" "Archive" "Sent" "Drafts" ];
+        };
+        notmuch.enable = true;
+        aerc = {
+          enable = true;
+          extraAccounts = {
+            archive = "Archive";
+            signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
+            address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
+          };
+        };
       };
-      #wgu = {
-      #  source = "imap+insecure://lheywo3%40wgu.edu@davmail.barn-banana.ts.net:143";
-      #  outgoing = "smtp+insecure://lheywo3%40wgu.edu@davmail.barn-banana.ts.net:25";
-      #  default = "INBOX";
-      #  copy-to = "Sent";
-      #  from = "LaMar Heywood <lheywo3@wgu.edu>";
-      #  signature-file = "${pkgs.writeText "signature.txt" "- LaMar Heywood"}";
-      #};
     };
 
     home.packages = with pkgs; [

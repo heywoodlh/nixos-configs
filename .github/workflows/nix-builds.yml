@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   changes:
@@ -59,6 +60,7 @@ jobs:
         include:
           - name: build-linux-amd64
             runner: ubuntu-24.04
+            validate: true
             targets: >-
               .#nixosConfigurations.nixos-server.config.system.build.toplevel
               .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
@@ -68,6 +70,7 @@ jobs:
               .#homeConfigurations.heywoodlh.activationPackage
           - name: build-linux-arm64
             runner: ubuntu-24.04-arm
+            validate: false
             targets: >-
               .#nixosConfigurations.nixos-server.config.system.build.toplevel
               .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
@@ -101,7 +104,31 @@ jobs:
       - name: Free disk space
         uses: jlumbroso/free-disk-space@main
 
+      - name: Provide host-only NixOS evaluation fixtures
+        if: github.event_name != 'push' && matrix.validate
+        run: |
+          sudo install -d -m 0755 /etc/nixos
+          sudo tee /etc/nixos/hardware-configuration.nix > /dev/null <<'EOF'
+          { ... }: {
+            fileSystems."/" = {
+              device = "tmpfs";
+              fsType = "tmpfs";
+            };
+          }
+          EOF
+          sudo cp /etc/nixos/hardware-configuration.nix /etc/nixos/hardware.nix
+          sudo tee /etc/nixos/configuration.nix > /dev/null <<'EOF'
+          { ... }: {}
+          EOF
+
+      - name: Validate NixOS and Home Manager configurations
+        if: github.event_name != 'push' && matrix.validate
+        run: |
+          nix eval --impure --accept-flake-config --json .#nixosConfigurations --apply 'configs: builtins.mapAttrs (_: config: config.config.system.build.toplevel.drvPath) configs' >/dev/null
+          nix eval --impure --accept-flake-config --json .#homeConfigurations --apply 'configs: builtins.mapAttrs (_: config: config.activationPackage.drvPath) configs' >/dev/null
+
       - name: Build configurations
+        if: github.event_name == 'push'
         run: nix build --accept-flake-config --print-out-paths ${{ matrix.targets }} | tee build-paths.txt
 
       - name: Configure Attic
@@ -149,11 +176,18 @@ jobs:
           EOF
 
       - name: Create Darwin run directory
+        if: github.event_name == 'push'
         run: |
           echo -e 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf > /dev/null
           /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t > /dev/null 2>&1 || true
 
+      - name: Validate nix-darwin configurations
+        if: github.event_name != 'push'
+        run: |
+          nix eval --accept-flake-config --json .#darwinConfigurations --apply 'configs: builtins.mapAttrs (_: config: config.config.system.build.toplevel.drvPath) configs' >/dev/null
+
       - name: Build configuration
+        if: github.event_name == 'push'
         run: |
           nix build --accept-flake-config --print-out-paths .#darwinConfigurations.m1-mac-mini.system | tee build-paths.txt
 

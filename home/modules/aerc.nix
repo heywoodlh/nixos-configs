@@ -110,6 +110,9 @@ in {
           enable = true;
           extraAccounts = {
             archive = "Archive";
+            check-mail = "5s";
+            check-mail-cmd = "${pkgs.isync}/bin/mbsync --all && ${pkgs.notmuch}/bin/notmuch new";
+            check-mail-timeout = "4m";
             signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
             address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
           };

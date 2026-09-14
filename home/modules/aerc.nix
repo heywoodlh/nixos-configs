@@ -43,6 +43,58 @@ let
       exit 1
     fi
   '';
+  sync-mail-core = pkgs.writeShellScript "sync-mail-core" ''
+    set -euo pipefail
+    umask 077
+    state_dir="''${XDG_STATE_HOME:-$HOME/.local/state}/mbsync"
+    limit_file="$state_dir/protonmail-max-messages"
+    config_file="''${XDG_CONFIG_HOME:-$HOME/.config}/isyncrc"
+    set_limit() {
+      state_file="$(mktemp "$state_dir/protonmail-max-messages.XXXXXX")"
+      printf '%s\n' "$1" > "$state_file"
+      mv "$state_file" "$limit_file"
+    }
+    case "''${1:-poll}" in
+      poll)
+        [[ -s "$limit_file" ]] || set_limit 250
+        sync_args=(--all)
+        ;;
+      backfill)
+        limit="$(<"$limit_file")"
+        [[ "$limit" =~ ^[0-9]+$ ]] || { echo "Invalid Proton Mail sync limit" >&2; exit 1; }
+        set_limit "$((limit + 250))"
+        sync_args=(--old --all)
+        ;;
+      *)
+        echo "Unknown Proton Mail sync mode" >&2
+        exit 1
+        ;;
+    esac
+    limit="$(<"$limit_file")"
+    [[ "$limit" =~ ^[0-9]+$ ]] || { echo "Invalid Proton Mail sync limit" >&2; exit 1; }
+    [[ -r "$config_file" ]] || { echo "Missing mbsync configuration" >&2; exit 1; }
+    temporary_config="$(mktemp)"
+    trap 'rm -f "$temporary_config"' EXIT
+    printf 'MaxMessages %s\nExpireUnread yes\n\n' "$limit" > "$temporary_config"
+    cat "$config_file" >> "$temporary_config"
+    ${pkgs.isync}/bin/mbsync -c "$temporary_config" "''${sync_args[@]}"
+    ${pkgs.notmuch}/bin/notmuch new
+  '';
+  sync-mail = pkgs.writeShellScriptBin "sync-mail" ''
+    set -euo pipefail
+    umask 077
+    state_dir="''${XDG_STATE_HOME:-$HOME/.local/state}/mbsync"
+    mkdir -p -m 700 "$state_dir"
+    exec ${pkgs.perl}/bin/perl -MFcntl=:flock,F_SETFD -e '
+      open my $lock, ">>", shift @ARGV or die "Unable to open Proton Mail sync lock: $!\n";
+      flock $lock, LOCK_EX | LOCK_NB or exit 0;
+      fcntl($lock, F_SETFD, 0) or die "Unable to retain Proton Mail sync lock: $!\n";
+      exec @ARGV or die "Unable to start Proton Mail sync: $!\n";
+    ' "$state_dir/protonmail-sync.lock" ${sync-mail-core} "$@"
+  '';
+  backfill-mail = pkgs.writeShellScriptBin "backfill-mail" ''
+    exec ${sync-mail}/bin/sync-mail backfill
+  '';
 in {
   options = {
     heywoodlh.home.aerc = {
@@ -93,7 +145,7 @@ in {
         from = "Spencer Heywood <spencer@heywoodlh.io>";
         aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>,LaMar Heywood <wgu@heywoodlh.io>,Spencer Heywood <heywoodlh@heywoodlh.io>";
         check-mail = "5s";
-        check-mail-cmd = "${pkgs.isync}/bin/mbsync --all && ${pkgs.notmuch}/bin/notmuch new";
+        check-mail-cmd = "${sync-mail}/bin/sync-mail";
         check-mail-timeout = "4m";
         signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
         address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
@@ -129,8 +181,49 @@ in {
       };
     };
 
+    systemd.user.services.protonmail-backfill = lib.mkIf (cfg.accounts && pkgs.stdenv.hostPlatform.isLinux) {
+      Unit.Description = "Progressively backfill Proton Mail";
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${backfill-mail}/bin/backfill-mail";
+      };
+    };
+    systemd.user.timers.protonmail-backfill = lib.mkIf (cfg.accounts && pkgs.stdenv.hostPlatform.isLinux) {
+      Unit.Description = "Progressively backfill Proton Mail";
+      Timer = {
+        OnBootSec = "10min";
+        OnUnitActiveSec = "10min";
+        Persistent = true;
+      };
+      Install.WantedBy = [ "timers.target" ];
+    };
+
+    launchd.agents.protonmail-backfill = lib.mkIf (cfg.accounts && pkgs.stdenv.hostPlatform.isDarwin) {
+      enable = true;
+      config = {
+        ProgramArguments = [ "${backfill-mail}/bin/backfill-mail" ];
+        RunAtLoad = false;
+        StartInterval = 600;
+        ProcessType = "Background";
+      };
+    };
+
+    home.activation.protonmail-sync-limit = lib.mkIf cfg.accounts ''
+      state_dir="''${XDG_STATE_HOME:-$HOME/.local/state}/mbsync"
+      limit_file="$state_dir/protonmail-max-messages"
+      mkdir -p -m 700 "$state_dir"
+      if [[ ! -s "$limit_file" ]]
+      then
+        state_file="$(mktemp "$state_dir/protonmail-max-messages.XXXXXX")"
+        printf '250\n' > "$state_file"
+        mv "$state_file" "$limit_file"
+      fi
+    '';
+
     home.packages = with pkgs; [
       khard
+      sync-mail
+      backfill-mail
     ];
 
     home.file.".config/khard/khard.conf".text = lib.optionalString (cfg.accounts) ''

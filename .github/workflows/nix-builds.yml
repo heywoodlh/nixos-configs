@@ -124,6 +124,7 @@ jobs:
       - name: Validate NixOS and Home Manager configurations
         if: github.event_name != 'push' && matrix.validate
         run: |
+          set -o pipefail
           perl -e '$| = 1; while (1) { sleep 60; print "Still evaluating NixOS and Home Manager configurations...\n"; }' &
           heartbeat_pid=$!
           cleanup() {
@@ -131,8 +132,18 @@ jobs:
             wait "$heartbeat_pid" 2>/dev/null || true
           }
           trap cleanup EXIT
-          nix eval --impure --accept-flake-config --json .#nixosConfigurations --apply 'configs: builtins.mapAttrs (_: config: config.config.system.build.toplevel.drvPath) configs' >/dev/null
-          nix eval --impure --accept-flake-config --json .#homeConfigurations --apply 'configs: builtins.mapAttrs (_: config: config.activationPackage.drvPath) configs' >/dev/null
+          nix eval --accept-flake-config --json .#nixosConfigurations --apply 'builtins.attrNames' |
+            jq -r '.[]' |
+            while IFS= read -r name; do
+              echo "Validating NixOS configuration: $name"
+              nix eval --impure --accept-flake-config --raw ".#nixosConfigurations.$name.config.system.build.toplevel.drvPath" >/dev/null
+            done
+          nix eval --accept-flake-config --json .#homeConfigurations --apply 'builtins.attrNames' |
+            jq -r '.[]' |
+            while IFS= read -r name; do
+              echo "Validating Home Manager configuration: $name"
+              nix eval --impure --accept-flake-config --raw ".#homeConfigurations.$name.activationPackage.drvPath" >/dev/null
+            done
 
       - name: Build configurations
         if: github.event_name == 'push'

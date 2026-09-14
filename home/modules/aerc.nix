@@ -80,6 +80,25 @@ in {
     programs.mbsync.enable = cfg.accounts;
     programs.notmuch.enable = cfg.accounts;
 
+    programs.aerc.extraAccounts = lib.optionalAttrs cfg.accounts {
+      protonmail = {
+        source = "notmuch://";
+        outgoing = "smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25";
+        outgoing-cred-cmd = "${cred}";
+        default = "INBOX";
+        copy-to = "Sent";
+        postpone = "Drafts";
+        archive = "Archive";
+        from = "Spencer Heywood <spencer@heywoodlh.io>";
+        aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>,LaMar Heywood <wgu@heywoodlh.io>,Spencer Heywood <heywoodlh@heywoodlh.io>";
+        check-mail = "5s";
+        check-mail-cmd = "${pkgs.isync}/bin/mbsync --all && ${pkgs.notmuch}/bin/notmuch new";
+        check-mail-timeout = "4m";
+        signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
+        address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
+      };
+    };
+
     accounts.email = lib.mkIf cfg.accounts {
       maildirBasePath = "${config.home.homeDirectory}/.mail";
       accounts.protonmail = {
@@ -106,17 +125,6 @@ in {
           patterns = [ "INBOX" "Archive" "Sent" "Drafts" ];
         };
         notmuch.enable = true;
-        aerc = {
-          enable = true;
-          extraAccounts = {
-            archive = "Archive";
-            check-mail = "5s";
-            check-mail-cmd = "${pkgs.isync}/bin/mbsync --all && ${pkgs.notmuch}/bin/notmuch new";
-            check-mail-timeout = "4m";
-            signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
-            address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
-          };
-        };
       };
     };
 

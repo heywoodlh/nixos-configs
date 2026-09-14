@@ -138,6 +138,7 @@ in {
     programs.aerc.extraAccounts = lib.optionalAttrs cfg.accounts {
       protonmail = {
         source = "notmuch://";
+        query-map = "${config.home.homeDirectory}/.config/aerc/protonmail-query-map";
         maildir-account-path = "protonmail";
         multi-file-strategy = "act-dir";
         outgoing = "smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25";
@@ -268,6 +269,14 @@ in {
       sync-mail
       backfill-mail
     ];
+
+    home.file.".config/aerc/protonmail-query-map".text = lib.optionalString cfg.accounts ''
+      inbox = path:protonmail/inbox/**
+      archive = path:protonmail/archive/**
+      sent = path:protonmail/sent/**
+      drafts = path:protonmail/drafts/**
+      spam = tag:spam and path:protonmail/spam/**
+    '';
 
     home.file.".config/khard/khard.conf".text = lib.optionalString (cfg.accounts) ''
       [addressbooks]

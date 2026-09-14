@@ -131,6 +131,9 @@ in {
     };
     programs.mbsync.enable = cfg.accounts;
     programs.notmuch.enable = cfg.accounts;
+    programs.notmuch.hooks.postNew = lib.mkIf cfg.accounts ''
+      ${pkgs.notmuch}/bin/notmuch tag +spam -inbox -- 'path:protonmail/spam/**'
+    '';
 
     programs.aerc.extraAccounts = lib.optionalAttrs cfg.accounts {
       protonmail = {
@@ -138,10 +141,10 @@ in {
         maildir-account-path = "protonmail";
         outgoing = "smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25";
         outgoing-cred-cmd = "${cred}";
-        default = "INBOX";
-        copy-to = "Sent";
-        postpone = "Drafts";
-        archive = "Archive";
+        default = "inbox";
+        copy-to = "sent";
+        postpone = "drafts";
+        archive = "archive";
         from = "Spencer Heywood <spencer@heywoodlh.io>";
         aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>,LaMar Heywood <wgu@heywoodlh.io>,Spencer Heywood <heywoodlh@heywoodlh.io>";
         check-mail = "5s";
@@ -172,10 +175,37 @@ in {
           port = 25;
           tls.enable = false;
         };
+        folders.inbox = "inbox";
         mbsync = {
           enable = true;
           create = "maildir";
-          patterns = [ "INBOX" "Archive" "Sent" "Drafts" ];
+          groups.protonmail.channels = {
+            inbox = {
+              farPattern = "INBOX";
+              nearPattern = "inbox";
+              extraConfig.Create = "Near";
+            };
+            archive = {
+              farPattern = "Archive";
+              nearPattern = "archive";
+              extraConfig.Create = "Near";
+            };
+            sent = {
+              farPattern = "Sent";
+              nearPattern = "sent";
+              extraConfig.Create = "Near";
+            };
+            drafts = {
+              farPattern = "Drafts";
+              nearPattern = "drafts";
+              extraConfig.Create = "Near";
+            };
+            spam = {
+              farPattern = "Spam";
+              nearPattern = "spam";
+              extraConfig.Create = "Near";
+            };
+          };
         };
         notmuch.enable = true;
       };
@@ -207,6 +237,18 @@ in {
         ProcessType = "Background";
       };
     };
+
+    home.activation.protonmail-maildir-lowercase = lib.mkIf cfg.accounts (lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      maildir="${config.home.homeDirectory}/.mail/protonmail"
+      for folder in Inbox Archive Sent Drafts Spam
+      do
+        lowercase_folder="$(printf '%s' "$folder" | tr '[:upper:]' '[:lower:]')"
+        if [[ -d "$maildir/$folder" && ! -e "$maildir/$lowercase_folder" ]]
+        then
+          mv "$maildir/$folder" "$maildir/$lowercase_folder"
+        fi
+      done
+    '');
 
     home.activation.protonmail-sync-limit = lib.mkIf cfg.accounts ''
       state_dir="''${XDG_STATE_HOME:-$HOME/.local/state}/mbsync"

@@ -124,6 +124,13 @@ jobs:
       - name: Validate NixOS and Home Manager configurations
         if: github.event_name != 'push' && matrix.validate
         run: |
+          perl -e '$| = 1; while (1) { sleep 60; print "Still evaluating NixOS and Home Manager configurations...\n"; }' &
+          heartbeat_pid=$!
+          cleanup() {
+            kill "$heartbeat_pid" 2>/dev/null || true
+            wait "$heartbeat_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
           nix eval --impure --accept-flake-config --json .#nixosConfigurations --apply 'configs: builtins.mapAttrs (_: config: config.config.system.build.toplevel.drvPath) configs' >/dev/null
           nix eval --impure --accept-flake-config --json .#homeConfigurations --apply 'configs: builtins.mapAttrs (_: config: config.activationPackage.drvPath) configs' >/dev/null
 

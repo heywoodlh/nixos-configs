@@ -83,6 +83,7 @@ in {
     programs.aerc.extraAccounts = lib.optionalAttrs cfg.accounts {
       protonmail = {
         source = "notmuch://";
+        maildir-account-path = "protonmail";
         outgoing = "smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25";
         outgoing-cred-cmd = "${cred}";
         default = "INBOX";

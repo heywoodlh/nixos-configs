@@ -118,7 +118,14 @@ jobs:
           EOF
           sudo cp /etc/nixos/hardware-configuration.nix /etc/nixos/hardware.nix
           sudo tee /etc/nixos/configuration.nix > /dev/null <<'EOF'
-          { ... }: {}
+          { ... }: {
+            boot.loader.grub.devices = [ "nodev" ];
+            users.groups.heywoodlh = {};
+            users.users.heywoodlh = {
+              isNormalUser = true;
+              group = "heywoodlh";
+            };
+          }
           EOF
 
       - name: Validate NixOS and Home Manager configurations

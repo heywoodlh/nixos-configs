@@ -29,7 +29,7 @@ rec {
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v1.0.0";
+      url = "github:nix-community/lanzaboote/v1.1.0";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.pre-commit.follows = "pre-commit-hooks";
       inputs.crane.follows = "crane";
@@ -498,7 +498,6 @@ rec {
       kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
       jovian-nixos.nixosModules.default
-    ] ++ lib.optionals (pkgs.stdenv.hostPlatform.isAarch64) [
       steam-asahi.nixosModules.default
     ];
     myNixOSModules = [
@@ -532,10 +531,8 @@ rec {
       ./nixos/modules/tv.nix
       ./nixos/modules/moonlight.nix
       ./nixos/modules/sshd.nix
-    ] ++ commonModules
-    ++ lib.optionals (pkgs.stdenv.hostPlatform.isAarch64) [
       ./nixos/modules/asahi.nix
-    ];
+    ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
     };

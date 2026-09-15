@@ -90,9 +90,12 @@ in {
     # Desktop packages
     environment.systemPackages = with pkgs; [
       busybox
-      ente-auth
       lsof
       gnome-boxes
+    ] ++ optionals stdenv.hostPlatform.isx86_64 [
+      # Ente Auth depends on Flutter's aapt, which is unavailable on aarch64-linux.
+      ente-auth
+    ] ++ [
       gnome-screenshot
       ifuse
       meshtastic

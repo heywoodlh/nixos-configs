@@ -27,6 +27,7 @@ in {
     heywoodlh.defaults.enable = true;
     heywoodlh.console = true;
     heywoodlh.sshd.enable = true;
+    heywoodlh.sshd.duo = true;
     # Enable backup user
     heywoodlh.backup.enable = true;
 

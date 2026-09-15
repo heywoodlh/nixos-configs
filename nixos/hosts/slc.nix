@@ -91,5 +91,4 @@
     port = 6767;
   };
 
-  heywoodlh.sshd.mfa = true;
 }

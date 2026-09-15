@@ -498,7 +498,6 @@ rec {
       kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
       jovian-nixos.nixosModules.default
-    ] ++ lib.optionals (pkgs.stdenv.hostPlatform.isAarch64) [
       steam-asahi.nixosModules.default
     ];
     myNixOSModules = [
@@ -532,10 +531,8 @@ rec {
       ./nixos/modules/tv.nix
       ./nixos/modules/moonlight.nix
       ./nixos/modules/sshd.nix
-    ] ++ commonModules
-    ++ lib.optionals (pkgs.stdenv.hostPlatform.isAarch64) [
       ./nixos/modules/asahi.nix
-    ];
+    ] ++ commonModules;
     nixosModules.heywoodlh = { config, pkgs, ... }: {
       imports = myNixOSModules ++ extNixOSModules;
     };

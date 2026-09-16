@@ -912,6 +912,8 @@ kind: Certificate
 metadata:
   name: plex-tls
   namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   secretName: plex-tls
   issuerRef:
@@ -951,22 +953,23 @@ kind: Gateway
 metadata:
   name: plex
   namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   selector:
     app.kubernetes.io/name: plex-gateway
   servers:
-    # The ACME certificate is not issued yet, so use the browser-acceptable
-    # self-signed certificate until Cloudflare DNS-01 issuance succeeds.
+    # Serve the public hostname only with its ACME certificate.
     - port:
         number: 32400
         name: https-plex-public
         protocol: HTTPS
       tls:
         mode: SIMPLE
-        credentialName: plex-selfsigned-tls
+        credentialName: plex-tls
       hosts:
         - plex.heywoodlh.io
-    # The same self-signed certificate covers the Tailnet hostname.
+    # Retain a separate self-signed certificate for the Tailnet-only hostname.
     - port:
         number: 32400
         name: https-plex-tailscale

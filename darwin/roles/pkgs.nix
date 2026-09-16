@@ -70,6 +70,7 @@ in {
       "knockknock"
       "akdev1l/apps/librewolf"
       "lulu"
+      "microsoft-powerpoint"
       "moonlight"
       "oversight"
       "paseo"

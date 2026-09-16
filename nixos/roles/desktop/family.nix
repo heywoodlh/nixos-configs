@@ -441,6 +441,7 @@ in {
             external-content.duckduckgo.com
             .apple.com
             .plex.tv
+            .opencut.app
             .animalia.bio
             .wikipedia.org
             .linuxjourney.com

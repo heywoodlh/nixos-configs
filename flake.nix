@@ -1348,6 +1348,7 @@ rec {
           imports = [
             ./nixos/hosts/family.nix
             ./nixos/roles/desktop/family.nix
+            ./nixos/roles/nixos/daily-flake-switch.nix
             ./nixos/roles/monitoring/osquery.nix
           ];
           swapDevices = [{

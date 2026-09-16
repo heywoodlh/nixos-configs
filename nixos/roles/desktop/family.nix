@@ -1,59 +1,110 @@
 # Configuration loaded for family systems
-{ config, pkgs, lib, home-manager, ... }:
+{ config, pkgs, lib, home-manager, nur, ... }:
 
 let
   system = pkgs.stdenv.hostPlatform.system;
   stdenv = pkgs.stdenv;
+  nur-pkgs = import nur {
+    inherit pkgs;
+    nurpkgs = pkgs;
+  };
+  homepagePort = 8082;
+  homepageUrl = "http://localhost:${toString homepagePort}";
+  bookmarks = [
+    {
+      name = "code.org";
+      url = "https://code.org";
+      domains = [ ".code.org" ];
+    }
+    {
+      name = "animalia";
+      url = "https://animalia.bio";
+      domains = [ ".animalia.bio" ];
+    }
+    {
+      name = "wikipedia";
+      url = "https://wikipedia.org";
+      domains = [ ".wikipedia.org" ];
+    }
+    {
+      name = "linux journey";
+      url = "https://linuxjourney.com";
+      domains = [ ".linuxjourney.com" ];
+    }
+    {
+      name = "national geographic";
+      url = "https://kids.nationalgeographic.com";
+      domains = [ ".kids.nationalgeographic.com" ];
+    }
+    {
+      name = "inaturalist";
+      url = "https://www.inaturalist.org";
+      domains = [ ".inaturalist.org" ];
+    }
+    {
+      name = "apple music";
+      url = "https://music.apple.com";
+      domains = [ ".apple.com" ];
+    }
+    {
+      name = "plex";
+      url = "https://plex.tv/web";
+      domains = [ ".plex.tv" ];
+    }
+    {
+      name = "coolmathgames";
+      url = "https://coolmathgames.com";
+      domains = [ ".coolmathgames.com" ];
+    }
+    {
+      name = "classlink";
+      url = "https://launchpad.classlink.com/southsanpete#mybackpack";
+      domains = [
+        ".classlink.com"
+        ".ssanpete.org"
+        ".adobe.com"
+        ".adobeexchange.com"
+        ".adobe.io"
+        ".adobelogin.com"
+        ".mylexia.com"
+        ".tegrity.com"
+        ".typesy.com"
+      ];
+    }
+    {
+      name = "gimkit";
+      url = "https://gimkit.com";
+      domains = [
+        ".gimkit.com"
+        ".gimkitconnect.com"
+      ];
+    }
+    {
+      name = "opencut";
+      url = "https://opencut.app";
+      domains = [ ".opencut.app" ];
+    }
+    {
+      name = "crunchlabs";
+      url = "https://crunchlabs.com";
+      domains = [
+        ".crunchlabs.com"
+        ".cdn.shopify.com"
+      ];
+    }
+  ];
+  # Domains squid must allow that no bookmark points at directly
+  extraAllowedDomains = [
+    "localhost"
+    "safe.duckduckgo.com"
+    "external-content.duckduckgo.com"
+  ];
+  allowedDomains = lib.unique (extraAllowedDomains
+    ++ lib.concatMap (bookmark: bookmark.domains or [ ]) bookmarks);
   render-bookmarks = pkgs.stdenv.mkDerivation {
     name = "render-bookmarks";
     builder = pkgs.bash;
     args = let
-      bookmarks = [
-        {
-          name = "code.org";
-          url = "https://code.org";
-        }
-        {
-          name = "animalia";
-          url = "https://animalia.bio";
-        }
-        {
-          name = "wikipedia";
-          url = "https://wikipedia.org";
-        }
-        {
-          name = "linux journey";
-          url = "https://linuxjourney.com";
-        }
-        {
-          name = "national geographic";
-          url = "https://kids.nationalgeographic.com";
-        }
-        {
-          name = "inaturalist";
-          url = "https://www.inaturalist.org";
-        }
-        {
-          name = "apple music";
-          url = "https://music.apple.com";
-        }
-        {
-          name = "plex";
-          url = "https://plex.tv/web";
-        }
-        {
-          name = "coolmathgames";
-          url = "https://coolmathgames.com";
-        }
-        {
-          name = "classlink";
-          url = "https://launchpad.classlink.com/southsanpete#mybackpack";
-        }
-        {
-          name = "gimkit";
-          url = "https://gimkit.com";
-        }
-      ];
       # Render bookmarks with buku
       bookmarksJson = pkgs.writeText "bookmarks.json" (builtins.toJSON bookmarks);
       renderBookmarks = pkgs.writeShellScript "render-bookmarks.sh" ''
@@ -100,6 +151,18 @@ let
       rm -f $HOME/.local/share/flatpak/exports/share/applications/org.mozilla.firefox.desktop &>/dev/null || true
       ${pkgs.desktop-file-utils}/bin/update-desktop-database &>/dev/null || true
 
+      for dir in extensions browser-extension-data
+      do
+        src=$HOME/.mozilla/firefox/home-manager/$dir
+        dest=$HOME/.var/app/org.mozilla.firefox/.mozilla/firefox/home-manager/$dir
+        if [[ -e $src ]]
+        then
+          rm -rf $dest
+          cp -rfL $src $dest
+          chmod -R u+w $dest
+        fi
+      done
+
       # Cleanup leftovers
       rm -rf $HOME/.mozilla/firefox/home-manager/*.bak &>/dev/null || true
 
@@ -122,7 +185,7 @@ in {
   users.users.heywoodlh.extraGroups = ["docker"];
 
   home-manager = {
-    backupFileExtension = ".bak";
+    backupCommand = "${pkgs.trash-cli}/bin/trash-put";
     users.family = { ... }: {
       home.stateVersion = "25.05";
       home.activation.flatpak = ''
@@ -258,6 +321,16 @@ in {
             force = true;
             settings = [];
           };
+          extensions = {
+            force = true;
+            packages = with nur-pkgs.repos.rycee.firefox-addons; [
+              new-tab-override
+            ];
+            settings."newtaboverride@agenedia.com".settings = {
+              type = "homepage";
+              focus_website = true;
+            };
+          };
           settings = {
             # Firefox settings
             "app.shield.optoutstudies.enabled" = false;
@@ -321,6 +394,9 @@ in {
             "network.proxy.ssl_port" = 3128;
             "network.proxy.backup.ssl_port" = 3128;
             "browser.bookmarks.file" = "/home/family/.var/app/org.mozilla.firefox/bookmarks.html";
+            "browser.startup.homepage" = homepageUrl;
+            "browser.startup.page" = 1;
+            "extensions.autoDisableScopes" = 0; # enable auto-loading of extensions
           };
         };
       };
@@ -338,6 +414,28 @@ in {
 
   # Parental controls
   services.malcontent.enable = true;
+
+  services.homepage-dashboard = {
+    enable = true;
+    listenPort = homepagePort;
+    allowedHosts = "localhost:${toString homepagePort},127.0.0.1:${toString homepagePort}";
+    settings = {
+      title = "Family";
+      headerStyle = "clean";
+      layout.Bookmarks = {
+        style = "row";
+        columns = 4;
+      };
+    };
+    bookmarks = [{
+      Bookmarks = map (bookmark: {
+        "${bookmark.name}" = [{
+          abbr = lib.toUpper (builtins.substring 0 2 bookmark.name);
+          href = bookmark.url;
+        }];
+      }) bookmarks;
+    }];
+  };
 
   # Flatpak for apps
   services.flatpak.enable = true;
@@ -434,35 +532,8 @@ in {
             100.64.0.0/10
             10.152.183.0/24
           '';
-          squid-allowed-domains = pkgs.writeText "allowed_domains.txt" ''
-            localhost
-            .code.org
-            safe.duckduckgo.com
-            external-content.duckduckgo.com
-            .apple.com
-            .plex.tv
-            .opencut.app
-            .animalia.bio
-            .wikipedia.org
-            .linuxjourney.com
-            .kids.nationalgeographic.com
-            .inaturalist.org
-            .coolmathgames.com
-            .crunchlabs.com
-            .cdn.shopify.com
-            .classlink.com
-            .ssanpete.org
-            .adobe.com
-            .mylexia.com
-            .tegrity.com
-            .typesy.com
-            .adobe.com
-            .adobeexchange.com
-            .adobe.io
-            .adobelogin.com
-            .gimkit.com
-            .gimkitconnect.com
-          '';
+          squid-allowed-domains = pkgs.writeText "allowed_domains.txt"
+            (lib.concatMapStrings (domain: "${domain}\n") allowedDomains);
         in [
           "${squid-conf}:/etc/squid/squid.conf"
           "${squid-allowed-networks}:/etc/squid/allowed_networks.txt"

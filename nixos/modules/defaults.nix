@@ -338,7 +338,7 @@ in {
         inherit nixpkgs-stable;
         inherit nixpkgs-lts;
       };
-      backupFileExtension = ".bak";
+      backupCommand = "${pkgs.trash-cli}/bin/trash-put";
       users.${username} = { ... }: base // {
         heywoodlh.home.syncthing = lib.mkForce cfg.syncthing;
         home.file.".config/fish/config.fish".text = ''

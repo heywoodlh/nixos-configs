@@ -129,19 +129,19 @@ in {
         echo "Installing Flatpaks..."
         ${pkgs.gnome-software}/bin/gnome-software --quit || true # kill gnome-software so flatpaks show up in search
         ${pkgs.flatpak}/bin/flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.mozilla.firefox
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub net.supertuxkart.SuperTuxKart
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub sh.cider.Cider
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.obsproject.Studio
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.onlyoffice.desktopeditors
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.videolan.VLC
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.visualstudio.code
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.valvesoftware.SteamLink
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.jeffser.Alpaca
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.vinegarhq.Vinegar
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.vinegarhq.Sober
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.prismlauncher.PrismLauncher
-        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.shotcut.Shotcut
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub org.mozilla.firefox
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub net.supertuxkart.SuperTuxKart
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub sh.cider.Cider
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub com.obsproject.Studio
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub org.onlyoffice.desktopeditors
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub org.videolan.VLC
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub com.visualstudio.code
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub com.valvesoftware.SteamLink
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub com.jeffser.Alpaca
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub org.vinegarhq.Vinegar
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub org.vinegarhq.Sober
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub org.prismlauncher.PrismLauncher
+        ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y flathub org.shotcut.Shotcut
         echo "Completed installation of Flatpaks..."
       '';
       home.file.".local/share/applications/org.mozilla.firefox.desktop".text = ''
@@ -479,24 +479,13 @@ in {
     };
   };
 
-  # Use dnsmasq
-  networking.networkmanager.dns = "dnsmasq";
-  services.dnsmasq = {
-    enable = true;
-    settings = {
-      no-resolv = true;
-      bogus-priv = true;
-      strict-order = true;
-      server = [
-        "2a07:a8c1::"
-        "45.90.30.0"
-        "2a07:a8c0::"
-        "45.90.28.0"
-        "/ts.net/100.100.100.100" # conditionally forward tailscale
-      ];
-      add-cpe-id = "9ad2ce";
-    };
-  };
+  heywoodlh.nixos.portmaster.dns = lib.mkForce [
+    # Global resolver: NextDNS (profile 9ad2ce) over DoT.
+    "dot://45.90.30.0:853?verify=9ad2ce.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
+    "dot://45.90.28.0:853?verify=9ad2ce.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
+    # Tailscale MagicDNS, restricted to .ts.net names only.
+    "dns://100.100.100.100?name=TailscaleDNS&search=barn-banana.ts.net&search-only"
+  ];
 
   services.displayManager.defaultSession = lib.mkForce "gnome";
 

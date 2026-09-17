@@ -156,6 +156,10 @@ jobs:
         if: github.event_name == 'push'
         run: nix build --accept-flake-config --print-out-paths ${{ matrix.targets }} | tee build-paths.txt
 
+      - name: Build spindle-run
+        if: github.event_name == 'push'
+        run: nix build --accept-flake-config --print-out-paths .#spindle-run | tee -a build-paths.txt
+
       - name: Configure Attic
         if: github.event_name == 'push'
         env:
@@ -215,6 +219,10 @@ jobs:
         if: github.event_name == 'push'
         run: |
           nix build --accept-flake-config --print-out-paths .#darwinConfigurations.m1-mac-mini.system | tee build-paths.txt
+
+      - name: Build spindle-run
+        if: github.event_name == 'push'
+        run: nix build --accept-flake-config --print-out-paths .#spindle-run | tee -a build-paths.txt
 
       - name: Configure Attic
         if: github.event_name == 'push'

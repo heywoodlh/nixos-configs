@@ -1200,7 +1200,6 @@
         "nixos-apple-silicon": "nixos-apple-silicon",
         "nixos-hardware": "nixos-hardware",
         "nixos-stable": "nixos-stable",
-        "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-backports": "nixpkgs-backports",
         "nixpkgs-lts": "nixpkgs-lts",
@@ -1276,32 +1275,6 @@
         "owner": "nixos",
         "ref": "nixos-25.05",
         "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixos-wsl": {
-      "inputs": {
-        "flake-compat": [
-          "nixos-configs",
-          "nixos-apple-silicon",
-          "flake-compat"
-        ],
-        "nixpkgs": [
-          "nixos-configs",
-          "nixpkgs-stable"
-        ]
-      },
-      "locked": {
-        "lastModified": 1763946063,
-        "narHash": "sha256-mxIPAXPmkf5aG7/pj59+82gvtgw2qi8pWIolMPTswu8=",
-        "owner": "nix-community",
-        "repo": "NixOS-WSL",
-        "rev": "8d8506cea352fba187cfc748078e0c920c4e2129",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "NixOS-WSL",
         "type": "github"
       }
     },

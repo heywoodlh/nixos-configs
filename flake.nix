@@ -173,11 +173,6 @@ rec {
       url = "github:heywoodlh/nix-darwin/heywoodlh";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-wsl = {
-      url = "github:nix-community/NixOS-WSL";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-      inputs.flake-compat.follows = "nix/flake-compat";
-    };
     user-icon = {
       url = "https://avatar.tangled.sh/1c796c57a7536e989ab09026df5f0fe7870be6217bc8ae642e48fa449de72f59/did:plc:ycnss4fntzi3rjuueb7loq3x?v=bafkreic";
       flake = false;
@@ -369,7 +364,6 @@ rec {
                       kyle,
                       nixpkgs-backports,
                       nixpkgs-lts,
-                      nixos-wsl,
                       darwin,
                       home-manager,
                       jovian-nixos,
@@ -1444,9 +1438,6 @@ rec {
           ];
         };
 
-        nixos-wsl = nixosConfig "workstation" "nixos-wsl" {
-          imports = [ ./nixos/hosts/wsl.nix ];
-        };
 
         # generic build for CI
         nixos-server = nixosConfig "server" "nixos-server" {

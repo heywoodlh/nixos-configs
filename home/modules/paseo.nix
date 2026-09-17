@@ -98,10 +98,11 @@ in {
     home.file.".paseo/config.json".text = builtins.toJSON ({
       "$schema" = "https://paseo.sh/schemas/paseo.config.v1.json";
       version = 1;
-      app.baseUrl = cfg.server.address; # is overridden by the `--listen` arg, but we'll keep it
       daemon = {
         relay.enabled = true;
       };
+    } // lib.optionalAttrs (cfg.server.address != "") {
+      app.baseUrl = cfg.server.address; # is overridden by the `--listen` arg, but we'll keep it
     } // cfg.extraConf);
 
     systemd.user = lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {

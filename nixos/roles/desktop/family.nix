@@ -188,6 +188,13 @@ in {
     backupCommand = "${pkgs.trash-cli}/bin/trash-put";
     users.family = { ... }: {
       home.stateVersion = "25.05";
+      heywoodlh.home = {
+        llm = {
+          enable = true;
+          lmstudio.paseo = true;
+        };
+        paseo.desktop = true;
+      };
       home.activation.flatpak = ''
         echo "Installing Flatpaks..."
         ${pkgs.gnome-software}/bin/gnome-software --quit || true # kill gnome-software so flatpaks show up in search

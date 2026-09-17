@@ -46,6 +46,13 @@ let
         '';
         type = str;
       };
+      paseo = mkOption {
+        default = false;
+        description = ''
+          Make the LM Studio model Paseo's default model for the OpenCode provider.
+        '';
+        type = bool;
+      };
       model = let
         modelType = submodule {
           options = {
@@ -414,6 +421,16 @@ in {
           };
         };
       };
+    };
+
+    heywoodlh.home.paseo.extraConf = mkIf (cfg.lmstudio.enable && cfg.lmstudio.paseo) {
+      agents.providers.opencode.additionalModels = [
+        {
+          id = "lmstudio/${cfg.lmstudio.model.alias}";
+          label = cfg.lmstudio.model.alias;
+          isDefault = true;
+        }
+      ];
     };
 
     home.file.".pi/agent/settings.json".text = builtins.toJSON {

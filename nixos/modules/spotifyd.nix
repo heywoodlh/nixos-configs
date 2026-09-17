@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.heywoodlh.nixos.spotifyd;
+  username = config.heywoodlh.defaults.user.name;
 in {
   options.heywoodlh.nixos.spotifyd = {
     enable = mkOption {
@@ -36,7 +37,7 @@ in {
       allowedTCPPorts = [ cfg.ports.zeroconf ];
       allowedUDPPorts = [ cfg.ports.mdns ];
     };
-    services.spotifyd = {
+    home-manager.users.${username}.services.spotifyd = {
       enable = true;
       settings.global = {
         backend = "alsa";

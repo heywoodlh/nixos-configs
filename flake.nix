@@ -518,6 +518,7 @@ rec {
       ./nixos/modules/rayhunter.nix
       ./nixos/modules/stylix.nix
       ./nixos/modules/sunshine.nix
+      ./nixos/modules/spotifyd.nix
       ./nixos/modules/nvidia-patch.nix
       ./nixos/modules/gaming.nix
       ./nixos/modules/cachyos-kernel.nix

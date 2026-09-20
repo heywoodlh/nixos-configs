@@ -290,7 +290,7 @@ spec:
   gateways:
     - immich
   http:
-    - timeout: 0s
+    - timeout: 24h
       route:
         - destination:
             host: immich-server.default.svc.cluster.local

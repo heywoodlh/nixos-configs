@@ -296,3 +296,39 @@ spec:
             host: immich-server.default.svc.cluster.local
             port:
               number: 80
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: immich-tailscale
+  namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  selector:
+    app.kubernetes.io/name: immich-tailscale-gateway
+  servers:
+    - port:
+        number: 80
+        name: http-immich-tailscale
+        protocol: HTTP
+      hosts:
+        - immich.barn-banana.ts.net
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: immich-tailscale
+  namespace: istio-system
+spec:
+  hosts:
+    - immich.barn-banana.ts.net
+  gateways:
+    - immich-tailscale
+  http:
+    - timeout: 24h
+      route:
+        - destination:
+            host: immich-server.default.svc.cluster.local
+            port:
+              number: 80

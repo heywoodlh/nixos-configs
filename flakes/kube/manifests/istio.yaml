@@ -21461,3 +21461,189 @@ spec:
 ---
 # Source: gateway/templates/zzz_profile.yaml
 #  Flatten globals, if defined on a per-chart basis
+---
+# Source: gateway/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: immich-gateway
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: immich-gateway
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "immich-gateway"
+    app.kubernetes.io/part-of: "istio"
+    app.kubernetes.io/version: "1.28.0"
+    helm.sh/chart: gateway-1.28.0
+    app: immich-gateway
+    istio: immich-gateway
+    "istio.io/dataplane-mode": "none"
+---
+# Source: gateway/templates/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: immich-gateway
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: immich-gateway
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "immich-gateway"
+    app.kubernetes.io/part-of: "istio"
+    app.kubernetes.io/version: "1.28.0"
+    helm.sh/chart: gateway-1.28.0
+    app: immich-gateway
+    istio: immich-gateway
+    "istio.io/dataplane-mode": "none"
+  annotations:
+    {}
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list"]
+---
+# Source: gateway/templates/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: immich-gateway
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: immich-gateway
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "immich-gateway"
+    app.kubernetes.io/part-of: "istio"
+    app.kubernetes.io/version: "1.28.0"
+    helm.sh/chart: gateway-1.28.0
+    app: immich-gateway
+    istio: immich-gateway
+    "istio.io/dataplane-mode": "none"
+  annotations:
+    {}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: immich-gateway
+subjects:
+- kind: ServiceAccount
+  name: immich-gateway
+---
+# Source: gateway/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-gateway
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: immich-gateway
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "immich-gateway"
+    app.kubernetes.io/part-of: "istio"
+    app.kubernetes.io/version: "1.28.0"
+    helm.sh/chart: gateway-1.28.0
+    app: immich-gateway
+    istio: immich-gateway
+    "istio.io/dataplane-mode": "none"
+  annotations:
+    {}
+spec:
+  loadBalancerIP: "192.168.1.22"
+  externalTrafficPolicy: "Local"
+  type: LoadBalancer
+  ports:
+    - name: status-port
+      port: 15021
+      protocol: TCP
+      targetPort: 15021
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+  selector:
+    app: immich-gateway
+    istio: immich-gateway
+---
+# Source: gateway/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-gateway
+  namespace: istio-system
+  labels:
+    app.kubernetes.io/name: immich-gateway
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "immich-gateway"
+    app.kubernetes.io/part-of: "istio"
+    app.kubernetes.io/version: "1.28.0"
+    helm.sh/chart: gateway-1.28.0
+    app: immich-gateway
+    istio: immich-gateway
+    "istio.io/dataplane-mode": "none"
+  annotations:
+    {}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich-gateway
+      istio: immich-gateway
+  template:
+    metadata:
+      annotations:
+        inject.istio.io/templates: gateway
+        prometheus.io/path: /stats/prometheus
+        prometheus.io/port: "15020"
+        prometheus.io/scrape: "true"
+        sidecar.istio.io/inject: "true"
+      labels:
+        sidecar.istio.io/inject: "true"
+        app: immich-gateway
+        istio: immich-gateway
+        app.kubernetes.io/name: immich-gateway
+        app.kubernetes.io/managed-by: "Helm"
+        app.kubernetes.io/instance: "immich-gateway"
+        app.kubernetes.io/part-of: "istio"
+        app.kubernetes.io/version: "1.28.0"
+        helm.sh/chart: gateway-1.28.0
+        "istio.io/dataplane-mode": "none"
+    spec:
+      serviceAccountName: immich-gateway
+      securityContext:
+        # Safe since 1.22: https://github.com/kubernetes/kubernetes/pull/103326
+        sysctls:
+        - name: net.ipv4.ip_unprivileged_port_start
+          value: "0"
+      containers:
+        - name: istio-proxy
+          # "auto" will be populated at runtime by the mutating webhook. See https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#customizing-injection
+          image: auto
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsUser: 1337
+            runAsGroup: 1337
+            runAsNonRoot: true
+          env:
+          ports:
+          - containerPort: 15090
+            protocol: TCP
+            name: http-envoy-prom
+          resources:
+            limits: null
+            requests:
+              cpu: 10m
+              memory: 64Mi
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      terminationGracePeriodSeconds: 30
+---
+# Source: gateway/templates/zzz_profile.yaml
+#  Flatten globals, if defined on a per-chart basis

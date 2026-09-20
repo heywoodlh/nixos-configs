@@ -159,19 +159,12 @@ metadata:
     app: immich-server
   name: immich-server
   namespace: @namespace@
-  annotations:
-    tailscale.com/expose: "true"
-    tailscale.com/hostname: "immich"
-    tailscale.com/tags: "tag:http"
 spec:
   ports:
     - name: "http"
       port: 80
       targetPort: 2283
-      nodePort: 32001
-  type: LoadBalancer
-  externalIPs:
-    - 192.168.1.22
+  type: ClusterIP
   selector:
     app: immich-server
 status:
@@ -222,3 +215,84 @@ spec:
       targetPort: 6379
   selector:
     app: immich-redis
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: immich-tls
+  namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  secretName: immich-tls
+  issuerRef:
+    name: plex-acme
+    kind: Issuer
+  dnsNames:
+    - images.heywoodlh.io
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: immich
+  namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  selector:
+    app.kubernetes.io/name: immich-gateway
+  servers:
+    - port:
+        number: 80
+        name: http-immich
+        protocol: HTTP
+      hosts:
+        - images.heywoodlh.io
+      tls:
+        httpsRedirect: true
+    - port:
+        number: 443
+        name: https-immich
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: immich-tls
+      hosts:
+        - images.heywoodlh.io
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: immich-crowdsec
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: immich-gateway
+  action: CUSTOM
+  provider:
+    name: crowdsec
+  rules:
+    - to:
+        - operation:
+            ports:
+              - "80"
+              - "443"
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: immich
+  namespace: istio-system
+spec:
+  hosts:
+    - images.heywoodlh.io
+  gateways:
+    - immich
+  http:
+    - timeout: 0s
+      route:
+        - destination:
+            host: immich-server.default.svc.cluster.local
+            port:
+              number: 80

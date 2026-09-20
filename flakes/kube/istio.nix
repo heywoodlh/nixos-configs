@@ -58,6 +58,33 @@ let
       };
     };
   };
+  immichGateway = kubelib.buildHelmChart {
+    name = "immich-gateway";
+    chart = (nixhelm.charts { inherit pkgs; }).istio.gateway;
+    namespace = "istio-system";
+    values = {
+      replicaCount = 1;
+      autoscaling.enabled = false;
+      resources = {
+        limits = null;
+        requests = {
+          cpu = "10m";
+          memory = "64Mi";
+        };
+      };
+      nodeSelector."kubernetes.io/hostname" = "homelab";
+      service = {
+        type = "LoadBalancer";
+        loadBalancerIP = "192.168.1.22";
+        externalTrafficPolicy = "Local";
+        ports = [
+          { name = "status-port"; port = 15021; targetPort = 15021; protocol = "TCP"; }
+          { name = "http"; port = 80; targetPort = 80; protocol = "TCP"; }
+          { name = "https"; port = 443; targetPort = 443; protocol = "TCP"; }
+        ];
+      };
+    };
+  };
 in pkgs.runCommand "istio" { } ''
-  cat ${base} ${control} ${gateway} > $out
+  cat ${base} ${control} ${gateway} ${immichGateway} > $out
 ''

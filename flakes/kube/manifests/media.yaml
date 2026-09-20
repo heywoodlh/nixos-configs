@@ -399,7 +399,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
       containers:
-      - image: docker.io/linuxserver/sabnzbd:5.1.3-ls273
+      - image: docker.io/linuxserver/sabnzbd:5.1.3-unstable
         name: sabnzbd
         ports:
         - name: http

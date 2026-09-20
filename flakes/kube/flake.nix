@@ -644,7 +644,7 @@
           lidarr_hostfolder = "/media/config/services/lidarr";
           readarr_image = "docker.io/linuxserver/readarr:nightly-version-0.4.19.2811";
           readarr_hostfolder = "/media/config/services/readarr";
-          sabnzbd_image = "docker.io/linuxserver/sabnzbd:5.1.3-ls273";
+          sabnzbd_image = "docker.io/linuxserver/sabnzbd:5.1.3-unstable";
           sabnzbd_hostfolder = "/media/config/services/sabnzbd";
           tautulli_image = "docker.io/tautulli/tautulli:v2.18.1";
           tautulli_hostfolder = "/media/config/services/tautulli/config";

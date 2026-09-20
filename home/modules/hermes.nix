@@ -5,6 +5,7 @@ with lib.types;
 
 let
   cfg = config.heywoodlh.home.hermes;
+  homeDir = if config ? home then config.home.homeDirectory else "~";
   signalCliDaemon = pkgs.writeShellScript "signal-cli-daemon.sh" ''
     set -a
     ${concatMapStringsSep "\n" (f: ''source "${f}"'') cfg.environmentFiles}
@@ -97,7 +98,7 @@ in {
         type = listOf str;
       };
       dockerDir = mkOption {
-        default = "${config.home.homeDirectory}/Documents/hermes";
+        default = "${homeDir}/Documents/hermes";
         description = ''
           Directory to use for `docker compose` project for Hermes.
         '';

@@ -1,4 +1,238 @@
+## heywoodlh\.apple-silicon\.enable
+
+
+
+Enable heywoodlh apple-silicon configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.cachefile
+
+Asahi Linux cache file name in ` /boot `\.
+
+
+
+*Type:*
+unspecified value
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.firmwarefile
+
+
+
+Asahi Linux peripheral firmware file name in ` /boot `\.
+
+
+
+*Type:*
+unspecified value
+
+
+
+*Default:*
+
+```nix
+"firmware.cpio"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.hash
+
+
+
+Hashes for firmware files\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.hash\.cache
+
+
+
+Hash for kernel cache\.
+Retrieve with ` nix hash convert --hash-algo sha256 $(nix-prefetch-url /boot/asahi/<cachefile>) `\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.hash\.firmware
+
+
+
+Hash for firmware file\.
+Retrieve with ` nix hash convert --hash-algo sha256 $(nix-prefetch-url /boot/vendorfw/firmware.cpio) `\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam
+
+
+
+Enable Asahi Steam configuration\.
+
+
+
+*Type:*
+submodule
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam\.enable
+
+
+
+Enable Steam for Asahi\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam\.memory
+
+
+
+Memory allowed for Steam\. Set to 6144 for 8GB machines\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+0
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
+## heywoodlh\.apple-silicon\.steam\.user
+
+
+
+User for Steam configuration\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"heywoodlh"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/asahi.nix)
+
+
+
 ## heywoodlh\.backup\.enable
+
+
 
 Enable heywoodlh backup client configuration\.
 
@@ -476,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults.nix)
 
 
 
@@ -708,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults.nix)
 
 
 
@@ -732,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults.nix)
 
 
 
@@ -756,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults.nix)
 
 
 
@@ -780,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults.nix)
 
 
 
@@ -804,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults.nix)
 
 
 
@@ -828,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/defaults.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/defaults.nix)
 
 
 
@@ -1378,7 +1612,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/g8ahqkvkdflf8pwwrbxj9qyf1asyxa7c-tmux/bin/tmux"
+"/nix/store/n77bzy3zj816vfn7j8wg58y7lcnvmyks-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1698,6 +1932,251 @@ string
 
 
 
+## heywoodlh\.home\.hermes\.enable
+
+
+
+Enable heywoodlh hermes-agent configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
+## heywoodlh\.home\.hermes\.dashboard
+
+
+
+Hermes dashboard configuration\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
+## heywoodlh\.home\.hermes\.dashboard\.enable
+
+
+
+Enable the hermes-agent web dashboard\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
+## heywoodlh\.home\.hermes\.dashboard\.address
+
+
+
+Address for the dashboard to bind to\. Passed to hermes as
+` --host `\. Required if the dashboard is enabled\.
+Example: “nixos-ops\.barn-banana\.ts\.net”\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
+## heywoodlh\.home\.hermes\.dockerDir
+
+
+
+Directory to use for ` docker compose ` project for Hermes\.
+
+
+
+*Type:*
+unspecified value
+
+
+
+*Default:*
+
+```nix
+"~/Documents/hermes"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
+## heywoodlh\.home\.hermes\.environment
+
+
+
+Extra environment vars to pass to services\.hermes-agent\.environment\.
+
+
+
+*Type:*
+attribute set
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
+## heywoodlh\.home\.hermes\.environmentFiles
+
+
+
+Environment files to provide hermes services\.
+
+
+
+*Type:*
+list of string
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
+## heywoodlh\.home\.hermes\.model
+
+
+
+Model configuration\.
+
+
+
+*Type:*
+attribute set
+
+
+
+*Default:*
+
+```nix
+{
+  default = "deepseek/deepseek-v4-flash-0731";
+  provider = "openrouter";
+}
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
+## heywoodlh\.home\.hermes\.settings
+
+
+
+Extra settings to pass to services\.hermes-agent\.settings\.
+
+
+
+*Type:*
+attribute set
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
+## heywoodlh\.home\.hermes\.signal
+
+
+
+Enable heywoodlh hermes-agent signal-cli configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes.nix)
+
+
+
 ## heywoodlh\.home\.hypr-rdp
 
 
@@ -1928,8 +2407,6 @@ string
 
 
 ## heywoodlh\.home\.librewolf\.socks
-
-
 
 User for heywoodlh configuration\.
 
@@ -2386,6 +2863,8 @@ string
 
 ## heywoodlh\.home\.llm\.lmstudio\.model\.context_length
 
+
+
 Context length for the model in OpenCode\.
 
 
@@ -2471,6 +2950,30 @@ string
 
 ```nix
 "lmstudio-local"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm.nix)
+
+
+
+## heywoodlh\.home\.llm\.lmstudio\.paseo
+
+
+
+Make the LM Studio model Paseo’s default model for the OpenCode provider\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
 ```
 
 *Declared by:*
@@ -2880,7 +3383,7 @@ package
 *Default:*
 
 ```nix
-<derivation pi-coding-agent-0.84.1>
+<derivation pi-coding-agent-0.84.4>
 ```
 
 *Declared by:*
@@ -3144,7 +3647,7 @@ attribute set
 *Default:*
 
 ```nix
-false
+{ }
 ```
 
 *Declared by:*
@@ -4224,6 +4727,102 @@ signed integer
 
 
 
+## heywoodlh\.nixos\.spotifyd\.enable
+
+
+
+Enable Spotify Connect playback through spotifyd\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd.nix)
+
+
+
+## heywoodlh\.nixos\.spotifyd\.ports
+
+
+
+Network ports used for Spotify Connect discovery\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd.nix)
+
+
+
+## heywoodlh\.nixos\.spotifyd\.ports\.mdns
+
+
+
+UDP port used for mDNS service advertisement\.
+
+
+
+*Type:*
+16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+
+
+*Default:*
+
+```nix
+5353
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd.nix)
+
+
+
+## heywoodlh\.nixos\.spotifyd\.ports\.zeroconf
+
+
+
+TCP port used for Spotify Connect discovery\.
+
+
+
+*Type:*
+16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+
+
+*Default:*
+
+```nix
+1234
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd.nix)
+
+
+
 ## heywoodlh\.nixos\.steam-deck\.enable
 
 
@@ -4249,8 +4848,6 @@ false
 
 
 ## heywoodlh\.nixos\.steam-deck\.user
-
-
 
 User for heywoodlh configuration\.
 
@@ -4724,7 +5321,31 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/sshd\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/sshd.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/sshd\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/sshd.nix)
+
+
+
+## heywoodlh\.sshd\.duo
+
+
+
+Allow Duo approval when an SSH key is unavailable\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sshd.nix)
 
 
 
@@ -4732,7 +5353,7 @@ false
 
 
 
-Enable mfa configuration for SSH\.
+Require an SSH key and Duo approval\.
 
 
 
@@ -4796,7 +5417,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/stylix\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/stylix.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/stylix\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/stylix.nix)
 
 
 
@@ -4820,7 +5441,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/stylix\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/stylix.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/stylix\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/stylix.nix)
 
 
 
@@ -4844,11 +5465,13 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/stylix\.nix](/nix/store/6dmgqw2fv7c1fhcgjxz7z5n6g9rpl4av-source/base/stylix.nix)
+ - [/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/stylix\.nix](/nix/store/w5fynr62fjqd9sk853jscznmj9d8bzng-source/base/stylix.nix)
 
 
 
 ## heywoodlh\.vm
+
+
 
 Enable heywoodlh virtual machine configuration\.
 

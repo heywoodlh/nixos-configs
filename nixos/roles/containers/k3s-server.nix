@@ -23,6 +23,7 @@ in {
     role = "server";
     clusterInit = false;
     extraFlags = toString ([
+      "--disable=traefik"
       "--kubelet-arg=config=${kubeletConf}"
       "--kube-controller-manager-arg=node-cidr-mask-size=16"
       "--cluster-cidr 10.42.0.0/16"

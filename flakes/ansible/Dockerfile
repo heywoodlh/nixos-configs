@@ -27,7 +27,7 @@ ENV ANSIBLE_REMOTE_TMP="/tmp/ansible"
 ENTRYPOINT [ "/docker-entrypoint.sh", "/bin/bash", "/ansible/entrypoint.sh" ]
 
 # "Unifi" target
-FROM docker.io/heywoodlh/systemd:debian-bullseye AS unifi-test
+FROM docker.io/heywoodlh/systemd:debian-bookworm AS unifi-test
 
 COPY server/files/scripts/install-ansible.sh /install-ansible.sh
 RUN /install-ansible.sh \

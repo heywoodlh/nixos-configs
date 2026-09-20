@@ -26,5 +26,7 @@ else
   # Use system-wide python if it exists
   export EXTRA_ARGS=""
   [[ -e /usr/bin/python3 ]] && export EXTRA_ARGS="-e ansible_python_interpreter=/usr/bin/python3"
-  ansible-pull -U https://tangled.org/heywoodlh.io/nixos-configs flakes/ansible/server/standalone.yml "${EXTRA_ARGS}"
+  repo="https://tangled.org/heywoodlh.io/nixos-configs"
+  [[ -f /usr/bin/ubios-udapi-server ]] && repo="https://github.com/heywoodlh/nixos-configs"
+  ansible-pull -U "${repo}" flakes/ansible/server/standalone.yml "${EXTRA_ARGS}"
 fi

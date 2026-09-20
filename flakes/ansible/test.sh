@@ -25,14 +25,6 @@ then
   fi
 fi
 
-if [[ -n "$3" ]]
-then
-  target_hostname="$3"
-  echo "Using hostname: $target_hostname"
-else
-  target_hostname="cloud"
-fi
-
 echo "Operating systems that will be tested: ${operating_systems[@]}"
 echo "Targets that will be tested: ${targets[@]}"
 for os in "${operating_systems[@]}"
@@ -55,9 +47,9 @@ do
         docker run -it -e ANSIBLE_INJECT_FACT_VARS=True --hostname=spencer-router --rm -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
       elif [[ "${os}" == "ubuntu" ]]
       then
-        docker run -it -e ANSIBLE_INJECT_FACT_VARS=True --hostname="$target_hostname" --rm -v "${dir}/.ansible.log:/ansible.log" -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
+        docker run -it -e ANSIBLE_INJECT_FACT_VARS=True --hostname="cloud" --rm -v "${dir}/.ansible.log:/ansible.log" -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
       else
-        docker run -it -e ANSIBLE_INJECT_FACT_VARS=True --hostname="$target_hostname" --rm -v "${dir}/.ansible.log:/ansible.log" -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
+        docker run -it -e ANSIBLE_INJECT_FACT_VARS=True --hostname="server" --rm -v "${dir}/.ansible.log:/ansible.log" -v /tmp/.ansible:/root/.ansible --privileged ansible-${os}-test ${target}
       fi
     fi
   done

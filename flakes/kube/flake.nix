@@ -543,7 +543,7 @@
         immich = mkKubeDrv "immich" rec {
           src = ./templates/immich.yaml;
           namespace = "default";
-          version = "v2";
+          version = "v3.2.2";
           timezone = "America/Denver";
           image = "ghcr.io/immich-app/immich-server:${version}";
           postgres_image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23";
@@ -552,11 +552,12 @@
           hostfolder = "/media/data-ssd/immich";
           datafolder = "/media/data_pool/immich/data";
         };
-        immich-machine-learning = mkKubeDrv "immich-machine-learning" {
+        immich-machine-learning = mkKubeDrv "immich-machine-learning" rec {
           src = ./templates/immich-ml.yaml;
           namespace = "default";
+          version = "v3.2.2";
           timezone = "America/Denver";
-          image = "ghcr.io/immich-app/immich-machine-learning:v2.3.1-openvino";
+          image = "ghcr.io/immich-app/immich-machine-learning:${version}-openvino";
           replicas = 1;
           hostfolder = "/media/data-ssd/immich-ml";
         };

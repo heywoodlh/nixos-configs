@@ -100,7 +100,7 @@ spec:
             - name: TZ
               value: "America/Denver"
             - name: IMMICH_VERSION
-              value: "v2"
+              value: "v3.2.2"
             - name: DB_HOSTNAME
               value: "immich-database.default.svc.cluster.local"
             - name: UPLOAD_LOCATION
@@ -122,7 +122,7 @@ spec:
                   key: db-name
             - name: REDIS_HOSTNAME
               value: "immich-redis.default.svc.cluster.local"
-          image: ghcr.io/immich-app/immich-server:v2
+          image: ghcr.io/immich-app/immich-server:v3.2.2
           name: immich-server
           ports:
             - containerPort: 2283

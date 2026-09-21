@@ -78,7 +78,6 @@ let
         loadBalancerIP = "192.168.1.22";
         externalTrafficPolicy = "Local";
         ports = [
-          { name = "status-port"; port = 15021; targetPort = 15021; protocol = "TCP"; }
           { name = "http"; port = 80; targetPort = 80; protocol = "TCP"; }
           { name = "https"; port = 443; targetPort = 443; protocol = "TCP"; }
         ];

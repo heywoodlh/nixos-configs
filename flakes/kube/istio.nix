@@ -102,6 +102,7 @@ let
       nodeSelector."kubernetes.io/hostname" = "homelab";
       service = {
         type = "LoadBalancer";
+        loadBalancerClass = "tailscale";
         externalTrafficPolicy = "Local";
         annotations = {
           "tailscale.com/expose" = "true";

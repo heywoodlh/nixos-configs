@@ -21735,6 +21735,7 @@ metadata:
     tailscale.com/hostname: immich
     tailscale.com/tags: tag:http
 spec:
+  loadBalancerClass: tailscale
   externalTrafficPolicy: "Local"
   type: LoadBalancer
   ports:

@@ -100,7 +100,7 @@ spec:
             - name: TZ
               value: "America/Denver"
             - name: IMMICH_VERSION
-              value: "v2"
+              value: "v3.2.2"
             - name: DB_HOSTNAME
               value: "immich-database.default.svc.cluster.local"
             - name: UPLOAD_LOCATION
@@ -122,7 +122,7 @@ spec:
                   key: db-name
             - name: REDIS_HOSTNAME
               value: "immich-redis.default.svc.cluster.local"
-          image: ghcr.io/immich-app/immich-server:v2
+          image: ghcr.io/immich-app/immich-server:v3.2.2
           name: immich-server
           ports:
             - containerPort: 2283
@@ -159,19 +159,12 @@ metadata:
     app: immich-server
   name: immich-server
   namespace: default
-  annotations:
-    tailscale.com/expose: "true"
-    tailscale.com/hostname: "immich"
-    tailscale.com/tags: "tag:http"
 spec:
   ports:
     - name: "http"
       port: 80
       targetPort: 2283
-      nodePort: 32001
-  type: LoadBalancer
-  externalIPs:
-    - 192.168.1.22
+  type: ClusterIP
   selector:
     app: immich-server
 status:
@@ -222,3 +215,120 @@ spec:
       targetPort: 6379
   selector:
     app: immich-redis
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: immich-tls
+  namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  secretName: immich-tls
+  issuerRef:
+    name: plex-acme
+    kind: Issuer
+  dnsNames:
+    - images.heywoodlh.io
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: immich
+  namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  selector:
+    app.kubernetes.io/name: immich-gateway
+  servers:
+    - port:
+        number: 80
+        name: http-immich
+        protocol: HTTP
+      hosts:
+        - images.heywoodlh.io
+      tls:
+        httpsRedirect: true
+    - port:
+        number: 443
+        name: https-immich
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: immich-tls
+      hosts:
+        - images.heywoodlh.io
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: immich-crowdsec
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: immich-gateway
+  action: CUSTOM
+  provider:
+    name: crowdsec
+  rules:
+    - to:
+        - operation:
+            ports:
+              - "80"
+              - "443"
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: immich
+  namespace: istio-system
+spec:
+  hosts:
+    - images.heywoodlh.io
+  gateways:
+    - immich
+  http:
+    - timeout: 24h
+      route:
+        - destination:
+            host: immich-server.default.svc.cluster.local
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: immich-tailscale
+  namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  selector:
+    app.kubernetes.io/name: immich-tailscale-gateway
+  servers:
+    - port:
+        number: 80
+        name: http-immich-tailscale
+        protocol: HTTP
+      hosts:
+        - immich.barn-banana.ts.net
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: immich-tailscale
+  namespace: istio-system
+spec:
+  hosts:
+    - immich.barn-banana.ts.net
+  gateways:
+    - immich-tailscale
+  http:
+    - timeout: 24h
+      route:
+        - destination:
+            host: immich-server.default.svc.cluster.local
+            port:
+              number: 80

@@ -118,6 +118,7 @@ in {
         8555 # go2rtc udp
       ];
       allowedTCPPorts = [
+        80
         1080
         443
         3389

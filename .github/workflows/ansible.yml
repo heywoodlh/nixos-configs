@@ -6,7 +6,7 @@ on:
     branches: [main]
   push:
     paths:
-      - flakes/ansible/**
+      - ansible/**
     branches:
       - main
 
@@ -38,5 +38,5 @@ jobs:
         uses: docker/setup-buildx-action@v3
       - name: Build containers and test
         run: |
-          script -e -c "./flakes/ansible/test.sh ${{ matrix.os }}"
+          script -e -c "./ansible/test.sh ${{ matrix.os }}"
 

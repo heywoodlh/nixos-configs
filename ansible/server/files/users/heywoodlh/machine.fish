@@ -1,0 +1,1 @@
+alias ansible-switch 'nix run \"git+https://tangled.org/heywoodlh.io/nixos-configs/$(git ls-remote https://tangled.org/heywoodlh.io/nixos-configs | head -1 | awk \'{print $1}\')#ansible-server\"'

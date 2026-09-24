@@ -187,7 +187,7 @@ else
     if [[ "${ansible}" == "true" ]]
     then
         echo "Running ansible playbooks"
-        nix run "git+https://tangled.org/heywoodlh.io/nixos-configs/$(git ls-remote https://tangled.org/heywoodlh.io/nixos-configs | head -1 | awk '{print $1}')?dir=flakes/ansible#${system}"
+        nix run "git+https://tangled.org/heywoodlh.io/nixos-configs/$(git ls-remote https://tangled.org/heywoodlh.io/nixos-configs | head -1 | awk '{print $1}')#ansible-${system}"
     fi
 
     # If WSL

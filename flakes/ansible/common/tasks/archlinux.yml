@@ -25,6 +25,9 @@
       ansible.builtin.command: /tmp/install-trizen.sh
       become: true
       become_user: "heywoodlh"
+      vars:
+        ansible_remote_tmp: /tmp/ansible-heywoodlh
+        ansible_python_interpreter: /usr/bin/python3
 
     - name: remove sudo without password for heywoodlh
       ansible.builtin.include_tasks: ./sudo-passwordless.yml

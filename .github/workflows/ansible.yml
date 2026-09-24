@@ -2,6 +2,8 @@ name: ansible-playbooks-test
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
   push:
     paths:
       - flakes/ansible/**
@@ -10,9 +12,23 @@ on:
 
 jobs:
   ansible-playbooks-test:
-    name: Test ansible playbooks with Docker
-    if: github.event.pull_request.merged != true # don't run on merged PRs
-    runs-on: ubuntu-24.04
+    name: Test ansible (${{ matrix.os }} / ${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64, arm64]
+        os: [archlinux, alpine, ubuntu, debian, unifi]
+        # archlinux is only tested on amd64 (test.sh only auto-selects it on x86_64,
+        # and explicitly requesting it on another arch falls through to testing all OSes)
+        exclude:
+          - arch: arm64
+            os: archlinux
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -22,5 +38,5 @@ jobs:
         uses: docker/setup-buildx-action@v3
       - name: Build containers and test
         run: |
-          script -e -c ./flakes/ansible/test.sh
+          script -e -c "./flakes/ansible/test.sh ${{ matrix.os }}"
 

@@ -45,7 +45,6 @@
   community.general.apk:
     name: tailscale
     update_cache: true
-    repository: http://dl-3.alpinelinux.org/alpine/edge/community
   when: ansible_os_family == 'Alpine'
 
 - name: enable cronie service

@@ -3,6 +3,7 @@
 # ./test.sh ubuntu server hetzner-cloud
 export LC_ALL="C.UTF-8"
 dir=$(dirname -- "$( readlink -f -- "$0"; )";)
+repo_dir=$(dirname -- "${dir}")
 operating_systems=("ubuntu" "debian" "unifi" "alpine")
 # If AMD64, also test Arch Linux
 [[ $(arch) == "x86_64" ]] && operating_systems+=("archlinux")
@@ -31,7 +32,7 @@ for os in "${operating_systems[@]}"
 do
   echo "Testing: ${os}"
   set -ex
-  docker build -q -t ansible-${os}-test -f ${dir}/Dockerfile --target ${os}-test ${dir} || printf "Error occurred on operating system: ${os}"
+  docker build -q -t ansible-${os}-test -f ${dir}/Dockerfile --target ${os}-test ${repo_dir} || printf "Error occurred on operating system: ${os}"
   mkdir -p /tmp/ansible
   echo "" > ${dir}/.ansible.log
   for target in "${targets[@]}"

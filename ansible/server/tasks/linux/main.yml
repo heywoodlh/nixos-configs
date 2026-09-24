@@ -50,6 +50,7 @@
       ansible.builtin.include_tasks: ../../../common/home-manager.yml
       vars:
         home_manager_configuration: heywoodlh-server
+        nixos_configs_root: "path:{{ playbook_dir }}/../.."
       when: not udm_check.stat.exists
 
     - name: install node_exporter

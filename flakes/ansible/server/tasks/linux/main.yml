@@ -33,10 +33,6 @@
     - name: include deps tasks
       ansible.builtin.include_tasks: deps.yml
 
-    - name: include nix tasks
-      ansible.builtin.include_tasks: ../../../common/nix.yml
-      when: not udm_check.stat.exists
-
     - name: include config tasks
       ansible.builtin.include_tasks: config.yml
 
@@ -45,6 +41,16 @@
 
     - name: include users tasks
       ansible.builtin.include_tasks: users.yml
+
+    - name: include Nix tasks
+      ansible.builtin.include_tasks: ../../../common/nix.yml
+      when: not udm_check.stat.exists
+
+    - name: apply server Home Manager profile
+      ansible.builtin.include_tasks: ../../../common/home-manager.yml
+      vars:
+        home_manager_configuration: heywoodlh-server
+      when: not udm_check.stat.exists
 
     - name: install node_exporter
       when:

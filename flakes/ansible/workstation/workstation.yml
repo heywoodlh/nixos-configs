@@ -9,6 +9,14 @@
     - role: desktop
     - role: security
   tasks:
+    - name: install Nix
+      ansible.builtin.include_tasks: ../common/nix.yml
+
+    - name: apply workstation Home Manager profile
+      ansible.builtin.include_tasks: ../common/home-manager.yml
+      vars:
+        home_manager_configuration: heywoodlh
+
     - name: import archlinux tasks
       include_tasks: ../common/tasks/archlinux.yml
       when: ansible_os_family == "Archlinux"

@@ -1,0 +1,27 @@
+---
+- name: Create Home Manager Ansible temporary directory
+  ansible.builtin.file:
+    path: /tmp/ansible-heywoodlh
+    state: directory
+    owner: heywoodlh
+    group: heywoodlh
+    mode: "0700"
+
+- name: Apply Home Manager profile
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/dbus-run-session
+      - --
+      - "{{ nix_binary_path }}"
+      - --extra-experimental-features
+      - nix-command flakes
+      - run
+      - "git+https://tangled.org/heywoodlh.io/nixos-configs#homeConfigurations.{{ home_manager_configuration }}.activationPackage"
+  become: true
+  become_user: heywoodlh
+  environment:
+    HOME: /home/heywoodlh
+    XDG_RUNTIME_DIR: "{{ '/tmp/xdg-runtime-heywoodlh' if ansible_os_family == 'Alpine' else ansible_env.XDG_RUNTIME_DIR | default(omit) }}"
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_remote_tmp: /tmp/ansible-heywoodlh

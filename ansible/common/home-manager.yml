@@ -1,0 +1,53 @@
+---
+- name: Create Home Manager Ansible temporary directory
+  ansible.builtin.file:
+    path: /tmp/ansible-heywoodlh
+    state: directory
+    owner: heywoodlh
+    group: heywoodlh
+    mode: "0700"
+
+- name: Check whether Home Manager profile exists
+  ansible.builtin.stat:
+    path: /home/heywoodlh/.local/state/nix/profiles/home-manager
+  register: home_manager_profile
+
+- name: Install Home Manager profile
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/dbus-run-session
+      - --
+      - "{{ nix_binary_path }}"
+      - --extra-experimental-features
+      - nix-command flakes
+      - run
+      - "{{ nixos_configs_root }}#homeConfigurations.{{ home_manager_configuration }}.activationPackage"
+  become: true
+  become_user: heywoodlh
+  environment:
+    HOME: /home/heywoodlh
+    XDG_RUNTIME_DIR: "{{ '/tmp/xdg-runtime-heywoodlh' if ansible_os_family == 'Alpine' else ansible_env.XDG_RUNTIME_DIR | default(omit) }}"
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_remote_tmp: /tmp/ansible-heywoodlh
+  when: not home_manager_profile.stat.exists
+
+- name: Update Home Manager profile
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/dbus-run-session
+      - --
+      - "{{ nix_binary_path }}"
+      - --extra-experimental-features
+      - nix-command flakes
+      - run
+      - "{{ nixos_configs_root }}#homeConfigurations.{{ home_manager_configuration }}.activationPackage"
+  become: true
+  become_user: heywoodlh
+  environment:
+    HOME: /home/heywoodlh
+    XDG_RUNTIME_DIR: "{{ '/tmp/xdg-runtime-heywoodlh' if ansible_os_family == 'Alpine' else ansible_env.XDG_RUNTIME_DIR | default(omit) }}"
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_remote_tmp: /tmp/ansible-heywoodlh
+  when: home_manager_profile.stat.exists

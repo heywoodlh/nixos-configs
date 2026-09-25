@@ -16,6 +16,7 @@
       ansible.builtin.include_tasks: ../common/home-manager.yml
       vars:
         home_manager_configuration: heywoodlh
+        nixos_configs_root: "path:{{ playbook_dir }}/../.."
 
     - name: import archlinux tasks
       include_tasks: ../common/tasks/archlinux.yml

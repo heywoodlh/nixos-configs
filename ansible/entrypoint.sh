@@ -15,7 +15,7 @@ then
     fi
 fi
 
-ansible-galaxy install -r /ansible/requirements.yml
+ansible-galaxy install -r /nixos-configs/ansible/requirements.yml
 
 verify_profiles() {
     if [[ -e /usr/bin/ubios-udapi-server ]]
@@ -41,14 +41,14 @@ do
     if [[ "${target}" == "server" ]]
     then
         # server build
-        ansible-playbook --connection=local /ansible/server/standalone.yml || exit 1
+        ansible-playbook --connection=local --extra-vars nixos_configs_root=path:/nixos-configs /nixos-configs/ansible/server/standalone.yml || exit 1
         verify_profiles
         printf "server playbooks completed"
     fi
     if [[ "${target}" == "workstation" ]]
     then
         # workstation build
-        ansible-playbook --connection=local /ansible/workstation/workstation.yml || exit 2
+        ansible-playbook --connection=local --extra-vars nixos_configs_root=path:/nixos-configs /nixos-configs/ansible/workstation/workstation.yml || exit 2
         verify_profiles
         printf "workstation playbooks completed"
     fi

@@ -1578,6 +1578,18 @@ rec {
       };
 
       packages = {
+        ansible-workstation = pkgs.writeShellScriptBin "ansible-workstation" ''
+          export LC_ALL="C.UTF-8"
+          export ANSIBLE_INJECT_FACT_VARS=True
+          sudo ${pkgs.ansible}/bin/ansible-galaxy install -r ${self}/ansible/requirements.yml
+          sudo ${pkgs.ansible}/bin/ansible-playbook --connection=local --extra-vars "nixos_configs_root=path:${self}" ${self}/ansible/workstation/workstation.yml
+        '';
+        ansible-server = pkgs.writeShellScriptBin "ansible-server" ''
+          export LC_ALL="C.UTF-8"
+          export ANSIBLE_INJECT_FACT_VARS=True
+          sudo ${pkgs.ansible}/bin/ansible-galaxy install -r ${self}/ansible/requirements.yml
+          sudo ${pkgs.ansible}/bin/ansible-playbook --connection=local --extra-vars "nixos_configs_root=path:${self}" ${self}/ansible/server/standalone.yml
+        '';
         docs = pkgs.runCommand "options-doc.md" {} ''
           cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/nixos\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/home\/modules|g' > $out
         '';

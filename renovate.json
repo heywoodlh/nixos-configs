@@ -27,7 +27,7 @@
     },
     {
       "matchPaths": [
-        "flakes/ansible/**"
+        "ansible/**"
       ],
       "automerge": true
     },

@@ -13,17 +13,17 @@ then
   export ansible_dir="/data/ansible"
 fi
 
-if command -v apt &>/dev/null
+if grep -q "ID=debian" /etc/os-release || grep -q "ID_LIKE=debian" /etc/os-release
 then
   apt update && apt install -y git curl
-elif command -v pacman &>/dev/null
+elif grep -q "ID=arch" /etc/os-release || grep -q "ID_LIKE=arch" /etc/os-release
 then
   pacman -Sy --noconfirm git curl
-elif command -v apk &>/dev/null
+elif grep -q "ID=alpine" /etc/os-release
 then
   apk update && apk add --no-cache git curl
 else
-  printf 'Unsupported package manager\n' >&2
+  printf 'Unsupported distribution\n' >&2
   exit 1
 fi
 

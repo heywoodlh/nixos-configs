@@ -13,6 +13,20 @@ then
   export ansible_dir="/data/ansible"
 fi
 
+if command -v apt &>/dev/null
+then
+  apt update && apt install -y git curl
+elif command -v pacman &>/dev/null
+then
+  pacman -Sy --noconfirm git curl
+elif command -v apk &>/dev/null
+then
+  apk update && apk add --no-cache git curl
+else
+  printf 'Unsupported package manager\n' >&2
+  exit 1
+fi
+
 if command -v nix &>/dev/null
 then
   nix run "git+https://tangled.org/heywoodlh.io/nixos-configs/$(git ls-remote https://tangled.org/heywoodlh.io/nixos-configs | head -1 | awk '{print $1}')#ansible-server"

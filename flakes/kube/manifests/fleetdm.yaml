@@ -28,6 +28,56 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: fleetdm-ntfy-webhook
+  namespace: monitoring
+spec:
+  selector:
+    app: fleetdm-ntfy-webhook
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fleetdm-ntfy-webhook
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fleetdm-ntfy-webhook
+  template:
+    metadata:
+      labels:
+        app: fleetdm-ntfy-webhook
+    spec:
+      containers:
+      - name: fleetdm-ntfy-webhook
+        image: docker.io/heywoodlh/fleetdm-ntfy-webhook@sha256:2e985cf861e8b287428d285b100391c353f21ad41e97fc2f0f3f2bcf66276c41
+        ports:
+        - name: http
+          containerPort: 8080
+        env:
+        - name: LISTEN_ADDR
+          value: ":8080"
+        - name: NTFY_URL
+          value: "http://ntfy.default.svc.cluster.local"
+        - name: NTFY_TOPIC
+          value: "security-notifications"
+        resources:
+          requests:
+            cpu: 25m
+            memory: 32Mi
+          limits:
+            cpu: 250m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: fleet-mysql
   namespace: monitoring
 spec:

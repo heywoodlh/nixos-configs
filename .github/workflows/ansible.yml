@@ -4,11 +4,16 @@ on:
   workflow_dispatch:
   pull_request:
     branches: [main]
-  push:
+    types: [opened, synchronize, reopened]
     paths:
       - ansible/**
-    branches:
-      - main
+      - home/**
+      - base/**
+      - pkgs/**
+      - assets/**
+      - flake.nix
+      - flake.lock
+      - .github/workflows/ansible.yml
 
 jobs:
   ansible-playbooks-test:

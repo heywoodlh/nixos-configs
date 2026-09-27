@@ -68,7 +68,9 @@ jobs:
         if: github.ref == 'refs/heads/main'
         working-directory: ./flakes
         run: |
-          mkdir -p -m 700 $HOME/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
-          for file in $(ls ./kube/manifests/ | grep yaml); do kubectl apply -f ./kube/manifests/${file}; done
+          install -d -m 700 "$HOME/.kube"
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > "$HOME/.kube/config"
+          chmod 600 "$HOME/.kube/config"
+          for file in ./kube/manifests/*.yaml; do
+            kubectl apply -f "$file"
+          done

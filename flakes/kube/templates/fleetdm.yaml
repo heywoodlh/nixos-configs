@@ -156,7 +156,9 @@ spec:
         - name: FLEET_FILESYSTEM_ENABLE_LOG_ROTATION
           value: "true"
         - name: FLEET_OSQUERY_RESULT_LOG_PLUGIN
-          value: "filesystem"
+          value: "webhook"
+        - name: FLEET_WEBHOOK_RESULT_URL
+          value: "http://fleetdm-ntfy-webhook.monitoring.svc.cluster.local:8080/webhook"
         - name: FLEET_FILESYSTEM_RESULT_LOG_FILE
           value: "/logs/result.log"
         - name: FLEET_FILESYSTEM_AUDIT_LOG_FILE

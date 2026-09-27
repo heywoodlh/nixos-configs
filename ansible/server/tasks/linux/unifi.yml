@@ -121,6 +121,17 @@
         osquery_version: "5.23.0-1"
 
 
+    - name: install UDM osquery executable
+      ansible.builtin.get_url:
+        url: http://files.barn-banana.ts.net/fleet/osqueryd-aarch64
+        dest: /opt/osquery/bin/osqueryd
+        owner: root
+        group: root
+        mode: "0755"
+        force: true
+      when: ansible_architecture in ['aarch64', 'arm64']
+      register: osquery_binary
+
     - name: mask journald audit socket (to reduce performance issues)
       ansible.builtin.systemd_service:
         name: systemd-journald-audit.socket
@@ -156,4 +167,4 @@
       ansible.builtin.systemd_service:
         name: osqueryd.service
         state: restarted
-      when: osquery_flagfile.changed
+      when: osquery_flagfile.changed or osquery_binary.changed

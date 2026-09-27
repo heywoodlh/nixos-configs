@@ -106,8 +106,10 @@
     value: /bin/bash
 
 - name: install osquery agent
-  when: tailscale_server_check.status == 200
   block:
+    # Ubiquiti's OS may retain /opt/osquery while dropping the package database
+    # and systemd unit after an upgrade or reboot. Keep the public package install
+    # independent from private Tailscale reachability so it can repair that state.
     - name: uninstall fleet package if installed
       ansible.builtin.apt:
         name: fleet-osquery
@@ -119,7 +121,6 @@
       vars:
         osquery_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}"
         osquery_version: "5.23.0-1"
-
 
     - name: mask journald audit socket (to reduce performance issues)
       ansible.builtin.systemd_service:
@@ -137,23 +138,36 @@
         dest: "/etc/osquery/osquery.flags"
       register: osquery_flagfile
 
-    - name: download osquery certs
+    - name: download osquery enrollment material
       ansible.builtin.uri:
         url: "http://files.barn-banana.ts.net/fleet/{{ item }}"
         dest: "/etc/osquery/{{ item }}"
       ignore_errors: true
-      with_items:
-        - "fleet.pem"
-        - "secret.txt"
+      loop:
+        - fleet.pem
+        - secret.txt
+      when: (tailscale_server_check.status | default(0)) == 200
+
+    - name: check osquery enrollment material
+      ansible.builtin.stat:
+        path: "/etc/osquery/{{ item }}"
+      loop:
+        - fleet.pem
+        - secret.txt
+      register: osquery_enrollment_material
 
     - name: enable osquery service
       ansible.builtin.systemd_service:
         name: osqueryd.service
+        daemon_reload: true
         enabled: true
         state: started
+      when: osquery_enrollment_material.results | map(attribute='stat.exists') | min
 
     - name: restart osquery service
       ansible.builtin.systemd_service:
         name: osqueryd.service
         state: restarted
-      when: osquery_flagfile.changed
+      when:
+        - osquery_flagfile.changed
+        - osquery_enrollment_material.results | map(attribute='stat.exists') | min

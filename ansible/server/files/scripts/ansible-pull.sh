@@ -13,6 +13,20 @@ then
   export ansible_dir="/data/ansible"
 fi
 
+if grep -q "ID=debian" /etc/os-release || grep -q "ID_LIKE=debian" /etc/os-release
+then
+  apt update && apt install -y git curl
+elif grep -q "ID=arch" /etc/os-release || grep -q "ID_LIKE=arch" /etc/os-release
+then
+  pacman -Sy --noconfirm git curl
+elif grep -q "ID=alpine" /etc/os-release
+then
+  apk update && apk add --no-cache git curl
+else
+  printf 'Unsupported distribution\n' >&2
+  exit 1
+fi
+
 if command -v nix &>/dev/null
 then
   nix run "git+https://tangled.org/heywoodlh.io/nixos-configs/$(git ls-remote https://tangled.org/heywoodlh.io/nixos-configs | head -1 | awk '{print $1}')#ansible-server"

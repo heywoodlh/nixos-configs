@@ -144,3 +144,26 @@
       ignore_errors: true
       vars:
         fleet_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}"
+
+    - name: check Orbit defaults file
+      ansible.builtin.stat:
+        path: /etc/default/orbit
+      register: orbit_defaults
+
+    - name: configure stable Fleet host identity
+      ansible.builtin.lineinfile:
+        path: /etc/default/orbit
+        regexp: '^ORBIT_HOST_IDENTIFIER='
+        line: ORBIT_HOST_IDENTIFIER=uuid
+        create: false
+        owner: root
+        group: root
+        mode: '0644'
+      when: orbit_defaults.stat.exists
+      register: orbit_host_identifier
+
+    - name: restart Orbit after changing its host identity
+      ansible.builtin.systemd_service:
+        name: orbit.service
+        state: restarted
+      when: orbit_host_identifier.changed | default(false)

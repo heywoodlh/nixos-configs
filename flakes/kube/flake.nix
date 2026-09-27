@@ -440,6 +440,7 @@
           src = ./templates/fleetdm.yaml;
           namespace = "monitoring";
           image = "docker.io/fleetdm/fleet:v4.78.1";
+          ntfy_webhook_image = "docker.io/heywoodlh/fleetdm-ntfy-webhook@sha256:2e985cf861e8b287428d285b100391c353f21ad41e97fc2f0f3f2bcf66276c41";
           mysql_image = "docker.io/mysql:8.4.7";
           redis_image = "docker.io/redis:8.0-M02-alpine3.21";
           replicas = 1;

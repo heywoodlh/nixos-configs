@@ -3,8 +3,28 @@ name: build-and-cache-nix-configurations
 on:
   pull_request:
     branches: [main]
+    paths:
+      - nixos/**
+      - darwin/**
+      - home/**
+      - base/**
+      - pkgs/**
+      - assets/**
+      - flake.nix
+      - flake.lock
+      - .github/workflows/nix-builds.yml
   push:
     branches: [main]
+    paths:
+      - nixos/**
+      - darwin/**
+      - home/**
+      - base/**
+      - pkgs/**
+      - assets/**
+      - flake.nix
+      - flake.lock
+      - .github/workflows/nix-builds.yml
   workflow_dispatch:
 
 permissions:

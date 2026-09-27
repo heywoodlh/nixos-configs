@@ -135,7 +135,7 @@ spec:
             limits:
               gpu.intel.com/i915: "1"
               cpu: "1"
-              memory: 2048Mi
+              memory: 8Gi
           volumeMounts:
             - mountPath: /data
               name: immich-data

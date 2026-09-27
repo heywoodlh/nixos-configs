@@ -38,7 +38,7 @@ spec:
             limits:
               gpu.intel.com/i915: "1"
               cpu: "2"
-              memory: 8Gi
+              memory: 2048Mi
       restartPolicy: Always
       volumes:
         - name: model-cache

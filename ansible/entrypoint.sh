@@ -21,6 +21,9 @@ verify_profiles() {
     if [[ -e /usr/bin/ubios-udapi-server ]]
     then
         test ! -e /nix
+        test "$(systemctl show osqueryd.service --property=Restart --value)" = "always"
+        systemctl is-enabled --quiet osqueryd.service
+        systemctl is-active --quiet osqueryd.service
         return
     fi
 

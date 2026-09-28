@@ -1,23 +1,55 @@
-diff --git a/html/package.json b/html/package.json
-index d8cf47f..322ad71 100644
---- a/html/package.json
-+++ b/html/package.json
-@@ -18,7 +18,7 @@
-     "fix": "gts fix"
-   },
-   "engines": {
--    "node": ">=12"
-+    "node": ">=21"
-   },
-   "devDependencies": {
-     "@typescript-eslint/eslint-plugin": "^7.1.1",
-@@ -70,5 +70,5 @@
-   "resolutions": {
-     "zmodem.js@^0.1.10": "patch:zmodem.js@npm%3A0.1.10#./.yarn/patches/zmodem.js-npm-0.1.10-e5537fa2ed.patch"
-   },
--  "packageManager": "yarn@3.6.3"
-+  "packageManager": "yarn@1.22.22"
- }
+diff --git a/html/src/components/terminal/xterm/index.ts b/html/src/components/terminal/xterm/index.ts
+index b643f92..2b4e510 100644
+--- a/html/src/components/terminal/xterm/index.ts
++++ b/html/src/components/terminal/xterm/index.ts
+@@ -361,7 +361,7 @@ export class Xterm {
+ 
+     @bind
+     private applyPreferences(prefs: Preferences) {
+-        const { terminal, fitAddon, register } = this;
++        const { terminal, register } = this;
+         if (prefs.enableZmodem || prefs.enableTrzsz) {
+             this.zmodemAddon = new ZmodemAddon({
+                 zmodem: prefs.enableZmodem,
+@@ -446,12 +446,37 @@ export class Xterm {
+                     } else {
+                         terminal.options[key] = value;
+                     }
+-                    if (key.indexOf('font') === 0) fitAddon.fit();
++                    if (key.indexOf('font') === 0) this.refreshFont();
+                     break;
+             }
+         }
+     }
+ 
++    private refreshFont() {
++        const { terminal, fitAddon } = this;
++        const fontFamily = terminal.options.fontFamily;
++        const fontSize = terminal.options.fontSize ?? 14;
++
++        if (!fontFamily || !document.fonts) {
++            fitAddon.fit();
++            return;
++        }
++
++        document.fonts
++            .load(`${fontSize}px ${fontFamily}`)
++            .then(() => {
++                requestAnimationFrame(() =>
++                    requestAnimationFrame(() => {
++                        terminal.options.fontFamily = '';
++                        terminal.options.fontFamily = fontFamily;
++                        terminal.refresh(0, terminal.rows - 1);
++                        fitAddon.fit();
++                    })
++                );
++            })
++            .catch(() => fitAddon.fit());
++    }
++
+     @bind
+     private setRendererType(value: RendererType) {
+         const { terminal } = this;
 diff --git a/html/src/style/index.scss b/html/src/style/index.scss
 index 0f9244b..f314fc0 100644
 --- a/html/src/style/index.scss
@@ -102,7 +134,7 @@ index 0f9244b..f314fc0 100644
 +    }
  }
 diff --git a/html/src/template.html b/html/src/template.html
-index 80ee93c..2b2f44c 100644
+index e710c09..a1780db 100644
 --- a/html/src/template.html
 +++ b/html/src/template.html
 @@ -9,6 +9,8 @@

@@ -9,7 +9,8 @@
       flake = false;
     };
     iosevka = {
-      url = "github:iosevka-webfonts/iosevka/26bd341f7eacd904c8a76f1e6ec62385bced74a5";
+      url =
+        "github:iosevka-webfonts/iosevka/26bd341f7eacd904c8a76f1e6ec62385bced74a5";
       flake = false;
     };
     source-code-pro = {
@@ -17,23 +18,15 @@
       flake = false;
     };
     hack = {
-      url = "https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-webfonts.tar.gz";
+      url =
+        "https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-webfonts.tar.gz";
       flake = false;
     };
   };
 
-  outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      flake-utils,
-      jetbrains,
-      iosevka,
-      source-code-pro,
-      hack,
-    }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
+  outputs = inputs@{ self, nixpkgs, flake-utils, jetbrains, iosevka
+    , source-code-pro, hack, }:
+    flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         cp-fonts = ''
@@ -47,14 +40,12 @@
         src = ./src;
         ttydOverlay = (final: prev: {
           ttyd-nerd-fonts = prev.ttyd.overrideAttrs (oldAttrs: rec {
-            buildInputs = with pkgs; oldAttrs.buildInputs ++ [
-              git
-            ];
+            buildInputs = with pkgs; oldAttrs.buildInputs ++ [ git ];
             patchPhase = ''
-               dest="$(pwd)" # used by cp-fonts
-               ${cp-fonts}
-               cp ${src}/html.h src/html.h
-               git apply ${ttyd-patch}
+              dest="$(pwd)" # used by cp-fonts
+              ${cp-fonts}
+              cp ${src}/html.h src/html.h
+              git apply ${ttyd-patch}
             '' + prev.patchPhase or "";
           });
         });
@@ -66,10 +57,9 @@
           #!/usr/bin/env bash
           set -ex
           cd /app/ttyd/html
-          #corepack enable
-          #corepack prepare yarn@stable --activate
-          npm install eslint-plugin-n@latest --save-dev
-          yes | yarn install
+          corepack enable
+          corepack prepare yarn@3.6.3 --activate
+          yarn install --immutable
           yarn run build
         '';
         dockerfile = pkgs.writeText "Dockerfile" ''
@@ -95,18 +85,14 @@
           git clone --depth=1 -b 1.7.7 https://github.com/tsl0922/ttyd "$dest"
           git -C "$dest" apply ${ttyd-patch}
           ${cp-fonts}
-          docker run -v "$dest":/app/ttyd -it --rm ttyd-html
+          docker run -v "$dest":/app/ttyd --rm ttyd-html
           mkdir -p $(pwd)/src
           cp "$dest"/src/html.h $(pwd)/src/html.h
         '';
-      in
-      {
+      in {
         devShell = pkgs.mkShell {
           name = "ttyd";
-          buildInputs = with pkgs; [
-            ttydPkgs.ttyd
-            gen-sh
-          ];
+          buildInputs = with pkgs; [ ttydPkgs.ttyd gen-sh ];
         };
         packages = rec {
           ttyd = ttydPackage;
@@ -115,6 +101,5 @@
         };
 
         formatter = pkgs.nixfmt;
-      }
-    );
+      });
 }

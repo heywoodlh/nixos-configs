@@ -145,19 +145,22 @@ in {
       # Restart preferences daemon
       /usr/bin/killall cfprefsd &>/dev/null || true
     '';
-    home.activation.defaults-privacy = mkIf cfg.privacy ''
+    home.activation.defaults-privacy = mkIf cfg.privacy (
+      ''
       echo "Applying MacOS defaults privacy settings"
 
       # Disable Apple personalized advertising
       /usr/bin/defaults -currentHost write com.apple.AdLib forceLimitAdTracking -int 1
       /usr/bin/defaults -currentHost write com.apple.AdLib allowApplePersonalizedAdvertising -int 0
       /usr/bin/defaults -currentHost write com.apple.AdLib allowIdentifierForAdvertising -int 0
+      '' + lib.optionalString (config.heywoodlh.home.llm.apfel == false) ''
 
       # Disable Apple Intelligence (may require restart)
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "545129924" -bool "false"
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "1341174415" -bool "false"
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "device" -bool "false"
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "auto_opt_in" -bool "false"
+      '' + ''
       # Disable Apple Intelligence Report
       /usr/bin/defaults -currentHost write com.apple.AppleIntelligenceReport "reportDuration" -int 0
 
@@ -173,7 +176,8 @@ in {
 
       # Disable the crash reporter
       /usr/bin/defaults -currentHost write com.apple.CrashReporter DialogType -string "none"
-    '';
+      ''
+    );
     home.activation.defaults-security = mkIf cfg.security ''
       echo "Applying MacOS defaults privacy settings"
       # Automatic updates (Deprecated, but we'll still set them anyway)

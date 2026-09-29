@@ -30,6 +30,10 @@ let
   runVllm = pkgs.writeShellScript "vllm.sh" ''
     ${vllmPkg}/bin/vllm serve "${cfg.opencode.vllm.model.name}" --download-dir "${vllmModelsDir}" --port ${toString cfg.opencode.vllm.port} ${cfg.opencode.vllm.extraArgs}
   '';
+  apfel-serve = pkgs.writeShellScript "apfel-serve" ''
+    /usr/bin/defaults write com.apple.CloudSubscriptionFeatures.optIn "545129924" -bool "true"
+    exec ${pkgs.apfel-llm}/bin/apfel --serve
+  '';
   lmstudioType = submodule {
     options = {
       enable = mkOption {
@@ -261,6 +265,11 @@ in {
         description = "LM Studio configuration.";
         type = lmstudioType;
       };
+      apfel = mkOption {
+        default = false;
+        description = "Enable Apple Foundation Models through Apfel on macOS.";
+        type = bool;
+      };
       opencode = mkOption {
         default = {};
         description = "Enable local OpenCode configuration.";
@@ -279,6 +288,13 @@ in {
     };
   };
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !cfg.apfel || stdenv.hostPlatform.isDarwin;
+        message = "heywoodlh.home.llm.apfel is only supported on macOS.";
+      }
+    ];
+
     home.packages = with pkgs; [
       github-copilot-cli
       claude-code
@@ -288,6 +304,8 @@ in {
       bubblewrap
     ] ++ lib.optionals (cfg.lmstudio.enable) [
       lmstudio
+    ] ++ lib.optionals (cfg.apfel) [
+      apfel-llm
     ] ++ lib.optionals (cfg.pi.enable) [
       cfg.pi.package
     ];
@@ -361,6 +379,17 @@ in {
         KeepAlive = true;
         StandardOutPath = "${vllmLogDir}/stdout.log";
         StandardErrorPath = "${vllmLogDir}/stderr.log";
+      };
+    };
+
+    launchd.agents.apfel = {
+      enable = cfg.apfel;
+      config = {
+        ProgramArguments = [
+          "${apfel-serve}"
+        ];
+        RunAtLoad = true;
+        KeepAlive = true;
       };
     };
 
@@ -450,7 +479,30 @@ in {
     };
 
     home.file.".pi/agent/models.json".text = builtins.toJSON {
-      providers = (lib.optionalAttrs (cfg.lmstudio.enable) {
+      providers = (lib.optionalAttrs (cfg.apfel) {
+        "apple-foundation" = {
+          baseUrl = "http://localhost:11434/v1";
+          api = "openai-completions";
+          apiKey = "local";
+          compat.supportsDeveloperRole = false;
+          models = [
+            {
+              id = "apple-foundationmodel";
+              name = "Apple Foundation Models";
+              reasoning = false;
+              input = [ "text" ];
+              contextWindow = 4096;
+              maxTokens = 1024;
+              cost = {
+                input = 0;
+                output = 0;
+                cacheRead = 0;
+                cacheWrite = 0;
+              };
+            }
+          ];
+        };
+      }) // (lib.optionalAttrs (cfg.lmstudio.enable) {
         lmstudio = {
           baseUrl = "http://localhost:1234/v1";
           api = "openai-completions";

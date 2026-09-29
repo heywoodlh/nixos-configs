@@ -87,16 +87,17 @@ let
     socks5 tor.barn-banana.ts.net 1080
   '';
   duo-key-self-setup = pkgs.writeShellScriptBin "duo-key-setup.sh" ''
-    op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key > /tmp/duo.key
-    op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key > /tmp/duo-integration.key
+    ${op-wrapper} item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key --reveal > /tmp/duo.key
+    ${op-wrapper} item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key --reveal > /tmp/duo-integration.key
     chmod 600 /tmp/duo*.key
     sudo mv /tmp/duo*.key /root/
-    sudo chown -R root:root /root/duo*.key
+    sudo chown -R root:root /root/duo.key
+    sudo chown -R root:root /root/duo-integration.key
   '';
   duo-key-remote-setup = pkgs.writeShellScriptBin "duo-key-remote-setup.sh" ''
     hosts=("nix-drive" "homelab" "nixos-gaming")
-    op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key > /tmp/duo.key
-    op item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key > /tmp/duo-integration.key
+    ${op-wrapper} item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key --reveal > /tmp/duo.key
+    ${op-wrapper} item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key --reveal > /tmp/duo-integration.key
     chmod 600 /tmp/duo.key
     chmod 600 /tmp/duo-integration.key
     for host in "''${hosts[@]}"

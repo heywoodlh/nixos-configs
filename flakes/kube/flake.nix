@@ -620,6 +620,15 @@
           replicas = 1;
           nodename = "homelab";
         };
+        lmstudio = mkKubeDrv "lmstudio" {
+          src = ./templates/lmstudio.yaml;
+          namespace = "machine-learning";
+          # 2026-09-25-ls34; resolved from Docker Hub for reproducible deploys.
+          image = "docker.io/linuxserver/lm-studio@sha256:3183a63d7ef121426a9f8dd908f095626aaa7f6fcf4e941d232c02bfbf4c58d7";
+          hostfolder = "/media/data-ssd/lmstudio";
+          model = "google/gemma-4-e4b";
+          model_context_length = 32768;
+        };
         llama = mkKubeDrv "llama" {
           src = ./templates/llama.yaml;
           namespace = "default";

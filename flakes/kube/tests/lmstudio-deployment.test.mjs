@@ -1,0 +1,31 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+const kubeDir = resolve(import.meta.dirname, "..");
+const rootDir = resolve(kubeDir, "..", "..");
+const template = readFileSync(resolve(kubeDir, "templates/lmstudio.yaml"), "utf8");
+const flake = readFileSync(resolve(kubeDir, "flake.nix"), "utf8");
+const render = readFileSync(resolve(kubeDir, "render.sh"), "utf8");
+const homeBase = readFileSync(resolve(rootDir, "home/base.nix"), "utf8");
+const llmModule = readFileSync(resolve(rootDir, "home/modules/llm.nix"), "utf8");
+
+assert.match(template, /name: lmstudio/);
+assert.match(template, /tailscale\.com\/hostname: "llm"/);
+assert.match(template, /containerPort: 1234/);
+assert.match(template, /lms daemon up/);
+assert.match(template, /lms get --yes --gguf "@model@"/);
+assert.match(template, /lms load "@model@" --identifier "@model@" --context-length @model_context_length@ --gpu 1 --yes/);
+assert.match(template, /name: AUTO_GPU/);
+assert.match(template, /cpu: "1000m"/);
+assert.match(template, /memory: "12Gi"/);
+assert.match(template, /cpu: "8"/);
+assert.match(template, /memory: "32Gi"/);
+assert.match(flake, /lmstudio = mkKubeDrv "lmstudio"/);
+assert.match(flake, /model = "google\/gemma-4-e4b"/);
+assert.match(render, /"lmstudio"/);
+assert.doesNotMatch(render, /"llama-swap"/);
+assert.match(homeBase, /pi\.extraConf =/);
+assert.match(homeBase, /homelab =/);
+assert.match(homeBase, /baseUrl = "http:\/\/llm\.barn-banana\.ts\.net\/v1"/);
+assert.match(llmModule, /providers = .*cfg\.pi\.extraConf/s);

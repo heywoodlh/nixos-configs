@@ -1,0 +1,97 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lmstudio
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: lmstudio
+    app.kubernetes.io/instance: lmstudio
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "llm"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: lmstudio
+      protocol: TCP
+      name: lmstudio
+  selector:
+    app.kubernetes.io/name: lmstudio
+    app.kubernetes.io/instance: lmstudio
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lmstudio
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: lmstudio
+    app.kubernetes.io/instance: lmstudio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: lmstudio
+      app.kubernetes.io/instance: lmstudio
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: lmstudio
+        app.kubernetes.io/instance: lmstudio
+    spec:
+      containers:
+        - name: lmstudio
+          image: "@image@"
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/bash", "-lc"]
+          args:
+            - |
+              set -euo pipefail
+              export HOME=/config
+              lms daemon up
+              lms get --yes --gguf "@model@"
+              lms load "@model@" --identifier "@model@" --context-length @model_context_length@ --gpu 1 --yes
+              exec lms server start --port 1234 --bind 0.0.0.0
+          env:
+            - name: AUTO_GPU
+              value: "true"
+          ports:
+            - name: lmstudio
+              containerPort: 1234
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /config
+          resources:
+            requests:
+              cpu: "1000m"
+              memory: "12Gi"
+              gpu.intel.com/i915: "1"
+            limits:
+              cpu: "8"
+              memory: "32Gi"
+              gpu.intel.com/i915: "1"
+          startupProbe:
+            httpGet:
+              path: /v1/models
+              port: lmstudio
+            periodSeconds: 10
+            failureThreshold: 180
+          readinessProbe:
+            httpGet:
+              path: /v1/models
+              port: lmstudio
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /v1/models
+              port: lmstudio
+            periodSeconds: 30
+      volumes:
+        - name: config
+          hostPath:
+            path: @hostfolder@
+            type: DirectoryOrCreate

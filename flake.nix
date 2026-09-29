@@ -608,6 +608,7 @@ rec {
                 darwin.protondrive = true;
                 onepassword.enable = true;
               };
+              heywoodlh.home.llm.appleFoundation = true;
             };
           };
 

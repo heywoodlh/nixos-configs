@@ -30,6 +30,10 @@ let
   runVllm = pkgs.writeShellScript "vllm.sh" ''
     ${vllmPkg}/bin/vllm serve "${cfg.opencode.vllm.model.name}" --download-dir "${vllmModelsDir}" --port ${toString cfg.opencode.vllm.port} ${cfg.opencode.vllm.extraArgs}
   '';
+  apfel-serve = pkgs.writeShellScript "apfel-serve" ''
+    /usr/bin/defaults write com.apple.CloudSubscriptionFeatures.optIn "545129924" -bool "true"
+    exec ${pkgs.apfel-llm}/bin/apfel --serve
+  '';
   lmstudioType = submodule {
     options = {
       enable = mkOption {
@@ -261,7 +265,7 @@ in {
         description = "LM Studio configuration.";
         type = lmstudioType;
       };
-      appleFoundation = mkOption {
+      apfel = mkOption {
         default = false;
         description = "Enable Apple Foundation Models through Apfel on macOS.";
         type = bool;
@@ -286,8 +290,8 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = !cfg.appleFoundation || stdenv.hostPlatform.isDarwin;
-        message = "heywoodlh.home.llm.appleFoundation is only supported on macOS.";
+        assertion = !cfg.apfel || stdenv.hostPlatform.isDarwin;
+        message = "heywoodlh.home.llm.apfel is only supported on macOS.";
       }
     ];
 
@@ -300,7 +304,7 @@ in {
       bubblewrap
     ] ++ lib.optionals (cfg.lmstudio.enable) [
       lmstudio
-    ] ++ lib.optionals (cfg.appleFoundation) [
+    ] ++ lib.optionals (cfg.apfel) [
       apfel-llm
     ] ++ lib.optionals (cfg.pi.enable) [
       cfg.pi.package
@@ -378,12 +382,11 @@ in {
       };
     };
 
-    launchd.agents."apple-foundation" = {
-      enable = cfg.appleFoundation;
+    launchd.agents.apfel = {
+      enable = cfg.apfel;
       config = {
         ProgramArguments = [
-          "${pkgs.apfel-llm}/bin/apfel"
-          "--serve"
+          "${apfel-serve}"
         ];
         RunAtLoad = true;
         KeepAlive = true;
@@ -476,7 +479,7 @@ in {
     };
 
     home.file.".pi/agent/models.json".text = builtins.toJSON {
-      providers = (lib.optionalAttrs (cfg.appleFoundation) {
+      providers = (lib.optionalAttrs (cfg.apfel) {
         "apple-foundation" = {
           baseUrl = "http://localhost:11434/v1";
           api = "openai-completions";

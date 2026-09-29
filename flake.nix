@@ -608,7 +608,7 @@ rec {
                 darwin.protondrive = true;
                 onepassword.enable = true;
               };
-              heywoodlh.home.llm.appleFoundation = true;
+              heywoodlh.home.llm.apfel = true;
             };
           };
 

@@ -12,6 +12,7 @@ const llmModule = readFileSync(resolve(rootDir, "home/modules/llm.nix"), "utf8")
 
 assert.match(template, /name: lmstudio/);
 assert.match(template, /tailscale\.com\/hostname: "llm"/);
+assert.match(template, /tailscale\.com\/tags: "tag:adminhttp"/);
 assert.match(template, /containerPort: 1234/);
 assert.match(template, /lms daemon up/);
 assert.match(template, /lms get --yes --gguf "@model@"/);

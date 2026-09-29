@@ -10,7 +10,7 @@ metadata:
   annotations:
     tailscale.com/expose: "true"
     tailscale.com/hostname: "llm"
-    tailscale.com/tags: "tag:http"
+    tailscale.com/tags: "tag:adminhttp"
 spec:
   type: ClusterIP
   ports:

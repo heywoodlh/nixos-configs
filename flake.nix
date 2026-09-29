@@ -1142,7 +1142,10 @@ rec {
           };
 
           heywoodlh = {
-            sshd.enable = true;
+            sshd = {
+              enable = true;
+              duo = true;
+            };
             nixos = {
               sunshine = {
                 enable = true;

@@ -7,10 +7,6 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - ansible/**
-      - home/**
-      - base/**
-      - pkgs/**
-      - assets/**
       - flake.lock
       - .github/workflows/ansible.yml
 

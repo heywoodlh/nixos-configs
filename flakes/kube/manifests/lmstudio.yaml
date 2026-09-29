@@ -54,7 +54,8 @@ spec:
               lms daemon up
               lms get --yes --gguf "google/gemma-4-e4b"
               lms load "google/gemma-4-e4b" --identifier "google/gemma-4-e4b" --context-length 32768 --gpu 1 --yes
-              exec lms server start --port 1234 --bind 0.0.0.0
+              lms server start --port 1234 --bind 0.0.0.0
+              exec tail -f /dev/null
           env:
             - name: AUTO_GPU
               value: "true"

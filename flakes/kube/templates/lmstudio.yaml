@@ -54,7 +54,8 @@ spec:
               lms daemon up
               lms get --yes --gguf "@model@"
               lms load "@model@" --identifier "@model@" --context-length @model_context_length@ --gpu 1 --yes
-              exec lms server start --port 1234 --bind 0.0.0.0
+              lms server start --port 1234 --bind 0.0.0.0
+              exec tail -f /dev/null
           env:
             - name: AUTO_GPU
               value: "true"

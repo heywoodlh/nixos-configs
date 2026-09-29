@@ -63,7 +63,6 @@ applications=(
   "syncthing"
   "syslog"
   "tailscale-dns-bridge"
-  "tailscale-mullvad-socks-router"
   "tor-socks-proxy"
   "xpipe"
 )

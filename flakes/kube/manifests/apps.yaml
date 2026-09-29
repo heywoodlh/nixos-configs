@@ -654,7 +654,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: llama-swap
+  name: lmstudio
   namespace: argo
 spec:
   destination:
@@ -665,7 +665,7 @@ spec:
     targetRevision: HEAD
     path: flakes/kube/manifests
     directory:
-      include: "llama-swap.yaml"
+      include: "lmstudio.yaml"
   project: default
   syncPolicy:
     automated:

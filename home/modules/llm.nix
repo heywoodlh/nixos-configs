@@ -450,7 +450,7 @@ in {
     };
 
     home.file.".pi/agent/models.json".text = builtins.toJSON {
-      providers = lib.optionalAttrs (cfg.lmstudio.enable) {
+      providers = (lib.optionalAttrs (cfg.lmstudio.enable) {
         lmstudio = {
           baseUrl = "http://localhost:1234/v1";
           api = "openai-completions";
@@ -473,7 +473,7 @@ in {
             }
           ];
         };
-      };
+      }) // cfg.pi.extraConf;
     };
   };
 }

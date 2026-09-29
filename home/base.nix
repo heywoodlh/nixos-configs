@@ -869,7 +869,33 @@ in {
     };
     btop = true;
     syncthing = true;
-    llm.enable = true;
+    llm = {
+      enable = true;
+      pi.extraConf = {
+        homelab = {
+          baseUrl = "http://llm.barn-banana.ts.net/v1";
+          api = "openai-completions";
+          apiKey = "local";
+          compat.supportsDeveloperRole = false;
+          models = [
+            {
+              id = "google/gemma-4-e4b";
+              name = "google/gemma-4-e4b";
+              reasoning = true;
+              input = [ "text" ];
+              contextWindow = 32768;
+              maxTokens = 8192;
+              cost = {
+                input = 0;
+                output = 0;
+                cacheRead = 0;
+                cacheWrite = 0;
+              };
+            }
+          ];
+        };
+      };
+    };
     paseo.extraConf = {
       agents.providers = {
         github-ll = {

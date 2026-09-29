@@ -34,7 +34,7 @@ applications=(
   "istio"
   "iperf"
   "lancache"
-  "llama-swap"
+  "lmstudio"
   "media"
   "metasploit"
   "meshtastic"

@@ -414,6 +414,7 @@ in {
       if [[ -e "${lmsBin}" ]] && "${lmsBin}" ls &>/dev/null
       then
         "${lmsBin}" get --yes "${cfg.lmstudio.model.name}" || true
+        "${lmsBin}" load --yes "${cfg.lmstudio.model.name}" --identifier "${cfg.lmstudio.model.name}" || true
       fi
     '';
 
@@ -510,8 +511,8 @@ in {
           compat.supportsDeveloperRole = false;
           models = [
             {
-              id = cfg.lmstudio.model.alias;
-              name = cfg.lmstudio.model.name;
+              id = cfg.lmstudio.model.name;
+              name = cfg.lmstudio.model.alias;
               reasoning = true;
               input = [ "text" ];
               contextWindow = cfg.lmstudio.model.context_length;

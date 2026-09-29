@@ -90,29 +90,39 @@ data:
     <body>
       <h1>scrutiny</h1>
       <div class="hosts">
-        <a href="/nixos-gaming/"><span class="dot"></span>nixos-gaming</a>
         <a href="/homelab/"><span class="dot"></span>homelab</a>
-        <a href="/nixos-slc/"><span class="dot"></span>nixos-slc</a>
-        <a href="/nixos-culug/"><span class="dot"></span>nixos-culug</a>
+        <a href="/nixos-nuc/"><span class="dot"></span>nixos-nuc</a>
+        <a href="/nixos-ops/"><span class="dot"></span>nixos-ops</a>
+        <a href="/nixos-gaming/"><span class="dot"></span>nixos-gaming</a>
+        <a href="/nixos-gaming-sarah/"><span class="dot"></span>nixos-gaming-sarah</a>
       </div>
     </body>
     </html>` 200
         }
 
-        handle /nixos-gaming* {
-            reverse_proxy http://nixos-gaming.barn-banana.ts.net:3050
-        }
-
-        handle /homelab* {
+        @homelab path /homelab /homelab/*
+        handle @homelab {
             reverse_proxy http://homelab.barn-banana.ts.net:3050
         }
 
-        handle /nixos-slc* {
-            reverse_proxy http://nixos-slc.barn-banana.ts.net:3050
+        @nixos-nuc path /nixos-nuc /nixos-nuc/*
+        handle @nixos-nuc {
+            reverse_proxy http://nixos-nuc.barn-banana.ts.net:3050
         }
 
-        handle /nixos-culug* {
-            reverse_proxy http://nixos-culug.barn-banana.ts.net:3050
+        @nixos-ops path /nixos-ops /nixos-ops/*
+        handle @nixos-ops {
+            reverse_proxy http://nixos-ops.barn-banana.ts.net:3050
+        }
+
+        @nixos-gaming path /nixos-gaming /nixos-gaming/*
+        handle @nixos-gaming {
+            reverse_proxy http://nixos-gaming.barn-banana.ts.net:3050
+        }
+
+        @nixos-gaming-sarah path /nixos-gaming-sarah /nixos-gaming-sarah/*
+        handle @nixos-gaming-sarah {
+            reverse_proxy http://nixos-gaming-sarah.barn-banana.ts.net:3050
         }
     }
 ---
@@ -141,6 +151,13 @@ spec:
         - name: scrutiny-proxy
           image: "@image@"
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
           ports:
             - name: scrutiny-proxy
               containerPort: 80

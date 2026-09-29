@@ -965,7 +965,14 @@ rec {
           heywoodlh = {
             sshd.enable = true;
             intel-mac = true;
-            nixos.portmaster.enable = lib.mkForce false;
+            nixos = {
+              portmaster.enable = lib.mkForce false;
+              scrutiny = {
+                enable = true;
+                port = 3050;
+                ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
+              };
+            };
           };
 
           users.users.ops = {
@@ -1147,6 +1154,11 @@ rec {
               duo = true;
             };
             nixos = {
+              scrutiny = {
+                enable = true;
+                port = 3050;
+                ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
+              };
               sunshine = {
                 enable = true;
                 resolutions = "[ 1920x1080, 2752x2064]";

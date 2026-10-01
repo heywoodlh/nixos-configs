@@ -141,6 +141,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+    stylix.targets.plymouth.enable = mkIf cfg.yubikey (mkForce false);
+
     boot.initrd = {
       availableKernelModules = optionals (cfg.yubikey || cfg.keyfile.enable) [
         "vfat"

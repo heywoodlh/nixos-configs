@@ -35,7 +35,7 @@ spec:
                   key: admin-password
             - name: ALLOW_CONNECT_PLATFORM
               value: Steam
-          image: docker.io/tiltedphoques/st-reborn-server:v1.8.0
+          image: docker.io/tiltedphoques/st-reborn-server:v1.8.2
           imagePullPolicy: Always
           name: skyrim-together-server
           ports:

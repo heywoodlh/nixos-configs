@@ -970,7 +970,7 @@
           src = ./templates/skyrim-together.yaml;
           namespace = "gaming";
           replicas = 1;
-          image = "docker.io/tiltedphoques/st-reborn-server:v1.8.0";
+          image = "docker.io/tiltedphoques/st-reborn-server:v1.8.2";
           hostfolder = "/media/data-ssd/st-server";
         };
         sons-of-the-forest = mkKubeDrv "sons-of-the-forest" {

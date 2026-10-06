@@ -74,6 +74,13 @@ spec:
           - containerPort: 8200
             name: http
             protocol: TCP
+          resources:
+            requests:
+              cpu: 500m
+              memory: 4Gi
+            limits:
+              cpu: "4"
+              memory: 24Gi
           volumeMounts:
             - mountPath: /config
               name: config

@@ -4,10 +4,16 @@ with lib;
 
 let
   aveyond = pkgs.writeShellScriptBin "aveyond.sh" ''
-    # Aveyond I is a 32-bit RPG Maker title. Its BGM path relies on Wine's
-    # Quartz/MCI components, so do not disable Quartz for this launcher.
-    WINEPREFIX=$HOME/.wine \
-      ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond/Game.exe
+    set -euo pipefail
+    export WINEPREFIX="$HOME/.wine"
+    directmusicMarker="$WINEPREFIX/.aveyond-directmusic-installed"
+
+    if [ ! -f "$directmusicMarker" ]; then
+      ${pkgs.umu-launcher}/bin/umu-run winetricks -q directmusic gmdls
+      touch "$directmusicMarker"
+    fi
+
+    ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond/Game.exe
   '';
   aveyond-eans-quest = pkgs.writeShellScriptBin "aveyond-eans-quest.sh" ''
     ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond\ 2\ -\ Ean\'s\ Quest/Aveyond\ 2.exe

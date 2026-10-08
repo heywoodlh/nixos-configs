@@ -4,9 +4,16 @@ with lib;
 
 let
   aveyond = pkgs.writeShellScriptBin "aveyond.sh" ''
-    WINEPREFIX=$HOME/.wine \
-    WINEDLLOVERRIDES="quartz=d" \
-      ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond/Game.exe
+    set -euo pipefail
+    export WINEPREFIX="$HOME/.wine"
+    directmusicMarker="$WINEPREFIX/.aveyond-directmusic-installed"
+
+    if [ ! -f "$directmusicMarker" ]; then
+      ${pkgs.umu-launcher}/bin/umu-run winetricks -q directmusic gmdls
+      touch "$directmusicMarker"
+    fi
+
+    ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond/Game.exe
   '';
   aveyond-eans-quest = pkgs.writeShellScriptBin "aveyond-eans-quest.sh" ''
     ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond\ 2\ -\ Ean\'s\ Quest/Aveyond\ 2.exe

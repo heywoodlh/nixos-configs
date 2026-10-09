@@ -55,7 +55,36 @@ with lib;
   environment.systemPackages = with pkgs; [
     steam-run
     clonehero
+    immich-cli
   ];
+
+  systemd.services.arc-raiders-immich-upload = {
+    description = "Upload ARC Raiders screenshots to Immich";
+    after = [ "network-online.target" "mnt-ssd0.mount" ];
+    wants = [ "network-online.target" ];
+    unitConfig.RequiresMountsFor = [ "/mnt/ssd0/SteamLibrary" ];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "heywoodlh";
+      WorkingDirectory = "/home/heywoodlh";
+      Environment = [
+        "HOME=/home/heywoodlh"
+        "IMMICH_CONFIG_DIR=/home/heywoodlh/.config/immich"
+      ];
+    };
+    script = ''
+      ${pkgs.immich-cli}/bin/immich upload --recursive --no-progress --album-name arc /mnt/ssd0/SteamLibrary/steamapps/compatdata/ArcRaiders/pfx/drive_c/users/steamuser/AppData/Local/PioneerGame/Saved/PersistentDownloadDir/Photos
+    '';
+  };
+
+  systemd.timers.arc-raiders-immich-upload = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*-*-* 05:00:00 America/Denver";
+      Persistent = true;
+      Unit = "arc-raiders-immich-upload.service";
+    };
+  };
 
   networking = {
     interfaces = {

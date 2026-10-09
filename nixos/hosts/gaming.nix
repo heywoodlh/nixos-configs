@@ -1,6 +1,12 @@
 { config, lib, pkgs, modulesPath, stackpkgs, ... }:
 
 with lib;
+let
+  arcPhotoBackup = pkgs.writeShellScriptBin "arc-photo-backup.sh" ''
+    set -euo pipefail
+    exec ${pkgs.immich-cli}/bin/immich upload --recursive --no-progress --album-name arc /mnt/ssd0/SteamLibrary/steamapps/compatdata/ArcRaiders/pfx/drive_c/users/steamuser/AppData/Local/PioneerGame/Saved/PersistentDownloadDir/Photos
+  '';
+in
 {
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
@@ -56,6 +62,7 @@ with lib;
     steam-run
     clonehero
     immich-cli
+    arcPhotoBackup
   ];
 
   systemd.services.arc-raiders-immich-upload = {
@@ -73,7 +80,7 @@ with lib;
       ];
     };
     script = ''
-      ${pkgs.immich-cli}/bin/immich upload --recursive --no-progress --album-name arc /mnt/ssd0/SteamLibrary/steamapps/compatdata/ArcRaiders/pfx/drive_c/users/steamuser/AppData/Local/PioneerGame/Saved/PersistentDownloadDir/Photos
+      exec ${arcPhotoBackup}/bin/arc-photo-backup.sh
     '';
   };
 

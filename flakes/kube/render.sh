@@ -65,6 +65,7 @@ applications=(
   "tailscale-dns-bridge"
   "tor-socks-proxy"
   "xpipe"
+  "yattee"
 )
 
 set -ex

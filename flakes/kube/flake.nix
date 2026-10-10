@@ -1096,6 +1096,13 @@
           hostfolder = "/media/data-ssd/xpipe";
           nodename = "homelab";
         };
+        yattee = mkKubeDrv "yattee" {
+          src = ./templates/yattee.yaml;
+          namespace = "default";
+          image = "docker.io/yattee/yattee-server:1.0.9";
+          hostfolder = "/media/data-ssd/yattee";
+          nodename = "homelab";
+        };
         # Kubectl wrapper with plugins
         kubectl = let
           kubectl = (krew2nix.packages.${system}.kubectl.withKrewPlugins (plugins: [

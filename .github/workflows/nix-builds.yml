@@ -110,6 +110,8 @@ jobs:
       - name: Install Nix
         run: |
           curl --fail --location --retry 3 https://nixos.org/nix/install | sh -s -- --daemon --yes
+          mkdir -p ~/.config/nix
+          printf 'experimental-features = nix-command flakes\n' > ~/.config/nix/nix.conf
           echo /nix/var/nix/profiles/default/bin >> "$GITHUB_PATH"
 
       - name: Parse Nix expressions
@@ -221,6 +223,8 @@ jobs:
       - name: Install Nix
         run: |
           curl --fail --location --retry 3 https://nixos.org/nix/install | sh -s -- --daemon --yes
+          mkdir -p ~/.config/nix
+          printf 'experimental-features = nix-command flakes\n' > ~/.config/nix/nix.conf
           echo /nix/var/nix/profiles/default/bin >> "$GITHUB_PATH"
 
       - name: Parse Nix expressions

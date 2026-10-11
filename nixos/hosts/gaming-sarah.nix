@@ -14,7 +14,8 @@ let
       ${pkgs.umu-launcher}/bin/umu-run winetricks -q gmdls
     fi
 
-    ${pkgs.umu-launcher}/bin/umu-run explorer /desktop=Aveyond,1920x1080 "C:\\Program Files (x86)\\Aveyond\\Game.exe"
+    export WINEDLLOVERRIDES="quartz=d''${WINEDLLOVERRIDES:+;''${WINEDLLOVERRIDES}}"
+    ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond/Game.exe
   '';
   aveyond-eans-quest = pkgs.writeShellScriptBin "aveyond-eans-quest.sh" ''
     ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond\ 2\ -\ Ean\'s\ Quest/Aveyond\ 2.exe

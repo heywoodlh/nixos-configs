@@ -6,11 +6,12 @@ let
   aveyond = pkgs.writeShellScriptBin "aveyond.sh" ''
     set -euo pipefail
     export WINEPREFIX="$HOME/.wine"
-    directmusicMarker="$WINEPREFIX/.aveyond-directmusic-installed"
+    if ! ${pkgs.umu-launcher}/bin/umu-run winetricks list-installed | ${pkgs.gnugrep}/bin/grep -qx directmusic; then
+      ${pkgs.umu-launcher}/bin/umu-run winetricks -q directmusic
+    fi
 
-    if [ ! -f "$directmusicMarker" ]; then
-      ${pkgs.umu-launcher}/bin/umu-run winetricks -q directmusic gmdls
-      touch "$directmusicMarker"
+    if ! ${pkgs.umu-launcher}/bin/umu-run winetricks list-installed | ${pkgs.gnugrep}/bin/grep -qx gmdls; then
+      ${pkgs.umu-launcher}/bin/umu-run winetricks -q gmdls
     fi
 
     ${pkgs.umu-launcher}/bin/umu-run /home/heywoodlh/.wine/drive_c/Program\ Files\ \(x86\)/Aveyond/Game.exe

@@ -99,7 +99,7 @@ jobs:
 
       - name: Login to Tailnet
         if: github.event_name == 'push'
-        uses: tailscale/github-action@v4.1.0
+        uses: tailscale/github-action@v4.2.0
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
@@ -202,7 +202,7 @@ jobs:
 
       - name: Login to Tailnet
         if: github.event_name == 'push'
-        uses: tailscale/github-action@v4.1.0
+        uses: tailscale/github-action@v4.2.0
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}

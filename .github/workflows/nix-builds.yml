@@ -81,6 +81,7 @@ jobs:
           - name: build-linux-amd64
             runner: ubuntu-24.04
             validate: true
+            parse: true
             targets: >-
               .#nixosConfigurations.nixos-server.config.system.build.toplevel
               .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
@@ -90,7 +91,8 @@ jobs:
               .#homeConfigurations.heywoodlh.activationPackage
           - name: build-linux-arm64
             runner: ubuntu-24.04-arm
-            validate: false
+            validate: true
+            parse: false
             targets: >-
               .#nixosConfigurations.nixos-server.config.system.build.toplevel
               .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
@@ -106,9 +108,17 @@ jobs:
           tags: tag:ci
 
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-        with:
-          determinate: true
+        run: |
+          curl --fail --location --retry 3 https://nixos.org/nix/install | sh -s -- --daemon --yes
+          echo /nix/var/nix/profiles/default/bin >> "$GITHUB_PATH"
+
+      - name: Parse Nix expressions
+        if: github.event_name != 'push' && matrix.parse
+        run: |
+          while IFS= read -r -d '' file; do
+            echo "Parsing Nix expression: $file"
+            nix-instantiate --parse "$file" >/dev/null
+          done < <(git ls-files -z -- '*.nix')
 
       - name: Configure Nix cache
         if: github.event_name == 'push'
@@ -209,9 +219,17 @@ jobs:
           tags: tag:ci
 
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-        with:
-          determinate: true
+        run: |
+          curl --fail --location --retry 3 https://nixos.org/nix/install | sh -s -- --daemon --yes
+          echo /nix/var/nix/profiles/default/bin >> "$GITHUB_PATH"
+
+      - name: Parse Nix expressions
+        if: github.event_name != 'push'
+        run: |
+          while IFS= read -r -d '' file; do
+            echo "Parsing Nix expression: $file"
+            nix-instantiate --parse "$file" >/dev/null
+          done < <(git ls-files -z -- '*.nix')
 
       - name: Configure Nix cache
         if: github.event_name == 'push'
@@ -230,10 +248,23 @@ jobs:
           echo -e 'run\tprivate/var/run' | sudo tee -a /etc/synthetic.conf > /dev/null
           /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t > /dev/null 2>&1 || true
 
-      - name: Validate nix-darwin configurations
+      - name: Evaluate nix-darwin configurations
         if: github.event_name != 'push'
         run: |
-          nix eval --accept-flake-config --json .#darwinConfigurations --apply 'configs: builtins.mapAttrs (_: config: config.config.system.build.toplevel.drvPath) configs' >/dev/null
+          set -o pipefail
+          perl -e '$| = 1; while (1) { sleep 60; print "Still evaluating nix-darwin configurations...\n"; }' &
+          heartbeat_pid=$!
+          cleanup() {
+            kill "$heartbeat_pid" 2>/dev/null || true
+            wait "$heartbeat_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+          nix eval --accept-flake-config --json .#darwinConfigurations --apply 'builtins.attrNames' |
+            jq -r '.[]' |
+            while IFS= read -r name; do
+              echo "Evaluating nix-darwin configuration: $name"
+              nix eval --accept-flake-config --raw ".#darwinConfigurations.$name.config.system.build.toplevel.drvPath" >/dev/null
+            done
 
       - name: Build configuration
         if: github.event_name == 'push'

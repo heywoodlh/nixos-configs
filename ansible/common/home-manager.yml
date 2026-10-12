@@ -18,6 +18,11 @@
       - /usr/bin/dbus-run-session
       - --
       - "{{ nix_binary_path }}"
+      - --max-jobs
+      - "1"
+      - --option
+      - cores
+      - "1"
       - --extra-experimental-features
       - nix-command flakes
       - run
@@ -38,6 +43,11 @@
       - /usr/bin/dbus-run-session
       - --
       - "{{ nix_binary_path }}"
+      - --max-jobs
+      - "1"
+      - --option
+      - cores
+      - "1"
       - --extra-experimental-features
       - nix-command flakes
       - run

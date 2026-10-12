@@ -21,6 +21,9 @@ verify_profiles() {
     if [[ -e /usr/bin/ubios-udapi-server ]]
     then
         test ! -e /nix
+        crontab -l | grep -Fx 'CRON_TZ="America/Denver"'
+        crontab -l | grep -Fx "#Ansible: weekly router reboot"
+        crontab -l | grep -Fx "30 3 * * 1 /usr/bin/systemctl reboot"
         return
     fi
 

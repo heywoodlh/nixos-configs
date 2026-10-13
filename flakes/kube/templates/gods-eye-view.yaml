@@ -9,6 +9,8 @@ metadata:
     app.kubernetes.io/instance: gods-eye-view
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: gods-eye-view
@@ -55,6 +57,7 @@ spec:
         - name: gods-eye-view
           image: "@image@"
           imagePullPolicy: IfNotPresent
+          workingDir: /workspace
           command:
             - /bin/sh
             - -ec

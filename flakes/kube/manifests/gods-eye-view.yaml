@@ -9,6 +9,8 @@ metadata:
     app.kubernetes.io/instance: gods-eye-view
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: gods-eye-view
@@ -55,6 +57,7 @@ spec:
         - name: gods-eye-view
           image: "docker.io/node:24.14.0-bookworm@sha256:5a593d74b632d1c6f816457477b6819760e13624455d587eef0fa418c8d0777b"
           imagePullPolicy: IfNotPresent
+          workingDir: /workspace
           command:
             - /bin/sh
             - -ec

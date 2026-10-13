@@ -1322,3 +1322,24 @@ spec:
     automated:
       prune: true
       selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gods-eye-view
+  namespace: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  source:
+    repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
+    targetRevision: HEAD
+    path: flakes/kube/manifests
+    directory:
+      include: "gods-eye-view.yaml"
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

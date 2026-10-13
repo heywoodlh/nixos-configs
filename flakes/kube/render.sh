@@ -22,6 +22,7 @@ applications=(
   "fuse-device-plugin"
   "ersatztv"
   "grafana"
+  "gods-eye-view"
   "hashcat"
   "healthchecks"
   "homepage"

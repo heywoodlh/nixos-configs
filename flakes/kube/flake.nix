@@ -1103,6 +1103,12 @@
           hostfolder = "/media/data-ssd/yattee";
           nodename = "homelab";
         };
+        "gods-eye-view" = mkKubeDrv "gods-eye-view" {
+          src = ./templates/gods-eye-view.yaml;
+          namespace = "default";
+          image = "docker.io/node:24.14.0-bookworm@sha256:5a593d74b632d1c6f816457477b6819760e13624455d587eef0fa418c8d0777b";
+          source_rev = "9beadbda6333b83f79aa03047e2d851830f01f6b";
+        };
         # Kubectl wrapper with plugins
         kubectl = let
           kubectl = (krew2nix.packages.${system}.kubectl.withKrewPlugins (plugins: [

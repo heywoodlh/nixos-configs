@@ -1,0 +1,134 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gods-eye-view
+  namespace: "@namespace@"
+  labels:
+    app.kubernetes.io/name: gods-eye-view
+    app.kubernetes.io/instance: gods-eye-view
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gods-eye-view
+      app.kubernetes.io/instance: gods-eye-view
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gods-eye-view
+        app.kubernetes.io/instance: gods-eye-view
+    spec:
+      initContainers:
+        - name: source
+          image: "@image@"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              apt-get update
+              apt-get install --yes --no-install-recommends git ca-certificates
+              git init /workspace
+              cd /workspace
+              git remote add origin https://github.com/bilawalsidhu/gods-eye-view.git
+              git fetch --depth 1 origin @source_rev@
+              git checkout --detach FETCH_HEAD
+              chown -R 1000:1000 /workspace
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspace
+      containers:
+        - name: gods-eye-view
+          image: "@image@"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              npm ci --cache /tmp/npm-cache
+              exec npm run dev -- --host 0.0.0.0
+          env:
+            - name: PORT
+              value: "5173"
+            - name: GEV_ALLOWED_HOSTS
+              value: "gods-eye-view"
+          ports:
+            - name: http
+              containerPort: 5173
+              protocol: TCP
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+            failureThreshold: 60
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 15
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 250m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspace
+            - name: npm-cache
+              mountPath: /tmp/npm-cache
+            - name: logs
+              mountPath: /logs
+              readOnly: true
+      volumes:
+        - name: workspace
+          emptyDir: {}
+        - name: npm-cache
+          emptyDir: {}
+        - name: logs
+          hostPath:
+            path: /logs
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gods-eye-view
+  namespace: "@namespace@"
+  labels:
+    app.kubernetes.io/name: gods-eye-view
+    app.kubernetes.io/instance: gods-eye-view
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "gods-eye-view"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: gods-eye-view
+    app.kubernetes.io/instance: gods-eye-view

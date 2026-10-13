@@ -39,6 +39,7 @@ spec:
               fi
               git fetch --depth 1 origin @source_rev@
               git checkout --detach -f FETCH_HEAD
+              npm ci --cache /tmp/npm-cache
               chown -R 1000:1000 /workspace
           resources:
             requests:
@@ -58,7 +59,6 @@ spec:
             - /bin/sh
             - -ec
             - |
-              npm ci --cache /workspace/.npm-cache
               exec npm run dev -- --host 0.0.0.0
           env:
             - name: PORT

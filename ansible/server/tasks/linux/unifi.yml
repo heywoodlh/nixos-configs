@@ -105,6 +105,14 @@
     env: yes
     value: /bin/bash
 
+- name: schedule weekly UniFi router reboot
+  ansible.builtin.cron:
+    name: "weekly router reboot"
+    minute: "30"
+    hour: "3"
+    weekday: "1"
+    job: "/usr/bin/systemctl reboot"
+
 - name: install osquery agent
   when: tailscale_server_check.status == 200
   block:

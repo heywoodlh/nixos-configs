@@ -134,8 +134,10 @@ in {
   };
 
   home.activation.flatpak = pkgs.lib.optionalString (system == "aarch64-linux") ''
-    ${pkgs.flatpak}/bin/flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.rustdesk.RustDesk
+    if [ ! -e /.dockerenv ]; then
+      ${pkgs.flatpak}/bin/flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+      ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub com.rustdesk.RustDesk
+    fi
   '';
 
   # Enable fontconfig

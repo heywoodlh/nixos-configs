@@ -26,6 +26,7 @@ assert.match(template, /spec:\n\s+replicas: 1\n\s+strategy:\n\s+type: Recreate\n
 assert.match(template, /name: data\n\s+mountPath: \/workspace/);
 assert.match(template, /name: data\n\s+hostPath:\n\s+path: "@hostfolder@"\n\s+type: DirectoryOrCreate/);
 assert.match(template, /git checkout --detach -f FETCH_HEAD\n\s+npm ci --cache \/tmp\/npm-cache\n\s+chown -R 1000:1000 \/workspace/);
+assert.match(template, /name: gods-eye-view\n\s+image: "@image@"\n\s+imagePullPolicy: IfNotPresent\n\s+workingDir: \/workspace\n\s+command:/);
 assert.match(template, /exec npm run dev -- --host 0\.0\.0\.0/);
 assert.doesNotMatch(template, /npm ci --cache \/workspace\/\.npm-cache/);
 assert.match(template, /git config --global --add safe\.directory \/workspace/);

@@ -30,10 +30,15 @@ spec:
               apt-get update
               apt-get install --yes --no-install-recommends git ca-certificates
               git init /workspace
+              git config --global --add safe.directory /workspace
               cd /workspace
-              git remote add origin https://github.com/bilawalsidhu/gods-eye-view.git
+              if git remote get-url origin >/dev/null 2>&1; then
+                git remote set-url origin https://github.com/bilawalsidhu/gods-eye-view.git
+              else
+                git remote add origin https://github.com/bilawalsidhu/gods-eye-view.git
+              fi
               git fetch --depth 1 origin 9beadbda6333b83f79aa03047e2d851830f01f6b
-              git checkout --detach FETCH_HEAD
+              git checkout --detach -f FETCH_HEAD
               chown -R 1000:1000 /workspace
           resources:
             requests:
@@ -43,7 +48,7 @@ spec:
               cpu: "1"
               memory: 1Gi
           volumeMounts:
-            - name: workspace
+            - name: data
               mountPath: /workspace
       containers:
         - name: gods-eye-view
@@ -53,7 +58,7 @@ spec:
             - /bin/sh
             - -ec
             - |
-              npm ci --cache /tmp/npm-cache
+              npm ci --cache /workspace/.npm-cache
               exec npm run dev -- --host 0.0.0.0
           env:
             - name: PORT
@@ -93,18 +98,16 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
           volumeMounts:
-            - name: workspace
+            - name: data
               mountPath: /workspace
-            - name: npm-cache
-              mountPath: /tmp/npm-cache
             - name: logs
               mountPath: /logs
               readOnly: true
       volumes:
-        - name: workspace
-          emptyDir: {}
-        - name: npm-cache
-          emptyDir: {}
+        - name: data
+          hostPath:
+            path: "/media/data-ssd/gods-eye"
+            type: DirectoryOrCreate
         - name: logs
           hostPath:
             path: /logs

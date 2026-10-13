@@ -97,6 +97,33 @@ roleRef:
   name: hermes-agent-exec
   apiGroup: rbac.authorization.k8s.io
 ---
+# Namespace-scoped exec access for operational diagnostics in monitoring.
+# Kubernetes RBAC cannot restrict pods/exec by label, so scope this permission
+# to the namespace and the exec/attach subresources only.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: hermes-agent-logbash-exec
+  namespace: monitoring
+rules:
+- apiGroups: [""]
+  resources: ["pods/exec", "pods/attach"]
+  verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hermes-agent-logbash-exec
+  namespace: monitoring
+subjects:
+- kind: ServiceAccount
+  name: hermes-agent
+  namespace: machine-learning
+roleRef:
+  kind: Role
+  name: hermes-agent-logbash-exec
+  apiGroup: rbac.authorization.k8s.io
+---
 # Namespace-scoped Role: grants full access within sandbox namespace for testing
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role

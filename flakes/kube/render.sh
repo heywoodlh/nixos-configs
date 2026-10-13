@@ -4,7 +4,6 @@ root_dir="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 applications=(
   "actual"
-  "android"
   "attic"
   "argo"
   "beeper-bridges"
@@ -33,7 +32,6 @@ applications=(
   "immich-machine-learning"
   "istio"
   "iperf"
-  "lancache"
   "lmstudio"
   "media"
   "metasploit"

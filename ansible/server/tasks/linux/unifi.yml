@@ -87,6 +87,12 @@
   when:
     - syslog_config.changed
 
+- name: Ensure syslog-ng service is enabled and running
+  ansible.builtin.systemd_service:
+    name: syslog-ng.service
+    enabled: true
+    state: started
+
 - name: install deps
   ansible.builtin.apt:
     pkg:

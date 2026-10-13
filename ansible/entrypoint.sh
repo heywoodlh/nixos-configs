@@ -46,6 +46,14 @@ do
         # server build
         ansible-playbook --connection=local --extra-vars nixos_configs_root=path:/nixos-configs /nixos-configs/ansible/server/standalone.yml || exit 1
         verify_profiles
+        if [[ -e /usr/bin/ubios-udapi-server ]]
+        then
+            # Verify a converged UniFi playbook recovers an independently
+            # failed syslog-ng service, not merely a changed configuration.
+            systemctl stop syslog-ng.service
+            ansible-playbook --connection=local --extra-vars nixos_configs_root=path:/nixos-configs /nixos-configs/ansible/server/standalone.yml || exit 1
+            systemctl is-active --quiet syslog-ng.service
+        fi
         printf "server playbooks completed"
     fi
     if [[ "${target}" == "workstation" ]]

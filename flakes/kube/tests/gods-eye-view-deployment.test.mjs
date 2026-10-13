@@ -10,7 +10,7 @@ const applications = readFileSync(resolve(kubeDir, "manifests/apps.yaml"), "utf8
 
 assert.match(template, /name: gods-eye-view/);
 assert.match(template, /tailscale\.com\/hostname: "gods-eye-view"/);
-assert.match(template, /name: GEV_ALLOWED_HOSTS\n\s+value: "gods-eye-view"/);
+assert.match(template, /name: GEV_ALLOWED_HOSTS\n\s+value: "gods-eye-view,gods-eye-view\.barn-banana\.ts\.net,gods-eye-view\.default\.svc\.cluster\.local,gods-eye\.heywoodlh\.io"/);
 assert.match(template, /tailscale\.com\/tags: "tag:http"/);
 assert.match(template, /port: 80/);
 assert.match(template, /type: ClusterIP/);

@@ -67,7 +67,7 @@ spec:
             - name: PORT
               value: "5173"
             - name: GEV_ALLOWED_HOSTS
-              value: "gods-eye-view"
+              value: "gods-eye-view,gods-eye-view.barn-banana.ts.net,gods-eye-view.default.svc.cluster.local,gods-eye.heywoodlh.io"
           ports:
             - name: http
               containerPort: 5173

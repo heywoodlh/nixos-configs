@@ -9,6 +9,8 @@ metadata:
     app.kubernetes.io/instance: gods-eye-view
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: gods-eye-view

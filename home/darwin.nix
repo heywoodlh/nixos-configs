@@ -4,6 +4,23 @@ let
   system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
   myTmux = myFlakes.packages.${system}.tmux;
+  testing = pkgs.writeShellScript "test" ''
+    verb="$1"
+    if [[ "$verb" == "on" ]]
+    then
+      launchctl_verb="unload"
+      tailscale_verb="off"
+    else
+      launchctl_verb="load"
+      tailscale_verb="on"
+    fi
+    /bin/launchctl $launchctl_verb $HOME/Library/LaunchAgents/org.nixos.skhd.plist
+    /bin/launchctl $launchctl_verb $HOME/Library/LaunchAgents/org.nixos.yabai.plist
+    /bin/launchctl $launchctl_verb $HOME/Library/LaunchAgents/org.nixos.sketchybar.plist
+    echo "Reminder: toggle Tailscale $tailscale_verb"
+  '';
+  testing-on = pkgs.writeShellScriptBin "testing-enable" "${testing} on";
+  testing-off = pkgs.writeShellScriptBin "testing-disable" "${testing} off";
 in {
   imports = [
     ./base.nix
@@ -16,6 +33,8 @@ in {
     m-cli
     mas
     pinentry_mac
+    testing-on
+    testing-off
   ];
 
   home.shellAliases = {

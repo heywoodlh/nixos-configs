@@ -471,7 +471,7 @@
         grayjay = mkKubeDrv "grayjay" {
           src = ./templates/grayjay.yaml;
           namespace = "default";
-          image = "docker.io/heywoodlh/grayjay:2026_03";
+          image = "docker.io/heywoodlh/grayjay:2026_10";
           nodename = "homelab";
           hostfolder = "/media/data-ssd/grayjay";
         };

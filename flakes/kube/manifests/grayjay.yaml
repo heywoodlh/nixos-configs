@@ -91,10 +91,33 @@ spec:
         app: grayjay
     spec:
       serviceAccountName: grayjay
+      initContainers:
+      - name: initialize-data-volume
+        image: "docker.io/heywoodlh/grayjay:2026_10"
+        command: ["chown", "-R", "1000:1000", "/data"]
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi
+        volumeMounts:
+        - name: http-datadir
+          mountPath: /data
       containers:
       - name: grayjay
         image: "docker.io/heywoodlh/grayjay:2026_10"
         imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 250m
+            memory: 1Gi
+          limits:
+            cpu: 2
+            memory: 4Gi
         ports:
         - name: grayjay-http
           containerPort: 11338

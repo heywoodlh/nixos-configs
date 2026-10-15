@@ -94,7 +94,7 @@ spec:
       initContainers:
       - name: initialize-data-volume
         image: "docker.io/heywoodlh/grayjay:2026_10"
-        command: ["chown", "-R", "1000:1000", "/data"]
+        command: ["/bin/sh", "-c", "chown -R 1000:1000 /data && rm -f /data/cef_cache/SingletonLock /data/cef_cache/SingletonCookie /data/cef_cache/SingletonSocket"]
         securityContext:
           runAsUser: 0
         resources:

@@ -7,7 +7,7 @@ text=$(<"$manifest")
 for required in \
   'initContainers:' \
   'name: initialize-data-volume' \
-  'command: ["chown", "-R", "1000:1000", "/data"]' \
+  'command: ["/bin/sh", "-c", "chown -R 1000:1000 /data && rm -f /data/cef_cache/SingletonLock /data/cef_cache/SingletonCookie /data/cef_cache/SingletonSocket"]' \
   'runAsUser: 0' \
   'name: http-datadir'; do
   if [[ "$text" != *"$required"* ]]; then

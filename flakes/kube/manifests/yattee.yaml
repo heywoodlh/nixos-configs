@@ -34,6 +34,8 @@ spec:
           env:
             - name: SECURE_COOKIES
               value: "false"
+            - name: CORS_ORIGINS
+              value: "yattee.barn-banana.ts.net,yattee.default.svc.cluster.local"
           startupProbe:
             tcpSocket:
               port: http
@@ -79,7 +81,7 @@ metadata:
     app.kubernetes.io/instance: yattee
   annotations:
     tailscale.com/expose: "true"
-    tailscale.com/hostname: "youtube"
+    tailscale.com/hostname: "yattee"
     tailscale.com/tags: "tag:http"
 spec:
   type: ClusterIP

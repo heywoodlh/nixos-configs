@@ -261,6 +261,10 @@ in {
     };
 
     security = {
+      pki.caCertificateBlacklist = [
+        "Comodo AAA Services root"
+        "emSign ECC Root CA - G3"
+      ];
       rtkit.enable = cfg.audio;
       pam.loginLimits = lib.optionals (cfg.audio) [
         {

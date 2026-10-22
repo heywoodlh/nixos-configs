@@ -3,6 +3,7 @@ rec {
 
   inputs = {
     nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
+    nixpkgs-edge.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
     nixpkgs-lts.follows = "nixpkgs";
     nixpkgs-stable.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-26.05-chilled/0.1";
     nixpkgs-nvidia.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
@@ -355,6 +356,7 @@ rec {
 
   outputs = inputs@{ self,
                       nixpkgs,
+                      nixpkgs-edge,
                       nixpkgs-stable,
                       nixpkgs-nvidia,
                       nixpkgs-sunshine,

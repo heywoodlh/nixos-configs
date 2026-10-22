@@ -15,9 +15,32 @@
         "image = {\n.*repo = \"(?<depName>.*)\";\n.*tag = \"(?<currentValue>.*)\";"
       ],
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["flakes/kube\/flake.nix"],
+      "matchStringsStrategy": "any",
+      "matchStrings": [
+        "immich = mkKubeDrv \"immich\" rec \\{[\\s\\S]*?version = \"(?<currentValue>[^\"]+)\";",
+        "immich-machine-learning = mkKubeDrv \"immich-machine-learning\" rec \\{[\\s\\S]*?version = \"(?<currentValue>[^\"]+)\";"
+      ],
+      "depNameTemplate": "ghcr.io/immich-app/immich-server",
+      "datasourceTemplate": "docker"
     }
   ],
   "packageRules": [
+    {
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": [
+        "docker.io/linuxserver/plex",
+        "ghcr.io/immich-app/immich-server"
+      ],
+      "groupName": "Plex and Immich",
+      "automerge": true,
+      "schedule": ["* 3 * * *"],
+      "automergeSchedule": ["* 3 * * *"],
+      "timezone": "America/Denver"
+    },
     {
       "matchPaths": [
         "flakes/kube/**"

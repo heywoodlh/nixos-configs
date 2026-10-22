@@ -645,7 +645,7 @@
           namespace = "media";
           replicas = 1;
           media_uid = "995";
-          plex_image = "docker.io/linuxserver/plex:1.43.3.10896-cb3ebc72d-ls323";
+          plex_image = "docker.io/linuxserver/plex:latest";
           plex_hostfolder = "/media/config/services/plex";
           radarr_image = "docker.io/linuxserver/radarr:6.3.0.10514-ls315";
           radarr_hostfolder = "/media/config/services/radarr";

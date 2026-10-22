@@ -31,7 +31,6 @@ in {
   };
 
   heywoodlh.home = {
-    dockerBins.enable = true;
     marp.enable = true;
     ghostty.enable = true;
     cava = pkgs.stdenv.hostPlatform.isLinux;

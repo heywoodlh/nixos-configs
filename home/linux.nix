@@ -61,6 +61,5 @@ in {
 
   heywoodlh.home = {
     bluetuith = true;
-    dockerBins.enable = true;
   };
 }

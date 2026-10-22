@@ -18,7 +18,7 @@ in {
       backend = "docker";
       containers = {
         cloudflared = {
-          image = "docker.io/erisamoe/cloudflared:2025.11.1";
+          image = "docker.io/cloudflare/cloudflared:2026.10.3";
           autoStart = true;
           cmd = [
             "tunnel"

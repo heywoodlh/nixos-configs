@@ -217,6 +217,7 @@ in
       // cfg.environment;
       environmentFiles =
         cfg.environmentFiles ++ lib.optionals cfg.remote.enable [ cfg.remote.credentialsFile ];
+      extraPackages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.systemd ];
     };
 
     home.packages =

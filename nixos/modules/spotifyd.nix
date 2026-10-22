@@ -37,14 +37,22 @@ in {
       allowedTCPPorts = [ cfg.ports.zeroconf ];
       allowedUDPPorts = [ cfg.ports.mdns ];
     };
-    home-manager.users.${username}.services.spotifyd = {
-      enable = true;
-      settings.global = {
-        backend = "alsa";
-        device = "default";
-        device_name = config.networking.hostName;
-        device_type = "computer";
-        zeroconf_port = cfg.ports.zeroconf;
+    home-manager.users.${username} = {
+      services.spotifyd = {
+        enable = true;
+        settings.global = {
+          backend = "alsa";
+          device = "default";
+          device_name = config.networking.hostName;
+          device_type = "computer";
+          zeroconf_port = cfg.ports.zeroconf;
+        };
+      };
+
+      # Keep Spotify Connect available after an unexpected daemon exit.
+      systemd.user.services.spotifyd.Service = {
+        Restart = mkForce "on-failure";
+        RestartSec = mkForce "12s";
       };
     };
   };

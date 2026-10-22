@@ -1,0 +1,38 @@
+name: update-nixpkgs-edge
+
+on:
+  schedule:
+    - cron: "0 12 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: true
+
+      - name: Update only nixpkgs-edge
+        run: nix flake update nixpkgs-edge
+
+      - name: Create or update pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/nixpkgs-edge
+          delete-branch: true
+          commit-message: "chore(nix): update nixpkgs-edge"
+          title: "chore(nix): update nixpkgs-edge"
+          body: |
+            Automated weekly update of the selectively-consumed `nixpkgs-edge` input.
+
+            This workflow runs only `nix flake update nixpkgs-edge`; it does not update the primary Nixpkgs input or any other lock-file node.

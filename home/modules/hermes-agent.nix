@@ -237,6 +237,18 @@ in
       ${pkgs.coreutils}/bin/chmod 600 "${cfg.remote.credentialsFile}"
     '';
 
+    systemd.user.services.hermes-agent.Service = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.remote.enable) {
+      Environment = lib.mkAfter [
+        "API_SERVER_ENABLED=true"
+        "API_SERVER_HOST=${cfg.remote.host}"
+        "API_SERVER_PORT=${toString cfg.remote.apiPort}"
+      ];
+      EnvironmentFile = [ cfg.remote.credentialsFile ];
+    };
+    systemd.user.services.hermes-backend.Service = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.remote.enable) {
+      EnvironmentFile = [ cfg.remote.credentialsFile ];
+    };
+
     launchd.agents = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
       signal-cli-daemon = {
         enable = cfg.signal;
@@ -249,21 +261,16 @@ in
       };
     };
 
-    systemd.user = lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && cfg.signal) {
-      enable = true;
-      services = {
-        signal-cli-daemon = {
-          Unit = {
-            Description = "signal-cli HTTP daemon";
-          };
-          Install = {
-            WantedBy = [ "default.target" ];
-          };
-          Service = {
-            ExecStart = "${signalCliDaemon}";
-            Restart = "on-failure";
-          };
-        };
+    systemd.user.services.signal-cli-daemon = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.signal) {
+      Unit = {
+        Description = "signal-cli HTTP daemon";
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+      Service = {
+        ExecStart = "${signalCliDaemon}";
+        Restart = "on-failure";
       };
     };
 

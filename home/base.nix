@@ -1,4 +1,4 @@
-{ config, lib, pkgs, myFlakes, ... }:
+{ config, lib, pkgs, myFlakes, nixpkgs-edge, ... }:
 
 with lib;
 
@@ -37,6 +37,10 @@ let
   then "Library/Application Support/gomuks/keybindings.yaml"
   else ".config/gomuks/keybindings.yaml";
   myOpWrapper = myFlakes.packages.${system}.op-wrapper;
+  edgePkgs = import nixpkgs-edge {
+    inherit system;
+    config.allowUnfree = true;
+  };
   op-wrapper = "${myOpWrapper}/bin/op-wrapper";
   op-backup-script = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/c938124eff5dddd3aad226a5a5a6ae65441211b7/backup.sh";
@@ -883,6 +887,7 @@ in {
     syncthing = true;
     llm = {
       enable = true;
+      pi.package = edgePkgs.pi-coding-agent;
       hermes-remote.enable = true;
       pi.extraConf = {
         homelab = {

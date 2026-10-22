@@ -453,7 +453,7 @@ rec {
       ./home/modules/pandoc.nix
       ./home/modules/paseo.nix
       ./home/modules/onepassword.nix
-      ./home/modules/hermes.nix
+      ./home/modules/hermes-agent.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -954,6 +954,7 @@ rec {
           '';
 
           networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
+            8642
             9119
           ];
 
@@ -964,6 +965,7 @@ rec {
           systemd.targets.hybrid-sleep.enable = false;
 
           heywoodlh = {
+            cloudflared = true;
             sshd.enable = true;
             intel-mac = true;
             nixos = {
@@ -1011,6 +1013,10 @@ rec {
                 dashboard = {
                   enable = true;
                   address = "100.67.47.0";
+                };
+                remote = {
+                  enable = true;
+                  host = "nixos-ops.barn-banana.ts.net";
                 };
                 model = {
                   default = "gpt-5.6-terra";

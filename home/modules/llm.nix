@@ -34,6 +34,11 @@ let
     /usr/bin/defaults write com.apple.CloudSubscriptionFeatures.optIn "545129924" -bool "true"
     exec ${pkgs.apfel-llm}/bin/apfel --serve
   '';
+  hermesRemoteOpencode = pkgs.writeShellScriptBin "opencode-hermes-remote" ''
+    export HERMES_REMOTE_USERNAME="$("${homeDir}/bin/hermes-remote-credentials" username)"
+    export HERMES_REMOTE_API_KEY="$("${homeDir}/bin/hermes-remote-credentials" password)"
+    exec ${pkgs.opencode}/bin/opencode "$@"
+  '';
   lmstudioType = submodule {
     options = {
       enable = mkOption {
@@ -250,6 +255,14 @@ let
       };
     };
   };
+  hermesRemoteType = submodule {
+    options = {
+      enable = mkOption { default = false; type = bool; description = "Enable the remote Hermes Agent provider in local TUI harnesses."; };
+      endpoint = mkOption { default = "http://nixos-ops.barn-banana.ts.net:8642/v1"; type = str; description = "OpenAI-compatible Hermes Agent API endpoint."; };
+      name = mkOption { default = "hermes-remote"; type = str; description = "Provider name for Hermes in local TUI harnesses."; };
+      model = mkOption { default = "hermes-agent"; type = str; description = "Model name exposed by the remote Hermes Agent API server."; };
+    };
+  };
 in {
   options = {
     heywoodlh.home.llm = {
@@ -285,6 +298,7 @@ in {
         description = "Enable pi-coding-agent configuration.";
         type = piType;
       };
+      hermes-remote = mkOption { default = {}; description = "Remote Hermes Agent configuration for local TUI harnesses."; type = hermesRemoteType; };
     };
   };
   config = mkIf cfg.enable {
@@ -308,6 +322,8 @@ in {
       apfel-llm
     ] ++ lib.optionals (cfg.pi.enable) [
       cfg.pi.package
+    ] ++ lib.optionals (cfg.hermes-remote.enable && cfg.opencode.enable) [
+      hermesRemoteOpencode
     ];
 
     heywoodlh.home.helix.ai = true;
@@ -420,7 +436,7 @@ in {
 
     programs.opencode = optionalAttrs (cfg.opencode.enable) {
       enable = cfg.opencode.enable;
-      settings = cfg.opencode.extraConf // optionalAttrs (cfg.opencode.enable && (cfg.lmstudio.enable || cfg.opencode.vllm.enable)) {
+      settings = cfg.opencode.extraConf // optionalAttrs (cfg.lmstudio.enable || cfg.opencode.vllm.enable || cfg.hermes-remote.enable) {
         provider = {
           vllm = optionalAttrs (cfg.opencode.vllm.enable) {
             npm = "@ai-sdk/openai-compatible";
@@ -448,6 +464,15 @@ in {
                 context_length = cfg.lmstudio.model.context_length;
               };
             };
+          };
+          "${cfg.hermes-remote.name}" = optionalAttrs cfg.hermes-remote.enable {
+            npm = "@ai-sdk/openai-compatible";
+            name = cfg.hermes-remote.name;
+            options = {
+              baseURL = cfg.hermes-remote.endpoint;
+              apiKey = "{env:HERMES_REMOTE_API_KEY}";
+            };
+            models."${cfg.hermes-remote.model}".name = cfg.hermes-remote.model;
           };
         };
       };
@@ -525,6 +550,13 @@ in {
               };
             }
           ];
+        };
+      }) // (lib.optionalAttrs cfg.hermes-remote.enable {
+        "${cfg.hermes-remote.name}" = {
+          baseUrl = cfg.hermes-remote.endpoint;
+          api = "openai-completions";
+          apiKey = "!${homeDir}/bin/hermes-remote-credentials password";
+          models = [{ id = cfg.hermes-remote.model; name = cfg.hermes-remote.model; }];
         };
       }) // cfg.pi.extraConf;
     };

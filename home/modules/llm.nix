@@ -39,6 +39,10 @@ let
     export HERMES_REMOTE_API_KEY="$("${homeDir}/bin/hermes-remote-credentials" password)"
     exec ${pkgs.opencode}/bin/opencode "$@"
   '';
+  hermesRemotePi = pkgs.writeShellScriptBin "pi" ''
+    ${myFlakes.packages.${stdenv.hostPlatform.system}.op-wrapper}/bin/op-unlock
+    exec ${cfg.pi.package}/bin/pi "$@"
+  '';
   lmstudioType = submodule {
     options = {
       enable = mkOption {
@@ -321,7 +325,7 @@ in {
     ] ++ lib.optionals (cfg.apfel) [
       apfel-llm
     ] ++ lib.optionals (cfg.pi.enable) [
-      cfg.pi.package
+      (if cfg.hermes-remote.enable then hermesRemotePi else cfg.pi.package)
     ] ++ lib.optionals (cfg.hermes-remote.enable && cfg.opencode.enable) [
       hermesRemoteOpencode
     ];

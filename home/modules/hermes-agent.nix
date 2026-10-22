@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 with lib.types;
@@ -46,6 +51,57 @@ let
       };
     };
   };
+  remoteType = submodule {
+    options = {
+      enable = mkOption {
+        default = false;
+        description = "Expose the Hermes dashboard and API server to remote Tailscale clients.";
+        type = bool;
+      };
+      host = mkOption {
+        default = "";
+        description = "Tailscale DNS name used to bind and access the remote Hermes endpoint.";
+        type = str;
+      };
+      dashboardPort = mkOption {
+        default = 9119;
+        description = "Port for the remote Hermes dashboard.";
+        type = port;
+      };
+      apiPort = mkOption {
+        default = 8642;
+        description = "Port for the OpenAI-compatible Hermes Agent API server.";
+        type = port;
+      };
+      credentialsFile = mkOption {
+        default = "${homeDir}/.config/hermes/remote.env";
+        description = "Runtime environment file containing remote dashboard and API credentials.";
+        type = str;
+      };
+    };
+  };
+  remoteCredentialsSetup = pkgs.writeShellScriptBin "hermes-remote-credentials-setup" ''
+    set -euo pipefail
+    credentials_file="${cfg.remote.credentialsFile}"
+    mkdir -p "$(dirname "$credentials_file")"
+    umask 077
+    printf 'Dashboard/API username: ' >&2
+    IFS= read -r username
+    printf 'Dashboard/API password: ' >&2
+    stty -echo
+    IFS= read -r password
+    stty echo
+    printf '\n' >&2
+    auth_secret="$(${pkgs.openssl}/bin/openssl rand -base64 32)"
+    cat > "$credentials_file" <<EOF
+    API_SERVER_KEY=$password
+    HERMES_DASHBOARD_BASIC_AUTH_USERNAME=$username
+    HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=$password
+    HERMES_DASHBOARD_BASIC_AUTH_SECRET=$auth_secret
+    EOF
+    chmod 600 "$credentials_file"
+    ${pkgs.systemd}/bin/systemctl --user restart hermes-agent.service hermes-backend.service
+  '';
   compose = pkgs.writeText "compose.yaml" ''
     services:
       camofox:
@@ -62,7 +118,8 @@ let
           start_period: 30s
           start_interval: 5s
   '';
-in {
+in
+{
   options = {
     heywoodlh.home.hermes = {
       enable = mkOption {
@@ -81,17 +138,17 @@ in {
         type = attrs;
       };
       settings = mkOption {
-        default = {};
+        default = { };
         description = "Extra settings to pass to services.hermes-agent.settings.";
         type = attrs;
       };
       environment = mkOption {
-        default = {};
+        default = { };
         description = "Extra environment vars to pass to services.hermes-agent.environment.";
         type = attrs;
       };
       environmentFiles = mkOption {
-        default = [];
+        default = [ ];
         description = ''
           Environment files to provide hermes services.
         '';
@@ -104,9 +161,14 @@ in {
         '';
       };
       dashboard = mkOption {
-        default = {};
+        default = { };
         description = "Hermes dashboard configuration.";
         type = dashboardType;
+      };
+      remote = mkOption {
+        default = { };
+        description = "Remote Hermes dashboard and OpenAI-compatible API configuration.";
+        type = remoteType;
       };
       signal = mkOption {
         default = true;
@@ -121,8 +183,12 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.dashboard.enable -> cfg.dashboard.address != "";
+        assertion = (cfg.dashboard.enable && !cfg.remote.enable) -> cfg.dashboard.address != "";
         message = "heywoodlh.home.hermes.dashboard.address must be set when heywoodlh.home.hermes.dashboard.enable is true.";
+      }
+      {
+        assertion = cfg.remote.enable -> cfg.remote.host != "";
+        message = "heywoodlh.home.hermes.remote.host must be set when heywoodlh.home.hermes.remote.enable is true.";
       }
     ];
 
@@ -130,24 +196,46 @@ in {
     services.hermes-agent = {
       enable = true;
       gateway.enable = true;
-      backend = lib.optionalAttrs cfg.dashboard.enable {
+      backend = lib.optionalAttrs (cfg.dashboard.enable || cfg.remote.enable) {
         mode = "dashboard";
-        host = cfg.dashboard.address;
+        host = if cfg.remote.enable then cfg.remote.host else cfg.dashboard.address;
+        port = if cfg.remote.enable then cfg.remote.dashboardPort else 9119;
+        waitFor = if cfg.remote.enable then "hostname" else null;
       };
       settings = {
         model = cfg.model;
-      } // cfg.settings;
+      }
+      // cfg.settings;
       environment = {
         CAMOFOX_URL = "http://localhost:9377";
-      } // cfg.environment;
-      environmentFiles = cfg.environmentFiles;
+      }
+      // lib.optionalAttrs cfg.remote.enable {
+        API_SERVER_ENABLED = "true";
+        API_SERVER_HOST = cfg.remote.host;
+        API_SERVER_PORT = toString cfg.remote.apiPort;
+      }
+      // cfg.environment;
+      environmentFiles =
+        cfg.environmentFiles ++ lib.optionals cfg.remote.enable [ cfg.remote.credentialsFile ];
     };
 
-    home.packages = with pkgs; [
-      dockerComposeUp
-    ] ++ lib.optionals (cfg.signal) [
-      signal-cli
-    ];
+    home.packages =
+      with pkgs;
+      [
+        dockerComposeUp
+      ]
+      ++ lib.optionals cfg.remote.enable [
+        remoteCredentialsSetup
+      ]
+      ++ lib.optionals (cfg.signal) [
+        signal-cli
+      ];
+
+    home.activation.hermes-remote-credentials-file = lib.mkIf cfg.remote.enable ''
+      ${pkgs.coreutils}/bin/mkdir -p "${homeDir}/.config/hermes"
+      ${pkgs.coreutils}/bin/touch "${cfg.remote.credentialsFile}"
+      ${pkgs.coreutils}/bin/chmod 600 "${cfg.remote.credentialsFile}"
+    '';
 
     launchd.agents = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
       signal-cli-daemon = {

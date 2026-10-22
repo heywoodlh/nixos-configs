@@ -36,5 +36,10 @@ in {
         };
       };
     };
+    systemd.services.docker-cloudflared.serviceConfig = {
+      Restart = mkForce "always";
+      RestartSec = mkForce "12s";
+      StartLimitIntervalSec = 0;
+    };
   };
 }

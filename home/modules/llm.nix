@@ -34,8 +34,8 @@ let
     /usr/bin/defaults write com.apple.CloudSubscriptionFeatures.optIn "545129924" -bool "true"
     exec ${pkgs.apfel-llm}/bin/apfel --serve
   '';
-  hermesRemoteOpencode = pkgs.writeShellScriptBin "opencode-hermes-remote" ''
-    export HERMES_REMOTE_USERNAME="$("${homeDir}/bin/hermes-remote-credentials" username)"
+  hermesRemoteOpencode = pkgs.writeShellScriptBin "opencode" ''
+    ${myFlakes.packages.${stdenv.hostPlatform.system}.op-wrapper}/bin/op-unlock
     export HERMES_REMOTE_API_KEY="$("${homeDir}/bin/hermes-remote-credentials" password)"
     exec ${pkgs.opencode}/bin/opencode "$@"
   '';
@@ -440,6 +440,7 @@ in {
 
     programs.opencode = optionalAttrs (cfg.opencode.enable) {
       enable = cfg.opencode.enable;
+      package = if cfg.hermes-remote.enable then hermesRemoteOpencode else pkgs.opencode;
       settings = cfg.opencode.extraConf // optionalAttrs (cfg.lmstudio.enable || cfg.opencode.vllm.enable || cfg.hermes-remote.enable) {
         provider = {
           vllm = optionalAttrs (cfg.opencode.vllm.enable) {

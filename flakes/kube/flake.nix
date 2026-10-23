@@ -65,6 +65,10 @@
       url = "github:kasmtech/kasm-helm/release/1.16.0";
       flake = false;
     };
+    harbor-helm = {
+      url = "github:goharbor/harbor-helm/v1.19.4";
+      flake = false;
+    };
   };
 
   outputs = inputs @ {
@@ -86,6 +90,7 @@
     elastic-cloud,
     krew2nix,
     kasmweb,
+    harbor-helm,
     fish-flake,
   }:
     flake-utils.lib.eachDefaultSystem (system: let
@@ -597,6 +602,7 @@
           };
         });
         istio = import ./istio.nix { inherit pkgs kubelib nixhelm mkKubeDrv; };
+        harbor = import ./harbor.nix { inherit pkgs kubelib harbor-helm; };
         kubevirt = mkKubeDrv "kubevirt" {
           src = ./templates/kubevirt.yaml;
           version = "v1.4.0";

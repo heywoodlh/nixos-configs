@@ -22,6 +22,7 @@ applications=(
   "fuse-device-plugin"
   "ersatztv"
   "grafana"
+  "harbor"
   "gods-eye-view"
   "hashcat"
   "healthchecks"
@@ -88,6 +89,9 @@ do
     if [[ "${app}" == "crowdsec" ]]
     then
       destination_namespace="security"
+    elif [[ "${app}" == "harbor" ]]
+    then
+      destination_namespace="harbor"
     fi
     #nix build --option substitute false "${root_dir}#${app}"
     nix build "${root_dir}#${app}" || error="true"

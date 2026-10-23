@@ -89,6 +89,20 @@ in {
     fsType = "ext4";
   };
 
+  systemd.tmpfiles.rules = [
+    "d /media/data-ssd/harbor 0755 root root -"
+    "d /media/data-ssd/harbor/registry 0750 10000 10000 -"
+    "d /media/data-ssd/harbor/database 0750 999 999 -"
+    "d /media/data-ssd/harbor/redis 0750 999 999 -"
+  ];
+
+  environment.etc."rancher/k3s/registries.yaml".text = ''
+    mirrors:
+      "harbor.barn-banana.ts.net":
+        endpoint:
+          - "http://harbor.barn-banana.ts.net"
+  '';
+
   # Enable mullvad wireguard
   networking.wg-quick.interfaces = {
     mullvad = {
@@ -230,6 +244,7 @@ in {
   in {
     after = mediaMounts;
     requires = mediaMounts;
+    restartTriggers = [ config.environment.etc."rancher/k3s/registries.yaml".source ];
   };
 
   # Use avahi for home-assistant service discovery

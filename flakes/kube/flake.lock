@@ -153,6 +153,23 @@
         "type": "github"
       }
     },
+    "harbor-helm": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792056299,
+        "narHash": "sha256-f/RVQJ3KaJJfo7bN+jOvzNfwUwUrAMJykUp2cpwuIuw=",
+        "owner": "goharbor",
+        "repo": "harbor-helm",
+        "rev": "321159f4129ef8ccd4476047d4c96f582e2e036e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "goharbor",
+        "ref": "v1.19.4",
+        "repo": "harbor-helm",
+        "type": "github"
+      }
+    },
     "haumea": {
       "inputs": {
         "nixpkgs": [
@@ -369,6 +386,7 @@
         "envoy-bouncer-helm": "envoy-bouncer-helm",
         "fish-flake": "fish-flake",
         "flake-utils": "flake-utils",
+        "harbor-helm": "harbor-helm",
         "kasmweb": "kasmweb",
         "krew2nix": "krew2nix",
         "nfs-helm": "nfs-helm",

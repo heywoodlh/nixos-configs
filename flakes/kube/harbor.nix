@@ -121,7 +121,7 @@ let
     apiVersion: onepassword.com/v1
     kind: OnePasswordItem
     metadata:
-      name: harbor-core
+      name: harbor-chart-core
       namespace: harbor
     spec:
       itemPath: "vaults/kubernetes/items/k8s/harbor"
@@ -129,7 +129,7 @@ let
     apiVersion: onepassword.com/v1
     kind: OnePasswordItem
     metadata:
-      name: harbor-database
+      name: harbor-chart-database
       namespace: harbor
     spec:
       itemPath: "vaults/kubernetes/items/k8s/harbor"
@@ -137,7 +137,7 @@ let
     apiVersion: onepassword.com/v1
     kind: OnePasswordItem
     metadata:
-      name: harbor-jobservice
+      name: harbor-chart-jobservice
       namespace: harbor
     spec:
       itemPath: "vaults/kubernetes/items/k8s/harbor"
@@ -145,7 +145,7 @@ let
     apiVersion: onepassword.com/v1
     kind: OnePasswordItem
     metadata:
-      name: harbor-registry
+      name: harbor-chart-registry
       namespace: harbor
     spec:
       itemPath: "vaults/kubernetes/items/k8s/harbor"

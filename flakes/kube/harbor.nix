@@ -14,9 +14,23 @@ let
         tls.enabled = false;
       };
       externalURL = "http://harbor.barn-banana.ts.net";
-      harborAdminPassword = "managed-by-onepassword";
-      secretKey = "managed-by-onepassword";
-      secret = "managed-by-onepassword";
+      existingSecretAdminPassword = "harbor-chart-core";
+      existingSecretAdminPasswordKey = "HARBOR_ADMIN_PASSWORD";
+      existingSecretSecretKey = "harbor-chart-core";
+      core = {
+        existingSecret = "harbor-chart-core";
+        secretName = "harbor-chart-core";
+        existingXsrfSecret = "harbor-chart-core";
+      };
+      jobservice.existingSecret = "harbor-chart-jobservice";
+      registry = {
+        existingSecret = "harbor-chart-registry";
+        credentials.existingSecret = "harbor-chart-registry";
+      };
+      # The chart only permits an existing database password through the
+      # external-database interface.  Its host continues to be the internal
+      # database Service, while this dedicated secret supplies the password.
+      database.external.existingSecret = "harbor-chart-database-password";
       updateStrategy.type = "Recreate";
       persistence = {
         enabled = true;
@@ -137,6 +151,14 @@ let
     apiVersion: onepassword.com/v1
     kind: OnePasswordItem
     metadata:
+      name: harbor-chart-database-password
+      namespace: harbor
+    spec:
+      itemPath: "vaults/kubernetes/items/harbor-db-password"
+    ---
+    apiVersion: onepassword.com/v1
+    kind: OnePasswordItem
+    metadata:
       name: harbor-chart-jobservice
       namespace: harbor
     spec:
@@ -146,6 +168,14 @@ let
     kind: OnePasswordItem
     metadata:
       name: harbor-chart-registry
+      namespace: harbor
+    spec:
+      itemPath: "vaults/kubernetes/items/2bal2uetofmakaktswbwjq6ktm"
+    ---
+    apiVersion: onepassword.com/v1
+    kind: OnePasswordItem
+    metadata:
+      name: harbor-chart-registryctl
       namespace: harbor
     spec:
       itemPath: "vaults/kubernetes/items/2bal2uetofmakaktswbwjq6ktm"

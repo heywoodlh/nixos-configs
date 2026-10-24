@@ -663,8 +663,8 @@ spec:
         app.kubernetes.io/component: core
       annotations:
         checksum/configmap: d1edae23312fef1b94b3cd772aada484ba6e875e409ddbb37c500734e778da0d
-        checksum/secret: 7c773496c80f12a5b0eca5203f133c30e048fa86b4807ad2f0f0f2784c39da7a
-        checksum/secret-jobservice: 29b5618d19cb486599547cebe00c7470dc6f3c9c9bdff559a06f82c6cd6ab8ba
+        checksum/secret: c481a101a543bcb74922080f17ad3b64fce3af2be9de9549c8a17b1024461ee3
+        checksum/secret-jobservice: d2c2a266dc5a52a05b334741a5478146fc271f8eaa0a198adee633d61fd8c1f9
     spec:
       securityContext:
         runAsUser: 10000
@@ -721,6 +721,26 @@ spec:
                 secretKeyRef:
                   name: harbor-chart-jobservice
                   key: JOBSERVICE_SECRET
+            - name: HARBOR_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-chart-core
+                  key: HARBOR_ADMIN_PASSWORD
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-chart-database-password
+                  key: password
+            - name: REGISTRY_CREDENTIAL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-chart-registry
+                  key: REGISTRY_PASSWD
+            - name: CSRF_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-chart-core
+                  key: CSRF_KEY
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -816,8 +836,8 @@ spec:
       annotations:
         checksum/configmap: 523044e62f50791694bc69b25e3b9500d2da91673b9ae717a78a89839d1959c8
         checksum/configmap-env: 57599a9b4cd56376b53b60c0f42f19aa621aed938699be7b7d7e217ce84a250e
-        checksum/secret: f7199c70c33ef3235b4e2bb674ef0d74fee5959bf2957458ef888934a595fef5
-        checksum/secret-core: b5c638448fbee2ef98779b9d8efbea09e49bf6de7b706a71e5e20e0ac78e90b2
+        checksum/secret: d2c2a266dc5a52a05b334741a5478146fc271f8eaa0a198adee633d61fd8c1f9
+        checksum/secret-core: c481a101a543bcb74922080f17ad3b64fce3af2be9de9549c8a17b1024461ee3
     spec:
       securityContext:
         runAsUser: 10000
@@ -861,6 +881,16 @@ spec:
                 secretKeyRef:
                   name: harbor-chart-core
                   key: secret
+            - name: JOBSERVICE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-chart-jobservice
+                  key: JOBSERVICE_SECRET
+            - name: REGISTRY_CREDENTIAL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-chart-registry
+                  key: REGISTRY_PASSWD
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -1133,9 +1163,9 @@ spec:
         app.kubernetes.io/component: registry
       annotations:
         checksum/configmap: 8667a8745753900f447065d78fdfeae7166e34cd34463cc86787b23f0001ec57
-        checksum/secret: b8aa50b2ef2e78861580bb6cd844d9c9cc070453446126732507ec4cb3c69179
-        checksum/secret-jobservice: b6766883856de4e901c0d40939fa7225b44c7ae2a14de4ac532bfbc49f582328
-        checksum/secret-core: 2eb5023144f3245388b99fa4f5e861f3ca74eb619ae1caaefe6abe29c54132cf
+        checksum/secret: fb7d07bd4df3dccf95e4a4a10027cb2fe99f93d4df0c6f7e840dee06eb5a1e71
+        checksum/secret-jobservice: d2c2a266dc5a52a05b334741a5478146fc271f8eaa0a198adee633d61fd8c1f9
+        checksum/secret-core: c481a101a543bcb74922080f17ad3b64fce3af2be9de9549c8a17b1024461ee3
     spec:
       securityContext:
         runAsUser: 10000
@@ -1187,6 +1217,11 @@ spec:
             - secretRef:
                 name: "harbor-chart-registry"
           env:
+            - name: REGISTRY_HTTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-chart-registry
+                  key: REGISTRY_HTTP_SECRET
           ports:
             - containerPort: 5000
             - containerPort: 5001
@@ -1247,6 +1282,11 @@ spec:
             - secretRef:
                 name: "harbor-chart-registryctl"
           env:
+            - name: REGISTRY_HTTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: harbor-chart-registry
+                  key: REGISTRY_HTTP_SECRET
             - name: CORE_SECRET
               valueFrom:
                 secretKeyRef:
@@ -1272,7 +1312,7 @@ spec:
       volumes:
         - name: registry-htpasswd
           secret:
-            secretName: harbor-chart-registry-htpasswd
+            secretName: harbor-chart-registry
             items:
               - key: REGISTRY_HTPASSWD
                 path: passwd
@@ -1532,6 +1572,14 @@ spec:
 apiVersion: onepassword.com/v1
 kind: OnePasswordItem
 metadata:
+  name: harbor-chart-database-password
+  namespace: harbor
+spec:
+  itemPath: "vaults/kubernetes/items/harbor-db-password"
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
   name: harbor-chart-jobservice
   namespace: harbor
 spec:
@@ -1541,6 +1589,14 @@ apiVersion: onepassword.com/v1
 kind: OnePasswordItem
 metadata:
   name: harbor-chart-registry
+  namespace: harbor
+spec:
+  itemPath: "vaults/kubernetes/items/2bal2uetofmakaktswbwjq6ktm"
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: harbor-chart-registryctl
   namespace: harbor
 spec:
   itemPath: "vaults/kubernetes/items/2bal2uetofmakaktswbwjq6ktm"

@@ -663,8 +663,8 @@ spec:
         app.kubernetes.io/component: core
       annotations:
         checksum/configmap: d1edae23312fef1b94b3cd772aada484ba6e875e409ddbb37c500734e778da0d
-        checksum/secret: 321c068b806346ec4a3b196baa3dea2193aa7d120139457902f40a0241f99218
-        checksum/secret-jobservice: a3bac9c696614d8b6035429f23d471961de357d1b8271c57192db1bb2c50e745
+        checksum/secret: ab97517a8e5e6c05df3e19742c186d04ce2798b902fd7c49233513e668435d9b
+        checksum/secret-jobservice: 9b373c071a6949e71d688fadac3ec1a1351ae56369f0c719a6679929a8850b42
     spec:
       securityContext:
         runAsUser: 10000
@@ -816,8 +816,8 @@ spec:
       annotations:
         checksum/configmap: 523044e62f50791694bc69b25e3b9500d2da91673b9ae717a78a89839d1959c8
         checksum/configmap-env: 57599a9b4cd56376b53b60c0f42f19aa621aed938699be7b7d7e217ce84a250e
-        checksum/secret: f9555cf1f26fe9129fadd5f9c45c35f2ab7ba43ae2f9269620eb10e4863f597d
-        checksum/secret-core: fe39f59d62a546a3a0ef04ee74b80b193d1205a2ed393d7e1c65eefa5ccb057d
+        checksum/secret: 17ce091c4732b01759acdfe810ca68d1191acbbef811c4dd87a837b04d06cc72
+        checksum/secret-core: cd5c78073c6abe0c350c0f3546312ef838223f8e86a1627bc027347b591f0722
     spec:
       securityContext:
         runAsUser: 10000
@@ -1133,9 +1133,9 @@ spec:
         app.kubernetes.io/component: registry
       annotations:
         checksum/configmap: 8667a8745753900f447065d78fdfeae7166e34cd34463cc86787b23f0001ec57
-        checksum/secret: db039b5636e31c9cecadfecc7fd9701b3169778752baf386c560be20b754687f
-        checksum/secret-jobservice: d0aad95ed6b9b340a7a205feac54502c104b79ce33837e6180ebb34df23ad458
-        checksum/secret-core: 9c57976eb2764030bc260e6ba4095d94e0cc72874ad73b3f36cafc83764b2c22
+        checksum/secret: 17b17a9fb963f9f4975bfbceb5f5b1e2f34b3bcc340ae50ac14a2f5884d3a034
+        checksum/secret-jobservice: 25c01b7e9578875e3d5e670a76b1aac63c5ddc1eecefe913b6f785ac1124c114
+        checksum/secret-core: 4fb7e288e58f4190fcbb43e053bd228d2748ecbe8e0fcaf12e856d4ced32165d
     spec:
       securityContext:
         runAsUser: 10000

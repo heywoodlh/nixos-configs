@@ -41,7 +41,7 @@ RUN chmod -R a+rX /nixos-configs
 
 # Configure things we need to emulate that are provided in UDM
 RUN apt update \
-    && apt install -y syslog-ng \
+    && apt install -y openssh-server syslog-ng \
     && rm -rf /var/lib/apt/lists/* \
     && touch /usr/bin/ubios-udapi-server \
     && printf 'test-secret-key' > /root/duo.key \

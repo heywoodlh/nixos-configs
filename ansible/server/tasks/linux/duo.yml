@@ -50,6 +50,7 @@
         printf '%s\n' 'autopush=true'
         printf '%s\n' 'failmode=secure'
       } > "$temporary_file"
+      install -d -o root -g root -m 0755 /etc/duo
       if ! cmp -s "$temporary_file" /etc/duo/pam_duo.conf 2>/dev/null; then
         install -o root -g root -m 0600 "$temporary_file" /etc/duo/pam_duo.conf
         printf changed

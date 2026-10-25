@@ -24,6 +24,11 @@ verify_profiles() {
         crontab -l | grep -Fx 'CRON_TZ="America/Denver"'
         crontab -l | grep -Fx "#Ansible: weekly router reboot"
         crontab -l | grep -Fx "30 3 * * 1 /usr/bin/systemctl reboot"
+        dpkg-query -W -f='${Status}\n' libpam-duo | grep -Fx 'install ok installed'
+        test "$(stat -c '%a:%U:%G' /etc/duo/pam_duo.conf)" = '600:root:root'
+        grep -Fx 'auth requisite pam_duo.so' /etc/pam.d/sshd
+        grep -Fx 'auth sufficient pam_permit.so' /etc/pam.d/sshd
+        sshd -T | grep -Fx 'authenticationmethods publickey keyboard-interactive'
         return
     fi
 

@@ -43,7 +43,11 @@ RUN chmod -R a+rX /nixos-configs
 RUN apt update \
     && apt install -y syslog-ng \
     && rm -rf /var/lib/apt/lists/* \
-    && touch /usr/bin/ubios-udapi-server
+    && touch /usr/bin/ubios-udapi-server \
+    && printf 'test-secret-key' > /root/duo.key \
+    && printf 'test-integration-key' > /root/duo-integration.key \
+    && printf 'api.example.invalid' > /root/duo-api-host \
+    && chmod 0600 /root/duo.key /root/duo-integration.key /root/duo-api-host
 
 COPY ansible/server/files/etc/syslog-ng/docker.conf /etc/syslog-ng/conf.d/docker.conf
 

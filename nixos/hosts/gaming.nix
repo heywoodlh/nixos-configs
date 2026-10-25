@@ -65,6 +65,11 @@ in
     arcPhotoBackup
   ];
 
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
+
   systemd.services.arc-raiders-immich-upload = {
     description = "Upload ARC Raiders screenshots to Immich";
     after = [ "network-online.target" "mnt-ssd0.mount" ];

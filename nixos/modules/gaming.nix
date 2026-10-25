@@ -302,6 +302,7 @@ in {
       sgdboop
       wl-clipboard
       tesseract
+      heroic
     ] ++ lib.optionals (system == "x86_64-linux") [
       get-custom-proton
       umu-launcher

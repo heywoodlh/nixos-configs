@@ -1,30 +1,34 @@
 ---
-- name: install Duo Unix PAM module
-  ansible.builtin.apt:
-    name: libpam-duo
-    state: present
-    update_cache: true
-    cache_valid_time: 3600
-
-- name: check for provisioned Duo keys
+- name: check for provisioned Duo credentials
   ansible.builtin.stat:
     path: "{{ item }}"
   loop:
     - /root/duo.key
     - /root/duo-integration.key
     - /root/duo-api-host
-  register: duo_key_files
+  register: duo_credential_files
 
-- name: require provisioned Duo keys
-  ansible.builtin.assert:
-    that:
-      - item.stat.exists
-      - item.stat.isreg
-      - item.stat.pw_name == 'root'
-      - item.stat.mode == '0600'
-    fail_msg: Run duo-key-remote-setup before applying the UniFi playbook.
-  loop: "{{ duo_key_files.results }}"
+- name: determine whether Duo credentials are usable
+  ansible.builtin.set_fact:
+    duo_credentials_present: >-
+      {{
+        duo_credential_files.results
+        | selectattr('stat.exists')
+        | selectattr('stat.isreg')
+        | selectattr('stat.pw_name', 'equalto', 'root')
+        | selectattr('stat.mode', 'equalto', '0600')
+        | list
+        | length == 3
+      }}
   no_log: true
+
+- name: install Duo Unix PAM module
+  ansible.builtin.apt:
+    name: libpam-duo
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: duo_credentials_present
 
 - name: render Duo PAM configuration from provisioned keys
   ansible.builtin.shell:
@@ -54,6 +58,7 @@
   no_log: true
   register: duo_pam_configuration
   changed_when: duo_pam_configuration.stdout == 'changed'
+  when: duo_credentials_present
 
 - name: require Duo for keyboard-interactive SSH authentication
   ansible.builtin.blockinfile:
@@ -63,6 +68,7 @@
     block: |
       auth requisite pam_duo.so
       auth sufficient pam_permit.so
+  when: duo_credentials_present
 
 - name: configure SSH public-key-or-Duo authentication
   ansible.builtin.lineinfile:
@@ -77,14 +83,18 @@
     - { key: 'PasswordAuthentication', value: 'no' }
     - { key: 'AuthenticationMethods', value: 'publickey keyboard-interactive' }
   register: duo_sshd_configuration
+  when: duo_credentials_present
 
 - name: validate SSH configuration
   ansible.builtin.command:
     cmd: /usr/sbin/sshd -t
   changed_when: false
+  when: duo_credentials_present
 
 - name: reload SSH after validated Duo configuration
   ansible.builtin.systemd_service:
     name: ssh.service
     state: reloaded
-  when: duo_sshd_configuration.changed
+  when:
+    - duo_credentials_present
+    - duo_sshd_configuration.changed

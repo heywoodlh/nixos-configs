@@ -455,7 +455,7 @@ rec {
       ./home/modules/pandoc.nix
       ./home/modules/paseo.nix
       ./home/modules/onepassword.nix
-      ./home/modules/hermes-agent.nix
+      ./home/modules/llm-agents.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -911,7 +911,10 @@ rec {
                 ];
               };
               home-manager.users.heywoodlh = {
-                heywoodlh.home.lima.nixos.memory = 12;
+                heywoodlh.home = {
+                  lima.nixos.memory = 12;
+                  t3.enable = true;
+                };
               };
             }
           ];
@@ -958,6 +961,7 @@ rec {
           networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
             8642
             9119
+            3773
           ];
 
           # Disable sleep
@@ -1036,6 +1040,7 @@ rec {
                   #};
                 };
               };
+              t3.enable = true;
             };
             home.activation.docker-rootless-context = ''
               if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
@@ -1191,6 +1196,8 @@ rec {
           # Apple Magic keyboard (makes useless globe key ctrl)
           boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
 
+          networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 3773 ];
+
           home-manager.users.heywoodlh = {
             heywoodlh.home = {
               paseo = {
@@ -1204,6 +1211,7 @@ rec {
                   ];
                 };
               };
+              t3.enable = true;
             };
 
             wayland.windowManager.hyprland.extraConfig = ''

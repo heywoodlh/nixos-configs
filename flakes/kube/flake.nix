@@ -1102,6 +1102,13 @@
           hostfolder = "/media/data-ssd/xpipe";
           nodename = "homelab";
         };
+        yattee-web = mkKubeDrv "yattee-web" {
+          src = ./templates/yattee-web.yaml;
+          namespace = "media";
+          image = "ghcr.io/heywoodlh/yattee-web:0.1.0";
+          hostfolder = "/media/data-ssd/yattee-web";
+          nodename = "homelab";
+        };
         yattee = mkKubeDrv "yattee" {
           src = ./templates/yattee.yaml;
           namespace = "default";

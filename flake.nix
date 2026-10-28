@@ -911,7 +911,10 @@ rec {
                 ];
               };
               home-manager.users.heywoodlh = {
-                heywoodlh.home.lima.nixos.memory = 12;
+                heywoodlh.home = {
+                  lima.nixos.memory = 12;
+                  t3.enable = true;
+                };
               };
             }
           ];
@@ -1206,6 +1209,7 @@ rec {
                   ];
                 };
               };
+              t3.enable = true;
             };
 
             wayland.windowManager.hyprland.extraConfig = ''

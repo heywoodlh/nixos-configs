@@ -1196,6 +1196,8 @@ rec {
           # Apple Magic keyboard (makes useless globe key ctrl)
           boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
 
+          networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 3773 ];
+
           home-manager.users.heywoodlh = {
             heywoodlh.home = {
               paseo = {

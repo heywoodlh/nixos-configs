@@ -913,7 +913,10 @@ rec {
               home-manager.users.heywoodlh = {
                 heywoodlh.home = {
                   lima.nixos.memory = 12;
-                  t3.enable = true;
+                  t3 = {
+                    enable = true;
+                    address = "100.125.243.118";
+                  };
                 };
               };
             }
@@ -1040,7 +1043,10 @@ rec {
                   #};
                 };
               };
-              t3.enable = true;
+              t3 = {
+                enable = true;
+                address = "100.67.47.0";
+              };
             };
             home.activation.docker-rootless-context = ''
               if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless

@@ -127,6 +127,11 @@ in {
         description = "Run the T3 Code web UI as a user service.";
         type = bool;
       };
+      address = mkOption {
+        default = "0.0.0.0";
+        description = "Address for the T3 Code web UI to bind to.";
+        type = str;
+      };
       port = mkOption {
         default = 3773;
         description = "Port for the T3 Code web UI.";
@@ -308,7 +313,7 @@ in {
       systemd.user.services.t3code = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
         Unit.Description = "T3 Code web UI";
         Service = {
-          ExecStart = "${pkgs.t3code}/bin/t3 serve --mode web --host 0.0.0.0 --port ${toString t3Cfg.port}";
+          ExecStart = "${pkgs.t3code}/bin/t3 serve --mode web --host ${t3Cfg.address} --port ${toString t3Cfg.port}";
           Restart = "on-failure";
           RestartSec = "5s";
         };
@@ -324,7 +329,7 @@ in {
             "--mode"
             "web"
             "--host"
-            "0.0.0.0"
+            t3Cfg.address
             "--port"
             (toString t3Cfg.port)
           ];

@@ -1211,7 +1211,10 @@ rec {
                   ];
                 };
               };
-              t3.enable = true;
+              t3 = {
+                enable = true;
+                address = "100.74.91.97";
+              };
             };
 
             wayland.windowManager.hyprland.extraConfig = ''

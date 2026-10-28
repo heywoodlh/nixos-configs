@@ -27,7 +27,7 @@ spec:
       containers:
         - name: yattee-web
           image: "ghcr.io/heywoodlh/yattee-web:0.1.0"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 8080

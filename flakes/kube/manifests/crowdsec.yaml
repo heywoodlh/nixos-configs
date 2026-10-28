@@ -18,8 +18,8 @@ metadata:
   namespace: security
 type: Opaque
 data:
-  csLapiSecret: Iy9eTmlVQVt4VEkiSHRkPUFQdSdZbFRZLDFiRlUlSzN5Y2tJKEtYKDwgSFRHWFViX19NXFRtdGtZcTR5K3VCLA==
-  registrationToken: bnMzbTlPVzJSNXY2T2Mxa0xqSzNRSzl5czJsMG41ZUo4T0hGdUpieXhzNGxhUmJo
+  csLapiSecret: Xz9HLz52c2RBSiZEb0M1MCR6dEh9IERbcCpZRCpSYS02QDwxUy19Q19WVGdORy12MztAPFpiaX4yUjtESlRSXg==
+  registrationToken: UXVsbDBiSUpFS2VpQm95ZG9PNWhJWnhkc0dyUHNyVUFmRGRMWUNkZUxYSEJZd0FT
 ---
 # Source: crowdsec/templates/docker-start-configmap.yaml
 apiVersion: v1
@@ -500,7 +500,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/lapi-secret: df7033b0e7c00075984c456d9f6eab2f2e48d667a7801eb40ca2a134d05836ea
+        checksum/lapi-secret: dffff7b6f0ac697e2a491382e6db78bbe3c907fdc7103b0adc3902cebaaf7b9f
         checksum/lapi-configmap: 5f81bdc08f32bc76fdb8210fa8afd96c741d1bb334f2cbf5d3a76cd7cd8e4ba7
       labels:
         k8s-app: crowdsec

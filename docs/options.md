@@ -710,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults.nix)
 
 
 
@@ -942,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults.nix)
 
 
 
@@ -966,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults.nix)
 
 
 
@@ -990,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults.nix)
 
 
 
@@ -1014,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults.nix)
 
 
 
@@ -1038,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults.nix)
 
 
 
@@ -1062,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/defaults.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/defaults.nix)
 
 
 
@@ -4113,6 +4113,30 @@ false
 
 
 
+## heywoodlh\.home\.t3\.address
+
+
+
+Address for the T3 Code web UI to bind to\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"0.0.0.0"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
+
+
+
 ## heywoodlh\.home\.t3\.port
 
 
@@ -4806,8 +4830,6 @@ string
 
 ## heywoodlh\.nixos\.moonlight\.enable
 
-
-
 Install Moonlight-QT Flatpak for\.
 
 
@@ -4829,6 +4851,8 @@ false
 
 
 ## heywoodlh\.nixos\.moonlight\.user
+
+
 
 User to install Moonlight-QT Flatpak for\.
 
@@ -5657,7 +5681,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/sshd\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/sshd.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/sshd\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/sshd.nix)
 
 
 
@@ -5753,7 +5777,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/stylix\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/stylix.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/stylix\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/stylix.nix)
 
 
 
@@ -5777,7 +5801,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/stylix\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/stylix.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/stylix\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/stylix.nix)
 
 
 
@@ -5801,7 +5825,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/stylix\.nix](/nix/store/pln76637zwnldwhhxnxq8k16x0h2whz4-source/base/stylix.nix)
+ - [/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/stylix\.nix](/nix/store/4x99lnrmhrr764zvkzi4fajf164mwdkd-source/base/stylix.nix)
 
 
 

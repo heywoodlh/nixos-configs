@@ -710,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults.nix)
 
 
 
@@ -942,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults.nix)
 
 
 
@@ -966,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults.nix)
 
 
 
@@ -990,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults.nix)
 
 
 
@@ -1014,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults.nix)
 
 
 
@@ -1038,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults.nix)
 
 
 
@@ -1062,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/defaults.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/defaults.nix)
 
 
 
@@ -1952,7 +1952,7 @@ false
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -1976,7 +1976,7 @@ submodule
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2000,7 +2000,7 @@ false
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2026,7 +2026,7 @@ string
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2050,7 +2050,7 @@ unspecified value
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2074,7 +2074,7 @@ attribute set
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2098,7 +2098,7 @@ list of string
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2125,7 +2125,7 @@ attribute set
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2149,7 +2149,7 @@ submodule
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2173,7 +2173,7 @@ false
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2197,7 +2197,7 @@ Port for the OpenAI-compatible Hermes Agent API server\.
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2221,7 +2221,7 @@ string
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2245,7 +2245,7 @@ Port for the remote Hermes dashboard\.
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2269,7 +2269,7 @@ string
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2293,7 +2293,7 @@ attribute set
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -2317,7 +2317,7 @@ true
 ```
 
 *Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hermes-agent.nix)
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
 
 
 
@@ -4089,6 +4089,54 @@ false
 
 
 
+## heywoodlh\.home\.t3\.enable
+
+
+
+Run the T3 Code web UI as a user service\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
+
+
+
+## heywoodlh\.home\.t3\.port
+
+
+
+Port for the T3 Code web UI\.
+
+
+
+*Type:*
+16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+
+
+*Default:*
+
+```nix
+3773
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
+
+
+
 ## heywoodlh\.home\.vicinae\.enable
 
 
@@ -4782,8 +4830,6 @@ false
 
 ## heywoodlh\.nixos\.moonlight\.user
 
-
-
 User to install Moonlight-QT Flatpak for\.
 
 
@@ -4853,6 +4899,8 @@ false
 
 
 ## heywoodlh\.nixos\.portmaster\.dns
+
+
 
 DNS servers to use\. If using Tailscale set to something like:
 \[
@@ -5609,7 +5657,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/sshd\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/sshd.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/sshd\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/sshd.nix)
 
 
 
@@ -5705,7 +5753,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/stylix\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/stylix.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/stylix\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/stylix.nix)
 
 
 
@@ -5729,7 +5777,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/stylix\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/stylix.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/stylix\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/stylix.nix)
 
 
 
@@ -5753,7 +5801,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/stylix\.nix](/nix/store/lqfzypyg6syqxhsg4gim2xipjp9ry87v-source/base/stylix.nix)
+ - [/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/stylix\.nix](/nix/store/7pd17367yqds1pdjh11fzsy0kq2vnsv4-source/base/stylix.nix)
 
 
 

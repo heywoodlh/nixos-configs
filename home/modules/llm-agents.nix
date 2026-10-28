@@ -4,13 +4,14 @@
   pkgs,
   ...
 }:
-
 with lib;
-with lib.types;
-
-let
+with lib.types; let
   cfg = config.heywoodlh.home.hermes;
-  homeDir = if config ? home then config.home.homeDirectory else "~";
+  t3Cfg = config.heywoodlh.home.t3;
+  homeDir =
+    if config ? home
+    then config.home.homeDirectory
+    else "~";
   signalCliDaemon = pkgs.writeShellScript "signal-cli-daemon.sh" ''
     set -a
     ${concatMapStringsSep "\n" (f: ''source "${f}"'') cfg.environmentFiles}
@@ -118,9 +119,20 @@ let
           start_period: 30s
           start_interval: 5s
   '';
-in
-{
+in {
   options = {
+    heywoodlh.home.t3 = {
+      enable = mkOption {
+        default = false;
+        description = "Run the T3 Code web UI as a user service.";
+        type = bool;
+      };
+      port = mkOption {
+        default = 3773;
+        description = "Port for the T3 Code web UI.";
+        type = port;
+      };
+    };
     heywoodlh.home.hermes = {
       enable = mkOption {
         default = false;
@@ -138,17 +150,17 @@ in
         type = attrs;
       };
       settings = mkOption {
-        default = { };
+        default = {};
         description = "Extra settings to pass to services.hermes-agent.settings.";
         type = attrs;
       };
       environment = mkOption {
-        default = { };
+        default = {};
         description = "Extra environment vars to pass to services.hermes-agent.environment.";
         type = attrs;
       };
       environmentFiles = mkOption {
-        default = [ ];
+        default = [];
         description = ''
           Environment files to provide hermes services.
         '';
@@ -161,12 +173,12 @@ in
         '';
       };
       dashboard = mkOption {
-        default = { };
+        default = {};
         description = "Hermes dashboard configuration.";
         type = dashboardType;
       };
       remote = mkOption {
-        default = { };
+        default = {};
         description = "Remote Hermes dashboard and OpenAI-compatible API configuration.";
         type = remoteType;
       };
@@ -180,103 +192,146 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = (cfg.dashboard.enable && !cfg.remote.enable) -> cfg.dashboard.address != "";
-        message = "heywoodlh.home.hermes.dashboard.address must be set when heywoodlh.home.hermes.dashboard.enable is true.";
-      }
-      {
-        assertion = cfg.remote.enable -> cfg.remote.host != "";
-        message = "heywoodlh.home.hermes.remote.host must be set when heywoodlh.home.hermes.remote.enable is true.";
-      }
-    ];
+  config = mkMerge [
+    (mkIf cfg.enable {
+      assertions = [
+        {
+          assertion = (cfg.dashboard.enable && !cfg.remote.enable) -> cfg.dashboard.address != "";
+          message = "heywoodlh.home.hermes.dashboard.address must be set when heywoodlh.home.hermes.dashboard.enable is true.";
+        }
+        {
+          assertion = cfg.remote.enable -> cfg.remote.host != "";
+          message = "heywoodlh.home.hermes.remote.host must be set when heywoodlh.home.hermes.remote.enable is true.";
+        }
+      ];
 
-    programs.hermes-agent.enable = true;
-    services.hermes-agent = {
-      enable = true;
-      gateway.enable = true;
-      backend = lib.optionalAttrs (cfg.dashboard.enable || cfg.remote.enable) {
-        mode = "dashboard";
-        host = if cfg.remote.enable then cfg.remote.host else cfg.dashboard.address;
-        port = if cfg.remote.enable then cfg.remote.dashboardPort else 9119;
-        waitFor = if cfg.remote.enable then "hostname" else null;
+      programs.hermes-agent.enable = true;
+      services.hermes-agent = {
+        enable = true;
+        gateway.enable = true;
+        backend = lib.optionalAttrs (cfg.dashboard.enable || cfg.remote.enable) {
+          mode = "dashboard";
+          host =
+            if cfg.remote.enable
+            then cfg.remote.host
+            else cfg.dashboard.address;
+          port =
+            if cfg.remote.enable
+            then cfg.remote.dashboardPort
+            else 9119;
+          waitFor =
+            if cfg.remote.enable
+            then "hostname"
+            else null;
+        };
+        settings =
+          {
+            model = cfg.model;
+          }
+          // cfg.settings;
+        environment =
+          {
+            CAMOFOX_URL = "http://localhost:9377";
+          }
+          // lib.optionalAttrs cfg.remote.enable {
+            API_SERVER_ENABLED = "true";
+            API_SERVER_HOST = cfg.remote.host;
+            API_SERVER_PORT = toString cfg.remote.apiPort;
+          }
+          // cfg.environment;
+        environmentFiles =
+          cfg.environmentFiles ++ lib.optionals cfg.remote.enable [cfg.remote.credentialsFile];
+        extraPackages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [pkgs.systemd];
       };
-      settings = {
-        model = cfg.model;
-      }
-      // cfg.settings;
-      environment = {
-        CAMOFOX_URL = "http://localhost:9377";
-      }
-      // lib.optionalAttrs cfg.remote.enable {
-        API_SERVER_ENABLED = "true";
-        API_SERVER_HOST = cfg.remote.host;
-        API_SERVER_PORT = toString cfg.remote.apiPort;
-      }
-      // cfg.environment;
-      environmentFiles =
-        cfg.environmentFiles ++ lib.optionals cfg.remote.enable [ cfg.remote.credentialsFile ];
-      extraPackages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.systemd ];
-    };
 
-    home.packages =
-      with pkgs;
-      [
-        dockerComposeUp
-      ]
-      ++ lib.optionals cfg.remote.enable [
-        remoteCredentialsSetup
-      ]
-      ++ lib.optionals (cfg.signal) [
-        signal-cli
-      ];
+      home.packages = with pkgs;
+        [
+          dockerComposeUp
+        ]
+        ++ lib.optionals cfg.remote.enable [
+          remoteCredentialsSetup
+        ]
+        ++ lib.optionals (cfg.signal) [
+          signal-cli
+        ];
 
-    home.activation.hermes-remote-credentials-file = lib.mkIf cfg.remote.enable ''
-      ${pkgs.coreutils}/bin/mkdir -p "${homeDir}/.config/hermes"
-      ${pkgs.coreutils}/bin/touch "${cfg.remote.credentialsFile}"
-      ${pkgs.coreutils}/bin/chmod 600 "${cfg.remote.credentialsFile}"
-    '';
+      home.activation.hermes-remote-credentials-file = lib.mkIf cfg.remote.enable ''
+        ${pkgs.coreutils}/bin/mkdir -p "${homeDir}/.config/hermes"
+        ${pkgs.coreutils}/bin/touch "${cfg.remote.credentialsFile}"
+        ${pkgs.coreutils}/bin/chmod 600 "${cfg.remote.credentialsFile}"
+      '';
 
-    systemd.user.services.hermes-agent.Service = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.remote.enable) {
-      Environment = lib.mkAfter [
-        "API_SERVER_ENABLED=true"
-        "API_SERVER_HOST=${cfg.remote.host}"
-        "API_SERVER_PORT=${toString cfg.remote.apiPort}"
-      ];
-      EnvironmentFile = [ cfg.remote.credentialsFile ];
-    };
-    systemd.user.services.hermes-backend.Service = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.remote.enable) {
-      EnvironmentFile = [ cfg.remote.credentialsFile ];
-    };
+      systemd.user.services.hermes-agent.Service = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.remote.enable) {
+        Environment = lib.mkAfter [
+          "API_SERVER_ENABLED=true"
+          "API_SERVER_HOST=${cfg.remote.host}"
+          "API_SERVER_PORT=${toString cfg.remote.apiPort}"
+        ];
+        EnvironmentFile = [cfg.remote.credentialsFile];
+      };
+      systemd.user.services.hermes-backend.Service = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.remote.enable) {
+        EnvironmentFile = [cfg.remote.credentialsFile];
+      };
 
-    launchd.agents = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
-      signal-cli-daemon = {
-        enable = cfg.signal;
-        config = {
-          ProgramArguments = [ "${signalCliDaemon}" ];
-          RunAtLoad = true;
-          KeepAlive = true;
-          AbandonProcessGroup = true;
+      launchd.agents = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+        signal-cli-daemon = {
+          enable = cfg.signal;
+          config = {
+            ProgramArguments = ["${signalCliDaemon}"];
+            RunAtLoad = true;
+            KeepAlive = true;
+            AbandonProcessGroup = true;
+          };
         };
       };
-    };
 
-    systemd.user.services.signal-cli-daemon = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.signal) {
-      Unit = {
-        Description = "signal-cli HTTP daemon";
+      systemd.user.services.signal-cli-daemon = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && cfg.signal) {
+        Unit = {
+          Description = "signal-cli HTTP daemon";
+        };
+        Install = {
+          WantedBy = ["default.target"];
+        };
+        Service = {
+          ExecStart = "${signalCliDaemon}";
+          Restart = "on-failure";
+        };
       };
-      Install = {
-        WantedBy = [ "default.target" ];
-      };
-      Service = {
-        ExecStart = "${signalCliDaemon}";
-        Restart = "on-failure";
-      };
-    };
 
-    home.activation.hermes-containers = ''
-      ${dockerComposeUp}/bin/hermes-containers.sh
-    '';
-  };
+      home.activation.hermes-containers = ''
+        ${dockerComposeUp}/bin/hermes-containers.sh
+      '';
+    })
+    (mkIf t3Cfg.enable {
+      home.packages = [pkgs.t3code];
+
+      systemd.user.services.t3code = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+        Unit.Description = "T3 Code web UI";
+        Service = {
+          ExecStart = "${pkgs.t3code}/bin/t3 serve --mode web --host 0.0.0.0 --port ${toString t3Cfg.port}";
+          Restart = "on-failure";
+          RestartSec = "5s";
+        };
+        Install.WantedBy = ["default.target"];
+      };
+
+      launchd.agents.t3code = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+        enable = true;
+        config = {
+          ProgramArguments = [
+            "${pkgs.t3code}/bin/t3"
+            "serve"
+            "--mode"
+            "web"
+            "--host"
+            "0.0.0.0"
+            "--port"
+            (toString t3Cfg.port)
+          ];
+          RunAtLoad = true;
+          KeepAlive = true;
+        };
+      };
+    })
+  ];
 }

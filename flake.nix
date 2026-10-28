@@ -455,7 +455,7 @@ rec {
       ./home/modules/pandoc.nix
       ./home/modules/paseo.nix
       ./home/modules/onepassword.nix
-      ./home/modules/hermes-agent.nix
+      ./home/modules/llm-agents.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -958,6 +958,7 @@ rec {
           networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
             8642
             9119
+            3773
           ];
 
           # Disable sleep
@@ -1036,6 +1037,7 @@ rec {
                   #};
                 };
               };
+              t3.enable = true;
             };
             home.activation.docker-rootless-context = ''
               if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless

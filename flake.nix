@@ -1021,6 +1021,7 @@ rec {
               t3 = {
                 enable = true;
                 address = "100.67.47.0";
+                hermes.enable = true;
               };
             };
             home.activation.docker-rootless-context = ''

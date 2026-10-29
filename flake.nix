@@ -1010,6 +1010,7 @@ rec {
                   "/home/ops/.hermes.env"
                 ];
                 settings = {
+                  dashboard.public_url = "https://hermes.heywoodlh.io";
                   #platform_toolsets = {
                   #  discord = [
                   #    "hermes-discord"

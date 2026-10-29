@@ -26,7 +26,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: yattee-web
-          image: "ghcr.io/heywoodlh/yattee-web:0.1.0"
+          image: "ghcr.io/heywoodlh/yattee-web:0.1.1"
           imagePullPolicy: Always
           ports:
             - name: http

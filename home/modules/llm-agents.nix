@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  nixpkgs-edge,
   ...
 }:
 with lib;
@@ -126,6 +127,12 @@ in {
         default = false;
         description = "Run the T3 Code web UI as a user service.";
         type = bool;
+      };
+      package = mkOption {
+        default = nixpkgs-edge.legacyPackages.${pkgs.stdenv.hostPlatform.system}.t3code;
+        defaultText = literalExpression "nixpkgs-edge.legacyPackages.\${system}.t3code";
+        description = "T3 Code package to use.";
+        type = package;
       };
       address = mkOption {
         default = "0.0.0.0";
@@ -321,6 +328,7 @@ in {
     (mkIf t3Cfg.enable {
       programs.t3code = {
         enable = true;
+        package = t3Cfg.package;
         userSettings = lib.optionalAttrs t3Cfg.hermes.enable {
           providerInstances.hermes = {
             driver = "acpRegistry";
@@ -338,7 +346,7 @@ in {
       systemd.user.services.t3code = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
         Unit.Description = "T3 Code web UI";
         Service = {
-          ExecStart = "${pkgs.t3code}/bin/t3 serve --mode web --host ${t3Cfg.address} --port ${toString t3Cfg.port}";
+          ExecStart = "${t3Cfg.package}/bin/t3 serve --mode web --host ${t3Cfg.address} --port ${toString t3Cfg.port}";
           Restart = "on-failure";
           RestartSec = "5s";
         };
@@ -349,7 +357,7 @@ in {
         enable = true;
         config = {
           ProgramArguments = [
-            "${pkgs.t3code}/bin/t3"
+            "${t3Cfg.package}/bin/t3"
             "serve"
             "--mode"
             "web"

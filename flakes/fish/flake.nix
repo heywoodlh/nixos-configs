@@ -239,28 +239,30 @@
         bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "${myClip}"
         bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "${myClip}"
       '';
-      nordTmux = pkgs.writeShellScript "nord.tmux" ''
-        ${pkgs.tmux}/bin/tmux set-option -g mode-style 'bg=brightblack, fg=cyan'
-        ${pkgs.tmux}/bin/tmux set-option -g message-style 'bg=brightblack, fg=cyan'
+      statusBar = pkgs.writeText "statusbar.tmux" ''
+        set -g set-titles on
+        set -g set-titles-string "#S: #{?#{==:#{pane_title},#{host}},#W,#{pane_title}}"
 
-        ${pkgs.tmux}/bin/tmux set-option -g status-justify centre
-        ${pkgs.tmux}/bin/tmux set-option -g status-style "bg=brightblack"
-        ${pkgs.tmux}/bin/tmux set-option -g status-left ' #S #[fg=cyan, bg=brightblack] '
-        ${pkgs.tmux}/bin/tmux set-option -g status-left-style "bg=cyan,fg=black"
+        set -g status-position bottom
+        set -g status-style "bg=default fg=colour245"
 
-        ${pkgs.tmux}/bin/tmux set-option -g status-right "#[fg=cyan, bg=brightblack] #[fg=brightblack, bg=cyan] %d/%m %R "
-        ${pkgs.tmux}/bin/tmux set-option -g status-right-style "bg=brightblack,fg=cyan"
+        set -g status-left "#[fg=colour114,bold] #S #[default]  "
+        set -g status-left-length 30
 
-        ${pkgs.tmux}/bin/tmux set-window-option -g window-status-format ' #I:#W '
-        ${pkgs.tmux}/bin/tmux set-window-option -g window-status-style "bg=black"
-        ${pkgs.tmux}/bin/tmux set-window-option -g window-status-current-format '#[bold] #I:#W '
-        ${pkgs.tmux}/bin/tmux set-window-option -g window-status-current-style "bg=cyan,fg=black"
-        ${pkgs.tmux}/bin/tmux set-window-option -g window-status-separator ''''''
+        set -g status-right "#{?#{==:#{pane_title},#{host}},,#[fg=colour110]#{=40:pane_title}  }#[fg=colour245]%H:%M  %d %b "
+        set -g status-right-length 80
+
+        setw -g window-status-current-format "#[bg=colour110,fg=colour234,bold] #I #W #[default]"
+        setw -g window-status-format         "#[fg=colour243]#I #W"
+        setw -g window-status-separator      "#[fg=colour242] · "
       '';
       tmuxConf = pkgs.writeText "tmux.conf" ''
         # Set shell
         set -g default-shell ${fishExe}/bin/fish
-        run-shell ${nordTmux}
+
+        # Appearance
+        source-file ${statusBar}
+
         # Change default prefix key to C-a, similar to screen
         unbind-key C-b
         set-option -g prefix C-a

@@ -137,6 +137,13 @@ in {
         description = "Port for the T3 Code web UI.";
         type = port;
       };
+      hermes = {
+        enable = mkOption {
+          default = false;
+          description = "Enable Hermes ACP as a local T3 Code provider.";
+          type = bool;
+        };
+      };
     };
     heywoodlh.home.hermes = {
       enable = mkOption {
@@ -207,6 +214,10 @@ in {
         {
           assertion = cfg.remote.enable -> cfg.remote.host != "";
           message = "heywoodlh.home.hermes.remote.host must be set when heywoodlh.home.hermes.remote.enable is true.";
+        }
+        {
+          assertion = !t3Cfg.hermes.enable || cfg.enable;
+          message = "heywoodlh.home.t3.hermes.enable requires heywoodlh.home.hermes.enable.";
         }
       ];
 
@@ -308,7 +319,21 @@ in {
       '';
     })
     (mkIf t3Cfg.enable {
-      home.packages = [pkgs.t3code];
+      programs.t3code = {
+        enable = true;
+        userSettings = lib.optionalAttrs t3Cfg.hermes.enable {
+          providerInstances.hermes = {
+            driver = "acpRegistry";
+            displayName = "Hermes";
+            enabled = true;
+            config = {
+              source = "local";
+              commandPath = "${config.programs.hermes-agent.package}/bin/hermes";
+              commandArgs = ["acp"];
+            };
+          };
+        };
+      };
 
       systemd.user.services.t3code = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
         Unit.Description = "T3 Code web UI";

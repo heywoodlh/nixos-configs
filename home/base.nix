@@ -355,18 +355,6 @@ let
     fi
   '';
 in {
-  home.file."bin/hermes-remote-credentials" = {
-    executable = true;
-    text = ''
-      #!${pkgs.bash}/bin/bash
-      set -euo pipefail
-      case "''${1:-password}" in
-        username) ${op-wrapper} item get frv6yulia3fh3jpuzfwnvjfmwy --vault Kubernetes --fields label=username --reveal ;;
-        password) ${op-wrapper} item get frv6yulia3fh3jpuzfwnvjfmwy --vault Kubernetes --fields label=password --reveal ;;
-        *) echo "usage: hermes-remote-credentials {username|password}" >&2; exit 2 ;;
-      esac
-    '';
-  };
   # Packages I need installed on every system
   home.packages = with pkgs; [
     _1password-cli
@@ -861,7 +849,6 @@ in {
     llm = {
       enable = true;
       pi.package = edgePkgs.pi-coding-agent;
-      hermes-remote.enable = true;
       pi.extraConf = {
         homelab = {
           baseUrl = "http://llm.barn-banana.ts.net/v1";

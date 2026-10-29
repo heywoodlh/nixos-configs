@@ -1,4 +1,4 @@
-{ config, lib, pkgs, myFlakes, nixpkgs-edge, ... }:
+{ config, lib, pkgs, myFlakes, nixpkgs-edge, nixpkgs-stable, ... }:
 
 with lib;
 
@@ -33,10 +33,11 @@ let
   else ''
     browser "${pkgs.xdg-utils}/bin/xdg-open %u"
   '';
-  gomuks_keybindings_file = if stdenv.hostPlatform.isDarwin
-  then "Library/Application Support/gomuks/keybindings.yaml"
-  else ".config/gomuks/keybindings.yaml";
   myOpWrapper = myFlakes.packages.${system}.op-wrapper;
+  stablePkgs = import nixpkgs-stable {
+    inherit system;
+    config.allowUnfree = true;
+  };
   edgePkgs = import nixpkgs-edge {
     inherit system;
     config.allowUnfree = true;
@@ -568,53 +569,6 @@ in {
     '';
   };
 
-  home.file."${gomuks_keybindings_file}" = {
-    text = ''
-      main:
-        'Ctrl+Down': next_room
-        'Ctrl+Up': prev_room
-        'Ctrl+Shift+k': search_rooms
-        'Ctrl+Home': scroll_up
-        'Ctrl+End': scroll_down
-        'Ctrl+Enter': add_newline
-        'Ctrl+l': show_bare
-        'Ctrl+n': next_room
-        'Ctrl+p': prev_room
-        'Alt+k':  search_rooms
-        'Alt+Home': scroll_up
-        'Alt+End': scroll_down
-        'Alt+Enter': add_newline
-        'Alt+a': next_active_room
-        'Alt+l': show_bare
-
-      modal:
-        'Tab': select_next
-        'Down': select_next
-        'Backtab': select_prev
-        'Up': select_prev
-        'Enter': confirm
-        'Escape': cancel
-
-      visual:
-        'Escape': clear
-        'h': clear
-        'Up': select_prev
-        'k': select_prev
-        'Down': select_next
-        'j': select_next
-        'Enter': confirm
-        'l': confirm
-
-      room:
-        'Escape': clear
-        'Ctrl+p': scroll_up
-        'Ctrl+n': scroll_down
-        'PageUp': scroll_up
-        'PageDown': scroll_down
-        'Enter': send
-    '';
-  };
-
   # config.fish
   home.file.".config/fish/config.fish" = {
     enable = true;
@@ -635,9 +589,9 @@ in {
       set -g PATH "$HOME/.nix-profile/bin" $PATH
 
       # Atuin
-      set -g PATH "${pkgs.atuin}/bin" $PATH
+      set -g PATH "${stablePkgs.atuin}/bin" $PATH
       set -gx ATUIN_CONFIG_DIR "${atuinConfigDir}/atuin"
-      ${pkgs.atuin}/bin/atuin init fish --disable-up-arrow | source
+      ${stablePkgs.atuin}/bin/atuin init fish --disable-up-arrow | source
 
       # Delete invalid session.sh file if exists
       if test -e $HOME/.1password/session.sh
@@ -654,7 +608,7 @@ in {
       end
 
       function github-unlock
-        set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh/personal-access-token --fields=password --reveal)"
+        set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh --fields=access-token --reveal)"
       end
 
       function lnav
@@ -867,6 +821,25 @@ in {
           "tcp://syncthing.barn-banana.ts.net:22000"
         ];
         id = "6HE3ZO4-PWG4ZYB-EQHAED7-ELFI5AL-25WRYGV-BK6ZBJM-6IWVZRL-6ADQCQD";
+      };
+    };
+  };
+
+  programs.iamb = {
+    enable = true;
+    settings = {
+      default_profile = "heywoodlh";
+      layout.style = "new";
+      macros."insert|normal|visual" = {
+        "<C-k>" = ":chats<Enter>";
+      };
+      settings = {
+        username_display = "displayname";
+        notifications.enabled = false;
+      };
+      profiles.heywoodlh = {
+        user_id = "@heywoodlh:beeper.com";
+        url = "https://matrix.beeper.com";
       };
     };
   };

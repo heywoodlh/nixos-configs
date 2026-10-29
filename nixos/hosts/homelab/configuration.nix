@@ -47,7 +47,6 @@ in {
     ./hardware-configuration.nix
     ../../roles/monitoring/syslog-ng/server.nix
     ../../roles/monitoring/syslog-ng/client.nix
-    ../../roles/gaming/minecraft-bedrock.nix
     ../../roles/containers/k3s-server.nix
     ../../roles/monitoring/osquery.nix
     ../../roles/nixos/cache.nix

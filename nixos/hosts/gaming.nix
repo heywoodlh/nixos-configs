@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, stackpkgs, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 with lib;
 let
@@ -101,13 +101,8 @@ in
     };
     firewall = {
       interfaces.enp4s0.allowedTCPPorts = [ 47990 ];
-      allowedTCPPorts = [
-        59100 # AudioRelay
-      ];
       allowedUDPPorts = [
         9
-        59100 # AudioRelay
-        59200 # AudioRelay server discovery
       ];
     };
   };
@@ -187,7 +182,6 @@ in
     in with pkgs; [
       #gamma-install
       ytmdesktop
-      (pkgs.callPackage "${stackpkgs}/packages/audiorelay.nix" {})
     ];
   };
 }

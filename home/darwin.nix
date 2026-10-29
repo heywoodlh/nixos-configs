@@ -29,7 +29,6 @@ in {
 
   home.packages = with pkgs; [
     fleetctl
-    gomuks
     m-cli
     mas
     pinentry_mac

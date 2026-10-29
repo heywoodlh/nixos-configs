@@ -8,7 +8,7 @@ rec {
     nixpkgs-stable.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-26.05-chilled/0.1";
     nixpkgs-nvidia.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
     nixpkgs-sunshine.url = "github:Qubasa/nixpkgs/update_sunshine";
-    nixpkgs-backports.url = "github:nixos/nixpkgs/release-25.05";
+    nixpkgs-backports.url = "github:nixos/nixpkgs/release-25.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     stylix = {
       url = "github:nix-community/stylix";
@@ -16,6 +16,14 @@ rec {
       inputs.systems.follows = "flake-utils/systems";
       inputs.nur.follows = "nur";
       inputs.flake-parts.follows = "flake-parts";
+    };
+    darwin = {
+      url = "github:heywoodlh/nix-darwin/heywoodlh";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nvidia-patch = {
       url = "github:icewind1991/nvidia-patch-nixos";
@@ -154,6 +162,7 @@ rec {
       inputs.nix.follows = "nix";
       inputs.git-hooks.follows = "pre-commit-hooks";
       inputs.flake-compat.follows = "nix/flake-compat";
+      inputs.rust-overlay.follows = "lanzaboote/rust-overlay";
       inputs.nixd.follows = "";
     };
     kyle = {
@@ -161,6 +170,7 @@ rec {
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.ashell.follows = "ashell";
       inputs.home-manager.follows = "home-manager";
+      inputs.nix-cachyos-kernel.follows = "nix-cachyos-kernel";
       inputs.nur.follows = "nur";
       inputs.teslamate-src.follows = "";
       inputs.opnix.follows = "";
@@ -170,10 +180,6 @@ rec {
       inputs.hermes-agent.follows = "hermes-agent";
       inputs.systems.follows = "flake-utils/systems";
     };
-    darwin = {
-      url = "github:heywoodlh/nix-darwin/heywoodlh";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     user-icon = {
       url = "https://avatar.tangled.sh/1c796c57a7536e989ab09026df5f0fe7870be6217bc8ae642e48fa449de72f59/did:plc:ycnss4fntzi3rjuueb7loq3x?v=bafkreic";
       flake = false;
@@ -181,10 +187,6 @@ rec {
     ssh-keys = {
       url = "https://github.com/heywoodlh.keys";
       flake = false;
-    };
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     osquery-fix-nixpkgs = {
       url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
@@ -225,12 +227,6 @@ rec {
       inputs.nix-darwin.follows = "darwin";
       inputs.flake-utils.follows = "flake-utils";
     };
-    hexstrike-ai = {
-      url = "github:heywoodlh/hexstrike-ai/nix-flake-init";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.pyproject-nix.follows = "pyproject-nix";
-    };
     # only to sync dependents that use pyproject-nix
     pyproject-nix = {
       url = "github:nix-community/pyproject.nix";
@@ -265,13 +261,6 @@ rec {
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nmd.follows = "nmd";
     };
-    nix-on-droid = {
-      url = "github:nix-community/nix-on-droid/release-24.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-      inputs.nix-formatter-pack.follows = "nix-formatter-pack";
-      inputs.nmd.follows = "nmd";
-    };
     nix-cachyos-kernel = {
       url = "github:xddxdd/nix-cachyos-kernel/release";
       inputs.nixpkgs.follows = "nixpkgs-nvidia"; # assume cachyos-kernel enabled machines are gaming machines
@@ -294,10 +283,6 @@ rec {
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.tangled.follows = "tangled";
     };
-    stackpkgs = {
-      url = "git+https://code.thishorsie.rocks/ryze/stackpkgs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     helium = {
       url = "github:oxcl/nix-flake-helium-browser";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -305,7 +290,6 @@ rec {
     nixos-lima = {
       url = "github:nixos-lima/nixos-lima";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
     };
     gh-gitignore = {
       url = "github:github/gitignore";
@@ -380,14 +364,11 @@ rec {
                       signal-ntfy,
                       plasma-manager,
                       cart,
-                      hexstrike-ai,
                       hyprland,
-                      nix-on-droid,
                       steam-asahi,
                       lanzaboote,
                       nix-cachyos-kernel,
                       spindle-run,
-                      stackpkgs,
                       helium,
                       nixpkgs-jovian-nixos,
                       nixos-lima,
@@ -752,9 +733,6 @@ rec {
     # shared config among darwin workstations
     darwinWorkstationConfig = {
       homebrew = {
-        #brews = [
-        #  "libolm"
-        #];
         casks = [
           "beeper"
           "legcord"
@@ -779,9 +757,6 @@ rec {
             username = "${user}";
             homeDirectory = "${homeDir}";
           };
-          nixpkgs.config.permittedInsecurePackages = [
-            "olm-3.2.16"
-          ];
           # Home-Manager specific nixpkgs config
           nixpkgs.config = {
             allowUnfree = true;
@@ -1058,12 +1033,6 @@ rec {
           };
         };
 
-        nixos-slc = nixosConfig "server" "nixos-slc" {
-          imports = [
-            ./nixos/hosts/slc.nix
-          ];
-        };
-
         nixos-thinkpad = nixosConfig "laptop" "nixos-thinkpad" {
           imports = [
             /etc/nixos/hardware-configuration.nix
@@ -1203,6 +1172,15 @@ rec {
           boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
 
           networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 3773 ];
+
+          # 8 GiB of RAM cannot feed `max-jobs = auto` (8) x `cores = 0` (8)
+          nix.settings = {
+            max-jobs = 1;
+            cores = 4;
+          };
+
+          # nix-daemon sets Delegate=, so this ceiling covers the build subtree
+          systemd.services.nix-daemon.serviceConfig.MemoryHigh = "3G";
 
           home-manager.users.heywoodlh = {
             heywoodlh.home = {
@@ -1601,21 +1579,6 @@ rec {
             ${pkgs.starship}/bin/starship init fish | source
           '';
         };
-      };
-
-      nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
-        pkgs = import nixpkgs { system = "aarch64-linux"; };
-        modules = [
-          {
-            home-manager.config = { pkgs, ... }:
-            {
-              imports = [
-                ./home/linux.nix
-                ./home/linux/no-desktop.nix
-              ];
-            };
-          }
-        ];
       };
 
       packages = {

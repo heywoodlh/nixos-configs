@@ -74,10 +74,8 @@ in {
     # Single insecure-package allowlist. This predicate can only be defined
     # once (functions don't merge across modules), so per-host allowances go
     # here rather than in individual modules.
-    #   - olm: for gomuks until issues are resolved
     #   - broadcom-sta: wl wifi module on Intel Macs (heywoodlh.intel-mac)
     nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
-      "olm"
       "broadcom-sta"
     ];
 
@@ -258,6 +256,23 @@ in {
         alsa.support32Bit = true;
         pulse.enable = true;
       };
+    };
+
+    # A stalled tailscaled trips its ipnlocal watchdog, and the resulting
+    # ExecStopPost=tailscaled --cleanup takes tailscale0 down with it.
+    systemd.services.tailscaled = mkIf config.services.tailscale.enable {
+      # MemoryMin would be capped to 0 by system.slice; this is self-contained
+      serviceConfig = {
+        MemorySwapMax = 0;
+        ManagedOOMPreference = "avoid";
+        OOMScoreAdjust = -900;
+        CPUWeight = 200;
+        Restart = "always";
+        RestartSec = 5;
+        TimeoutStopSec = 30;
+      };
+      # Never stop retrying, even on a crash loop
+      unitConfig.StartLimitBurst = 0;
     };
 
     security = {

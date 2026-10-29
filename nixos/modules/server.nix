@@ -1,16 +1,10 @@
-{ config, pkgs, lib, home-manager, nixpkgs-stable, nixpkgs-backports, ... }:
+{ config, pkgs, lib, home-manager, ... }:
 
 with lib;
 with lib.types;
 
 let
   cfg = config.heywoodlh.server;
-  system = pkgs.stdenv.hostPlatform.system;
-  pkgs-stable = import nixpkgs-stable {
-    inherit system;
-    config.allowUnfree = true;
-  };
-  pkgs-backports = nixpkgs-backports.legacyPackages.${system};
 in {
   options.heywoodlh.server = mkOption {
     default = false;
@@ -18,12 +12,7 @@ in {
     type = bool;
   };
 
-  config = let
-    username = config.heywoodlh.defaults.user.name;
-    userDesc = config.heywoodlh.defaults.user.description;
-    userUid = config.heywoodlh.defaults.user.uid;
-    homeDir = config.heywoodlh.defaults.user.homeDir;
-  in mkIf cfg {
+  config = mkIf cfg {
     heywoodlh.defaults.enable = true;
     heywoodlh.console = true;
     heywoodlh.sshd.enable = true;
@@ -52,11 +41,6 @@ in {
       pkgs.wireguard-tools
       pkgs.zsh
     ];
-
-    virtualisation.docker = {
-      enable = true;
-      package = pkgs-backports.docker;
-    };
 
     # Allow heywoodlh to run sudo commands without password
     security.sudo.wheelNeedsPassword = false;

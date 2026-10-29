@@ -16,7 +16,6 @@ in {
 
   home.packages = with pkgs; [
     contact
-    gomuks
     libvirt
     meshtastic
     cpuspeed

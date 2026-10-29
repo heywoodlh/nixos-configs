@@ -185,7 +185,6 @@ in {
           #onepassword-password-manager <- install via Firefox extensions, seems to break when using nixpkgs' provided app
           privacy-badger
           stylus
-          terms-of-service-didnt-read
           ublock-origin
           vimium
         ];

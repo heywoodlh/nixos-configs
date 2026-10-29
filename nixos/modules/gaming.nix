@@ -99,7 +99,7 @@ let
   # 1. localplatformlinux.py: run() strips PATH from subprocesses (env={"LD_LIBRARY_PATH":""}),
   #    causing service_stop() to fail finding systemctl
   # 2. helpers.py: get_system_pythonpaths() calls bare "python3" with env={}, not found on NixOS
-  decky-loader-patched = pkgs.decky-loader.overrideAttrs (old: {
+  decky-loader-patched = pkgs.jovianPackages.decky-loader.overrideAttrs (old: {
     postPatch = (old.postPatch or "") + ''
       substituteInPlace backend/decky_loader/localplatform/localplatformlinux.py \
         --replace-fail \
@@ -215,9 +215,10 @@ in {
 
     programs.steam = {
       enable = true;
-      package = if (system == "aarch64-linux") then
+      # mkDefault so jovian.steam's own package wins on Jovian hosts
+      package = mkDefault (if (system == "aarch64-linux") then
         vidhanix.packages.${system}.muvm-steam
-      else pkgs.steam;
+      else pkgs.steam);
       protontricks.enable = (system == "x86_64-linux");
       localNetworkGameTransfers.openFirewall = true;
     };

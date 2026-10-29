@@ -46,10 +46,20 @@
         auto-pairs = false
       '';
 
+      helixPkg = helix-src.packages.${system}.helix.override {
+        grammarOverlays = [
+          (final: prev: {
+            perl = prev.perl.overrideAttrs (old: {
+              FLAGS = old.FLAGS ++ ["-std=gnu17"];
+            });
+          })
+        ];
+      };
+
       helixConf = pkgs.stdenv.mkDerivation {
         name = "config.toml";
         builder = pkgs.bash;
-        args = [ "-c" "${pkgs.coreutils}/bin/cp ${myConfig} $out" ];
+        args = ["-c" "${pkgs.coreutils}/bin/cp ${myConfig} $out"];
       };
     in {
       packages = rec {
@@ -58,9 +68,9 @@
           PATH="${pkgs.nix}/bin:${pkgs.nil}/bin:$PATH"
           mkdir -p ~/.config/helix/themes
           cp -f ${self}/themes/heywoodlh.toml ~/.config/helix/themes
-          ${helix-src.packages.${system}.helix}/bin/hx -c ${helixConf} $@
+          ${helixPkg}/bin/hx -c ${helixConf} $@
         '';
-        helix = helix-src.packages.${system}.helix;
+        helix = helixPkg;
         default = helix-wrapper;
       };
 

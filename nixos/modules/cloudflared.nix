@@ -28,7 +28,7 @@ in {
             "/opt/cloudflared/config:/etc/cloudflared"
           ];
           environmentFiles = [
-            /opt/cloudflared/env
+            "/opt/cloudflared/env"
           ];
           extraOptions = [
             "--network=host"

@@ -173,6 +173,11 @@ in {
         description = "Extra settings to pass to services.hermes-agent.settings.";
         type = attrs;
       };
+      extraPlugins = mkOption {
+        default = [];
+        description = "Extra plugins to pass to services.hermes-agent.extraPlugins.";
+        type = listOf package;
+      };
       environment = mkOption {
         default = {};
         description = "Extra environment vars to pass to services.hermes-agent.environment.";
@@ -247,6 +252,7 @@ in {
             then "hostname"
             else null;
         };
+        extraPlugins = cfg.extraPlugins;
         settings =
           {
             model = cfg.model;

@@ -1003,20 +1003,24 @@ rec {
                   host = "nixos-ops.barn-banana.ts.net";
                 };
                 model = {
-                  default = "gpt-5.6-terra";
-                  provider = "copilot";
+                  default = "z-ai/glm-5.3-flash";
+                  provider = "openrouter";
                 };
                 environmentFiles = [
                   "/home/ops/.hermes.env"
                 ];
+                extraPlugins = [
+                  (pkgs.runCommand "claude-subscription-directsdk" {} ''
+                    cp -r ${pkgs.fetchFromGitHub {
+                      owner = "NousResearch";
+                      repo = "hermes-official-plugins";
+                      rev = "1e326ddd28ae261821d7714d106fe114999a0bba";
+                      hash = "sha256-9sxRw20aMkbGQXxoa5SEFGDDudwQq3GvGyKL8Yl0I/U=";
+                    }}/claude-subscription-directsdk $out
+                  '')
+                ];
                 settings = {
                   dashboard.public_url = "https://hermes.heywoodlh.io";
-                  #platform_toolsets = {
-                  #  discord = [
-                  #    "hermes-discord"
-                  #    "discord"
-                  #  ];
-                  #};
                 };
               };
               t3 = {

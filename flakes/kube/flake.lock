@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "cloudflared-helm": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1726797199,
-        "narHash": "sha256-x8F9AUNPqb/jEgrIAAxaCp+3t2V+5CoJz/3UFaSaW7o=",
-        "owner": "cloudflare",
-        "repo": "helm-charts",
-        "rev": "76f20fe9ca41d8c40fb138635cf23e545df8d45b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cloudflare",
-        "repo": "helm-charts",
-        "type": "github"
-      }
-    },
     "coredns": {
       "flake": false,
       "locked": {
@@ -378,7 +362,6 @@
     },
     "root": {
       "inputs": {
-        "cloudflared-helm": "cloudflared-helm",
         "coredns": "coredns",
         "crossplane": "crossplane",
         "crowdsec-helm": "crowdsec-helm",

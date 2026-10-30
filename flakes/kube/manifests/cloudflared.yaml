@@ -33,7 +33,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: cloudflare-tunnel
-          image: "docker.io/cloudflare/cloudflared:2025.11.1"
+          image: "docker.io/cloudflare/cloudflared:2026.10.3"
           imagePullPolicy: IfNotPresent
           env:
             - name: CLOUDFLARED_TOKEN

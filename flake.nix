@@ -1004,7 +1004,7 @@ rec {
                 };
                 model = {
                   default = "z-ai/glm-5.3-flash";
-                  provider = "openrouter";
+                  provider = "OpenRouter";
                 };
                 environmentFiles = [
                   "/home/ops/.hermes.env"

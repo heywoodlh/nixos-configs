@@ -10,10 +10,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    cloudflared-helm = {
-      url = "github:cloudflare/helm-charts";
-      flake = false;
-    };
     crowdsec-helm = { url = "github:crowdsecurity/helm-charts/crowdsec-0.24.2"; flake = false; };
     envoy-bouncer-helm = { url = "github:kdwils/envoy-proxy-crowdsec-bouncer/v0.8.1"; flake = false; };
     nfs-helm = {
@@ -82,7 +78,6 @@
     crowdsec-helm,
     envoy-bouncer-helm,
     tailscale,
-    cloudflared-helm,
     truecharts-helm,
     coredns,
     wazuh,
@@ -341,7 +336,7 @@
         cloudflared = mkKubeDrv "cloudflared" {
           src = ./templates/cloudflared.yaml;
           namespace = "cloudflared";
-          image = "docker.io/cloudflare/cloudflared:2025.11.1";
+          image = "docker.io/cloudflare/cloudflared:2026.10.3";
           replicas = 2;
         };
         cloudtube = mkKubeDrv "cloudtube" {

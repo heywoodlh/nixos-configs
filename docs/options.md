@@ -710,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults.nix)
 
 
 
@@ -942,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults.nix)
 
 
 
@@ -966,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults.nix)
 
 
 
@@ -990,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults.nix)
 
 
 
@@ -1014,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults.nix)
 
 
 
@@ -1038,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults.nix)
 
 
 
@@ -1062,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/defaults.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/defaults.nix)
 
 
 
@@ -1612,7 +1612,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/s3jygjhkyhamir31d4vp4bzhpvqxylwa-tmux/bin/tmux"
+"/nix/store/ynjlliis43akz6nv5s8m860cqxphsjjj-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1660,7 +1660,7 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
@@ -5633,7 +5633,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/sshd\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/sshd.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/sshd\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/sshd.nix)
 
 
 
@@ -5729,7 +5729,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/stylix\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/stylix.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/stylix\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/stylix.nix)
 
 
 
@@ -5753,7 +5753,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/stylix\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/stylix.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/stylix\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/stylix.nix)
 
 
 
@@ -5777,7 +5777,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/stylix\.nix](/nix/store/z5f47gmnnyw4ikaxmlc3y5lifqghsy24-source/base/stylix.nix)
+ - [/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/stylix\.nix](/nix/store/fx1p1s5alb5xnq9q0l044gs89xk1v3v4-source/base/stylix.nix)
 
 
 

@@ -33,6 +33,9 @@
     line: "deb https://deb.debian.org/debian/ bullseye-backports main"
     state: absent
 
+- name: configure Duo SSH authentication
+  ansible.builtin.include_tasks: duo.yml
+
 - name: add neovim
   ansible.builtin.apt:
     name: neovim

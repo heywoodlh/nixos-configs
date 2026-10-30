@@ -1,0 +1,110 @@
+---
+- name: check for provisioned Duo credentials
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop:
+    - /root/duo.key
+    - /root/duo-integration.key
+    - /root/duo-api-host
+  register: duo_credential_files
+
+- name: determine whether Duo credentials are usable
+  ansible.builtin.set_fact:
+    duo_credentials_present: >-
+      {{
+        duo_credential_files.results
+        | selectattr('stat.exists')
+        | selectattr('stat.isreg')
+        | selectattr('stat.pw_name', 'equalto', 'root')
+        | selectattr('stat.mode', 'equalto', '0600')
+        | list
+        | length == 3
+      }}
+  no_log: true
+
+- name: install Duo Unix PAM module
+  ansible.builtin.apt:
+    name: libpam-duo
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: duo_credentials_present
+
+- name: render Duo PAM configuration from provisioned keys
+  ansible.builtin.shell:
+    cmd: |
+      set -euo pipefail
+      temporary_file=$(mktemp)
+      trap 'rm -f "$temporary_file"' EXIT
+      {
+        printf '%s\n' '[duo]'
+        printf 'ikey='
+        tr -d '\r\n' < /root/duo-integration.key
+        printf '\n'
+        printf 'skey='
+        tr -d '\r\n' < /root/duo.key
+        printf '\n'
+        printf 'host='
+        tr -d '\r\n' < /root/duo-api-host
+        printf '\n'
+        printf '%s\n' 'autopush=true'
+        printf '%s\n' 'failmode=secure'
+      } > "$temporary_file"
+      install -d -o root -g root -m 0755 /etc/duo
+      if ! cmp -s "$temporary_file" /etc/duo/pam_duo.conf 2>/dev/null; then
+        install -o root -g root -m 0600 "$temporary_file" /etc/duo/pam_duo.conf
+        printf changed
+      fi
+    executable: /bin/bash
+  no_log: true
+  register: duo_pam_configuration
+  changed_when: duo_pam_configuration.stdout == 'changed'
+  when: duo_credentials_present
+
+- name: require Duo for keyboard-interactive SSH authentication
+  ansible.builtin.blockinfile:
+    path: /etc/pam.d/sshd
+    insertbefore: '^@include common-auth$'
+    marker: '# {mark} ANSIBLE DUO SSH'
+    block: |
+      auth requisite pam_duo.so
+      auth sufficient pam_permit.so
+  when: duo_credentials_present
+
+- name: configure SSH public-key-or-Duo authentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^(#)?{{ item.key }}"
+    line: "{{ item.key }} {{ item.value }}"
+    state: present
+  loop:
+    - { key: 'UsePAM', value: 'yes' }
+    - { key: 'KbdInteractiveAuthentication', value: 'yes' }
+    - { key: 'ChallengeResponseAuthentication', value: 'yes' }
+    - { key: 'PasswordAuthentication', value: 'no' }
+    - { key: 'AuthenticationMethods', value: 'publickey keyboard-interactive' }
+  register: duo_sshd_configuration
+  when: duo_credentials_present
+
+- name: ensure SSH runtime directory exists before validation
+  ansible.builtin.file:
+    path: /run/sshd
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when: duo_credentials_present
+
+- name: validate SSH configuration
+  ansible.builtin.command:
+    cmd: /usr/sbin/sshd -t
+  changed_when: false
+  when: duo_credentials_present
+
+- name: reload SSH after validated Duo configuration
+  ansible.builtin.systemd_service:
+    name: ssh.service
+    state: reloaded
+  when:
+    - duo_credentials_present
+    - duo_sshd_configuration.changed

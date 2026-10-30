@@ -100,19 +100,32 @@ let
     sudo chown -R root:root /root/duo-integration.key
   '';
   duo-key-remote-setup = pkgs.writeShellScriptBin "duo-key-remote-setup.sh" ''
-    hosts=("nix-drive" "homelab" "nixos-gaming")
-    ${op-wrapper} item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key --reveal > /tmp/duo.key
-    ${op-wrapper} item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key --reveal > /tmp/duo-integration.key
-    chmod 600 /tmp/duo.key
-    chmod 600 /tmp/duo-integration.key
+    set -euo pipefail
+    umask 077
+    hosts=("homelab" "spencer-router" "yasmin-router" "arlene-router")
+    duo_key="$(${pkgs.coreutils}/bin/mktemp)"
+    duo_integration_key="$(${pkgs.coreutils}/bin/mktemp)"
+    duo_api_host="$(${pkgs.coreutils}/bin/mktemp)"
+    cleanup() {
+      ${pkgs.coreutils}/bin/rm -f "$duo_key" "$duo_integration_key" "$duo_api_host"
+    }
+    trap cleanup EXIT
+    : "''${DUO_API_HOST:?Set DUO_API_HOST to the Duo Unix API hostname}"
+    ${op-wrapper} item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key --reveal > "$duo_key"
+    ${op-wrapper} item get 6sgj3s3755opehqifusmxxoehy --fields=unix-integration-key --reveal > "$duo_integration_key"
+    printf '%s' "$DUO_API_HOST" > "$duo_api_host"
     for host in "''${hosts[@]}"
     do
-      scp /tmp/duo.key heywoodlh@$host:/tmp/duo.key
-      scp /tmp/duo-integration.key heywoodlh@$host:/tmp/duo-integration.key
-      ssh heywoodlh@$host "sudo mv /tmp/duo.key /root/duo.key; sudo chown -R root:root /root/duo.key; sudo chmod 600 /root/duo.key"
-      ssh heywoodlh@$host "sudo mv /tmp/duo-integration.key /root/duo-integration.key; sudo chown -R root:root /root/duo-integration.key; sudo chmod 600 /root/duo-integration.key"
+      ${pkgs.openssh}/bin/scp "$duo_key" "heywoodlh@''${host}:/tmp/duo.key"
+      ${pkgs.openssh}/bin/scp "$duo_integration_key" "heywoodlh@''${host}:/tmp/duo-integration.key"
+      ${pkgs.openssh}/bin/scp "$duo_api_host" "heywoodlh@''${host}:/tmp/duo-api-host"
+      ${pkgs.openssh}/bin/ssh "heywoodlh@''${host}" \
+        'sudo install -o root -g root -m 0600 /tmp/duo.key /root/duo.key && sudo rm -f /tmp/duo.key'
+      ${pkgs.openssh}/bin/ssh "heywoodlh@''${host}" \
+        'sudo install -o root -g root -m 0600 /tmp/duo-integration.key /root/duo-integration.key && sudo rm -f /tmp/duo-integration.key'
+      ${pkgs.openssh}/bin/ssh "heywoodlh@''${host}" \
+        'sudo install -o root -g root -m 0600 /tmp/duo-api-host /root/duo-api-host && sudo rm -f /tmp/duo-api-host'
     done
-    rm /tmp/duo.key
   '';
   docker-compose-txt = pkgs.writeText "docker-compose.yml" ''
     services:

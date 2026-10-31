@@ -65,36 +65,6 @@
         "type": "github"
       }
     },
-    "ashell": {
-      "inputs": {
-        "crane": [
-          "crane"
-        ],
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": [
-          "lanzaboote",
-          "rust-overlay"
-        ]
-      },
-      "locked": {
-        "lastModified": 1762758122,
-        "narHash": "sha256-Ftlt78xIGlFxAkNLEVSRximAEOcIIk8pvLo87jol2DE=",
-        "owner": "kylesferrazza",
-        "repo": "ashell",
-        "rev": "887b0da74a93da7e66b33577ba78f9fd1776cb7d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kylesferrazza",
-        "repo": "ashell",
-        "type": "github"
-      }
-    },
     "base16": {
       "inputs": {
         "fromYaml": "fromYaml"
@@ -1225,10 +1195,14 @@
     },
     "kyle": {
       "inputs": {
-        "ashell": [
-          "ashell"
-        ],
         "doom-d": [],
+        "flake-compat": [
+          "nix",
+          "flake-compat"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
         "hermes-agent": [
           "hermes-agent"
         ],
@@ -1251,6 +1225,10 @@
           "nur"
         ],
         "opnix": [],
+        "rust-overlay": [
+          "lanzaboote",
+          "rust-overlay"
+        ],
         "spicetify-nix": "spicetify-nix",
         "stylix": [],
         "systems": [
@@ -1258,20 +1236,23 @@
           "systems"
         ],
         "teslamate-src": [],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ],
         "vscode-server": []
       },
       "locked": {
-        "lastModified": 1793157603,
-        "narHash": "sha256-4s8T+bnl+wCNkE+qqvsKYj5e0B1x9icKxzidOzcB0Wc=",
-        "owner": "kylesferrazza",
-        "repo": "nix-configs",
-        "rev": "20c685992b52f1f8134d7c834813da2e3c49e7dd",
-        "type": "gitlab"
+        "lastModified": 1793383283,
+        "narHash": "sha256-Rrif1JKZ64BCBkcFkfKiE0KQt6Hc/bUxjk0Xmoep8bU=",
+        "ref": "refs/heads/main",
+        "rev": "a70f56e1407c1a7d82557ee9eb6f1af9948a6902",
+        "revCount": 1959,
+        "type": "git",
+        "url": "https://codeberg.org/kylesferrazza/nix-configs"
       },
       "original": {
-        "owner": "kylesferrazza",
-        "repo": "nix-configs",
-        "type": "gitlab"
+        "type": "git",
+        "url": "https://codeberg.org/kylesferrazza/nix-configs"
       }
     },
     "lacros": {
@@ -1331,8 +1312,6 @@
         "bun2nix": "bun2nix",
         "flake-parts": [
           "kyle",
-          "teslamate-src",
-          "devenv",
           "flake-parts"
         ],
         "nixpkgs": [
@@ -1345,16 +1324,15 @@
         ],
         "treefmt-nix": [
           "kyle",
-          "teslamate-src",
           "treefmt-nix"
         ]
       },
       "locked": {
-        "lastModified": 1792295049,
-        "narHash": "sha256-yhfeGI3EKvlmzURqFGp6cJGBUiBMkXS2P0MczEMqtkI=",
+        "lastModified": 1793216108,
+        "narHash": "sha256-8g7NBybH8skrUEEVuhY4c5IjOEK3K/92IiHUc+ffXi4=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "90f2b0ae321600d119301d7f5d496c6d8d08d175",
+        "rev": "b87f6329012591fc1af978866e57d9c866b146ef",
         "type": "github"
       },
       "original": {
@@ -1609,8 +1587,6 @@
       "inputs": {
         "flake-compat": [
           "kyle",
-          "teslamate-src",
-          "devenv",
           "flake-compat"
         ],
         "nixpkgs": [
@@ -1619,11 +1595,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791830269,
-        "narHash": "sha256-A3JRH8qkp+NrP3sSwfutu7nZ5AclDY/HDmn/xDxduM4=",
+        "lastModified": 1792772387,
+        "narHash": "sha256-MK6/UsOv1Ii71c+2U28GpmKn+Fm4MZG2TmIscuvUERw=",
         "owner": "nix-community",
         "repo": "nixos-apple-silicon",
-        "rev": "12cd234285d3037cedfab979aa70b75284a59afc",
+        "rev": "46e80bc641f5aaee6ed7ef90a12314a81492f48f",
         "type": "github"
       },
       "original": {
@@ -1788,11 +1764,11 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1792303382,
-        "narHash": "sha256-o36vJiC4eM6zpiSEVT98FTsEcXYguqFF+TBonhNp4jg=",
+        "lastModified": 1793220184,
+        "narHash": "sha256-CgXV8u+qPlDkZV6XINxVqP1HkZq/0c4UY2TDAzkz8yY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "435f9e465af755dcec593135683efe2932d8bcaf",
+        "rev": "294fd7a700803a2b6a4ed56b94a1bbff6e02367f",
         "type": "github"
       },
       "original": {
@@ -2197,7 +2173,6 @@
     },
     "root": {
       "inputs": {
-        "ashell": "ashell",
         "cart": "cart",
         "chromium-widevine-flake": "chromium-widevine-flake",
         "crane": "crane",
@@ -2370,11 +2345,11 @@
         "spicetify-themes-alindl": "spicetify-themes-alindl"
       },
       "locked": {
-        "lastModified": 1762904572,
-        "narHash": "sha256-SBowp8n32H1pB22DKYcodCVrySxr0vMuHtSgvU128vA=",
+        "lastModified": 1793327460,
+        "narHash": "sha256-QruEQt+8jne7aO0LDvI2m2TW9Ev+YsX2K7A3NOVgPb4=",
         "owner": "kylesferrazza",
         "repo": "spicetify-nix",
-        "rev": "827589fa7223259a95d183968939d9945d01229b",
+        "rev": "32122a9b91f52e1bfa6f6f3f0900ed2097935282",
         "type": "gitlab"
       },
       "original": {

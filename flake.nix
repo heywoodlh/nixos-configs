@@ -146,14 +146,6 @@ rec {
       inputs.op-flake.follows = "op-flake";
       inputs.ttyd-flake.follows = "ttyd-flake";
     };
-    # for dependents of ashell
-    ashell = {
-      url = "github:kylesferrazza/ashell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.crane.follows = "crane";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.rust-overlay.follows = "lanzaboote/rust-overlay";
-    };
     # for dependents of devenv
     devenv = {
       url = "github:cachix/devenv";
@@ -166,9 +158,8 @@ rec {
       inputs.nixd.follows = "";
     };
     kyle = {
-      url = "gitlab:kylesferrazza/nix-configs";
+      url = "git+https://codeberg.org/kylesferrazza/nix-configs";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.ashell.follows = "ashell";
       inputs.home-manager.follows = "home-manager";
       inputs.nix-cachyos-kernel.follows = "nix-cachyos-kernel";
       inputs.nur.follows = "nur";
@@ -179,6 +170,10 @@ rec {
       inputs.vscode-server.follows = "";
       inputs.hermes-agent.follows = "hermes-agent";
       inputs.systems.follows = "flake-utils/systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.flake-compat.follows = "nix/flake-compat";
+      inputs.rust-overlay.follows = "lanzaboote/rust-overlay";
+      inputs.treefmt-nix.follows = "treefmt-nix";
     };
     user-icon = {
       url = "https://avatar.tangled.sh/1c796c57a7536e989ab09026df5f0fe7870be6217bc8ae642e48fa449de72f59/did:plc:ycnss4fntzi3rjuueb7loq3x?v=bafkreic";
@@ -472,7 +467,6 @@ rec {
     extNixOSModules = [
       home-manager.nixosModules.home-manager
       stylix.nixosModules.stylix
-      kyle.nixosModules.apple-silicon-support
       kyle.nixosModules.appleSilicon
       jovian-nixos.nixosModules.default
       steam-asahi.nixosModules.default

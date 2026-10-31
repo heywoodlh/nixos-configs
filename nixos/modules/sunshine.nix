@@ -110,11 +110,22 @@ in {
 
     services.sunshine = {
       enable = true;
-      package = sunshine-pkgs.sunshine.override {
+      # security.wrappers.sunshine (below) needs a real ELF at $out/bin/sunshine --
+      # cudaSupport makes upstream wrap it in a bash script (to set LD_LIBRARY_PATH
+      # for vulkan-loader), which Nix's wrapper tooling refuses to apply
+      # capabilities to. Bake the same lib path into the RPATH instead, so the
+      # binary stays unwrapped.
+      package = (sunshine-pkgs.sunshine.override {
         cudaSupport = true;
         cudaPackages = pkgs.cudaPackages;
         libva = pkgs.libva;
-      };
+      }).overrideAttrs (old: {
+        postFixup = ''
+          ${pkgs.patchelf}/bin/patchelf --set-rpath \
+            "$(${pkgs.patchelf}/bin/patchelf --print-rpath $out/bin/sunshine):${pkgs.lib.makeLibraryPath [ pkgs.vulkan-loader ]}" \
+            $out/bin/sunshine
+        '';
+      });
 
       settings = cfg.extraConfig // {
         resolutions = cfg.resolutions;

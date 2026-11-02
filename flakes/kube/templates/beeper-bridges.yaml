@@ -10,6 +10,17 @@ metadata:
 spec:
   itemPath: vaults/Kubernetes/items/ujxgo6q3j7k44nr4vgxgkh3zoi
 ---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  finalizers:
+  - onepassword.com/finalizer.secret
+  generation: 1
+  name: beeper-bluebubbles
+  namespace: @namespace@
+spec:
+  itemPath: vaults/Kubernetes/items/ho6p75vydj7jxykh2i2kd45cta
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -162,6 +173,43 @@ spec:
         #        secretKeyRef:
         #          name: beeper-key
         #          key: password
+        # Set up by sending a DM to: `@sh-imessage-000bot:beeper.local`
+        - name: beeper-imessage
+          securityContext:
+            {}
+          image: "@image@"
+          command:
+            - "/bin/ash"
+            - "-c"
+          volumeMounts:
+            - name: imessage-config
+              mountPath: /data
+          args:
+            - /usr/local/bin/run-bridge.sh sh-imessage-000
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          env:
+            - name: MATRIX_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-key
+                  key: password
+            - name: BLUEBUBBLES_URL
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-bluebubbles
+                  key: url
+            - name: BLUEBUBBLES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: beeper-bluebubbles
+                  key: password
       volumes:
       - name: signal-config
         hostPath:
@@ -186,4 +234,8 @@ spec:
       - name: google-voice-config
         hostPath:
           path: @hostfolder@/googlevoice
+          type: DirectoryOrCreate
+      - name: imessage-config
+        hostPath:
+          path: @hostfolder@/imessage
           type: DirectoryOrCreate

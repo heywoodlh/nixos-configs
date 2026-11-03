@@ -22,5 +22,6 @@ fi
 
 if grep -q 'Arch Linux' /etc/os-release
 then
-  pacman -Sy --noconfirm ansible git curl
+  pacman -Sy --noconfirm python-pipx git curl
+  pipx install --include-deps "ansible-core==2.21.*"
 fi

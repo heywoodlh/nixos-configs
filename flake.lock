@@ -1261,17 +1261,17 @@
         "vscode-server": []
       },
       "locked": {
-        "lastModified": 1793157603,
+        "lastModified": 1793727038,
         "narHash": "sha256-4s8T+bnl+wCNkE+qqvsKYj5e0B1x9icKxzidOzcB0Wc=",
-        "owner": "kylesferrazza",
-        "repo": "nix-configs",
-        "rev": "20c685992b52f1f8134d7c834813da2e3c49e7dd",
-        "type": "gitlab"
+        "owner": "heywoodlh-bot",
+        "repo": "kylesferrazza-nix-configs",
+        "rev": "a8c5007bf56d5ad590764cfd2d3eb3a95c782313",
+        "type": "github"
       },
       "original": {
-        "owner": "kylesferrazza",
-        "repo": "nix-configs",
-        "type": "gitlab"
+        "owner": "heywoodlh-bot",
+        "repo": "kylesferrazza-nix-configs",
+        "type": "github"
       }
     },
     "lacros": {

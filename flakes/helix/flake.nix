@@ -53,6 +53,16 @@
               FLAGS = old.FLAGS ++ ["-std=gnu17"];
             });
           })
+          (final: prev: {
+            cylc = prev.cylc.overrideAttrs (old: {
+              src = builtins.fetchTree {
+                type = "github";
+                owner = "heywoodlh-bot";
+                repo = "tree-sitter-cylc";
+                rev = "53d051db1d527debe905f5ad1a7c05d2fb393bd6";
+              };
+            });
+          })
         ];
       };
 

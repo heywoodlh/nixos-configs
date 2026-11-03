@@ -166,7 +166,7 @@ rec {
       inputs.nixd.follows = "";
     };
     kyle = {
-      url = "gitlab:kylesferrazza/nix-configs";
+      url = "github:heywoodlh-bot/kylesferrazza-nix-configs";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.ashell.follows = "ashell";
       inputs.home-manager.follows = "home-manager";

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 # For whatever reason, home-manager and nix-darwin modules don't apply defaults settings?
 with lib;
@@ -127,9 +127,10 @@ in {
       # Use CMD + [ and CMD + ] to move between spaces
       # Note: these must be written to the user domain (no -currentHost); the
       # ByHost/currentHost domain is not where macOS reads symbolic hotkeys.
-      # Hotkey 80 uses ASCII "]" (93) with virtual keycode 30 under Cmd only.
+      # Move left a space is hotkeys 79 (80 is its secondary registration);
+      # move right a space is hotkeys 81/82. "]" = ASCII 93, keycode 30.
       /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>91</integer><integer>33</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>"
-      /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 80 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>93</integer><integer>30</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>"
+      /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>93</integer><integer>30</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>"
 
       # Use CMD + k to open Mission Control
       # ASCII "k" (107), virtual keycode 40, Cmd only. Hotkey 36 is Mission Control.
@@ -151,26 +152,22 @@ in {
       # Restart preferences daemon
       /usr/bin/killall cfprefsd &>/dev/null || true
     '';
-    home.activation.spaces-provision = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      echo "Ensuring 4 spaces per display"
-      ${pkgs.writeShellScript "provision-spaces" ''
-        /usr/bin/python3 - ${./../../darwin/modules/scripts/provision-spaces.py}
-      ''}
-    '';
-
-    home.activation.defaults-privacy = mkIf cfg.privacy ''
+    home.activation.defaults-privacy = mkIf cfg.privacy (
+      ''
       echo "Applying MacOS defaults privacy settings"
 
       # Disable Apple personalized advertising
       /usr/bin/defaults -currentHost write com.apple.AdLib forceLimitAdTracking -int 1
       /usr/bin/defaults -currentHost write com.apple.AdLib allowApplePersonalizedAdvertising -int 0
       /usr/bin/defaults -currentHost write com.apple.AdLib allowIdentifierForAdvertising -int 0
+      '' + lib.optionalString (config.heywoodlh.home.llm.apfel == false) ''
 
       # Disable Apple Intelligence (may require restart)
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "545129924" -bool "false"
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "1341174415" -bool "false"
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "device" -bool "false"
       /usr/bin/defaults -currentHost write com.apple.CloudSubscriptionFeatures.optIn "auto_opt_in" -bool "false"
+      '' + ''
       # Disable Apple Intelligence Report
       /usr/bin/defaults -currentHost write com.apple.AppleIntelligenceReport "reportDuration" -int 0
 
@@ -186,7 +183,8 @@ in {
 
       # Disable the crash reporter
       /usr/bin/defaults -currentHost write com.apple.CrashReporter DialogType -string "none"
-    '';
+      ''
+    );
     home.activation.defaults-security = mkIf cfg.security ''
       echo "Applying MacOS defaults privacy settings"
       # Automatic updates (Deprecated, but we'll still set them anyway)

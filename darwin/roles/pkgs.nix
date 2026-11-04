@@ -49,6 +49,9 @@ in {
     extraConfig = ''
       cask_args appdir: "~/Applications"
     '';
+    onActivation.extraEnv = {
+      HOMEBREW_NO_UPGRADE_QUIT_CASKS = "1";
+    };
     taps = [
       { name = "amar1729/formulae"; trusted = true; }
       { name = "colindean/fonts-nonfree"; trusted = true; }

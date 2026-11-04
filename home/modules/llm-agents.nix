@@ -9,6 +9,60 @@ with lib;
 with lib.types; let
   cfg = config.heywoodlh.home.hermes;
   t3Cfg = config.heywoodlh.home.t3;
+  # Nix-built library closure for T3 Code's runtime-downloaded
+  # chrome-headless-shell (a generic Linux binary that fails on NixOS).
+  t3ChromeDeps = pkgs.symlinkJoin {
+    name = "t3-chrome-headless-shell-deps";
+    paths =
+      map pkgs.lib.getLib [
+        pkgs.alsa-lib
+        pkgs.atk
+        pkgs.at-spi2-atk
+        pkgs.at-spi2-core
+        pkgs.dbus
+        pkgs.expat
+        pkgs.mesa
+        pkgs.glib
+        pkgs.nspr
+        pkgs.nss
+        pkgs.systemd
+        pkgs.xorg.libX11
+        pkgs.xorg.libxcb
+        pkgs.xorg.libXcomposite
+        pkgs.xorg.libXdamage
+        pkgs.xorg.libXext
+        pkgs.xorg.libXfixes
+        pkgs.xorg.libXrandr
+        pkgs.libxkbcommon
+      ]
+      ++ [pkgs.mesa-libgbm pkgs.glibc];
+  };
+  # Idempotently patch every downloaded chrome-headless-shell so it can run
+  # on NixOS: set the ELF interpreter and an rpath against t3ChromeDeps.
+  # Keeps an unpatched .orig backup per version; re-runs after T3 updates.
+  t3PatchBrowser = pkgs.writeShellScriptBin "t3-patch-browser" ''
+    set -euo pipefail
+    patched=0
+    for bin in "$HOME"/.t3/tools/chrome-headless-shell/linux64/*/chrome-headless-shell; do
+      [ -e "$bin" ] || continue
+      if [ -e "$bin.orig" ]; then
+        # Already backed up: re-patch from the pristine copy.
+        cp -f "$bin.orig" "$bin"
+      else
+        cp -f "$bin" "$bin.orig"
+      fi
+      ${pkgs.patchelf}/bin/patchelf \
+        --set-interpreter "${pkgs.glibc}/lib/ld-linux-x86-64.so.2" \
+        --set-rpath "${t3ChromeDeps}/lib" "$bin"
+      patched=$((patched + 1))
+    done
+    echo "t3-patch-browser: patched $patched chrome-headless-shell binaries"
+  '';
+  # Launch wrapper: patch any newly downloaded browser, then run the server.
+  t3Serve = pkgs.writeShellScriptBin "t3-serve-patched" ''
+    ${t3PatchBrowser}/bin/t3-patch-browser
+    exec ${t3Cfg.package}/bin/t3 serve --mode web --host ${t3Cfg.address} --port ${toString t3Cfg.port} "$@"
+  '';
   homeDir =
     if config ? home
     then config.home.homeDirectory
@@ -352,7 +406,7 @@ in {
       systemd.user.services.t3code = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
         Unit.Description = "T3 Code web UI";
         Service = {
-          ExecStart = "${t3Cfg.package}/bin/t3 serve --mode web --host ${t3Cfg.address} --port ${toString t3Cfg.port}";
+          ExecStart = "${t3Serve}/bin/t3-serve-patched";
           Restart = "on-failure";
           RestartSec = "5s";
         };

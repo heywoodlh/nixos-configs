@@ -859,6 +859,7 @@ in {
     };
     btop = true;
     syncthing = true;
+    search-tui.enable = true;
     llm = {
       enable = true;
       pi.package = edgePkgs.pi-coding-agent;

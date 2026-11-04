@@ -314,6 +314,10 @@ rec {
       inputs.uv2nix.follows = "uv2nix";
       inputs.pyproject-nix.follows = "pyproject-nix";
     };
+    search-tui = {
+      url = "github:heywoodlh/search-tui";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {
@@ -432,6 +436,7 @@ rec {
       ./home/modules/paseo.nix
       ./home/modules/onepassword.nix
       ./home/modules/llm-agents.nix
+      ./home/modules/search-tui.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -709,7 +714,7 @@ rec {
     nixosConfig = nixosConfigWith nixpkgs;
 
     eval = pkgs.lib.evalModules {
-      specialArgs = { inherit pkgs; inherit myFlakes; inherit self; };
+      specialArgs = { inherit pkgs; inherit myFlakes; inherit self; search-tui = inputs.search-tui; };
       modules = [
         darwinModules.heywoodlh.darwin { config._module.check = false; }
         homeModules.docs { config._module.check = false; }

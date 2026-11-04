@@ -3969,6 +3969,87 @@ false
 
 
 
+## heywoodlh\.home\.search-tui\.enable
+
+
+
+Whether to enable heywoodlh search-tui configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui.nix)
+
+
+
+## heywoodlh\.home\.search-tui\.package
+
+
+
+The search-tui package installed as ` search `\. The default wrapper
+populates the Kagi session token from 1Password before running it\.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+<derivation search>
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui.nix)
+
+
+
+## heywoodlh\.home\.search-tui\.settings
+
+
+
+Extra settings merged into ` search-tui/config.toml `\.
+
+
+
+*Type:*
+TOML value
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui.nix)
+
+
+
 ## heywoodlh\.home\.syncthing
 
 
@@ -4758,8 +4839,6 @@ true
 
 ## heywoodlh\.nixos\.libvirtd\.username
 
-
-
 Non-root user that will run libvirt\.
 
 
@@ -4829,6 +4908,8 @@ string
 
 
 ## heywoodlh\.nixos\.nvidia-patch
+
+
 
 Enable heywoodlh nvidia-patch configuration\.
 

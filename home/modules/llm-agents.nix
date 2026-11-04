@@ -35,7 +35,7 @@ with lib.types; let
         pkgs.xorg.libXrandr
         pkgs.libxkbcommon
       ]
-      ++ [pkgs.mesa-libgbm pkgs.glibc];
+      ++ [pkgs.libgbm pkgs.glibc];
   };
   # Idempotently patch every downloaded chrome-headless-shell so it can run
   # on NixOS: set the ELF interpreter and an rpath against t3ChromeDeps.

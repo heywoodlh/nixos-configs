@@ -1026,6 +1026,10 @@ rec {
                 enable = true;
                 address = "100.67.47.0";
                 hermes.enable = true;
+                notifications.ntfy = {
+                  enable = true;
+                  url = "http://ntfy.barn-banana.ts.net/t3";
+                };
               };
             };
             home.activation.docker-rootless-context = ''

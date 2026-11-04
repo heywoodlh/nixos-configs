@@ -4001,36 +4001,14 @@ true
 
 
 
-## heywoodlh\.home\.search-tui\.package
-
-
-
-The search-tui package installed as ` search `\. The default wrapper
-populates the Kagi session token from 1Password before running it\.
-
-
-
-*Type:*
-package
-
-
-
-*Default:*
-
-```nix
-<derivation search>
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui.nix)
-
-
-
 ## heywoodlh\.home\.search-tui\.settings
 
 
 
 Extra settings merged into ` search-tui/config.toml `\.
+
+Credentials are not configured here; use search-tui’s ` :login `
+command, which stores them outside the Nix store\.
 
 
 
@@ -4839,6 +4817,8 @@ string
 
 ## heywoodlh\.nixos\.kde\.enable
 
+
+
 Enable heywoodlh KDE configuration\.
 
 
@@ -4860,8 +4840,6 @@ false
 
 
 ## heywoodlh\.nixos\.kde\.user
-
-
 
 User for heywoodlh configuration\.
 
@@ -6003,5 +5981,129 @@ false
 
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/workstation\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/workstation.nix)
+
+
+
+## programs\.search-tui\.enable
+
+
+
+Whether to enable search-tui, a terminal client for web and code search engines\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+
+
+*Example:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui.nix)
+
+
+
+## programs\.search-tui\.package
+
+
+
+The search-tui package to install\.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+search-tui.packages.${pkgs.stdenv.hostPlatform.system}.default
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui.nix)
+
+
+
+## programs\.search-tui\.settings
+
+
+
+Configuration written to ` $XDG_CONFIG_HOME/search-tui/config.toml `\.
+Every key of the TOML config file is supported; run
+` search --example-config ` for a documented example\.
+
+Do not put secrets here (they would end up in the Nix store); use the
+` *_command `, ` *_file ` or ` *_env ` variants of ` api_key `, ` token `,
+` password ` and ` cx ` instead\.
+
+
+
+*Type:*
+TOML value
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+
+
+*Example:*
+
+```nix
+{
+  default_engine = "kagi";
+  default_code_engine = "github";
+  results = 15;
+  browser = "firefox";
+  low_power = false;
+  summary.sentences = 4;
+  ui = {
+    layout = "auto";
+    theme = "tokyo-night";
+    colors.accent = "#7aa2f7";
+  };
+  keys = {
+    open = [ "o" "enter" ];
+    details = [ "l" "right" "space" ];
+  };
+  bangs = {
+    nw = "https://wiki.nixos.org/w/index.php?search={query}";
+  };
+  engines = {
+    kagi.token_file = "~/.config/kagi/session-token";
+    github.token_command = "gh auth token";
+    work = {
+      type = "gitlab";
+      base_url = "https://gitlab.example.com";
+      token_command = "pass show work/gitlab";
+      bangs = [ "work" ];
+    };
+  };
+}
+
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/search-tui.nix)
 
 

@@ -35,7 +35,7 @@ with lib.types; let
         pkgs.xorg.libXrandr
         pkgs.libxkbcommon
       ]
-      ++ [pkgs.mesa-libgbm pkgs.glibc];
+      ++ [pkgs.libgbm pkgs.glibc];
   };
   # Idempotently patch every downloaded chrome-headless-shell so it can run
   # on NixOS: set the ELF interpreter and an rpath against t3ChromeDeps.
@@ -62,6 +62,13 @@ with lib.types; let
   t3Serve = pkgs.writeShellScriptBin "t3-serve-patched" ''
     ${t3PatchBrowser}/bin/t3-patch-browser
     exec ${t3Cfg.package}/bin/t3 serve --mode web --host ${t3Cfg.address} --port ${toString t3Cfg.port} "$@"
+  '';
+  t3ApiHost =
+    if builtins.elem t3Cfg.address ["0.0.0.0" "::"]
+    then "127.0.0.1"
+    else t3Cfg.address;
+  t3NtfyBridge = pkgs.writeShellScriptBin "t3-ntfy-bridge" ''
+    exec ${pkgs.nodejs}/bin/node ${./t3-ntfy-bridge.mjs} "$@"
   '';
   homeDir =
     if config ? home
@@ -197,6 +204,28 @@ in {
         default = 3773;
         description = "Port for the T3 Code web UI.";
         type = port;
+      };
+      notifications.ntfy = {
+        enable = mkOption {
+          default = false;
+          description = "Send T3 Code thread notifications to an ntfy topic.";
+          type = bool;
+        };
+        url = mkOption {
+          default = "";
+          description = "ntfy topic URL to publish notifications to.";
+          type = str;
+        };
+        pollInterval = mkOption {
+          default = 10;
+          description = "Seconds between T3 Code shell snapshot polls.";
+          type = ints.positive;
+        };
+        tokenFile = mkOption {
+          default = null;
+          description = "Optional file containing an ntfy access token for a protected topic.";
+          type = nullOr str;
+        };
       };
       hermes = {
         enable = mkOption {
@@ -386,6 +415,13 @@ in {
       '';
     })
     (mkIf t3Cfg.enable {
+      assertions = [
+        {
+          assertion = !t3Cfg.notifications.ntfy.enable || t3Cfg.notifications.ntfy.url != "";
+          message = "heywoodlh.home.t3.notifications.ntfy.url must be set when ntfy notifications are enabled.";
+        }
+      ];
+
       programs.t3code = {
         enable = true;
         package = t3Cfg.package;
@@ -411,6 +447,46 @@ in {
           RestartSec = "5s";
         };
         Install.WantedBy = ["default.target"];
+      };
+
+      systemd.user.services.t3-ntfy = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && t3Cfg.notifications.ntfy.enable) {
+        Unit = {
+          Description = "T3 Code ntfy notifications";
+          After = ["t3code.service"];
+        };
+        Service = {
+          ExecStart = "${t3NtfyBridge}/bin/t3-ntfy-bridge";
+          Restart = "on-failure";
+          RestartSec = "15s";
+          Environment =
+            [
+              "T3_NOTIFY_BASE_URL=http://${t3ApiHost}:${toString t3Cfg.port}"
+              "T3_NOTIFY_NTFY_URL=${t3Cfg.notifications.ntfy.url}"
+              "T3_NOTIFY_T3_BIN=${t3Cfg.package}/bin/t3"
+              "T3_NOTIFY_POLL_SECONDS=${toString t3Cfg.notifications.ntfy.pollInterval}"
+            ]
+            ++ lib.optional (t3Cfg.notifications.ntfy.tokenFile != null) "T3_NOTIFY_NTFY_TOKEN_FILE=${t3Cfg.notifications.ntfy.tokenFile}";
+        };
+        Install.WantedBy = ["default.target"];
+      };
+
+      launchd.agents.t3-ntfy = lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && t3Cfg.notifications.ntfy.enable) {
+        enable = true;
+        config = {
+          ProgramArguments = ["${t3NtfyBridge}/bin/t3-ntfy-bridge"];
+          EnvironmentVariables =
+            {
+              T3_NOTIFY_BASE_URL = "http://${t3ApiHost}:${toString t3Cfg.port}";
+              T3_NOTIFY_NTFY_URL = t3Cfg.notifications.ntfy.url;
+              T3_NOTIFY_T3_BIN = "${t3Cfg.package}/bin/t3";
+              T3_NOTIFY_POLL_SECONDS = toString t3Cfg.notifications.ntfy.pollInterval;
+            }
+            // lib.optionalAttrs (t3Cfg.notifications.ntfy.tokenFile != null) {
+              T3_NOTIFY_NTFY_TOKEN_FILE = t3Cfg.notifications.ntfy.tokenFile;
+            };
+          RunAtLoad = true;
+          KeepAlive = true;
+        };
       };
 
       launchd.agents.t3code = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {

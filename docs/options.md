@@ -4170,6 +4170,102 @@ false
 
 
 
+## heywoodlh\.home\.t3\.notifications\.ntfy\.enable
+
+
+
+Send T3 Code thread notifications to an ntfy topic\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
+
+
+
+## heywoodlh\.home\.t3\.notifications\.ntfy\.pollInterval
+
+
+
+Seconds between T3 Code shell snapshot polls\.
+
+
+
+*Type:*
+positive integer, meaning >0
+
+
+
+*Default:*
+
+```nix
+10
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
+
+
+
+## heywoodlh\.home\.t3\.notifications\.ntfy\.tokenFile
+
+
+
+Optional file containing an ntfy access token for a protected topic\.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
+
+
+
+## heywoodlh\.home\.t3\.notifications\.ntfy\.url
+
+
+
+ntfy topic URL to publish notifications to\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+""
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
+
+
+
 ## heywoodlh\.home\.t3\.port
 
 
@@ -4743,8 +4839,6 @@ string
 
 ## heywoodlh\.nixos\.kde\.enable
 
-
-
 Enable heywoodlh KDE configuration\.
 
 
@@ -4838,6 +4932,8 @@ true
 
 
 ## heywoodlh\.nixos\.libvirtd\.username
+
+
 
 Non-root user that will run libvirt\.
 

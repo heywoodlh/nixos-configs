@@ -1,16 +1,13 @@
-{ config, lib, pkgs, myFlakes, search-tui, ... }:
+{ config, lib, pkgs, search-tui, ... }:
 
 with lib;
 
 let
   cfg = config.heywoodlh.home.search-tui;
-  system = pkgs.stdenv.hostPlatform.system;
-  op-wrapper = "${myFlakes.packages.${system}.op-wrapper}/bin/op-wrapper";
   tomlFormat = pkgs.formats.toml { };
   defaultSettings = {
     default_engine = "kagi";
     ui.theme = "catppuccin-macchiato";
-    engines.kagi.token_command = "${op-wrapper} item get m7jgf2i7odnem6kafb6bslyck4 --fields api-key --reveal";
   };
 in
 {
@@ -24,6 +21,9 @@ in
       default = { };
       description = ''
         Extra settings merged into `search-tui/config.toml`.
+
+        Credentials are not configured here; use search-tui's `:login`
+        command, which stores them outside the Nix store.
       '';
     };
   };

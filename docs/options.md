@@ -4007,6 +4007,9 @@ true
 
 Extra settings merged into ` search-tui/config.toml `\.
 
+Credentials are not configured here; use search-tui’s ` :login `
+command, which stores them outside the Nix store\.
+
 
 
 *Type:*

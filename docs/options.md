@@ -710,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults.nix)
 
 
 
@@ -942,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults.nix)
 
 
 
@@ -966,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults.nix)
 
 
 
@@ -990,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults.nix)
 
 
 
@@ -1014,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults.nix)
 
 
 
@@ -1038,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults.nix)
 
 
 
@@ -1062,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/defaults.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/defaults.nix)
 
 
 
@@ -1612,7 +1612,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/s3jygjhkyhamir31d4vp4bzhpvqxylwa-tmux/bin/tmux"
+"/nix/store/ynjlliis43akz6nv5s8m860cqxphsjjj-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1660,7 +1660,7 @@ signed integer
 *Default:*
 
 ```nix
-14
+16
 ```
 
 *Declared by:*
@@ -4841,6 +4841,8 @@ false
 
 ## heywoodlh\.nixos\.kde\.user
 
+
+
 User for heywoodlh configuration\.
 
 
@@ -5788,7 +5790,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/sshd\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/sshd.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/sshd\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/sshd.nix)
 
 
 
@@ -5884,7 +5886,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/stylix\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/stylix.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/stylix\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/stylix.nix)
 
 
 
@@ -5908,7 +5910,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/stylix\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/stylix.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/stylix\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/stylix.nix)
 
 
 
@@ -5932,7 +5934,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/stylix\.nix](/nix/store/fpjl276gxfv2k57b4s712gij30vsy97p-source/base/stylix.nix)
+ - [/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/stylix\.nix](/nix/store/d3q9v8jsilcj2wv1fhiv0p9m37dcg7zc-source/base/stylix.nix)
 
 
 

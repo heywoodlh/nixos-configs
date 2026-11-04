@@ -2303,11 +2303,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793821790,
-        "narHash": "sha256-Rqu0YhnUHZjv3sEftZ8FOL4ExF8M07jrasfCB4H4s7k=",
+        "lastModified": 1793826852,
+        "narHash": "sha256-O/lMUHZtFxi+QTAW7dvL/e0G2GC5VoBvpF9/sjjXGkk=",
         "owner": "heywoodlh",
         "repo": "search-tui",
-        "rev": "dfb765826732b478294d64db7f89dde733e9eb20",
+        "rev": "be17cda6f12a164b4382942fa942cdbaf611f95a",
         "type": "github"
       },
       "original": {

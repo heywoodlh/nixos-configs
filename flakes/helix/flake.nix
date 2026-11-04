@@ -52,6 +52,15 @@
             perl = prev.perl.overrideAttrs (old: {
               FLAGS = old.FLAGS ++ ["-std=gnu17"];
             });
+            # Upstream elliotfontaine/tree-sitter-cylc was deleted; this mirror is byte-identical.
+            cylc = prev.cylc.overrideAttrs {
+              src = pkgs.fetchFromGitHub {
+                owner = "heywoodlh-bot";
+                repo = "tree-sitter-cylc";
+                rev = "53d051db1d527debe905f5ad1a7c05d2fb393bd6";
+                hash = "sha256-Mllpfigv2i0sG1nQ55/ooR1q4HS3bJPIgjN9XyZC3Ec=";
+              };
+            };
           })
         ];
       };

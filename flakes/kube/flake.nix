@@ -324,6 +324,9 @@
           replicas = 1;
           image = "ghcr.io/beeper/bridge-manager:8ff78f238554b359e24eb196649eaea0179a700b";
           hostfolder = "/media/data-ssd/beeper";
+          # tailscale-dns-bridge ClusterIP, resolves the tailnet and falls back to cluster DNS
+          dns_ip = "10.43.0.15";
+          tailnet = "barn-banana.ts.net";
         };
         # Run the following before deploying:
         # nix run .#1password-item -- --name dev-password --namespace default --itemPath "vaults/kubernetes/items/boofeqmvt6vmcdqsyzczhiwqre" | kubectl apply -f -

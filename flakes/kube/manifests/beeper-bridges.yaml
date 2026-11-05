@@ -21,6 +21,46 @@ metadata:
 spec:
   itemPath: vaults/Kubernetes/items/ho6p75vydj7jxykh2i2kd45cta
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: beeper-imessage-entrypoint
+  namespace: messaging
+data:
+  run-bridge-imessage.sh: |
+    #!/bin/bash
+    set -euf -o pipefail
+    if [[ -z "${BRIDGE_NAME:-}" ]]; then
+        if [[ ! -z "$1" ]]; then
+            export BRIDGE_NAME="$1"
+        else
+            echo "BRIDGE_NAME not set"
+            exit 1
+        fi
+    fi
+    export BBCTL_CONFIG=${BBCTL_CONFIG:-/tmp/bbctl.json}
+    export BEEPER_ENV=${BEEPER_ENV:-prod}
+    if [[ ! -f $BBCTL_CONFIG ]]; then
+        if [[ -z "$MATRIX_ACCESS_TOKEN" ]]; then
+            echo "MATRIX_ACCESS_TOKEN not set"
+            exit 1
+        fi
+        export DATA_DIR=${DATA_DIR:-/data}
+        if [[ ! -d $DATA_DIR ]]; then
+            echo "DATA_DIR ($DATA_DIR) does not exist, creating"
+            mkdir -p $DATA_DIR
+        fi
+        export DB_DIR=${DB_DIR:-/data/db}
+        mkdir -p $DB_DIR
+        jq -n '{environments: {"\(env.BEEPER_ENV)": {access_token: env.MATRIX_ACCESS_TOKEN, database_dir: env.DB_DIR, bridge_data_dir: env.DATA_DIR}}}' > $BBCTL_CONFIG
+    fi
+    bbctl -c /tmp/bbctl.json -e prod run --param 'imessage_platform=bluebubbles' --param "bluebubbles_url=$BLUEBUBBLES_URL" --param "bluebubbles_password=$BLUEBUBBLES_PASSWORD" sh-imessage-000
+  resolv.conf: |
+    nameserver 10.43.0.15
+    nameserver 10.43.0.10
+    search messaging.svc.cluster.local svc.cluster.local cluster.local barn-banana.ts.net
+    options ndots:1
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -184,8 +224,14 @@ spec:
           volumeMounts:
             - name: imessage-config
               mountPath: /data
+            - name: imessage-entrypoint
+              mountPath: /usr/local/bin/run-bridge-imessage.sh
+              subPath: run-bridge-imessage.sh
+            - name: imessage-entrypoint
+              mountPath: /etc/resolv.conf
+              subPath: resolv.conf
           args:
-            - /usr/local/bin/run-bridge.sh sh-imessage-000
+            - /usr/local/bin/run-bridge-imessage.sh sh-imessage-000
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -239,3 +285,13 @@ spec:
         hostPath:
           path: /media/data-ssd/beeper/imessage
           type: DirectoryOrCreate
+      - name: imessage-entrypoint
+        configMap:
+          name: beeper-imessage-entrypoint
+          items:
+          - key: run-bridge-imessage.sh
+            path: run-bridge-imessage.sh
+            mode: 0755
+          - key: resolv.conf
+            path: resolv.conf
+            mode: 0644

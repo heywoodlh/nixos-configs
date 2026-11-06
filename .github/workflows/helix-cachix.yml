@@ -35,7 +35,7 @@ jobs:
           extra-trusted-public-keys = $ATTIC_PUBKEY
           EOF
 
-      - uses: cachix/cachix-action@v16
+      - uses: cachix/cachix-action@v17
         with:
           name: heywoodlh-helix
           authToken: '${{ secrets.CACHIX_HEYWOODLH_HELIX }}'

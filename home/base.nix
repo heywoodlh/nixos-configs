@@ -828,6 +828,7 @@ in {
 
   programs.iamb = {
     enable = true;
+    package = edgePkgs.iamb;
     settings = {
       default_profile = "heywoodlh";
       layout.style = "new";
@@ -837,6 +838,7 @@ in {
       settings = {
         username_display = "displayname";
         notifications.enabled = false;
+        state_event_display = false;
       };
       profiles.heywoodlh = {
         user_id = "@heywoodlh:beeper.com";

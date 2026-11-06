@@ -61,87 +61,6 @@ data:
     search messaging.svc.cluster.local svc.cluster.local cluster.local barn-banana.ts.net
     options ndots:1
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: beeper-discord-entrypoint
-  namespace: messaging
-data:
-  run-bridge-discord.sh: |
-    #!/bin/bash
-    set -euf -o pipefail
-    if [[ -z "${BRIDGE_NAME:-}" ]]; then
-        if [[ ! -z "$1" ]]; then
-            export BRIDGE_NAME="$1"
-        else
-            echo "BRIDGE_NAME not set"
-            exit 1
-        fi
-    fi
-    export BBCTL_CONFIG=${BBCTL_CONFIG:-/tmp/bbctl.json}
-    export BEEPER_ENV=${BEEPER_ENV:-prod}
-    if [[ ! -f $BBCTL_CONFIG ]]; then
-        if [[ -z "$MATRIX_ACCESS_TOKEN" ]]; then
-            echo "MATRIX_ACCESS_TOKEN not set"
-            exit 1
-        fi
-        export DATA_DIR=${DATA_DIR:-/data}
-        if [[ ! -d $DATA_DIR ]]; then
-            echo "DATA_DIR ($DATA_DIR) does not exist, creating"
-            mkdir -p $DATA_DIR
-        fi
-        export DB_DIR=${DB_DIR:-/data/db}
-        mkdir -p $DB_DIR
-        jq -n '{environments: {"\(env.BEEPER_ENV)": {access_token: env.MATRIX_ACCESS_TOKEN, database_dir: env.DB_DIR, bridge_data_dir: env.DATA_DIR}}}' > $BBCTL_CONFIG
-    fi
-    export DATA_DIR=${DATA_DIR:-/data}
-    DISCORD_CONFIG="$DATA_DIR/$BRIDGE_NAME/config.yaml"
-    mkdir -p "$DATA_DIR/$BRIDGE_NAME"
-    bbctl -c "$BBCTL_CONFIG" -e "$BEEPER_ENV" config --type discord -o "$DISCORD_CONFIG" "$BRIDGE_NAME"
-    python3 "$(dirname "$0")/patch-discord-config.py" "$DISCORD_CONFIG"
-    bbctl -c "$BBCTL_CONFIG" -e "$BEEPER_ENV" run --no-override-config "$BRIDGE_NAME"
-  patch-discord-config.py: |
-    #!/usr/bin/env python3
-    import sys
-    from ruamel.yaml import YAML
-
-    TEMPLATE = '{{if or (eq .Type 3) (eq .Type 4)}}{{.Name}}{{else if or (eq .GuildName "heywoodlh study server") (eq .GuildName "CULUG")}}#{{.Name}} ({{.GuildName}}){{else}}#{{.Name}}{{end}}'
-    KEY = "channel_name_template:"
-
-    def main(path):
-        with open(path) as f:
-            lines = f.readlines()
-
-        in_bridge = False
-        patched = False
-        for i, line in enumerate(lines):
-            if line.startswith("bridge:"):
-                in_bridge = True
-                continue
-            if in_bridge and line.strip() and not line[0].isspace():
-                break
-            if in_bridge and line.lstrip().startswith(KEY):
-                indent = line[: len(line) - len(line.lstrip())]
-                lines[i] = f"{indent}{KEY} '{TEMPLATE}'\n"
-                patched = True
-                break
-
-        if not patched:
-            raise SystemExit(f"{path}: {KEY} not found under bridge")
-
-        with open(path, "w") as f:
-            f.writelines(lines)
-
-        with open(path) as f:
-            config = YAML(typ="safe").load(f)
-        if config["bridge"]["channel_name_template"] != TEMPLATE:
-            raise SystemExit(f"{path}: patched channel_name_template does not match")
-
-    if __name__ == "__main__":
-        if len(sys.argv) != 2:
-            raise SystemExit(f"usage: {sys.argv[0]} CONFIG")
-        main(sys.argv[1])
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -196,10 +115,8 @@ spec:
           volumeMounts:
             - name: discord-config
               mountPath: /data
-            - name: discord-entrypoint
-              mountPath: /opt/beeper-discord
           args:
-            - /opt/beeper-discord/run-bridge-discord.sh sh-discord-000
+            - /usr/local/bin/run-bridge.sh sh-discord-000
           imagePullPolicy: IfNotPresent
           resources:
             {}
@@ -377,14 +294,4 @@ spec:
             mode: 0755
           - key: resolv.conf
             path: resolv.conf
-            mode: 0644
-      - name: discord-entrypoint
-        configMap:
-          name: beeper-discord-entrypoint
-          items:
-          - key: run-bridge-discord.sh
-            path: run-bridge-discord.sh
-            mode: 0755
-          - key: patch-discord-config.py
-            path: patch-discord-config.py
             mode: 0644

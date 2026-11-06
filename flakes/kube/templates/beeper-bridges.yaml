@@ -102,37 +102,45 @@ data:
     import sys
     from ruamel.yaml import YAML
 
-    TEMPLATE = '{{if or (eq .Type 3) (eq .Type 4)}}{{.Name}}{{else if or (eq .GuildName "heywoodlh study server") (eq .GuildName "CULUG")}}#{{.Name}} ({{.GuildName}}){{else}}#{{.Name}}{{end}}'
-    KEY = "channel_name_template:"
+    REPLACEMENTS = {
+        "channel_name_template": '{{if or (eq .Type 3) (eq .Type 4)}}{{.Name}}{{else if or (eq .GuildName \"heywoodlh study server\") (eq .GuildName \"CULUG\")}}#{{.Name}} ({{.GuildName}}){{else}}#{{.Name}}{{end}}',
+        "displayname_template": "{{if .Webhook}}Webhook{{else}}{{or .GlobalName .Username}} (Discord){{end}}",
+        "private_chat_portal_meta": "always",
+    }
+
+    def render(value):
+        return f"'{value}'" if value.startswith("{") else value
 
     def main(path):
         with open(path) as f:
             lines = f.readlines()
 
         in_bridge = False
-        patched = False
+        remaining = dict(REPLACEMENTS)
         for i, line in enumerate(lines):
             if line.startswith("bridge:"):
                 in_bridge = True
                 continue
             if in_bridge and line.strip() and not line[0].isspace():
                 break
-            if in_bridge and line.lstrip().startswith(KEY):
+            if not in_bridge:
+                continue
+            key = line.lstrip().split(":", 1)[0]
+            if key in remaining and line.lstrip().startswith(key + ":"):
                 indent = line[: len(line) - len(line.lstrip())]
-                lines[i] = f"{indent}{KEY} '{TEMPLATE}'\n"
-                patched = True
-                break
+                lines[i] = f"{indent}{key}: {render(remaining.pop(key))}\n"
 
-        if not patched:
-            raise SystemExit(f"{path}: {KEY} not found under bridge")
+        if remaining:
+            raise SystemExit(f"{path}: keys not found under bridge: {', '.join(sorted(remaining))}")
 
         with open(path, "w") as f:
             f.writelines(lines)
 
         with open(path) as f:
             config = YAML(typ="safe").load(f)
-        if config["bridge"]["channel_name_template"] != TEMPLATE:
-            raise SystemExit(f"{path}: patched channel_name_template does not match")
+        for key, value in REPLACEMENTS.items():
+            if config["bridge"][key] != value:
+                raise SystemExit(f"{path}: patched {key} does not match")
 
     if __name__ == "__main__":
         if len(sys.argv) != 2:

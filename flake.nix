@@ -318,6 +318,10 @@ rec {
       url = "github:heywoodlh/search-tui";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixtop-source = {
+      url = "git+https://codeberg.org/kylesferrazza/nix-configs?ref=main&rev=289467371d81111509567e9d5199ab0c74f72317";
+      flake = false;
+    };
   };
 
   nixConfig = {
@@ -919,7 +923,36 @@ rec {
         nixos-ops = nixosConfig "workstation" "nixos-ops" {
           imports = [
             ./nixos/hosts/intel-mac-mini.nix
+            (import ./nixos/roles/remote-access/wayland-desktop.nix {
+              user = "ops";
+              uid = 1002;
+              tailscaleIP = "100.67.47.0";
+            })
           ];
+          systemd.services.ops-hyprland = {
+            description = "Headless Hyprland session for ops";
+            wantedBy = [ "multi-user.target" ];
+            after = [ "home-manager-ops.service" "user@1002.service" ];
+            requires = [ "home-manager-ops.service" ];
+            wants = [ "user@1002.service" ];
+            environment = {
+              XDG_RUNTIME_DIR = "/run/user/1002";
+              DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1002/bus";
+              XDG_SESSION_TYPE = "wayland";
+              XDG_CURRENT_DESKTOP = "Hyprland";
+              AQ_NO_KMS_REQUIREMENT = "1";
+            };
+            serviceConfig = {
+              User = "ops";
+              PAMName = "login";
+              WorkingDirectory = "/home/ops";
+              ExecStart = "${pkgs.hyprland}/bin/Hyprland";
+              Restart = "always";
+              RestartSec = "5s";
+            };
+          };
+          systemd.services.selkies.after = [ "ops-hyprland.service" ];
+          systemd.services.wayvnc.after = [ "ops-hyprland.service" ];
           swapDevices = [
             {
               device = "/swap";
@@ -963,12 +996,15 @@ rec {
 
           users.users.ops = {
             isNormalUser = true;
+            uid = 1002;
             description = "Ops user";
             linger = true;
             extraGroups = [
               "adbusers"
               "networkmanager"
               "libvirtd"
+              "render"
+              "video"
             ];
             shell = pkgs.bashInteractive;
             homeMode = "755";
@@ -978,6 +1014,14 @@ rec {
           home-manager.users.ops = {
             home.stateVersion = "25.05";
             systemd.user.enable = true;
+            heywoodlh.home.hyprland = true;
+            wayland.windowManager.hyprland.systemd.enable = false;
+            wayland.windowManager.hyprland.extraConfig = ''
+              hl.monitor({ output = "HEADLESS-OPS", mode = "preferred", position = "0x0", scale = 1 })
+              hl.on("hyprland.start", function()
+                hl.exec_cmd("${pkgs.hyprland}/bin/hyprctl output create headless HEADLESS-OPS")
+              end)
+            '';
             heywoodlh.home = {
               paseo = {
                 desktop = true;
@@ -1146,6 +1190,7 @@ rec {
         nixos-nuc = nixosConfigWith nixpkgs-jovian-nixos "workstation" "nixos-nuc" {
           imports = [
             ./nixos/hosts/nuc.nix
+            ./nixos/hosts/nuc-remote-desktop.nix
           ];
 
           hardware.graphics = {
@@ -1154,27 +1199,15 @@ rec {
           };
 
           heywoodlh = {
+            cloudflared = true;
             sshd = {
               enable = true;
               duo = true;
             };
-            nixos = {
-              scrutiny = {
-                enable = true;
-                port = 3050;
-                ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
-              };
-              sunshine = {
-                enable = true;
-                resolutions = "[ 1920x1080, 2752x2064]";
-                dynamic = true;
-                extraConfig = {
-                  sunshine_name = "nixos-nuc";
-                  output_name = 0;
-                  encoder = "vaapi";
-                  csrf_allowed_origins = "https://nixos-nuc.barn-banana.ts.net:47990,https://nixos-nuc:47990";
-                };
-              };
+            nixos.scrutiny = {
+              enable = true;
+              port = 3050;
+              ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
             };
           };
 
@@ -1216,18 +1249,6 @@ rec {
                 address = "100.74.91.97";
               };
             };
-
-            wayland.windowManager.hyprland.extraConfig = ''
-              -- The HDMI dummy is mirrored over RDP (hypr-rdp). Render natively at
-              -- half the iPad Pro panel resolution so hypr-rdp captures without
-              -- scaling and it displays crisply at 2x on the client.
-              hl.monitor({ output = "HDMI-A-1", mode = "1376x1032@60", position = "0x0", scale = 1 })
-              -- unscale XWayland
-              hl.config({ xwayland = { force_zero_scaling = true } })
-              -- toolkit-specific scale
-              hl.env("GDK_SCALE", "2")
-              hl.env("XCURSOR_SIZE", "24")
-            '';
           };
         };
 

@@ -1868,6 +1868,24 @@
         "type": "indirect"
       }
     },
+    "nixtop-source": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794179439,
+        "narHash": "sha256-VCTPSZK5W1Witjruhul383zzkvVqrqZTrtgNMT28bmw=",
+        "ref": "main",
+        "rev": "289467371d81111509567e9d5199ab0c74f72317",
+        "revCount": 2096,
+        "type": "git",
+        "url": "https://codeberg.org/kylesferrazza/nix-configs"
+      },
+      "original": {
+        "ref": "main",
+        "rev": "289467371d81111509567e9d5199ab0c74f72317",
+        "type": "git",
+        "url": "https://codeberg.org/kylesferrazza/nix-configs"
+      }
+    },
     "nmd": {
       "inputs": {
         "nixpkgs": [
@@ -2214,6 +2232,7 @@
         "nixpkgs-pam-lid-fix": "nixpkgs-pam-lid-fix",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-sunshine": "nixpkgs-sunshine",
+        "nixtop-source": "nixtop-source",
         "nmd": "nmd",
         "nur": "nur",
         "nushell-flake": "nushell-flake",

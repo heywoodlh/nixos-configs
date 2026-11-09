@@ -365,9 +365,7 @@ in {
           export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
         '';
       };
-      users.root = { ... }: base // {
-        stylix.targets.helix.enable = false;
-      };
+      users.root = { ... }: base;
     };
 
     ## Bluetooth

@@ -710,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults.nix)
 
 
 
@@ -942,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults.nix)
 
 
 
@@ -966,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults.nix)
 
 
 
@@ -990,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults.nix)
 
 
 
@@ -1014,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults.nix)
 
 
 
@@ -1038,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults.nix)
 
 
 
@@ -1062,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/defaults.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/defaults.nix)
 
 
 
@@ -1612,7 +1612,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/ynjlliis43akz6nv5s8m860cqxphsjjj-tmux/bin/tmux"
+"/nix/store/s3jygjhkyhamir31d4vp4bzhpvqxylwa-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -1660,7 +1660,7 @@ signed integer
 *Default:*
 
 ```nix
-16
+14
 ```
 
 *Declared by:*
@@ -5788,7 +5788,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/sshd\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/sshd.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/sshd\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/sshd.nix)
 
 
 
@@ -5884,7 +5884,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/stylix\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/stylix.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/stylix\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/stylix.nix)
 
 
 
@@ -5908,7 +5908,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/stylix\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/stylix.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/stylix\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/stylix.nix)
 
 
 
@@ -5932,7 +5932,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/stylix\.nix](/nix/store/48m5z04xjql8c3hkspx0p520vdgh4i5b-source/base/stylix.nix)
+ - [/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/stylix\.nix](/nix/store/fqhhap2fy3mldm0kkfllc2p571csz7hv-source/base/stylix.nix)
 
 
 

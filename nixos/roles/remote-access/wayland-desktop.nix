@@ -17,7 +17,7 @@ let
   vncResize = pkgs.writers.writePython3 "${user}-vnc-resize" {
     libraries = [ pkgs.python3Packages.aiohttp ];
     flakeIgnore = [ "E501" ];
-  } "${nixtop-source}/nixosModules/containerServices/nixtop/vnc-resize.py";
+  } (builtins.readFile "${nixtop-source}/nixosModules/containerServices/nixtop/vnc-resize.py");
   waitForDesktop = ''
     for _ in {1..300}; do
       for socket in "$XDG_RUNTIME_DIR"/wayland-*; do

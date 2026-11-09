@@ -923,7 +923,36 @@ rec {
         nixos-ops = nixosConfig "workstation" "nixos-ops" {
           imports = [
             ./nixos/hosts/intel-mac-mini.nix
+            (import ./nixos/roles/remote-access/wayland-desktop.nix {
+              user = "ops";
+              uid = 1002;
+              tailscaleIP = "100.67.47.0";
+            })
           ];
+          systemd.services.ops-hyprland = {
+            description = "Headless Hyprland session for ops";
+            wantedBy = [ "multi-user.target" ];
+            after = [ "home-manager-ops.service" "user@1002.service" ];
+            requires = [ "home-manager-ops.service" ];
+            wants = [ "user@1002.service" ];
+            environment = {
+              XDG_RUNTIME_DIR = "/run/user/1002";
+              DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1002/bus";
+              XDG_SESSION_TYPE = "wayland";
+              XDG_CURRENT_DESKTOP = "Hyprland";
+              AQ_NO_KMS_REQUIREMENT = "1";
+            };
+            serviceConfig = {
+              User = "ops";
+              PAMName = "login";
+              WorkingDirectory = "/home/ops";
+              ExecStart = "${pkgs.hyprland}/bin/Hyprland";
+              Restart = "always";
+              RestartSec = "5s";
+            };
+          };
+          systemd.services.selkies.after = [ "ops-hyprland.service" ];
+          systemd.services.wayvnc.after = [ "ops-hyprland.service" ];
           swapDevices = [
             {
               device = "/swap";
@@ -967,12 +996,15 @@ rec {
 
           users.users.ops = {
             isNormalUser = true;
+            uid = 1002;
             description = "Ops user";
             linger = true;
             extraGroups = [
               "adbusers"
               "networkmanager"
               "libvirtd"
+              "render"
+              "video"
             ];
             shell = pkgs.bashInteractive;
             homeMode = "755";
@@ -982,6 +1014,14 @@ rec {
           home-manager.users.ops = {
             home.stateVersion = "25.05";
             systemd.user.enable = true;
+            heywoodlh.home.hyprland = true;
+            wayland.windowManager.hyprland.systemd.enable = false;
+            wayland.windowManager.hyprland.extraConfig = ''
+              hl.monitor({ output = "HEADLESS-OPS", mode = "preferred", position = "0x0", scale = 1 })
+              hl.on("hyprland.start", function()
+                hl.exec_cmd("${pkgs.hyprland}/bin/hyprctl output create headless HEADLESS-OPS")
+              end)
+            '';
             heywoodlh.home = {
               paseo = {
                 desktop = true;

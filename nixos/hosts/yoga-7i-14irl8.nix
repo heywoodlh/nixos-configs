@@ -61,7 +61,7 @@ in
   services.fwupd.enable = true;
 
   # 2-in-1 convertible: accelerometer + tablet-mode switch via iio-sensor-proxy
-  services.iio-sensor-proxy.enable = true;
+  environment.systemPackages = [ pkgs.iio-sensor-proxy ];
 
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend";

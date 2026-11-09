@@ -318,6 +318,10 @@ rec {
       url = "github:heywoodlh/search-tui";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixtop-source = {
+      url = "git+https://codeberg.org/kylesferrazza/nix-configs?ref=main&rev=289467371d81111509567e9d5199ab0c74f72317";
+      flake = false;
+    };
   };
 
   nixConfig = {
@@ -1146,6 +1150,7 @@ rec {
         nixos-nuc = nixosConfigWith nixpkgs-jovian-nixos "workstation" "nixos-nuc" {
           imports = [
             ./nixos/hosts/nuc.nix
+            ./nixos/hosts/nuc-remote-desktop.nix
           ];
 
           hardware.graphics = {
@@ -1154,27 +1159,15 @@ rec {
           };
 
           heywoodlh = {
+            cloudflared = true;
             sshd = {
               enable = true;
               duo = true;
             };
-            nixos = {
-              scrutiny = {
-                enable = true;
-                port = 3050;
-                ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
-              };
-              sunshine = {
-                enable = true;
-                resolutions = "[ 1920x1080, 2752x2064]";
-                dynamic = true;
-                extraConfig = {
-                  sunshine_name = "nixos-nuc";
-                  output_name = 0;
-                  encoder = "vaapi";
-                  csrf_allowed_origins = "https://nixos-nuc.barn-banana.ts.net:47990,https://nixos-nuc:47990";
-                };
-              };
+            nixos.scrutiny = {
+              enable = true;
+              port = 3050;
+              ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
             };
           };
 
@@ -1216,18 +1209,6 @@ rec {
                 address = "100.74.91.97";
               };
             };
-
-            wayland.windowManager.hyprland.extraConfig = ''
-              -- The HDMI dummy is mirrored over RDP (hypr-rdp). Render natively at
-              -- half the iPad Pro panel resolution so hypr-rdp captures without
-              -- scaling and it displays crisply at 2x on the client.
-              hl.monitor({ output = "HDMI-A-1", mode = "1376x1032@60", position = "0x0", scale = 1 })
-              -- unscale XWayland
-              hl.config({ xwayland = { force_zero_scaling = true } })
-              -- toolkit-specific scale
-              hl.env("GDK_SCALE", "2")
-              hl.env("XCURSOR_SIZE", "24")
-            '';
           };
         };
 

@@ -1,42 +1,57 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, lanzaboote, ... }:
 
 let
-  # Goodix GF3268 fingerprint sensor (USB 27c6:55b4) shipped in the Yoga 7i
-  # Gen 8 (14IRL8/16IRL8). Stock libfprint does not support it; the
-  # libfprint-goodix55b4-milan driver integrates into libfprint 1.94.10 /
-  # 1.94.100 (pinned nixpkgs libfprint is exactly 1.94.100) with its own
-  # integration script.
-  # https://github.com/TheWeirdDev/libfprint-goodix55b4-milan
-  #
-  # After first build:
-  #   - Confirm the reader with `lsusb` (expect 27c6:55b4).
-  #   - Enroll with `sudo fprintd-enroll -f left-index-finger heywoodlh`.
-  #   - If enrollment fails with "not provisioned with the zero PSK",
-  #     follow the driver README's Sensor provisioning section (this
-  #     breaks Windows Hello on dual-boot setups; Windows also reflashes
-  #     the sensor, so disable the reader in Windows Device Manager).
-  goodix55b4-src = pkgs.fetchFromGitHub {
-    owner = "TheWeirdDev";
-    repo = "libfprint-goodix55b4-milan";
-    rev = "7b41f02e51875637641349bd826964c290e8553e";
-    hash = "sha256-suZ44KNI6yYejF0cCtnYkXPsD1s2bCZuEAAdTBMHa78=";
+  egis0576-src = pkgs.fetchFromGitHub {
+    owner = "PHILIPPDEV5396";
+    repo = "libfprint-egis0576";
+    rev = "33f9d8beb83ffc2b513507ab724d675469348713";
+    hash = "sha256-B6lkYLAsD2uIAVIeXWxnNl5YxVChqoJQNVi4AfWUajA=";
   };
 
-  libfprint-goodix55b4 = pkgs.libfprint.overrideAttrs (old: {
-    buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.libdeflate ];
+  libfprint-egis0576 = pkgs.libfprint.overrideAttrs (old: {
     postPatch = (old.postPatch or "") + ''
-      ${pkgs.python3.interpreter} ${goodix55b4-src}/scripts/integrate.py .
+      cp ${egis0576-src}/driver/egis0576.c ${egis0576-src}/driver/egis0576.h libfprint/drivers/
+      cp -r ${egis0576-src}/driver/egis0576 libfprint/drivers/
+      chmod -R u+w libfprint/drivers/egis0576
+      patch -p1 < ${egis0576-src}/patches/libfprint-${old.version}-egis0576.patch
+      substituteInPlace libfprint/fprint-list-udev-hwdb.c \
+        --replace-fail "  { .vid = 0x1c7a, .pid = 0x0576 },
+" ""
+    '';
+  });
+
+  chargeLimit = "80.0";
+
+  ashell-scaled = pkgs.ashell.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace src/services/upower/dbus.rs \
+        --replace-fail "return Ok(pct);" "return Ok((pct * 100.0 / ${chargeLimit}).min(100.0));"
     '';
   });
 in
 {
+  imports = [ lanzaboote.nixosModules.lanzaboote ];
 
   fileSystems."/" =
     { device = "/dev/mapper/cryptroot";
       fsType = "ext4";
     };
 
-  boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/24e64e22-2978-43a7-9ec8-57585f5aeb79";
+  heywoodlh.luks = {
+    enable = true;
+    name = "cryptroot";
+    uuid = "24e64e22-2978-43a7-9ec8-57585f5aeb79";
+    tpm2 = true;
+  };
+
+  boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.lanzaboote = {
+    enable = true;
+    autoEnrollKeys.enable = true;
+    pkiBundle = "/var/lib/sbctl";
+  };
+
+  users.users.heywoodlh.extraGroups = [ "tss" ];
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/DDAC-B67A";
@@ -53,10 +68,13 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelParams = [ "pcie_aspm.policy=powersupersave" ];
+  hardware.intelgpu.vaapiDriver = "intel-media-driver";
   boot.extraModulePackages = [ ];
 
   networking.useDHCP = lib.mkDefault true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   hardware.firmware = [ pkgs.sof-firmware ];
@@ -73,7 +91,7 @@ in
   services.fwupd.enable = true;
 
   # 2-in-1 convertible: accelerometer + tablet-mode switch via iio-sensor-proxy
-  environment.systemPackages = [ pkgs.iio-sensor-proxy ];
+  environment.systemPackages = with pkgs; [ iio-sensor-proxy sbctl ];
 
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend";
@@ -104,12 +122,19 @@ in
     '';
   };
 
+  systemd.services."systemd-backlight@leds:platform::kbd_backlight" = {
+    overrideStrategy = "asDropin";
+    serviceConfig.ExecStartPost = "${pkgs.runtimeShell} -c 'cat /sys/class/leds/platform::kbd_backlight/max_brightness > /sys/class/leds/platform::kbd_backlight/brightness'";
+  };
+
   # Fingerprint login
   security.pam.services.sudo.fprintAuth = true;
   services.fprintd = {
     enable = true;
-    package = pkgs.fprintd.override { libfprint = libfprint-goodix55b4; };
+    package = pkgs.fprintd.override { libfprint = libfprint-egis0576; };
   };
+
+  home-manager.users.heywoodlh.programs.ashell.package = ashell-scaled;
 
   home-manager.users.heywoodlh.wayland.windowManager.hyprland.extraConfig = ''
     -- change monitor to high resolution, the last argument is the scale factor

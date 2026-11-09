@@ -129,6 +129,15 @@ in {
       '';
       type = bool;
     };
+    tpm2 = mkOption {
+      default = false;
+      description = ''
+        Use TPM2 decryption (requires Secure Boot so PCR 7 is meaningful).
+        Setup with: `sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7 /dev/nvme0n1p2`
+        Falls back to the passphrase if the TPM refuses to unseal.
+      '';
+      type = bool;
+    };
     keyfile = mkOption {
       default = { };
       description = ''
@@ -149,9 +158,10 @@ in {
         "nls_cp437"
         "nls_iso8859-1"
       ];
-      systemd = optionalAttrs (cfg.fido) {
+      systemd = optionalAttrs (cfg.fido || cfg.tpm2) {
         enable = true;
-        fido2.enable = true;
+        fido2.enable = cfg.fido;
+        tpm2.enable = cfg.tpm2;
       };
       luks = {
         yubikeySupport = cfg.yubikey;
@@ -178,10 +188,12 @@ in {
           # slots.
           keyFile = mkIf cfg.keyfile.enable "/${keyFileName}:UUID=${cfg.keyfile.uuid}";
           keyFileTimeout = mkIf cfg.keyfile.enable cfg.keyfile.timeout;
-          crypttabExtraOpts = optionals (cfg.fido) [
+          crypttabExtraOpts = (optionals cfg.fido [
             "fido2-device=auto"
             "token-timeout=30"
-          ];
+          ]) ++ (optionals cfg.tpm2 [
+            "tpm2-device=auto"
+          ]);
         };
       };
     };

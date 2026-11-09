@@ -367,6 +367,10 @@ let
       systemctl --user restart paseo.service
     fi
   '';
+  iambClearcache = pkgs.writeShellScriptBin "iamb-clearcache" ''
+    rm -rf "$HOME/.cache/iamb/profiles/heywoodlh/sqlite"
+    pkill -9 iamb &>/dev/null || true
+  '';
 in {
   # Packages I need installed on every system
   home.packages = with pkgs; [
@@ -433,6 +437,7 @@ in {
     myOpWrapper
     tangledSyncWrapper
     paseoSetup
+    iambClearcache
   ];
 
   # Enable password-store

@@ -374,6 +374,29 @@ in {
           match = { class = "^(com.mitchellh.ghostty)$" },
         })
 
+        -- Keep floating windows and dialogs on screen
+        hl.window_rule({
+          name  = "float-clamp",
+          match = { float = true },
+          max_size = "((monitor_w*0.9)) ((monitor_h*0.9))",
+        })
+
+        hl.window_rule({
+          name  = "dialogs",
+          match = { title = "^(Authentication Required|Authenticate|Open File|Save File|File Upload|Save As|Open|Choose.*|Select.*)$" },
+          float = true,
+          size = "((monitor_w*0.6)) ((monitor_h*0.7))",
+          center = true,
+        })
+
+        hl.window_rule({
+          name  = "polkit-agent",
+          match = { title = "^(Hyprland Polkit Agent)$" },
+          float = true,
+          size = "((monitor_w*0.5)) ((monitor_h*0.5))",
+          center = true,
+        })
+
         -- Animations
         hl.config({
           animations = {

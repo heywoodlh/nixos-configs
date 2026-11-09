@@ -1,3 +1,11 @@
+# requirements
+
+## comments
+
+Self-explanatory code should have absolutely no comments.
+
+Comments should be limited to one line. If multi-line comments are required, shorten them as much as possible.
+
 # nixos-configs layout
 
 - `base`: things shared between nix-darwin and NixOS.

@@ -1088,6 +1088,10 @@ rec {
 
         nixos-yoga = nixosConfig "laptop" "nixos-yoga" {
           imports = [
+            nixos-hardware.nixosModules.common-cpu-intel
+            nixos-hardware.nixosModules.common-gpu-intel
+            nixos-hardware.nixosModules.common-pc-laptop
+            nixos-hardware.nixosModules.common-pc-laptop-ssd
             ./nixos/hosts/yoga-7i-14irl8.nix
           ];
         };

@@ -710,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults.nix)
 
 
 
@@ -942,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults.nix)
 
 
 
@@ -966,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults.nix)
 
 
 
@@ -990,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults.nix)
 
 
 
@@ -1014,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults.nix)
 
 
 
@@ -1038,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults.nix)
 
 
 
@@ -1062,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/defaults.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/defaults.nix)
 
 
 
@@ -4620,6 +4620,32 @@ string
 
 
 
+## heywoodlh\.luks\.tpm2
+
+
+
+Use TPM2 decryption (requires Secure Boot so PCR 7 is meaningful)\.
+Setup with: ` sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7 /dev/nvme0n1p2 `
+Falls back to the passphrase if the TPM refuses to unseal\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks.nix)
+
+
+
 ## heywoodlh\.luks\.uuid
 
 
@@ -4817,8 +4843,6 @@ string
 
 ## heywoodlh\.nixos\.kde\.enable
 
-
-
 Enable heywoodlh KDE configuration\.
 
 
@@ -4840,6 +4864,8 @@ false
 
 
 ## heywoodlh\.nixos\.kde\.user
+
+
 
 User for heywoodlh configuration\.
 
@@ -5788,7 +5814,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/sshd\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/sshd.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/sshd\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/sshd.nix)
 
 
 
@@ -5884,7 +5910,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/stylix\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/stylix.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/stylix\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/stylix.nix)
 
 
 
@@ -5908,7 +5934,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/stylix\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/stylix.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/stylix\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/stylix.nix)
 
 
 
@@ -5932,7 +5958,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/stylix\.nix](/nix/store/8yzbqln8mf19ymspm48vhqkl4wkn5zj6-source/base/stylix.nix)
+ - [/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/stylix\.nix](/nix/store/mfnyvgbg43cmd6xzkb3wpld8pzjfllfa-source/base/stylix.nix)
 
 
 

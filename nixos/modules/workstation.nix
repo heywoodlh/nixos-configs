@@ -48,6 +48,10 @@ in {
 
     programs.dconf.enable = true;
 
+    programs.dconf.profiles.gdm.databases = mkIf config.services.fprintd.enable (mkBefore [
+      { settings."org/gnome/login-screen".enable-fingerprint-authentication = false; }
+    ]);
+
     # Bluetooth, audio, keyring
     heywoodlh.defaults.bluetooth = true;
     heywoodlh.defaults.audio = true;

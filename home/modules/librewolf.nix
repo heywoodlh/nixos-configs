@@ -9,6 +9,68 @@ let
     inherit pkgs;
     nurpkgs = pkgs;
   };
+  hasStylix = hasAttrByPath [ "lib" "stylix" "colors" ] config;
+  colors = config.lib.stylix.colors.withHashtag;
+  userChrome = ''
+    :root {
+      --lwt-accent-color: ${colors.base01} !important;
+      --lwt-text-color: ${colors.base05} !important;
+      --toolbar-bgcolor: ${colors.base00} !important;
+      --toolbar-color: ${colors.base05} !important;
+      --toolbar-field-background-color: ${colors.base02} !important;
+      --toolbar-field-color: ${colors.base05} !important;
+      --toolbar-field-focus-background-color: ${colors.base00} !important;
+      --toolbar-field-focus-border-color: ${colors.base0D} !important;
+      --toolbarbutton-icon-fill: ${colors.base05} !important;
+      --tab-selected-bgcolor: ${colors.base02} !important;
+      --tab-selected-textcolor: ${colors.base05} !important;
+      --tab-loading-fill: ${colors.base0D} !important;
+      --arrowpanel-background: ${colors.base00} !important;
+      --arrowpanel-color: ${colors.base05} !important;
+      --arrowpanel-border-color: ${colors.base0D} !important;
+      --sidebar-background-color: ${colors.base00} !important;
+      --sidebar-text-color: ${colors.base05} !important;
+      --chrome-content-separator-color: ${colors.base0D} !important;
+    }
+
+    #browser,
+    #navigator-toolbox,
+    #nav-bar,
+    #TabsToolbar,
+    #sidebar-main,
+    sidebar-main,
+    #sidebar-box,
+    #vertical-tabs,
+    #tabbrowser-arrowscrollbox,
+    #tabbrowser-arrowscrollbox-periphery,
+    #vertical-tabs-newtab-button {
+      background-color: ${colors.base00} !important;
+      color: ${colors.base05} !important;
+    }
+
+    #titlebar,
+    #tabbrowser-tabs {
+      background-color: ${colors.base01} !important;
+    }
+  '';
+  userContent = ''
+    @-moz-document url("about:home"), url("about:newtab"), url("about:privatebrowsing") {
+      :root,
+      body {
+        --newtab-background-color: ${colors.base00} !important;
+        --newtab-background-color-secondary: ${colors.base01} !important;
+        --newtab-text-primary-color: ${colors.base05} !important;
+        --newtab-primary-action-background: ${colors.base0D} !important;
+        --newtab-border-color: ${colors.base02} !important;
+        --newtab-element-hover-color: ${colors.base02} !important;
+        --newtab-element-active-color: ${colors.base03} !important;
+        --in-content-page-background: ${colors.base00} !important;
+        --in-content-page-color: ${colors.base05} !important;
+        background-color: ${colors.base00} !important;
+        color: ${colors.base05} !important;
+      }
+    }
+  '';
   socksType = types.submodule {
     options = {
       proxy = mkOption {
@@ -176,10 +238,11 @@ in {
             };
           };
         };
+        userChrome = mkIf hasStylix userChrome;
+        userContent = mkIf hasStylix userContent;
         extensions.packages = with nur-pkgs.repos.rycee.firefox-addons; [
           darkreader
           facebook-container
-          kristofferhagen-nord-theme
           multi-account-containers
           #mullvad # https://github.com/nix-community/nur-combined/blob/0b1bfae0cf152df7a77fe9f56beccf7fa450003e/repos/rycee/pkgs/firefox-addons/default.nix#L93-L107
           #onepassword-password-manager <- install via Firefox extensions, seems to break when using nixpkgs' provided app
@@ -191,8 +254,7 @@ in {
         settings = {
           "browser.compactmode.show" = true; # enable compact bar
           "browser.theme.content-theme" = 0; # dark mode
-          "extensions.activeThemeID" = "{e410fec2-1cbd-4098-9944-e21e708418af}"; # Nord theme
-          "toolkit.legacyUserProfileCustomizations.stylesheets" = false; # userChrome.css
+          "toolkit.legacyUserProfileCustomizations.stylesheets" = hasStylix; # userChrome.css
           "gfx.webrender.all" = true;
           "browser.startup.page" = 3; # restore previous session
           "extensions.autoDisableScopes" = 0; # enable auto-loading of extensions

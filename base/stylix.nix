@@ -54,14 +54,19 @@ in {
         };
       };
     };
+    # Every home-manager user gets these: root included.
+    home-manager.sharedModules = [
+      {
+        stylix.targets = {
+          # Don't configure Helix (using a transparent theme)
+          helix.enable = false;
+          # Don't configure aerc (using its own catppuccin-macchiato styleset)
+          aerc.enable = false;
+        };
+      }
+    ];
     home-manager.users.${cfg.username} = { ... }: {
-      stylix.targets = {
-        librewolf.profileNames = [ "home-manager" ];
-        # Don't configure Helix (using a transparent theme)
-        helix.enable = false;
-        # Don't configure aerc (using its own catppuccin-macchiato styleset)
-        aerc.enable = false;
-      };
+      stylix.targets.librewolf.profileNames = [ "home-manager" ];
     };
   };
 }

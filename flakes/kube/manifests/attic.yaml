@@ -103,8 +103,11 @@ spec:
               containerPort: 8080
               protocol: TCP
           resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
             limits:
-              cpu: 100m
+              cpu: "4"
               memory: 6784Mi
           volumeMounts:
             - name: server-toml
@@ -132,3 +135,151 @@ spec:
           hostPath:
             path: /media/data-ssd/attic/data
             type: Directory
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nix-builder
+  namespace: default
+data:
+  build.sh: |-
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    skip=" nixos-arm64 nixos-m1-mac-mini "
+    roots=/nix/var/nix/gcroots/nightly
+    src=$(mktemp -d)
+
+    git clone --depth 1 https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs "$src"
+    cd "$src"
+    git log -1 --oneline
+
+    targets=()
+    for host in $(nix eval --accept-flake-config --raw .#nixosConfigurations --apply 'c: builtins.concatStringsSep " " (builtins.attrNames c)'); do
+      [[ "$skip" == *" $host "* ]] || targets+=(".#nixosConfigurations.$host.config.system.build.toplevel")
+    done
+    targets+=(".#homeConfigurations.heywoodlh.activationPackage" ".#homeConfigurations.heywoodlh-server.activationPackage" ".#spindle-run")
+    printf 'Target: %s\n' "${targets[@]}"
+
+    nix path-info --impure --accept-flake-config --derivation "${targets[@]}" > /tmp/drvs.txt
+
+    rm -rf "$roots"
+    mkdir -p "$roots"
+    status=0
+    sed 's/$/^*/' /tmp/drvs.txt | xargs nix build --keep-going --out-link "$roots/result" || status=$?
+
+    token=$(sed -n 's/^token = "\(.*\)"$/\1/p' /etc/attic/config.toml)
+    mkdir -p ~/.config/attic
+    printf 'default-server = "kube"\n\n[servers.kube]\nendpoint = "%s"\ntoken = "%s"\n' "$ATTIC_ENDPOINT" "$token" > ~/.config/attic/config.toml
+
+    nix build --out-link "$roots/attic" nixpkgs#attic-client
+    xargs nix-store --query --requisites --include-outputs < /tmp/drvs.txt | grep -v '\.drv$' | sort -u > /tmp/paths.txt
+    echo "Pushing up to $(wc -l < /tmp/paths.txt) store paths"
+    xargs -r "$roots/attic/bin/attic" push "$ATTIC_CACHE" < /tmp/paths.txt || status=$?
+
+    nix-collect-garbage
+    exit "$status"
+  hardware-configuration.nix: |-
+    { ... }: {
+      fileSystems."/" = {
+        device = "tmpfs";
+        fsType = "tmpfs";
+      };
+    }
+  configuration.nix: |-
+    { ... }: {
+      boot.loader.grub.devices = [ "nodev" ];
+      users.groups.heywoodlh = {};
+      users.users.heywoodlh = {
+        isNormalUser = true;
+        group = "heywoodlh";
+      };
+    }
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nix-builder
+  namespace: default
+  labels:
+    app.kubernetes.io/name: nix-builder
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 28800
+      ttlSecondsAfterFinished: 259200
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: nix-builder
+        spec:
+          restartPolicy: Never
+          nodeSelector:
+            kubernetes.io/hostname: homelab
+          containers:
+            - name: nix-builder
+              image: "docker.io/heywoodlh/nix:2.35.4"
+              imagePullPolicy: IfNotPresent
+              args:
+                - nice
+                - -n
+                - "19"
+                - bash
+                - /opt/nix-builder/build.sh
+              env:
+                - name: ATTIC_ENDPOINT
+                  value: http://attic.default.svc.cluster.local
+                - name: ATTIC_CACHE
+                  value: nixos
+                - name: NIX_CONFIG
+                  value: |
+                    max-jobs = 3
+                    cores = 2
+                    fallback = true
+                    connect-timeout = 5
+                    extra-substituters = http://attic.default.svc.cluster.local/nixos
+                    extra-trusted-public-keys = nixos:4q9iokR56gpJfsHh0UKn9Hj1cPplvM879XVgnRstpNU=
+              resources:
+                requests:
+                  cpu: 250m
+                  memory: 2Gi
+                limits:
+                  cpu: "6"
+                  memory: 24Gi
+              volumeMounts:
+                - name: nix-store
+                  mountPath: /nix
+                - name: nix-builder
+                  mountPath: /opt/nix-builder/build.sh
+                  subPath: build.sh
+                - name: nix-builder
+                  mountPath: /etc/nixos/hardware-configuration.nix
+                  subPath: hardware-configuration.nix
+                - name: nix-builder
+                  mountPath: /etc/nixos/hardware.nix
+                  subPath: hardware-configuration.nix
+                - name: nix-builder
+                  mountPath: /etc/nixos/configuration.nix
+                  subPath: configuration.nix
+                - name: attic-client
+                  mountPath: /etc/attic
+                  readOnly: true
+          volumes:
+            - name: nix-store
+              hostPath:
+                path: /media/data-ssd/nix-builder
+                type: DirectoryOrCreate
+            - name: nix-builder
+              configMap:
+                name: nix-builder
+            - name: attic-client
+              secret:
+                secretName: attic-server-token
+                items:
+                  - key: normal-config
+                    path: config.toml

@@ -213,6 +213,8 @@
           replicas = 1;
           image = "docker.io/heywoodlh/attic:47752427561f1c34debb16728a210d378f0ece36";
           hostfolder = "/media/data-ssd/attic";
+          nix_image = "docker.io/heywoodlh/nix:2.35.4";
+          builder_hostfolder = "/media/data-ssd/nix-builder";
         };
         actual = mkKubeDrv "actual" {
           src = ./templates/actual.yaml;

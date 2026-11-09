@@ -112,6 +112,8 @@ jobs:
           curl --fail --location --retry 3 https://nixos.org/nix/install | sh -s -- --daemon --yes
           mkdir -p ~/.config/nix
           printf 'experimental-features = nix-command flakes\n' > ~/.config/nix/nix.conf
+          echo "trusted-users = root $USER" | sudo tee -a /etc/nix/nix.conf > /dev/null
+          sudo systemctl restart nix-daemon
           echo /nix/var/nix/profiles/default/bin >> "$GITHUB_PATH"
 
       - name: Parse Nix expressions
@@ -225,6 +227,8 @@ jobs:
           curl --fail --location --retry 3 https://nixos.org/nix/install | sh -s -- --daemon --yes
           mkdir -p ~/.config/nix
           printf 'experimental-features = nix-command flakes\n' > ~/.config/nix/nix.conf
+          echo "trusted-users = root $USER" | sudo tee -a /etc/nix/nix.conf > /dev/null
+          sudo launchctl kickstart -k system/org.nixos.nix-daemon
           echo /nix/var/nix/profiles/default/bin >> "$GITHUB_PATH"
 
       - name: Parse Nix expressions

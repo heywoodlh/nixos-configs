@@ -1042,6 +1042,13 @@ rec {
           };
         };
 
+        nixos-yoga = nixosConfig "laptop" "nixos-yoga" {
+          imports = [
+            ./nixos/hosts/yoga-7i-14irl8.nix
+            /etc/nixos/hardware-configuration.nix
+          ];
+        };
+
         nixos-thinkpad = nixosConfig "laptop" "nixos-thinkpad" {
           imports = [
             /etc/nixos/hardware-configuration.nix

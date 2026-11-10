@@ -39,7 +39,6 @@ let
 
   caddyfile = pkgs.writeText "nomad-Caddyfile" ''
     {
-      admin off
       auto_https off
     }
 
@@ -47,8 +46,11 @@ let
       basic_auth {
         {$NOMAD_USER} {$NOMAD_PASSWORD_HASH}
       }
-      reverse_proxy nomad-admin:8080 {
-        flush_interval -1
+      route {
+        import /etc/caddy/apps/*.caddy
+        reverse_proxy nomad-admin:8080 {
+          flush_interval -1
+        }
       }
     }
   '';
@@ -57,9 +59,80 @@ let
     #!/bin/sh
     set -eu
     NOMAD_PASSWORD_HASH="$(caddy hash-password --plaintext "$NOMAD_PASSWORD")"
+    printf '%s' "$NOMAD_PASSWORD_HASH" > /tmp/nomad-password-hash
     export NOMAD_PASSWORD_HASH
     exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
   '';
+
+  nomadApps = {
+    nomad_kiwix_server = {
+      path = "library";
+      port = 8080;
+      rootPaths = [ "/skin/*" "/catalog/*" "/content/*" "/viewer*" "/search*" "/suggest*" "/raw/*" "/random*" "/nojs*" ];
+    };
+    nomad_cyberchef = { path = "cyberchef"; port = 80; };
+    nomad_flatnotes = { path = "notes"; port = 8080; };
+    nomad_kolibri_2 = { path = "kolibri"; port = 8080; };
+    nomad_stirling_pdf = { path = "pdf"; port = 8080; };
+    nomad_filebrowser = { path = "files"; port = 80; };
+    nomad_calibreweb = { path = "books"; port = 8083; };
+    nomad_excalidraw = { path = "draw"; port = 80; };
+    nomad_meshtastic_web = { path = "meshtastic"; port = 8080; };
+    nomad_homebox = { path = "homebox"; port = 7745; };
+    nomad_jellyfin = { path = "jellyfin"; port = 8096; };
+  };
+
+  appTable = lib.concatStringsSep "\n" (lib.mapAttrsToList (service: app: "${service} ${app.path} ${toString app.port} ${lib.concatStringsSep "," (app.rootPaths or [ "-" ])}") nomadApps);
+
+  syncProxy = pkgs.writeShellApplication {
+    name = "nomad-proxy-sync";
+    runtimeInputs = [ config.virtualisation.docker.package pkgs.coreutils pkgs.diffutils pkgs.gnugrep ];
+    text = ''
+      snippets="${baseDir}/caddy/apps.caddy"
+
+      build() {
+        local running
+        running="$(docker ps --filter label=io.project-nomad.managed=true --format '{{.Names}}')"
+        while read -r service path port roots; do
+          if grep -qxF "$service" <<< "$running"; then
+            matcher="$(printf '%s' "$path" | tr - _)"
+            cat <<BLOCK
+      redir /$path /$path/ 308
+      handle_path /$path/* {
+        reverse_proxy $service:$port
+      }
+      @ref_$matcher header Referer */$path/*
+      reverse_proxy @ref_$matcher $service:$port
+      BLOCK
+            if [ "$roots" != "-" ]; then
+              printf '@root_%s path %s\nreverse_proxy @root_%s %s:%s\n' "$matcher" "''${roots//,/ }" "$matcher" "$service" "$port"
+            fi
+          fi
+        done <<'TABLE'
+      ${appTable}
+      TABLE
+      }
+
+      sync() {
+        local tmp
+        tmp="$(mktemp "${baseDir}/caddy/.apps.XXXXXX")"
+        build > "$tmp"
+        if cmp -s "$tmp" "$snippets"; then
+          rm -f "$tmp"
+          return
+        fi
+        chmod 644 "$tmp"
+        mv "$tmp" "$snippets"
+        docker exec nomad-proxy sh -c 'NOMAD_PASSWORD_HASH="$(cat /tmp/nomad-password-hash)" exec caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile' || echo "caddy reload failed" >&2
+      }
+
+      while true; do
+        sync || true
+        timeout 30 docker events --filter type=container --filter label=io.project-nomad.managed=true --filter event=start --filter event=die --filter event=destroy --format '{{.Action}}' | head -n 1 > /dev/null || true
+        sleep 2
+      done
+    '';
+  };
 
   syncZims = pkgs.writeShellApplication {
     name = "nomad-sync-zims";
@@ -102,6 +175,8 @@ in {
     "d ${storage}/zim 0755 root root -"
     "d ${baseDir}/mysql 0750 999 999 -"
     "d ${baseDir}/redis 0750 999 1000 -"
+    "d ${baseDir}/caddy 0755 root root -"
+    "f ${baseDir}/caddy/apps.caddy 0644 root root -"
     "d ${kiwixDir} 0755 root root -"
   ];
 
@@ -144,6 +219,19 @@ in {
       script = ''
         docker network inspect ${network} >/dev/null 2>&1 || docker network create ${network}
       '';
+    };
+
+    nomad-proxy-sync = {
+      description = "Route installed Project NOMAD apps through the Caddy proxy";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "docker-nomad-proxy.service" ];
+      environment = systemDocker;
+      unitConfig.RequiresMountsFor = [ baseDir ];
+      serviceConfig = {
+        ExecStart = "${syncProxy}/bin/nomad-proxy-sync";
+        Restart = "always";
+        RestartSec = 5;
+      };
     };
 
     nomad-sync-zims = {
@@ -258,6 +346,7 @@ in {
         volumes = [
           "${caddyfile}:/etc/caddy/Caddyfile:ro"
           "${proxyStart}:/etc/caddy/start.sh:ro"
+          "${baseDir}/caddy:/etc/caddy/apps:ro"
         ];
         extraOptions = commonOptions;
       };

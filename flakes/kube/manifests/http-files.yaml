@@ -32,16 +32,261 @@ spec:
       labels:
         app: http-files
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
       containers:
       - name: http-files
         image: docker.io/heywoodlh/http-files:v2.10.2
         ports:
         - containerPort: 80
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
         volumeMounts:
         - name: http-files
           mountPath: /web
+        - name: kiwix
+          mountPath: /web/kiwix
+          readOnly: true
       volumes:
       - name: http-files
         hostPath:
           path: /opt/files
+      - name: kiwix
+        hostPath:
+          path: /media/services_pool/kiwix
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiwix-zim-urls
+  namespace: default
+data:
+  zims.txt: |
+    books https://lb.download.kiwix.org/zim/wikisource/wikisource_en_all_nopic_2026-09.zim
+    education https://lb.download.kiwix.org/zim/wikibooks/wikibooks_en_all_nopic_2026-10.zim
+    education https://lb.download.kiwix.org/zim/libretexts/libretexts.org_en_math_2026-01.zim
+    education https://lb.download.kiwix.org/zim/phet/phet_en_all_2026-08.zim
+    education https://lb.download.kiwix.org/zim/wiktionary/wiktionary_en-simple_all_nopic_2026-10.zim
+    emergency https://lb.download.kiwix.org/zim/ifixit/ifixit_en_all_2025-12.zim
+    emergency https://lb.download.kiwix.org/zim/stack_exchange/mechanics.stackexchange.com_en_all_2026-10.zim
+    emergency https://lb.download.kiwix.org/zim/stack_exchange/aviation.stackexchange.com_en_all_2026-10.zim
+    emergency https://lb.download.kiwix.org/zim/other/zimgit-post-disaster_en_2024-05.zim
+    emergency https://lb.download.kiwix.org/zim/other/zimgit-food-preparation_en_2025-04.zim
+    emergency https://lb.download.kiwix.org/zim/other/zimgit-water_en_2024-08.zim
+    emergency https://lb.download.kiwix.org/zim/other/zimgit-knots_en_2024-08.zim
+    emergency https://lb.download.kiwix.org/zim/other/usda-2015_en_2025-04.zim
+    emergency https://lb.download.kiwix.org/zim/other/appropedia_en_all_maxi_2026-02.zim
+    emergency https://lb.download.kiwix.org/zim/other/wikivet.net_en_all_maxi_2026-07a.zim
+    emergency https://lb.download.kiwix.org/zim/other/restarters_en_all_maxi_2026-10.zim
+    emergency https://lb.download.kiwix.org/zim/stack_exchange/outdoors.stackexchange.com_en_all_2026-10.zim
+    emergency https://lb.download.kiwix.org/zim/other/scoutwiki.org_en_all_maxi_2026-10.zim
+    emergency https://lb.download.kiwix.org/zim/wikipedia/wikipedia_en_knots_maxi_2026-10.zim
+    entertainment https://lb.download.kiwix.org/zim/zimit/xkcd.com_en_all_2026-08.zim
+    entertainment https://lb.download.kiwix.org/zim/stack_exchange/chess.stackexchange.com_en_all_2026-10.zim
+    entertainment https://lb.download.kiwix.org/zim/stack_exchange/boardgames.stackexchange.com_en_all_2026-10.zim
+    health https://lb.download.kiwix.org/zim/other/zimgit-medicine_en_2024-08.zim
+    health https://lb.download.kiwix.org/zim/zimit/nhs.uk_en_medicines_2026-09b.zim
+    health https://lb.download.kiwix.org/zim/zimit/irp.fas.org_en_military-medicine_2026-10.zim
+    health https://lb.download.kiwix.org/zim/zimit/wwwnc.cdc.gov_en_all_2024-11.zim
+    health https://lb.download.kiwix.org/zim/stack_exchange/psychology.stackexchange.com_en_all_2026-10.zim
+    health https://lb.download.kiwix.org/zim/stack_exchange/interpersonal.stackexchange.com_en_all_2026-10.zim
+    health https://lb.download.kiwix.org/zim/stack_exchange/medicalsciences.stackexchange.com_en_all_2026-10.zim
+    health https://lb.download.kiwix.org/zim/stack_exchange/fitness.stackexchange.com_en_all_2026-10.zim
+    health https://lb.download.kiwix.org/zim/stack_exchange/parenting.stackexchange.com_en_all_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_bash_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_nix_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_python_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_go_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_rust_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_c_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_cpp_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_ansible_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_terraform_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_opentofu_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_docker_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_kubernetes_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_git_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_powershell_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_man_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/devdocs/devdocs_en_sqlite_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/zimit/gobyexample.com_en_all_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/freecodecamp/freecodecamp_en_rosetta-code_2026-11.zim
+    programming https://lb.download.kiwix.org/zim/zimit/devhints.io_en_all_2026-08.zim
+    programming https://lb.download.kiwix.org/zim/zimit/www.mankier.com_en_all_2026-10.zim
+    programming https://lb.download.kiwix.org/zim/zimit/htdp.org_en_all_2026-08.zim
+    programming https://lb.download.kiwix.org/zim/zimit/opendatastructures.org_en_all_2026-05.zim
+    radio https://lb.download.kiwix.org/zim/stack_exchange/ham.stackexchange.com_en_all_2026-10.zim
+    radio https://lb.download.kiwix.org/zim/stack_exchange/arduino.stackexchange.com_en_all_2026-10.zim
+    radio https://lb.download.kiwix.org/zim/stack_exchange/iot.stackexchange.com_en_all_2026-10.zim
+    radio https://lb.download.kiwix.org/zim/stack_exchange/drones.stackexchange.com_en_all_2026-10.zim
+    sysadmin https://lb.download.kiwix.org/zim/stack_exchange/unix.stackexchange.com_en_all_2026-10.zim
+    sysadmin https://lb.download.kiwix.org/zim/stack_exchange/askubuntu.com_en_all_2026-10.zim
+    sysadmin https://lb.download.kiwix.org/zim/stack_exchange/apple.stackexchange.com_en_all_2026-10.zim
+    sysadmin https://lb.download.kiwix.org/zim/stack_exchange/networkengineering.stackexchange.com_en_all_2026-10.zim
+    sysadmin https://lb.download.kiwix.org/zim/zimit/openwrt.org_en_all_2026-07.zim
+    sysadmin https://lb.download.kiwix.org/zim/other/archlinux_en_all_maxi_2026-10.zim
+    sysadmin https://lb.download.kiwix.org/zim/other/gentoo_en_all_maxi_2026-07.zim
+    sysadmin https://lb.download.kiwix.org/zim/other/alpinelinux_en_all_maxi_2026-10.zim
+    sysadmin https://lb.download.kiwix.org/zim/other/termux_en_all_maxi_2022-12.zim
+    sysadmin https://lb.download.kiwix.org/zim/stack_exchange/vi.stackexchange.com_en_all_2026-10.zim
+    sysadmin https://lb.download.kiwix.org/zim/stack_exchange/devops.stackexchange.com_en_all_2026-10.zim
+    sysadmin https://lb.download.kiwix.org/zim/devdocs/devdocs_en_nginx_2026-10.zim
+    wikipedia https://lb.download.kiwix.org/zim/wikipedia/wikipedia_en_top_nopic_2026-09.zim
+    wikipedia https://lb.download.kiwix.org/zim/wikipedia/wikipedia_en_top1m_mini_2026-04.zim
+    wikipedia https://lb.download.kiwix.org/zim/wikipedia/wikipedia_en_medicine_nopic_2026-10.zim
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiwix-zim-downloader
+  namespace: default
+data:
+  download.sh: |
+    #!/bin/sh
+    umask 022
+    urls_file="${ZIM_URLS_FILE:-/config/zims.txt}"
+    dest_root="${ZIM_DEST:-/kiwix}"
+    failed=0
 
+    remote_size() {
+      curl -fsSIL --retry 3 --connect-timeout 30 "$1" | tr -d '\r' | awk 'tolower($1) == "content-length:" { size = $2 } END { print size }'
+    }
+
+    is_dated_zim() {
+      case "$1" in
+        [0-9][0-9][0-9][0-9]-[0-9][0-9].zim | [0-9][0-9][0-9][0-9]-[0-9][0-9][a-z].zim) return 0 ;;
+        *) return 1 ;;
+      esac
+    }
+
+    prune_superseded() {
+      dir="$1"
+      name="$2"
+      stem="${name%_*}"
+      for old in "${dir}/${stem}_"*.zim; do
+        [ -e "${old}" ] || continue
+        [ "${old}" = "${dir}/${name}" ] && continue
+        suffix="${old##*/}"
+        suffix="${suffix#"${stem}"_}"
+        if is_dated_zim "${suffix}"; then
+          echo "Removing superseded ${old}"
+          rm -f "${old}"
+        fi
+      done
+    }
+
+    while read -r category url _; do
+      case "${category}" in
+        "" | "#"*) continue ;;
+      esac
+      [ -n "${url}" ] || continue
+
+      name="${url##*/}"
+      dir="${dest_root}/${category}"
+      dest="${dir}/${name}"
+      part="${dest}.part"
+      mkdir -p "${dir}"
+
+      size="$(remote_size "${url}")"
+      if [ -z "${size}" ]; then
+        echo "ERROR: could not determine size of ${url}"
+        failed=$((failed + 1))
+        continue
+      fi
+
+      if [ -f "${dest}" ] && [ "$(wc -c < "${dest}")" = "${size}" ]; then
+        echo "Up to date: ${category}/${name}"
+        prune_superseded "${dir}" "${name}"
+        continue
+      fi
+
+      if [ -f "${part}" ] && [ "$(wc -c < "${part}")" -gt "${size}" ]; then
+        rm -f "${part}"
+      fi
+
+      echo "Downloading ${category}/${name} (${size} bytes)"
+      if curl -fL --no-progress-meter --show-error --retry 5 --retry-delay 15 --connect-timeout 30 --speed-limit 1024 --speed-time 120 -C - -o "${part}" "${url}" \
+        && [ "$(wc -c < "${part}")" = "${size}" ]; then
+        mv -f "${part}" "${dest}"
+        prune_superseded "${dir}" "${name}"
+      else
+        echo "ERROR: failed to download ${url}"
+        failed=$((failed + 1))
+      fi
+    done < "${urls_file}"
+
+    if [ "${failed}" -gt 0 ]; then
+      echo "${failed} download(s) failed"
+      exit 1
+    fi
+    echo "All ZIM files are up to date"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kiwix-zim-downloader
+  namespace: default
+spec:
+  schedule: "0 3 * * 0"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 43200
+      template:
+        metadata:
+          labels:
+            app: kiwix-zim-downloader
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            kubernetes.io/hostname: homelab
+          containers:
+          - name: downloader
+            image: docker.io/curlimages/curl:8.23.0
+            imagePullPolicy: IfNotPresent
+            command: ["/bin/sh", "/scripts/download.sh"]
+            env:
+            - name: ZIM_URLS_FILE
+              value: /config/zims.txt
+            - name: ZIM_DEST
+              value: /kiwix
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
+            volumeMounts:
+            - name: urls
+              mountPath: /config
+              readOnly: true
+            - name: script
+              mountPath: /scripts
+              readOnly: true
+            - name: kiwix
+              mountPath: /kiwix
+          volumes:
+          - name: urls
+            configMap:
+              name: kiwix-zim-urls
+          - name: script
+            configMap:
+              name: kiwix-zim-downloader
+          - name: kiwix
+            hostPath:
+              path: /media/services_pool/kiwix
+              type: DirectoryOrCreate

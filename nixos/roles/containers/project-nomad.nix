@@ -1,0 +1,216 @@
+{ config, lib, pkgs, ... }:
+
+let
+  baseDir = "/opt/project-nomad";
+  storage = "${baseDir}/storage";
+  kiwixDir = "/media/services_pool/kiwix";
+  envFile = "${baseDir}/env";
+  network = "project-nomad_default";
+  bridgeIP = "172.17.0.1";
+  tailnetURL = "http://nomad.barn-banana.ts.net";
+  containerNames = [ "nomad-admin" "nomad-mysql" "nomad-redis" "nomad-disk-collector" ];
+
+  initEnv = pkgs.writeShellApplication {
+    name = "nomad-init-env";
+    runtimeInputs = [ pkgs.coreutils pkgs.openssl ];
+    text = ''
+      if [ -s "${envFile}" ]; then
+        exit 0
+      fi
+      umask 077
+      tmp="$(mktemp "${envFile}.XXXXXX")"
+      trap 'rm -f "$tmp"' EXIT
+      db_password="$(openssl rand -hex 24)"
+      {
+        echo "APP_KEY=$(openssl rand -hex 32)"
+        echo "DB_PASSWORD=$db_password"
+        echo "MYSQL_PASSWORD=$db_password"
+        echo "MYSQL_ROOT_PASSWORD=$(openssl rand -hex 24)"
+      } > "$tmp"
+      mv "$tmp" "${envFile}"
+      trap - EXIT
+    '';
+  };
+
+  syncZims = pkgs.writeShellApplication {
+    name = "nomad-sync-zims";
+    runtimeInputs = [ pkgs.coreutils pkgs.curl ];
+    text = ''
+      cd "${kiwixDir}"
+      changed=0
+      for target in */*.zim; do
+        [ -e "$target" ] || continue
+        link="$(basename "$target")"
+        if [ -e "$link" ] && [ ! -L "$link" ]; then
+          continue
+        fi
+        if [ "$(readlink "$link" || true)" != "$target" ]; then
+          ln -sfn "$target" "$link"
+          changed=1
+        fi
+      done
+      for link in ./*.zim; do
+        if [ -L "$link" ] && [ ! -e "$link" ]; then
+          rm -f "$link"
+          changed=1
+        fi
+      done
+      if [ "$changed" = 1 ]; then
+        curl -fsS -X POST http://127.0.0.1:8080/api/zim/rescan-library || true
+      fi
+    '';
+  };
+
+  commonOptions = [
+    "--network=${network}"
+  ];
+in {
+  systemd.tmpfiles.rules = [
+    "d ${baseDir} 0755 root root -"
+    "d ${storage} 0755 root root -"
+    "d ${storage}/zim 0755 root root -"
+    "d ${baseDir}/mysql 0755 root root -"
+    "d ${baseDir}/redis 0755 root root -"
+    "d ${kiwixDir} 0755 root root -"
+  ];
+
+  systemd.mounts = [
+    {
+      what = kiwixDir;
+      where = "${storage}/zim";
+      type = "none";
+      options = "bind";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-tmpfiles-setup.service" "zfs-mount.service" ];
+      unitConfig.RequiresMountsFor = [ baseDir ];
+    }
+  ];
+
+  systemd.services = {
+    nomad-init-env = {
+      description = "Generate Project NOMAD credentials";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "systemd-tmpfiles-setup.service" ];
+      unitConfig.RequiresMountsFor = [ baseDir ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${initEnv}/bin/nomad-init-env";
+      };
+    };
+
+    docker-network-project-nomad = {
+      description = "Docker network for Project NOMAD";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "docker.service" ];
+      requires = [ "docker.service" ];
+      path = [ config.virtualisation.docker.package ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        docker network inspect ${network} >/dev/null 2>&1 || docker network create ${network}
+      '';
+    };
+
+    nomad-sync-zims = {
+      description = "Link categorized ZIM files into the flat layout Project NOMAD scans";
+      unitConfig.RequiresMountsFor = [ "${storage}/zim" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${syncZims}/bin/nomad-sync-zims";
+      };
+    };
+  } // lib.genAttrs (map (name: "docker-${name}") containerNames) (_: {
+    after = [ "nomad-init-env.service" "docker-network-project-nomad.service" ];
+    requires = [ "nomad-init-env.service" "docker-network-project-nomad.service" ];
+    unitConfig.RequiresMountsFor = [ "${storage}/zim" ];
+  });
+
+  systemd.timers.nomad-sync-zims = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "hourly";
+      Persistent = true;
+    };
+  };
+
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      nomad-mysql = {
+        image = "docker.io/library/mysql:8.0.46";
+        autoStart = true;
+        environment = {
+          MYSQL_DATABASE = "nomad";
+          MYSQL_USER = "nomad_user";
+        };
+        environmentFiles = [ envFile ];
+        volumes = [
+          "${baseDir}/mysql:/var/lib/mysql"
+        ];
+        extraOptions = commonOptions ++ [
+          "--network-alias=mysql"
+        ];
+      };
+
+      nomad-redis = {
+        image = "docker.io/library/redis:7.4.12-alpine";
+        autoStart = true;
+        volumes = [
+          "${baseDir}/redis:/data"
+        ];
+        extraOptions = commonOptions ++ [
+          "--network-alias=redis"
+        ];
+      };
+
+      nomad-admin = {
+        image = "ghcr.io/crosstalk-solutions/project-nomad:v1.35.1";
+        autoStart = true;
+        dependsOn = [ "nomad-mysql" "nomad-redis" ];
+        environment = {
+          NODE_ENV = "production";
+          NOMAD_STORAGE_PATH = storage;
+          PORT = "8080";
+          LOG_LEVEL = "info";
+          HOST = "0.0.0.0";
+          URL = tailnetURL;
+          DB_HOST = "mysql";
+          DB_PORT = "3306";
+          DB_DATABASE = "nomad";
+          DB_USER = "nomad_user";
+          DB_NAME = "nomad";
+          DB_SSL = "false";
+          REDIS_HOST = "redis";
+          REDIS_PORT = "6379";
+          DISABLE_COMPRESSION = "false";
+        };
+        environmentFiles = [ envFile ];
+        ports = [
+          "${bridgeIP}:8080:8080"
+          "127.0.0.1:8080:8080"
+        ];
+        volumes = [
+          "${storage}:/app/storage"
+          "/var/run/docker.sock:/var/run/docker.sock"
+          "nomad-update-shared:/app/update-shared"
+        ];
+        extraOptions = commonOptions ++ [
+          "--add-host=host.docker.internal:host-gateway"
+        ];
+      };
+
+      nomad-disk-collector = {
+        image = "ghcr.io/crosstalk-solutions/project-nomad-disk-collector:v1.31.1";
+        autoStart = true;
+        volumes = [
+          "/:/host:ro,rslave"
+          "${storage}:/storage"
+        ];
+        extraOptions = commonOptions;
+      };
+    };
+  };
+}

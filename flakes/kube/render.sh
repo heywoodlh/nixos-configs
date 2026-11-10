@@ -43,6 +43,7 @@ applications=(
   "miniflux"
   "namespaces"
   "nfcapd"
+  "nomad"
   "ntfy"
   "nuclei"
   "open-webui"

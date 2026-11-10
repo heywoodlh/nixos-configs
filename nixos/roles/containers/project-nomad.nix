@@ -6,6 +6,10 @@ let
   kiwixDir = "/media/services_pool/kiwix";
   envFile = "${baseDir}/env";
   network = "project-nomad_default";
+  systemDocker = {
+    DOCKER_HOST = "unix:///var/run/docker.sock";
+    DOCKER_CONTEXT = "default";
+  };
   containerNames = [ "nomad-proxy" "nomad-admin" "nomad-mysql" "nomad-redis" "nomad-disk-collector" ];
 
   initEnv = pkgs.writeShellApplication {
@@ -96,8 +100,8 @@ in {
     "d ${baseDir} 0755 root root -"
     "d ${storage} 0755 root root -"
     "d ${storage}/zim 0755 root root -"
-    "d ${baseDir}/mysql 0755 root root -"
-    "d ${baseDir}/redis 0755 root root -"
+    "d ${baseDir}/mysql 0750 999 999 -"
+    "d ${baseDir}/redis 0750 999 1000 -"
     "d ${kiwixDir} 0755 root root -"
   ];
 
@@ -132,6 +136,7 @@ in {
       after = [ "docker.service" ];
       requires = [ "docker.service" ];
       path = [ config.virtualisation.docker.package ];
+      environment = systemDocker;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -150,6 +155,7 @@ in {
       };
     };
   } // lib.genAttrs (map (name: "docker-${name}") containerNames) (_: {
+    environment = systemDocker;
     after = [ "nomad-init-env.service" "docker-network-project-nomad.service" "zfs-mount.service" ];
     requires = [ "nomad-init-env.service" "docker-network-project-nomad.service" ];
     unitConfig.RequiresMountsFor = [ "${storage}/zim" ];

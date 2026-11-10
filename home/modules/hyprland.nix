@@ -29,8 +29,10 @@ let
   lockCmd = "${lockCmdPfx} ${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.hyprlock}/bin/hyprlock";
   screenshotScript = pkgs.writeShellScriptBin "screenshot.sh" ''
     screenshot_path="${homeDir}/Downloads/screenshot.png"
+    archive_dir="${homeDir}/Pictures/screenshots/$(${pkgs.hostname}/bin/hostname)"
+    ${pkgs.coreutils}/bin/mkdir -p "$archive_dir"
     ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp -d)" - \
-      | ${pkgs.coreutils}/bin/tee "$screenshot_path" \
+      | ${pkgs.coreutils}/bin/tee "$screenshot_path" "$archive_dir/$(${pkgs.coreutils}/bin/date +%Y-%m-%d-%H:%M:%S).png" \
       | ${pkgs.wl-clipboard}/bin/wl-copy
   '';
   screenrecordScript = pkgs.writeShellScriptBin "screenrecord.sh" ''

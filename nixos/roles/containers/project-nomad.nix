@@ -6,29 +6,56 @@ let
   kiwixDir = "/media/services_pool/kiwix";
   envFile = "${baseDir}/env";
   network = "project-nomad_default";
-  containerNames = [ "nomad-admin" "nomad-mysql" "nomad-redis" "nomad-disk-collector" ];
+  containerNames = [ "nomad-proxy" "nomad-admin" "nomad-mysql" "nomad-redis" "nomad-disk-collector" ];
 
   initEnv = pkgs.writeShellApplication {
     name = "nomad-init-env";
-    runtimeInputs = [ pkgs.coreutils pkgs.openssl ];
+    runtimeInputs = [ pkgs.coreutils pkgs.gnugrep pkgs.openssl ];
     text = ''
-      if [ -s "${envFile}" ]; then
-        exit 0
-      fi
       umask 077
-      tmp="$(mktemp "${envFile}.XXXXXX")"
-      trap 'rm -f "$tmp"' EXIT
-      db_password="$(openssl rand -hex 24)"
-      {
-        echo "APP_KEY=$(openssl rand -hex 32)"
-        echo "DB_PASSWORD=$db_password"
-        echo "MYSQL_PASSWORD=$db_password"
-        echo "MYSQL_ROOT_PASSWORD=$(openssl rand -hex 24)"
-      } > "$tmp"
-      mv "$tmp" "${envFile}"
-      trap - EXIT
+      touch "${envFile}"
+
+      add_key() {
+        if ! grep -q "^$1=" "${envFile}"; then
+          echo "$1=$2" >> "${envFile}"
+        fi
+      }
+
+      if ! grep -q "^DB_PASSWORD=" "${envFile}"; then
+        db_password="$(openssl rand -hex 24)"
+        echo "DB_PASSWORD=$db_password" >> "${envFile}"
+        echo "MYSQL_PASSWORD=$db_password" >> "${envFile}"
+      fi
+      add_key APP_KEY "$(openssl rand -hex 32)"
+      add_key MYSQL_ROOT_PASSWORD "$(openssl rand -hex 24)"
+      add_key NOMAD_USER nomad
+      add_key NOMAD_PASSWORD "$(openssl rand -hex 16)"
     '';
   };
+
+  caddyfile = pkgs.writeText "nomad-Caddyfile" ''
+    {
+      admin off
+      auto_https off
+    }
+
+    :8080 {
+      basic_auth {
+        {$NOMAD_USER} {$NOMAD_PASSWORD_HASH}
+      }
+      reverse_proxy nomad-admin:8080 {
+        flush_interval -1
+      }
+    }
+  '';
+
+  proxyStart = pkgs.writeText "nomad-proxy-start.sh" ''
+    #!/bin/sh
+    set -eu
+    NOMAD_PASSWORD_HASH="$(caddy hash-password --plaintext "$NOMAD_PASSWORD")"
+    export NOMAD_PASSWORD_HASH
+    exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+  '';
 
   syncZims = pkgs.writeShellApplication {
     name = "nomad-sync-zims";
@@ -54,7 +81,7 @@ let
         fi
       done
       if [ "$changed" = 1 ]; then
-        curl -fsS -X POST http://127.0.0.1:8080/api/zim/rescan-library || true
+        curl -fsS -X POST http://127.0.0.1:8081/api/zim/rescan-library || true
       fi
     '';
   };
@@ -189,7 +216,7 @@ in {
         };
         environmentFiles = [ envFile ];
         ports = [
-          "8080:8080"
+          "127.0.0.1:8081:8080"
         ];
         volumes = [
           "${storage}:/app/storage"
@@ -199,6 +226,23 @@ in {
         extraOptions = commonOptions ++ [
           "--add-host=host.docker.internal:host-gateway"
         ];
+      };
+
+      nomad-proxy = {
+        image = "docker.io/library/caddy:2.11.9-alpine";
+        autoStart = true;
+        dependsOn = [ "nomad-admin" ];
+        environmentFiles = [ envFile ];
+        entrypoint = "/bin/sh";
+        cmd = [ "/etc/caddy/start.sh" ];
+        ports = [
+          "8080:8080"
+        ];
+        volumes = [
+          "${caddyfile}:/etc/caddy/Caddyfile:ro"
+          "${proxyStart}:/etc/caddy/start.sh:ro"
+        ];
+        extraOptions = commonOptions;
       };
 
       nomad-disk-collector = {

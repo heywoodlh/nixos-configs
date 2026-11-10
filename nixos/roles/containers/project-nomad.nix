@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  baseDir = "/opt/project-nomad";
+  baseDir = "/media/services_pool/nomad";
   storage = "${baseDir}/storage";
   kiwixDir = "/media/services_pool/kiwix";
   envFile = "${baseDir}/env";
@@ -90,7 +90,7 @@ in {
     nomad-init-env = {
       description = "Generate Project NOMAD credentials";
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-tmpfiles-setup.service" ];
+      after = [ "systemd-tmpfiles-setup.service" "zfs-mount.service" ];
       unitConfig.RequiresMountsFor = [ baseDir ];
       serviceConfig = {
         Type = "oneshot";
@@ -123,7 +123,7 @@ in {
       };
     };
   } // lib.genAttrs (map (name: "docker-${name}") containerNames) (_: {
-    after = [ "nomad-init-env.service" "docker-network-project-nomad.service" ];
+    after = [ "nomad-init-env.service" "docker-network-project-nomad.service" "zfs-mount.service" ];
     requires = [ "nomad-init-env.service" "docker-network-project-nomad.service" ];
     unitConfig.RequiresMountsFor = [ "${storage}/zim" ];
   });

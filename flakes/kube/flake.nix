@@ -97,6 +97,9 @@
         inherit system;
         config.allowUnfree = true;
       };
+      indentLines = n: text: let
+        pad = pkgs.lib.concatStrings (builtins.genList (_: " ") n);
+      in pkgs.lib.concatMapStringsSep "\n" (l: if l == "" then l else pad + l) (pkgs.lib.splitString "\n" (pkgs.lib.removeSuffix "\n" text));
       mkKubeDrv = pkgName: args: let
         yaml = oldpkgs.substituteAll args;
       in builtins.derivation {
@@ -541,7 +544,16 @@
           src = ./templates/http-files.yaml;
           namespace = "default";
           image = "docker.io/heywoodlh/http-files:v2.10.2";
+          curl_image = "docker.io/curlimages/curl:8.23.0";
           replicas = 1;
+          nodename = "homelab";
+          kiwixfolder = "/media/services_pool/kiwix";
+          kiwix_schedule = "0 3 * * 0";
+          zim_urls = indentLines 4 (builtins.readFile ./kiwix/zims.txt);
+          zim_download_script = indentLines 4 (builtins.readFile ./kiwix/download.sh);
+          apk_schedule = "30 2 * * 0";
+          apk_sources = indentLines 4 (builtins.readFile ./kiwix/apks.txt);
+          apk_download_script = indentLines 4 (builtins.readFile ./kiwix/download-apks.sh);
         };
         immich = mkKubeDrv "immich" rec {
           src = ./templates/immich.yaml;

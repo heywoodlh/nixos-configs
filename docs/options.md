@@ -2500,6 +2500,108 @@ true
 
 
 
+## heywoodlh\.home\.kiwix\.enable
+
+
+
+Enable heywoodlh Kiwix configuration\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kiwix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kiwix.nix)
+
+
+
+## heywoodlh\.home\.kiwix\.cron
+
+
+
+Five-field cron expression (minute hour day-of-month month
+day-of-week) controlling when ZIM files are downloaded\. Supports ` * `,
+lists, ranges and steps\. Translated into a systemd timer on Linux and
+a launchd calendar interval on macOS\. Day-of-month and day-of-week
+restrictions are combined (AND), unlike classic cron\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"0 * * * *"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kiwix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kiwix.nix)
+
+
+
+## heywoodlh\.home\.kiwix\.dir
+
+
+
+Directory ZIM files are downloaded to and read from by Kiwix and the
+TUI reader\. Shell variables such as $HOME are expanded at runtime\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"$HOME/Documents/kiwix"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kiwix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kiwix.nix)
+
+
+
+## heywoodlh\.home\.kiwix\.urls
+
+
+
+ZIM file URLs to download periodically\. Files already downloaded with
+a matching size are skipped\.
+
+
+
+*Type:*
+list of string
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kiwix\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/kiwix.nix)
+
+
+
 ## heywoodlh\.home\.librewolf\.enable
 
 
@@ -4771,8 +4873,6 @@ false
 
 ## heywoodlh\.nixos\.gaming\.console
 
-
-
 Enable heywoodlh dedicated console-like gaming configuration\.
 
 
@@ -4842,6 +4942,8 @@ string
 
 
 ## heywoodlh\.nixos\.kde\.enable
+
+
 
 Enable heywoodlh KDE configuration\.
 

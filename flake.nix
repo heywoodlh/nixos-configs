@@ -441,6 +441,7 @@ rec {
       ./home/modules/onepassword.nix
       ./home/modules/llm-agents.nix
       ./home/modules/search-tui.nix
+      ./home/modules/kiwix.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -856,6 +857,7 @@ rec {
                 "steam"
               ];
               home-manager.users.heywoodlh = {
+                imports = [ ./home/roles/kiwix.nix ];
                 heywoodlh.home.lima.nixos.memory = 12;
               };
             }
@@ -889,6 +891,7 @@ rec {
                 ];
               };
               home-manager.users.heywoodlh = {
+                imports = [ ./home/roles/kiwix.nix ];
                 heywoodlh.home = {
                   lima.nixos.memory = 12;
                   t3 = {
@@ -1094,12 +1097,14 @@ rec {
             nixos-hardware.nixosModules.common-pc-laptop-ssd
             ./nixos/hosts/yoga-7i-14irl8.nix
           ];
+          home-manager.users.heywoodlh.imports = [ ./home/roles/kiwix.nix ];
         };
 
         nixos-thinkpad = nixosConfig "laptop" "nixos-thinkpad" {
           imports = [
             /etc/nixos/hardware-configuration.nix
           ];
+          home-manager.users.heywoodlh.imports = [ ./home/roles/kiwix.nix ];
         };
 
         nixos-framework = nixosConfig "laptop" "nixos-framework" {
@@ -1288,6 +1293,7 @@ rec {
             nvtopPackages.nvidia
           ];
           home-manager.users.heywoodlh = {
+            imports = [ ./home/roles/kiwix.nix ];
             wayland.windowManager.hyprland.extraConfig = ''
               -- change monitor to high resolution, the last argument is the scale factor
               hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1.6 })

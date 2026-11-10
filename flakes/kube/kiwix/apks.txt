@@ -1,0 +1,4 @@
+kiwix-android.apk github kiwix/kiwix-android /v[0-9.]*-arm64-v8a-standalone\.apk$
+meshtastic.apk github meshtastic/Meshtastic-Android /androidApp-fdroid-arm64-v8a-release\.apk$
+cromite.apk github uazo/cromite /arm64_ChromePublic\.apk$
+briar.apk url https://briarproject.org/apk/briar.apk

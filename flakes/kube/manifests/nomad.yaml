@@ -45,7 +45,7 @@ data:
         <p class="muted">Add the entry to <code>/etc/docker/daemon.json</code>, merging with any existing keys, then restart Docker with <code>sudo systemctl restart docker</code>. On NixOS, set <code>virtualisation.docker.daemon.settings.insecure-registries</code> instead.</p>
         <h3>Rootless Docker</h3>
         <pre><code id="rootless"></code></pre>
-        <p class="muted">Add the entry to <code>~/.config/docker/daemon.json</code>, merging with any existing keys, then restart Docker with <code>systemctl --user restart docker</code>. On NixOS, set <code>virtualisation.docker.rootless.daemon.settings.insecure-registries</code> instead.</p>
+        <p class="muted">Add the entry to <code>~/.config/docker/daemon.json</code>, merging with any existing keys, then restart Docker with <code>systemctl --user restart docker</code>. On NixOS the rootless service starts <code>dockerd-rootless</code> with a generated <code>--config-file</code>, so that file is ignored: set <code>virtualisation.docker.rootless.daemon.settings.insecure-registries</code> and rebuild instead.</p>
         <p class="muted">Confirm the daemon picked it up with <code>docker info | grep -A3 "Insecure Registries"</code>. Docker tries HTTPS first and falls back to HTTP only for hosts listed there.</p>
       </details>
       <h2>Repositories</h2>
@@ -1340,7 +1340,7 @@ spec:
       labels:
         app: nomad
       annotations:
-        checksum/config: 7fa143bb3eb128243736273b69d6898f622626655353d3ae491af257c255690d
+        checksum/config: 3c7094695241d26d8e45c5d1b98ecce606e9a388c12b4bb0fa0a8b7830ceb2fd
     spec:
       nodeSelector:
         kubernetes.io/hostname: homelab

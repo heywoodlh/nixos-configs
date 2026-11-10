@@ -17,6 +17,7 @@
   pre code { border: 0; padding: 0; }
   ul { list-style: none; padding: 0; }
   li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; }
+  summary { cursor: pointer; margin-bottom: 8px; }
   .tags { color: var(--muted); font-size: 13px; }
 </style>
 </head>
@@ -24,16 +25,22 @@
 <main>
   <p><a href="/">&larr; Nomad</a></p>
   <h1>Container registry</h1>
-  <p class="muted">Unauthenticated, plain HTTP. Mirrors the images Nomad runs plus common base images and languages.</p>
+  <p class="muted">Unauthenticated, plain HTTP. Served under <code>/docker/images</code> (the bare <code>/</code> path also works). Mirrors the images Nomad runs plus common base images and languages.</p>
   <h2>Pull</h2>
   <pre><code id="example"></code></pre>
   <p class="muted">Docker only trusts plain HTTP for hosts listed under <code>insecure-registries</code> in <code>/etc/docker/daemon.json</code>.</p>
+  <details>
+    <summary>Configure plaintext HTTP</summary>
+    <pre><code id="daemon"></code></pre>
+    <p class="muted">Add the entry to <code>/etc/docker/daemon.json</code>, merging with any existing keys, then restart Docker with <code>sudo systemctl restart docker</code>. On NixOS, set <code>virtualisation.docker.daemon.settings.insecure-registries</code> instead.</p>
+  </details>
   <h2>Repositories</h2>
   <ul id="repos"><li class="muted">Loading</li></ul>
 </main>
 <script>
 const host = location.host;
-document.getElementById('example').textContent = 'docker pull ' + host + '/ubuntu:24.04\ndocker pull ' + host + '/alpine:latest';
+document.getElementById('example').textContent = 'docker pull ' + host + '/docker/images/ubuntu:24.04\ndocker pull ' + host + '/docker/images/alpine:latest';
+document.getElementById('daemon').textContent = JSON.stringify({ 'insecure-registries': [host] }, null, 2);
 
 fetch('/v2/_catalog?n=1000', { cache: 'no-store' }).then(r => r.json()).then(async catalog => {
   const list = document.getElementById('repos');

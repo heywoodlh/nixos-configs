@@ -8,7 +8,7 @@ appimages_file="${APPIMAGES_FILE:-/etc/nomad/appimages.txt}"
 nixos_channel="${NIXOS_CHANNEL:-nixos-26.05}"
 failed=0
 
-mkdir -p "${root}/android" "${linux}/appimages" "${linux}/debs" "${linux}/apk" "${linux}/pacman"
+mkdir -p "${root}/android" "${root}/maps" "${linux}/appimages" "${linux}/debs" "${linux}/apk" "${linux}/pacman"
 
 fetch_iso() {
   name="$1"

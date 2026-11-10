@@ -524,7 +524,7 @@ data:
     nixos_channel="${NIXOS_CHANNEL:-nixos-26.05}"
     failed=0
 
-    mkdir -p "${root}/android" "${linux}/appimages" "${linux}/debs" "${linux}/apk" "${linux}/pacman"
+    mkdir -p "${root}/android" "${root}/maps" "${linux}/appimages" "${linux}/debs" "${linux}/apk" "${linux}/pacman"
 
     fetch_iso() {
       name="$1"
@@ -1645,7 +1645,7 @@ spec:
       labels:
         app: nomad
       annotations:
-        checksum/config: 8f2e16ea0b7ce2ea92b6f17cd2aefae778943b3067378c41872692b3ded3039e
+        checksum/config: e36d0e71f4fa18842efbb926f941969c8f11e7dbf99140659dbd59fd25c4bfbb
     spec:
       nodeSelector:
         kubernetes.io/hostname: homelab

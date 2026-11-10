@@ -1,0 +1,64 @@
+{
+	auto_https off
+	admin off
+}
+
+:80 {
+	@kiwix path /kiwix /kiwix/*
+	@notes path /notes /notes/*
+	@v2 path /v2 /v2/*
+
+	redir /maps /maps/ 308
+	redir /meshtastic /meshtastic/ 308
+	redir /files /files/ 308
+	redir /docker /docker/ 308
+
+	handle /healthz {
+		respond "ok" 200
+	}
+
+	handle @kiwix {
+		reverse_proxy 127.0.0.1:8081
+	}
+
+	handle @notes {
+		reverse_proxy 127.0.0.1:8083
+	}
+
+	handle @v2 {
+		reverse_proxy 127.0.0.1:5000 {
+			flush_interval -1
+		}
+	}
+
+	handle_path /maps/* {
+		reverse_proxy 127.0.0.1:8082
+	}
+
+	handle_path /meshtastic/* {
+		reverse_proxy 127.0.0.1:8080
+	}
+
+	handle /files/* {
+		reverse_proxy 127.0.0.1:8084
+	}
+
+	handle_path /docker/* {
+		@index path /
+		handle @index {
+			rewrite * /docker.html
+			root * /srv/www
+			file_server
+		}
+		handle {
+			reverse_proxy 127.0.0.1:5000 {
+				flush_interval -1
+			}
+		}
+	}
+
+	handle {
+		root * /srv/www
+		file_server
+	}
+}

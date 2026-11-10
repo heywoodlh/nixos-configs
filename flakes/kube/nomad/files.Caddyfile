@@ -1,0 +1,11 @@
+{
+	auto_https off
+	admin off
+}
+
+:8084 {
+	handle_path /files/* {
+		root * /srv
+		file_server browse
+	}
+}

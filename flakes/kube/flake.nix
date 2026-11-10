@@ -773,6 +773,70 @@
             };
           };
         });
+        nomad = let
+          nomadImages = {
+            kiwix = "ghcr.io/kiwix/kiwix-serve:3.8.2";
+            silverbullet = "ghcr.io/silverbulletmd/silverbullet:2.12.1";
+            meshtastic_web = "ghcr.io/meshtastic/web:2.7.2";
+            caddy = "docker.io/library/caddy:2.11.9-alpine";
+            registry = "docker.io/library/registry:2.8.3";
+            python = "docker.io/library/python:3.15.2-alpine";
+            curl = "docker.io/curlimages/curl:8.23.0";
+            skopeo = "quay.io/skopeo/stable:v1.22.3";
+            ubuntu = "docker.io/library/ubuntu:24.04";
+            alpine = "docker.io/library/alpine:3.24.4";
+            archlinux = "docker.io/library/archlinux:base-20261108.0.623074";
+          };
+          nomadFile = name: builtins.readFile ./nomad/${name};
+          nomadConfig = files: pkgs.lib.concatStringsSep "\n" (pkgs.lib.mapAttrsToList (name: text: "  ${name}: |\n${indentLines 4 text}") files);
+        in mkKubeDrv "nomad" {
+          src = ./templates/nomad.yaml;
+          namespace = "nomad";
+          nodename = "homelab";
+          hostfolder = "/media/services_pool/nomad/containers";
+          kiwixfolder = "/media/services_pool/kiwix";
+          kiwix_image = nomadImages.kiwix;
+          silverbullet_image = nomadImages.silverbullet;
+          meshtastic_web_image = nomadImages.meshtastic_web;
+          caddy_image = nomadImages.caddy;
+          registry_image = nomadImages.registry;
+          python_image = nomadImages.python;
+          curl_image = nomadImages.curl;
+          skopeo_image = nomadImages.skopeo;
+          ubuntu_image = nomadImages.ubuntu;
+          alpine_image = nomadImages.alpine;
+          archlinux_image = nomadImages.archlinux;
+          pmtiles_version = "1.31.2";
+          pmtiles_js_version = "4.5.0";
+          maplibre_version = "5.24.0";
+          basemaps_version = "5.7.2";
+          nixos_channel = "nixos-26.05";
+          image_sync_schedule = "0 4 * * 0";
+          debs_schedule = "0 2 * * 6";
+          apk_schedule = "0 4 * * 6";
+          pacman_schedule = "30 4 * * 6";
+          dashboard_config = nomadConfig {
+            "index.html" = nomadFile "dashboard.html";
+            "docker.html" = nomadFile "docker.html";
+          };
+          script_config = nomadConfig {
+            "appimages.txt" = nomadFile "appimages.txt";
+            "dashboard.Caddyfile" = nomadFile "dashboard.Caddyfile";
+            "files-init.sh" = nomadFile "files-init.sh";
+            "files.Caddyfile" = nomadFile "files.Caddyfile";
+            "images.txt" = nomadFile "images.txt" + pkgs.lib.concatMapStrings (image: "${image}\n") (builtins.attrValues nomadImages);
+            "kiwix-serve.sh" = nomadFile "kiwix-serve.sh";
+            "lib.sh" = nomadFile "lib.sh";
+            "maps-index.html" = nomadFile "maps-index.html";
+            "maps-init.sh" = nomadFile "maps-init.sh";
+            "maps-server.py" = nomadFile "maps-server.py";
+            "meshtastic-web-init.sh" = nomadFile "meshtastic-web-init.sh";
+            "mirror-apk.sh" = nomadFile "mirror-apk.sh";
+            "mirror-debs.sh" = nomadFile "mirror-debs.sh";
+            "mirror-pacman.sh" = nomadFile "mirror-pacman.sh";
+            "sync-images.sh" = nomadFile "sync-images.sh";
+          };
+        };
         ntfy = mkKubeDrv "ntfy" {
           src = ./templates/ntfy.yaml;
           namespace = "default";

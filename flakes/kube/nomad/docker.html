@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nomad registry</title>
+<style>
+  :root { color-scheme: dark; --bg: #0b1016; --card: #151d27; --line: #243140; --text: #e6edf3; --muted: #8b9bab; --accent: #4ea1ff; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
+  a { color: var(--accent); }
+  h1 { margin: 0 0 4px; }
+  .muted { color: var(--muted); }
+  pre, code { background: var(--card); border: 1px solid var(--line); border-radius: 6px; }
+  pre { padding: 12px 14px; overflow-x: auto; }
+  code { padding: 1px 6px; }
+  pre code { border: 0; padding: 0; }
+  ul { list-style: none; padding: 0; }
+  li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; }
+  .tags { color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <p><a href="/">&larr; Nomad</a></p>
+  <h1>Container registry</h1>
+  <p class="muted">Unauthenticated, plain HTTP. Mirrors the images Nomad runs plus common base images and languages.</p>
+  <h2>Pull</h2>
+  <pre><code id="example"></code></pre>
+  <p class="muted">Docker only trusts plain HTTP for hosts listed under <code>insecure-registries</code> in <code>/etc/docker/daemon.json</code>.</p>
+  <h2>Repositories</h2>
+  <ul id="repos"><li class="muted">Loading</li></ul>
+</main>
+<script>
+const host = location.host;
+document.getElementById('example').textContent = 'docker pull ' + host + '/ubuntu:24.04\ndocker pull ' + host + '/alpine:latest';
+
+fetch('/v2/_catalog?n=1000', { cache: 'no-store' }).then(r => r.json()).then(async catalog => {
+  const list = document.getElementById('repos');
+  list.innerHTML = '';
+  for (const repo of catalog.repositories) {
+    const item = document.createElement('li');
+    item.innerHTML = '<strong>' + repo + '</strong> <span class="tags">...</span>';
+    list.appendChild(item);
+    fetch('/v2/' + repo + '/tags/list', { cache: 'no-store' }).then(r => r.json()).then(t => {
+      item.querySelector('.tags').textContent = (t.tags || []).join(', ');
+    });
+  }
+  if (!catalog.repositories.length) list.innerHTML = '<li class="muted">No images yet. The initial pull may still be running.</li>';
+}).catch(() => {
+  document.getElementById('repos').innerHTML = '<li class="muted">Registry unreachable</li>';
+});
+</script>
+</body>
+</html>

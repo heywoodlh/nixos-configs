@@ -279,6 +279,27 @@ spec:
         - name: scripts
           mountPath: /etc/nomad
           readOnly: true
+      - name: comaps-sync
+        image: @python_image@
+        command: ["/bin/sh", "-c", "while :; do python /etc/nomad/comaps-sync.py; sleep 86400; done"]
+        env:
+        - name: COMAPS_ROOT
+          value: /srv/comaps
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 1m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - name: files
+          mountPath: /srv
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
       - name: files-init
         image: @curl_image@
         command: ["/bin/sh", "-c", "while :; do /bin/sh /etc/nomad/files-init.sh; sleep 21600; done"]

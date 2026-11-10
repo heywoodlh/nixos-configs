@@ -795,6 +795,7 @@
           };
           scriptFiles = {
             "appimages.txt" = nomadFile "appimages.txt";
+            "comaps-sync.py" = nomadFile "comaps-sync.py";
             "dashboard.Caddyfile" = nomadFile "dashboard.Caddyfile";
             "files-init.sh" = nomadFile "files-init.sh";
             "files.Caddyfile" = nomadFile "files.Caddyfile";

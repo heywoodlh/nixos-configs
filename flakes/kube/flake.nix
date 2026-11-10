@@ -773,11 +773,6 @@
             };
           };
         });
-        nomad = mkKubeDrv "nomad" {
-          src = ./templates/nomad.yaml;
-          namespace = "default";
-          host_ip = "172.17.0.1";
-        };
         ntfy = mkKubeDrv "ntfy" {
           src = ./templates/ntfy.yaml;
           namespace = "default";

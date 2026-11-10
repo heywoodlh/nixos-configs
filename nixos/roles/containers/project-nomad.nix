@@ -6,8 +6,6 @@ let
   kiwixDir = "/media/services_pool/kiwix";
   envFile = "${baseDir}/env";
   network = "project-nomad_default";
-  bridgeIP = "172.17.0.1";
-  tailnetURL = "http://nomad.barn-banana.ts.net";
   containerNames = [ "nomad-admin" "nomad-mysql" "nomad-redis" "nomad-disk-collector" ];
 
   initEnv = pkgs.writeShellApplication {
@@ -65,6 +63,8 @@ let
     "--network=${network}"
   ];
 in {
+  networking.firewall.allowedTCPPorts = [ 8080 ];
+
   systemd.tmpfiles.rules = [
     "d ${baseDir} 0755 root root -"
     "d ${storage} 0755 root root -"
@@ -176,7 +176,7 @@ in {
           PORT = "8080";
           LOG_LEVEL = "info";
           HOST = "0.0.0.0";
-          URL = tailnetURL;
+          URL = "http://0.0.0.0:8080";
           DB_HOST = "mysql";
           DB_PORT = "3306";
           DB_DATABASE = "nomad";
@@ -189,8 +189,7 @@ in {
         };
         environmentFiles = [ envFile ];
         ports = [
-          "${bridgeIP}:8080:8080"
-          "127.0.0.1:8080:8080"
+          "8080:8080"
         ];
         volumes = [
           "${storage}:/app/storage"

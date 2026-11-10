@@ -20,6 +20,7 @@ emergency https://lb.download.kiwix.org/zim/wikipedia/wikipedia_en_knots_maxi_20
 entertainment https://lb.download.kiwix.org/zim/zimit/xkcd.com_en_all_2026-08.zim
 entertainment https://lb.download.kiwix.org/zim/stack_exchange/chess.stackexchange.com_en_all_2026-10.zim
 entertainment https://lb.download.kiwix.org/zim/stack_exchange/boardgames.stackexchange.com_en_all_2026-10.zim
+gutenberg https://lb.download.kiwix.org/zim/gutenberg/gutenberg_mul_all_2025-11.zim
 health https://lb.download.kiwix.org/zim/other/zimgit-medicine_en_2024-08.zim
 health https://lb.download.kiwix.org/zim/zimit/nhs.uk_en_medicines_2026-09b.zim
 health https://lb.download.kiwix.org/zim/zimit/irp.fas.org_en_military-medicine_2026-10.zim

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offline Maps</title>
+<link rel="stylesheet" href="assets/maplibre-gl.css">
+<style>
+  :root { color-scheme: dark; --bg: #0f1419; --panel: #172029; --line: #26323f; --text: #e6edf3; --muted: #8b9bab; --accent: #4ea1ff; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font: 14px/1.4 system-ui, sans-serif; }
+  body { display: flex; }
+  #panel { width: 340px; max-width: 45vw; overflow-y: auto; background: var(--panel); border-right: 1px solid var(--line); padding: 16px; }
+  #map { flex: 1; min-width: 0; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 20px 0 8px; }
+  a { color: var(--accent); }
+  label { display: block; margin: 8px 0; color: var(--muted); }
+  input, select { width: 100%; margin-top: 4px; padding: 8px; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 6px; }
+  button { padding: 8px 12px; background: var(--accent); color: #04121f; border: 0; border-radius: 6px; font-weight: 600; cursor: pointer; }
+  button.secondary { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  button.danger { background: transparent; color: #ff7b72; border: 1px solid var(--line); padding: 4px 8px; }
+  .row { display: flex; gap: 8px; margin-top: 10px; }
+  .row > button { flex: 1; }
+  .item { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
+  .item .title { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .muted { color: var(--muted); font-size: 12px; }
+  .ok { color: #3fb950; } .bad { color: #ff7b72; }
+  code { background: var(--bg); padding: 1px 4px; border-radius: 4px; }
+  @media (max-width: 700px) { body { flex-direction: column-reverse; } #panel { width: 100%; max-width: none; max-height: 45vh; border-right: 0; border-top: 1px solid var(--line); } }
+</style>
+</head>
+<body>
+<aside id="panel">
+  <h1>Offline maps</h1>
+  <div class="muted">OpenStreetMap data via Protomaps. Pan and zoom the map to the area you want, then download that view for offline use.</div>
+  <h2>Download current view</h2>
+  <label>Name <input id="name" placeholder="denver" autocomplete="off"></label>
+  <label>Detail (max zoom)
+    <select id="zoom">
+      <option value="10">10 - regional overview</option>
+      <option value="12">12 - towns and main roads</option>
+      <option value="14" selected>14 - streets</option>
+      <option value="15">15 - maximum detail</option>
+    </select>
+  </label>
+  <div class="muted" id="bbox"></div>
+  <div class="row">
+    <button class="secondary" id="estimate">Estimate size</button>
+    <button id="download">Download</button>
+  </div>
+  <div class="muted" id="message" style="margin-top:8px"></div>
+  <h2>Downloads</h2>
+  <div id="jobs" class="muted">None</div>
+  <h2>Installed areas</h2>
+  <div id="regions" class="muted">Loading</div>
+</aside>
+<div id="map"></div>
+<script src="assets/maplibre-gl.js"></script>
+<script src="assets/pmtiles.js"></script>
+<script src="assets/basemaps.js"></script>
+<script>
+const base = new URL('.', location.href).href;
+const $ = id => document.getElementById(id);
+const fmtSize = bytes => bytes > 1e9 ? (bytes / 1e9).toFixed(2) + ' GB' : (bytes / 1e6).toFixed(1) + ' MB';
+const api = (path, body) => fetch(base + 'api/' + path, body ? { method: 'POST', body: JSON.stringify(body) } : {}).then(r => r.json());
+
+maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
+const flavor = basemaps.namedFlavor('light');
+
+function styleFor(regions) {
+  const sources = {};
+  const layers = [];
+  const ordered = regions.filter(r => r.name === 'world').concat(regions.filter(r => r.name !== 'world'));
+  ordered.forEach((region, index) => {
+    sources[region.name] = {
+      type: 'vector',
+      url: 'pmtiles://' + base + 'tiles/' + region.name + '.pmtiles',
+      attribution: '&copy; OpenStreetMap contributors, Protomaps'
+    };
+    basemaps.layers(region.name, flavor, { lang: 'en' }).forEach(layer => {
+      if (index > 0 && layer.type === 'background') return;
+      layers.push({ ...layer, id: region.name + ':' + layer.id });
+    });
+  });
+  return { version: 8, glyphs: base + 'assets/fonts/{fontstack}/{range}.pbf', sprite: base + 'assets/sprites/v4/light', sources, layers };
+}
+
+let map = null;
+let loadedKey = '';
+
+function currentBbox() {
+  const b = map.getBounds();
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  return [clamp(b.getWest(), -180, 180), clamp(b.getSouth(), -85, 85), clamp(b.getEast(), -180, 180), clamp(b.getNorth(), -85, 85)];
+}
+
+function showBbox() {
+  if (!map) return;
+  $('bbox').textContent = 'View: ' + currentBbox().map(v => v.toFixed(3)).join(', ');
+}
+
+function renderRegions(regions) {
+  const rows = regions.map(r => {
+    const remove = r.name === 'world' ? '' : '<button class="danger" data-delete="' + r.name + '">Delete</button>';
+    const detail = r.maxzoom ? 'zoom ' + r.maxzoom + ' - ' : '';
+    return '<div class="item"><div class="title"><a href="#" data-goto="' + r.name + '">' + r.name + '</a>' + remove + '</div><div class="muted">' + detail + fmtSize(r.size) + '</div></div>';
+  });
+  $('regions').innerHTML = rows.join('') || 'None';
+  $('regions').querySelectorAll('[data-delete]').forEach(b => b.onclick = async () => {
+    if (confirm('Delete ' + b.dataset.delete + '?')) { await api('delete', { name: b.dataset.delete }); refresh(); }
+  });
+  $('regions').querySelectorAll('[data-goto]').forEach(a => a.onclick = e => {
+    e.preventDefault();
+    const region = regions.find(r => r.name === a.dataset.goto);
+    if (region.bbox) map.fitBounds([[region.bbox[0], region.bbox[1]], [region.bbox[2], region.bbox[3]]], { padding: 40 });
+  });
+}
+
+function renderJobs(jobs) {
+  const rows = jobs.map(j => {
+    const cls = j.state === 'done' ? 'ok' : j.state === 'failed' ? 'bad' : '';
+    const detail = j.state === 'failed' ? (j.error || '') : (j.log || []).slice(-1)[0] || '';
+    return '<div class="item"><div class="title"><span>' + j.name + '</span><span class="' + cls + '">' + j.state + '</span></div><div class="muted">' + detail + '</div></div>';
+  });
+  $('jobs').innerHTML = rows.join('') || 'None';
+}
+
+async function refresh() {
+  const [regions, jobs] = await Promise.all([api('regions'), api('jobs')]);
+  renderRegions(regions);
+  renderJobs(jobs);
+  const key = regions.map(r => r.name + ':' + r.size).join('|');
+  if (regions.some(r => r.name === 'world') && key !== loadedKey) {
+    loadedKey = key;
+    if (!map) {
+      map = new maplibregl.Map({ container: 'map', style: styleFor(regions), center: [-98, 39], zoom: 3, maxZoom: 18 });
+      map.addControl(new maplibregl.NavigationControl());
+      map.addControl(new maplibregl.ScaleControl());
+      map.on('moveend', showBbox);
+      map.on('load', showBbox);
+    } else {
+      map.setStyle(styleFor(regions));
+    }
+  } else if (!map) {
+    $('map').innerHTML = '<div style="padding:24px" class="muted">Downloading the world base map. This page refreshes automatically.</div>';
+  }
+  return jobs.some(j => j.state === 'queued' || j.state === 'running');
+}
+
+function request() {
+  return { name: $('name').value, bbox: currentBbox(), maxzoom: Number($('zoom').value) };
+}
+
+$('estimate').onclick = async () => {
+  $('message').textContent = 'Estimating...';
+  const result = await api('estimate', request());
+  $('message').textContent = result.error || result.message;
+};
+
+$('download').onclick = async () => {
+  const result = await api('extract', request());
+  $('message').textContent = result.error ? result.error : 'Download started';
+  refresh();
+};
+
+async function poll() {
+  let busy = true;
+  try { busy = await refresh(); } catch (e) { busy = true; }
+  setTimeout(poll, busy ? 3000 : 15000);
+}
+poll();
+</script>
+</body>
+</html>

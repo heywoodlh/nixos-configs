@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nomad</title>
+<style>
+  :root { color-scheme: dark; --bg: #0b1016; --card: #151d27; --line: #243140; --text: #e6edf3; --muted: #8b9bab; --accent: #4ea1ff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: radial-gradient(circle at top, #14202e, var(--bg) 60%); color: var(--text); font: 15px/1.5 system-ui, sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 48px 20px; }
+  h1 { margin: 0; font-size: 32px; letter-spacing: .02em; }
+  .sub { color: var(--muted); margin: 4px 0 32px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+  a.card { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; color: inherit; text-decoration: none; transition: transform .12s, border-color .12s; }
+  a.card:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .head { display: flex; align-items: center; justify-content: space-between; }
+  .name { font-size: 18px; font-weight: 600; }
+  .icon { font-size: 28px; }
+  .desc { color: var(--muted); margin: 6px 0 14px; min-height: 44px; }
+  .meta { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #6e7681; }
+  .dot.up { background: #3fb950; }
+  .dot.down { background: #f85149; }
+  footer { margin-top: 32px; color: var(--muted); font-size: 13px; }
+  code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Nomad</h1>
+  <p class="sub">Offline knowledge, maps, notes, mesh radio, files and containers</p>
+  <div class="grid" id="grid"></div>
+  <footer>Serving from <code id="host"></code></footer>
+</main>
+<script>
+const apps = [
+  { name: 'Kiwix', icon: '📚', path: '/kiwix/', desc: 'Offline Wikipedia and other ZIM libraries.', probe: '/kiwix/catalog/v2/entries?count=1',
+    summary: text => { const m = text.match(/<totalResults>(\d+)</); return m ? m[1] + ' libraries' : 'online'; } },
+  { name: 'Maps', icon: '🗺️', path: '/maps/', desc: 'Download OpenStreetMap areas for offline use.', probe: '/maps/api/regions',
+    summary: text => { const n = JSON.parse(text).filter(r => r.name !== 'world').length; return n + ' areas installed'; } },
+  { name: 'Notes', icon: '📝', path: '/notes/', desc: 'SilverBullet notes and wiki.', probe: '/notes/.ping', ok: status => status < 500 },
+  { name: 'Meshtastic', icon: '📡', path: '/meshtastic/', desc: 'Meshtastic web client for mesh radios.', probe: '/meshtastic/', ok: status => status < 500 },
+  { name: 'Files', icon: '🗂️', path: '/files/', desc: 'Android APKs, Linux ISOs, AppImages and package mirrors.', probe: '/files/', ok: status => status < 500 },
+  { name: 'Docker', icon: '🐳', path: '/docker/', desc: 'Unauthenticated HTTP container registry.', probe: '/v2/_catalog',
+    summary: text => JSON.parse(text).repositories.length + ' repositories' }
+];
+
+const grid = document.getElementById('grid');
+document.getElementById('host').textContent = location.host;
+
+apps.forEach(app => {
+  const card = document.createElement('a');
+  card.className = 'card';
+  card.href = app.path;
+  card.innerHTML = '<div class="head"><span class="name">' + app.name + '</span><span class="icon">' + app.icon + '</span></div>' +
+    '<div class="desc">' + app.desc + '</div><div class="meta"><span class="dot"></span><span class="state">checking</span></div>';
+  grid.appendChild(card);
+
+  fetch(app.probe, { cache: 'no-store' }).then(async response => {
+    const up = app.ok ? app.ok(response.status) : response.ok;
+    let label = up ? 'online' : 'unavailable';
+    if (up && app.summary) {
+      try { label = app.summary(await response.text()); } catch (e) { label = 'online'; }
+    }
+    card.querySelector('.dot').classList.add(up ? 'up' : 'down');
+    card.querySelector('.state').textContent = label;
+  }).catch(() => {
+    card.querySelector('.dot').classList.add('down');
+    card.querySelector('.state').textContent = 'unreachable';
+  });
+});
+</script>
+</body>
+</html>

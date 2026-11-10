@@ -1,0 +1,5 @@
+github pkgforge-dev/ghostty-appimage Ghostty-[0-9.]+-x86_64\.AppImage$
+github meshtastic/Meshtastic-Android Meshtastic_Desktop-[0-9.]+-x86_64\.AppImage$
+github kiwix/kiwix-js-pwa Kiwix-JS-Electron-[0-9.]+-E\.AppImage$
+github kiwix/kiwix-js-pwa Wikivoyage-by-Kiwix-[0-9.]+-E\.AppImage$
+url https://download.kiwix.org/release/kiwix-desktop/kiwix-desktop_x86_64.appimage kiwix-desktop-x86_64.AppImage

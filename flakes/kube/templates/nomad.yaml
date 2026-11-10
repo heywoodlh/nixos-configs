@@ -1,0 +1,566 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nomad-dashboard
+  namespace: @namespace@
+data:
+@dashboard_config@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nomad-scripts
+  namespace: @namespace@
+data:
+@script_config@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nomad
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "nomad"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  selector:
+    app: nomad
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nomad
+  namespace: @namespace@
+  labels:
+    app: nomad
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 86400
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nomad
+  template:
+    metadata:
+      labels:
+        app: nomad
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      initContainers:
+      - name: maps-init
+        image: @curl_image@
+        command: ["/bin/sh", "/etc/nomad/maps-init.sh"]
+        env:
+        - name: PMTILES_VERSION
+          value: "@pmtiles_version@"
+        - name: PMTILES_JS_VERSION
+          value: "@pmtiles_js_version@"
+        - name: MAPLIBRE_VERSION
+          value: "@maplibre_version@"
+        - name: BASEMAPS_VERSION
+          value: "@basemaps_version@"
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: maps
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: meshtastic-web-init
+        image: @meshtastic_web_image@
+        command: ["/bin/sh", "/etc/nomad/meshtastic-web-init.sh"]
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: meshtastic-web
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: docker
+        image: @registry_image@
+        restartPolicy: Always
+        ports:
+        - name: registry
+          containerPort: 5000
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: 0.0.0.0:5000
+        - name: REGISTRY_HTTP_RELATIVEURLS
+          value: "true"
+        - name: REGISTRY_STORAGE_DELETE_ENABLED
+          value: "true"
+        startupProbe:
+          httpGet:
+            path: /v2/
+            port: registry
+          periodSeconds: 2
+          failureThreshold: 60
+        readinessProbe:
+          httpGet:
+            path: /v2/
+            port: registry
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - name: docker
+          mountPath: /var/lib/registry
+      - name: docker-seed
+        image: @skopeo_image@
+        command: ["/bin/sh", "-c", "/bin/sh /etc/nomad/sync-images.sh || true"]
+        env:
+        - name: REGISTRY
+          value: 127.0.0.1:5000
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        volumeMounts:
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: files-init
+        image: @curl_image@
+        command: ["/bin/sh", "/etc/nomad/files-init.sh"]
+        env:
+        - name: FILES_ROOT
+          value: /srv
+        - name: NIXOS_CHANNEL
+          value: "@nixos_channel@"
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - name: files
+          mountPath: /srv
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      containers:
+      - name: dashboard
+        image: @caddy_image@
+        command: ["caddy", "run", "--config", "/etc/nomad/dashboard.Caddyfile", "--adapter", "caddyfile"]
+        ports:
+        - name: http
+          containerPort: 80
+          hostPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: dashboard
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+        - name: dashboard-www
+          mountPath: /srv/www
+          readOnly: true
+      - name: kiwix-serve
+        image: @kiwix_image@
+        command: ["/bin/sh", "/etc/nomad/kiwix-serve.sh"]
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+        volumeMounts:
+        - name: kiwix-serve
+          mountPath: /data
+        - name: zims
+          mountPath: /zims
+          readOnly: true
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: maps
+        image: @python_image@
+        command: ["python", "/etc/nomad/maps-server.py"]
+        env:
+        - name: DATA_DIR
+          value: /data
+        - name: APP_DIR
+          value: /etc/nomad
+        - name: PORT
+          value: "8082"
+        readinessProbe:
+          httpGet:
+            path: /api/regions
+            port: 8082
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        volumeMounts:
+        - name: maps
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: notes
+        image: @silverbullet_image@
+        env:
+        - name: SB_URL_PREFIX
+          value: /notes
+        - name: SB_PORT
+          value: "8083"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        volumeMounts:
+        - name: notes
+          mountPath: /data
+      - name: meshtastic-web
+        image: @meshtastic_web_image@
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 250m
+            memory: 128Mi
+        volumeMounts:
+        - name: meshtastic-web
+          mountPath: /usr/share/nginx/html
+          subPath: html
+          readOnly: true
+      - name: files
+        image: @caddy_image@
+        command: ["caddy", "run", "--config", "/etc/nomad/files.Caddyfile", "--adapter", "caddyfile"]
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: files
+          mountPath: /srv
+          readOnly: true
+        - name: android
+          mountPath: /srv/android
+          readOnly: true
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      volumes:
+      - name: scripts
+        configMap:
+          name: nomad-scripts
+      - name: dashboard-www
+        configMap:
+          name: nomad-dashboard
+      - name: dashboard
+        hostPath:
+          path: @hostfolder@/dashboard
+          type: DirectoryOrCreate
+      - name: kiwix-serve
+        hostPath:
+          path: @hostfolder@/kiwix-serve
+          type: DirectoryOrCreate
+      - name: maps
+        hostPath:
+          path: @hostfolder@/maps
+          type: DirectoryOrCreate
+      - name: notes
+        hostPath:
+          path: @hostfolder@/notes
+          type: DirectoryOrCreate
+      - name: meshtastic-web
+        hostPath:
+          path: @hostfolder@/meshtastic-web
+          type: DirectoryOrCreate
+      - name: files
+        hostPath:
+          path: @hostfolder@/files
+          type: DirectoryOrCreate
+      - name: docker
+        hostPath:
+          path: @hostfolder@/docker
+          type: DirectoryOrCreate
+      - name: zims
+        hostPath:
+          path: @kiwixfolder@
+          type: DirectoryOrCreate
+      - name: android
+        hostPath:
+          path: @kiwixfolder@/android
+          type: DirectoryOrCreate
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nomad-image-sync
+  namespace: @namespace@
+spec:
+  schedule: "@image_sync_schedule@"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 43200
+      template:
+        metadata:
+          labels:
+            app: nomad-image-sync
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: skopeo
+            image: @skopeo_image@
+            command: ["/bin/sh", "/etc/nomad/sync-images.sh"]
+            env:
+            - name: REGISTRY
+              value: nomad.@namespace@.svc.cluster.local:80
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 2000m
+                memory: 1Gi
+            volumeMounts:
+            - name: scripts
+              mountPath: /etc/nomad
+              readOnly: true
+          volumes:
+          - name: scripts
+            configMap:
+              name: nomad-scripts
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nomad-mirror-debs
+  namespace: @namespace@
+spec:
+  schedule: "@debs_schedule@"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 43200
+      template:
+        metadata:
+          labels:
+            app: nomad-mirror-debs
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            kubernetes.io/hostname: @nodename@
+          containers:
+          - name: mirror
+            image: @ubuntu_image@
+            command: ["/bin/sh", "/etc/nomad/mirror-debs.sh"]
+            env:
+            - name: MIRROR_DEST
+              value: /mirror
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 2000m
+                memory: 2Gi
+            volumeMounts:
+            - name: files
+              mountPath: /mirror
+              subPath: linux/debs
+            - name: scripts
+              mountPath: /etc/nomad
+              readOnly: true
+          volumes:
+          - name: scripts
+            configMap:
+              name: nomad-scripts
+          - name: files
+            hostPath:
+              path: @hostfolder@/files
+              type: DirectoryOrCreate
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nomad-mirror-apk
+  namespace: @namespace@
+spec:
+  schedule: "@apk_schedule@"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 43200
+      template:
+        metadata:
+          labels:
+            app: nomad-mirror-apk
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            kubernetes.io/hostname: @nodename@
+          containers:
+          - name: mirror
+            image: @alpine_image@
+            command: ["/bin/sh", "/etc/nomad/mirror-apk.sh"]
+            env:
+            - name: MIRROR_DEST
+              value: /mirror
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 2000m
+                memory: 1Gi
+            volumeMounts:
+            - name: files
+              mountPath: /mirror
+              subPath: linux/apk
+            - name: scripts
+              mountPath: /etc/nomad
+              readOnly: true
+          volumes:
+          - name: scripts
+            configMap:
+              name: nomad-scripts
+          - name: files
+            hostPath:
+              path: @hostfolder@/files
+              type: DirectoryOrCreate
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nomad-mirror-pacman
+  namespace: @namespace@
+spec:
+  schedule: "@pacman_schedule@"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 43200
+      template:
+        metadata:
+          labels:
+            app: nomad-mirror-pacman
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            kubernetes.io/hostname: @nodename@
+          containers:
+          - name: mirror
+            image: @archlinux_image@
+            command: ["/bin/sh", "/etc/nomad/mirror-pacman.sh"]
+            env:
+            - name: MIRROR_DEST
+              value: /mirror
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 2000m
+                memory: 2Gi
+            volumeMounts:
+            - name: files
+              mountPath: /mirror
+              subPath: linux/pacman
+            - name: scripts
+              mountPath: /etc/nomad
+              readOnly: true
+          volumes:
+          - name: scripts
+            configMap:
+              name: nomad-scripts
+          - name: files
+            hostPath:
+              path: @hostfolder@/files
+              type: DirectoryOrCreate

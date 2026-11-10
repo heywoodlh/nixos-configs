@@ -1,0 +1,1837 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nomad-dashboard
+  namespace: nomad
+data:
+  docker.html: |
+    <!doctype html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nomad registry</title>
+    <style>
+      :root { color-scheme: dark; --bg: #0b1016; --card: #151d27; --line: #243140; --text: #e6edf3; --muted: #8b9bab; --accent: #4ea1ff; }
+      body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, sans-serif; }
+      main { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
+      a { color: var(--accent); }
+      h1 { margin: 0 0 4px; }
+      .muted { color: var(--muted); }
+      pre, code { background: var(--card); border: 1px solid var(--line); border-radius: 6px; }
+      pre { padding: 12px 14px; overflow-x: auto; }
+      code { padding: 1px 6px; }
+      pre code { border: 0; padding: 0; }
+      ul { list-style: none; padding: 0; }
+      li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; }
+      .tags { color: var(--muted); font-size: 13px; }
+    </style>
+    </head>
+    <body>
+    <main>
+      <p><a href="/">&larr; Nomad</a></p>
+      <h1>Container registry</h1>
+      <p class="muted">Unauthenticated, plain HTTP. Mirrors the images Nomad runs plus common base images and languages.</p>
+      <h2>Pull</h2>
+      <pre><code id="example"></code></pre>
+      <p class="muted">Docker only trusts plain HTTP for hosts listed under <code>insecure-registries</code> in <code>/etc/docker/daemon.json</code>.</p>
+      <h2>Repositories</h2>
+      <ul id="repos"><li class="muted">Loading</li></ul>
+    </main>
+    <script>
+    const host = location.host;
+    document.getElementById('example').textContent = 'docker pull ' + host + '/ubuntu:24.04\ndocker pull ' + host + '/alpine:latest';
+
+    fetch('/v2/_catalog?n=1000', { cache: 'no-store' }).then(r => r.json()).then(async catalog => {
+      const list = document.getElementById('repos');
+      list.innerHTML = '';
+      for (const repo of catalog.repositories) {
+        const item = document.createElement('li');
+        item.innerHTML = '<strong>' + repo + '</strong> <span class="tags">...</span>';
+        list.appendChild(item);
+        fetch('/v2/' + repo + '/tags/list', { cache: 'no-store' }).then(r => r.json()).then(t => {
+          item.querySelector('.tags').textContent = (t.tags || []).join(', ');
+        });
+      }
+      if (!catalog.repositories.length) list.innerHTML = '<li class="muted">No images yet. The initial pull may still be running.</li>';
+    }).catch(() => {
+      document.getElementById('repos').innerHTML = '<li class="muted">Registry unreachable</li>';
+    });
+    </script>
+    </body>
+    </html>
+  index.html: |
+    <!doctype html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nomad</title>
+    <style>
+      :root { color-scheme: dark; --bg: #0b1016; --card: #151d27; --line: #243140; --text: #e6edf3; --muted: #8b9bab; --accent: #4ea1ff; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: radial-gradient(circle at top, #14202e, var(--bg) 60%); color: var(--text); font: 15px/1.5 system-ui, sans-serif; }
+      main { max-width: 1040px; margin: 0 auto; padding: 48px 20px; }
+      h1 { margin: 0; font-size: 32px; letter-spacing: .02em; }
+      .sub { color: var(--muted); margin: 4px 0 32px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+      a.card { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; color: inherit; text-decoration: none; transition: transform .12s, border-color .12s; }
+      a.card:hover { transform: translateY(-2px); border-color: var(--accent); }
+      .head { display: flex; align-items: center; justify-content: space-between; }
+      .name { font-size: 18px; font-weight: 600; }
+      .icon { font-size: 28px; }
+      .desc { color: var(--muted); margin: 6px 0 14px; min-height: 44px; }
+      .meta { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+      .dot { width: 9px; height: 9px; border-radius: 50%; background: #6e7681; }
+      .dot.up { background: #3fb950; }
+      .dot.down { background: #f85149; }
+      footer { margin-top: 32px; color: var(--muted); font-size: 13px; }
+      code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; }
+    </style>
+    </head>
+    <body>
+    <main>
+      <h1>Nomad</h1>
+      <p class="sub">Offline knowledge, maps, notes, mesh radio, files and containers</p>
+      <div class="grid" id="grid"></div>
+      <footer>Serving from <code id="host"></code></footer>
+    </main>
+    <script>
+    const apps = [
+      { name: 'Kiwix', icon: '📚', path: '/kiwix/', desc: 'Offline Wikipedia and other ZIM libraries.', probe: '/kiwix/catalog/v2/entries?count=1',
+        summary: text => { const m = text.match(/<totalResults>(\d+)</); return m ? m[1] + ' libraries' : 'online'; } },
+      { name: 'Maps', icon: '🗺️', path: '/maps/', desc: 'Download OpenStreetMap areas for offline use.', probe: '/maps/api/regions',
+        summary: text => { const n = JSON.parse(text).filter(r => r.name !== 'world').length; return n + ' areas installed'; } },
+      { name: 'Notes', icon: '📝', path: '/notes/', desc: 'SilverBullet notes and wiki.', probe: '/notes/.ping', ok: status => status < 500 },
+      { name: 'Meshtastic', icon: '📡', path: '/meshtastic/', desc: 'Meshtastic web client for mesh radios.', probe: '/meshtastic/', ok: status => status < 500 },
+      { name: 'Files', icon: '🗂️', path: '/files/', desc: 'Android APKs, Linux ISOs, AppImages and package mirrors.', probe: '/files/', ok: status => status < 500 },
+      { name: 'Docker', icon: '🐳', path: '/docker/', desc: 'Unauthenticated HTTP container registry.', probe: '/v2/_catalog',
+        summary: text => JSON.parse(text).repositories.length + ' repositories' }
+    ];
+
+    const grid = document.getElementById('grid');
+    document.getElementById('host').textContent = location.host;
+
+    apps.forEach(app => {
+      const card = document.createElement('a');
+      card.className = 'card';
+      card.href = app.path;
+      card.innerHTML = '<div class="head"><span class="name">' + app.name + '</span><span class="icon">' + app.icon + '</span></div>' +
+        '<div class="desc">' + app.desc + '</div><div class="meta"><span class="dot"></span><span class="state">checking</span></div>';
+      grid.appendChild(card);
+
+      fetch(app.probe, { cache: 'no-store' }).then(async response => {
+        const up = app.ok ? app.ok(response.status) : response.ok;
+        let label = up ? 'online' : 'unavailable';
+        if (up && app.summary) {
+          try { label = app.summary(await response.text()); } catch (e) { label = 'online'; }
+        }
+        card.querySelector('.dot').classList.add(up ? 'up' : 'down');
+        card.querySelector('.state').textContent = label;
+      }).catch(() => {
+        card.querySelector('.dot').classList.add('down');
+        card.querySelector('.state').textContent = 'unreachable';
+      });
+    });
+    </script>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nomad-scripts
+  namespace: nomad
+data:
+  appimages.txt: |
+    github pkgforge-dev/ghostty-appimage Ghostty-[0-9.]+-x86_64\.AppImage$
+    github meshtastic/Meshtastic-Android Meshtastic_Desktop-[0-9.]+-x86_64\.AppImage$
+    github kiwix/kiwix-js-pwa Kiwix-JS-Electron-[0-9.]+-E\.AppImage$
+    github kiwix/kiwix-js-pwa Wikivoyage-by-Kiwix-[0-9.]+-E\.AppImage$
+    url https://download.kiwix.org/release/kiwix-desktop/kiwix-desktop_x86_64.appimage kiwix-desktop-x86_64.AppImage
+  dashboard.Caddyfile: |
+    {
+    	auto_https off
+    	admin off
+    }
+
+    :80 {
+    	@kiwix path /kiwix /kiwix/*
+    	@notes path /notes /notes/*
+    	@v2 path /v2 /v2/*
+
+    	redir /maps /maps/ 308
+    	redir /meshtastic /meshtastic/ 308
+    	redir /files /files/ 308
+    	redir /docker /docker/ 308
+
+    	handle /healthz {
+    		respond "ok" 200
+    	}
+
+    	handle @kiwix {
+    		reverse_proxy 127.0.0.1:8081
+    	}
+
+    	handle @notes {
+    		reverse_proxy 127.0.0.1:8083
+    	}
+
+    	handle @v2 {
+    		reverse_proxy 127.0.0.1:5000 {
+    			flush_interval -1
+    		}
+    	}
+
+    	handle_path /maps/* {
+    		reverse_proxy 127.0.0.1:8082
+    	}
+
+    	handle_path /meshtastic/* {
+    		reverse_proxy 127.0.0.1:8080
+    	}
+
+    	handle /files/* {
+    		reverse_proxy 127.0.0.1:8084
+    	}
+
+    	handle_path /docker/* {
+    		@index path /
+    		handle @index {
+    			rewrite * /docker.html
+    			root * /srv/www
+    			file_server
+    		}
+    		handle {
+    			reverse_proxy 127.0.0.1:5000 {
+    				flush_interval -1
+    			}
+    		}
+    	}
+
+    	handle {
+    		root * /srv/www
+    		file_server
+    	}
+    }
+  files-init.sh: |
+    #!/bin/sh
+    umask 022
+    . /etc/nomad/lib.sh
+
+    root="${FILES_ROOT:-/srv}"
+    linux="${root}/linux"
+    appimages_file="${APPIMAGES_FILE:-/etc/nomad/appimages.txt}"
+    nixos_channel="${NIXOS_CHANNEL:-nixos-26.05}"
+    failed=0
+
+    mkdir -p "${root}/android" "${linux}/appimages" "${linux}/debs" "${linux}/apk" "${linux}/pacman"
+
+    fetch_iso() {
+      name="$1"
+      url="$2"
+      sha="$3"
+      pattern="$4"
+      dest="${linux}/${name}"
+
+      if [ -s "${dest}" ]; then
+        echo "Up to date: ${name}"
+        return 0
+      fi
+
+      echo "Downloading ${name}"
+      if ! download "${url}" "${dest}"; then
+        echo "ERROR: failed to download ${url}"
+        failed=$((failed + 1))
+        return 1
+      fi
+
+      actual="$(sha256sum "${dest}" | cut -d' ' -f1)"
+      if [ -n "${sha}" ] && [ "${actual}" != "${sha}" ]; then
+        echo "ERROR: checksum mismatch for ${name}"
+        rm -f "${dest}"
+        failed=$((failed + 1))
+        return 1
+      fi
+
+      for old in "${linux}"/${pattern}; do
+        [ -e "${old}" ] && [ "${old}" != "${dest}" ] && rm -f "${old}"
+      done
+      return 0
+    }
+
+    ubuntu() {
+      base="https://releases.ubuntu.com/24.04"
+      entry="$(curl -fsSL --retry 3 "${base}/SHA256SUMS" | awk '$2 ~ /desktop-amd64\.iso$/ { sub(/^\*/, "", $2); print $2, $1 }' | sort -V | tail -1)"
+      [ -n "${entry}" ] || { echo "ERROR: could not resolve Ubuntu 24.04 ISO"; failed=$((failed + 1)); return; }
+      fetch_iso "${entry% *}" "${base}/${entry% *}" "${entry#* }" "ubuntu-24.04*-desktop-amd64.iso"
+    }
+
+    nixos() {
+      url="$(curl -fsSIL --retry 3 -o /dev/null -w '%{url_effective}' "https://channels.nixos.org/${nixos_channel}/latest-nixos-graphical-x86_64-linux.iso")"
+      name="${url##*/}"
+      case "${name}" in
+        nixos-graphical-*-x86_64-linux.iso) ;;
+        *) echo "ERROR: could not resolve NixOS ISO (${url})"; failed=$((failed + 1)); return ;;
+      esac
+      sha="$(curl -fsSL --retry 3 "${url}.sha256" | cut -d' ' -f1)"
+      fetch_iso "${name}" "${url}" "${sha}" "nixos-graphical-*-x86_64-linux.iso"
+    }
+
+    arch() {
+      base="https://geo.mirror.pkgbuild.com/iso/latest"
+      entry="$(curl -fsSL --retry 3 "${base}/sha256sums.txt" | awk '$2 ~ /^archlinux-[0-9.]+-x86_64\.iso$/ { print $2, $1 }' | sort -V | tail -1)"
+      [ -n "${entry}" ] || { echo "ERROR: could not resolve Arch Linux ISO"; failed=$((failed + 1)); return; }
+      fetch_iso "${entry% *}" "${base}/${entry% *}" "${entry#* }" "archlinux-*-x86_64.iso"
+    }
+
+    alpine() {
+      base="https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64"
+      name="$(curl -fsSL --retry 3 "${base}/" | grep -o 'alpine-standard-[0-9.]*-x86_64\.iso' | sort -uV | tail -1)"
+      [ -n "${name}" ] || { echo "ERROR: could not resolve Alpine Linux ISO"; failed=$((failed + 1)); return; }
+      sha="$(curl -fsSL --retry 3 "${base}/${name}.sha256" | cut -d' ' -f1)"
+      fetch_iso "${name}" "${base}/${name}" "${sha}" "alpine-standard-*-x86_64.iso"
+    }
+
+    appimages() {
+      dest_dir="${linux}/appimages"
+      while read -r kind source pattern; do
+        case "${kind}" in
+          "" | "#"*) continue ;;
+        esac
+
+        case "${kind}" in
+          github)
+            url="$(gh_asset_url "${source}" "${pattern}")"
+            file="${url##*/}"
+            ;;
+          url)
+            url="${source}"
+            file="${pattern}"
+            ;;
+          *)
+            echo "ERROR: unknown source kind ${kind}"
+            failed=$((failed + 1))
+            continue
+            ;;
+        esac
+
+        if [ -z "${url}" ]; then
+          echo "ERROR: no release asset for ${source} ${pattern}"
+          failed=$((failed + 1))
+          continue
+        fi
+
+        size="$(remote_size "${url}" | tr -d ' ')"
+        dest="${dest_dir}/${file}"
+        if [ -n "${size}" ] && [ -f "${dest}" ] && [ "$(wc -c < "${dest}")" = "${size}" ]; then
+          echo "Up to date: ${file}"
+          continue
+        fi
+
+        echo "Downloading ${file}"
+        if download "${url}" "${dest}"; then
+          chmod 755 "${dest}"
+          if [ "${kind}" = github ]; then
+            for old in "${dest_dir}"/*; do
+              [ "${old}" != "${dest}" ] && printf '%s\n' "${old##*/}" | grep -Eq "${pattern}" && rm -f "${old}"
+            done
+          fi
+        else
+          echo "ERROR: failed to download ${url}"
+          failed=$((failed + 1))
+        fi
+      done < "${appimages_file}"
+    }
+
+    ubuntu
+    nixos
+    arch
+    alpine
+    appimages
+
+    if [ "${failed}" -gt 0 ]; then
+      echo "${failed} download(s) failed; restart the pod to retry"
+    fi
+    exit 0
+  files.Caddyfile: |
+    {
+    	auto_https off
+    	admin off
+    }
+
+    :8084 {
+    	handle_path /files/* {
+    		root * /srv
+    		file_server browse
+    	}
+    }
+  images.txt: |
+    docker.io/ubuntu:24.04
+    docker.io/ubuntu:26.04
+    docker.io/debian:trixie-slim
+    docker.io/alpine:latest
+    docker.io/alpine:3.24
+    docker.io/archlinux:latest
+    docker.io/busybox:latest
+    docker.io/python:3-slim
+    docker.io/python:3-alpine
+    docker.io/golang:1-alpine
+    docker.io/golang:1
+    docker.io/node:lts-alpine
+    docker.io/node:lts-slim
+    docker.io/rust:1-slim
+    docker.io/gcc:latest
+    docker.io/nginx:alpine
+    docker.io/caddy:alpine
+    docker.io/redis:alpine
+    docker.io/postgres:alpine
+    docker.io/library/alpine:3.24.4
+    docker.io/library/archlinux:base-20261108.0.623074
+    docker.io/library/caddy:2.11.9-alpine
+    docker.io/curlimages/curl:8.23.0
+    ghcr.io/kiwix/kiwix-serve:3.8.2
+    ghcr.io/meshtastic/web:2.7.2
+    docker.io/library/python:3.15.2-alpine
+    docker.io/library/registry:2.8.3
+    ghcr.io/silverbulletmd/silverbullet:2.12.1
+    quay.io/skopeo/stable:v1.22.3
+    docker.io/library/ubuntu:24.04
+  kiwix-serve.sh: |
+    #!/bin/sh
+    set -eu
+
+    library=/data/library.xml
+    port="${KIWIX_PORT:-8081}"
+
+    rebuild() {
+      tmp="$(mktemp /data/.library.XXXXXX)"
+      rm -f "${tmp}"
+      find /zims -name '*.zim' -type f | sort | while read -r zim; do
+        kiwix-manage "${tmp}" add "${zim}" > /dev/null 2>&1 || echo "skipping unreadable ${zim}" >&2
+      done
+      if [ ! -f "${tmp}" ]; then
+        printf '<?xml version="1.0" encoding="UTF-8"?>\n<library version="20110515"></library>\n' > "${tmp}"
+      fi
+      if cmp -s "${tmp}" "${library}" 2> /dev/null; then
+        rm -f "${tmp}"
+      else
+        mv "${tmp}" "${library}"
+      fi
+    }
+
+    rebuild
+
+    (
+      while sleep 600; do
+        rebuild || true
+      done
+    ) &
+
+    exec kiwix-serve --port="${port}" --urlRootLocation=/kiwix --monitorLibrary --library "${library}"
+  lib.sh: |
+    #!/bin/sh
+
+    gh_asset_url() {
+      curl -fsSL --retry 3 --connect-timeout 30 "https://api.github.com/repos/$1/releases?per_page=30" \
+        | grep -o '"browser_download_url": *"[^"]*"' \
+        | cut -d'"' -f4 \
+        | grep -E "$2" \
+        | head -1
+    }
+
+    remote_size() {
+      curl -fsSIL --retry 3 --connect-timeout 30 "$1" \
+        | tr -d '\r' \
+        | awk 'tolower($1) == "content-length:" { size = $2 } END { print size }'
+    }
+
+    download() {
+      part="$2.part"
+      curl -fL --no-progress-meter --show-error --retry 5 --retry-delay 15 --connect-timeout 30 \
+        --speed-limit 1024 --speed-time 120 -C - -o "${part}" "$1" \
+        || { rm -f "${part}"; curl -fL --no-progress-meter --show-error --retry 5 --retry-delay 15 --connect-timeout 30 \
+          --speed-limit 1024 --speed-time 120 -o "${part}" "$1"; } \
+        || { rm -f "${part}"; return 1; }
+      mv -f "${part}" "$2"
+    }
+  maps-index.html: |
+    <!doctype html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Offline Maps</title>
+    <link rel="stylesheet" href="assets/maplibre-gl.css">
+    <style>
+      :root { color-scheme: dark; --bg: #0f1419; --panel: #172029; --line: #26323f; --text: #e6edf3; --muted: #8b9bab; --accent: #4ea1ff; }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font: 14px/1.4 system-ui, sans-serif; }
+      body { display: flex; }
+      #panel { width: 340px; max-width: 45vw; overflow-y: auto; background: var(--panel); border-right: 1px solid var(--line); padding: 16px; }
+      #map { flex: 1; min-width: 0; }
+      h1 { font-size: 18px; margin: 0 0 4px; }
+      h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 20px 0 8px; }
+      a { color: var(--accent); }
+      label { display: block; margin: 8px 0; color: var(--muted); }
+      input, select { width: 100%; margin-top: 4px; padding: 8px; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 6px; }
+      button { padding: 8px 12px; background: var(--accent); color: #04121f; border: 0; border-radius: 6px; font-weight: 600; cursor: pointer; }
+      button.secondary { background: transparent; color: var(--text); border: 1px solid var(--line); }
+      button.danger { background: transparent; color: #ff7b72; border: 1px solid var(--line); padding: 4px 8px; }
+      .row { display: flex; gap: 8px; margin-top: 10px; }
+      .row > button { flex: 1; }
+      .item { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
+      .item .title { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+      .muted { color: var(--muted); font-size: 12px; }
+      .ok { color: #3fb950; } .bad { color: #ff7b72; }
+      code { background: var(--bg); padding: 1px 4px; border-radius: 4px; }
+      @media (max-width: 700px) { body { flex-direction: column-reverse; } #panel { width: 100%; max-width: none; max-height: 45vh; border-right: 0; border-top: 1px solid var(--line); } }
+    </style>
+    </head>
+    <body>
+    <aside id="panel">
+      <h1>Offline maps</h1>
+      <div class="muted">OpenStreetMap data via Protomaps. Pan and zoom the map to the area you want, then download that view for offline use.</div>
+      <h2>Download current view</h2>
+      <label>Name <input id="name" placeholder="denver" autocomplete="off"></label>
+      <label>Detail (max zoom)
+        <select id="zoom">
+          <option value="10">10 - regional overview</option>
+          <option value="12">12 - towns and main roads</option>
+          <option value="14" selected>14 - streets</option>
+          <option value="15">15 - maximum detail</option>
+        </select>
+      </label>
+      <div class="muted" id="bbox"></div>
+      <div class="row">
+        <button class="secondary" id="estimate">Estimate size</button>
+        <button id="download">Download</button>
+      </div>
+      <div class="muted" id="message" style="margin-top:8px"></div>
+      <h2>Downloads</h2>
+      <div id="jobs" class="muted">None</div>
+      <h2>Installed areas</h2>
+      <div id="regions" class="muted">Loading</div>
+    </aside>
+    <div id="map"></div>
+    <script src="assets/maplibre-gl.js"></script>
+    <script src="assets/pmtiles.js"></script>
+    <script src="assets/basemaps.js"></script>
+    <script>
+    const base = new URL('.', location.href).href;
+    const $ = id => document.getElementById(id);
+    const fmtSize = bytes => bytes > 1e9 ? (bytes / 1e9).toFixed(2) + ' GB' : (bytes / 1e6).toFixed(1) + ' MB';
+    const api = (path, body) => fetch(base + 'api/' + path, body ? { method: 'POST', body: JSON.stringify(body) } : {}).then(r => r.json());
+
+    maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
+    const flavor = basemaps.namedFlavor('light');
+
+    function styleFor(regions) {
+      const sources = {};
+      const layers = [];
+      const ordered = regions.filter(r => r.name === 'world').concat(regions.filter(r => r.name !== 'world'));
+      ordered.forEach((region, index) => {
+        sources[region.name] = {
+          type: 'vector',
+          url: 'pmtiles://' + base + 'tiles/' + region.name + '.pmtiles',
+          attribution: '&copy; OpenStreetMap contributors, Protomaps'
+        };
+        basemaps.layers(region.name, flavor, { lang: 'en' }).forEach(layer => {
+          if (index > 0 && layer.type === 'background') return;
+          layers.push({ ...layer, id: region.name + ':' + layer.id });
+        });
+      });
+      return { version: 8, glyphs: base + 'assets/fonts/{fontstack}/{range}.pbf', sprite: base + 'assets/sprites/v4/light', sources, layers };
+    }
+
+    let map = null;
+    let loadedKey = '';
+
+    function currentBbox() {
+      const b = map.getBounds();
+      const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+      return [clamp(b.getWest(), -180, 180), clamp(b.getSouth(), -85, 85), clamp(b.getEast(), -180, 180), clamp(b.getNorth(), -85, 85)];
+    }
+
+    function showBbox() {
+      if (!map) return;
+      $('bbox').textContent = 'View: ' + currentBbox().map(v => v.toFixed(3)).join(', ');
+    }
+
+    function renderRegions(regions) {
+      const rows = regions.map(r => {
+        const remove = r.name === 'world' ? '' : '<button class="danger" data-delete="' + r.name + '">Delete</button>';
+        const detail = r.maxzoom ? 'zoom ' + r.maxzoom + ' - ' : '';
+        return '<div class="item"><div class="title"><a href="#" data-goto="' + r.name + '">' + r.name + '</a>' + remove + '</div><div class="muted">' + detail + fmtSize(r.size) + '</div></div>';
+      });
+      $('regions').innerHTML = rows.join('') || 'None';
+      $('regions').querySelectorAll('[data-delete]').forEach(b => b.onclick = async () => {
+        if (confirm('Delete ' + b.dataset.delete + '?')) { await api('delete', { name: b.dataset.delete }); refresh(); }
+      });
+      $('regions').querySelectorAll('[data-goto]').forEach(a => a.onclick = e => {
+        e.preventDefault();
+        const region = regions.find(r => r.name === a.dataset.goto);
+        if (region.bbox) map.fitBounds([[region.bbox[0], region.bbox[1]], [region.bbox[2], region.bbox[3]]], { padding: 40 });
+      });
+    }
+
+    function renderJobs(jobs) {
+      const rows = jobs.map(j => {
+        const cls = j.state === 'done' ? 'ok' : j.state === 'failed' ? 'bad' : '';
+        const detail = j.state === 'failed' ? (j.error || '') : (j.log || []).slice(-1)[0] || '';
+        return '<div class="item"><div class="title"><span>' + j.name + '</span><span class="' + cls + '">' + j.state + '</span></div><div class="muted">' + detail + '</div></div>';
+      });
+      $('jobs').innerHTML = rows.join('') || 'None';
+    }
+
+    async function refresh() {
+      const [regions, jobs] = await Promise.all([api('regions'), api('jobs')]);
+      renderRegions(regions);
+      renderJobs(jobs);
+      const key = regions.map(r => r.name + ':' + r.size).join('|');
+      if (regions.some(r => r.name === 'world') && key !== loadedKey) {
+        loadedKey = key;
+        if (!map) {
+          map = new maplibregl.Map({ container: 'map', style: styleFor(regions), center: [-98, 39], zoom: 3, maxZoom: 18 });
+          map.addControl(new maplibregl.NavigationControl());
+          map.addControl(new maplibregl.ScaleControl());
+          map.on('moveend', showBbox);
+          map.on('load', showBbox);
+        } else {
+          map.setStyle(styleFor(regions));
+        }
+      } else if (!map) {
+        $('map').innerHTML = '<div style="padding:24px" class="muted">Downloading the world base map. This page refreshes automatically.</div>';
+      }
+      return jobs.some(j => j.state === 'queued' || j.state === 'running');
+    }
+
+    function request() {
+      return { name: $('name').value, bbox: currentBbox(), maxzoom: Number($('zoom').value) };
+    }
+
+    $('estimate').onclick = async () => {
+      $('message').textContent = 'Estimating...';
+      const result = await api('estimate', request());
+      $('message').textContent = result.error || result.message;
+    };
+
+    $('download').onclick = async () => {
+      const result = await api('extract', request());
+      $('message').textContent = result.error ? result.error : 'Download started';
+      refresh();
+    };
+
+    async function poll() {
+      let busy = true;
+      try { busy = await refresh(); } catch (e) { busy = true; }
+      setTimeout(poll, busy ? 3000 : 15000);
+    }
+    poll();
+    </script>
+    </body>
+    </html>
+  maps-init.sh: |
+    #!/bin/sh
+    umask 022
+    data=/data
+    failed=0
+
+    mkdir -p "${data}/bin" "${data}/regions" "${data}/assets/sprites/v4" "${data}/assets/fonts"
+
+    fetch() {
+      [ -s "$2" ] && return 0
+      mkdir -p "$(dirname "$2")"
+      if curl -fsSL --retry 5 --retry-delay 5 --connect-timeout 30 -o "$2.part" "$1"; then
+        mv -f "$2.part" "$2"
+      else
+        rm -f "$2.part"
+        echo "ERROR: failed to download $1"
+        failed=$((failed + 1))
+      fi
+    }
+
+    if [ "$(cat "${data}/bin/pmtiles.version" 2> /dev/null)" != "${PMTILES_VERSION}" ]; then
+      echo "Installing pmtiles ${PMTILES_VERSION}"
+      if curl -fsSL --retry 5 --retry-delay 5 --connect-timeout 30 \
+        "https://github.com/protomaps/go-pmtiles/releases/download/v${PMTILES_VERSION}/go-pmtiles_${PMTILES_VERSION}_Linux_x86_64.tar.gz" \
+        | tar xz -C "${data}/bin" pmtiles; then
+        printf '%s\n' "${PMTILES_VERSION}" > "${data}/bin/pmtiles.version"
+      else
+        echo "ERROR: failed to install pmtiles"
+        failed=$((failed + 1))
+      fi
+    fi
+
+    cdn="https://cdn.jsdelivr.net/npm"
+    fetch "${cdn}/maplibre-gl@${MAPLIBRE_VERSION}/dist/maplibre-gl.js" "${data}/assets/maplibre-gl.js"
+    fetch "${cdn}/maplibre-gl@${MAPLIBRE_VERSION}/dist/maplibre-gl.css" "${data}/assets/maplibre-gl.css"
+    fetch "${cdn}/pmtiles@${PMTILES_JS_VERSION}/dist/pmtiles.js" "${data}/assets/pmtiles.js"
+    fetch "${cdn}/@protomaps/basemaps@${BASEMAPS_VERSION}/dist/basemaps.js" "${data}/assets/basemaps.js"
+
+    assets="https://protomaps.github.io/basemaps-assets"
+    for sprite in light.json light.png light@2x.json light@2x.png; do
+      fetch "${assets}/sprites/v4/${sprite}" "${data}/assets/sprites/v4/${sprite}"
+    done
+
+    for font in "Noto Sans Regular" "Noto Sans Medium" "Noto Sans Italic"; do
+      encoded="$(printf '%s' "${font}" | sed 's/ /%20/g')"
+      for range in 0-255 256-511 512-767 768-1023 1024-1279 8192-8447; do
+        fetch "${assets}/fonts/${encoded}/${range}.pbf" "${data}/assets/fonts/${font}/${range}.pbf"
+      done
+    done
+
+    if [ "${failed}" -gt 0 ]; then
+      echo "${failed} asset download(s) failed; restart the pod to retry"
+    fi
+    exit 0
+  maps-server.py: |
+    #!/usr/bin/env python3
+    import datetime
+    import json
+    import os
+    import re
+    import subprocess
+    import threading
+    import time
+    import urllib.error
+    import urllib.request
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+    from pathlib import Path
+    from urllib.parse import unquote, urlparse
+
+    DATA = Path(os.environ.get("DATA_DIR", "/data"))
+    APP = Path(os.environ.get("APP_DIR", "/app"))
+    REGIONS = DATA / "regions"
+    ASSETS = DATA / "assets"
+    PMTILES = os.environ.get("PMTILES_BIN", str(DATA / "bin" / "pmtiles"))
+    BUILD_URL = os.environ.get("PROTOMAPS_BUILD_URL", "https://build.protomaps.com")
+    SOURCE_OVERRIDE = os.environ.get("PMTILES_SOURCE", "")
+    PORT = int(os.environ.get("PORT", "8082"))
+    WORLD = "world"
+    WORLD_MAXZOOM = 5
+    NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
+    TYPES = {
+        ".html": "text/html; charset=utf-8",
+        ".js": "text/javascript; charset=utf-8",
+        ".mjs": "text/javascript; charset=utf-8",
+        ".css": "text/css; charset=utf-8",
+        ".json": "application/json",
+        ".png": "image/png",
+        ".pbf": "application/x-protobuf",
+        ".pmtiles": "application/octet-stream",
+    }
+
+    jobs = {}
+    jobs_lock = threading.Lock()
+    extract_lock = threading.Lock()
+    build_cache = {"url": None, "at": 0.0}
+
+
+    def latest_build():
+        if SOURCE_OVERRIDE:
+            return SOURCE_OVERRIDE
+        if build_cache["url"] and time.time() - build_cache["at"] < 21600:
+            return build_cache["url"]
+        today = datetime.date.today()
+        for back in range(21):
+            url = f"{BUILD_URL}/{today - datetime.timedelta(days=back):%Y%m%d}.pmtiles"
+            try:
+                request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "nomad-maps/1.0"})
+                with urllib.request.urlopen(request, timeout=20) as response:
+                    if response.status == 200:
+                        build_cache.update(url=url, at=time.time())
+                        return url
+            except urllib.error.URLError:
+                continue
+        raise RuntimeError("no recent Protomaps planet build found")
+
+
+    def extract_command(source, dest, bbox, maxzoom, dry_run=False):
+        command = [PMTILES, "extract", source, str(dest), f"--maxzoom={maxzoom}"]
+        if bbox:
+            command.append("--bbox=" + ",".join(f"{value:.6f}" for value in bbox))
+        if dry_run:
+            command.append("--dry-run")
+        return command
+
+
+    def run_extract(job):
+        with extract_lock:
+            job["state"] = "running"
+            dest = REGIONS / f"{job['name']}.pmtiles"
+            part = REGIONS / f"{job['name']}.pmtiles.part"
+            try:
+                source = latest_build()
+                result = subprocess.run(
+                    extract_command(source, part, job["bbox"], job["maxzoom"]),
+                    capture_output=True,
+                    text=True,
+                )
+                job["log"] = (result.stderr or result.stdout).strip().splitlines()[-3:]
+                if result.returncode != 0:
+                    raise RuntimeError("pmtiles extract failed")
+                os.replace(part, dest)
+                dest.with_suffix(".json").write_text(json.dumps({
+                    "bbox": job["bbox"],
+                    "maxzoom": job["maxzoom"],
+                    "source": source,
+                    "created": int(time.time()),
+                }))
+                job["state"] = "done"
+            except Exception as error:
+                job["state"] = "failed"
+                job["error"] = str(error)
+                part.unlink(missing_ok=True)
+            job["finished"] = int(time.time())
+
+
+    def start_job(name, bbox, maxzoom):
+        job = {
+            "id": f"{int(time.time() * 1000)}-{name}",
+            "name": name,
+            "bbox": bbox,
+            "maxzoom": maxzoom,
+            "state": "queued",
+            "started": int(time.time()),
+        }
+        with jobs_lock:
+            jobs[job["id"]] = job
+        threading.Thread(target=run_extract, args=(job,), daemon=True).start()
+        return job
+
+
+    def ensure_world():
+        while True:
+            if (REGIONS / f"{WORLD}.pmtiles").exists():
+                return
+            job = start_job(WORLD, None, WORLD_MAXZOOM)
+            while job["state"] in ("queued", "running"):
+                time.sleep(5)
+            if job["state"] == "done":
+                return
+            time.sleep(600)
+
+
+    def list_regions():
+        regions = []
+        for path in sorted(REGIONS.glob("*.pmtiles")):
+            meta = {}
+            sidecar = path.with_suffix(".json")
+            if sidecar.exists():
+                try:
+                    meta = json.loads(sidecar.read_text())
+                except ValueError:
+                    meta = {}
+            regions.append({
+                "name": path.stem,
+                "size": path.stat().st_size,
+                "bbox": meta.get("bbox"),
+                "maxzoom": meta.get("maxzoom"),
+                "created": meta.get("created"),
+            })
+        return regions
+
+
+    def parse_request(payload):
+        name = str(payload.get("name", "")).strip().lower()
+        if not NAME_RE.match(name) or name == WORLD:
+            raise ValueError("name must be lowercase letters, digits and dashes")
+        bbox = [float(value) for value in payload.get("bbox", [])]
+        if len(bbox) != 4:
+            raise ValueError("bbox must be [west, south, east, north]")
+        west, south, east, north = bbox
+        if not (-180 <= west < east <= 180 and -85.06 <= south < north <= 85.06):
+            raise ValueError("bbox is out of range")
+        maxzoom = int(payload.get("maxzoom", 12))
+        if not 1 <= maxzoom <= 15:
+            raise ValueError("maxzoom must be between 1 and 15")
+        return name, bbox, maxzoom
+
+
+    class Handler(BaseHTTPRequestHandler):
+        server_version = "nomad-maps"
+
+        def log_message(self, format, *args):
+            print(f"{self.address_string()} {format % args}", flush=True)
+
+        def send_json(self, payload, status=200):
+            body = json.dumps(payload).encode()
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            self.wfile.write(body)
+
+        def send_file(self, path):
+            size = path.stat().st_size
+            start, end, status = 0, size - 1, 200
+            requested = self.headers.get("Range")
+            if requested:
+                match = re.match(r"^bytes=(\d*)-(\d*)$", requested.strip())
+                if match:
+                    first, last = match.groups()
+                    if first == "" and last != "":
+                        start = max(size - int(last), 0)
+                    elif first != "":
+                        start = int(first)
+                        end = min(int(last), size - 1) if last else size - 1
+                    if start > end or start >= size:
+                        self.send_response(416)
+                        self.send_header("Content-Range", f"bytes */{size}")
+                        self.end_headers()
+                        return
+                    status = 206
+            self.send_response(status)
+            self.send_header("Content-Type", TYPES.get(path.suffix, "application/octet-stream"))
+            self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Content-Length", str(end - start + 1))
+            self.send_header("Cache-Control", "no-cache")
+            if status == 206:
+                self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+            self.end_headers()
+            if self.command == "HEAD":
+                return
+            with path.open("rb") as handle:
+                handle.seek(start)
+                remaining = end - start + 1
+                while remaining > 0:
+                    chunk = handle.read(min(65536, remaining))
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk)
+                    remaining -= len(chunk)
+
+        def resolve(self, base, relative):
+            candidate = (base / unquote(relative)).resolve()
+            if candidate.is_file() and candidate.is_relative_to(base.resolve()):
+                return candidate
+            return None
+
+        def do_HEAD(self):
+            self.do_GET()
+
+        def do_GET(self):
+            path = urlparse(self.path).path
+            if path in ("/", "/index.html"):
+                self.send_file(APP / "maps-index.html")
+            elif path == "/api/regions":
+                self.send_json(list_regions())
+            elif path == "/api/jobs":
+                with jobs_lock:
+                    self.send_json(sorted(jobs.values(), key=lambda job: job["started"], reverse=True)[:20])
+            elif path.startswith("/assets/"):
+                target = self.resolve(ASSETS, path[len("/assets/"):])
+                self.send_file(target) if target else self.send_error(404)
+            elif path.startswith("/tiles/") and path.endswith(".pmtiles"):
+                target = self.resolve(REGIONS, path[len("/tiles/"):])
+                self.send_file(target) if target else self.send_error(404)
+            else:
+                self.send_error(404)
+
+        def do_POST(self):
+            path = urlparse(self.path).path
+            try:
+                payload = json.loads(self.rfile.read(int(self.headers.get("Content-Length", "0"))) or b"{}")
+                if path == "/api/extract":
+                    name, bbox, maxzoom = parse_request(payload)
+                    self.send_json(start_job(name, bbox, maxzoom), 202)
+                elif path == "/api/estimate":
+                    _, bbox, maxzoom = parse_request({**payload, "name": "estimate"})
+                    result = subprocess.run(
+                        extract_command(latest_build(), DATA / "estimate.pmtiles", bbox, maxzoom, dry_run=True),
+                        capture_output=True,
+                        text=True,
+                        timeout=300,
+                    )
+                    (DATA / "estimate.pmtiles").unlink(missing_ok=True)
+                    lines = (result.stderr or result.stdout).strip().splitlines()
+                    self.send_json({"ok": result.returncode == 0, "message": lines[-1] if lines else ""})
+                elif path == "/api/delete":
+                    name = str(payload.get("name", ""))
+                    if not NAME_RE.match(name) or name == WORLD:
+                        raise ValueError("invalid region")
+                    for suffix in (".pmtiles", ".json"):
+                        (REGIONS / f"{name}{suffix}").unlink(missing_ok=True)
+                    self.send_json({"ok": True})
+                else:
+                    self.send_error(404)
+            except (ValueError, TypeError, RuntimeError, subprocess.TimeoutExpired) as error:
+                self.send_json({"error": str(error)}, 400)
+
+
+    def main():
+        REGIONS.mkdir(parents=True, exist_ok=True)
+        for stale in REGIONS.glob("*.part"):
+            stale.unlink(missing_ok=True)
+        threading.Thread(target=ensure_world, daemon=True).start()
+        ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
+
+
+    if __name__ == "__main__":
+        main()
+  meshtastic-web-init.sh: |
+    #!/bin/sh
+    set -eu
+
+    src=/usr/share/nginx/html
+    out=/data/html
+    prefix=/meshtastic
+
+    rm -rf "${out}.new"
+    mkdir -p "${out}.new"
+    cp -a "${src}/." "${out}.new/"
+    cd "${out}.new"
+
+    sed -i -E "s#(src|href)=\"/#\\1=\"${prefix}/#g" index.html
+
+    find . -type f \( -name '*.js' -o -name '*.html' -o -name '*.webmanifest' -o -name '*.json' \) -exec sed -i -E \
+      -e "s#([\`'\"])/(index-|dist-|worker-|sqlite3-|maplibre-gl-|manifest\\.webmanifest|site\\.webmanifest|logo\\.svg|chirpy\\.svg|icon\\.svg|favicon\\.ico|apple-touch-icon|i18n/|devices/|sw\\.js)#\\1${prefix}/\\2#g" \
+      -e "s#scope: '/'#scope: '${prefix}/'#g" \
+      -e "s#([A-Za-z_\$][A-Za-z0-9_\$]*)\\(\\{routeTree:#\\1({basepath:\"${prefix}\",routeTree:#g" \
+      {} +
+
+    grep -q "basepath:\"${prefix}\"" index-*.js || { echo "router basepath patch did not apply" >&2; exit 1; }
+
+    rm -rf "${out}"
+    mv "${out}.new" "${out}"
+  mirror-apk.sh: |
+    #!/bin/sh
+    set -u
+    umask 022
+
+    dest="${MIRROR_DEST:-/mirror}"
+    arch="$(apk --print-arch)"
+    repo="${dest}/${arch}"
+    keys="${dest}/keys"
+    packages="${APK_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python3 py3-pip python3-dev go gcc g++ build-base musl-dev gdb make vim helix msedit}"
+    failed=0
+
+    apk add --no-cache abuild openssl > /dev/null || exit 1
+    mkdir -p "${repo}" "${keys}"
+    ln -sfn "${arch}" "${dest}/noarch"
+
+    if [ ! -f "${keys}/nomad.rsa" ]; then
+      openssl genrsa -out "${keys}/nomad.rsa" 4096 2> /dev/null || exit 1
+      openssl rsa -in "${keys}/nomad.rsa" -pubout -out "${keys}/nomad.rsa.pub" 2> /dev/null || exit 1
+    fi
+    cp "${keys}/nomad.rsa.pub" "${dest}/nomad.rsa.pub"
+
+    : > /tmp/status
+    available=""
+    for package in ${packages}; do
+      if apk search -x "${package}" | grep -q .; then
+        available="${available} ${package}"
+        echo "included ${package}" >> /tmp/status
+      else
+        echo "ERROR: ${package} is not packaged in Alpine $(cat /etc/alpine-release)"
+        echo "missing ${package}" >> /tmp/status
+        failed=$((failed + 1))
+      fi
+    done
+
+    # shellcheck disable=SC2086
+    apk fetch --recursive --simulate ${available} 2>&1 | sed -n 's/^Downloading //p' > /tmp/wanted
+    if [ ! -s /tmp/wanted ]; then
+      echo "ERROR: dependency resolution produced no packages"
+      exit 1
+    fi
+    sed 's/$/.apk/' /tmp/wanted | sort -u > /tmp/wanted.apk
+
+    # shellcheck disable=SC2086
+    apk fetch --recursive --output "${repo}" ${available} || failed=$((failed + 1))
+
+    for apk_file in "${repo}"/*.apk; do
+      [ -e "${apk_file}" ] || continue
+      grep -qxF "${apk_file##*/}" /tmp/wanted.apk || { echo "Removing superseded ${apk_file##*/}"; rm -f "${apk_file}"; }
+    done
+
+    rm -f "${repo}/APKINDEX.tar.gz"
+    apk index --output "${repo}/APKINDEX.tar.gz" "${repo}"/*.apk || exit 1
+    abuild-sign -k "${keys}/nomad.rsa" "${repo}/APKINDEX.tar.gz" || exit 1
+
+    {
+      echo "Alpine $(cat /etc/alpine-release) package mirror, rebuilt $(date -u +%FT%TZ)"
+      echo
+      echo "Trust the signing key and add the repository:"
+      echo "  wget -O /etc/apk/keys/nomad.rsa.pub http://<nomad-host>/files/linux/apk/nomad.rsa.pub"
+      echo "  echo http://<nomad-host>/files/linux/apk >> /etc/apk/repositories"
+      echo
+      sort /tmp/status
+    } > "${dest}/README.txt"
+
+    echo "Mirror contains $(ls "${repo}"/*.apk | wc -l) packages"
+    [ "${failed}" -eq 0 ]
+  mirror-debs.sh: |
+    #!/bin/sh
+    set -u
+    umask 022
+    . /etc/nomad/lib.sh
+
+    dest="${MIRROR_DEST:-/mirror}"
+    pool="${dest}/pool"
+    extra="${dest}/extra"
+    work="${dest}/.work"
+    packages="${DEB_PACKAGES:-firefox gnome-terminal meshtasticd kiwix python3 python3-pip python3-venv python3-dev golang-go gcc g++ build-essential gdb make vim}"
+    failed=0
+
+    export DEBIAN_FRONTEND=noninteractive
+
+    apt-get update -qq || exit 1
+    apt-get install -y -qq --no-install-recommends ca-certificates curl gnupg apt-utils software-properties-common > /dev/null || exit 1
+
+    install -d -m 0755 /etc/apt/keyrings
+    curl -fsSL https://packages.mozilla.org/apt/repo-signing-key.gpg -o /etc/apt/keyrings/packages.mozilla.org.asc || exit 1
+    echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" > /etc/apt/sources.list.d/mozilla.list
+    printf 'Package: *\nPin: origin packages.mozilla.org\nPin-Priority: 1000\n' > /etc/apt/preferences.d/mozilla
+    add-apt-repository -y ppa:meshtastic/beta > /dev/null || exit 1
+    apt-get update -qq || exit 1
+
+    rm -rf "${work}"
+    mkdir -p "${pool}" "${extra}" "${work}/dl"
+    : > "${work}/keep"
+    : > "${work}/need"
+    : > "${work}/status"
+
+    key_of() {
+      base="${1##*/}"
+      printf '%s\n' "${base%_*}"
+    }
+
+    local_debs=""
+    local_names=""
+    fetch_deb() {
+      url="$(gh_asset_url "$1" "$2")"
+      if [ -z "${url}" ]; then
+        echo "ERROR: no release asset for $1"
+        echo "missing $1" >> "${work}/status"
+        failed=$((failed + 1))
+        return
+      fi
+      file="${pool}/${url##*/}"
+      if [ ! -s "${file}" ] && ! download "${url}" "${file}"; then
+        echo "ERROR: failed to download ${url}"
+        failed=$((failed + 1))
+        return
+      fi
+      local_debs="${local_debs} ${file}"
+      local_names="${local_names} $(dpkg-deb -f "${file}" Package)"
+      key_of "${file}" >> "${work}/keep"
+      echo "upstream ${url##*/}" >> "${work}/status"
+    }
+
+    fetch_deb mkasberg/ghostty-ubuntu 'ghostty_.*_amd64_24\.04\.deb$'
+    fetch_deb helix-editor/helix 'helix_.*_amd64\.deb$'
+
+    msedit_url="$(gh_asset_url microsoft/edit 'edit-.*-x86_64-linux-gnu\.tar\.gz$')"
+    if [ -n "${msedit_url}" ]; then
+      msedit_file="${extra}/${msedit_url##*/}"
+      if [ -s "${msedit_file}" ] || download "${msedit_url}" "${msedit_file}"; then
+        for old in "${extra}"/edit-*-x86_64-linux-gnu.tar.gz; do
+          [ "${old}" != "${msedit_file}" ] && rm -f "${old}"
+        done
+        echo "upstream extra/${msedit_file##*/}" >> "${work}/status"
+      else
+        failed=$((failed + 1))
+      fi
+    else
+      echo "ERROR: no release asset for microsoft/edit"
+      failed=$((failed + 1))
+    fi
+
+    available=""
+    for package in ${packages}; do
+      if apt-cache show "${package}" > /dev/null 2>&1; then
+        available="${available} ${package}"
+        echo "included ${package}" >> "${work}/status"
+      else
+        echo "ERROR: ${package} is not available for Ubuntu 24.04"
+        echo "missing ${package}" >> "${work}/status"
+        failed=$((failed + 1))
+      fi
+    done
+
+    # shellcheck disable=SC2086
+    closure="$(apt-get install -s --no-install-recommends -o Dir::State::status=/dev/null ${available} ${local_debs} 2> /dev/null | sed -n 's/^Inst \([^ ]*\) (\([^ ]*\) .*/\1=\2/p')"
+    if [ -z "${closure}" ]; then
+      echo "ERROR: dependency resolution produced no packages"
+      exit 1
+    fi
+
+    for spec in ${closure}; do
+      name="${spec%%=*}"
+      version="${spec#*=}"
+      case " ${local_names} " in
+        *" ${name} "*) continue ;;
+      esac
+      encoded="$(printf '%s' "${version}" | sed 's/:/%3a/g')"
+      echo "${name}_${encoded}" >> "${work}/keep"
+      ls "${pool}/${name}_${encoded}_"*.deb > /dev/null 2>&1 || echo "${name}=${version}" >> "${work}/need"
+    done
+
+    echo "$(wc -l < "${work}/need") package(s) to download"
+    if [ -s "${work}/need" ]; then
+      (cd "${work}/dl" && xargs -n 40 apt-get download -qq -o APT::Sandbox::User=root < "${work}/need") || failed=$((failed + 1))
+      find "${work}/dl" -name '*.deb' -exec mv -f {} "${pool}/" \;
+    fi
+
+    for deb in "${pool}"/*.deb; do
+      [ -e "${deb}" ] || continue
+      grep -qxF "$(key_of "${deb}")" "${work}/keep" || { echo "Removing superseded ${deb##*/}"; rm -f "${deb}"; }
+    done
+
+    cd "${dest}" || exit 1
+    apt-ftparchive packages pool > Packages.new
+    mv -f Packages.new Packages
+    gzip -9kf Packages
+    apt-ftparchive release . > Release.new
+    mv -f Release.new Release
+
+    {
+      echo "Ubuntu 24.04 package mirror, rebuilt $(date -u +%FT%TZ)"
+      echo
+      echo "Add to /etc/apt/sources.list.d/nomad.list:"
+      echo "  deb [trusted=yes] http://<nomad-host>/files/linux/debs ./"
+      echo
+      sort "${work}/status"
+    } > README.txt
+
+    rm -rf "${work}"
+    echo "Mirror contains $(ls "${pool}" | wc -l) packages"
+    [ "${failed}" -eq 0 ]
+  mirror-pacman.sh: |
+    #!/bin/sh
+    set -u
+    umask 022
+
+    dest="${MIRROR_DEST:-/mirror}"
+    repo="${dest}/x86_64"
+    db=/tmp/pacman-db
+    packages="${PACMAN_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python python-pip go gcc gdb make vim helix msedit}"
+    failed=0
+
+    mkdir -p "${repo}" "${db}/local"
+    pacman --dbpath "${db}" -Sy --noconfirm > /dev/null || exit 1
+
+    : > /tmp/status
+    available=""
+    for package in ${packages}; do
+      if pacman --dbpath "${db}" -Si "${package}" > /dev/null 2>&1; then
+        available="${available} ${package}"
+        echo "included ${package}" >> /tmp/status
+      else
+        echo "ERROR: ${package} is not in the official Arch repositories"
+        echo "missing ${package}" >> /tmp/status
+        failed=$((failed + 1))
+      fi
+    done
+
+    # shellcheck disable=SC2086
+    pacman --dbpath "${db}" -Sp --noconfirm ${available} 2> /dev/null | sed 's#.*/##' | sort -u > /tmp/wanted
+    if [ ! -s /tmp/wanted ]; then
+      echo "ERROR: dependency resolution produced no packages"
+      exit 1
+    fi
+
+    # shellcheck disable=SC2086
+    pacman --dbpath "${db}" --cachedir "${repo}" -Sw --noconfirm ${available} || failed=$((failed + 1))
+
+    for package_file in "${repo}"/*.pkg.tar.*; do
+      [ -e "${package_file}" ] || continue
+      name="${package_file##*/}"
+      grep -qxF "${name%.sig}" /tmp/wanted || { echo "Removing superseded ${name}"; rm -f "${package_file}"; }
+    done
+
+    rm -f "${repo}"/nomad.db* "${repo}"/nomad.files*
+    repo-add --quiet "${repo}/nomad.db.tar.gz" "${repo}"/*.pkg.tar.zst || exit 1
+
+    {
+      echo "Arch Linux package mirror, rebuilt $(date -u +%FT%TZ)"
+      echo
+      echo "Add to /etc/pacman.conf:"
+      echo "  [nomad]"
+      echo "  SigLevel = Optional TrustAll"
+      echo "  Server = http://<nomad-host>/files/linux/pacman/\$arch"
+      echo
+      sort /tmp/status
+    } > "${dest}/README.txt"
+
+    echo "Mirror contains $(ls "${repo}"/*.pkg.tar.zst | wc -l) packages"
+    [ "${failed}" -eq 0 ]
+  sync-images.sh: |
+    #!/bin/sh
+    registry="${REGISTRY:-127.0.0.1:5000}"
+    images_file="${IMAGES_FILE:-/etc/nomad/images.txt}"
+    failed=0
+
+    while read -r source; do
+      case "${source}" in
+        "" | "#"*) continue ;;
+      esac
+
+      name="${source#docker.io/}"
+      name="${name#library/}"
+      echo "Syncing ${source} -> ${registry}/${name}"
+      if ! skopeo copy --quiet --retry-times 3 --dest-tls-verify=false "docker://${source}" "docker://${registry}/${name}" < /dev/null; then
+        echo "ERROR: failed to sync ${source}"
+        failed=$((failed + 1))
+      fi
+    done < "${images_file}"
+
+    if [ "${failed}" -gt 0 ]; then
+      echo "${failed} image(s) failed to sync"
+      exit 1
+    fi
+    echo "All images are synced"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nomad
+  namespace: nomad
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "nomad"
+    tailscale.com/tags: "tag:http"
+spec:
+  type: ClusterIP
+  selector:
+    app: nomad
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nomad
+  namespace: nomad
+  labels:
+    app: nomad
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 86400
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nomad
+  template:
+    metadata:
+      labels:
+        app: nomad
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: homelab
+      initContainers:
+      - name: maps-init
+        image: docker.io/curlimages/curl:8.23.0
+        command: ["/bin/sh", "/etc/nomad/maps-init.sh"]
+        env:
+        - name: PMTILES_VERSION
+          value: "1.31.2"
+        - name: PMTILES_JS_VERSION
+          value: "4.5.0"
+        - name: MAPLIBRE_VERSION
+          value: "5.24.0"
+        - name: BASEMAPS_VERSION
+          value: "5.7.2"
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: maps
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: meshtastic-web-init
+        image: ghcr.io/meshtastic/web:2.7.2
+        command: ["/bin/sh", "/etc/nomad/meshtastic-web-init.sh"]
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: meshtastic-web
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: docker
+        image: docker.io/library/registry:2.8.3
+        restartPolicy: Always
+        ports:
+        - name: registry
+          containerPort: 5000
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: 0.0.0.0:5000
+        - name: REGISTRY_HTTP_RELATIVEURLS
+          value: "true"
+        - name: REGISTRY_STORAGE_DELETE_ENABLED
+          value: "true"
+        startupProbe:
+          httpGet:
+            path: /v2/
+            port: registry
+          periodSeconds: 2
+          failureThreshold: 60
+        readinessProbe:
+          httpGet:
+            path: /v2/
+            port: registry
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - name: docker
+          mountPath: /var/lib/registry
+      - name: docker-seed
+        image: quay.io/skopeo/stable:v1.22.3
+        command: ["/bin/sh", "-c", "/bin/sh /etc/nomad/sync-images.sh || true"]
+        env:
+        - name: REGISTRY
+          value: 127.0.0.1:5000
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        volumeMounts:
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: files-init
+        image: docker.io/curlimages/curl:8.23.0
+        command: ["/bin/sh", "/etc/nomad/files-init.sh"]
+        env:
+        - name: FILES_ROOT
+          value: /srv
+        - name: NIXOS_CHANNEL
+          value: "nixos-26.05"
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - name: files
+          mountPath: /srv
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      containers:
+      - name: dashboard
+        image: docker.io/library/caddy:2.11.9-alpine
+        command: ["caddy", "run", "--config", "/etc/nomad/dashboard.Caddyfile", "--adapter", "caddyfile"]
+        ports:
+        - name: http
+          containerPort: 80
+          hostPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: dashboard
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+        - name: dashboard-www
+          mountPath: /srv/www
+          readOnly: true
+      - name: kiwix-serve
+        image: ghcr.io/kiwix/kiwix-serve:3.8.2
+        command: ["/bin/sh", "/etc/nomad/kiwix-serve.sh"]
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 256Mi
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+        volumeMounts:
+        - name: kiwix-serve
+          mountPath: /data
+        - name: zims
+          mountPath: /zims
+          readOnly: true
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: maps
+        image: docker.io/library/python:3.15.2-alpine
+        command: ["python", "/etc/nomad/maps-server.py"]
+        env:
+        - name: DATA_DIR
+          value: /data
+        - name: APP_DIR
+          value: /etc/nomad
+        - name: PORT
+          value: "8082"
+        readinessProbe:
+          httpGet:
+            path: /api/regions
+            port: 8082
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        volumeMounts:
+        - name: maps
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: notes
+        image: ghcr.io/silverbulletmd/silverbullet:2.12.1
+        env:
+        - name: SB_URL_PREFIX
+          value: /notes
+        - name: SB_PORT
+          value: "8083"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        volumeMounts:
+        - name: notes
+          mountPath: /data
+      - name: meshtastic-web
+        image: ghcr.io/meshtastic/web:2.7.2
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 250m
+            memory: 128Mi
+        volumeMounts:
+        - name: meshtastic-web
+          mountPath: /usr/share/nginx/html
+          subPath: html
+          readOnly: true
+      - name: files
+        image: docker.io/library/caddy:2.11.9-alpine
+        command: ["caddy", "run", "--config", "/etc/nomad/files.Caddyfile", "--adapter", "caddyfile"]
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: files
+          mountPath: /srv
+          readOnly: true
+        - name: android
+          mountPath: /srv/android
+          readOnly: true
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      volumes:
+      - name: scripts
+        configMap:
+          name: nomad-scripts
+      - name: dashboard-www
+        configMap:
+          name: nomad-dashboard
+      - name: dashboard
+        hostPath:
+          path: /media/services_pool/nomad/containers/dashboard
+          type: DirectoryOrCreate
+      - name: kiwix-serve
+        hostPath:
+          path: /media/services_pool/nomad/containers/kiwix-serve
+          type: DirectoryOrCreate
+      - name: maps
+        hostPath:
+          path: /media/services_pool/nomad/containers/maps
+          type: DirectoryOrCreate
+      - name: notes
+        hostPath:
+          path: /media/services_pool/nomad/containers/notes
+          type: DirectoryOrCreate
+      - name: meshtastic-web
+        hostPath:
+          path: /media/services_pool/nomad/containers/meshtastic-web
+          type: DirectoryOrCreate
+      - name: files
+        hostPath:
+          path: /media/services_pool/nomad/containers/files
+          type: DirectoryOrCreate
+      - name: docker
+        hostPath:
+          path: /media/services_pool/nomad/containers/docker
+          type: DirectoryOrCreate
+      - name: zims
+        hostPath:
+          path: /media/services_pool/kiwix
+          type: DirectoryOrCreate
+      - name: android
+        hostPath:
+          path: /media/services_pool/kiwix/android
+          type: DirectoryOrCreate
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nomad-image-sync
+  namespace: nomad
+spec:
+  schedule: "0 4 * * 0"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 43200
+      template:
+        metadata:
+          labels:
+            app: nomad-image-sync
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: skopeo
+            image: quay.io/skopeo/stable:v1.22.3
+            command: ["/bin/sh", "/etc/nomad/sync-images.sh"]
+            env:
+            - name: REGISTRY
+              value: nomad.nomad.svc.cluster.local:80
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 2000m
+                memory: 1Gi
+            volumeMounts:
+            - name: scripts
+              mountPath: /etc/nomad
+              readOnly: true
+          volumes:
+          - name: scripts
+            configMap:
+              name: nomad-scripts
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nomad-mirror-debs
+  namespace: nomad
+spec:
+  schedule: "0 2 * * 6"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 43200
+      template:
+        metadata:
+          labels:
+            app: nomad-mirror-debs
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            kubernetes.io/hostname: homelab
+          containers:
+          - name: mirror
+            image: docker.io/library/ubuntu:24.04
+            command: ["/bin/sh", "/etc/nomad/mirror-debs.sh"]
+            env:
+            - name: MIRROR_DEST
+              value: /mirror
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 2000m
+                memory: 2Gi
+            volumeMounts:
+            - name: files
+              mountPath: /mirror
+              subPath: linux/debs
+            - name: scripts
+              mountPath: /etc/nomad
+              readOnly: true
+          volumes:
+          - name: scripts
+            configMap:
+              name: nomad-scripts
+          - name: files
+            hostPath:
+              path: /media/services_pool/nomad/containers/files
+              type: DirectoryOrCreate
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nomad-mirror-apk
+  namespace: nomad
+spec:
+  schedule: "0 4 * * 6"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 43200
+      template:
+        metadata:
+          labels:
+            app: nomad-mirror-apk
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            kubernetes.io/hostname: homelab
+          containers:
+          - name: mirror
+            image: docker.io/library/alpine:3.24.4
+            command: ["/bin/sh", "/etc/nomad/mirror-apk.sh"]
+            env:
+            - name: MIRROR_DEST
+              value: /mirror
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 2000m
+                memory: 1Gi
+            volumeMounts:
+            - name: files
+              mountPath: /mirror
+              subPath: linux/apk
+            - name: scripts
+              mountPath: /etc/nomad
+              readOnly: true
+          volumes:
+          - name: scripts
+            configMap:
+              name: nomad-scripts
+          - name: files
+            hostPath:
+              path: /media/services_pool/nomad/containers/files
+              type: DirectoryOrCreate
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nomad-mirror-pacman
+  namespace: nomad
+spec:
+  schedule: "30 4 * * 6"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 43200
+      template:
+        metadata:
+          labels:
+            app: nomad-mirror-pacman
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            kubernetes.io/hostname: homelab
+          containers:
+          - name: mirror
+            image: docker.io/library/archlinux:base-20261108.0.623074
+            command: ["/bin/sh", "/etc/nomad/mirror-pacman.sh"]
+            env:
+            - name: MIRROR_DEST
+              value: /mirror
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 2000m
+                memory: 2Gi
+            volumeMounts:
+            - name: files
+              mountPath: /mirror
+              subPath: linux/pacman
+            - name: scripts
+              mountPath: /etc/nomad
+              readOnly: true
+          volumes:
+          - name: scripts
+            configMap:
+              name: nomad-scripts
+          - name: files
+            hostPath:
+              path: /media/services_pool/nomad/containers/files
+              type: DirectoryOrCreate

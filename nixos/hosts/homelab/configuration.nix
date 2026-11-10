@@ -48,7 +48,6 @@ in {
     ../../roles/monitoring/syslog-ng/server.nix
     ../../roles/monitoring/syslog-ng/client.nix
     ../../roles/containers/k3s-server.nix
-    ../../roles/containers/project-nomad.nix
     ../../roles/monitoring/osquery.nix
     ../../roles/nixos/cache.nix
     ../../roles/home-automation/homebridge.nix

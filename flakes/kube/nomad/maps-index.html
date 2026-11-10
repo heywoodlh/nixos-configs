@@ -107,9 +107,9 @@ function renderRegions(regions) {
   const rows = regions.map(r => {
     const remove = r.name === 'world' ? '' : '<button class="danger" data-delete="' + r.name + '">Delete</button>';
     const detail = r.maxzoom ? 'zoom ' + r.maxzoom + ' - ' : '';
-    return '<div class="item"><div class="title"><a href="#" data-goto="' + r.name + '">' + r.name + '</a>' + remove + '</div><div class="muted">' + detail + fmtSize(r.size) + '</div></div>';
+    return '<div class="item"><div class="title"><a href="#" data-goto="' + r.name + '">' + r.name + '</a>' + remove + '</div><div class="muted">' + detail + fmtSize(r.size) + ' - <a href="tiles/' + r.name + '.pmtiles" download="' + r.name + '.pmtiles">Download</a></div></div>';
   });
-  $('regions').innerHTML = rows.join('') || 'None';
+  $('regions').innerHTML = (rows.join('') || 'None') + '<div class="muted" style="margin-top:8px">Also browsable in <a href="../files/maps/">Files</a>.</div>';
   $('regions').querySelectorAll('[data-delete]').forEach(b => b.onclick = async () => {
     if (confirm('Delete ' + b.dataset.delete + '?')) { await api('delete', { name: b.dataset.delete }); refresh(); }
   });

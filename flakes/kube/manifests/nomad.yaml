@@ -127,7 +127,7 @@ data:
         summary: text => { const regions = JSON.parse(text); const n = regions.filter(r => r.name !== 'world').length; return regions.some(r => r.name === 'world') ? n + ' areas installed' : 'base map downloading'; } },
       { name: 'Notes', icon: '📝', path: '/notes/', desc: 'SilverBullet notes and wiki.', probe: '/notes/.ping', ok: status => status < 500 },
       { name: 'Meshtastic', icon: '📡', path: '/meshtastic/', desc: 'Meshtastic web client for mesh radios.', probe: '/meshtastic/', ok: status => status < 500 },
-      { name: 'Files', icon: '🗂️', path: '/files/', desc: 'Android APKs, Linux ISOs, AppImages and package mirrors.', probe: '/files/', ok: status => status < 500 },
+      { name: 'Files', icon: '🗂️', path: '/files/', desc: 'Android APKs, Linux ISOs, AppImages, package mirrors and offline maps.', probe: '/files/', ok: status => status < 500 },
       { name: 'Docker', icon: '🐳', path: '/docker/', desc: 'Unauthenticated HTTP container registry.', probe: '/v2/_catalog',
         summary: text => JSON.parse(text).repositories.length + ' repositories' }
     ];
@@ -399,7 +399,9 @@ data:
     :8084 {
     	handle_path /files/* {
     		root * /srv
-    		file_server browse
+    		file_server browse {
+    			hide *.part
+    		}
     	}
     }
   images.txt: |
@@ -601,9 +603,9 @@ data:
       const rows = regions.map(r => {
         const remove = r.name === 'world' ? '' : '<button class="danger" data-delete="' + r.name + '">Delete</button>';
         const detail = r.maxzoom ? 'zoom ' + r.maxzoom + ' - ' : '';
-        return '<div class="item"><div class="title"><a href="#" data-goto="' + r.name + '">' + r.name + '</a>' + remove + '</div><div class="muted">' + detail + fmtSize(r.size) + '</div></div>';
+        return '<div class="item"><div class="title"><a href="#" data-goto="' + r.name + '">' + r.name + '</a>' + remove + '</div><div class="muted">' + detail + fmtSize(r.size) + ' - <a href="tiles/' + r.name + '.pmtiles" download="' + r.name + '.pmtiles">Download</a></div></div>';
       });
-      $('regions').innerHTML = rows.join('') || 'None';
+      $('regions').innerHTML = (rows.join('') || 'None') + '<div class="muted" style="margin-top:8px">Also browsable in <a href="../files/maps/">Files</a>.</div>';
       $('regions').querySelectorAll('[data-delete]').forEach(b => b.onclick = async () => {
         if (confirm('Delete ' + b.dataset.delete + '?')) { await api('delete', { name: b.dataset.delete }); refresh(); }
       });
@@ -1380,7 +1382,7 @@ spec:
       labels:
         app: nomad
       annotations:
-        checksum/config: 0b04c566c317dd2c00d32bb8c54ff7fb6cbd52c0c5aafb97a640e7a3749ac492
+        checksum/config: 4a1736bc28aeaf6b130ae4821cf5de4cfcea08eaa2a3d171098b14ca95b8a3dd
     spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
@@ -1518,6 +1520,10 @@ spec:
           readOnly: true
         - name: android
           mountPath: /srv/android
+          readOnly: true
+        - name: maps
+          mountPath: /srv/maps
+          subPath: regions
           readOnly: true
         - name: scripts
           mountPath: /etc/nomad

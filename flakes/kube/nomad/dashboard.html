@@ -42,7 +42,7 @@ const apps = [
     summary: text => { const regions = JSON.parse(text); const n = regions.filter(r => r.name !== 'world').length; return regions.some(r => r.name === 'world') ? n + ' areas installed' : 'base map downloading'; } },
   { name: 'Notes', icon: '📝', path: '/notes/', desc: 'SilverBullet notes and wiki.', probe: '/notes/.ping', ok: status => status < 500 },
   { name: 'Meshtastic', icon: '📡', path: '/meshtastic/', desc: 'Meshtastic web client for mesh radios.', probe: '/meshtastic/', ok: status => status < 500 },
-  { name: 'Files', icon: '🗂️', path: '/files/', desc: 'Android APKs, Linux ISOs, AppImages and package mirrors.', probe: '/files/', ok: status => status < 500 },
+  { name: 'Files', icon: '🗂️', path: '/files/', desc: 'Android APKs, Linux ISOs, AppImages, package mirrors and offline maps.', probe: '/files/', ok: status => status < 500 },
   { name: 'Docker', icon: '🐳', path: '/docker/', desc: 'Unauthenticated HTTP container registry.', probe: '/v2/_catalog',
     summary: text => JSON.parse(text).repositories.length + ' repositories' }
 ];

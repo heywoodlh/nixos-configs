@@ -193,6 +193,10 @@ spec:
         - name: android
           mountPath: /srv/android
           readOnly: true
+        - name: maps
+          mountPath: /srv/maps
+          subPath: regions
+          readOnly: true
         - name: scripts
           mountPath: /etc/nomad
           readOnly: true

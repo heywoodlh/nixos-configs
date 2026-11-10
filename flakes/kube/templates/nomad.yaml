@@ -73,11 +73,8 @@ spec:
           periodSeconds: 10
         resources:
           requests:
-            cpu: 10m
+            cpu: 5m
             memory: 32Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
         volumeMounts:
         - name: dashboard
           mountPath: /data
@@ -94,11 +91,8 @@ spec:
           runAsUser: 0
         resources:
           requests:
-            cpu: 50m
+            cpu: 25m
             memory: 256Mi
-          limits:
-            cpu: 2000m
-            memory: 2Gi
         volumeMounts:
         - name: kiwix-serve
           mountPath: /data
@@ -125,11 +119,8 @@ spec:
           periodSeconds: 10
         resources:
           requests:
-            cpu: 50m
+            cpu: 25m
             memory: 128Mi
-          limits:
-            cpu: 2000m
-            memory: 1Gi
         volumeMounts:
         - name: maps
           mountPath: /data
@@ -145,11 +136,8 @@ spec:
           value: "8083"
         resources:
           requests:
-            cpu: 100m
+            cpu: 25m
             memory: 256Mi
-          limits:
-            cpu: 2000m
-            memory: 1Gi
         volumeMounts:
         - name: notes
           mountPath: /data
@@ -165,11 +153,8 @@ spec:
           periodSeconds: 10
         resources:
           requests:
-            cpu: 50m
+            cpu: 10m
             memory: 64Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
         volumeMounts:
         - name: meshtastic-web
           mountPath: /data
@@ -181,11 +166,8 @@ spec:
         command: ["caddy", "run", "--config", "/etc/nomad/files.Caddyfile", "--adapter", "caddyfile"]
         resources:
           requests:
-            cpu: 10m
+            cpu: 5m
             memory: 32Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
         volumeMounts:
         - name: files
           mountPath: /srv
@@ -221,11 +203,8 @@ spec:
           periodSeconds: 10
         resources:
           requests:
-            cpu: 25m
+            cpu: 10m
             memory: 64Mi
-          limits:
-            cpu: 1000m
-            memory: 512Mi
         volumeMounts:
         - name: docker
           mountPath: /var/lib/registry
@@ -245,11 +224,8 @@ spec:
           runAsUser: 0
         resources:
           requests:
-            cpu: 50m
+            cpu: 5m
             memory: 64Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
         volumeMounts:
         - name: maps
           mountPath: /data
@@ -266,11 +242,8 @@ spec:
           runAsUser: 0
         resources:
           requests:
-            cpu: 100m
+            cpu: 10m
             memory: 128Mi
-          limits:
-            cpu: 2000m
-            memory: 1Gi
         volumeMounts:
         - name: scripts
           mountPath: /etc/nomad
@@ -287,11 +260,8 @@ spec:
           runAsUser: 0
         resources:
           requests:
-            cpu: 50m
+            cpu: 5m
             memory: 64Mi
-          limits:
-            cpu: 1000m
-            memory: 512Mi
         volumeMounts:
         - name: files
           mountPath: /srv

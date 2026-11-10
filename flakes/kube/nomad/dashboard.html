@@ -39,7 +39,7 @@ const apps = [
   { name: 'Kiwix', icon: '📚', path: '/kiwix/', desc: 'Offline Wikipedia and other ZIM libraries.', probe: '/kiwix/catalog/v2/entries?count=1',
     summary: text => { const m = text.match(/<totalResults>(\d+)</); return m ? m[1] + ' libraries' : 'online'; } },
   { name: 'Maps', icon: '🗺️', path: '/maps/', desc: 'Download OpenStreetMap areas for offline use.', probe: '/maps/api/regions',
-    summary: text => { const n = JSON.parse(text).filter(r => r.name !== 'world').length; return n + ' areas installed'; } },
+    summary: text => { const regions = JSON.parse(text); const n = regions.filter(r => r.name !== 'world').length; return regions.some(r => r.name === 'world') ? n + ' areas installed' : 'base map downloading'; } },
   { name: 'Notes', icon: '📝', path: '/notes/', desc: 'SilverBullet notes and wiki.', probe: '/notes/.ping', ok: status => status < 500 },
   { name: 'Meshtastic', icon: '📡', path: '/meshtastic/', desc: 'Meshtastic web client for mesh radios.', probe: '/meshtastic/', ok: status => status < 500 },
   { name: 'Files', icon: '🗂️', path: '/files/', desc: 'Android APKs, Linux ISOs, AppImages and package mirrors.', probe: '/files/', ok: status => status < 500 },

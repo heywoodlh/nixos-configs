@@ -124,7 +124,7 @@ data:
       { name: 'Kiwix', icon: '📚', path: '/kiwix/', desc: 'Offline Wikipedia and other ZIM libraries.', probe: '/kiwix/catalog/v2/entries?count=1',
         summary: text => { const m = text.match(/<totalResults>(\d+)</); return m ? m[1] + ' libraries' : 'online'; } },
       { name: 'Maps', icon: '🗺️', path: '/maps/', desc: 'Download OpenStreetMap areas for offline use.', probe: '/maps/api/regions',
-        summary: text => { const n = JSON.parse(text).filter(r => r.name !== 'world').length; return n + ' areas installed'; } },
+        summary: text => { const regions = JSON.parse(text); const n = regions.filter(r => r.name !== 'world').length; return regions.some(r => r.name === 'world') ? n + ' areas installed' : 'base map downloading'; } },
       { name: 'Notes', icon: '📝', path: '/notes/', desc: 'SilverBullet notes and wiki.', probe: '/notes/.ping', ok: status => status < 500 },
       { name: 'Meshtastic', icon: '📡', path: '/meshtastic/', desc: 'Meshtastic web client for mesh radios.', probe: '/meshtastic/', ok: status => status < 500 },
       { name: 'Files', icon: '🗂️', path: '/files/', desc: 'Android APKs, Linux ISOs, AppImages and package mirrors.', probe: '/files/', ok: status => status < 500 },
@@ -538,6 +538,7 @@ data:
           <option value="15">15 - maximum detail</option>
         </select>
       </label>
+      <label id="manual" hidden>Area (west, south, east, north) <input id="bboxText" placeholder="-105.1, 39.6, -104.8, 39.9" autocomplete="off"></label>
       <div class="muted" id="bbox"></div>
       <div class="row">
         <button class="secondary" id="estimate">Estimate size</button>
@@ -559,8 +560,9 @@ data:
     const fmtSize = bytes => bytes > 1e9 ? (bytes / 1e9).toFixed(2) + ' GB' : (bytes / 1e6).toFixed(1) + ' MB';
     const api = (path, body) => fetch(base + 'api/' + path, body ? { method: 'POST', body: JSON.stringify(body) } : {}).then(r => r.json());
 
-    maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
-    const flavor = basemaps.namedFlavor('light');
+    const mapReady = typeof maplibregl !== 'undefined' && typeof pmtiles !== 'undefined' && typeof basemaps !== 'undefined';
+    if (mapReady) maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
+    const flavor = mapReady ? basemaps.namedFlavor('light') : null;
 
     function styleFor(regions) {
       const sources = {};
@@ -584,6 +586,7 @@ data:
     let loadedKey = '';
 
     function currentBbox() {
+      if (!map) return $('bboxText').value.split(',').map(Number);
       const b = map.getBounds();
       const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
       return [clamp(b.getWest(), -180, 180), clamp(b.getSouth(), -85, 85), clamp(b.getEast(), -180, 180), clamp(b.getNorth(), -85, 85)];
@@ -607,7 +610,7 @@ data:
       $('regions').querySelectorAll('[data-goto]').forEach(a => a.onclick = e => {
         e.preventDefault();
         const region = regions.find(r => r.name === a.dataset.goto);
-        if (region.bbox) map.fitBounds([[region.bbox[0], region.bbox[1]], [region.bbox[2], region.bbox[3]]], { padding: 40 });
+        if (map && region.bbox) map.fitBounds([[region.bbox[0], region.bbox[1]], [region.bbox[2], region.bbox[3]]], { padding: 40 });
       });
     }
 
@@ -625,7 +628,7 @@ data:
       renderRegions(regions);
       renderJobs(jobs);
       const key = regions.map(r => r.name + ':' + r.size).join('|');
-      if (regions.some(r => r.name === 'world') && key !== loadedKey) {
+      if (mapReady && regions.some(r => r.name === 'world') && key !== loadedKey) {
         loadedKey = key;
         if (!map) {
           map = new maplibregl.Map({ container: 'map', style: styleFor(regions), center: [-98, 39], zoom: 3, maxZoom: 18 });
@@ -636,8 +639,13 @@ data:
         } else {
           map.setStyle(styleFor(regions));
         }
-      } else if (!map) {
-        $('map').innerHTML = '<div style="padding:24px" class="muted">Downloading the world base map. This page refreshes automatically.</div>';
+      }
+      $('manual').hidden = !!map;
+      if (!map) {
+        const failed = jobs.find(j => j.name === 'world' && j.state === 'failed');
+        const reason = !mapReady ? 'The map viewer files are still downloading (reload this page once they finish)' : 'The world base map is not installed yet' + (failed ? ' (last attempt failed: ' + failed.error + ')' : ' and is downloading');
+        $('map').innerHTML = '<div style="padding:24px" class="muted">' + reason + '. This page refreshes automatically. You can still download an area by entering its coordinates in the panel.<br><br><button id="retry">Retry base map download</button></div>';
+        $('retry').onclick = async () => { await api('world', {}); refresh(); };
       }
       return jobs.some(j => j.state === 'queued' || j.state === 'running');
     }
@@ -762,6 +770,7 @@ data:
     jobs_lock = threading.Lock()
     extract_lock = threading.Lock()
     build_cache = {"url": None, "at": 0.0}
+    world_wake = threading.Event()
 
 
     def latest_build():
@@ -798,6 +807,8 @@ data:
             dest = REGIONS / f"{job['name']}.pmtiles"
             part = REGIONS / f"{job['name']}.pmtiles.part"
             try:
+                if not os.access(PMTILES, os.X_OK):
+                    raise RuntimeError("pmtiles is not installed yet; maps-init is still downloading it")
                 source = latest_build()
                 result = subprocess.run(
                     extract_command(source, part, job["bbox"], job["maxzoom"]),
@@ -841,12 +852,15 @@ data:
         while True:
             if (REGIONS / f"{WORLD}.pmtiles").exists():
                 return
+            while not os.access(PMTILES, os.X_OK):
+                time.sleep(5)
             job = start_job(WORLD, None, WORLD_MAXZOOM)
             while job["state"] in ("queued", "running"):
                 time.sleep(5)
             if job["state"] == "done":
                 return
-            time.sleep(600)
+            world_wake.wait(60)
+            world_wake.clear()
 
 
     def list_regions():
@@ -984,6 +998,9 @@ data:
                     (DATA / "estimate.pmtiles").unlink(missing_ok=True)
                     lines = (result.stderr or result.stdout).strip().splitlines()
                     self.send_json({"ok": result.returncode == 0, "message": lines[-1] if lines else ""})
+                elif path == "/api/world":
+                    world_wake.set()
+                    self.send_json({"ok": True}, 202)
                 elif path == "/api/delete":
                     name = str(payload.get("name", ""))
                     if not NAME_RE.match(name) or name == WORLD:
@@ -1363,7 +1380,7 @@ spec:
       labels:
         app: nomad
       annotations:
-        checksum/config: 6e27e93263a4ec867d05b8be2930ca98342015083e41f4599421b0357ea39d45
+        checksum/config: 0b04c566c317dd2c00d32bb8c54ff7fb6cbd52c0c5aafb97a640e7a3749ac492
     spec:
       nodeSelector:
         kubernetes.io/hostname: homelab

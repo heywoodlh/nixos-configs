@@ -154,11 +154,22 @@ in {
         ExecStart = "${syncZims}/bin/nomad-sync-zims";
       };
     };
-  } // lib.genAttrs (map (name: "docker-${name}") containerNames) (_: {
+  } // lib.genAttrs (map (name: "docker-${name}") containerNames) (name: {
     environment = systemDocker;
     after = [ "nomad-init-env.service" "docker-network-project-nomad.service" "zfs-mount.service" ];
     requires = [ "nomad-init-env.service" "docker-network-project-nomad.service" ];
     unitConfig.RequiresMountsFor = [ "${storage}/zim" ];
+  } // lib.optionalAttrs (name == "docker-nomad-admin") {
+    preStart = ''
+      for _ in $(seq 1 450); do
+        if docker exec nomad-mysql mysqladmin ping -h 127.0.0.1 --protocol=tcp --silent; then
+          exit 0
+        fi
+        sleep 2
+      done
+      echo "nomad-mysql did not become ready" >&2
+      exit 1
+    '';
   });
 
   systemd.timers.nomad-sync-zims = {

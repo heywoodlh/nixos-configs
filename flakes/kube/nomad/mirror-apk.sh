@@ -6,7 +6,7 @@ dest="${MIRROR_DEST:-/mirror}"
 arch="$(apk --print-arch)"
 repo="${dest}/${arch}"
 keys="${dest}/keys"
-packages="${APK_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python3 py3-pip python3-dev go gcc g++ build-base musl-dev gdb make vim helix msedit}"
+packages="${APK_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python3 py3-pip python3-dev go gcc g++ build-base musl-dev gdb make vim helix msedit socat}"
 failed=0
 
 apk add --no-cache abuild openssl > /dev/null || exit 1

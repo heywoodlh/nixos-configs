@@ -26,6 +26,7 @@ metadata:
     tailscale.com/tags: "tag:http"
 spec:
   type: ClusterIP
+  publishNotReadyAddresses: true
   selector:
     app: nomad
   ports:
@@ -57,128 +58,6 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: @nodename@
-      initContainers:
-      - name: maps-init
-        image: @curl_image@
-        command: ["/bin/sh", "/etc/nomad/maps-init.sh"]
-        env:
-        - name: PMTILES_VERSION
-          value: "@pmtiles_version@"
-        - name: PMTILES_JS_VERSION
-          value: "@pmtiles_js_version@"
-        - name: MAPLIBRE_VERSION
-          value: "@maplibre_version@"
-        - name: BASEMAPS_VERSION
-          value: "@basemaps_version@"
-        securityContext:
-          runAsUser: 0
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
-        volumeMounts:
-        - name: maps
-          mountPath: /data
-        - name: scripts
-          mountPath: /etc/nomad
-          readOnly: true
-      - name: meshtastic-web-init
-        image: @meshtastic_web_image@
-        command: ["/bin/sh", "/etc/nomad/meshtastic-web-init.sh"]
-        securityContext:
-          runAsUser: 0
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
-        volumeMounts:
-        - name: meshtastic-web
-          mountPath: /data
-        - name: scripts
-          mountPath: /etc/nomad
-          readOnly: true
-      - name: docker
-        image: @registry_image@
-        restartPolicy: Always
-        ports:
-        - name: registry
-          containerPort: 5000
-        env:
-        - name: REGISTRY_HTTP_ADDR
-          value: 0.0.0.0:5000
-        - name: REGISTRY_HTTP_RELATIVEURLS
-          value: "true"
-        - name: REGISTRY_STORAGE_DELETE_ENABLED
-          value: "true"
-        startupProbe:
-          httpGet:
-            path: /v2/
-            port: registry
-          periodSeconds: 2
-          failureThreshold: 60
-        readinessProbe:
-          httpGet:
-            path: /v2/
-            port: registry
-          periodSeconds: 10
-        resources:
-          requests:
-            cpu: 25m
-            memory: 64Mi
-          limits:
-            cpu: 1000m
-            memory: 512Mi
-        volumeMounts:
-        - name: docker
-          mountPath: /var/lib/registry
-      - name: docker-seed
-        image: @skopeo_image@
-        command: ["/bin/sh", "-c", "/bin/sh /etc/nomad/sync-images.sh || true"]
-        env:
-        - name: REGISTRY
-          value: 127.0.0.1:5000
-        securityContext:
-          runAsUser: 0
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 2000m
-            memory: 1Gi
-        volumeMounts:
-        - name: scripts
-          mountPath: /etc/nomad
-          readOnly: true
-      - name: files-init
-        image: @curl_image@
-        command: ["/bin/sh", "/etc/nomad/files-init.sh"]
-        env:
-        - name: FILES_ROOT
-          value: /srv
-        - name: NIXOS_CHANNEL
-          value: "@nixos_channel@"
-        securityContext:
-          runAsUser: 0
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 1000m
-            memory: 512Mi
-        volumeMounts:
-        - name: files
-          mountPath: /srv
-        - name: scripts
-          mountPath: /etc/nomad
-          readOnly: true
       containers:
       - name: dashboard
         image: @caddy_image@
@@ -276,17 +155,26 @@ spec:
           mountPath: /data
       - name: meshtastic-web
         image: @meshtastic_web_image@
+        command: ["/bin/sh", "/etc/nomad/meshtastic-web.sh"]
+        securityContext:
+          runAsUser: 0
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          periodSeconds: 10
         resources:
           requests:
-            cpu: 10m
-            memory: 32Mi
+            cpu: 50m
+            memory: 64Mi
           limits:
-            cpu: 250m
-            memory: 128Mi
+            cpu: 500m
+            memory: 256Mi
         volumeMounts:
         - name: meshtastic-web
-          mountPath: /usr/share/nginx/html
-          subPath: html
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
           readOnly: true
       - name: files
         image: @caddy_image@
@@ -305,6 +193,108 @@ spec:
         - name: android
           mountPath: /srv/android
           readOnly: true
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: docker
+        image: @registry_image@
+        ports:
+        - name: registry
+          containerPort: 5000
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: 0.0.0.0:5000
+        - name: REGISTRY_HTTP_RELATIVEURLS
+          value: "true"
+        - name: REGISTRY_STORAGE_DELETE_ENABLED
+          value: "true"
+        startupProbe:
+          httpGet:
+            path: /v2/
+            port: registry
+          periodSeconds: 2
+          failureThreshold: 60
+        readinessProbe:
+          httpGet:
+            path: /v2/
+            port: registry
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - name: docker
+          mountPath: /var/lib/registry
+      - name: maps-init
+        image: @curl_image@
+        command: ["/bin/sh", "-c", "while :; do /bin/sh /etc/nomad/maps-init.sh; sleep 3600; done"]
+        env:
+        - name: PMTILES_VERSION
+          value: "@pmtiles_version@"
+        - name: PMTILES_JS_VERSION
+          value: "@pmtiles_js_version@"
+        - name: MAPLIBRE_VERSION
+          value: "@maplibre_version@"
+        - name: BASEMAPS_VERSION
+          value: "@basemaps_version@"
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: maps
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: docker-seed
+        image: @skopeo_image@
+        command: ["/bin/sh", "-c", "until /bin/sh /etc/nomad/sync-images.sh; do sleep 300; done; exec sleep infinity"]
+        env:
+        - name: REGISTRY
+          value: 127.0.0.1:5000
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        volumeMounts:
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: files-init
+        image: @curl_image@
+        command: ["/bin/sh", "-c", "while :; do /bin/sh /etc/nomad/files-init.sh; sleep 21600; done"]
+        env:
+        - name: FILES_ROOT
+          value: /srv
+        - name: NIXOS_CHANNEL
+          value: "@nixos_channel@"
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - name: files
+          mountPath: /srv
         - name: scripts
           mountPath: /etc/nomad
           readOnly: true

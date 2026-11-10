@@ -5,7 +5,7 @@ umask 022
 dest="${MIRROR_DEST:-/mirror}"
 repo="${dest}/x86_64"
 db=/tmp/pacman-db
-packages="${PACMAN_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python python-pip go gcc gdb make vim helix msedit}"
+packages="${PACMAN_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python python-pip go gcc gdb make vim helix msedit socat}"
 failed=0
 
 mkdir -p "${repo}" "${db}/local"

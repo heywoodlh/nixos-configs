@@ -804,7 +804,7 @@
             "maps-index.html" = nomadFile "maps-index.html";
             "maps-init.sh" = nomadFile "maps-init.sh";
             "maps-server.py" = nomadFile "maps-server.py";
-            "meshtastic-web-init.sh" = nomadFile "meshtastic-web-init.sh";
+            "meshtastic-web.sh" = nomadFile "meshtastic-web.sh";
             "mirror-apk.sh" = nomadFile "mirror-apk.sh";
             "mirror-debs.sh" = nomadFile "mirror-debs.sh";
             "mirror-pacman.sh" = nomadFile "mirror-pacman.sh";

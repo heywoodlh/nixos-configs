@@ -47,6 +47,9 @@ data:
         <pre><code id="rootless"></code></pre>
         <p class="muted">Add the entry to <code>~/.config/docker/daemon.json</code>, merging with any existing keys, then restart Docker with <code>systemctl --user restart docker</code>. On NixOS the rootless service starts <code>dockerd-rootless</code> with a generated <code>--config-file</code>, so that file is ignored: set <code>virtualisation.docker.rootless.daemon.settings.insecure-registries</code> and rebuild instead.</p>
         <p class="muted">Confirm the daemon picked it up with <code>docker info | grep -A3 "Insecure Registries"</code>. Docker tries HTTPS first and falls back to HTTP only for hosts listed there.</p>
+        <h3>No Docker configuration</h3>
+        <pre><code id="loopback"></code></pre>
+        <p class="muted">Docker always trusts plain HTTP on <code>127.0.0.0/8</code>, so forward a local port to the registry instead of editing any daemon config. The image keeps the <code>localhost:5000</code> name unless you <code>docker tag</code> it.</p>
       </details>
       <h2>Repositories</h2>
       <ul id="repos"><li class="muted">Loading</li></ul>
@@ -57,6 +60,9 @@ data:
     const daemonConfig = JSON.stringify({ 'insecure-registries': [host] }, null, 2);
     document.getElementById('daemon').textContent = daemonConfig;
     document.getElementById('rootless').textContent = daemonConfig;
+    const scheme = location.protocol === 'https:' ? 'OPENSSL' : 'TCP';
+    const port = location.port || (location.protocol === 'https:' ? '443' : '80');
+    document.getElementById('loopback').textContent = 'socat TCP-LISTEN:5000,bind=127.0.0.1,fork,reuseaddr ' + scheme + ':' + location.hostname + ':' + port + ' &\ndocker pull localhost:5000/docker/images/ubuntu:24.04';
 
     fetch('/v2/_catalog?n=1000', { cache: 'no-store' }).then(r => r.json()).then(async catalog => {
       const list = document.getElementById('repos');
@@ -101,6 +107,7 @@ data:
       .dot { width: 9px; height: 9px; border-radius: 50%; background: #6e7681; }
       .dot.up { background: #3fb950; }
       .dot.down { background: #f85149; }
+      .dot.wait { background: #d29922; }
       footer { margin-top: 32px; color: var(--muted); font-size: 13px; }
       code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; }
     </style>
@@ -136,18 +143,30 @@ data:
         '<div class="desc">' + app.desc + '</div><div class="meta"><span class="dot"></span><span class="state">checking</span></div>';
       grid.appendChild(card);
 
-      fetch(app.probe, { cache: 'no-store' }).then(async response => {
-        const up = app.ok ? app.ok(response.status) : response.ok;
-        let label = up ? 'online' : 'unavailable';
-        if (up && app.summary) {
-          try { label = app.summary(await response.text()); } catch (e) { label = 'online'; }
-        }
-        card.querySelector('.dot').classList.add(up ? 'up' : 'down');
+      const setState = (kind, label) => {
+        const dot = card.querySelector('.dot');
+        dot.classList.remove('up', 'down', 'wait');
+        dot.classList.add(kind);
         card.querySelector('.state').textContent = label;
-      }).catch(() => {
-        card.querySelector('.dot').classList.add('down');
-        card.querySelector('.state').textContent = 'unreachable';
-      });
+      };
+
+      const check = () => fetch(app.probe, { cache: 'no-store' }).then(async response => {
+        const up = app.ok ? app.ok(response.status) : response.ok;
+        if (up) {
+          let label = 'online';
+          if (app.summary) {
+            try { label = app.summary(await response.text()); } catch (e) { label = 'online'; }
+          }
+          setState('up', label);
+        } else if ([502, 503, 504].includes(response.status)) {
+          setState('wait', 'starting');
+        } else {
+          setState('down', 'unavailable');
+        }
+      }).catch(() => setState('down', 'unreachable'));
+
+      check();
+      setInterval(check, 10000);
     });
     </script>
     </body>
@@ -988,7 +1007,7 @@ data:
 
     if __name__ == "__main__":
         main()
-  meshtastic-web-init.sh: |
+  meshtastic-web.sh: |
     #!/bin/sh
     set -eu
 
@@ -1013,6 +1032,9 @@ data:
 
     rm -rf "${out}"
     mv "${out}.new" "${out}"
+
+    sed -i "s#root /usr/share/nginx/html;#root ${out};#" /etc/nginx/conf.d/default.conf
+    exec /docker-entrypoint.sh nginx -g 'daemon off;'
   mirror-apk.sh: |
     #!/bin/sh
     set -u
@@ -1022,7 +1044,7 @@ data:
     arch="$(apk --print-arch)"
     repo="${dest}/${arch}"
     keys="${dest}/keys"
-    packages="${APK_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python3 py3-pip python3-dev go gcc g++ build-base musl-dev gdb make vim helix msedit}"
+    packages="${APK_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python3 py3-pip python3-dev go gcc g++ build-base musl-dev gdb make vim helix msedit socat}"
     failed=0
 
     apk add --no-cache abuild openssl > /dev/null || exit 1
@@ -1090,7 +1112,7 @@ data:
     pool="${dest}/pool"
     extra="${dest}/extra"
     work="${dest}/.work"
-    packages="${DEB_PACKAGES:-firefox gnome-terminal meshtasticd kiwix python3 python3-pip python3-venv python3-dev golang-go gcc g++ build-essential gdb make vim}"
+    packages="${DEB_PACKAGES:-firefox gnome-terminal meshtasticd kiwix python3 python3-pip python3-venv python3-dev golang-go gcc g++ build-essential gdb make vim socat}"
     failed=0
 
     export DEBIAN_FRONTEND=noninteractive
@@ -1225,7 +1247,7 @@ data:
     dest="${MIRROR_DEST:-/mirror}"
     repo="${dest}/x86_64"
     db=/tmp/pacman-db
-    packages="${PACMAN_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python python-pip go gcc gdb make vim helix msedit}"
+    packages="${PACMAN_PACKAGES:-firefox gnome-terminal ghostty meshtasticd kiwix-desktop python python-pip go gcc gdb make vim helix msedit socat}"
     failed=0
 
     mkdir -p "${repo}" "${db}/local"
@@ -1313,6 +1335,7 @@ metadata:
     tailscale.com/tags: "tag:http"
 spec:
   type: ClusterIP
+  publishNotReadyAddresses: true
   selector:
     app: nomad
   ports:
@@ -1340,132 +1363,10 @@ spec:
       labels:
         app: nomad
       annotations:
-        checksum/config: 3c7094695241d26d8e45c5d1b98ecce606e9a388c12b4bb0fa0a8b7830ceb2fd
+        checksum/config: 6e27e93263a4ec867d05b8be2930ca98342015083e41f4599421b0357ea39d45
     spec:
       nodeSelector:
         kubernetes.io/hostname: homelab
-      initContainers:
-      - name: maps-init
-        image: docker.io/curlimages/curl:8.23.0
-        command: ["/bin/sh", "/etc/nomad/maps-init.sh"]
-        env:
-        - name: PMTILES_VERSION
-          value: "1.31.2"
-        - name: PMTILES_JS_VERSION
-          value: "4.5.0"
-        - name: MAPLIBRE_VERSION
-          value: "5.24.0"
-        - name: BASEMAPS_VERSION
-          value: "5.7.2"
-        securityContext:
-          runAsUser: 0
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
-        volumeMounts:
-        - name: maps
-          mountPath: /data
-        - name: scripts
-          mountPath: /etc/nomad
-          readOnly: true
-      - name: meshtastic-web-init
-        image: ghcr.io/meshtastic/web:2.7.2
-        command: ["/bin/sh", "/etc/nomad/meshtastic-web-init.sh"]
-        securityContext:
-          runAsUser: 0
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 500m
-            memory: 256Mi
-        volumeMounts:
-        - name: meshtastic-web
-          mountPath: /data
-        - name: scripts
-          mountPath: /etc/nomad
-          readOnly: true
-      - name: docker
-        image: docker.io/library/registry:2.8.3
-        restartPolicy: Always
-        ports:
-        - name: registry
-          containerPort: 5000
-        env:
-        - name: REGISTRY_HTTP_ADDR
-          value: 0.0.0.0:5000
-        - name: REGISTRY_HTTP_RELATIVEURLS
-          value: "true"
-        - name: REGISTRY_STORAGE_DELETE_ENABLED
-          value: "true"
-        startupProbe:
-          httpGet:
-            path: /v2/
-            port: registry
-          periodSeconds: 2
-          failureThreshold: 60
-        readinessProbe:
-          httpGet:
-            path: /v2/
-            port: registry
-          periodSeconds: 10
-        resources:
-          requests:
-            cpu: 25m
-            memory: 64Mi
-          limits:
-            cpu: 1000m
-            memory: 512Mi
-        volumeMounts:
-        - name: docker
-          mountPath: /var/lib/registry
-      - name: docker-seed
-        image: quay.io/skopeo/stable:v1.22.3
-        command: ["/bin/sh", "-c", "/bin/sh /etc/nomad/sync-images.sh || true"]
-        env:
-        - name: REGISTRY
-          value: 127.0.0.1:5000
-        securityContext:
-          runAsUser: 0
-        resources:
-          requests:
-            cpu: 100m
-            memory: 128Mi
-          limits:
-            cpu: 2000m
-            memory: 1Gi
-        volumeMounts:
-        - name: scripts
-          mountPath: /etc/nomad
-          readOnly: true
-      - name: files-init
-        image: docker.io/curlimages/curl:8.23.0
-        command: ["/bin/sh", "/etc/nomad/files-init.sh"]
-        env:
-        - name: FILES_ROOT
-          value: /srv
-        - name: NIXOS_CHANNEL
-          value: "nixos-26.05"
-        securityContext:
-          runAsUser: 0
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 1000m
-            memory: 512Mi
-        volumeMounts:
-        - name: files
-          mountPath: /srv
-        - name: scripts
-          mountPath: /etc/nomad
-          readOnly: true
       containers:
       - name: dashboard
         image: docker.io/library/caddy:2.11.9-alpine
@@ -1563,17 +1464,26 @@ spec:
           mountPath: /data
       - name: meshtastic-web
         image: ghcr.io/meshtastic/web:2.7.2
+        command: ["/bin/sh", "/etc/nomad/meshtastic-web.sh"]
+        securityContext:
+          runAsUser: 0
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          periodSeconds: 10
         resources:
           requests:
-            cpu: 10m
-            memory: 32Mi
+            cpu: 50m
+            memory: 64Mi
           limits:
-            cpu: 250m
-            memory: 128Mi
+            cpu: 500m
+            memory: 256Mi
         volumeMounts:
         - name: meshtastic-web
-          mountPath: /usr/share/nginx/html
-          subPath: html
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
           readOnly: true
       - name: files
         image: docker.io/library/caddy:2.11.9-alpine
@@ -1592,6 +1502,108 @@ spec:
         - name: android
           mountPath: /srv/android
           readOnly: true
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: docker
+        image: docker.io/library/registry:2.8.3
+        ports:
+        - name: registry
+          containerPort: 5000
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: 0.0.0.0:5000
+        - name: REGISTRY_HTTP_RELATIVEURLS
+          value: "true"
+        - name: REGISTRY_STORAGE_DELETE_ENABLED
+          value: "true"
+        startupProbe:
+          httpGet:
+            path: /v2/
+            port: registry
+          periodSeconds: 2
+          failureThreshold: 60
+        readinessProbe:
+          httpGet:
+            path: /v2/
+            port: registry
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - name: docker
+          mountPath: /var/lib/registry
+      - name: maps-init
+        image: docker.io/curlimages/curl:8.23.0
+        command: ["/bin/sh", "-c", "while :; do /bin/sh /etc/nomad/maps-init.sh; sleep 3600; done"]
+        env:
+        - name: PMTILES_VERSION
+          value: "1.31.2"
+        - name: PMTILES_JS_VERSION
+          value: "4.5.0"
+        - name: MAPLIBRE_VERSION
+          value: "5.24.0"
+        - name: BASEMAPS_VERSION
+          value: "5.7.2"
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        volumeMounts:
+        - name: maps
+          mountPath: /data
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: docker-seed
+        image: quay.io/skopeo/stable:v1.22.3
+        command: ["/bin/sh", "-c", "until /bin/sh /etc/nomad/sync-images.sh; do sleep 300; done; exec sleep infinity"]
+        env:
+        - name: REGISTRY
+          value: 127.0.0.1:5000
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+        volumeMounts:
+        - name: scripts
+          mountPath: /etc/nomad
+          readOnly: true
+      - name: files-init
+        image: docker.io/curlimages/curl:8.23.0
+        command: ["/bin/sh", "-c", "while :; do /bin/sh /etc/nomad/files-init.sh; sleep 21600; done"]
+        env:
+        - name: FILES_ROOT
+          value: /srv
+        - name: NIXOS_CHANNEL
+          value: "nixos-26.05"
+        securityContext:
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        volumeMounts:
+        - name: files
+          mountPath: /srv
         - name: scripts
           mountPath: /etc/nomad
           readOnly: true

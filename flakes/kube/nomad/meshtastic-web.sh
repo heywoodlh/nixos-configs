@@ -22,3 +22,6 @@ grep -q "basepath:\"${prefix}\"" index-*.js || { echo "router basepath patch did
 
 rm -rf "${out}"
 mv "${out}.new" "${out}"
+
+sed -i "s#root /usr/share/nginx/html;#root ${out};#" /etc/nginx/conf.d/default.conf
+exec /docker-entrypoint.sh nginx -g 'daemon off;'

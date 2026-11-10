@@ -22,6 +22,7 @@
   .dot { width: 9px; height: 9px; border-radius: 50%; background: #6e7681; }
   .dot.up { background: #3fb950; }
   .dot.down { background: #f85149; }
+  .dot.wait { background: #d29922; }
   footer { margin-top: 32px; color: var(--muted); font-size: 13px; }
   code { background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; }
 </style>
@@ -57,18 +58,30 @@ apps.forEach(app => {
     '<div class="desc">' + app.desc + '</div><div class="meta"><span class="dot"></span><span class="state">checking</span></div>';
   grid.appendChild(card);
 
-  fetch(app.probe, { cache: 'no-store' }).then(async response => {
-    const up = app.ok ? app.ok(response.status) : response.ok;
-    let label = up ? 'online' : 'unavailable';
-    if (up && app.summary) {
-      try { label = app.summary(await response.text()); } catch (e) { label = 'online'; }
-    }
-    card.querySelector('.dot').classList.add(up ? 'up' : 'down');
+  const setState = (kind, label) => {
+    const dot = card.querySelector('.dot');
+    dot.classList.remove('up', 'down', 'wait');
+    dot.classList.add(kind);
     card.querySelector('.state').textContent = label;
-  }).catch(() => {
-    card.querySelector('.dot').classList.add('down');
-    card.querySelector('.state').textContent = 'unreachable';
-  });
+  };
+
+  const check = () => fetch(app.probe, { cache: 'no-store' }).then(async response => {
+    const up = app.ok ? app.ok(response.status) : response.ok;
+    if (up) {
+      let label = 'online';
+      if (app.summary) {
+        try { label = app.summary(await response.text()); } catch (e) { label = 'online'; }
+      }
+      setState('up', label);
+    } else if ([502, 503, 504].includes(response.status)) {
+      setState('wait', 'starting');
+    } else {
+      setState('down', 'unavailable');
+    }
+  }).catch(() => setState('down', 'unreachable'));
+
+  check();
+  setInterval(check, 10000);
 });
 </script>
 </body>

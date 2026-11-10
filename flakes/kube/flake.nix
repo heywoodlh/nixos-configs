@@ -551,6 +551,9 @@
           kiwix_schedule = "0 3 * * 0";
           zim_urls = indentLines 4 (builtins.readFile ./kiwix/zims.txt);
           zim_download_script = indentLines 4 (builtins.readFile ./kiwix/download.sh);
+          apk_schedule = "30 2 * * 0";
+          apk_sources = indentLines 4 (builtins.readFile ./kiwix/apks.txt);
+          apk_download_script = indentLines 4 (builtins.readFile ./kiwix/download-apks.sh);
         };
         immich = mkKubeDrv "immich" rec {
           src = ./templates/immich.yaml;

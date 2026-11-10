@@ -142,3 +142,85 @@ spec:
             hostPath:
               path: @kiwixfolder@
               type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiwix-apk-sources
+  namespace: @namespace@
+data:
+  apks.txt: |
+@apk_sources@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kiwix-apk-downloader
+  namespace: @namespace@
+data:
+  download-apks.sh: |
+@apk_download_script@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kiwix-apk-downloader
+  namespace: @namespace@
+spec:
+  schedule: "@apk_schedule@"
+  timeZone: "America/Denver"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 7200
+      template:
+        metadata:
+          labels:
+            app: kiwix-apk-downloader
+        spec:
+          restartPolicy: OnFailure
+          nodeSelector:
+            kubernetes.io/hostname: @nodename@
+          containers:
+          - name: downloader
+            image: @curl_image@
+            imagePullPolicy: IfNotPresent
+            command: ["/bin/sh", "/scripts/download-apks.sh"]
+            env:
+            - name: APK_SOURCES_FILE
+              value: /config/apks.txt
+            - name: APK_DEST
+              value: /kiwix/android
+            securityContext:
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
+            volumeMounts:
+            - name: sources
+              mountPath: /config
+              readOnly: true
+            - name: script
+              mountPath: /scripts
+              readOnly: true
+            - name: kiwix
+              mountPath: /kiwix
+          volumes:
+          - name: sources
+            configMap:
+              name: kiwix-apk-sources
+          - name: script
+            configMap:
+              name: kiwix-apk-downloader
+          - name: kiwix
+            hostPath:
+              path: @kiwixfolder@
+              type: DirectoryOrCreate

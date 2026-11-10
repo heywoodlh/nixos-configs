@@ -25,6 +25,7 @@ data:
       pre code { border: 0; padding: 0; }
       ul { list-style: none; padding: 0; }
       li { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; }
+      h3 { margin: 16px 0 8px; font-size: 15px; }
       summary { cursor: pointer; margin-bottom: 8px; }
       .tags { color: var(--muted); font-size: 13px; }
     </style>
@@ -39,8 +40,12 @@ data:
       <p class="muted">Docker only trusts plain HTTP for hosts listed under <code>insecure-registries</code> in <code>/etc/docker/daemon.json</code>.</p>
       <details>
         <summary>Configure plaintext HTTP</summary>
+        <h3>Rootful Docker</h3>
         <pre><code id="daemon"></code></pre>
         <p class="muted">Add the entry to <code>/etc/docker/daemon.json</code>, merging with any existing keys, then restart Docker with <code>sudo systemctl restart docker</code>. On NixOS, set <code>virtualisation.docker.daemon.settings.insecure-registries</code> instead.</p>
+        <h3>Rootless Docker</h3>
+        <pre><code id="rootless"></code></pre>
+        <p class="muted">Add the entry to <code>~/.config/docker/daemon.json</code>, merging with any existing keys, then restart Docker with <code>systemctl --user restart docker</code>. On NixOS, set <code>virtualisation.docker.rootless.daemon.settings.insecure-registries</code> instead.</p>
       </details>
       <h2>Repositories</h2>
       <ul id="repos"><li class="muted">Loading</li></ul>
@@ -48,7 +53,9 @@ data:
     <script>
     const host = location.host;
     document.getElementById('example').textContent = 'docker pull ' + host + '/docker/images/ubuntu:24.04\ndocker pull ' + host + '/docker/images/alpine:latest';
-    document.getElementById('daemon').textContent = JSON.stringify({ 'insecure-registries': [host] }, null, 2);
+    const daemonConfig = JSON.stringify({ 'insecure-registries': [host] }, null, 2);
+    document.getElementById('daemon').textContent = daemonConfig;
+    document.getElementById('rootless').textContent = daemonConfig;
 
     fetch('/v2/_catalog?n=1000', { cache: 'no-store' }).then(r => r.json()).then(async catalog => {
       const list = document.getElementById('repos');

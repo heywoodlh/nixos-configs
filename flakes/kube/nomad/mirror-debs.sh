@@ -7,7 +7,7 @@ dest="${MIRROR_DEST:-/mirror}"
 pool="${dest}/pool"
 extra="${dest}/extra"
 work="${dest}/.work"
-packages="${DEB_PACKAGES:-firefox gnome-terminal meshtasticd kiwix python3 python3-pip python3-venv python3-dev golang-go gcc g++ build-essential gdb make vim}"
+packages="${DEB_PACKAGES:-firefox gnome-terminal meshtasticd kiwix python3 python3-pip python3-venv python3-dev golang-go gcc g++ build-essential gdb make vim socat}"
 failed=0
 
 export DEBIAN_FRONTEND=noninteractive

@@ -38,6 +38,7 @@ jobs = {}
 jobs_lock = threading.Lock()
 extract_lock = threading.Lock()
 build_cache = {"url": None, "at": 0.0}
+world_wake = threading.Event()
 
 
 def latest_build():
@@ -74,6 +75,8 @@ def run_extract(job):
         dest = REGIONS / f"{job['name']}.pmtiles"
         part = REGIONS / f"{job['name']}.pmtiles.part"
         try:
+            if not os.access(PMTILES, os.X_OK):
+                raise RuntimeError("pmtiles is not installed yet; maps-init is still downloading it")
             source = latest_build()
             result = subprocess.run(
                 extract_command(source, part, job["bbox"], job["maxzoom"]),
@@ -117,12 +120,15 @@ def ensure_world():
     while True:
         if (REGIONS / f"{WORLD}.pmtiles").exists():
             return
+        while not os.access(PMTILES, os.X_OK):
+            time.sleep(5)
         job = start_job(WORLD, None, WORLD_MAXZOOM)
         while job["state"] in ("queued", "running"):
             time.sleep(5)
         if job["state"] == "done":
             return
-        time.sleep(600)
+        world_wake.wait(60)
+        world_wake.clear()
 
 
 def list_regions():
@@ -260,6 +266,9 @@ class Handler(BaseHTTPRequestHandler):
                 (DATA / "estimate.pmtiles").unlink(missing_ok=True)
                 lines = (result.stderr or result.stdout).strip().splitlines()
                 self.send_json({"ok": result.returncode == 0, "message": lines[-1] if lines else ""})
+            elif path == "/api/world":
+                world_wake.set()
+                self.send_json({"ok": True}, 202)
             elif path == "/api/delete":
                 name = str(payload.get("name", ""))
                 if not NAME_RE.match(name) or name == WORLD:

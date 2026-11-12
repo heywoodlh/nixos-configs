@@ -6,6 +6,8 @@
 :8084 {
 	handle_path /files/* {
 		root * /srv
-		file_server browse
+		file_server browse {
+			hide *.part
+		}
 	}
 }

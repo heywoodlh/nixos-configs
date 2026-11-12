@@ -44,6 +44,7 @@
       <option value="15">15 - maximum detail</option>
     </select>
   </label>
+  <label id="manual" hidden>Area (west, south, east, north) <input id="bboxText" placeholder="-105.1, 39.6, -104.8, 39.9" autocomplete="off"></label>
   <div class="muted" id="bbox"></div>
   <div class="row">
     <button class="secondary" id="estimate">Estimate size</button>
@@ -65,8 +66,9 @@ const $ = id => document.getElementById(id);
 const fmtSize = bytes => bytes > 1e9 ? (bytes / 1e9).toFixed(2) + ' GB' : (bytes / 1e6).toFixed(1) + ' MB';
 const api = (path, body) => fetch(base + 'api/' + path, body ? { method: 'POST', body: JSON.stringify(body) } : {}).then(r => r.json());
 
-maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
-const flavor = basemaps.namedFlavor('light');
+const mapReady = typeof maplibregl !== 'undefined' && typeof pmtiles !== 'undefined' && typeof basemaps !== 'undefined';
+if (mapReady) maplibregl.addProtocol('pmtiles', new pmtiles.Protocol().tile);
+const flavor = mapReady ? basemaps.namedFlavor('light') : null;
 
 function styleFor(regions) {
   const sources = {};
@@ -90,6 +92,7 @@ let map = null;
 let loadedKey = '';
 
 function currentBbox() {
+  if (!map) return $('bboxText').value.split(',').map(Number);
   const b = map.getBounds();
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   return [clamp(b.getWest(), -180, 180), clamp(b.getSouth(), -85, 85), clamp(b.getEast(), -180, 180), clamp(b.getNorth(), -85, 85)];
@@ -104,16 +107,16 @@ function renderRegions(regions) {
   const rows = regions.map(r => {
     const remove = r.name === 'world' ? '' : '<button class="danger" data-delete="' + r.name + '">Delete</button>';
     const detail = r.maxzoom ? 'zoom ' + r.maxzoom + ' - ' : '';
-    return '<div class="item"><div class="title"><a href="#" data-goto="' + r.name + '">' + r.name + '</a>' + remove + '</div><div class="muted">' + detail + fmtSize(r.size) + '</div></div>';
+    return '<div class="item"><div class="title"><a href="#" data-goto="' + r.name + '">' + r.name + '</a>' + remove + '</div><div class="muted">' + detail + fmtSize(r.size) + ' - <a href="tiles/' + r.name + '.pmtiles" download="' + r.name + '.pmtiles">Download</a></div></div>';
   });
-  $('regions').innerHTML = rows.join('') || 'None';
+  $('regions').innerHTML = (rows.join('') || 'None') + '<div class="muted" style="margin-top:8px">Also browsable in <a href="../files/maps/">Files</a>.</div>';
   $('regions').querySelectorAll('[data-delete]').forEach(b => b.onclick = async () => {
     if (confirm('Delete ' + b.dataset.delete + '?')) { await api('delete', { name: b.dataset.delete }); refresh(); }
   });
   $('regions').querySelectorAll('[data-goto]').forEach(a => a.onclick = e => {
     e.preventDefault();
     const region = regions.find(r => r.name === a.dataset.goto);
-    if (region.bbox) map.fitBounds([[region.bbox[0], region.bbox[1]], [region.bbox[2], region.bbox[3]]], { padding: 40 });
+    if (map && region.bbox) map.fitBounds([[region.bbox[0], region.bbox[1]], [region.bbox[2], region.bbox[3]]], { padding: 40 });
   });
 }
 
@@ -131,7 +134,7 @@ async function refresh() {
   renderRegions(regions);
   renderJobs(jobs);
   const key = regions.map(r => r.name + ':' + r.size).join('|');
-  if (regions.some(r => r.name === 'world') && key !== loadedKey) {
+  if (mapReady && regions.some(r => r.name === 'world') && key !== loadedKey) {
     loadedKey = key;
     if (!map) {
       map = new maplibregl.Map({ container: 'map', style: styleFor(regions), center: [-98, 39], zoom: 3, maxZoom: 18 });
@@ -142,8 +145,13 @@ async function refresh() {
     } else {
       map.setStyle(styleFor(regions));
     }
-  } else if (!map) {
-    $('map').innerHTML = '<div style="padding:24px" class="muted">Downloading the world base map. This page refreshes automatically.</div>';
+  }
+  $('manual').hidden = !!map;
+  if (!map) {
+    const failed = jobs.find(j => j.name === 'world' && j.state === 'failed');
+    const reason = !mapReady ? 'The map viewer files are still downloading (reload this page once they finish)' : 'The world base map is not installed yet' + (failed ? ' (last attempt failed: ' + failed.error + ')' : ' and is downloading');
+    $('map').innerHTML = '<div style="padding:24px" class="muted">' + reason + '. This page refreshes automatically. You can still download an area by entering its coordinates in the panel.<br><br><button id="retry">Retry base map download</button></div>';
+    $('retry').onclick = async () => { await api('world', {}); refresh(); };
   }
   return jobs.some(j => j.state === 'queued' || j.state === 'running');
 }

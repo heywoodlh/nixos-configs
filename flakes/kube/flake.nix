@@ -789,6 +789,28 @@
           };
           nomadFile = name: builtins.readFile ./nomad/${name};
           nomadConfig = files: pkgs.lib.concatStringsSep "\n" (pkgs.lib.mapAttrsToList (name: text: "  ${name}: |\n${indentLines 4 text}") files);
+          dashboardFiles = {
+            "index.html" = nomadFile "dashboard.html";
+            "docker.html" = nomadFile "docker.html";
+          };
+          scriptFiles = {
+            "appimages.txt" = nomadFile "appimages.txt";
+            "comaps-sync.py" = nomadFile "comaps-sync.py";
+            "dashboard.Caddyfile" = nomadFile "dashboard.Caddyfile";
+            "files-init.sh" = nomadFile "files-init.sh";
+            "files.Caddyfile" = nomadFile "files.Caddyfile";
+            "images.txt" = nomadFile "images.txt" + pkgs.lib.concatMapStrings (image: "${image}\n") (builtins.attrValues nomadImages);
+            "kiwix-serve.sh" = nomadFile "kiwix-serve.sh";
+            "lib.sh" = nomadFile "lib.sh";
+            "maps-index.html" = nomadFile "maps-index.html";
+            "maps-init.sh" = nomadFile "maps-init.sh";
+            "maps-server.py" = nomadFile "maps-server.py";
+            "meshtastic-web.sh" = nomadFile "meshtastic-web.sh";
+            "mirror-apk.sh" = nomadFile "mirror-apk.sh";
+            "mirror-debs.sh" = nomadFile "mirror-debs.sh";
+            "mirror-pacman.sh" = nomadFile "mirror-pacman.sh";
+            "sync-images.sh" = nomadFile "sync-images.sh";
+          };
         in mkKubeDrv "nomad" {
           src = ./templates/nomad.yaml;
           namespace = "nomad";
@@ -815,27 +837,9 @@
           debs_schedule = "0 2 * * 6";
           apk_schedule = "0 4 * * 6";
           pacman_schedule = "30 4 * * 6";
-          dashboard_config = nomadConfig {
-            "index.html" = nomadFile "dashboard.html";
-            "docker.html" = nomadFile "docker.html";
-          };
-          script_config = nomadConfig {
-            "appimages.txt" = nomadFile "appimages.txt";
-            "dashboard.Caddyfile" = nomadFile "dashboard.Caddyfile";
-            "files-init.sh" = nomadFile "files-init.sh";
-            "files.Caddyfile" = nomadFile "files.Caddyfile";
-            "images.txt" = nomadFile "images.txt" + pkgs.lib.concatMapStrings (image: "${image}\n") (builtins.attrValues nomadImages);
-            "kiwix-serve.sh" = nomadFile "kiwix-serve.sh";
-            "lib.sh" = nomadFile "lib.sh";
-            "maps-index.html" = nomadFile "maps-index.html";
-            "maps-init.sh" = nomadFile "maps-init.sh";
-            "maps-server.py" = nomadFile "maps-server.py";
-            "meshtastic-web-init.sh" = nomadFile "meshtastic-web-init.sh";
-            "mirror-apk.sh" = nomadFile "mirror-apk.sh";
-            "mirror-debs.sh" = nomadFile "mirror-debs.sh";
-            "mirror-pacman.sh" = nomadFile "mirror-pacman.sh";
-            "sync-images.sh" = nomadFile "sync-images.sh";
-          };
+          config_hash = builtins.hashString "sha256" (nomadConfig dashboardFiles + nomadConfig scriptFiles);
+          dashboard_config = nomadConfig dashboardFiles;
+          script_config = nomadConfig scriptFiles;
         };
         ntfy = mkKubeDrv "ntfy" {
           src = ./templates/ntfy.yaml;

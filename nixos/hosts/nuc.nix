@@ -25,6 +25,25 @@
     [ { device = "/dev/disk/by-uuid/8a404ba6-b8b5-403a-bc3d-baf5150c2dde"; }
     ];
 
+  heywoodlh.nixos.remote-desktop = {
+    enable = true;
+    tailscaleIP = "100.74.91.97";
+  };
+
+  services.desktopManager.plasma6.enable = false;
+  services.displayManager = {
+    gdm.enable = true;
+    defaultSession = "hyprland";
+    autoLogin = {
+      enable = true;
+      user = config.heywoodlh.defaults.user.name;
+    };
+  };
+  heywoodlh.cosmic = lib.mkForce false;
+  heywoodlh.hyprland = true;
+  heywoodlh.nixos.kde.enable = false;
+  heywoodlh.nixos.sunshine.enable = false;
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

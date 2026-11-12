@@ -1167,7 +1167,6 @@ rec {
         nixos-nuc = nixosConfigWith nixpkgs-jovian-nixos "workstation" "nixos-nuc" {
           imports = [
             ./nixos/hosts/nuc.nix
-            ./nixos/hosts/nuc-remote-desktop.nix
           ];
 
           hardware.graphics = {

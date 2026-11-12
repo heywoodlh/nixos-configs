@@ -5,8 +5,7 @@ with lib;
 let
   cfg = config.heywoodlh.home.aerc;
   aerc-html-filter = pkgs.writeShellScript "html" ''
-    export SOCKS_SERVER="10.64.0.1:1080"
-    exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
+    exec ${pkgs.w3m}/bin/w3m \
       -T text/html \
       -cols $(${pkgs.ncurses}/bin/tput cols) \
       -dump \

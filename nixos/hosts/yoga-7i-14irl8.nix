@@ -19,15 +19,6 @@ let
 " ""
     '';
   });
-
-  chargeLimit = "80.0";
-
-  ashell-scaled = pkgs.ashell.overrideAttrs (old: {
-    postPatch = (old.postPatch or "") + ''
-      substituteInPlace src/services/upower/dbus.rs \
-        --replace-fail "return Ok(pct);" "return Ok((pct * 100.0 / ${chargeLimit}).min(100.0));"
-    '';
-  });
 in
 {
   imports = [ lanzaboote.nixosModules.lanzaboote ];
@@ -133,8 +124,6 @@ in
     enable = true;
     package = pkgs.fprintd.override { libfprint = libfprint-egis0576; };
   };
-
-  home-manager.users.heywoodlh.programs.ashell.package = ashell-scaled;
 
   home-manager.users.heywoodlh.wayland.windowManager.hyprland.extraConfig = ''
     -- change monitor to high resolution, the last argument is the scale factor

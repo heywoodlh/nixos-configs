@@ -1923,6 +1923,26 @@
         "type": "gitlab"
       }
     },
+    "noctalia": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-edge"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794513704,
+        "narHash": "sha256-rgw5jkoReu1cu3+UInQD0FhaBS8QWNxa2CckYT+9DQQ=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia",
+        "rev": "02af15624075bcb6093f7f55ab3cc89e1ebb934e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia",
+        "type": "github"
+      }
+    },
     "nordic": {
       "flake": false,
       "locked": {
@@ -2234,6 +2254,7 @@
         "nixpkgs-sunshine": "nixpkgs-sunshine",
         "nixtop-source": "nixtop-source",
         "nmd": "nmd",
+        "noctalia": "noctalia",
         "nur": "nur",
         "nushell-flake": "nushell-flake",
         "nvidia-patch": "nvidia-patch",
@@ -2251,6 +2272,7 @@
         "steam-asahi": "steam-asahi",
         "stylix": "stylix",
         "tangled": "tangled",
+        "tether": "tether",
         "treefmt-nix": "treefmt-nix",
         "ttyd-flake": "ttyd-flake",
         "user-icon": "user-icon",
@@ -2588,6 +2610,26 @@
       "original": {
         "type": "git",
         "url": "https://tangled.org/tangled.org/core"
+      }
+    },
+    "tether": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-edge"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794159260,
+        "narHash": "sha256-7UpNfiEZ8D21aaoeSy7JMDolLU7Sl81JU+ho6o7+MBY=",
+        "owner": "zackb",
+        "repo": "tether",
+        "rev": "adb03f60c9c69e2b439c751e2c24434a8abfffaa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zackb",
+        "repo": "tether",
+        "type": "github"
       }
     },
     "tinted-kitty": {

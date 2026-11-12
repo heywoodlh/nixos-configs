@@ -207,7 +207,7 @@ in {
         imports = [
           (plasma-manager + /modules/default.nix)
         ];
-        programs.ashell.enable = lib.mkForce false;
+        programs.noctalia.enable = lib.mkForce false;
         programs.plasma = {
           kscreenlocker.autoLock = false;
         };

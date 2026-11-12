@@ -5805,6 +5805,88 @@ string
 
 
 
+## heywoodlh\.nixos\.tether\.enable
+
+
+
+Enable Tether iPhone integration, reachable only over Tailscale\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether.nix)
+
+
+
+## heywoodlh\.nixos\.tether\.package
+
+
+
+Tether package to use\.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+tether.packages.${system}.default
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether.nix)
+
+
+
+## heywoodlh\.nixos\.tether\.allowedAddresses
+
+
+
+Tailscale addresses allowed to reach tetherd; all other tailnet peers are refused\.
+
+
+
+*Type:*
+list of string
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+*Example:*
+
+```nix
+[
+  "100.65.159.82"
+]
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether.nix)
+
+
+
 ## heywoodlh\.nixos\.tor\.enable
 
 

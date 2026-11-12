@@ -414,6 +414,7 @@ in {
         -- Launcher
         hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("${noctaliaMsg} panel-toggle launcher"))
         hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("${noctaliaMsg} panel-toggle control-center"))
+        hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("${noctaliaMsg} panel-toggle control-center"))
         hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd("${noctaliaMsg} settings-toggle"))
         -- Lock screen
         hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("${lockCmd}"))

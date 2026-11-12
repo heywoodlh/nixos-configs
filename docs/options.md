@@ -5247,6 +5247,215 @@ string
 
 
 
+## heywoodlh\.nixos\.remote-desktop\.enable
+
+
+
+Stream a user’s Hyprland session over VNC (Tailscale) and Selkies (localhost)\.
+The password is read from ` passwordFile `; services are skipped until it exists\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.headless\.enable
+
+
+
+Run a headless Hyprland session for the user as a system service instead of relying on a display manager\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.headless\.output
+
+
+
+Name of the headless Hyprland output\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"HEADLESS-${toUpper config.heywoodlh.nixos.remote-desktop.user}"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.passwordFile
+
+
+
+File containing the VNC and Selkies basic-auth password\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"/opt/remote-desktop/password"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.selkiesPort
+
+
+
+Port Selkies listens on (127\.0\.0\.1 only)\.
+
+
+
+*Type:*
+16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+
+
+*Default:*
+
+```nix
+8082
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.tailscaleIP
+
+
+
+Tailscale address wayvnc listens on\.
+
+
+
+*Type:*
+string
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.uid
+
+
+
+UID of the streamed user\.
+
+
+
+*Type:*
+signed integer
+
+
+
+*Default:*
+
+```nix
+config.heywoodlh.defaults.user.uid
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.user
+
+
+
+User whose Hyprland session is streamed\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+config.heywoodlh.defaults.user.name
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.vncPort
+
+
+
+Port wayvnc listens on\.
+
+
+
+*Type:*
+16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+
+
+*Default:*
+
+```nix
+5900
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
 ## heywoodlh\.nixos\.scrutiny\.enable
 
 

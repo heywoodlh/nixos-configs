@@ -1,13 +1,10 @@
 { config, lib, ... }:
 
 {
-  imports = [
-    (import ../roles/remote-access/wayland-desktop.nix {
-      user = config.heywoodlh.defaults.user.name;
-      uid = config.heywoodlh.defaults.user.uid;
-      tailscaleIP = "100.74.91.97";
-    })
-  ];
+  heywoodlh.nixos.remote-desktop = {
+    enable = true;
+    tailscaleIP = "100.74.91.97";
+  };
 
   services.desktopManager.plasma6.enable = false;
   services.displayManager = {

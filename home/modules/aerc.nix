@@ -1,37 +1,16 @@
-{ config, lib, pkgs, myFlakes, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.heywoodlh.home.aerc;
-  system = pkgs.stdenv.hostPlatform.system;
-  op-wrapper = "${myFlakes.packages.${system}.op-wrapper}/bin/op-wrapper";
   aerc-html-filter = pkgs.writeShellScript "html" ''
-    export SOCKS_SERVER="10.64.0.1:1080"
-    exec ${pkgs.dante}/bin/socksify ${pkgs.w3m}/bin/w3m \
+    exec ${pkgs.w3m}/bin/w3m \
       -T text/html \
       -cols $(${pkgs.ncurses}/bin/tput cols) \
       -dump \
       -o display_image=false \
       -o display_link_number=true
-  '';
-  cred = pkgs.writeShellScript "cred.sh" ''
-    mkdir -p ~/.config/aerc
-
-    # Remove file if empty
-    [[ -s ~/.config/aerc/protonmail.txt ]] || rm -f ~/.config/aerc/protonmail.txt
-
-    if [[ ! -e ~/.config/aerc/protonmail.txt ]]
-    then
-      ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge' > ~/.config/aerc/protonmail.txt
-    fi
-    if [[ -e ~/.config/aerc/protonmail.txt ]]
-    then
-      cat ~/.config/aerc/protonmail.txt
-    else
-      echo "Unable to populate credentials. Exiting."
-      exit 1
-    fi
   '';
 in {
   options = {
@@ -44,11 +23,16 @@ in {
         type = types.bool;
       };
       accounts = mkOption {
-        default = false;
+        default = { };
+        example = {
+          work = {
+            source = "maildir://~/Maildir/work";
+          };
+        };
         description = ''
-          Enable heywoodlh aerc accounts. Only useful to the author.
+          Accounts added to `programs.aerc.extraAccounts`.
         '';
-        type = types.bool;
+        type = types.attrsOf (types.attrsOf types.anything);
       };
     };
   };
@@ -178,37 +162,10 @@ in {
         "code.fg" = "#a6da95";
       };
     };
-    programs.aerc.extraAccounts = lib.optionalAttrs (cfg.accounts) {
-      protonmail = {
-        source = "imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143";
-        source-cred-cmd = "${cred}";
-        outgoing = "smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25";
-        outgoing-cred-cmd = "${cred}";
-        default = "INBOX";
-        copy-to = "Sent";
-        from = "Spencer Heywood <spencer@heywoodlh.io>";
-        aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>,LaMar Heywood <wgu@heywoodlh.io>,Spencer Heywood <heywoodlh@heywoodlh.io>";
-        signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
-        address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
-      };
-      #wgu = {
-      #  source = "imap+insecure://lheywo3%40wgu.edu@davmail.barn-banana.ts.net:143";
-      #  outgoing = "smtp+insecure://lheywo3%40wgu.edu@davmail.barn-banana.ts.net:25";
-      #  default = "INBOX";
-      #  copy-to = "Sent";
-      #  from = "LaMar Heywood <lheywo3@wgu.edu>";
-      #  signature-file = "${pkgs.writeText "signature.txt" "- LaMar Heywood"}";
-      #};
-    };
+    programs.aerc.extraAccounts = cfg.accounts;
 
     home.packages = with pkgs; [
       khard
     ];
-
-    home.file.".config/khard/khard.conf".text = lib.optionalString (cfg.accounts) ''
-      [addressbooks]
-      [[personal]]
-      path = ~/.contacts/apple/main
-    '';
   };
 }

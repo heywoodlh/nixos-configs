@@ -7,6 +7,10 @@ let
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
   isLinux = pkgs.stdenv.hostPlatform.isLinux;
   kiwix-cli = pkgs.callPackage ../../pkgs/kiwix-cli.nix {};
+  # ServerNegativeTest.UnusablePort fails on macOS, where unprivileged users can bind low ports
+  kiwix-tools = if isDarwin then pkgs.kiwix-tools.override {
+    libkiwix = pkgs.libkiwix.overrideAttrs { doCheck = false; };
+  } else pkgs.kiwix-tools;
 
   cronFields = filter isString (builtins.split "[[:space:]]+" (strings.trim cfg.cron));
 
@@ -135,7 +139,7 @@ let
 
   tui = pkgs.writeShellApplication {
     name = "kiwix-tui";
-    runtimeInputs = [ pkgs.coreutils pkgs.curl pkgs.findutils pkgs.kiwix-tools kiwix-cli ];
+    runtimeInputs = [ pkgs.coreutils pkgs.curl pkgs.findutils kiwix-tools kiwix-cli ];
     text = ''
       dir="${cfg.dir}"
       mapfile -t zims < <(find "$dir" -type f -name '*.zim' | sort)

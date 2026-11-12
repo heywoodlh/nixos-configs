@@ -68,7 +68,7 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.kernelParams = [ "pcie_aspm.policy=powersupersave" ];
+  boot.kernelParams = [ "pcie_aspm.policy=powersupersave" "i915.enable_psr=0" ];
   hardware.intelgpu.vaapiDriver = "intel-media-driver";
   boot.extraModulePackages = [ ];
 

@@ -124,18 +124,6 @@ in {
       # Use CMD + Shift + s to take screenshot area to clipboard
       /usr/bin/defaults -currentHost write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 31 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>115</integer><integer>1</integer><integer>1179648</integer></array><key>type</key><string>standard</string></dict></dict>"
 
-      # Use CMD + [ and CMD + ] to move between spaces
-      # Note: these must be written to the user domain (no -currentHost); the
-      # ByHost/currentHost domain is not where macOS reads symbolic hotkeys.
-      # Move left a space is hotkeys 79 (80 is its secondary registration);
-      # move right a space is hotkeys 81/82. "]" = ASCII 93, keycode 30.
-      /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>91</integer><integer>33</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>"
-      /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>93</integer><integer>30</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>"
-
-      # Use CMD + k to open Mission Control
-      # ASCII "k" (107), virtual keycode 40, Cmd only. Hotkey 36 is Mission Control.
-      /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 36 "<dict><key>enabled</key><true/><key>value</key><dict><key>parameters</key><array><integer>107</integer><integer>40</integer><integer>1048576</integer></array><key>type</key><string>standard</string></dict></dict>"
-
       # Prevent iTunes from launching when pressing the media keys on the keyboard
       /bin/launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist &> /dev/null || true
 

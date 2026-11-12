@@ -837,8 +837,13 @@ in {
     settings = {
       default_profile = "heywoodlh";
       layout.style = "new";
-      macros."insert|normal|visual" = {
-        "<C-k>" = ":chats<Enter>";
+      macros = {
+        "insert" = {
+          "<C-k>" = "<Esc>:chats<Enter>";
+        };
+        "normal|visual" = {
+          "<C-k>" = ":chats<Enter>";
+        };
       };
       settings = {
         username_display = "displayname";

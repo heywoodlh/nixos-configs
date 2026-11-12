@@ -126,6 +126,7 @@ in {
       settings = {
         shell = {
           polkit_agent = true;
+          setup_wizard_enabled = false;
           telemetry_enabled = false;
         };
         notification.enable_daemon = true;

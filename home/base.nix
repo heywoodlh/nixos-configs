@@ -367,6 +367,24 @@ let
       systemctl --user restart paseo.service
     fi
   '';
+  aercCred = pkgs.writeShellScript "cred.sh" ''
+    mkdir -p ~/.config/aerc
+
+    # Remove file if empty
+    [[ -s ~/.config/aerc/protonmail.txt ]] || rm -f ~/.config/aerc/protonmail.txt
+
+    if [[ ! -e ~/.config/aerc/protonmail.txt ]]
+    then
+      ${op-wrapper} read 'op://Personal/7xgfk5ve2zeltpeyglwephqtsq/bridge' > ~/.config/aerc/protonmail.txt
+    fi
+    if [[ -e ~/.config/aerc/protonmail.txt ]]
+    then
+      cat ~/.config/aerc/protonmail.txt
+    else
+      echo "Unable to populate credentials. Exiting."
+      exit 1
+    fi
+  '';
   iambClearcache = pkgs.writeShellScriptBin "iamb-clearcache" ''
     rm -rf "$HOME/.cache/iamb/profiles/heywoodlh/sqlite"
     pkill -9 iamb &>/dev/null || true
@@ -706,6 +724,12 @@ in {
     '';
   };
 
+  home.file.".config/khard/khard.conf".text = ''
+    [addressbooks]
+    [[personal]]
+    path = ~/.contacts/apple/main
+  '';
+
   home.file.".ssh/config".text = let
     # Lazy: assume I'm either on Apple Silicon MacOS or Intel Linux
     altBuilder = if stdenv.hostPlatform.isLinux then "ubuntu-arm64" else "intel-mac-vm";
@@ -867,7 +891,20 @@ in {
     };
     aerc = {
       enable = true;
-      accounts = true;
+      accounts = {
+        protonmail = {
+          source = "imap+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:143";
+          source-cred-cmd = "${aercCred}";
+          outgoing = "smtp+insecure://l.spencer.heywood%40protonmail.com@protonmail-bridge.barn-banana.ts.net:25";
+          outgoing-cred-cmd = "${aercCred}";
+          default = "INBOX";
+          copy-to = "Sent";
+          from = "Spencer Heywood <spencer@heywoodlh.io>";
+          aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>,LaMar Heywood <wgu@heywoodlh.io>,Spencer Heywood <heywoodlh@heywoodlh.io>";
+          signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
+          address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
+        };
+      };
     };
     btop = true;
     syncthing = true;

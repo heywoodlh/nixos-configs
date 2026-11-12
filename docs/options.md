@@ -1142,19 +1142,31 @@ false
 
 
 
-Enable heywoodlh aerc accounts\. Only useful to the author\.
+Accounts added to ` programs.aerc.extraAccounts `\.
 
 
 
 *Type:*
-boolean
+attribute set of attribute set of anything
 
 
 
 *Default:*
 
 ```nix
-false
+{ }
+```
+
+
+
+*Example:*
+
+```nix
+{
+  work = {
+    source = "maildir://~/Maildir/work";
+  };
+}
 ```
 
 *Declared by:*
@@ -1660,7 +1672,7 @@ signed integer
 *Default:*
 
 ```nix
-16
+14
 ```
 
 *Declared by:*

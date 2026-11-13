@@ -48,6 +48,23 @@ in {
       };
       programs.noctalia.settings.lockscreen.fingerprint = config.services.fprintd.enable;
       programs.noctalia.settings.widget.battery.enabled = config.heywoodlh.laptop;
+      programs.noctalia.settings.lockscreen_widgets.widget.name = {
+        type = "label";
+        output = "";
+        cx = 960.0;
+        cy = 805.0;
+        placement_width = 1920.0;
+        placement_height = 1080.0;
+        box_width = 300.0;
+        box_height = 26.0;
+        settings = {
+          title = config.users.users.${username}.description;
+          background = false;
+          color = "#ffffff";
+          font_family = "Noto Sans";
+          shadow = false;
+        };
+      };
     };
   };
 }

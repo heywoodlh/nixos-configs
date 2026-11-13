@@ -75,6 +75,60 @@ let
         hyprctl dispatch "$CMD"
     fi
   '';
+  lockAvatar = pkgs.runCommand "lock-avatar.png" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
+    magick ${config.home.file.".face".source} -resize 256x256^ -gravity center -extent 256x256 \
+      \( +clone -alpha extract -fill black -colorize 100 -fill white -draw "circle 128,128 128,0" \) \
+      -alpha off -compose CopyOpacity -composite $out
+  '';
+  noctaliaResetLockLayout = pkgs.writers.writePython3 "noctalia-reset-lock-layout" { libraries = [ pkgs.python3Packages.tomlkit ]; } ''
+    import sys
+
+    import tomlkit
+
+    path = sys.argv[1]
+    with open(path) as f:
+        doc = tomlkit.parse(f.read())
+    if "lockscreen_widgets" in doc:
+        del doc["lockscreen_widgets"]
+        with open(path, "w") as f:
+            f.write(tomlkit.dumps(doc))
+  '';
+  lockWidget = type: cx: cy: boxWidth: boxHeight: settings: {
+    inherit type cx cy settings;
+    output = "";
+    placement_width = 1920.0;
+    placement_height = 1080.0;
+    box_width = boxWidth;
+    box_height = boxHeight;
+  };
+  lockText = {
+    background = false;
+    color = "#ffffff";
+    font_family = "Noto Sans";
+    shadow = false;
+  };
+  lockLoginBox = output: {
+    name = "lockscreen-login-box@${output}";
+    value = {
+      type = "login_box";
+      inherit output;
+      cx = 960.0;
+      cy = 967.0;
+      placement_width = 1920.0;
+      placement_height = 1080.0;
+      box_width = 260.0;
+      settings = {
+        layout = "compact";
+        show_login_button = false;
+        show_password_reveal = false;
+        show_keyboard_layout = false;
+        center_password_text = true;
+        background_opacity = 0.0;
+        input_opacity = 0.35;
+        input_radius = 16.0;
+      };
+    };
+  };
 in {
   options = {
     heywoodlh.home.hyprland = mkOption {
@@ -121,6 +175,13 @@ in {
       onepasswordToggle
     ];
 
+    # Noctalia saves the lock screen layout to settings.toml, which would shadow config.toml
+    home.activation.noctaliaResetLockLayout = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if [ -f "${config.xdg.stateHome}/noctalia/settings.toml" ]; then
+        run ${noctaliaResetLockLayout} "${config.xdg.stateHome}/noctalia/settings.toml"
+      fi
+    '';
+
     programs.noctalia = {
       enable = true;
       settings = {
@@ -143,6 +204,17 @@ in {
         lockscreen = {
           enabled = true;
           lock_before_suspend = true;
+          transition = [ ];
+          blur_intensity = 0.0;
+          tint_intensity = 0.1;
+        };
+        lockscreen_widgets = {
+          enabled = true;
+          widget = {
+            date = lockWidget "clock" 960.0 97.0 300.0 32.0 (lockText // { format = "{:%A %-d %B}"; center_text = true; });
+            time = lockWidget "clock" 960.0 222.0 480.0 150.0 (lockText // { format = "{:%-I:%M}"; center_text = true; });
+            avatar = lockWidget "sticker" 960.0 713.0 72.0 72.0 { image_path = "${lockAvatar}"; background = false; };
+          } // listToAttrs (map lockLoginBox [ "eDP-1" "eDP-2" "DP-1" "DP-2" "DP-3" "DP-4" "HDMI-A-1" "HDMI-A-2" ]);
         };
         idle = {
           behavior_order = [ "lock" "screen-off" ];

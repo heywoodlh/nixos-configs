@@ -128,6 +128,16 @@ in {
           polkit_agent = true;
           setup_wizard_enabled = false;
           telemetry_enabled = false;
+          panel = {
+            launcher_placement = "floating";
+            launcher_position = "center";
+            transparency_mode = "glass";
+          };
+          launcher = {
+            layout = "simple";
+            categories = false;
+            show_app_origin_indicator = false;
+          };
         };
         notification.enable_daemon = true;
         lockscreen = {
@@ -163,28 +173,71 @@ in {
           auto_update = "all";
         };
         widget = {
+          launcher = {
+            custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake-white.png";
+            capsule = false;
+            scale = 1.3;
+          };
+          workspaces = {
+            capsule = false;
+            focused_color = "#81a1c1";
+            occupied_color = "#57627a";
+            empty_color = "#57627a";
+            active_pill_size = 1.6;
+            inactive_pill_size = 1.6;
+            pill_scale = 1.0;
+          };
+          notifications.hide_when_no_unread = true;
+          volume.show_label = false;
+          network.show_label = false;
+          cpu = {
+            type = "sysmon";
+            stat = "cpu_usage";
+            visualization = "none";
+          };
+          memory = {
+            type = "sysmon";
+            stat = "ram_used";
+            visualization = "none";
+          };
+          clock = {
+            format = "{:%a %d %b %H:%M}";
+            custom_label = "󰥔";
+          };
           tailscale.type = "davemhammer/tailscale:status";
           screen-mirror.type = "profidev/hypr-screen-mirror:widget";
-          tiling-layout.type = "maddingo/hypr-layout-switcher:toggle";
         };
         bar.main = {
           position = "top";
-          start = [ "launcher" "workspaces" "tiling-layout" ];
-          center = [ "clock" ];
-          end = [
-            "media"
-            "tray"
-            "privacy"
-            "notifications"
-            "tailscale"
-            "screen-mirror"
-            "network"
-            "bluetooth"
-            "volume"
-            "brightness"
-            "battery"
-            "control-center"
-            "session"
+          thickness = 32;
+          margin_ends = 0;
+          margin_edge = 0;
+          radius = 0;
+          concave_edge_corners = false;
+          shadow = false;
+          compositor_blur = false;
+          padding = 8;
+          widget_spacing = 7;
+          font_family = "JetBrainsMono Nerd Font";
+          font_weight = 700;
+          color = "#eceff4";
+          capsule = true;
+          capsule_fill = "#57627a";
+          capsule_radius = 4.0;
+          capsule_thickness = 0.66;
+          capsule_padding = 8;
+          start = [ "launcher" "workspaces" ];
+          center = [ ];
+          end = [ "tray" "notifications" "caffeine" "cpu" "memory" "group:status" "battery" "clock" ];
+          capsule_group = [
+            {
+              id = "status";
+              members = [ "volume" "network" "bluetooth" "tailscale" "screen-mirror" ];
+              fill = "#57627a";
+              radius = 4.0;
+              padding = 8.0;
+              accordion = true;
+            }
           ];
         };
       };

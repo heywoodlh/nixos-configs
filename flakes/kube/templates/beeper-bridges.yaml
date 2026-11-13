@@ -55,8 +55,6 @@ data:
         jq -n '{environments: {"\(env.BEEPER_ENV)": {access_token: env.MATRIX_ACCESS_TOKEN, database_dir: env.DB_DIR, bridge_data_dir: env.DATA_DIR}}}' > $BBCTL_CONFIG
     fi
     bbctl -c /tmp/bbctl.json -e prod run --param 'imessage_platform=bluebubbles' --param "bluebubbles_url=$BLUEBUBBLES_URL" --param "bluebubbles_password=$BLUEBUBBLES_PASSWORD" sh-imessage-000
-  resolv.conf: |
-    nameserver 100.100.100.100
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -301,6 +299,69 @@ spec:
         #        secretKeyRef:
         #          name: beeper-key
         #          key: password
+      volumes:
+      - name: signal-config
+        hostPath:
+          path: @hostfolder@/signal
+          type: DirectoryOrCreate
+      - name: discord-config
+        hostPath:
+          path: @hostfolder@/discord
+          type: DirectoryOrCreate
+      - name: telegram-config
+        hostPath:
+          path: @hostfolder@/telegram
+          type: DirectoryOrCreate
+      - name: irc-config
+        hostPath:
+          path: @hostfolder@/irc
+          type: DirectoryOrCreate
+      - name: google-messages-config
+        hostPath:
+          path: @hostfolder@/googlemessages
+          type: DirectoryOrCreate
+      - name: google-voice-config
+        hostPath:
+          path: @hostfolder@/googlevoice
+          type: DirectoryOrCreate
+      - name: discord-entrypoint
+        configMap:
+          name: beeper-discord-entrypoint
+          items:
+          - key: run-bridge-discord.sh
+            path: run-bridge-discord.sh
+            mode: 0755
+          - key: patch-discord-config.py
+            path: patch-discord-config.py
+            mode: 0644
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beeper-imessage
+  namespace: @namespace@
+  labels:
+    app.kubernetes.io/name: beeper-imessage
+    app.kubernetes.io/instance: beeper-imessage
+spec:
+  replicas: @replicas@
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: beeper-imessage
+      app.kubernetes.io/instance: beeper-imessage
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: beeper-imessage
+        app.kubernetes.io/instance: beeper-imessage
+    spec:
+      hostNetwork: true
+      dnsPolicy: Default
+      securityContext:
+        {}
+      containers:
         # Set up by sending a DM to: `@sh-imessage-000bot:beeper.local`
         - name: beeper-imessage
           securityContext:
@@ -315,9 +376,6 @@ spec:
             - name: imessage-entrypoint
               mountPath: /usr/local/bin/run-bridge-imessage.sh
               subPath: run-bridge-imessage.sh
-            - name: imessage-entrypoint
-              mountPath: /etc/resolv.conf
-              subPath: resolv.conf
           args:
             - /usr/local/bin/run-bridge-imessage.sh sh-imessage-000
           imagePullPolicy: IfNotPresent
@@ -345,30 +403,6 @@ spec:
                   name: beeper-bluebubbles
                   key: password
       volumes:
-      - name: signal-config
-        hostPath:
-          path: @hostfolder@/signal
-          type: DirectoryOrCreate
-      - name: discord-config
-        hostPath:
-          path: @hostfolder@/discord
-          type: DirectoryOrCreate
-      - name: telegram-config
-        hostPath:
-          path: @hostfolder@/telegram
-          type: DirectoryOrCreate
-      - name: irc-config
-        hostPath:
-          path: @hostfolder@/irc
-          type: DirectoryOrCreate
-      - name: google-messages-config
-        hostPath:
-          path: @hostfolder@/googlemessages
-          type: DirectoryOrCreate
-      - name: google-voice-config
-        hostPath:
-          path: @hostfolder@/googlevoice
-          type: DirectoryOrCreate
       - name: imessage-config
         hostPath:
           path: @hostfolder@/imessage
@@ -380,16 +414,3 @@ spec:
           - key: run-bridge-imessage.sh
             path: run-bridge-imessage.sh
             mode: 0755
-          - key: resolv.conf
-            path: resolv.conf
-            mode: 0644
-      - name: discord-entrypoint
-        configMap:
-          name: beeper-discord-entrypoint
-          items:
-          - key: run-bridge-discord.sh
-            path: run-bridge-discord.sh
-            mode: 0755
-          - key: patch-discord-config.py
-            path: patch-discord-config.py
-            mode: 0644

@@ -187,25 +187,11 @@ in {
             inactive_pill_size = 1.6;
             pill_scale = 1.0;
           };
-          notifications.hide_when_no_unread = true;
-          volume.show_label = false;
-          network.show_label = false;
-          cpu = {
-            type = "sysmon";
-            stat = "cpu_usage";
-            visualization = "none";
-          };
-          memory = {
-            type = "sysmon";
-            stat = "ram_used";
-            visualization = "none";
-          };
           clock = {
             format = "{:%a %d %b %H:%M}";
             custom_label = "󰥔";
           };
           tailscale.type = "davemhammer/tailscale:status";
-          screen-mirror.type = "profidev/hypr-screen-mirror:widget";
         };
         bar.main = {
           position = "top";
@@ -228,17 +214,7 @@ in {
           capsule_padding = 8;
           start = [ "launcher" "workspaces" ];
           center = [ ];
-          end = [ "tray" "notifications" "caffeine" "cpu" "memory" "group:status" "battery" "clock" ];
-          capsule_group = [
-            {
-              id = "status";
-              members = [ "volume" "network" "bluetooth" "tailscale" "screen-mirror" ];
-              fill = "#57627a";
-              radius = 4.0;
-              padding = 8.0;
-              accordion = true;
-            }
-          ];
+          end = [ "caffeine" "tailscale" "clock" ];
         };
       };
     };

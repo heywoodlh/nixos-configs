@@ -47,6 +47,7 @@ in {
         systemd.enable = false;
       };
       programs.noctalia.settings.lockscreen.fingerprint = config.services.fprintd.enable;
+      programs.noctalia.settings.widget.battery.enabled = config.heywoodlh.laptop;
     };
   };
 }

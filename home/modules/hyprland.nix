@@ -191,7 +191,28 @@ in {
             format = "{:%a %d %b %H:%M}";
             custom_label = "󰥔";
           };
+          more = {
+            type = "custom_button";
+            glyph = "dots";
+            tooltip = "Control Center";
+            actions.left = "panel-toggle control-center";
+          };
+          notifications.hide_when_no_unread = true;
+          volume.show_label = false;
+          network.show_label = false;
+          cpu = {
+            type = "sysmon";
+            stat = "cpu_usage";
+            visualization = "none";
+          };
+          memory = {
+            type = "sysmon";
+            stat = "ram_used";
+            visualization = "none";
+          };
+          battery.enabled = mkDefault false;
           tailscale.type = "davemhammer/tailscale:status";
+          screen-mirror.type = "profidev/hypr-screen-mirror:widget";
         };
         bar.main = {
           position = "top";
@@ -214,7 +235,18 @@ in {
           capsule_padding = 8;
           start = [ "launcher" "workspaces" ];
           center = [ ];
-          end = [ "caffeine" "tailscale" "clock" ];
+          end = [ "group:more" "caffeine" "tailscale" "battery" "network" "clock" ];
+          capsule_group = [
+            {
+              id = "more";
+              members = [ "more" "tray" "notifications" "volume" "bluetooth" "cpu" "memory" "screen-mirror" ];
+              fill = "#57627a";
+              radius = 4.0;
+              padding = 8.0;
+              accordion = true;
+              accordion_direction = "start";
+            }
+          ];
         };
       };
     };

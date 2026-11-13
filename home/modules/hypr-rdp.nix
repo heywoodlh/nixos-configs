@@ -154,8 +154,7 @@ in {
       Service = {
         ExecStart = "${cfg.package}/bin/hypr-rdp";
         # The Wayland socket may not be ready the instant graphical-session.target
-        # is reached (see the similar ashell workaround in hyprland.nix), so
-        # retry on early failures.
+        # is reached, so retry on early failures.
         Restart = "always";
         RestartSec = 5;
       };

@@ -18,6 +18,9 @@ let
   };
   onepasswordCfg = config.heywoodlh.home.onepassword;
   homeDir = config.home.homeDirectory;
+  noctaliaBin = "${config.programs.noctalia.package}/bin/noctalia";
+  noctaliaMsg = "${noctaliaBin} msg";
+  dmenu = "${noctaliaBin} dmenu";
   onepasswordToggle = pkgs.writeShellScriptBin "1password-toggle.sh" ''
     # Check if 1password is running
     ps aux | grep -i 1password | grep -iq silent || ${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --silent --ozone-platform-hint=wayland
@@ -25,8 +28,7 @@ let
     # Open 1password quick access
     ${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --quick-access
   '';
-  lockCmdPfx = "" + optionalString (onepasswordCfg.enable) "${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --lock;";
-  lockCmd = "${lockCmdPfx} ${pkgs.playerctl}/bin/playerctl --all-players pause; ${pkgs.hyprlock}/bin/hyprlock";
+  lockCmd = "${noctaliaMsg} session lock";
   screenshotScript = pkgs.writeShellScriptBin "screenshot.sh" ''
     screenshot_path="${homeDir}/Downloads/screenshot.png"
     archive_dir="${homeDir}/Pictures/screenshots/$(${pkgs.hostname}/bin/hostname)"
@@ -50,59 +52,9 @@ let
   monitorsScript = pkgs.writeShellScriptBin "monitors.sh" ''
     # Hyprland
     # Script to select monitor and switch focus on it
-    selection=$(hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused == false) | (.name + ": " + .description)' | ${pkgs.fuzzel}/bin/fuzzel -d | ${pkgs.coreutils}/bin/cut -d':' -f1)
+    selection=$(hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[] | select(.focused == false) | (.name + ": " + .description)' | ${dmenu} -p "Monitor" | ${pkgs.coreutils}/bin/cut -d':' -f1)
     hyprctl dispatch focusmonitor $selection
     ${pkgs.libnotify}/bin/notify-send "Monitor switched to $selection"
-  '';
-  applicationsScript = pkgs.writeShellScriptBin "applications.sh" ''
-    # Hyprland
-    # Script to select open apps and switch focus to it
-    # Excludes apps in special workspaces
-    selection=$(hyprctl clients -j | ${pkgs.jq}/bin/jq -r '.[] | select(.class != "") | select(.workspace.name | contains("special") | not) | (.class + ":" + .title + ":" + .address)' | ${pkgs.fuzzel}/bin/fuzzel -d --width=100 | ${pkgs.util-linux}/bin/rev | ${pkgs.coreutils}/bin/cut -d ':' -f1 | ${pkgs.util-linux}/bin/rev)
-
-    hyprctl dispatch focuswindow address:$selection
-  '';
-  caffeineScript = pkgs.writeShellScriptBin "caffeine.sh" ''
-    export caffeine_enabled="false"
-    ${pkgs.procps}/bin/ps aux | ${pkgs.gnugrep}/bin/grep -i systemd-inhibit | ${pkgs.gnugrep}/bin/grep -iq caffeine && caffeine_enabled="true"
-
-    if [[ "$caffeine_enabled" == "true" ]]
-    then
-        ${pkgs.procps}/bin/pkill -9 systemd-inhibit && ${pkgs.libnotify}/bin/notify-send "Disabled caffeine"
-    else
-        ${pkgs.systemd}/bin/systemd-inhibit --what=idle --who=Caffeine --why=Caffeine --mode=block sleep inf &
-        disown
-        ${pkgs.libnotify}/bin/notify-send "Enabled caffeine"
-    fi
-  '';
-  soundScript = pkgs.writeShellScriptBin "sound.sh" ''
-    # This script is intended to make switching audio devices easier
-    # Intended for PipeWire
-
-    # Get current audio device info
-    wpctl_status=$(wpctl status)
-    audio_section=$(printf "$wpctl_status" | sed -n '/Audio/,/Streams/p')
-
-    # Choose whether to set output (speaker) or input (microphone)
-    selection=$(printf "Output\nInput" | fuzzel -d)
-
-    if [[ $selection == "Output" ]]
-    then
-        sink_selection=$(printf "$audio_section" | sed -n '/Sinks/,/Sink endpoints/p' | grep -E '\.' | cut -d'[' -f1 | fuzzel --width=100 -d | head -1)
-        sink_selection_name=$(printf "$sink_selection" | cut -d'.' -f2)
-        sink_selection_id=$(printf "$sink_selection" | grep -o '[0-9]*')
-        [[ -n $sink_selection_id ]] && wpctl set-default $sink_selection_id &&\
-            notify-send "Set default audio input to$sink_selection_name"
-    fi
-
-    if [[ $selection == "Input" ]]
-    then
-        source_selection=$(printf "$audio_section" | sed -n '/Sources/,/Source endpoints/p' | grep -E '\.' | cut -d'[' -f1 | fuzzel --width=100 -d | head -1)
-        source_selection_name=$(printf "$source_selection" | cut -d'.' -f2)
-        source_selection_id=$(printf "$source_selection" | grep -o '[0-9]*')
-        [[ -n $source_selection_id ]] && wpctl set-default $source_selection_id &&\
-            notify-send "Set default audio output to$source_selection_name"
-    fi
   '';
   keybindHelper = pkgs.writeShellScriptBin "keybind-helper.sh" ''
     HYPR_CONF="$HOME/.config/hypr/hyprland.conf"
@@ -111,7 +63,7 @@ let
     mapfile -t BINDINGS < <(grep '^bind=' "$HYPR_CONF" | \
         sed -e 's/  */ /g' -e 's/bind=//g' -e 's/, /,/g' -e 's/ # /,/' | \
         awk -F, '{cmd=""; for(i=3;i<NF;i++) cmd=cmd $(i) " "; printf "%s + %s\t%s\t%s\n", $1, $2, $NF, cmd}')
-    CHOICE=$(printf '%s\n' "''${BINDINGS[@]}" | fuzzel --dmenu --prompt="Hyprland Keybinds: ")
+    CHOICE=$(printf '%s\n' "''${BINDINGS[@]}" | ${dmenu} -p "Hyprland Keybinds")
     # exit if no selection was made (e.g. user pressed ESC)
     [[ -z "$CHOICE" ]] && exit 0
     # extract cmd (3rd tab-separated field)
@@ -123,6 +75,60 @@ let
         hyprctl dispatch "$CMD"
     fi
   '';
+  lockAvatar = pkgs.runCommand "lock-avatar.png" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
+    magick ${config.home.file.".face".source} -resize 256x256^ -gravity center -extent 256x256 \
+      \( +clone -alpha extract -fill black -colorize 100 -fill white -draw "circle 128,128 128,0" \) \
+      -alpha off -compose CopyOpacity -composite $out
+  '';
+  noctaliaResetLockLayout = pkgs.writers.writePython3 "noctalia-reset-lock-layout" { libraries = [ pkgs.python3Packages.tomlkit ]; } ''
+    import sys
+
+    import tomlkit
+
+    path = sys.argv[1]
+    with open(path) as f:
+        doc = tomlkit.parse(f.read())
+    if "lockscreen_widgets" in doc:
+        del doc["lockscreen_widgets"]
+        with open(path, "w") as f:
+            f.write(tomlkit.dumps(doc))
+  '';
+  lockWidget = type: cx: cy: boxWidth: boxHeight: settings: {
+    inherit type cx cy settings;
+    output = "";
+    placement_width = 1920.0;
+    placement_height = 1080.0;
+    box_width = boxWidth;
+    box_height = boxHeight;
+  };
+  lockText = {
+    background = false;
+    color = "#ffffff";
+    font_family = "Noto Sans";
+    shadow = false;
+  };
+  lockLoginBox = output: {
+    name = "lockscreen-login-box@${output}";
+    value = {
+      type = "login_box";
+      inherit output;
+      cx = 960.0;
+      cy = 967.0;
+      placement_width = 1920.0;
+      placement_height = 1080.0;
+      box_width = 260.0;
+      settings = {
+        layout = "compact";
+        show_login_button = false;
+        show_password_reveal = false;
+        show_keyboard_layout = false;
+        center_password_text = true;
+        background_opacity = 0.0;
+        input_opacity = 0.35;
+        input_radius = 16.0;
+      };
+    };
+  };
 in {
   options = {
     heywoodlh.home.hyprland = mkOption {
@@ -141,21 +147,22 @@ in {
       adwaita-icon-theme
       bluez
       brillo
-      dunst
       grim
       hyprmon
+      jq
       libnotify
       pavucontrol
       playerctl
       procps
       pulseaudio
       slurp
-      swaybg
+      socat
       util-linux
       pkgs-stable.wf-recorder
       wireplumber
       wl-clipboard
       xdg-desktop-portal-hyprland
+      xdg-utils
       ydotool
     ] ++ [
       screenshotScript
@@ -163,83 +170,159 @@ in {
       screenrecordKillScript
       battpopScript
       monitorsScript
-      applicationsScript
-      caffeineScript
-      soundScript
       keybindHelper
     ] ++ optionals (config.heywoodlh.home.onepassword.enable) [
       onepasswordToggle
     ];
 
-    # Dunst for notifications
-    services.dunst.enable = true;
+    # Noctalia saves the lock screen layout to settings.toml, which would shadow config.toml
+    home.activation.noctaliaResetLockLayout = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      if [ -f "${config.xdg.stateHome}/noctalia/settings.toml" ]; then
+        run ${noctaliaResetLockLayout} "${config.xdg.stateHome}/noctalia/settings.toml"
+      fi
+    '';
 
-    programs.fuzzel = {
+    programs.noctalia = {
       enable = true;
       settings = {
-        main = {
-          terminal = "${pkgs.ghostty}/bin/ghostty";
-          layer = "overlay";
-          width = 50;
-          lines = 5;
+        shell = {
+          polkit_agent = true;
+          setup_wizard_enabled = false;
+          telemetry_enabled = false;
+          panel = {
+            launcher_placement = "floating";
+            launcher_position = "center";
+            transparency_mode = "glass";
+          };
+          launcher = {
+            layout = "simple";
+            categories = false;
+            show_app_origin_indicator = false;
+          };
         };
-      };
-    };
-
-    programs.ashell = {
-      enable = true;
-      systemd = {
-        enable = true;
-        target = "graphical-session.target";
-      };
-      settings = {
-        log_level = "warn";
-        outputs = { Targets = [ "eDP-1" ]; };
-        position = "Top";
-        app_launcher_cmd = "${pkgs.fuzzel}/bin/fuzzel -I";
-
-        modules = {
-          left = [ [ "appLauncher" "Updates" "Workspaces" ] ];
-          center = [ "WindowTitle" ];
-          right = [ [ "Tray" "Clock" "Privacy" "Settings" ] ];
+        notification.enable_daemon = true;
+        lockscreen = {
+          enabled = true;
+          lock_before_suspend = true;
+          transition = [ ];
+          blur_intensity = 0.5;
+          tint_intensity = 0.1;
         };
-
-        workspaces = {
-          enable_workspace_filling = true;
+        lockscreen_widgets = {
+          enabled = true;
+          widget = {
+            date = lockWidget "clock" 960.0 97.0 300.0 32.0 (lockText // { format = "{:%A %-d %B}"; center_text = true; });
+            time = lockWidget "clock" 960.0 222.0 480.0 150.0 (lockText // { format = "{:%-I:%M}"; center_text = true; });
+            avatar = lockWidget "sticker" 960.0 713.0 72.0 72.0 { image_path = "${lockAvatar}"; background = false; };
+          } // listToAttrs (map lockLoginBox [ "eDP-1" "eDP-2" "DP-1" "DP-2" "DP-3" "DP-4" "HDMI-A-1" "HDMI-A-2" ]);
         };
-
-        CustomModule = [
-          {
-            name = "appLauncher";
-            icon = "󱗼";
-            command = "${pkgs.fuzzel}/bin/fuzzel -I";
-          }
+        idle = {
+          behavior_order = [ "lock" "screen-off" ];
+          behavior = {
+            lock = {
+              enabled = true;
+              timeout = 900;
+              action = "lock";
+            };
+            screen-off = {
+              enabled = true;
+              timeout = 1200;
+              action = "screen_off";
+            };
+          };
+        };
+        hooks.session_locked = [
+          "${pkgs.playerctl}/bin/playerctl --all-players pause"
+        ] ++ optionals onepasswordCfg.enable [
+          "${onepasswordCfg.wrapper}/bin/1password-gui-wrapper --lock"
         ];
-
-        window_title = {
-          truncate_title_after_length = 100;
+        plugins = {
+          enabled = [
+            "davemhammer/tailscale"
+            "profidev/hypr-screen-mirror"
+            "maddingo/hypr-layout-switcher"
+          ];
+          auto_update = "all";
         };
-
-        settings = {
-          lock_cmd = "${lockCmd}";
-          audio_sinks_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 3";
-          audio_sources_more_cmd = "${pkgs.pavucontrol}/bin/pavucontrol -t 4";
-          wifi_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
-          vpn_more_cmd = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
-          bluetooth_more_cmd = "${pkgs.blueman}/bin/blueman-manager";
+        plugin_settings."davemhammer/tailscale".notify_on_peer_change = false;
+        widget = {
+          launcher = {
+            custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake-white.png";
+            capsule = false;
+            scale = 1.3;
+          };
+          workspaces = {
+            capsule = false;
+            focused_color = "#81a1c1";
+            occupied_color = "#57627a";
+            empty_color = "#57627a";
+            active_pill_size = 1.6;
+            inactive_pill_size = 1.6;
+            pill_scale = 1.0;
+          };
+          clock = {
+            format = "{:%a %d %b %H:%M}";
+            custom_label = "󰥔";
+            actions.left = "panel-toggle control-center notifications";
+          };
+          more = {
+            type = "custom_button";
+            glyph = "dots";
+            tooltip = "Control Center";
+            actions.left = "panel-toggle control-center";
+          };
+          notifications.hide_when_no_unread = true;
+          volume.show_label = false;
+          network.show_label = false;
+          cpu = {
+            type = "sysmon";
+            stat = "cpu_usage";
+            visualization = "none";
+          };
+          memory = {
+            type = "sysmon";
+            stat = "ram_used";
+            visualization = "none";
+          };
+          battery.enabled = mkDefault false;
+          tailscale.type = "davemhammer/tailscale:status";
+          screen-mirror.type = "profidev/hypr-screen-mirror:widget";
         };
-
-        appearance = {
-          style = "Islands";
+        bar.main = {
+          position = "top";
+          thickness = 32;
+          background_opacity = 0.0;
+          margin_ends = 0;
+          margin_edge = 0;
+          radius = 0;
+          concave_edge_corners = false;
+          shadow = false;
+          compositor_blur = false;
+          padding = 8;
+          widget_spacing = 7;
+          font_family = "JetBrainsMono Nerd Font";
+          font_weight = 700;
+          color = "#eceff4";
+          capsule = true;
+          capsule_fill = "#57627a";
+          capsule_radius = 4.0;
+          capsule_thickness = 0.66;
+          capsule_padding = 8;
+          start = [ "launcher" "workspaces" ];
+          center = [ ];
+          end = [ "group:more" "caffeine" "tailscale" "battery" "network" "clock" ];
+          capsule_group = [
+            {
+              id = "more";
+              members = [ "more" "tray" "notifications" "volume" "bluetooth" "cpu" "memory" "screen-mirror" ];
+              fill = "#57627a";
+              radius = 4.0;
+              padding = 8.0;
+              accordion = true;
+              accordion_direction = "start";
+            }
+          ];
         };
-      };
-    };
-
-    # Workaround for ashell not starting immediately
-    systemd.user.services.ashell = {
-      Service = {
-        Restart = mkForce "always";
-        RestartSec = 5;
       };
     };
 
@@ -274,36 +357,6 @@ in {
         categories = [ "Utility" ];
         icon = "nix-snowflake";
       };
-      app-switcher = {
-        name = "App Switcher";
-        genericName = "applications";
-        comment = "Switch application focus";
-        exec = "${applicationsScript}/bin/applications.sh";
-        terminal = false;
-        type = "Application";
-        categories = [ "Utility" ];
-        icon = "nix-snowflake";
-      };
-      caffeine = {
-        name = "Caffeine toggle";
-        genericName = "caffeine";
-        comment = "Toggle caffeine";
-        exec = "${caffeineScript}/bin/caffeine.sh";
-        terminal = false;
-        type = "Application";
-        categories = [ "Utility" ];
-        icon = "nix-snowflake";
-      };
-      default-sound-switcher = {
-        name = "Default Sound Device Switcher";
-        genericName = "sound";
-        comment = "Switch default sound device";
-        exec = "${soundScript}/bin/sound.sh";
-        terminal = false;
-        type = "Application";
-        categories = [ "Utility" ];
-        icon = "nix-snowflake";
-      };
       keybind-helper = {
         name = "keybind-helper";
         genericName = "keybinds";
@@ -315,8 +368,6 @@ in {
         icon = "nix-snowflake";
       };
     };
-
-    programs.hyprlock.enable = true;
 
     # Hyprland
     wayland.windowManager.hyprland = {
@@ -331,26 +382,32 @@ in {
         hl.config({
           general = {
             no_focus_fallback = true,
+            layout = "dwindle",
+            gaps_in = 5,
+            gaps_out = 10,
+          },
+          dwindle = {
+            preserve_split = true,
+          },
+          master = {
+            new_status = "master",
           },
         })
+
+        for ws = 1, 4 do
+          hl.workspace_rule({ workspace = tostring(ws), persistent = true })
+        end
 
         -- Apps to start on login
         hl.on("hyprland.start", function()
           hl.exec_cmd("${pkgs.hyprland}/bin/hyprctl setcursor Adwaita 24")
           hl.exec_cmd("${pkgs.xdg-desktop-portal-hyprland}/libexec/xdg-desktop-portal-hyprland")
-          hl.exec_cmd("${pkgs.dunst}/bin/dunst")
+          hl.exec_cmd("${noctaliaBin}")
           hl.exec_cmd("${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --start --components=secrets")
           hl.exec_cmd("${pkgs.ydotool}/bin/ydotoold")
 
           -- DBUS
           hl.exec_cmd("${pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all")
-
-          -- Workarounds
-          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user hypridle.service")
-          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user ashell.service")
-          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user hyprpaper.service")
-          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user kdeconnect.service")
-          hl.exec_cmd("/run/current-system/sw/bin/systemctl restart --user hyprpolkitagent.service")
         end)
 
         -- Dark mode for apps
@@ -391,12 +448,30 @@ in {
           center = true,
         })
 
+        -- Noctalia
         hl.window_rule({
-          name  = "polkit-agent",
-          match = { title = "^(Hyprland Polkit Agent)$" },
+          name  = "noctalia-settings",
+          match = { class = "^(dev.noctalia.Noctalia)$" },
           float = true,
-          size = "((monitor_w*0.5)) ((monitor_h*0.5))",
-          center = true,
+          size = { 1080, 920 },
+        })
+
+        hl.layer_rule({
+          name = "noctalia-no-anim",
+          match = {
+            namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd|window-switcher)$",
+          },
+          no_anim = true,
+        })
+
+        hl.layer_rule({
+          name = "noctalia-blur",
+          match = {
+            namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd|window-switcher)$",
+          },
+          ignore_alpha = 0.5,
+          blur = true,
+          blur_popups = true,
         })
 
         -- Animations
@@ -473,38 +548,43 @@ in {
         -- Emote picker
         hl.bind("CTRL + SUPER + Space", hl.dsp.exec_cmd("${pkgs.emote}/bin/emote"))
         -- Launcher
-        hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("${pkgs.fuzzel}/bin/fuzzel -I"))
+        hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd("${noctaliaMsg} panel-toggle launcher"))
+        hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("${noctaliaMsg} panel-toggle control-center"))
+        hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("${noctaliaMsg} panel-toggle control-center"))
+        hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd("${noctaliaMsg} settings-toggle"))
         -- Lock screen
         hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("${lockCmd}"))
         -- Remap caps lock to super
         hl.config({ input = { kb_options = "caps:super" } })
         -- Audio
-        hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), { locked = true, repeating = true })
-        hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -t \"1000\" -e \"Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)\""), { repeating = true })
-        hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("${pkgs.wireplumber}/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
-        hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -t \"1000\" -e \"Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)\""), { repeating = true })
-        hl.bind("XF86AudioMute", hl.dsp.exec_cmd("${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true, repeating = true })
-        hl.bind("XF86AudioMute", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -t \"1000\" -e \"Volume: $(${pkgs.wireplumber}/bin/wpctl get-volume @DEFAULT_AUDIO_SINK@)\""), { repeating = true })
-        hl.bind("CTRL + SHIFT + Space", hl.dsp.exec_cmd("${pkgs.playerctl}/bin/playerctl play-pause"))
-        hl.bind("CTRL + SHIFT + Space", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Media: $(playerctl status)\""))
-        hl.bind("CTRL + SHIFT + N", hl.dsp.exec_cmd("${pkgs.playerctl}/bin/playerctl next"))
-        hl.bind("CTRL + SHIFT + N", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Media: next track\""))
-        hl.bind("CTRL + SHIFT + P", hl.dsp.exec_cmd("${pkgs.playerctl}/bin/playerctl previous"))
-        hl.bind("CTRL + SHIFT + P", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Media: previous track\""))
+        hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("${noctaliaMsg} volume-down"), { locked = true, repeating = true })
+        hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("${noctaliaMsg} volume-up"), { locked = true, repeating = true })
+        hl.bind("XF86AudioMute", hl.dsp.exec_cmd("${noctaliaMsg} volume-mute"), { locked = true })
+        hl.bind("CTRL + SHIFT + Space", hl.dsp.exec_cmd("${noctaliaMsg} media toggle"))
+        hl.bind("CTRL + SHIFT + N", hl.dsp.exec_cmd("${noctaliaMsg} media next"))
+        hl.bind("CTRL + SHIFT + P", hl.dsp.exec_cmd("${noctaliaMsg} media previous"))
 
         -- Backlight
-        hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("${pkgs.brillo}/bin/brillo -A 5"), { repeating = true })
-        hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Brightness: $(${pkgs.brillo}/bin/brillo)\""), { repeating = true })
-        hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("${pkgs.brillo}/bin/brillo -U 5"), { repeating = true })
-        hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("${pkgs.libnotify}/bin/notify-send -e \"Brightness: $(${pkgs.brillo}/bin/brillo)\""), { repeating = true })
+        hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("${noctaliaMsg} brightness-up"), { locked = true, repeating = true })
+        hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("${noctaliaMsg} brightness-down"), { locked = true, repeating = true })
 
         -- Productivity
         hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd("${screenshotScript}/bin/screenshot.sh"))
         hl.bind("CTRL + SHIFT + B", hl.dsp.exec_cmd("${battpopScript}/bin/battpop.sh"))
-        hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("${applicationsScript}/bin/applications.sh"))
+        hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("${noctaliaMsg} window-switcher hold"))
+        hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.exec_cmd("${noctaliaMsg} window-switcher hold reverse"))
         hl.bind("CTRL + SHIFT + E", hl.dsp.exit())
         hl.bind("CTRL + SHIFT + D", hl.dsp.exec_cmd("${pkgs.bash}/bin/bash -c '${pkgs.libnotify}/bin/notify-send $(date \"+%T\")'"))
         hl.bind("CTRL + SUPER + H", hl.dsp.exec_cmd("${keybindHelper}/bin/keybind-helper.sh"))
+
+        -- Tiling
+        hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+        hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
+        hl.bind(mainMod .. " + backslash", hl.dsp.exec_cmd("${noctaliaMsg} plugin maddingo/hypr-layout-switcher:poller all cycle"))
+        hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
+        hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
+        hl.bind(mainMod .. " + up", hl.dsp.focus({ direction = "up" }))
+        hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
 
         -- Navigation
         hl.bind(mainMod .. " + 1", hl.dsp.focus({ workspace = 1 }))
@@ -574,40 +654,5 @@ in {
 
     # Foot terminal for non-special workspaces
     programs.foot.enable = true;
-
-    # Wallpaper daemon
-    services.hyprpaper.enable = true;
-
-    # KDE Connect
-    services.kdeconnect.enable = true;
-
-    # Polkit authentication agent
-    services.hyprpolkitagent.enable = true;
-
-    # Idle/suspend daemon
-    services.hypridle = {
-      enable = true;
-      settings = {
-        general = {
-          after_sleep_cmd = "${pkgs.hyprland}/bin/hyprctl eval \"hl.dispatch(hl.dsp.dpms('on'))\"";
-          ignore_dbus_inhibit = false;
-          lock_cmd = "${lockCmd}";
-          unlock_cmd = "/run/current-system/sw/bin/systemctl --user restart ashell.service";
-          before_sleep_cmd = "${lockCmd}";
-        };
-
-        listener = [
-          {
-            timeout = 900;
-            on-timeout = "${lockCmd}";
-          }
-          {
-            timeout = 1200;
-            on-timeout = "${pkgs.hyprland}/bin/hyprctl eval \"hl.dispatch(hl.dsp.dpms('off'))\"";
-            on-resume = "${pkgs.hyprland}/bin/hyprctl eval \"hl.dispatch(hl.dsp.dpms('on'))\"";
-          }
-        ];
-      };
-    };
   };
 }

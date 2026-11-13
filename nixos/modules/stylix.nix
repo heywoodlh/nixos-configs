@@ -51,22 +51,7 @@ in {
     };
 
     home-manager.users.${cfg.username} = { ... }: {
-      # get rid of the god-awful orange
-      # for some reason `stylix.targets.ashell.override` does not seem to work
-      programs.ashell.settings.appearance = {
-        danger_color = lib.mkForce "#d8dee9";
-        workspace_colors = lib.mkForce [
-          "#d8dee9"
-          "#8aadf4"
-        ];
-      };
       fonts.fontconfig.enable = true;
-      stylix.targets = {
-        fuzzel.fonts.override = {
-          sansSerif.name = "JetBrains Mono";
-          sizes.popups = "14";
-        };
-      };
     };
   };
 }

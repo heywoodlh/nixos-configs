@@ -4286,6 +4286,30 @@ false
 
 
 
+## heywoodlh\.home\.t3\.notifications\.ntfy\.clickTarget
+
+
+
+Where notification clicks open the thread: the T3 Code web UI or the T3 Code iOS app\.
+
+
+
+*Type:*
+one of “web”, “ios”
+
+
+
+*Default:*
+
+```nix
+"web"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/llm-agents.nix)
+
+
+
 ## heywoodlh\.home\.t3\.notifications\.ntfy\.pollInterval
 
 
@@ -4837,8 +4861,6 @@ false
 
 ## heywoodlh\.nixos\.cachyos-kernel\.kernel
 
-
-
 Desired CachyOS kernel version\.
 
 
@@ -4884,6 +4906,8 @@ false
 
 
 ## heywoodlh\.nixos\.gaming\.console
+
+
 
 Enable heywoodlh dedicated console-like gaming configuration\.
 
@@ -5802,6 +5826,112 @@ string
 
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine.nix)
+
+
+
+## heywoodlh\.nixos\.tether\.enable
+
+
+
+Enable Tether iPhone integration, reachable only over Tailscale\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether.nix)
+
+
+
+## heywoodlh\.nixos\.tether\.package
+
+
+
+Tether package to use\.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+tether.packages.${system}.default
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether.nix)
+
+
+
+## heywoodlh\.nixos\.tether\.allowedAddresses
+
+
+
+Tailscale addresses allowed to reach tetherd; all other tailnet peers are refused\.
+
+
+
+*Type:*
+list of string
+
+
+
+*Default:*
+
+```nix
+[ ]
+```
+
+
+
+*Example:*
+
+```nix
+[
+  "100.65.159.82"
+]
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether.nix)
+
+
+
+## heywoodlh\.nixos\.tether\.bluetooth
+
+
+
+Enable Tether’s Bluetooth integration for messages, notifications and calls\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether.nix)
 
 
 

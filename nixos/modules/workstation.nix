@@ -83,12 +83,17 @@ in {
 
     services.power-profiles-daemon.enable = true;
 
-    # enable kde connect
-    programs.kdeconnect.enable = true;
+    heywoodlh.nixos.tether = {
+      enable = true;
+      bluetooth = config.heywoodlh.laptop;
+      allowedAddresses = [
+        "100.65.159.82"
+        "fd7a:115c:a1e0:ab12:4843:cd96:6241:9f52"
+      ];
+    };
 
     networking.firewall = {
-      interfaces.tailscale0.allowedTCPPortRanges = [ { from = 1714; to = 1764; } { from = 3131; to = 3131;} ];
-      interfaces.tailscale0.allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
+      interfaces.tailscale0.allowedTCPPortRanges = [ { from = 3131; to = 3131;} ];
     };
 
     # Desktop packages

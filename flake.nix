@@ -306,6 +306,14 @@ rec {
       url = "github:MuNeNICK/hypr-rdp";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+      inputs.nixpkgs.follows = "nixpkgs-edge";
+    };
+    tether = {
+      url = "github:zackb/tether";
+      inputs.nixpkgs.follows = "nixpkgs-edge";
+    };
     hermes-agent = {
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs-edge";
@@ -380,6 +388,8 @@ rec {
                       youtube-htpc,
                       paseo,
                       hypr-rdp,
+                      noctalia,
+                      tether,
                       hermes-agent,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
@@ -465,7 +475,7 @@ rec {
     platformHomeModules = if pkgs.stdenv.hostPlatform.isDarwin then
       commonHomeModules ++ macosHomeModules
     else
-      commonHomeModules ++ linuxHomeModules
+      commonHomeModules ++ linuxHomeModules ++ [ noctalia.homeModules.default ]
     ;
     homeModules.heywoodlh.home = { ... }: {
       imports = platformHomeModules ++ extHomeModules;
@@ -480,6 +490,7 @@ rec {
       kyle.nixosModules.appleSilicon
       jovian-nixos.nixosModules.default
       steam-asahi.nixosModules.default
+      tether.nixosModules.default
     ];
     myNixOSModules = [
       ./nixos/modules/defaults.nix
@@ -510,6 +521,7 @@ rec {
       ./nixos/modules/kde.nix
       ./nixos/modules/tor.nix
       ./nixos/modules/portmaster.nix
+      ./nixos/modules/tether.nix
       ./nixos/modules/libvirtd.nix
       ./nixos/modules/tv.nix
       ./nixos/modules/moonlight.nix
@@ -1045,6 +1057,7 @@ rec {
                 notifications.ntfy = {
                   enable = true;
                   url = "http://ntfy.barn-banana.ts.net/t3";
+                  clickTarget = "ios";
                 };
               };
             };

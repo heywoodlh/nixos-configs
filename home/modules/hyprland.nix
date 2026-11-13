@@ -205,7 +205,7 @@ in {
           enabled = true;
           lock_before_suspend = true;
           transition = [ ];
-          blur_intensity = 0.0;
+          blur_intensity = 0.5;
           tint_intensity = 0.1;
         };
         lockscreen_widgets = {

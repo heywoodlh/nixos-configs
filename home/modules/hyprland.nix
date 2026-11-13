@@ -190,6 +190,7 @@ in {
           clock = {
             format = "{:%a %d %b %H:%M}";
             custom_label = "󰥔";
+            actions.left = "panel-toggle control-center notifications";
           };
           more = {
             type = "custom_button";

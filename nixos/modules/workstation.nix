@@ -85,6 +85,7 @@ in {
 
     heywoodlh.nixos.tether = {
       enable = true;
+      bluetooth = config.heywoodlh.laptop;
       allowedAddresses = [
         "100.65.159.82"
         "fd7a:115c:a1e0:ab12:4843:cd96:6241:9f52"

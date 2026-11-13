@@ -5911,6 +5911,30 @@ list of string
 
 
 
+## heywoodlh\.nixos\.tether\.bluetooth
+
+
+
+Enable Tether’s Bluetooth integration for messages, notifications and calls\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/tether.nix)
+
+
+
 ## heywoodlh\.nixos\.tor\.enable
 
 

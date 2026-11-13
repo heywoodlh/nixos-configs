@@ -26,6 +26,11 @@ in {
       description = "Tether package to use.";
       type = types.package;
     };
+    bluetooth = mkOption {
+      default = false;
+      description = "Enable Tether's Bluetooth integration for messages, notifications and calls.";
+      type = types.bool;
+    };
     allowedAddresses = mkOption {
       default = [ ];
       example = [ "100.65.159.82" ];
@@ -45,6 +50,7 @@ in {
     programs.tether = {
       enable = true;
       package = cfg.package;
+      bluetooth.enable = cfg.bluetooth;
     };
 
     systemd.packages = [ cfg.package ];

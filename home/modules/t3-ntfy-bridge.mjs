@@ -13,6 +13,7 @@ const config = {
   ntfyTokenFile: process.env.T3_NOTIFY_NTFY_TOKEN_FILE ?? "",
   pollMs: Math.max(2, Number(process.env.T3_NOTIFY_POLL_SECONDS ?? 10)) * 1000,
   tokenTtl: process.env.T3_NOTIFY_TOKEN_TTL ?? "30d",
+  clickTarget: process.env.T3_NOTIFY_CLICK_TARGET ?? "web",
 };
 const sessionLabel = "t3-ntfy-bridge";
 const t3Home = process.env.T3CODE_HOME ?? join(homedir(), ".t3");
@@ -270,6 +271,13 @@ function evaluate(previous, snapshot) {
   return {next, events};
 }
 
+function clickUrl(environmentId, threadId) {
+  if (config.clickTarget === "ios") {
+    return `t3code://threads/${encodeURIComponent(environmentId)}/${encodeURIComponent(threadId)}`;
+  }
+  return `${config.baseUrl}/${environmentId}/${threadId}`;
+}
+
 async function publish(event, environmentId) {
   const headers = {
     title: event.title,
@@ -277,7 +285,7 @@ async function publish(event, environmentId) {
     tags: event.tag,
   };
   if (environmentId !== null && event.threadId !== "") {
-    headers.click = `${config.baseUrl}/${environmentId}/${event.threadId}`;
+    headers.click = clickUrl(environmentId, event.threadId);
   }
   if (config.ntfyToken !== "") headers.authorization = `Bearer ${config.ntfyToken}`;
   const response = await fetch(config.ntfyUrl, {
@@ -378,6 +386,11 @@ function selfTest() {
     ],
   });
   assert(result.events.length === 0, "subagent and archived threads must stay silent");
+
+  config.clickTarget = "ios";
+  assert(clickUrl("env 1", "thread-1") === "t3code://threads/env%201/thread-1", "ios click must use the app deep link");
+  config.clickTarget = "web";
+  assert(clickUrl("env-1", "thread-1").endsWith("/env-1/thread-1"), "web click must use the web UI");
 
   process.stdout.write("self-test passed\n");
 }

@@ -1057,6 +1057,7 @@ rec {
                 notifications.ntfy = {
                   enable = true;
                   url = "http://ntfy.barn-banana.ts.net/t3";
+                  clickTarget = "ios";
                 };
               };
             };

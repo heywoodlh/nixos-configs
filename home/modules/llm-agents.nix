@@ -226,6 +226,11 @@ in {
           description = "Optional file containing an ntfy access token for a protected topic.";
           type = nullOr str;
         };
+        clickTarget = mkOption {
+          default = "web";
+          description = "Where notification clicks open the thread: the T3 Code web UI or the T3 Code iOS app.";
+          type = enum [ "web" "ios" ];
+        };
       };
       hermes = {
         enable = mkOption {
@@ -464,6 +469,7 @@ in {
               "T3_NOTIFY_NTFY_URL=${t3Cfg.notifications.ntfy.url}"
               "T3_NOTIFY_T3_BIN=${t3Cfg.package}/bin/t3"
               "T3_NOTIFY_POLL_SECONDS=${toString t3Cfg.notifications.ntfy.pollInterval}"
+              "T3_NOTIFY_CLICK_TARGET=${t3Cfg.notifications.ntfy.clickTarget}"
             ]
             ++ lib.optional (t3Cfg.notifications.ntfy.tokenFile != null) "T3_NOTIFY_NTFY_TOKEN_FILE=${t3Cfg.notifications.ntfy.tokenFile}";
         };
@@ -480,6 +486,7 @@ in {
               T3_NOTIFY_NTFY_URL = t3Cfg.notifications.ntfy.url;
               T3_NOTIFY_T3_BIN = "${t3Cfg.package}/bin/t3";
               T3_NOTIFY_POLL_SECONDS = toString t3Cfg.notifications.ntfy.pollInterval;
+              T3_NOTIFY_CLICK_TARGET = t3Cfg.notifications.ntfy.clickTarget;
             }
             // lib.optionalAttrs (t3Cfg.notifications.ntfy.tokenFile != null) {
               T3_NOTIFY_NTFY_TOKEN_FILE = t3Cfg.notifications.ntfy.tokenFile;

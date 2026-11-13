@@ -217,6 +217,7 @@ in {
         bar.main = {
           position = "top";
           thickness = 32;
+          background_opacity = 0.0;
           margin_ends = 0;
           margin_edge = 0;
           radius = 0;

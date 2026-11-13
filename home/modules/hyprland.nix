@@ -244,6 +244,7 @@ in {
           ];
           auto_update = "all";
         };
+        plugin_settings."davemhammer/tailscale".notify_on_peer_change = false;
         widget = {
           launcher = {
             custom_image = "${pkgs.nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake-white.png";

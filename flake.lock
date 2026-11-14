@@ -1547,6 +1547,26 @@
         "type": "github"
       }
     },
+    "nix-llama": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794519977,
+        "narHash": "sha256-tYovskCYUGeQLSuBybqJqlhEKyEZ2KviJYZO397Oc4s=",
+        "owner": "heywoodlh",
+        "repo": "nix-llama",
+        "rev": "bdb48145a910b8ff5118bed3506556373294df80",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "repo": "nix-llama",
+        "type": "github"
+      }
+    },
     "nix-vscode-extensions": {
       "inputs": {
         "nixpkgs": [
@@ -2239,6 +2259,7 @@
         "nix": "nix",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
         "nix-formatter-pack": "nix-formatter-pack",
+        "nix-llama": "nix-llama",
         "nixos-hardware": "nixos-hardware",
         "nixos-lima": "nixos-lima",
         "nixpkgs": "nixpkgs",

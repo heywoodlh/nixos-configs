@@ -60,6 +60,13 @@ in {
     ../../roles/remote-access/wol.nix
   ];
 
+  # Reachable over tailscale0 (a trusted interface); 8080 is taken by nomad's hostPort
+  services.nix-llama = {
+    enable = true;
+    host = "0.0.0.0";
+    port = 8090;
+  };
+
   # Bootloader.
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 

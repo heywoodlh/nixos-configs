@@ -855,6 +855,20 @@ in {
     };
   };
 
+  programs.opencode.settings.provider.nix-llama-homelab = mkIf config.heywoodlh.home.llm.enable {
+    npm = "@ai-sdk/openai-compatible";
+    name = "nix-llama-homelab";
+    options.baseURL = "http://homelab.barn-banana.ts.net:8090/v1";
+    models.nix-llama = {
+      name = "nix-llama";
+      tool_call = true;
+      limit = {
+        context = 32768;
+        output = 8192;
+      };
+    };
+  };
+
   programs.iamb = {
     enable = true;
     package = edgePkgs.iamb;

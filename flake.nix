@@ -326,6 +326,10 @@ rec {
       url = "github:heywoodlh/search-tui";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-llama = {
+      url = "github:heywoodlh/nix-llama";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixtop-source = {
       url = "git+https://codeberg.org/kylesferrazza/nix-configs?ref=main&rev=289467371d81111509567e9d5199ab0c74f72317";
       flake = false;
@@ -391,6 +395,7 @@ rec {
                       noctalia,
                       tether,
                       hermes-agent,
+                      nix-llama,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -762,6 +767,37 @@ rec {
       };
     };
 
+    # nix-llama served on loopback, with a matching OpenCode provider
+    nixLlamaLocal = {
+      services.nix-llama.enable = true;
+      home-manager.users.heywoodlh.programs.opencode.settings.provider.nix-llama-local = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "nix-llama-local";
+        options.baseURL = "http://127.0.0.1:8080/v1";
+        models.nix-llama = {
+          name = "nix-llama";
+          tool_call = true;
+          limit = {
+            context = 32768;
+            output = 8192;
+          };
+        };
+      };
+    };
+
+    # The upstream overlay's top-level `version` leaks into every callPackage
+    nixLlamaOverlay = final: prev: removeAttrs (nix-llama.overlays.default final prev) [ "version" ];
+    nixLlamaNixOS = {
+      imports = [ nix-llama.nixosModules.nix-llama ];
+      nixpkgs.overlays = [ nixLlamaOverlay ];
+    };
+    nixLlamaDarwin = { config, lib, ... }: {
+      imports = [ nix-llama.darwinModules.nix-llama ];
+      nixpkgs.overlays = [ nixLlamaOverlay ];
+      # nix-darwin only runs its own fixed list of activation scripts
+      system.activationScripts.extraActivation.text = lib.mkIf config.services.nix-llama.enable (lib.mkAfter config.system.activationScripts.nix-llama.text);
+    };
+
     # Base home configuration
     homeConfig = target: user: homeDir: extraConf: home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
@@ -850,6 +886,8 @@ rec {
         "m4-macbook-air" = darwinConfig "macbook" "m4-macbook-air" {
           imports = [
             darwinWorkstationConfig
+            nixLlamaDarwin
+            nixLlamaLocal
             {
               cart = {
                 enable = true;
@@ -880,6 +918,8 @@ rec {
           imports = [
             ./darwin/roles/mac-mini.nix
             darwinWorkstationConfig
+            nixLlamaDarwin
+            nixLlamaLocal
             {
               heywoodlh.sshd.enable = true;
               # Firewall needs to be lenient for VNC/SSH
@@ -933,6 +973,7 @@ rec {
         homelab = nixosConfig "server" "homelab" {
           imports = [
             ./nixos/hosts/homelab/configuration.nix
+            nixLlamaNixOS
           ];
         };
 
@@ -1078,6 +1119,8 @@ rec {
             nixos-hardware.nixosModules.common-pc-laptop
             nixos-hardware.nixosModules.common-pc-laptop-ssd
             ./nixos/hosts/yoga-7i-14irl8.nix
+            nixLlamaNixOS
+            nixLlamaLocal
           ];
           home-manager.users.heywoodlh.imports = [ ./home/roles/kiwix.nix ];
         };

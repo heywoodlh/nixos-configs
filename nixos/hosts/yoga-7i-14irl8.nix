@@ -59,7 +59,8 @@ in
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.kernelParams = [ "pcie_aspm.policy=powersupersave" "i915.enable_psr=0" ];
+  # PSR1 only: enable_psr=0 keeps the eDP link clocked, suspected 5GHz wifi interference
+  boot.kernelParams = [ "pcie_aspm.policy=powersupersave" "i915.enable_psr=1" ];
   hardware.intelgpu.vaapiDriver = "intel-media-driver";
   boot.extraModulePackages = [ ];
 
@@ -81,8 +82,11 @@ in
   # Firmware updates (BIOS/SSD/etc.)
   services.fwupd.enable = true;
 
-  # 2-in-1 convertible: accelerometer + tablet-mode switch via iio-sensor-proxy
-  environment.systemPackages = with pkgs; [ iio-sensor-proxy sbctl ];
+  environment.systemPackages = with pkgs; [
+    iio-sensor-proxy
+    moonlight-qt
+    sbctl
+  ];
 
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend";

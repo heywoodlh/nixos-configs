@@ -785,19 +785,6 @@ rec {
       };
     };
 
-    # The upstream overlay's top-level `version` leaks into every callPackage
-    nixLlamaOverlay = final: prev: removeAttrs (nix-llama.overlays.default final prev) [ "version" ];
-    nixLlamaNixOS = {
-      imports = [ nix-llama.nixosModules.nix-llama ];
-      nixpkgs.overlays = [ nixLlamaOverlay ];
-    };
-    nixLlamaDarwin = { config, lib, ... }: {
-      imports = [ nix-llama.darwinModules.nix-llama ];
-      nixpkgs.overlays = [ nixLlamaOverlay ];
-      # nix-darwin only runs its own fixed list of activation scripts
-      system.activationScripts.extraActivation.text = lib.mkIf config.services.nix-llama.enable (lib.mkAfter config.system.activationScripts.nix-llama.text);
-    };
-
     # Base home configuration
     homeConfig = target: user: homeDir: extraConf: home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
@@ -886,7 +873,7 @@ rec {
         "m4-macbook-air" = darwinConfig "macbook" "m4-macbook-air" {
           imports = [
             darwinWorkstationConfig
-            nixLlamaDarwin
+            nix-llama.darwinModules.default
             nixLlamaLocal
             {
               cart = {
@@ -918,7 +905,7 @@ rec {
           imports = [
             ./darwin/roles/mac-mini.nix
             darwinWorkstationConfig
-            nixLlamaDarwin
+            nix-llama.darwinModules.default
             nixLlamaLocal
             {
               heywoodlh.sshd.enable = true;
@@ -973,7 +960,7 @@ rec {
         homelab = nixosConfig "server" "homelab" {
           imports = [
             ./nixos/hosts/homelab/configuration.nix
-            nixLlamaNixOS
+            nix-llama.nixosModules.default
           ];
         };
 
@@ -1119,7 +1106,7 @@ rec {
             nixos-hardware.nixosModules.common-pc-laptop
             nixos-hardware.nixosModules.common-pc-laptop-ssd
             ./nixos/hosts/yoga-7i-14irl8.nix
-            nixLlamaNixOS
+            nix-llama.nixosModules.default
             nixLlamaLocal
           ];
           home-manager.users.heywoodlh.imports = [ ./home/roles/kiwix.nix ];

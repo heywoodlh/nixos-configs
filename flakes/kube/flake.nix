@@ -660,7 +660,7 @@
           namespace = "media";
           replicas = 1;
           media_uid = "995";
-          plex_image = "docker.io/linuxserver/plex:1.43.5.11029-6bf8af3f0-ls329";
+          plex_image = "docker.io/linuxserver/plex:1.43.5.11079-b3b13e506-ls333";
           plex_hostfolder = "/media/config/services/plex";
           radarr_image = "docker.io/linuxserver/radarr:6.3.0.10514-ls315";
           radarr_hostfolder = "/media/config/services/radarr";

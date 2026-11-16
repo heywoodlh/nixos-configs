@@ -418,6 +418,7 @@ rec {
       ./base/defaults.nix
       ./base/stylix.nix
       ./base/sshd.nix
+      ./base/nix-llama.nix
     ];
     darwinModules.heywoodlh.darwin = { config, pkgs, ... }: {
       imports = [
@@ -548,6 +549,7 @@ rec {
       modules = [
         darwinModules.heywoodlh.darwin
         home-manager.darwinModules.home-manager
+        nix-llama.darwinModules.default
         cart.darwinModules.${system}.cart
         stylix.darwinModules.stylix
         ./darwin/roles/base.nix
@@ -632,6 +634,7 @@ rec {
       modules = [
         nixosModules.heywoodlh
         home-manager.nixosModules.home-manager
+        nix-llama.nixosModules.default
         ./nixos/roles/virtualization/multiarch.nix
         ./nixos/roles/nixos/attic.nix
         {
@@ -767,24 +770,6 @@ rec {
       };
     };
 
-    # nix-llama served on loopback, with a matching OpenCode provider
-    nixLlamaLocal = {
-      services.nix-llama.enable = true;
-      home-manager.users.heywoodlh.programs.opencode.settings.provider.nix-llama-local = {
-        npm = "@ai-sdk/openai-compatible";
-        name = "nix-llama-local";
-        options.baseURL = "http://127.0.0.1:8080/v1";
-        models.nix-llama = {
-          name = "nix-llama";
-          tool_call = true;
-          limit = {
-            context = 32768;
-            output = 8192;
-          };
-        };
-      };
-    };
-
     # Base home configuration
     homeConfig = target: user: homeDir: extraConf: home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
@@ -873,9 +858,8 @@ rec {
         "m4-macbook-air" = darwinConfig "macbook" "m4-macbook-air" {
           imports = [
             darwinWorkstationConfig
-            nix-llama.darwinModules.default
-            nixLlamaLocal
             {
+              heywoodlh.nix-llama.enable = true;
               cart = {
                 enable = true;
                 user = "heywoodlh";
@@ -905,9 +889,8 @@ rec {
           imports = [
             ./darwin/roles/mac-mini.nix
             darwinWorkstationConfig
-            nix-llama.darwinModules.default
-            nixLlamaLocal
             {
+              heywoodlh.nix-llama.enable = true;
               heywoodlh.sshd.enable = true;
               # Firewall needs to be lenient for VNC/SSH
               networking.applicationFirewall = {
@@ -960,7 +943,6 @@ rec {
         homelab = nixosConfig "server" "homelab" {
           imports = [
             ./nixos/hosts/homelab/configuration.nix
-            nix-llama.nixosModules.default
           ];
         };
 
@@ -1106,9 +1088,8 @@ rec {
             nixos-hardware.nixosModules.common-pc-laptop
             nixos-hardware.nixosModules.common-pc-laptop-ssd
             ./nixos/hosts/yoga-7i-14irl8.nix
-            nix-llama.nixosModules.default
-            nixLlamaLocal
           ];
+          heywoodlh.nix-llama.enable = true;
           home-manager.users.heywoodlh.imports = [ ./home/roles/kiwix.nix ];
         };
 

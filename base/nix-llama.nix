@@ -28,6 +28,13 @@ in {
       '';
       type = types.port;
     };
+    model = mkOption {
+      default = null;
+      description = ''
+        Model to serve. `null` uses nix-llama's default 7B model.
+      '';
+      type = types.nullOr (types.either types.path types.package);
+    };
     acceleration = mkOption {
       default = "auto";
       description = ''
@@ -91,6 +98,7 @@ in {
           inherit (cfg) host port acceleration;
           tuning.contextSize = cfg.contextSize;
         }
+        (optionalAttrs (cfg.model != null) { inherit (cfg) model; })
         cfg.extraConf
       ];
 

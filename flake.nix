@@ -859,7 +859,19 @@ rec {
           imports = [
             darwinWorkstationConfig
             {
-              heywoodlh.nix-llama.enable = true;
+              # 24 GiB shared with lima VMs: 64k context at q8_0 KV costs the same
+              # as 32k at f16; smaller RAM prompt cache and no mlock so macOS can
+              # page the weights out under pressure
+              heywoodlh.nix-llama = {
+                enable = true;
+                contextSize = 65536;
+                extraConf.tuning = {
+                  kvCacheType = "q8_0";
+                  promptCacheMiB = 2048;
+                  loadMode = "mmap";
+                  parallel = 1;
+                };
+              };
               cart = {
                 enable = true;
                 user = "heywoodlh";
@@ -1089,7 +1101,6 @@ rec {
             nixos-hardware.nixosModules.common-pc-laptop-ssd
             ./nixos/hosts/yoga-7i-14irl8.nix
           ];
-          heywoodlh.nix-llama.enable = true;
           home-manager.users.heywoodlh.imports = [ ./home/roles/kiwix.nix ];
         };
 

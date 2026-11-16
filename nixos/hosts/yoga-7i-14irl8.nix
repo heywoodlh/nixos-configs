@@ -69,6 +69,14 @@ in
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
+  # 7.5 GiB RAM: the 7B model thrashes swap and the probe floors context at 4096
+  heywoodlh.nix-llama = {
+    enable = true;
+    acceleration = "vulkan";
+    contextSize = 32768;
+    model = pkgs.nix-llama-model-small;
+  };
+
   hardware.firmware = [ pkgs.sof-firmware ];
   # Bass speaker quirk confirmed for Yoga 7i Gen 6/7; enable if speakers
   # sound thin on this unit:

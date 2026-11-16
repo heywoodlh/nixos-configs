@@ -326,6 +326,10 @@ rec {
       url = "github:heywoodlh/search-tui";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-llama = {
+      url = "github:heywoodlh/nix-llama";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixtop-source = {
       url = "git+https://codeberg.org/kylesferrazza/nix-configs?ref=main&rev=289467371d81111509567e9d5199ab0c74f72317";
       flake = false;
@@ -391,6 +395,7 @@ rec {
                       noctalia,
                       tether,
                       hermes-agent,
+                      nix-llama,
                       ... }:
   flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import nixpkgs {
@@ -413,6 +418,7 @@ rec {
       ./base/defaults.nix
       ./base/stylix.nix
       ./base/sshd.nix
+      ./base/nix-llama.nix
     ];
     darwinModules.heywoodlh.darwin = { config, pkgs, ... }: {
       imports = [
@@ -543,6 +549,7 @@ rec {
       modules = [
         darwinModules.heywoodlh.darwin
         home-manager.darwinModules.home-manager
+        nix-llama.darwinModules.default
         cart.darwinModules.${system}.cart
         stylix.darwinModules.stylix
         ./darwin/roles/base.nix
@@ -627,6 +634,7 @@ rec {
       modules = [
         nixosModules.heywoodlh
         home-manager.nixosModules.home-manager
+        nix-llama.nixosModules.default
         ./nixos/roles/virtualization/multiarch.nix
         ./nixos/roles/nixos/attic.nix
         {
@@ -851,6 +859,19 @@ rec {
           imports = [
             darwinWorkstationConfig
             {
+              # 24 GiB shared with lima VMs: 64k context at q8_0 KV costs the same
+              # as 32k at f16; smaller RAM prompt cache and no mlock so macOS can
+              # page the weights out under pressure
+              heywoodlh.nix-llama = {
+                enable = true;
+                contextSize = 65536;
+                extraConf.tuning = {
+                  kvCacheType = "q8_0";
+                  promptCacheMiB = 2048;
+                  loadMode = "mmap";
+                  parallel = 1;
+                };
+              };
               cart = {
                 enable = true;
                 user = "heywoodlh";
@@ -881,6 +902,7 @@ rec {
             ./darwin/roles/mac-mini.nix
             darwinWorkstationConfig
             {
+              heywoodlh.nix-llama.enable = true;
               heywoodlh.sshd.enable = true;
               # Firewall needs to be lenient for VNC/SSH
               networking.applicationFirewall = {

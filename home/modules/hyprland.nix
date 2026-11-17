@@ -142,6 +142,7 @@ in {
 
   config = mkIf cfg {
     heywoodlh.home.onepassword.package = mkForce pkgs._1password-gui;
+    heywoodlh.home.hyprland-windows-mode.enable = mkDefault true;
     home.packages = with pkgs; [
       acpi
       adwaita-icon-theme
@@ -213,6 +214,7 @@ in {
           widget = {
             date = lockWidget "clock" 960.0 97.0 300.0 32.0 (lockText // { format = "{:%A %-d %B}"; center_text = true; });
             time = lockWidget "clock" 960.0 222.0 480.0 150.0 (lockText // { format = "{:%-I:%M}"; center_text = true; });
+          } // optionalAttrs (config.home.file ? ".face") {
             avatar = lockWidget "sticker" 960.0 713.0 72.0 72.0 { image_path = "${lockAvatar}"; background = false; };
           } // listToAttrs (map lockLoginBox [ "eDP-1" "eDP-2" "DP-1" "DP-2" "DP-3" "DP-4" "HDMI-A-1" "HDMI-A-2" ]);
         };

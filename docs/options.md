@@ -2464,6 +2464,30 @@ false
 
 
 
+## heywoodlh\.home\.hyprland-windows-mode\.enable
+
+
+
+Add a “Windows Mode (Undercover)” app that temporarily makes Hyprland look like Windows 11\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hyprland-windows-mode\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/hyprland-windows-mode.nix)
+
+
+
 ## heywoodlh\.home\.kde-windows\.enable
 
 

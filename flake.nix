@@ -464,6 +464,7 @@ rec {
       ./home/modules/cosmic.nix
       ./home/modules/guake.nix
       ./home/modules/hyprland.nix
+      ./home/modules/hyprland-windows-mode.nix
       ./home/modules/vicinae.nix
       ./home/modules/linux-autostart.nix
       ./home/modules/bluetuith.nix

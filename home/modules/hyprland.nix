@@ -142,6 +142,7 @@ in {
 
   config = mkIf cfg {
     heywoodlh.home.onepassword.package = mkForce pkgs._1password-gui;
+    heywoodlh.home.hyprland-windows-mode.enable = mkDefault true;
     home.packages = with pkgs; [
       acpi
       adwaita-icon-theme

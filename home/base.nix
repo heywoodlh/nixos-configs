@@ -385,6 +385,23 @@ let
       exit 1
     fi
   '';
+  wguCred = pkgs.writeShellScript "wgu-cred.sh" ''
+    mkdir -p ~/.config/aerc
+
+    [[ -s ~/.config/aerc/wgu.txt ]] || rm -f ~/.config/aerc/wgu.txt
+
+    if [[ ! -e ~/.config/aerc/wgu.txt ]]
+    then
+      ${op-wrapper} read 'op://Personal/5oqda5e5mytllayfjncbr7zogu/password' > ~/.config/aerc/wgu.txt
+    fi
+    if [[ -e ~/.config/aerc/wgu.txt ]]
+    then
+      cat ~/.config/aerc/wgu.txt
+    else
+      echo "Unable to populate WGU credentials. Exiting."
+      exit 1
+    fi
+  '';
   iambClearcache = pkgs.writeShellScriptBin "iamb-clearcache" ''
     rm -rf "$HOME/.cache/iamb/profiles/heywoodlh/sqlite"
     pkill -9 iamb &>/dev/null || true
@@ -855,16 +872,29 @@ in {
     };
   };
 
-  programs.opencode.settings.provider.nix-llama-homelab = mkIf config.heywoodlh.home.llm.enable {
-    npm = "@ai-sdk/openai-compatible";
-    name = "nix-llama-homelab";
-    options.baseURL = "http://homelab.barn-banana.ts.net:8090/v1";
-    models.nix-llama = {
-      name = "nix-llama";
-      tool_call = true;
-      limit = {
-        context = 32768;
-        output = 8192;
+  programs.opencode.settings.provider = mkIf config.heywoodlh.home.llm.enable {
+    nix-llama-homelab = {
+      npm = "@ai-sdk/openai-compatible";
+      name = "nix-llama-homelab";
+      options.baseURL = "http://homelab.barn-banana.ts.net:8090/v1";
+      models.nix-llama = {
+        name = "nix-llama";
+        tool_call = true;
+        limit = {
+          context = 32768;
+          output = 8192;
+        };
+      };
+    };
+    lmstudio-remote = {
+      npm = "@ai-sdk/openai-compatible";
+      name = "lmstudio-remote";
+      options.baseURL = "http://llm.barn-banana.ts.net/v1";
+      models."google/gemma-4-e4b" = {
+        name = "google/gemma-4-e4b";
+        reasoning = true;
+        tool_call = true;
+        limit = { context = 32768; output = 8192; };
       };
     };
   };
@@ -917,6 +947,16 @@ in {
           aliases = "Spencer Heywood <*@protonmail.com>,Spencer Heywood <*@pm.me>,LaMar Heywood <wgu@heywoodlh.io>,Spencer Heywood <heywoodlh@heywoodlh.io>";
           signature-file = "${pkgs.writeText "signature.txt" "- L. Spencer Heywood"}";
           address-book-cmd = "${pkgs.khard}/bin/khard email -a personal --parsable --remove-first-line %s";
+        };
+        wgu = {
+          source = "imap+insecure://lheywo3%40wgu.edu@davmail.barn-banana.ts.net:143";
+          source-cred-cmd = "${wguCred}";
+          outgoing = "smtp+insecure://lheywo3%40wgu.edu@davmail.barn-banana.ts.net:25";
+          outgoing-cred-cmd = "${wguCred}";
+          default = "INBOX";
+          copy-to = "Sent";
+          from = "LaMar S. Heywood <lheywo3@wgu.edu>";
+          signature-file = "${pkgs.writeText "signature.txt" "- LaMar Heywood"}";
         };
       };
     };

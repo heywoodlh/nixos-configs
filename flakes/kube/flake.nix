@@ -390,7 +390,7 @@
         davmail = mkKubeDrv "davmail" {
           src = ./templates/davmail.yaml;
           namespace = "default";
-          image = "docker.io/heywoodlh/davmail:6.8.1";
+          image = "docker.io/heywoodlh/davmail:7.1.0";
           hostfolder = "/media/data-ssd/davmail";
           nodename = "homelab";
         };

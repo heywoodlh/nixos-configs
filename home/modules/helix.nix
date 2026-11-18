@@ -250,6 +250,22 @@ in {
         language = [
           {
             name = "markdown";
+            file-types = [
+              "md"
+              "livemd"
+              "markdown"
+              "mdx"
+              "mkd"
+              "mkdn"
+              "mdwn"
+              "mdown"
+              "markdn"
+              "mdtxt"
+              "mdtext"
+              "workbook"
+              { glob = "PULLREQ_EDITMSG"; }
+              "eml"
+            ];
             language-servers = [
               "marksman"
               "harper"

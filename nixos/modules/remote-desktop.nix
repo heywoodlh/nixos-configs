@@ -30,7 +30,10 @@ let
       done
       ${pkgs.coreutils}/bin/sleep 0.1
     done
-    [ -n "''${WAYLAND_DISPLAY:-}" ] || exit 1
+    if [ -z "''${WAYLAND_DISPLAY:-}" ]; then
+      echo "no Wayland socket in $XDG_RUNTIME_DIR after 30s; is the desktop session running?" >&2
+      exit 1
+    fi
   '';
 in {
   options.heywoodlh.nixos.remote-desktop = {
@@ -197,6 +200,9 @@ in {
 
     (mkIf cfg.headless.enable {
       users.users.${user}.extraGroups = [ "render" "video" ];
+
+      systemd.services.selkies.partOf = [ "${headlessService}.service" ];
+      systemd.services.wayvnc.partOf = [ "${headlessService}.service" ];
 
       systemd.services.${headlessService} = {
         description = "Headless Hyprland session for ${user}";

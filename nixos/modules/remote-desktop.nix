@@ -201,9 +201,6 @@ in {
     (mkIf cfg.headless.enable {
       users.users.${user}.extraGroups = [ "render" "video" ];
 
-      systemd.services.selkies.partOf = [ "${headlessService}.service" ];
-      systemd.services.wayvnc.partOf = [ "${headlessService}.service" ];
-
       systemd.services.${headlessService} = {
         description = "Headless Hyprland session for ${user}";
         wantedBy = [ "multi-user.target" ];

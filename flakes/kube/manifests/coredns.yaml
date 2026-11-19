@@ -100,6 +100,18 @@ spec:
   type: ClusterIP
   clusterIP: 10.43.9.152
 ---
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: coredns-router
+spec:
+  hostname: coredns-router
+  tags:
+    - tag:kubedns
+  subnetRouter:
+    advertiseRoutes:
+      - 10.43.0.0/16
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

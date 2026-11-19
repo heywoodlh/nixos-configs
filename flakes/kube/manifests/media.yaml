@@ -237,6 +237,23 @@ spec:
   selector:
     app: plex
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: plex
+  name: plex-direct
+  namespace: media
+spec:
+  ports:
+  - name: tls-plex
+    port: 32400
+    protocol: TCP
+    targetPort: plex
+  selector:
+    app: plex
+  type: ClusterIP
 # Radarr
 ---
 apiVersion: apps/v1
@@ -979,6 +996,15 @@ spec:
         credentialName: plex-selfsigned-tls
       hosts:
         - plex.barn-banana.ts.net
+    # Pass plex.direct through so clients see Plex's own certificate.
+    - port:
+        number: 32400
+        name: tls-plex-direct
+        protocol: TLS
+      tls:
+        mode: PASSTHROUGH
+      hosts:
+        - "*.plex.direct"
     # Preserve direct IP access. An IP is not in the certificate SAN list, so
     # it continues to require a browser warning override.
     - port:
@@ -1041,5 +1067,26 @@ spec:
     - route:
         - destination:
             host: plex.media.svc.cluster.local
+            port:
+              number: 32400
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: plex-direct
+  namespace: istio-system
+spec:
+  hosts:
+    - "*.plex.direct"
+  gateways:
+    - plex
+  tls:
+    - match:
+        - port: 32400
+          sniHosts:
+            - "*.plex.direct"
+      route:
+        - destination:
+            host: plex-direct.media.svc.cluster.local
             port:
               number: 32400

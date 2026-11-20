@@ -27,18 +27,13 @@
 
   heywoodlh.nixos.remote-desktop = {
     enable = true;
-    tailscaleIP = "100.74.91.97";
+    address = "100.74.91.97";
+    cssScaling = true;
+    headless.enable = true;
   };
 
-  services.desktopManager.plasma6.enable = false;
-  services.displayManager = {
-    gdm.enable = true;
-    defaultSession = "hyprland";
-    autoLogin = {
-      enable = true;
-      user = config.heywoodlh.defaults.user.name;
-    };
-  };
+  services.displayManager.gdm.enable = lib.mkForce false;
+  services.xserver.displayManager.lightdm.enable = lib.mkForce false;
   heywoodlh.cosmic = lib.mkForce false;
   heywoodlh.hyprland = true;
   heywoodlh.nixos.kde.enable = false;

@@ -999,7 +999,7 @@ rec {
                 enable = true;
                 user = "ops";
                 uid = 1002;
-                tailscaleIP = "100.67.47.0";
+                address = "100.67.47.0";
                 headless.enable = true;
               };
               portmaster.enable = lib.mkForce false;
@@ -1200,7 +1200,7 @@ rec {
           hardware.printers.ensurePrinters = lib.mkForce [];
         };
 
-        nixos-nuc = nixosConfigWith nixpkgs-jovian-nixos "workstation" "nixos-nuc" {
+        nixos-nuc = nixosConfig "workstation" "nixos-nuc" {
           imports = [
             ./nixos/hosts/nuc.nix
           ];

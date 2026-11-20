@@ -710,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults.nix)
 
 
 
@@ -942,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults.nix)
 
 
 
@@ -966,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults.nix)
 
 
 
@@ -990,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults.nix)
 
 
 
@@ -1014,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults.nix)
 
 
 
@@ -1038,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults.nix)
 
 
 
@@ -1062,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/defaults.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/defaults.nix)
 
 
 
@@ -4879,7 +4879,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -4901,7 +4901,7 @@ one of “auto”, “none”, “cuda”, “rocm”, “vulkan”, “metal”
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -4925,7 +4925,7 @@ null
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -4949,7 +4949,7 @@ attribute set
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -4973,7 +4973,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -4997,7 +4997,7 @@ null
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -5021,7 +5021,7 @@ true
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -5045,7 +5045,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -5069,7 +5069,7 @@ positive integer, meaning >0
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -5093,7 +5093,7 @@ Port nix-llama listens on\.
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/nix-llama.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/nix-llama.nix)
 
 
 
@@ -5551,8 +5551,56 @@ string
 
 
 
-Stream a user’s Hyprland session over VNC (Tailscale) and Selkies (localhost)\.
+Stream a user’s Hyprland session over VNC and Selkies\.
 The password is read from ` passwordFile `; services are skipped until it exists\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.address
+
+
+
+Address services listen on\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"127.0.0.1"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
+## heywoodlh\.nixos\.remote-desktop\.cssScaling
+
+
+
+Stream Selkies at the browser’s CSS resolution instead of its device pixels, so HiDPI clients such as Retina Macs get a lower resolution that the browser scales up\.
 
 
 
@@ -5620,6 +5668,31 @@ string
 
 
 
+## heywoodlh\.nixos\.remote-desktop\.headless\.vt
+
+
+
+Virtual terminal the headless session runs on so logind gives it a seat\.
+Its getty is stopped, and no display manager may run on the same seat\.
+
+
+
+*Type:*
+integer between 1 and 63 (both inclusive)
+
+
+
+*Default:*
+
+```nix
+1
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
+
+
+
 ## heywoodlh\.nixos\.remote-desktop\.passwordFile
 
 
@@ -5648,7 +5721,7 @@ string
 
 
 
-Port Selkies listens on (127\.0\.0\.1 only)\.
+Port Selkies listens on\.
 
 
 
@@ -5662,22 +5735,6 @@ Port Selkies listens on (127\.0\.0\.1 only)\.
 ```nix
 8082
 ```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
-
-
-
-## heywoodlh\.nixos\.remote-desktop\.tailscaleIP
-
-
-
-Tailscale address wayvnc listens on\.
-
-
-
-*Type:*
-string
 
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
@@ -6531,7 +6588,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/sshd\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/sshd.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/sshd\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/sshd.nix)
 
 
 
@@ -6627,7 +6684,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/stylix\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/stylix.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/stylix\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/stylix.nix)
 
 
 
@@ -6651,7 +6708,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/stylix\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/stylix.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/stylix\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/stylix.nix)
 
 
 
@@ -6675,7 +6732,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/stylix\.nix](/nix/store/0d9y0prjr9ad4bfa9phva56854gvf8j0-source/base/stylix.nix)
+ - [/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/stylix\.nix](/nix/store/b7yb78djhnxvjm2rjlnryxx3x5w3znab-source/base/stylix.nix)
 
 
 

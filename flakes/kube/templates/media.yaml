@@ -36,7 +36,7 @@ data:
         --config-dir /letsencrypt/config \
         --work-dir /letsencrypt/work \
         --logs-dir /letsencrypt/logs \
-        -m $CLOUDFLARE_EMAIL \
+        -m $ACME_EMAIL \
         -d $CLOUDFLARE_DOMAIN
     fi
     openssl pkcs12 -export \
@@ -62,21 +62,21 @@ spec:
           restartPolicy: Never
           containers:
             - name: letsencrypt
-              image: docker.io/certbot/dns-cloudflare:v5.8.0
+              image: docker.io/certbot/dns-cloudflare:latest
+              imagePullPolicy: Always
               command:
                 - "/bin/ash"
                 - "-c"
               args:
                 - |
                   /run.sh
-                  exit 0
               env:
                 - name: CLOUDFLARE_TOKEN
                   valueFrom:
                     secretKeyRef:
                       name: plex-cloudflare-token
-                      key: api-token
-                - name: CLOUDFLARE_EMAIL
+                      key: password
+                - name: ACME_EMAIL
                   valueFrom:
                     secretKeyRef:
                       name: plex-cloudflare-token
@@ -130,7 +130,7 @@ spec:
         kubernetes.io/hostname: @nodename@
       initContainers:
         - name: bundle-downloader
-          image: docker.io/alpine/git:v2.54.0
+          image: docker.io/alpine/git:latest
           command:
             - "/bin/ash"
             - "-c"
@@ -144,7 +144,8 @@ spec:
             - name: plex-config
               mountPath: /config
         - name: letsencrypt
-          image: docker.io/certbot/dns-cloudflare:v5.8.0
+          image: docker.io/certbot/dns-cloudflare:latest
+          imagePullPolicy: Always
           command:
             - "/bin/ash"
             - "-c"
@@ -158,7 +159,7 @@ spec:
                 secretKeyRef:
                   name: plex-cloudflare-token
                   key: password
-            - name: CLOUDFLARE_EMAIL
+            - name: ACME_EMAIL
               valueFrom:
                 secretKeyRef:
                   name: plex-cloudflare-token
@@ -231,6 +232,23 @@ metadata:
 spec:
   ports:
   - name: plex
+    port: 32400
+    protocol: TCP
+    targetPort: plex
+  selector:
+    app: plex
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: plex
+  name: plex-direct
+  namespace: @namespace@
+spec:
+  ports:
+  - name: tls-plex
     port: 32400
     protocol: TCP
     targetPort: plex
@@ -979,6 +997,15 @@ spec:
         credentialName: plex-selfsigned-tls
       hosts:
         - plex.barn-banana.ts.net
+    # Pass plex.direct through so clients see Plex's own certificate.
+    - port:
+        number: 32400
+        name: tls-plex-direct
+        protocol: TLS
+      tls:
+        mode: PASSTHROUGH
+      hosts:
+        - "*.plex.direct"
     # Preserve direct IP access. An IP is not in the certificate SAN list, so
     # it continues to require a browser warning override.
     - port:
@@ -1041,5 +1068,26 @@ spec:
     - route:
         - destination:
             host: plex.media.svc.cluster.local
+            port:
+              number: 32400
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: plex-direct
+  namespace: istio-system
+spec:
+  hosts:
+    - "*.plex.direct"
+  gateways:
+    - plex
+  tls:
+    - match:
+        - port: 32400
+          sniHosts:
+            - "*.plex.direct"
+      route:
+        - destination:
+            host: plex-direct.media.svc.cluster.local
             port:
               number: 32400

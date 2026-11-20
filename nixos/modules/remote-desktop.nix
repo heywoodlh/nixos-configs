@@ -9,6 +9,7 @@ let
   runtimeDir = "/run/user/${toString cfg.uid}";
   hostname = "${config.networking.hostName}.barn-banana.ts.net";
   headlessService = "${user}-hyprland";
+  headlessTty = "tty${toString cfg.headless.vt}";
   sessionUnits = [ "display-manager.service" ] ++ optional cfg.headless.enable "${headlessService}.service";
   selkies = pkgs.callPackage "${nixtop-source}/pkgs/selkies/package.nix" { };
   wayvnc = pkgs.wayvnc.overrideAttrs (old: {
@@ -20,16 +21,34 @@ let
     libraries = [ pkgs.python3Packages.aiohttp ];
     flakeIgnore = [ "E501" ];
   } (builtins.readFile "${nixtop-source}/nixosModules/containerServices/nixtop/vnc-resize.py");
-  waitForDesktop = ''
-    for _ in {1..300}; do
+  killWayvnc = pkgs.writeShellScript "${user}-wayvnc-kill" ''
+    ${pkgs.procps}/bin/pkill -u ${user} -x wayvnc || true
+  '';
+  findSocket =
+    if cfg.headless.enable then ''
+      pid=$(${config.systemd.package}/bin/systemctl show -p MainPID --value ${headlessService}.service)
+      if [ "$pid" != 0 ]; then
+        socket=$(${pkgs.hyprland}/bin/hyprctl instances -j | ${getExe pkgs.jq} -r --argjson pid "$pid" '.[] | select(.pid == $pid) | .wl_socket')
+        if [ -n "$socket" ] && [ -S "$XDG_RUNTIME_DIR/$socket" ]; then
+          WAYLAND_DISPLAY="$socket"
+        fi
+      fi
+    '' else ''
       for socket in "$XDG_RUNTIME_DIR"/wayland-*; do
         if [ -S "$socket" ]; then
-          export WAYLAND_DISPLAY="''${socket##*/}"
-          break 2
+          WAYLAND_DISPLAY="''${socket##*/}"
+          break
         fi
       done
+    '';
+  waitForDesktop = ''
+    WAYLAND_DISPLAY=
+    for _ in {1..300}; do
+      ${findSocket}
+      [ -n "$WAYLAND_DISPLAY" ] && break
       ${pkgs.coreutils}/bin/sleep 0.1
     done
+    export WAYLAND_DISPLAY
     if [ -z "''${WAYLAND_DISPLAY:-}" ]; then
       echo "no Wayland socket in $XDG_RUNTIME_DIR after 30s; is the desktop session running?" >&2
       exit 1
@@ -40,7 +59,7 @@ in {
     enable = mkOption {
       default = false;
       description = ''
-        Stream a user's Hyprland session over VNC (Tailscale) and Selkies (localhost).
+        Stream a user's Hyprland session over VNC and Selkies.
         The password is read from `passwordFile`; services are skipped until it exists.
       '';
       type = types.bool;
@@ -61,9 +80,10 @@ in {
       '';
       type = types.int;
     };
-    tailscaleIP = mkOption {
+    address = mkOption {
+      default = "127.0.0.1";
       description = ''
-        Tailscale address wayvnc listens on.
+        Address services listen on.
       '';
       type = types.str;
     };
@@ -84,9 +104,16 @@ in {
     selkiesPort = mkOption {
       default = 8082;
       description = ''
-        Port Selkies listens on (127.0.0.1 only).
+        Port Selkies listens on.
       '';
       type = types.port;
+    };
+    cssScaling = mkOption {
+      default = false;
+      description = ''
+        Stream Selkies at the browser's CSS resolution instead of its device pixels, so HiDPI clients such as Retina Macs get a lower resolution that the browser scales up.
+      '';
+      type = types.bool;
     };
     headless = {
       enable = mkOption {
@@ -103,6 +130,14 @@ in {
           Name of the headless Hyprland output.
         '';
         type = types.str;
+      };
+      vt = mkOption {
+        default = 1;
+        description = ''
+          Virtual terminal the headless session runs on so logind gives it a seat.
+          Its getty is stopped, and no display manager may run on the same seat.
+        '';
+        type = types.ints.between 1 63;
       };
     };
   };
@@ -123,12 +158,17 @@ in {
           description = "Selkies stream of the ${config.networking.hostName} Hyprland session";
           wantedBy = [ "multi-user.target" ];
           after = sessionUnits;
+          bindsTo = optional cfg.headless.enable "${headlessService}.service";
           unitConfig.ConditionPathExists = cfg.passwordFile;
           environment = {
             XDG_RUNTIME_DIR = runtimeDir;
             DBUS_SESSION_BUS_ADDRESS = "unix:path=${runtimeDir}/bus";
             SELKIES_GAMEPAD_ENABLED = "false";
             SELKIES_PRINTING_ENABLED = "false";
+            SELKIES_ADDR = "127.0.0.1" + optionalString (cfg.address != "127.0.0.1") ",${cfg.address}";
+            SELKIES_USE_CPU = "true";
+          } // optionalAttrs cfg.cssScaling {
+            SELKIES_USE_CSS_SCALING = "true";
           };
           serviceConfig = {
             User = user;
@@ -139,7 +179,7 @@ in {
               ${waitForDesktop}
               SELKIES_BASIC_AUTH_PASSWORD=$(<"$CREDENTIALS_DIRECTORY/password")
               export SELKIES_BASIC_AUTH_PASSWORD
-              exec ${getExe selkies} --addr=127.0.0.1 --port=${toString cfg.selkiesPort} \
+              exec ${getExe selkies} --port=${toString cfg.selkiesPort} \
                 --wayland=true --wayland-host-display="$WAYLAND_DISPLAY" \
                 --basic-auth-user=${user}
             '';
@@ -149,9 +189,10 @@ in {
         };
 
         wayvnc = {
-          description = "VNC access to the ${config.networking.hostName} Hyprland session over Tailscale";
+          description = "VNC access to the ${config.networking.hostName} Hyprland session";
           wantedBy = [ "multi-user.target" ];
-          after = sessionUnits ++ [ "tailscaled.service" ];
+          after = sessionUnits;
+          bindsTo = optional cfg.headless.enable "${headlessService}.service";
           unitConfig.ConditionPathExists = cfg.passwordFile;
           environment = {
             XDG_RUNTIME_DIR = runtimeDir;
@@ -168,6 +209,8 @@ in {
             RuntimeDirectory = "${user}-wayvnc";
             RuntimeDirectoryMode = "0700";
             UMask = "0077";
+            ExecStartPre = killWayvnc;
+            ExecStopPost = killWayvnc;
             ExecStart = pkgs.writeShellScript "${user}-wayvnc" ''
               key="$STATE_DIRECTORY/rsa.pem"
               [ -e "$key" ] || ${getExe pkgs.openssl} genrsa -traditional -out "$key" 4096
@@ -180,7 +223,7 @@ in {
                 -keyout "$tlsKey" -out "$cert"
               ${waitForDesktop}
               ${pkgs.coreutils}/bin/cat >"$RUNTIME_DIRECTORY/config" <<EOF
-              address=${cfg.tailscaleIP}
+              address=${cfg.address}
               port=${toString cfg.vncPort}
               enable_auth=true
               username=${user}
@@ -201,17 +244,33 @@ in {
     (mkIf cfg.headless.enable {
       users.users.${user}.extraGroups = [ "render" "video" ];
 
+      systemd.targets.getty.wants = mkIf (cfg.headless.vt == 1) (mkForce [ ]);
+
       systemd.services.${headlessService} = {
         description = "Headless Hyprland session for ${user}";
         wantedBy = [ "multi-user.target" ];
-        after = [ "home-manager-${user}.service" "user@${toString cfg.uid}.service" ];
-        requires = [ "home-manager-${user}.service" ];
-        wants = [ "user@${toString cfg.uid}.service" ];
+        after = [
+          "home-manager-${user}.service"
+          "user@${toString cfg.uid}.service"
+          "systemd-user-sessions.service"
+          "systemd-logind.service"
+          "getty@${headlessTty}.service"
+        ];
+        wants = [
+          "home-manager-${user}.service"
+          "user@${toString cfg.uid}.service"
+          "systemd-logind.service"
+          "selkies.service"
+          "wayvnc.service"
+        ];
+        conflicts = [ "getty@${headlessTty}.service" ];
         environment = {
           XDG_RUNTIME_DIR = runtimeDir;
           DBUS_SESSION_BUS_ADDRESS = "unix:path=${runtimeDir}/bus";
           XDG_SESSION_TYPE = "wayland";
           XDG_CURRENT_DESKTOP = "Hyprland";
+          XDG_SEAT = "seat0";
+          XDG_VTNR = toString cfg.headless.vt;
           AQ_NO_KMS_REQUIREMENT = "1";
         };
         serviceConfig = {
@@ -219,6 +278,15 @@ in {
           PAMName = "login";
           WorkingDirectory = homeDir;
           ExecStart = "${pkgs.hyprland}/bin/Hyprland";
+          TTYPath = "/dev/${headlessTty}";
+          TTYReset = true;
+          TTYVHangup = true;
+          TTYVTDisallocate = true;
+          StandardInput = "tty-fail";
+          StandardOutput = "journal";
+          StandardError = "journal";
+          UtmpIdentifier = headlessTty;
+          UtmpMode = "user";
           Restart = "always";
           RestartSec = "5s";
         };

@@ -897,6 +897,154 @@ spec:
     app: seerr
   type: ClusterIP
 
+# tdarr
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tdarr
+  name: tdarr
+  namespace: @namespace@
+spec:
+  replicas: @replicas@
+  selector:
+    matchLabels:
+      app: tdarr
+  template:
+    metadata:
+      labels:
+        app: tdarr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: @nodename@
+      containers:
+      - image: @tdarr_server_image@
+        name: tdarr
+        ports:
+        - name: web-ui
+          containerPort: 8265
+        - name: server
+          containerPort: 8266
+        volumeMounts:
+        - name: tdarr-server
+          mountPath: /app/server
+        - name: tdarr-configs
+          mountPath: /app/configs
+        - name: tdarr-logs
+          mountPath: /app/logs
+        - name: media
+          mountPath: /media/home-media
+        - name: tdarr-temp
+          mountPath: /temp
+        env:
+          - name: PUID
+            value: "@media_uid@"
+          - name: PGID
+            value: "@media_uid@"
+          - name: UMASK_SET
+            value: "002"
+          - name: TZ
+            value: America/Denver
+          - name: serverIP
+            value: "0.0.0.0"
+          - name: serverPort
+            value: "8266"
+          - name: webUIPort
+            value: "8265"
+          - name: internalNode
+            value: "false"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 2Gi
+      - image: @tdarr_node_image@
+        name: tdarr-node
+        volumeMounts:
+        - name: tdarr-configs
+          mountPath: /app/configs
+        - name: tdarr-logs
+          mountPath: /app/logs
+        - name: media
+          mountPath: /media/home-media
+        - name: tdarr-temp
+          mountPath: /temp
+        env:
+          - name: PUID
+            value: "@media_uid@"
+          - name: PGID
+            value: "@media_uid@"
+          - name: UMASK_SET
+            value: "002"
+          - name: TZ
+            value: America/Denver
+          - name: serverIP
+            value: "127.0.0.1"
+          - name: serverPort
+            value: "8266"
+          - name: nodeName
+            value: gpu-worker
+          - name: internalNode
+            value: "false"
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+            gpu.intel.com/i915: "1"
+          limits:
+            cpu: "4"
+            memory: 4Gi
+            gpu.intel.com/i915: "1"
+      volumes:
+      - name: tdarr-server
+        hostPath:
+          path: @tdarr_hostfolder@/server
+          type: DirectoryOrCreate
+      - name: tdarr-configs
+        hostPath:
+          path: @tdarr_hostfolder@/configs
+          type: DirectoryOrCreate
+      - name: tdarr-logs
+        hostPath:
+          path: @tdarr_hostfolder@/logs
+          type: DirectoryOrCreate
+      - name: tdarr-temp
+        hostPath:
+          path: @tdarr_hostfolder@/temp
+          type: DirectoryOrCreate
+      - name: media
+        hostPath:
+          path: @media_hostfolder@
+          type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tdarr
+  name: tdarr
+  namespace: @namespace@
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "tdarr"
+    tailscale.com/tags: "tag:http"
+spec:
+  ports:
+  - name: web-ui
+    port: 80
+    protocol: TCP
+    targetPort: web-ui
+  - name: server
+    port: 8266
+    protocol: TCP
+    targetPort: server
+  selector:
+    app: tdarr
+  type: ClusterIP
+
 # Plex Istio ingress and CrowdSec authorization
 ---
 apiVersion: onepassword.com/v1

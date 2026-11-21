@@ -680,6 +680,9 @@
           libation_hostfolder = "/media/config/services/libation";
           seerr_image = "ghcr.io/seerr-team/seerr:v3.4.1";
           seerr_hostfolder = "/media/config/services/seerr";
+          tdarr_server_image = "ghcr.io/haveagitgat/tdarr:3.08.00";
+          tdarr_node_image = "ghcr.io/haveagitgat/tdarr_node:3.08.00";
+          tdarr_hostfolder = "/media/config/services/tdarr";
           media_hostfolder = "/media/home-media";
           nodename = "homelab";
         };

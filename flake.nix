@@ -518,6 +518,7 @@ rec {
       ./nixos/modules/rayhunter.nix
       ./nixos/modules/stylix.nix
       ./nixos/modules/sunshine.nix
+      ./nixos/modules/spotifyd.nix
       ./nixos/modules/nvidia-patch.nix
       ./nixos/modules/gaming.nix
       ./nixos/modules/cachyos-kernel.nix
@@ -1202,7 +1203,6 @@ rec {
           imports = [
             ./nixos/hosts/steam-deck.nix
           ];
-          home-manager.users.heywoodlh.imports = [ ./home/roles/spotify-soloist.nix ];
           heywoodlh.nixos.steam-deck.enable = true;
           hardware.printers.ensurePrinters = lib.mkForce [];
         };
@@ -1251,7 +1251,6 @@ rec {
           systemd.services.nix-daemon.serviceConfig.MemoryHigh = "3G";
 
           home-manager.users.heywoodlh = {
-            imports = [ ./home/roles/spotify-soloist.nix ];
             heywoodlh.home = {
               paseo = {
                 desktop = true;
@@ -1276,14 +1275,12 @@ rec {
           imports = [
             ./nixos/hosts/gaming.nix
           ];
-          home-manager.users.heywoodlh.imports = [ ./home/roles/spotify-soloist.nix ];
         };
 
         nixos-gaming-sarah =  nixosConfig "workstation" "nixos-gaming-sarah" {
           imports = [
             ./nixos/hosts/gaming-sarah.nix
           ];
-          home-manager.users.heywoodlh.imports = [ ./home/roles/spotify-soloist.nix ];
         };
 
         nixos-blade = nixosConfig "laptop" "nixos-blade" {

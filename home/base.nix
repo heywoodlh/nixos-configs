@@ -402,12 +402,13 @@ let
       exit 1
     fi
   '';
+  soloistCredentialsFile = config.heywoodlh.home.spotify-soloist.credentialsFile;
   soloistWrapper = pkgs.writeShellScriptBin "soloist" ''
     set -euo pipefail
-    credentials="$HOME/.local/share/spotify-soloist/password.txt"
+    credentials="${soloistCredentialsFile}"
     if [[ ! -s "$credentials" ]]
     then
-      ${pkgs.coreutils}/bin/mkdir -p "$HOME/.local/share/spotify-soloist"
+      ${pkgs.coreutils}/bin/mkdir -p "$(${pkgs.coreutils}/bin/dirname "$credentials")"
       tmp="$(${pkgs.coreutils}/bin/mktemp)"
       trap '${pkgs.coreutils}/bin/rm -f "$tmp"' EXIT
       ${op-wrapper} item get leuhmz7uins37a44yh7zugdylu --fields soloist-api-key --reveal > "$tmp"
@@ -415,7 +416,11 @@ let
       ${pkgs.coreutils}/bin/mv "$tmp" "$credentials"
       trap - EXIT
     fi
-    exec ${edgePkgs.soloist}/bin/soloist "$@"
+    ${if stdenv.hostPlatform.isDarwin then ''
+      /bin/launchctl kickstart -k "gui/$(/usr/bin/id -u)/org.nix-community.home.spotify-soloist"
+    '' else ''
+      ${pkgs.systemd}/bin/systemctl --user restart spotify-soloist.service
+    ''}
   '';
   iambClearcache = pkgs.writeShellScriptBin "iamb-clearcache" ''
     rm -rf "$HOME/.cache/iamb/profiles/heywoodlh/sqlite"
@@ -489,7 +494,7 @@ in {
     tangledSyncWrapper
     paseoSetup
     iambClearcache
-  ]) ++ lib.optionals stdenv.hostPlatform.isLinux [ soloistWrapper ];
+  ]) ++ lib.optional config.heywoodlh.home.spotify-soloist.enable soloistWrapper;
 
   # Enable password-store
   programs.password-store = {

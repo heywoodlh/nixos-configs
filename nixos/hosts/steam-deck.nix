@@ -15,6 +15,8 @@ with lib;
     moonlight-qt
   ];
 
+  home-manager.users.heywoodlh.heywoodlh.home.spotify-soloist.enable = true;
+
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/adf380ab-a702-4976-b107-cb6547629a1e";
     fsType = "ext4";

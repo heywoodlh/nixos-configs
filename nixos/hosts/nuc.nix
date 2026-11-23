@@ -32,6 +32,8 @@
     headless.enable = true;
   };
 
+  home-manager.users.heywoodlh.heywoodlh.home.spotify-soloist.enable = true;
+
   services.displayManager.gdm.enable = lib.mkForce false;
   services.xserver.displayManager.lightdm.enable = lib.mkForce false;
   heywoodlh.cosmic = lib.mkForce false;

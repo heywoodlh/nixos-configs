@@ -40,6 +40,8 @@ in {
     ls = "ls --color";
   };
 
+  heywoodlh.home.spotify-soloist.enable = true;
+
   home.file."Pictures/wallpaper.png" = {
     enable = true;
     source = ../assets/nord-apple.png;

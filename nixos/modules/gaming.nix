@@ -220,7 +220,6 @@ in {
       hyprland = lib.mkForce false;
       server = true;
       nixos = {
-        spotifyd.enable = mkDefault true;
         sunshine.enable = true;
         nvidia-patch = true;
         portmaster.enable = lib.mkForce false;
@@ -455,15 +454,18 @@ in {
         ${pkgs.flatpak}/bin/flatpak --user install --noninteractive -y --or-update flathub org.vinegarhq.Sober
       '';
 
-      heywoodlh.home = mkIf cfg.console {
-        hyprland = lib.mkForce false;
-        autostart = [
-          {
-            name = "Steam";
-            command = "steam -start steam://open/bigpicture";
-          }
-        ];
-      };
+      heywoodlh.home = mkMerge [
+        { spotify-soloist.enable = true; }
+        (mkIf cfg.console {
+          hyprland = lib.mkForce false;
+          autostart = [
+            {
+              name = "Steam";
+              command = "steam -start steam://open/bigpicture";
+            }
+          ];
+        })
+      ];
 
       systemd.user.services.ydotoold = {
         Unit = {

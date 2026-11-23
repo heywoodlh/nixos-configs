@@ -82,6 +82,7 @@ in {
       "rustdesk"
       "shortcat"
       "soduto"
+      "spotify-soloist"
       "tailscale-app"
     ];
     masApps = {

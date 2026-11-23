@@ -458,6 +458,7 @@ rec {
       ./home/modules/llm-agents.nix
       ./home/modules/search-tui.nix
       ./home/modules/kiwix.nix
+      ./home/modules/spotify-soloist.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -741,7 +742,13 @@ rec {
     nixosConfig = nixosConfigWith nixpkgs;
 
     eval = pkgs.lib.evalModules {
-      specialArgs = { inherit pkgs; inherit myFlakes; inherit self; search-tui = inputs.search-tui; };
+      specialArgs = {
+        inherit pkgs;
+        inherit myFlakes;
+        inherit self;
+        search-tui = inputs.search-tui;
+        nixpkgs-edge = inputs.nixpkgs-edge;
+      };
       modules = [
         darwinModules.heywoodlh.darwin { config._module.check = false; }
         homeModules.docs { config._module.check = false; }

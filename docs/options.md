@@ -4166,6 +4166,78 @@ TOML value
 
 
 
+## heywoodlh\.home\.spotify-soloist\.enable
+
+
+
+Enable Spotify Soloist as a Spotify Connect device\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist.nix)
+
+
+
+## heywoodlh\.home\.spotify-soloist\.package
+
+
+
+Soloist package\. Defaults to null on Darwin because only the Homebrew cask ships a macOS build; the Homebrew binary at /opt/homebrew/bin/soloist is used instead\.
+
+
+
+*Type:*
+null or package
+
+
+
+*Default:*
+
+```nix
+if pkgs.stdenv.hostPlatform.isLinux then nixpkgs-edge.legacyPackages.${pkgs.stdenv.hostPlatform.system}.soloist else null
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist.nix)
+
+
+
+## heywoodlh\.home\.spotify-soloist\.credentialsFile
+
+
+
+File holding the Soloist API key; the service stays stopped until it exists\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"${config.home.homeDirectory}/.local/share/spotify-soloist/password.txt"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist.nix)
+
+
+
 ## heywoodlh\.home\.syncthing
 
 
@@ -4784,8 +4856,6 @@ string
 
 ## heywoodlh\.luks\.tpm2
 
-
-
 Use TPM2 decryption (requires Secure Boot so PCR 7 is meaningful)\.
 Setup with: ` sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7 /dev/nvme0n1p2 `
 Falls back to the passphrase if the TPM refuses to unseal\.
@@ -4884,6 +4954,8 @@ false
 
 
 ## heywoodlh\.nix-llama\.acceleration
+
+
 
 llama\.cpp backend\. ` auto ` infers it from the system configuration\.
 

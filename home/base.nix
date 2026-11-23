@@ -461,6 +461,7 @@ in {
     pwgen
     python3
     screen
+    spotify-player
     tcpdump
     tree
     unzip

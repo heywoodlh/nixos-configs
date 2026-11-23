@@ -220,7 +220,6 @@ in {
       hyprland = lib.mkForce false;
       server = true;
       nixos = {
-        spotifyd.enable = mkDefault true;
         sunshine.enable = true;
         nvidia-patch = true;
         portmaster.enable = lib.mkForce false;

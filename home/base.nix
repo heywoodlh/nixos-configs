@@ -402,13 +402,28 @@ let
       exit 1
     fi
   '';
+  soloistWrapper = pkgs.writeShellScriptBin "soloist" ''
+    set -euo pipefail
+    credentials="$HOME/.local/share/spotify-soloist/password.txt"
+    if [[ ! -s "$credentials" ]]
+    then
+      ${pkgs.coreutils}/bin/mkdir -p "$HOME/.local/share/spotify-soloist"
+      tmp="$(${pkgs.coreutils}/bin/mktemp)"
+      trap '${pkgs.coreutils}/bin/rm -f "$tmp"' EXIT
+      ${op-wrapper} item get leuhmz7uins37a44yh7zugdylu --fields soloist-api-key --reveal > "$tmp"
+      ${pkgs.coreutils}/bin/chmod 600 "$tmp"
+      ${pkgs.coreutils}/bin/mv "$tmp" "$credentials"
+      trap - EXIT
+    fi
+    exec ${edgePkgs.soloist}/bin/soloist "$@"
+  '';
   iambClearcache = pkgs.writeShellScriptBin "iamb-clearcache" ''
     rm -rf "$HOME/.cache/iamb/profiles/heywoodlh/sqlite"
     pkill -9 iamb &>/dev/null || true
   '';
 in {
   # Packages I need installed on every system
-  home.packages = with pkgs; [
+  home.packages = (with pkgs; [
     _1password-cli
     act
     attic-client
@@ -473,7 +488,7 @@ in {
     tangledSyncWrapper
     paseoSetup
     iambClearcache
-  ];
+  ]) ++ lib.optionals stdenv.hostPlatform.isLinux [ soloistWrapper ];
 
   # Enable password-store
   programs.password-store = {

@@ -4166,6 +4166,54 @@ TOML value
 
 
 
+## heywoodlh\.home\.spotify-soloist\.enable
+
+
+
+Enable Spotify Soloist as a Spotify Connect device\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist.nix)
+
+
+
+## heywoodlh\.home\.spotify-soloist\.credentialsFile
+
+
+
+File holding the Soloist API key; the service stays stopped until it exists\.
+
+
+
+*Type:*
+string
+
+
+
+*Default:*
+
+```nix
+"$HOME/.local/share/spotify-soloist/password.txt"
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/spotify-soloist.nix)
+
+
+
 ## heywoodlh\.home\.syncthing
 
 
@@ -4810,8 +4858,6 @@ false
 
 ## heywoodlh\.luks\.uuid
 
-
-
 LUKS block device UUID\.
 Obtain with ` sudo blkid `\.
 
@@ -4884,6 +4930,8 @@ false
 
 
 ## heywoodlh\.nix-llama\.acceleration
+
+
 
 llama\.cpp backend\. ` auto ` infers it from the system configuration\.
 
@@ -5883,102 +5931,6 @@ signed integer
 
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny.nix)
-
-
-
-## heywoodlh\.nixos\.spotifyd\.enable
-
-
-
-Enable Spotify Connect playback through spotifyd\.
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-false
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd.nix)
-
-
-
-## heywoodlh\.nixos\.spotifyd\.ports
-
-
-
-Network ports used for Spotify Connect discovery\.
-
-
-
-*Type:*
-submodule
-
-
-
-*Default:*
-
-```nix
-{ }
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd.nix)
-
-
-
-## heywoodlh\.nixos\.spotifyd\.ports\.mdns
-
-
-
-UDP port used for mDNS service advertisement\.
-
-
-
-*Type:*
-16 bit unsigned integer; between 0 and 65535 (both inclusive)
-
-
-
-*Default:*
-
-```nix
-5353
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd.nix)
-
-
-
-## heywoodlh\.nixos\.spotifyd\.ports\.zeroconf
-
-
-
-TCP port used for Spotify Connect discovery\.
-
-
-
-*Type:*
-16 bit unsigned integer; between 0 and 65535 (both inclusive)
-
-
-
-*Default:*
-
-```nix
-1234
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotifyd.nix)
 
 
 

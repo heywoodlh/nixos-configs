@@ -458,6 +458,7 @@ rec {
       ./home/modules/llm-agents.nix
       ./home/modules/search-tui.nix
       ./home/modules/kiwix.nix
+      ./home/modules/spotify-soloist.nix
     ];
     linuxHomeModules = [
       ./home/modules/gnome.nix
@@ -517,7 +518,6 @@ rec {
       ./nixos/modules/rayhunter.nix
       ./nixos/modules/stylix.nix
       ./nixos/modules/sunshine.nix
-      ./nixos/modules/spotifyd.nix
       ./nixos/modules/nvidia-patch.nix
       ./nixos/modules/gaming.nix
       ./nixos/modules/cachyos-kernel.nix
@@ -741,7 +741,13 @@ rec {
     nixosConfig = nixosConfigWith nixpkgs;
 
     eval = pkgs.lib.evalModules {
-      specialArgs = { inherit pkgs; inherit myFlakes; inherit self; search-tui = inputs.search-tui; };
+      specialArgs = {
+        inherit pkgs;
+        inherit myFlakes;
+        inherit self;
+        search-tui = inputs.search-tui;
+        nixpkgs-edge = inputs.nixpkgs-edge;
+      };
       modules = [
         darwinModules.heywoodlh.darwin { config._module.check = false; }
         homeModules.docs { config._module.check = false; }
@@ -1196,6 +1202,7 @@ rec {
           imports = [
             ./nixos/hosts/steam-deck.nix
           ];
+          home-manager.users.heywoodlh.imports = [ ./home/roles/spotify-soloist.nix ];
           heywoodlh.nixos.steam-deck.enable = true;
           hardware.printers.ensurePrinters = lib.mkForce [];
         };
@@ -1244,6 +1251,7 @@ rec {
           systemd.services.nix-daemon.serviceConfig.MemoryHigh = "3G";
 
           home-manager.users.heywoodlh = {
+            imports = [ ./home/roles/spotify-soloist.nix ];
             heywoodlh.home = {
               paseo = {
                 desktop = true;
@@ -1268,12 +1276,14 @@ rec {
           imports = [
             ./nixos/hosts/gaming.nix
           ];
+          home-manager.users.heywoodlh.imports = [ ./home/roles/spotify-soloist.nix ];
         };
 
         nixos-gaming-sarah =  nixosConfig "workstation" "nixos-gaming-sarah" {
           imports = [
             ./nixos/hosts/gaming-sarah.nix
           ];
+          home-manager.users.heywoodlh.imports = [ ./home/roles/spotify-soloist.nix ];
         };
 
         nixos-blade = nixosConfig "laptop" "nixos-blade" {

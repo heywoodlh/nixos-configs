@@ -436,7 +436,7 @@ let
       tmp="$(${pkgs.coreutils}/bin/mktemp)"
       trap '${pkgs.coreutils}/bin/rm -f "$tmp"' EXIT
       ${op-wrapper} item get 3wjpym5n2cfjupshea2jzcw3gq --reveal --fields "$field" > "$tmp"
-      if [[ ! -s "$tmp" ]]
+      if [[ -z "$(${pkgs.coreutils}/bin/tr -d '[:space:]' < "$tmp")" ]]
       then
         echo "Unable to read $field from 1Password. Run op-unlock first." >&2
         exit 1

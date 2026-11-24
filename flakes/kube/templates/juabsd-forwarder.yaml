@@ -45,11 +45,12 @@ metadata:
   name: juabsd-forwarder-forwards
   namespace: "@namespace@"
 data:
-  # "listen target proto" per line; proto is tcp or udp
+  # "listen target proto" per line; 8081/49820 dial into his tailnet, 9090 serves this cluster to it
   forwards.conf: |
     8081 100.64.0.7:8017 tcp
     49820 100.64.0.1:49820 tcp
     49820 100.64.0.1:49820 udp
+    9090 http-files.default.svc.cluster.local:80 tcp
 ---
 apiVersion: apps/v1
 kind: Deployment

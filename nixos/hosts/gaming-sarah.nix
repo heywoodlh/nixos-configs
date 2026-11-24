@@ -58,6 +58,7 @@ in {
     gaming = {
       enable = true;
       console = true;
+      soloist = true;
     };
     libvirtd.enable = false;
     # Machine-specific sunshine configuration

@@ -1028,8 +1028,9 @@ in {
         models = {
           "inkling-2-mini" = {
             name = "inkling-2-mini";
-            id = "26b-a5b-nvfp4";
+            id = "inkling-2-mini:26b-a5b-nvfp4";
             provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
+            headers.Host = "100.64.0.7";
             tool_call = true;
             limit = { context = 32768; output = 8192; };
           };
@@ -1037,13 +1038,15 @@ in {
             name = "gpt-oss-120b";
             id = "hermes-gpt-oss-120b-64k:latest";
             provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
+            headers.Host = "100.64.0.7";
             tool_call = true;
             limit = { context = 65536; output = 8192; };
           };
           "qwen3.5" = {
             name = "qwen3.5";
-            id = "9b";
+            id = "qwen3.5:9b";
             provider.api = "http://juabsd.barn-banana.ts.net:8017/qwen35/v1";
+            headers.Host = "100.64.0.7";
             tool_call = true;
             limit = { context = 32768; output = 8192; };
           };
@@ -1051,6 +1054,7 @@ in {
             name = "qwen3-6-vision";
             id = "Qwen/Qwen3.6-35B-A3B";
             provider.api = "http://juabsd.barn-banana.ts.net:8017/vision/v1";
+            headers.Host = "100.64.0.7";
             attachment = true;
             modalities = {
               input = [ "text" "image" ];
@@ -1071,6 +1075,7 @@ in {
         models."qwen-3.6-text-only" = {
           name = "qwen-3.6-text-only";
           id = "Qwen/Qwen3.6-35B-A3B";
+          headers.Host = "100.64.0.1";
           tool_call = true;
           limit = { context = 32768; output = 8192; };
         };

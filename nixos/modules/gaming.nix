@@ -197,6 +197,13 @@ in {
       '';
       type = types.bool;
     };
+    soloist = mkOption {
+      default = false;
+      description = ''
+        Allow LAN clients to reach the Spotify Soloist Connect port.
+      '';
+      type = types.bool;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -216,21 +223,24 @@ in {
       localNetworkGameTransfers.openFirewall = true;
     };
 
-    heywoodlh = mkIf cfg.console {
-      hyprland = lib.mkForce false;
-      server = true;
-      nixos = {
-        sunshine.enable = true;
-        nvidia-patch = true;
-        portmaster.enable = lib.mkForce false;
-        cachyos-kernel.kernel = "linuxPackages-cachyos-bore-zen4";
-        scrutiny = {
-          enable = true;
-          port = 3050;
-          ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
+    heywoodlh = mkMerge [
+      { nixos.spotify-soloist.enable = cfg.soloist; }
+      (mkIf cfg.console {
+        hyprland = lib.mkForce false;
+        server = true;
+        nixos = {
+          sunshine.enable = true;
+          nvidia-patch = true;
+          portmaster.enable = lib.mkForce false;
+          cachyos-kernel.kernel = "linuxPackages-cachyos-bore-zen4";
+          scrutiny = {
+            enable = true;
+            port = 3050;
+            ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
+          };
         };
-      };
-    };
+      })
+    ];
 
     programs.gamemode = {
       enable = true;

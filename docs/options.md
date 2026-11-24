@@ -5265,6 +5265,30 @@ false
 
 
 
+## heywoodlh\.nixos\.gaming\.soloist
+
+
+
+Allow LAN clients to reach the Spotify Soloist Connect port\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gaming\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/gaming.nix)
+
+
+
 ## heywoodlh\.nixos\.gaming\.soulframe
 
 
@@ -5955,6 +5979,102 @@ signed integer
 
 *Declared by:*
  - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/scrutiny.nix)
+
+
+
+## heywoodlh\.nixos\.spotify-soloist\.enable
+
+
+
+Allow LAN clients to reach the Spotify Soloist Connect port\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotify-soloist\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotify-soloist.nix)
+
+
+
+## heywoodlh\.nixos\.spotify-soloist\.ports
+
+
+
+TCP port range Spotify Soloist may bind its Connect endpoint to\.
+
+
+
+*Type:*
+submodule
+
+
+
+*Default:*
+
+```nix
+{ }
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotify-soloist\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotify-soloist.nix)
+
+
+
+## heywoodlh\.nixos\.spotify-soloist\.ports\.from
+
+
+
+First TCP port of the allowed range\.
+
+
+
+*Type:*
+16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+
+
+*Default:*
+
+```nix
+32768
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotify-soloist\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotify-soloist.nix)
+
+
+
+## heywoodlh\.nixos\.spotify-soloist\.ports\.to
+
+
+
+Last TCP port of the allowed range\.
+
+
+
+*Type:*
+16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+
+
+*Default:*
+
+```nix
+60999
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotify-soloist\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/spotify-soloist.nix)
 
 
 

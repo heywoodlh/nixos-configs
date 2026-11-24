@@ -46,6 +46,7 @@ in
       enable = true;
       console = true;
       soulframe = true;
+      soloist = true;
     };
     libvirtd.enable = false;
     # Machine-specific sunshine configuration

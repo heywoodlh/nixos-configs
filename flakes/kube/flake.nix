@@ -592,7 +592,7 @@
           src = ./templates/juabsd-forwarder.yaml;
           namespace = "default";
           image = "docker.io/tailscale/tailscale:v1.104.7";
-          forwarder_image = "docker.io/alpine/socat:1.8.1.3";
+          forwarder_image = "docker.io/library/caddy:2.11.9";
           forwards_checksum = builtins.hashFile "sha256" ./templates/juabsd-forwarder.yaml;
           replicas = 1;
         };

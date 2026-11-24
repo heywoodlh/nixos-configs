@@ -51,12 +51,28 @@ metadata:
   name: juabsd-forwarder-forwards
   namespace: "@namespace@"
 data:
-  # "listen target proto" per line; 8017/49820 dial into his tailnet, 9090 serves this cluster to it
-  forwards.conf: |
-    8017 100.64.0.7:8017 tcp
-    49820 100.64.0.1:49820 tcp
-    49820 100.64.0.1:49820 udp
-    9090 http-files.default.svc.cluster.local:80 tcp
+  # his Caddy matches a site by Host, so the proxy sets it to the tailnet address
+  Caddyfile: |
+    {
+      admin off
+      auto_https off
+    }
+
+    :8017 {
+      reverse_proxy 100.64.0.7:8017 {
+        header_up Host 100.64.0.7
+      }
+    }
+
+    :49820 {
+      reverse_proxy 100.64.0.1:49820 {
+        header_up Host 100.64.0.1
+      }
+    }
+
+    :9090 {
+      reverse_proxy http-files.default.svc.cluster.local:80
+    }
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -78,6 +94,8 @@ spec:
         checksum/forwards: "@forwards_checksum@"
     spec:
       serviceAccountName: juabsd-forwarder
+      securityContext:
+        fsGroup: 65534
       containers:
       - name: tailscale
         image: "@image@"
@@ -121,22 +139,17 @@ spec:
             memory: 256Mi
       - name: forwarder
         image: "@forwarder_image@"
-        command: ["/bin/sh", "-c"]
-        args:
-        - |
-          while [ ! -e /sys/class/net/tailscale0 ]; do sleep 1; done
-          while read -r listen target proto; do
-            case "$listen" in ''|'#'*) continue ;; esac
-            case "$proto" in
-              tcp) socat -d -d "TCP-LISTEN:${listen},fork,reuseaddr" "TCP:${target}" & ;;
-              udp) socat -d -d "UDP-LISTEN:${listen},fork,reuseaddr" "UDP:${target}" & ;;
-            esac
-          done < /etc/forwarder/forwards.conf
-          wait
+        args: ["run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
         volumeMounts:
         - name: forwards
-          mountPath: /etc/forwarder
+          mountPath: /etc/caddy
           readOnly: true
+        - name: caddy-data
+          mountPath: /data
+        - name: caddy-config
+          mountPath: /config
+        - name: caddy-tmp
+          mountPath: /tmp
         securityContext:
           runAsUser: 65534
           runAsGroup: 65534
@@ -160,6 +173,12 @@ spec:
       - name: forwards
         configMap:
           name: juabsd-forwarder-forwards
+      - name: caddy-data
+        emptyDir: {}
+      - name: caddy-config
+        emptyDir: {}
+      - name: caddy-tmp
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
@@ -185,7 +204,3 @@ spec:
     port: 49820
     targetPort: 49820
     protocol: TCP
-  - name: p49820-udp
-    port: 49820
-    targetPort: 49820
-    protocol: UDP

@@ -16,7 +16,7 @@ let
   };
   homeDir = config.home.homeDirectory or "$HOME";
   isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
-  hostname = if isDarwin then "/bin/hostname -s" else "${pkgs.coreutils}/bin/hostname";
+  hostname = if isDarwin then "/bin/hostname -s" else "${pkgs.hostname}/bin/hostname -s";
   soloist = if cfg.package == null then "/opt/homebrew/bin/soloist" else "${cfg.package}/bin/soloist";
   launch = pkgs.writeShellScript "spotify-soloist" ''
     set -euo pipefail

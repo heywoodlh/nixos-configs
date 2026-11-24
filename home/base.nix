@@ -402,8 +402,8 @@ let
       exit 1
     fi
   '';
-  lumoTamerApiKey = "${homeDir}/.config/opencode/lumo-api-key";
-  lumoTamerSetup = pkgs.writeShellScriptBin "lumo-tamer-setup" ''
+  lumoApiKey = "${homeDir}/.config/opencode/lumo-api-key";
+  lumoSetup = pkgs.writeShellScriptBin "lumo-setup" ''
     set -euo pipefail
     ${pkgs.coreutils}/bin/mkdir -p "${homeDir}/.config/opencode"
     tmp="$(${pkgs.coreutils}/bin/mktemp)"
@@ -415,10 +415,10 @@ let
       exit 1
     fi
     ${pkgs.coreutils}/bin/chmod 600 "$tmp"
-    ${pkgs.coreutils}/bin/mv "$tmp" "${lumoTamerApiKey}"
+    ${pkgs.coreutils}/bin/mv "$tmp" "${lumoApiKey}"
     trap - EXIT
-    echo "Wrote Lumo API key to ${lumoTamerApiKey}"
-    if ${pkgs.curl}/bin/curl -fsS -m 10 -H "Authorization: Bearer $(${pkgs.coreutils}/bin/cat "${lumoTamerApiKey}")" http://lumo.barn-banana.ts.net/v1/models > /dev/null
+    echo "Wrote Lumo API key to ${lumoApiKey}"
+    if ${pkgs.curl}/bin/curl -fsS -m 10 -H "Authorization: Bearer $(${pkgs.coreutils}/bin/cat "${lumoApiKey}")" http://lumo.barn-banana.ts.net/v1/models > /dev/null
     then
       echo "lumo-tamer reachable at http://lumo.barn-banana.ts.net"
     else
@@ -514,7 +514,7 @@ in {
     wake-spencer-gaming-pc
     wake-sarah-gaming-pc
     myOpWrapper
-    lumoTamerSetup
+    lumoSetup
     tangledSyncWrapper
     paseoSetup
     iambClearcache
@@ -695,6 +695,13 @@ in {
 
       function github-unlock
         set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh --fields=access-token --reveal)"
+      end
+
+      function opencode
+        if not test -s "$HOME/.config/opencode/lumo-api-key"
+          lumo-setup
+        end
+        command opencode $argv
       end
 
       function lnav
@@ -919,12 +926,12 @@ in {
 
   programs.opencode.settings.provider = mkMerge [
     {
-      lumo-tamer = {
+      lumo = {
         npm = "@ai-sdk/openai-compatible";
-        name = "lumo-tamer";
+        name = "Lumo";
         options = {
           baseURL = "http://lumo.barn-banana.ts.net/v1";
-          apiKey = "{file:${lumoTamerApiKey}}";
+          apiKey = "{file:${lumoApiKey}}";
         };
         models = {
           lumo = {

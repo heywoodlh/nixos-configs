@@ -64,6 +64,9 @@ in
     };
   };
 
+  # Requires Above 4G Decoding and Re-Size BAR Support enabled in BIOS.
+  hardware.nvidia.moduleParams.nvidia.NVreg_EnableResizableBar = 1;
+
   environment.systemPackages = with pkgs; [
     steam-run
     clonehero

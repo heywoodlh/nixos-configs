@@ -869,7 +869,7 @@ rec {
               # as 32k at f16; smaller RAM prompt cache and no mlock so macOS can
               # page the weights out under pressure
               heywoodlh.nix-llama = {
-                enable = true;
+                enable = false;
                 contextSize = 65536;
                 extraConf.tuning = {
                   kvCacheType = "q8_0";
@@ -908,7 +908,7 @@ rec {
             ./darwin/roles/mac-mini.nix
             darwinWorkstationConfig
             {
-              heywoodlh.nix-llama.enable = true;
+              heywoodlh.nix-llama.enable = false;
               heywoodlh.sshd.enable = true;
               # Firewall needs to be lenient for VNC/SSH
               networking.applicationFirewall = {

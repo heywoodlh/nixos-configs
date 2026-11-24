@@ -62,7 +62,7 @@ in {
 
   # Reachable over tailscale0 (a trusted interface); 8080 is taken by nomad's hostPort
   heywoodlh.nix-llama = {
-    enable = true;
+    enable = false;
     host = "0.0.0.0";
     port = 8090;
     opencode.enable = false;

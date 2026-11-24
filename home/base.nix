@@ -726,6 +726,9 @@ in {
         if not test -s "$HOME/.config/opencode/lumo-api-key"
           lumo-setup
         end
+        if not test -s "${juabsdOllamaApiKey}"; or not test -s "${juabsdClarisApiKey}"
+          juabsd-setup
+        end
         command opencode $argv
       end
 

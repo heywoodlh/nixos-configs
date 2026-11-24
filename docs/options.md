@@ -6174,30 +6174,6 @@ attribute set
 
 
 
-## heywoodlh\.nixos\.sunshine\.resolutions
-
-
-
-Allowed resolutions\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-"[ 1920x1080 ]"
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/sunshine.nix)
-
-
-
 ## heywoodlh\.nixos\.sunshine\.user
 
 

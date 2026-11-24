@@ -49,12 +49,20 @@ in
     };
     libvirtd.enable = false;
     # Machine-specific sunshine configuration
-    sunshine.extraConfig = {
-      sunshine_name = "spencer-linux";
-      output_name = 0;
-      encoder = "nvenc";
-      nvenc_preset = 1;
-      csrf_allowed_origins = "https://nixos-gaming.barn-banana.ts.net:47990,https://192.168.1.231:47990,https://sunshine.heywoodlh.io";
+    sunshine = {
+      # Match the display mode to what the client asks for so the iPad Pro's
+      # 120Hz panel and non-1080p resolutions are not downscaled to 60Hz/1080p
+      # by KMS capture.
+      dynamic = true;
+      extraConfig = {
+        sunshine_name = "spencer-linux";
+        # Connector name instead of a numeric index: KMS output ordering is not
+        # guaranteed to stay stable across driver/display changes.
+        output_name = "HDMI-A-1";
+        encoder = "nvenc";
+        nvenc_preset = 1;
+        csrf_allowed_origins = "https://nixos-gaming.barn-banana.ts.net:47990,https://192.168.1.231:47990,https://sunshine.heywoodlh.io";
+      };
     };
   };
 

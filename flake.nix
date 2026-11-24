@@ -7,7 +7,6 @@ rec {
     nixpkgs-lts.follows = "nixpkgs";
     nixpkgs-stable.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-26.05-chilled/0.1";
     nixpkgs-nvidia.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
-    nixpkgs-sunshine.url = "github:Qubasa/nixpkgs/update_sunshine";
     nixpkgs-backports.url = "github:nixos/nixpkgs/release-25.11";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     stylix = {
@@ -358,7 +357,6 @@ rec {
                       nixpkgs-edge,
                       nixpkgs-stable,
                       nixpkgs-nvidia,
-                      nixpkgs-sunshine,
                       nixpkgs-pam-lid-fix,
                       myFlakes,
                       stylix,

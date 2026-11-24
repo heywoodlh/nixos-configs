@@ -218,7 +218,6 @@ rec {
     cart = {
       url = "github:heywoodlh/cart";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nix-darwin.follows = "darwin";
       inputs.flake-utils.follows = "flake-utils";
     };
     # only to sync dependents that use pyproject-nix

@@ -176,19 +176,16 @@
         "flake-utils": [
           "flake-utils"
         ],
-        "nix-darwin": [
-          "darwin"
-        ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1770619924,
-        "narHash": "sha256-0lTRWv3khwT/F6z5R36QbIcgNnknRYtbrP+RazebF5Q=",
+        "lastModified": 1791242763,
+        "narHash": "sha256-2izvjtw6R/LjplZHr3eMW1JeaYFjBbPXdTobIYhLbME=",
         "owner": "heywoodlh",
         "repo": "cart",
-        "rev": "8fe1ba09b23f9f56bacb926a0d6b6b3d09cf699a",
+        "rev": "03eb80f293005ee471d0b9ddd7d8d563241903bc",
         "type": "github"
       },
       "original": {

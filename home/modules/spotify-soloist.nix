@@ -89,7 +89,7 @@ in
       };
 
       systemd.user.paths.spotify-soloist = {
-        pathConfig = {
+        Path = {
           PathExists = cfg.credentialsFile;
           Unit = "spotify-soloist.service";
         };

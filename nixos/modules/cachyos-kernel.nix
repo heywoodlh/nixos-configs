@@ -20,48 +20,51 @@ in {
       '';
       type = types.str;
     };
+    trimDrivers = mkOption {
+      default = false;
+      description = "Trim unused drivers from the kernel config (requires a local rebuild).";
+      type = types.bool;
+    };
   };
 
   config = mkIf cfg.enable {
     boot.kernelPackages = pkgs.cachyosKernels.${cfg.kernel};
-    boot.kernelPatches = [
-      {
-        name = "cachyos-trim-unused-drivers";
-        patch = null;
-        structuredExtraConfig = let
-          no = lib.mkForce lib.kernel.no;
-          noOpt = lib.mkForce (lib.kernel.option lib.kernel.no);
-        in {
-          DRM_NOUVEAU_SVM = noOpt; # DRM_NOUVEAU
-          INFINIBAND_IPOIB = noOpt; # INFINIBAND
-          INFINIBAND_IPOIB_CM = noOpt;
-          MEDIA_ATTACH = noOpt; # MEDIA_*_TV_SUPPORT / MEDIA_SDR_SUPPORT
+    boot.kernelPatches = lib.optional cfg.trimDrivers {
+      name = "cachyos-trim-unused-drivers";
+      patch = null;
+      structuredExtraConfig = let
+        no = lib.mkForce lib.kernel.no;
+        noOpt = lib.mkForce (lib.kernel.option lib.kernel.no);
+      in {
+        DRM_NOUVEAU_SVM = noOpt; # DRM_NOUVEAU
+        INFINIBAND_IPOIB = noOpt; # INFINIBAND
+        INFINIBAND_IPOIB_CM = noOpt;
+        MEDIA_ATTACH = noOpt; # MEDIA_*_TV_SUPPORT / MEDIA_SDR_SUPPORT
 
-          # Nvidia GPUs here always run the proprietary driver (nvidia-patch);
-          # the open-source nouveau driver is never loaded.
-          DRM_NOUVEAU = no;
-          # Legacy pre-GCN AMD, superseded by amdgpu on all current hardware.
-          DRM_RADEON = no;
-          # Server BMC graphics.
-          DRM_AST = no;
-          DRM_MGAG200 = no;
+        # Nvidia GPUs here always run the proprietary driver (nvidia-patch);
+        # the open-source nouveau driver is never loaded.
+        DRM_NOUVEAU = no;
+        # Legacy pre-GCN AMD, superseded by amdgpu on all current hardware.
+        DRM_RADEON = no;
+        # Server BMC graphics.
+        DRM_AST = no;
+        DRM_MGAG200 = no;
 
-          # TV tuners / DVB / SDR (keep MEDIA_CAMERA_SUPPORT for USB webcams
-          # and capture devices like Sunshine).
-          MEDIA_ANALOG_TV_SUPPORT = no;
-          MEDIA_DIGITAL_TV_SUPPORT = no;
-          MEDIA_SDR_SUPPORT = no;
+        # TV tuners / DVB / SDR (keep MEDIA_CAMERA_SUPPORT for USB webcams
+        # and capture devices like Sunshine).
+        MEDIA_ANALOG_TV_SUPPORT = no;
+        MEDIA_DIGITAL_TV_SUPPORT = no;
+        MEDIA_SDR_SUPPORT = no;
 
-          # Enterprise/legacy subsystems with zero relevance on gaming
-          # desktops/laptops.
-          COMEDI = no; # lab data-acquisition cards
-          CAN = no; # automotive bus
-          INFINIBAND = no; # RDMA / enterprise fabric
-          ATM = no; # legacy WAN
-          NFC = no;
-        };
-      }
-    ];
+        # Enterprise/legacy subsystems with zero relevance on gaming
+        # desktops/laptops.
+        COMEDI = no; # lab data-acquisition cards
+        CAN = no; # automotive bus
+        INFINIBAND = no; # RDMA / enterprise fabric
+        ATM = no; # legacy WAN
+        NFC = no;
+      };
+    };
 
     nixpkgs.overlays = [
       nix-cachyos-kernel.overlays.pinned

@@ -48,6 +48,7 @@ in
       soulframe = true;
     };
     libvirtd.enable = false;
+    cachyos-kernel.kernel = mkForce "linuxPackages-cachyos-bore-x86_64-v3";
     # Machine-specific sunshine configuration
     sunshine = {
       # Match the display mode to what the client asks for so the iPad Pro's

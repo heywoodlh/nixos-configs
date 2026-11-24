@@ -66,7 +66,8 @@ in {
       dynamic = true;
       extraConfig = {
         sunshine_name = "sarah-linux";
-        output_name = 0;
+        capture = "kms";
+        output_name = "HDMI-A-1";
         encoder = "nvenc";
         nvenc_preset = 1;
         nvenc_twopass = "disabled";

@@ -57,7 +57,8 @@ in
       dynamic = true;
       extraConfig = {
         sunshine_name = "spencer-linux";
-        output_name = "0";
+        capture = "kms";
+        output_name = "HDMI-A-1";
         encoder = "nvenc";
         nvenc_preset = 1;
         csrf_allowed_origins = "https://nixos-gaming.barn-banana.ts.net:47990,https://192.168.1.231:47990,https://sunshine.heywoodlh.io";

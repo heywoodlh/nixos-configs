@@ -128,8 +128,8 @@ spec:
           while read -r listen target proto; do
             case "$listen" in ''|'#'*) continue ;; esac
             case "$proto" in
-              tcp) socat "TCP-LISTEN:${listen},fork,reuseaddr" "TCP:${target}" & ;;
-              udp) socat "UDP-LISTEN:${listen},fork,reuseaddr" "UDP:${target}" & ;;
+              tcp) socat -d -d "TCP-LISTEN:${listen},fork,reuseaddr" "TCP:${target}" & ;;
+              udp) socat -d -d "UDP-LISTEN:${listen},fork,reuseaddr" "UDP:${target}" & ;;
             esac
           done < /etc/forwarder/forwards.conf
           wait

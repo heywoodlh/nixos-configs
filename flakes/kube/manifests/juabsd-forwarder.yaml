@@ -75,7 +75,7 @@ spec:
       labels:
         app: juabsd-forwarder
       annotations:
-        checksum/forwards: "91a4a9ee3c8a167f7b0487e292ad85ea6e2dd523b3372776ec671fdb794c4377"
+        checksum/forwards: "f0a2d1a500178d05024e1584f1ad3698132dded572f70c7f5ffaa9d49973ee2c"
     spec:
       serviceAccountName: juabsd-forwarder
       containers:
@@ -128,8 +128,8 @@ spec:
           while read -r listen target proto; do
             case "$listen" in ''|'#'*) continue ;; esac
             case "$proto" in
-              tcp) socat "TCP-LISTEN:${listen},fork,reuseaddr" "TCP:${target}" & ;;
-              udp) socat "UDP-LISTEN:${listen},fork,reuseaddr" "UDP:${target}" & ;;
+              tcp) socat -d -d "TCP-LISTEN:${listen},fork,reuseaddr" "TCP:${target}" & ;;
+              udp) socat -d -d "UDP-LISTEN:${listen},fork,reuseaddr" "UDP:${target}" & ;;
             esac
           done < /etc/forwarder/forwards.conf
           wait

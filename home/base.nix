@@ -428,7 +428,7 @@ let
 
   soloistWrapper = pkgs.writeShellScriptBin "soloist" ''
     set -euo pipefail
-    credentials="${soloistCredentialsFile}"
+    credentials="${config.heywoodlh.home.spotify-soloist.credentialsFile}"
     if [[ ! -s "$credentials" ]]
     then
       ${pkgs.coreutils}/bin/mkdir -p "$(${pkgs.coreutils}/bin/dirname "$credentials")"

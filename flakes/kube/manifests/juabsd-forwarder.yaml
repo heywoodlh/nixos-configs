@@ -66,7 +66,7 @@ metadata:
   labels:
     app: juabsd-forwarder
 spec:
-  replicas: "1"
+  replicas: 1
   selector:
     matchLabels:
       app: juabsd-forwarder
@@ -75,7 +75,7 @@ spec:
       labels:
         app: juabsd-forwarder
       annotations:
-        checksum/forwards: "e9b3f83eb1ac92d34c6d6e091ccce5403441abb2351627c82a5dc6a2a84be711"
+        checksum/forwards: "91a4a9ee3c8a167f7b0487e292ad85ea6e2dd523b3372776ec671fdb794c4377"
     spec:
       serviceAccountName: juabsd-forwarder
       containers:

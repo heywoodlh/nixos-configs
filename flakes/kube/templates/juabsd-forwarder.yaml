@@ -8,6 +8,12 @@ spec:
   itemPath: "vaults/Kubernetes/items/zprnv7qso3djtipop56uzoqwlm"
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: juabsd-forwarder-state
+  namespace: "@namespace@"
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: juabsd-forwarder

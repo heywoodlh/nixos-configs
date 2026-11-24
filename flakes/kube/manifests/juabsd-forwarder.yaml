@@ -8,6 +8,12 @@ spec:
   itemPath: "vaults/Kubernetes/items/zprnv7qso3djtipop56uzoqwlm"
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: juabsd-forwarder-state
+  namespace: "default"
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: juabsd-forwarder
@@ -69,7 +75,7 @@ spec:
       labels:
         app: juabsd-forwarder
       annotations:
-        checksum/forwards: "d0b01235d69bae358662866a99cb5f04e7c14139d9e24301efc9339b9fe7a84c"
+        checksum/forwards: "e9b3f83eb1ac92d34c6d6e091ccce5403441abb2351627c82a5dc6a2a84be711"
     spec:
       serviceAccountName: juabsd-forwarder
       containers:

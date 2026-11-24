@@ -480,11 +480,6 @@
           nodename = "homelab";
           hostfolder = "/media/data-ssd/grayjay";
         };
-        hashcat = mkKubeDrv "hashcat" {
-          src = ./templates/hashcat.yaml;
-          namespace = "security";
-          image = "docker.io/ubuntu:24.10";
-        };
         hashtopolis = mkKubeDrv "hashtopolis" {
           src = ./templates/hashtopolis.yaml;
           namespace = "security";

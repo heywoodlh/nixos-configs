@@ -56,9 +56,7 @@ in
       dynamic = true;
       extraConfig = {
         sunshine_name = "spencer-linux";
-        # Connector name instead of a numeric index: KMS output ordering is not
-        # guaranteed to stay stable across driver/display changes.
-        output_name = "HDMI-A-1";
+        output_name = "0";
         encoder = "nvenc";
         nvenc_preset = 1;
         csrf_allowed_origins = "https://nixos-gaming.barn-banana.ts.net:47990,https://192.168.1.231:47990,https://sunshine.heywoodlh.io";

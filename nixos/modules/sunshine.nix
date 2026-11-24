@@ -115,10 +115,6 @@ in {
 
       settings = cfg.extraConfig // {
         system_tray = false;
-        # KDE Wayland is always the session here; KMS capture avoids the
-        # XDG portal session Sunshine otherwise opens (and can hang on) while
-        # probing encoders, and is the backend actually used for streaming.
-        capture = "kms";
         back_button_timeout = 2000;
         origin_web_ui_allowed = "wan";
       } // lib.optionalAttrs cfg.dynamic {

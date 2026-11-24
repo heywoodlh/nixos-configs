@@ -1,17 +1,10 @@
-{ pkgs, nixpkgs-sunshine, config, lib, plasma-manager, ... }:
+{ pkgs, config, lib, plasma-manager, ... }:
 
 with lib;
 with lib.types;
 
 let
   cfg = config.heywoodlh.nixos.sunshine;
-  system = pkgs.stdenv.hostPlatform.system;
-  sunshine-pkgs = import nixpkgs-sunshine {
-    inherit system;
-    config = {
-      allowUnfree = true;
-    };
-  };
 in {
   options.heywoodlh.nixos.sunshine = {
     enable = mkOption {
@@ -34,13 +27,6 @@ in {
         Extra settings for Sunshine to be placed in `services.sunshine.settings`.
       '';
       type = attrs;
-    };
-    resolutions = mkOption {
-      default = "[ 1920x1080 ]";
-      description = ''
-        Allowed resolutions.
-      '';
-      type = str;
     };
     dynamic = mkOption {
       default = false;
@@ -115,7 +101,7 @@ in {
       # for vulkan-loader), which Nix's wrapper tooling refuses to apply
       # capabilities to. Bake the same lib path into the RPATH instead, so the
       # binary stays unwrapped.
-      package = (sunshine-pkgs.sunshine.override {
+      package = (pkgs.sunshine.override {
         cudaSupport = true;
         cudaPackages = pkgs.cudaPackages;
         libva = pkgs.libva;
@@ -128,10 +114,11 @@ in {
       });
 
       settings = cfg.extraConfig // {
-        resolutions = cfg.resolutions;
         system_tray = false;
-        fps = "[ 60 ]";
-        av1_mode = 1;
+        # KDE Wayland is always the session here; KMS capture avoids the
+        # XDG portal session Sunshine otherwise opens (and can hang on) while
+        # probing encoders, and is the backend actually used for streaming.
+        capture = "kms";
         back_button_timeout = 2000;
         origin_web_ui_allowed = "wan";
       } // lib.optionalAttrs cfg.dynamic {

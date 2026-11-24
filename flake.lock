@@ -1858,22 +1858,6 @@
         "url": "https://flakehub.com/f/DeterminateSystems/nixpkgs-26.05-chilled/0.1"
       }
     },
-    "nixpkgs-sunshine": {
-      "locked": {
-        "lastModified": 1780670869,
-        "narHash": "sha256-vNjd59YIP2eH6wfcjcaNW0ec+xjIe0/ZsjKHycGt/5Y=",
-        "owner": "Qubasa",
-        "repo": "nixpkgs",
-        "rev": "391d69d880514742b8612cbcd6480b5a8c3c08b5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Qubasa",
-        "ref": "update_sunshine",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1791487292,
@@ -2272,7 +2256,6 @@
         "nixpkgs-nvidia": "nixpkgs-nvidia",
         "nixpkgs-pam-lid-fix": "nixpkgs-pam-lid-fix",
         "nixpkgs-stable": "nixpkgs-stable",
-        "nixpkgs-sunshine": "nixpkgs-sunshine",
         "nixtop-source": "nixtop-source",
         "nmd": "nmd",
         "noctalia": "noctalia",

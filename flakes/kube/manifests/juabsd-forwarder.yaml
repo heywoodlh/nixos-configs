@@ -75,7 +75,7 @@ spec:
       labels:
         app: juabsd-forwarder
       annotations:
-        checksum/forwards: "f0a2d1a500178d05024e1584f1ad3698132dded572f70c7f5ffaa9d49973ee2c"
+        checksum/forwards: "dc8b6eba72d2df89d2ebe83162884d83a53d0ce50d7acc3a4704093b936bc295"
     spec:
       serviceAccountName: juabsd-forwarder
       containers:
@@ -171,6 +171,7 @@ metadata:
   annotations:
     tailscale.com/expose: "true"
     tailscale.com/hostname: "juabsd"
+    tailscale.com/tags: "tag:juabsd"
 spec:
   type: ClusterIP
   selector:

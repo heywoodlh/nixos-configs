@@ -171,6 +171,7 @@ metadata:
   annotations:
     tailscale.com/expose: "true"
     tailscale.com/hostname: "juabsd"
+    tailscale.com/tags: "tag:juabsd"
 spec:
   type: ClusterIP
   selector:

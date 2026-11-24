@@ -1,0 +1,183 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: "juabsd-forwarder-authkey"
+  namespace: "default"
+spec:
+  itemPath: "vaults/Kubernetes/items/zprnv7qso3djtipop56uzoqwlm"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: juabsd-forwarder
+  namespace: "default"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: juabsd-forwarder
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["create", "get", "list", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "get", "list", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: juabsd-forwarder
+subjects:
+- kind: ServiceAccount
+  name: juabsd-forwarder
+  namespace: "default"
+roleRef:
+  kind: ClusterRole
+  name: juabsd-forwarder
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: juabsd-forwarder-forwards
+  namespace: "default"
+data:
+  # "listen target proto" per line; proto is tcp or udp
+  forwards.conf: |
+    8081 100.64.0.7:8017 tcp
+    49820 100.64.0.1:49820 tcp
+    49820 100.64.0.1:49820 udp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: juabsd-forwarder
+  namespace: "default"
+  labels:
+    app: juabsd-forwarder
+spec:
+  replicas: "1"
+  selector:
+    matchLabels:
+      app: juabsd-forwarder
+  template:
+    metadata:
+      labels:
+        app: juabsd-forwarder
+      annotations:
+        checksum/forwards: "d1ad6cf0a66e9830f7b0cfad0e53bbcc28f253f40aa83ddf07d7fcc14536ad64"
+    spec:
+      serviceAccountName: juabsd-forwarder
+      containers:
+      - name: tailscale
+        image: "docker.io/tailscale/tailscale:v1.104.7"
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          export TS_EXTRA_ARGS="--login-server=${TS_CONTROLLER}"
+          exec /usr/local/bin/containerboot
+        env:
+        - name: TS_AUTHKEY
+          valueFrom:
+            secretKeyRef:
+              name: juabsd-forwarder-authkey
+              key: enrollment-key
+        - name: TS_CONTROLLER
+          valueFrom:
+            secretKeyRef:
+              name: juabsd-forwarder-authkey
+              key: controller
+        - name: TS_KUBE_SECRET
+          value: juabsd-forwarder-state
+        - name: TS_HOSTNAME
+          value: juabsd-forwarder
+        - name: TS_USERSPACE
+          value: "false"
+        - name: TS_ACCEPT_DNS
+          value: "false"
+        - name: TS_AUTH_ONCE
+          value: "true"
+        volumeMounts:
+        - name: dev-net-tun
+          mountPath: /dev/net/tun
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+      - name: forwarder
+        image: "docker.io/alpine/socat:1.8.1.3"
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          while [ ! -e /sys/class/net/tailscale0 ]; do sleep 1; done
+          while read -r listen target proto; do
+            case "$listen" in ''|'#'*) continue ;; esac
+            case "$proto" in
+              tcp) socat "TCP-LISTEN:${listen},fork,reuseaddr" "TCP:${target}" & ;;
+              udp) socat "UDP-LISTEN:${listen},fork,reuseaddr" "UDP:${target}" & ;;
+            esac
+          done < /etc/forwarder/forwards.conf
+          wait
+        volumeMounts:
+        - name: forwards
+          mountPath: /etc/forwarder
+          readOnly: true
+        securityContext:
+          runAsUser: 65534
+          runAsGroup: 65534
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+      volumes:
+      - name: dev-net-tun
+        hostPath:
+          path: /dev/net/tun
+          type: CharDevice
+      - name: forwards
+        configMap:
+          name: juabsd-forwarder-forwards
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: juabsd-forwarder
+  namespace: "default"
+  labels:
+    app: juabsd-forwarder
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "juabsd"
+spec:
+  type: ClusterIP
+  selector:
+    app: juabsd-forwarder
+  ports:
+  - name: p8081
+    port: 8081
+    targetPort: 8081
+    protocol: TCP
+  - name: p49820-tcp
+    port: 49820
+    targetPort: 49820
+    protocol: TCP
+  - name: p49820-udp
+    port: 49820
+    targetPort: 49820
+    protocol: UDP

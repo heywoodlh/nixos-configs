@@ -61,15 +61,23 @@ in {
       soloist = true;
     };
     libvirtd.enable = false;
+    cachyos-kernel.kernel = mkForce "linuxPackages-cachyos-bore-x86_64-v4";
     # Machine-specific sunshine configuration
-    sunshine.extraConfig = {
-      sunshine_name = "sarah-linux";
-      output_name = 0;
-      encoder = "nvenc";
-      nvenc_preset = 1;
-      csrf_allowed_origins = "https://nixos-gaming-sarah.barn-banana.ts.net:47990,https://192.168.1.196:47990,https://sunshine-sarah.heywoodlh.io";
+    sunshine = {
+      dynamic = true;
+      extraConfig = {
+        sunshine_name = "sarah-linux";
+        capture = "kms";
+        output_name = "HDMI-A-1";
+        encoder = "nvenc";
+        nvenc_preset = 1;
+        nvenc_twopass = "disabled";
+        csrf_allowed_origins = "https://nixos-gaming-sarah.barn-banana.ts.net:47990,https://192.168.1.196:47990,https://sunshine-sarah.heywoodlh.io";
+      };
     };
   };
+
+  hardware.nvidia.moduleParams.nvidia.NVreg_EnableResizableBar = 1;
 
   #boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
   boot.loader.systemd-boot.windows."11".efiDeviceHandle = "HD1i32768a1";
@@ -156,6 +164,13 @@ in {
   };
 
   systemd.services = {
+    nvidia_oc = {
+      enable = lib.mkForce true;
+      serviceConfig.ExecStart = lib.mkForce "${pkgs.writeShellScript "sarah-nvidia-oc" ''
+        ${pkgs.steam-run}/bin/steam-run ${pkgs.nvidia_oc}/bin/nvidia_oc set --index 0 --power-limit 385000 --freq-offset 100 --mem-offset 500 || true
+        ${config.hardware.nvidia.package.bin}/bin/nvidia-smi -pl 385 || true
+      ''}";
+    };
     ntfsfix-ssd0-startup = {
       description = "Fix NTFS dirty bit on /mnt/ssd0 before mounting";
       wantedBy = [ "mnt-ssd0.mount" ];

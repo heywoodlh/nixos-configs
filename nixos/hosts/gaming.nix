@@ -49,6 +49,7 @@ in
       soloist = true;
     };
     libvirtd.enable = false;
+    cachyos-kernel.kernel = mkForce "linuxPackages-cachyos-bore-x86_64-v3";
     # Machine-specific sunshine configuration
     sunshine = {
       # Match the display mode to what the client asks for so the iPad Pro's
@@ -57,8 +58,7 @@ in
       dynamic = true;
       extraConfig = {
         sunshine_name = "spencer-linux";
-        # Connector name instead of a numeric index: KMS output ordering is not
-        # guaranteed to stay stable across driver/display changes.
+        capture = "kms";
         output_name = "HDMI-A-1";
         encoder = "nvenc";
         nvenc_preset = 1;
@@ -66,6 +66,9 @@ in
       };
     };
   };
+
+  # Requires Above 4G Decoding and Re-Size BAR Support enabled in BIOS.
+  hardware.nvidia.moduleParams.nvidia.NVreg_EnableResizableBar = 1;
 
   environment.systemPackages = with pkgs; [
     steam-run

@@ -36,8 +36,8 @@ in {
     boot = {
       kernelParams = [
         "nvidia.NVreg_UsePageAttributeTable=1"
-        "NVreg_InitializeSystemMemoryAllocations=0"
-        "NVreg_RegistryDwords=RMIntrLockingMode=1"
+        "nvidia.NVreg_InitializeSystemMemoryAllocations=0"
+        "nvidia.NVreg_RegistryDwords=RMIntrLockingMode=1"
       ];
     };
     hardware.nvidia = {

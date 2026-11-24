@@ -402,7 +402,30 @@ let
       exit 1
     fi
   '';
-  soloistCredentialsFile = config.heywoodlh.home.spotify-soloist.credentialsFile;
+  lumoApiKey = "${homeDir}/.config/opencode/lumo-api-key";
+  lumoSetup = pkgs.writeShellScriptBin "lumo-setup" ''
+    set -euo pipefail
+    ${pkgs.coreutils}/bin/mkdir -p "${homeDir}/.config/opencode"
+    tmp="$(${pkgs.coreutils}/bin/mktemp)"
+    trap '${pkgs.coreutils}/bin/rm -f "$tmp"' EXIT
+    ${op-wrapper} item get qp43o4locdg7gq64nhl5apqcoe --fields api-key --reveal > "$tmp"
+    if [[ ! -s "$tmp" ]]
+    then
+      echo "Unable to read the Lumo API key from 1Password. Run op-unlock first." >&2
+      exit 1
+    fi
+    ${pkgs.coreutils}/bin/chmod 600 "$tmp"
+    ${pkgs.coreutils}/bin/mv "$tmp" "${lumoApiKey}"
+    trap - EXIT
+    echo "Wrote Lumo API key to ${lumoApiKey}"
+    if ${pkgs.curl}/bin/curl -fsS -m 10 -H "Authorization: Bearer $(${pkgs.coreutils}/bin/cat "${lumoApiKey}")" http://lumo.barn-banana.ts.net/v1/models > /dev/null
+    then
+      echo "lumo-tamer reachable at http://lumo.barn-banana.ts.net"
+    else
+      echo "WARNING: could not reach lumo-tamer; check Tailscale connectivity" >&2
+    fi
+  '';
+
   soloistWrapper = pkgs.writeShellScriptBin "soloist" ''
     set -euo pipefail
     credentials="${soloistCredentialsFile}"
@@ -491,6 +514,7 @@ in {
     wake-spencer-gaming-pc
     wake-sarah-gaming-pc
     myOpWrapper
+    lumoSetup
     tangledSyncWrapper
     paseoSetup
     iambClearcache
@@ -671,6 +695,13 @@ in {
 
       function github-unlock
         set -gx NIX_CONFIG "access-tokens = github.com=$(${op-wrapper} item get github.com/heywoodlh --fields=access-token --reveal)"
+      end
+
+      function opencode
+        if not test -s "$HOME/.config/opencode/lumo-api-key"
+          lumo-setup
+        end
+        command opencode $argv
       end
 
       function lnav
@@ -893,32 +924,71 @@ in {
     };
   };
 
-  programs.opencode.settings.provider = mkIf config.heywoodlh.home.llm.enable {
-    nix-llama-homelab = {
-      npm = "@ai-sdk/openai-compatible";
-      name = "nix-llama-homelab";
-      options.baseURL = "http://homelab.barn-banana.ts.net:8090/v1";
-      models.nix-llama = {
-        name = "nix-llama";
-        tool_call = true;
-        limit = {
-          context = 32768;
-          output = 8192;
+  programs.opencode.settings.provider = mkMerge [
+    {
+      lumo = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "Lumo";
+        options = {
+          baseURL = "http://lumo.barn-banana.ts.net/v1";
+          apiKey = "{file:${lumoApiKey}}";
+        };
+        models = {
+          lumo = {
+            name = "lumo";
+            tool_call = false;
+            limit = {
+              context = 32768;
+              output = 8192;
+            };
+          };
+          lumo-lite = {
+            name = "lumo-lite";
+            tool_call = false;
+            limit = {
+              context = 32768;
+              output = 8192;
+            };
+          };
+          lumo-max = {
+            name = "lumo-max";
+            tool_call = false;
+            reasoning = true;
+            limit = {
+              context = 32768;
+              output = 8192;
+            };
+          };
         };
       };
-    };
-    lmstudio-remote = {
-      npm = "@ai-sdk/openai-compatible";
-      name = "lmstudio-remote";
-      options.baseURL = "http://llm.barn-banana.ts.net/v1";
-      models."google/gemma-4-e4b" = {
-        name = "google/gemma-4-e4b";
-        reasoning = true;
-        tool_call = true;
-        limit = { context = 32768; output = 8192; };
+    }
+    (mkIf config.heywoodlh.home.llm.enable {
+      nix-llama-homelab = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "nix-llama-homelab";
+        options.baseURL = "http://homelab.barn-banana.ts.net:8090/v1";
+        models.nix-llama = {
+          name = "nix-llama";
+          tool_call = true;
+          limit = {
+            context = 32768;
+            output = 8192;
+          };
+        };
       };
-    };
-  };
+      lmstudio-remote = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "lmstudio-remote";
+        options.baseURL = "http://llm.barn-banana.ts.net/v1";
+        models."google/gemma-4-e4b" = {
+          name = "google/gemma-4-e4b";
+          reasoning = true;
+          tool_call = true;
+          limit = { context = 32768; output = 8192; };
+        };
+      };
+    })
+  ];
 
   programs.iamb = {
     enable = true;

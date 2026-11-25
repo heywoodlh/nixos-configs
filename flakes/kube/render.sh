@@ -34,6 +34,7 @@ applications=(
   "istio"
   "iperf"
   "juabsd-forwarder"
+  "lancache"
   "lmstudio"
   "media"
   "metasploit"

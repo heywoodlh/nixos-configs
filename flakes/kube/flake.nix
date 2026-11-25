@@ -372,14 +372,12 @@
         };
         coredns = mkKubeDrv "coredns" {
           src = ./templates/coredns.yaml;
-          tailnet = "barn-banana.ts.net";
           namespace = "coredns";
           image = "docker.io/coredns/coredns:1.13.1";
           replicas = "1";
         };
         coredns-kube-system = mkKubeDrv "coredns-kube-system" {
           src = ./templates/kube-system-coredns.yaml;
-          tailnet = "barn-banana.ts.net";
         };
         "crossplane" = (kubelib.buildHelmChart {
           name = "crossplane";
@@ -624,15 +622,15 @@
         lancache = mkKubeDrv "lancache" {
           src = ./templates/lancache.yaml;
           namespace = "default";
-          dns_image = "docker.io/heywoodlh/lancache-dns:latest";
-          dns_upstream = "10.43.9.152"; # use coredns, which will work with tailscale and kubernetes
+          dns_image = "docker.io/heywoodlh/lancache-dns@sha256:80d62e475b4de8a373950104c766ab727dbca3fbf7d308d875c83ecb9ada7f83";
+          dns_upstream = "10.43.0.10"; # kube-dns, which resolves tailnet names via the bridge
           dns_ip = "100.65.18.5";
           cache_ip = "100.65.18.10";
           cache_disk_size = "1000g";
           cache_index_size = "500m";
           cache_max_age = "3650d";
-          cache_hostDir = "/media/data-ssd/lancache/";
-          cache_image = "docker.io/lancachenet/monolithic:latest";
+          cache_hostDir = "/media/services_pool/lancache";
+          cache_image = "docker.io/lancachenet/monolithic@sha256:3253f1b5d2fe84d5a423a8cb8edab0d44a131bd1057248106415e3fd3d0ca542";
           cache_generic = "true";
           timezone = "America/Denver";
           replicas = 1;

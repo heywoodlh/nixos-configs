@@ -32,8 +32,8 @@ data:
         reload
         loadbalance
     }
-    barn-banana.ts.net {
-      forward . 100.100.100.100
+    ts.net {
+      forward . 10.43.0.15
     }
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -98,7 +98,7 @@ spec:
   - {"name":"udp-53","port":53,"protocol":"UDP","targetPort":53}
   - {"name":"tcp-53","port":53,"protocol":"TCP","targetPort":53}
   type: ClusterIP
-  clusterIP: 10.43.9.152
+  clusterIP: 10.43.0.20
 ---
 apiVersion: tailscale.com/v1alpha1
 kind: Connector

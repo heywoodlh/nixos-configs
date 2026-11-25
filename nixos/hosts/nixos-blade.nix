@@ -16,6 +16,10 @@
   hardware.openrazer.enable = true;
   services.thermald.enable = true;
 
+  security.pam.services.sudo.fprintAuth = true;
+  services.fprintd.enable = true;
+  services.fprintd.lid.authSkipLidClose = true;
+
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "usb_storage" "usbhid" "sd_mod"];
   boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];

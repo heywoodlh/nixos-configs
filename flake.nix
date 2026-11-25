@@ -7,6 +7,7 @@
     nixpkgs-stable.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-26.05-chilled/0.1";
     nixpkgs-nvidia.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
     nixpkgs-lts.follows = "nixpkgs";
+    nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     nvidia-patch = {
       url = "github:icewind1991/nvidia-patch-nixos";
       inputs.nixpkgs.follows = "nixpkgs-nvidia";
@@ -307,11 +308,12 @@
     ];
     allHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
     extHomeModules = [inputs.hermes-agent.homeManagerModules.default];
-    linuxHomeModule = {...}: {
-      imports = commonHomeModules ++ linuxHomeModules ++ [inputs.noctalia.homeModules.default] ++ extHomeModules;
-    };
-    macosHomeModule = {...}: {
-      imports = commonHomeModules ++ macosHomeModules ++ extHomeModules;
+    homeModule = {pkgs, ...}: {
+      imports =
+        commonHomeModules
+        ++ extHomeModules
+        ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux (linuxHomeModules ++ [inputs.noctalia.homeModules.default])
+        ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin macosHomeModules;
     };
     myNixOSModules =
       [
@@ -327,6 +329,7 @@
         ./nixos/modules/vm.nix
         ./nixos/modules/helix.nix
         ./nixos/modules/luks.nix
+        ./nixos/modules/fprint-lid.nix
         ./nixos/modules/backups.nix
         ./nixos/modules/cloudflared.nix
         ./nixos/modules/rayhunter.nix
@@ -414,7 +417,7 @@
                 };
               };
               home-manager.extraSpecialArgs = inputs // {myPkgs = mkMyPkgs system;};
-              home-manager.sharedModules = [linuxHomeModule];
+              home-manager.sharedModules = [homeModule];
               heywoodlh.stylix.enable = true;
             }
             ./nixos/hosts/${name}.nix
@@ -461,7 +464,7 @@
               useGlobalPkgs = true;
               extraSpecialArgs = inputs // {myPkgs = mkMyPkgs system;};
               users.heywoodlh = {...}: {
-                imports = [macosHomeModule];
+                imports = [homeModule];
                 home.packages = import ./darwin/user-packages.nix {inherit pkgs;};
                 heywoodlh.home = {
                   darwin.protondrive = true;
@@ -488,7 +491,7 @@
             myPkgs = mkMyPkgs system;
           };
         modules = [
-          linuxHomeModule
+          homeModule
           ./home/hosts/${name}.nix
           {
             nixpkgs.config.allowUnfree = true;
@@ -593,8 +596,7 @@
     nixosModules.docs = {...}: {imports = myNixOSModules;};
     darwinModules.heywoodlh.darwin = darwinModule;
     homeModules.heywoodlh = {
-      home = macosHomeModule;
-      home-linux = linuxHomeModule;
+      home = homeModule;
     };
 
     packages = forAllSystems (system: let

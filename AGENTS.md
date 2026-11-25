@@ -73,8 +73,9 @@ Everything is wired in the root `flake.nix`:
 - `mkDarwin` builds a macOS host from `darwin/hosts/<name>.nix` plus
   `darwinModules.heywoodlh.darwin` and the shared `darwin/roles/*` modules.
 - `mkHome` builds a standalone home-manager target from
-  `home/hosts/<name>.nix` plus `homeModules.heywoodlh.home-linux`.
-  `homeModules.heywoodlh.home` is the macOS variant for external consumers.
+  `home/hosts/<name>.nix` plus `homeModules.heywoodlh.home`. That module
+  imports the common, Linux, or macOS module sets based on the target
+  platform, so the same `heywoodlh.home` output works everywhere.
 - Servers additionally get `home/linux/no-desktop.nix` shared in through
   `nixos/machine-types/server.nix`.
 

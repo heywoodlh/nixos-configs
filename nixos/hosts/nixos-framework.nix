@@ -82,6 +82,8 @@
   # setup with `sudo fprintd-enroll -f left-index-finger heywoodlh`
   security.pam.services.sudo.fprintAuth = true;
   services.fprintd.enable = true;
+  services.fprintd.lid.authSkipLidClose = true;
+  services.fprintd.lid.path = "/proc/acpi/button/lid/LID0/state";
 
   heywoodlh.nixos = {
     gaming.enable = true;

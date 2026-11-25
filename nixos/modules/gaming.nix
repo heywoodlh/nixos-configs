@@ -233,7 +233,6 @@ in {
     heywoodlh = mkMerge [
       {nixos.spotify-soloist.enable = cfg.soloist;}
       (mkIf cfg.console {
-        hyprland = lib.mkForce false;
         server = true;
         nixos = {
           sunshine.enable = true;
@@ -485,7 +484,6 @@ in {
       heywoodlh.home = mkMerge [
         {spotify-soloist.enable = true;}
         (mkIf cfg.console {
-          hyprland = lib.mkForce false;
           autostart = [
             {
               name = "Steam";

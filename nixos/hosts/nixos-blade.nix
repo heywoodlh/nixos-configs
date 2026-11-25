@@ -67,7 +67,6 @@
   # Automatic LUKS decryption with Yubikey
   heywoodlh.luks = {
     enable = true;
-    boot = "/dev/nvme0n1p1";
     name = "luks";
     uuid = "ae2132a2-325c-4418-b42b-0492e9c7c448";
     fido = true; # Setup with `sudo systemd-cryptenroll /dev/nvme0n1p2 --fido2-device=auto --fido2-with-user-presence=yes --fido2-with-client-pin=no`

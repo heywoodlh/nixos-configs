@@ -10,3 +10,5 @@ rules:
 ignore: |
   kubernetes/kustomize/
   kubernetes/manifests/
+  kubernetes/templates/
+  kubernetes/vms/

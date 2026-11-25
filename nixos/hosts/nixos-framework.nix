@@ -5,19 +5,16 @@
   modulesPath,
   lanzaboote,
   nixos-hardware,
-  nixpkgs-pam-lid-fix,
   ...
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     lanzaboote.nixosModules.lanzaboote
-    (nixpkgs-pam-lid-fix + "/nixos/modules/services/security/fprintd.nix")
     nixos-hardware.nixosModules.common-cpu-intel
     nixos-hardware.nixosModules.common-gpu-intel
     nixos-hardware.nixosModules.common-pc-laptop
     nixos-hardware.nixosModules.common-pc-laptop-ssd
   ];
-  disabledModules = ["services/security/fprintd.nix"];
 
   boot.initrd.availableKernelModules = ["xhci_pci" "thunderbolt" "nvme" "uas" "usb_storage" "sd_mod"];
   boot.initrd.kernelModules = [];
@@ -84,13 +81,7 @@
   # Fingerprint
   # setup with `sudo fprintd-enroll -f left-index-finger heywoodlh`
   security.pam.services.sudo.fprintAuth = true;
-  services.fprintd = {
-    enable = true;
-    lid = {
-      authSkipLidClose = true;
-      path = "/proc/acpi/button/lid/LID0/state";
-    };
-  };
+  services.fprintd.enable = true;
 
   heywoodlh.nixos = {
     gaming.enable = true;

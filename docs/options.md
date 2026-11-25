@@ -1624,7 +1624,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/s3jygjhkyhamir31d4vp4bzhpvqxylwa-tmux/bin/tmux"
+"/nix/store/zc1mjlcy99fbw9gs4a1kgxswlbk9by95-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -3713,7 +3713,7 @@ package
 *Default:*
 
 ```nix
-<derivation pi-coding-agent-1.2.0>
+<derivation pi-coding-agent-1.5.2>
 ```
 
 *Declared by:*
@@ -3833,7 +3833,7 @@ package
 *Default:*
 
 ```nix
-<derivation 1password-8.12.40>
+<derivation 1password-8.12.44>
 ```
 
 *Declared by:*
@@ -4622,30 +4622,6 @@ false
 
 
 
-## heywoodlh\.luks\.boot
-
-
-
-Full path of FAT boot device (i\.e\. /dev/nvme0n1p1)\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-""
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks.nix)
-
-
-
 ## heywoodlh\.luks\.fido
 
 
@@ -4856,6 +4832,8 @@ string
 
 ## heywoodlh\.luks\.tpm2
 
+
+
 Use TPM2 decryption (requires Secure Boot so PCR 7 is meaningful)\.
 Setup with: ` sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7 /dev/nvme0n1p2 `
 Falls back to the passphrase if the TPM refuses to unseal\.
@@ -4880,8 +4858,6 @@ false
 
 ## heywoodlh\.luks\.uuid
 
-
-
 LUKS block device UUID\.
 Obtain with ` sudo blkid `\.
 
@@ -4896,32 +4872,6 @@ string
 
 ```nix
 ""
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/luks.nix)
-
-
-
-## heywoodlh\.luks\.yubikey
-
-
-
-Enable Yubikey luks single factor decryption\.
-See the following gist for setup example:
-https://gist\.github\.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
-
-
-
-*Type:*
-boolean
-
-
-
-*Default:*
-
-```nix
-false
 ```
 
 *Declared by:*

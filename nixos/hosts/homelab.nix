@@ -81,13 +81,20 @@ in {
   boot.kernelPackages = pkgs.linuxPackages_xanmod_stable;
 
   # Enable ZFS
-  boot.extraModulePackages = [pkgs.linuxKernel.packages.linux_xanmod_stable.zfs_unstable];
-  boot.zfs.package = pkgs.zfs_unstable;
+  boot.extraModulePackages = [
+    (pkgs.linuxKernel.packages.linux_xanmod_stable.zfs_unstable.override {
+      enableUnsupportedExperimentalKernel = true;
+    })
+  ];
+  boot.zfs.package = pkgs.zfs_unstable.override {
+    enableUnsupportedExperimentalKernel = true;
+  };
   boot.supportedFilesystems = ["zfs"];
   systemd.services.zfs-mount.enable = true;
   networking.hostId = "fd838b2e"; # Set a unique host ID for ZFS
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.problems.handlers.zfs.broken = "warn";
   # Make sure opengl is enabled
   hardware.graphics = {
     enable = true;
@@ -260,7 +267,7 @@ in {
   # Use avahi for home-assistant service discovery
   services.avahi = {
     enable = true;
-    reflector = true;
+    settings.reflector.enable-reflector = true;
     openFirewall = true;
   };
 

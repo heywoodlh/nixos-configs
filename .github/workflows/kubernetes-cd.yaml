@@ -46,9 +46,9 @@ jobs:
           EOF
 
       - name: Update manifests
-        working-directory: ./flakes
+        working-directory: ./kubernetes
         run: |
-          ./kube/render.sh
+          ./render.sh
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -66,11 +66,11 @@ jobs:
         # op read 'op://Kubernetes/s5dqdxlxnvhvdnq4pbyzg22swa/unprotected-kubeconfig' | base64
       - name: Apply kube manifests
         if: github.ref == 'refs/heads/main'
-        working-directory: ./flakes
+        working-directory: ./kubernetes
         run: |
           install -d -m 700 "$HOME/.kube"
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > "$HOME/.kube/config"
           chmod 600 "$HOME/.kube/config"
-          for file in ./kube/manifests/*.yaml; do
+          for file in ./manifests/*.yaml; do
             kubectl apply -f "$file"
           done

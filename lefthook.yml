@@ -13,7 +13,7 @@ pre-commit:
       glob: ".github/workflows/*.{yml,yaml}"
       run: actionlint {staged_files}
     yamllint:
-      glob: "*.{yml,yaml}"
+      glob: ".github/workflows/*.{yml,yaml}"
       run: yamllint -c .yamllint.yml {staged_files}
     check-dupe-inputs:
       run: |

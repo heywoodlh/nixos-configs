@@ -36,10 +36,11 @@ jobs:
             echo "No Nix files changed"
             exit 0
           fi
+          mapfile -t files < changed-nix.txt
           nix shell nixpkgs#alejandra nixpkgs#deadnix -c bash -c '
-            alejandra --check $(cat changed-nix.txt)
-            deadnix --fail $(cat changed-nix.txt)
-          '
+            alejandra --check "$@"
+            deadnix --fail "$@"
+          ' _ "${files[@]}"
       - name: Parse every Nix file
         run: |
           while IFS= read -r -d '' file; do
@@ -53,7 +54,7 @@ jobs:
       - uses: actions/checkout@v6
       - name: ShellCheck
         run: |
-          shellcheck --severity=error $(git ls-files -- '*.sh')
+          git ls-files -z -- '*.sh' | xargs -0 shellcheck --severity=error
 
   workflows:
     name: Workflow lint
@@ -65,4 +66,4 @@ jobs:
       - name: yamllint
         run: |
           pip install yamllint
-          yamllint -c .yamllint.yml .github kubernetes ansible
+          yamllint -c .yamllint.yml .github

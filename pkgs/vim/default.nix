@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   neovim,
   mods,
   ...
@@ -14,11 +15,9 @@
   modsRC = lstToString (map getModRC mods);
   modsPlugins = lib.lists.concatMap getModPlugins mods;
 in
-  neovim.override {
-    vimAlias = true;
-    viAlias = true;
-    configure = {
-      customRC = modsRC;
-      packages.pluginPackage.start = modsPlugins;
-    };
-  }
+pkgs.wrapNeovim neovim {
+  vimAlias = true;
+  viAlias = true;
+  neovimRcContent = modsRC;
+  plugins = modsPlugins;
+}

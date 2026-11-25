@@ -39,4 +39,3 @@ jobs:
       - name: Build containers and test
         run: |
           script -e -c "./ansible/test.sh ${{ matrix.os }}"
-

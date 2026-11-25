@@ -141,7 +141,7 @@ in {
   # Allow mdns for shanocast
   services.avahi = {
     enable = true;
-    reflector = true;
+    settings.reflector.enable-reflector = true;
     openFirewall = true;
   };
 

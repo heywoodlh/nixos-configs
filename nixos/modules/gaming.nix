@@ -263,9 +263,9 @@ in {
 
     # Sched-ext scheduler tuned for interactive/foreground latency; the
     # cachyos kernel keeps SCHED_CLASS_EXT enabled specifically for this.
-    services.scx = lib.optionalAttrs (system == "x86_64-linux") {
+    services.scx-loader = lib.optionalAttrs (system == "x86_64-linux") {
       enable = true;
-      scheduler = "scx_lavd";
+      config.default_sched = "scx_lavd";
     };
 
     environment.sessionVariables = {

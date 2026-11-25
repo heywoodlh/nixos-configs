@@ -11,7 +11,7 @@ in
 
     server = mkOption {
       type = types.str;
-      default = "100.65.18.5";
+      default = "100.80.187.50";
       description = "Address of the lancache DNS server.";
     };
   };

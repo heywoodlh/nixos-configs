@@ -37,7 +37,7 @@ spec:
             - name: TZ
               value: "America/Denver"
             - name: UPSTREAM_DNS
-              value: "10.43.0.20"
+              value: "10.43.0.10"
             - name: USE_GENERIC_CACHE
               value: "true"
             - name: ALLOW_GLOBAL_ROUTABLE_IP
@@ -120,7 +120,7 @@ spec:
             - name: TZ
               value: "America/Denver"
             - name: UPSTREAM_DNS
-              value: "10.43.0.20"
+              value: "10.43.0.10"
             - name: USE_GENERIC_CACHE
               value: "true"
           image: docker.io/lancachenet/monolithic@sha256:3253f1b5d2fe84d5a423a8cb8edab0d44a131bd1057248106415e3fd3d0ca542
@@ -131,7 +131,7 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 100m
+              cpu: 10m
               memory: 512Mi
             limits:
               cpu: "2"

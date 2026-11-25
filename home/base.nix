@@ -952,7 +952,10 @@ in {
     };
   };
 
-  programs.opencode.tui.theme = "catppuccin-macchiato";
+  programs.opencode.themes.stylix.theme.background = mkForce {
+    dark = "none";
+    light = "none";
+  };
 
   heywoodlh.home.llm.opencode.extraConf.provider = {
     lumo = {

@@ -26,6 +26,11 @@ data:
         reload
         loadbalance
     }
+    barn-banana.ts.net:53 {
+        errors
+        cache 30
+        forward . 10.43.0.15
+    }
 
   NodeHosts: |
     192.168.1.22 homelab

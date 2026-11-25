@@ -1119,6 +1119,7 @@
         };
         tailscale-dns-bridge = mkKubeDrv "tailscale-dns-bridge" {
           src = ./templates/tailscale-dns-bridge.yaml;
+          tailnet = "barn-banana.ts.net";
           namespace = "default";
           image = "docker.io/heywoodlh/tailscale-dns-bridge:1.90.9";
           replicas = 1;

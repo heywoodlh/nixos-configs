@@ -26,6 +26,31 @@ metadata:
   name: tailscale-dns-bridge-state
   namespace: "default"
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tailscale-dns-bridge-corefile
+  namespace: "default"
+data:
+  Corefile: |
+    .:53 {
+        bind {$POD_IP}
+        errors
+        health
+        ready
+        cache 30
+        forward . 10.43.0.10
+        loop
+        reload
+        loadbalance
+    }
+    barn-banana.ts.net:53 {
+        bind {$POD_IP}
+        errors
+        cache 30
+        forward . 100.100.100.100
+    }
+---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -82,6 +107,10 @@ spec:
             value: "false"
           - name: TS_EXTRA_ARGS
             value: "--accept-routes=true"
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
         ports:
         - name: dns-udp
           containerPort: 53
@@ -89,9 +118,26 @@ spec:
         - name: dns-tcp
           containerPort: 53
           protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8181
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
         volumeMounts:
           - name: dev-net-tun
             mountPath: /dev/net/tun
+          - name: corefile
+            mountPath: /etc/coredns/Corefile
+            subPath: Corefile
+            readOnly: true
         securityContext:
           privileged: true
       volumes:
@@ -103,6 +149,9 @@ spec:
           hostPath:
             path: /dev/net/tun
             type: CharDevice
+        - name: corefile
+          configMap:
+            name: tailscale-dns-bridge-corefile
 ---
 apiVersion: v1
 kind: Service

@@ -588,6 +588,14 @@
           image = "docker.io/heywoodlh/iperf3:3.16-r0";
           replicas = 1;
         };
+        juabsd-forwarder = mkKubeDrv "juabsd-forwarder" {
+          src = ./templates/juabsd-forwarder.yaml;
+          namespace = "default";
+          image = "docker.io/tailscale/tailscale:v1.104.7";
+          forwarder_image = "docker.io/library/caddy:2.11.9";
+          forwards_checksum = builtins.hashFile "sha256" ./templates/juabsd-forwarder.yaml;
+          replicas = 1;
+        };
         jellyfin = mkKubeDrv "jellyfin" {
           src = ./templates/jellyfin.yaml;
           namespace = "default";

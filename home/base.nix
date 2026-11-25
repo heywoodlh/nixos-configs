@@ -426,6 +426,30 @@ let
     fi
   '';
 
+  juabsdOllamaApiKey = "${homeDir}/.config/opencode/juabsd-ollama-api-key";
+  juabsdClarisApiKey = "${homeDir}/.config/opencode/juabsd-claris-api-key";
+  juabsdSetup = pkgs.writeShellScriptBin "juabsd-setup" ''
+    set -euo pipefail
+    ${pkgs.coreutils}/bin/mkdir -p "${homeDir}/.config/opencode"
+    fetch() {
+      local field="$1" dest="$2" tmp
+      tmp="$(${pkgs.coreutils}/bin/mktemp)"
+      trap '${pkgs.coreutils}/bin/rm -f "$tmp"' EXIT
+      ${op-wrapper} item get 3wjpym5n2cfjupshea2jzcw3gq --reveal --fields "$field" > "$tmp"
+      if [[ -z "$(${pkgs.coreutils}/bin/tr -d '[:space:]' < "$tmp")" ]]
+      then
+        echo "Unable to read $field from 1Password. Run op-unlock first." >&2
+        exit 1
+      fi
+      ${pkgs.coreutils}/bin/chmod 600 "$tmp"
+      ${pkgs.coreutils}/bin/mv "$tmp" "$dest"
+      trap - EXIT
+      echo "Wrote $field to $dest"
+    }
+    fetch credential "${juabsdOllamaApiKey}"
+    fetch claris "${juabsdClarisApiKey}"
+  '';
+
   soloistWrapper = pkgs.writeShellScriptBin "soloist" ''
     set -euo pipefail
     credentials="${config.heywoodlh.home.spotify-soloist.credentialsFile}"
@@ -515,6 +539,7 @@ in {
     wake-sarah-gaming-pc
     myOpWrapper
     lumoSetup
+    juabsdSetup
     tangledSyncWrapper
     paseoSetup
     iambClearcache
@@ -700,6 +725,9 @@ in {
       function opencode
         if not test -s "$HOME/.config/opencode/lumo-api-key"
           lumo-setup
+        end
+        if not test -s "${juabsdOllamaApiKey}"; or not test -s "${juabsdClarisApiKey}"
+          juabsd-setup
         end
         command opencode $argv
       end
@@ -988,6 +1016,71 @@ in {
         };
       };
     })
+    {
+      # juabsd's Headscale host serves several OpenAI-compatible endpoints under
+      # different paths on port 8017. opencode only reads baseURL from the provider
+      # options, so each model carries its own URL via provider.api; leaving the
+      # provider-level baseURL unset is what makes that per-model URL take effect.
+      "juabsd-ollama" = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "juabsd-ollama";
+        options.apiKey = "{file:${juabsdOllamaApiKey}}";
+        models = {
+          "inkling-2-mini" = {
+            name = "inkling-2-mini";
+            id = "inkling-2-mini:26b-a5b-nvfp4";
+            provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
+            headers.Host = "100.64.0.7";
+            tool_call = true;
+            limit = { context = 32768; output = 8192; };
+          };
+          "gpt-oss-120b" = {
+            name = "gpt-oss-120b";
+            id = "hermes-gpt-oss-120b-64k:latest";
+            provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
+            headers.Host = "100.64.0.7";
+            tool_call = true;
+            limit = { context = 65536; output = 8192; };
+          };
+          "qwen3.5" = {
+            name = "qwen3.5";
+            id = "qwen3.5:9b";
+            provider.api = "http://juabsd.barn-banana.ts.net:8017/qwen35/v1";
+            headers.Host = "100.64.0.7";
+            tool_call = true;
+            limit = { context = 32768; output = 8192; };
+          };
+          "qwen3-6-vision" = {
+            name = "qwen3-6-vision";
+            id = "Qwen/Qwen3.6-35B-A3B";
+            provider.api = "http://juabsd.barn-banana.ts.net:8017/vision/v1";
+            headers.Host = "100.64.0.7";
+            attachment = true;
+            modalities = {
+              input = [ "text" "image" ];
+              output = [ "text" ];
+            };
+            tool_call = true;
+            limit = { context = 32768; output = 8192; };
+          };
+        };
+      };
+      "juabsd-claris" = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "juabsd-claris";
+        options = {
+          baseURL = "http://juabsd.barn-banana.ts.net:49820/v1";
+          apiKey = "{file:${juabsdClarisApiKey}}";
+        };
+        models."qwen-3.6-text-only" = {
+          name = "qwen-3.6-text-only";
+          id = "Qwen/Qwen3.6-35B-A3B";
+          headers.Host = "100.64.0.1";
+          tool_call = true;
+          limit = { context = 32768; output = 8192; };
+        };
+      };
+    }
   ];
 
   programs.iamb = {

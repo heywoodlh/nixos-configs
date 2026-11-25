@@ -34,6 +34,7 @@ applications=(
   "immich-machine-learning"
   "istio"
   "iperf"
+  "juabsd-forwarder"
   "lmstudio"
   "media"
   "metasploit"

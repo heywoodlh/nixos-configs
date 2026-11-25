@@ -372,14 +372,12 @@
         };
         coredns = mkKubeDrv "coredns" {
           src = ./templates/coredns.yaml;
-          tailnet = "barn-banana.ts.net";
           namespace = "coredns";
           image = "docker.io/coredns/coredns:1.13.1";
           replicas = "1";
         };
         coredns-kube-system = mkKubeDrv "coredns-kube-system" {
           src = ./templates/kube-system-coredns.yaml;
-          tailnet = "barn-banana.ts.net";
         };
         "crossplane" = (kubelib.buildHelmChart {
           name = "crossplane";
@@ -1119,7 +1117,6 @@
         };
         tailscale-dns-bridge = mkKubeDrv "tailscale-dns-bridge" {
           src = ./templates/tailscale-dns-bridge.yaml;
-          tailnet = "barn-banana.ts.net";
           namespace = "default";
           image = "docker.io/heywoodlh/tailscale-dns-bridge:1.90.9";
           replicas = 1;

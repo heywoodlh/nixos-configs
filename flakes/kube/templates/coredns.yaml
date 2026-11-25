@@ -32,8 +32,8 @@ data:
         reload
         loadbalance
     }
-    @tailnet@ {
-      forward . 100.100.100.100
+    ts.net {
+      forward . 10.43.0.15
     }
 ---
 apiVersion: rbac.authorization.k8s.io/v1

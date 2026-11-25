@@ -26,7 +26,7 @@ data:
         reload
         loadbalance
     }
-    @tailnet@:53 {
+    ts.net:53 {
         errors
         cache 30
         forward . 10.43.0.15

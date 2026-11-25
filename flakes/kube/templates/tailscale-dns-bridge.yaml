@@ -44,7 +44,7 @@ data:
         reload
         loadbalance
     }
-    @tailnet@:53 {
+    ts.net:53 {
         bind {$POD_IP}
         errors
         cache 30

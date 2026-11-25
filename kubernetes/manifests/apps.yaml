@@ -663,7 +663,7 @@ spec:
   source:
     repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
     targetRevision: HEAD
-    path: flakes/kube/manifests
+    path: kubernetes/manifests
     directory:
       include: "lancache.yaml"
   project: default

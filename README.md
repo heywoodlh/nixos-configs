@@ -14,6 +14,14 @@ Home-Manager configs: [./home](./home)
 
 Shared packages: [./pkgs](./pkgs)
 
+Run bundled tools directly, e.g.:
+
+```
+nix run .#tmux
+nix run .#helix
+nix run .#fish
+```
+
 ## Using custom modules
 
 > Note: I don't plan to support external usage of my modules, but instead have it publicly available for reference.

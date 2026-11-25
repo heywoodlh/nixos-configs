@@ -1,9 +1,11 @@
 # Configuration loaded for family systems
-{ config, pkgs, lib, home-manager, nur, ... }:
-
-let
-  system = pkgs.stdenv.hostPlatform.system;
-  stdenv = pkgs.stdenv;
+{
+  pkgs,
+  lib,
+  home-manager,
+  nur,
+  ...
+}: let
   nur-pkgs = import nur {
     inherit pkgs;
     nurpkgs = pkgs;
@@ -14,47 +16,47 @@ let
     {
       name = "code.org";
       url = "https://code.org";
-      domains = [ ".code.org" ];
+      domains = [".code.org"];
     }
     {
       name = "animalia";
       url = "https://animalia.bio";
-      domains = [ ".animalia.bio" ];
+      domains = [".animalia.bio"];
     }
     {
       name = "wikipedia";
       url = "https://wikipedia.org";
-      domains = [ ".wikipedia.org" ];
+      domains = [".wikipedia.org"];
     }
     {
       name = "linux journey";
       url = "https://linuxjourney.com";
-      domains = [ ".linuxjourney.com" ];
+      domains = [".linuxjourney.com"];
     }
     {
       name = "national geographic";
       url = "https://kids.nationalgeographic.com";
-      domains = [ ".kids.nationalgeographic.com" ];
+      domains = [".kids.nationalgeographic.com"];
     }
     {
       name = "inaturalist";
       url = "https://www.inaturalist.org";
-      domains = [ ".inaturalist.org" ];
+      domains = [".inaturalist.org"];
     }
     {
       name = "apple music";
       url = "https://music.apple.com";
-      domains = [ ".apple.com" ];
+      domains = [".apple.com"];
     }
     {
       name = "plex";
       url = "https://plex.tv/web";
-      domains = [ ".plex.tv" ];
+      domains = [".plex.tv"];
     }
     {
       name = "coolmathgames";
       url = "https://coolmathgames.com";
-      domains = [ ".coolmathgames.com" ];
+      domains = [".coolmathgames.com"];
     }
     {
       name = "classlink";
@@ -82,7 +84,7 @@ let
     {
       name = "opencut";
       url = "https://opencut.app";
-      domains = [ ".opencut.app" ];
+      domains = [".opencut.app"];
     }
     {
       name = "crunchlabs";
@@ -99,8 +101,9 @@ let
     "safe.duckduckgo.com"
     "external-content.duckduckgo.com"
   ];
-  allowedDomains = lib.unique (extraAllowedDomains
-    ++ lib.concatMap (bookmark: bookmark.domains or [ ]) bookmarks);
+  allowedDomains =
+    lib.unique (extraAllowedDomains
+      ++ lib.concatMap (bookmark: bookmark.domains or []) bookmarks);
   render-bookmarks = pkgs.stdenv.mkDerivation {
     name = "render-bookmarks";
     builder = pkgs.bash;
@@ -119,7 +122,7 @@ let
         XDG_DATA_HOME=/tmp/buku ${pkgs.buku}/bin/buku --export $out/bookmarks.html
         ${pkgs.coreutils}/bin/rm -rf /tmp/buku
       '';
-    in [ "${renderBookmarks}" ];
+    in ["${renderBookmarks}"];
   };
   configureFirefox = let
     profiles-ini = pkgs.writeText "profiles.ini" ''
@@ -133,7 +136,8 @@ let
       Name=home-manager
       Path=home-manager
     '';
-  in pkgs.writeShellScript "firefox.sh" ''
+  in
+    pkgs.writeShellScript "firefox.sh" ''
       mkdir -p $HOME/.mozilla
       mkdir -p $HOME/.var/app/org.mozilla.firefox/.mozilla/firefox/home-manager
       cp -fv ${profiles-ini} $HOME/.var/app/org.mozilla.firefox/.mozilla/firefox/profiles.ini
@@ -168,7 +172,7 @@ let
 
       # Setup bookmarks
       cp -f "${render-bookmarks}/bookmarks.html" $HOME/.var/app/org.mozilla.firefox/bookmarks.html
-  '';
+    '';
 in {
   imports = [
     home-manager.nixosModules.home-manager
@@ -176,17 +180,17 @@ in {
 
   # Create "family" user
   users.users.family = {
-    isNormalUser  = true;
-    home  = "/home/family";
-    description  = "Family";
-    extraGroups  = [ "networkmanager" ];
+    isNormalUser = true;
+    home = "/home/family";
+    description = "Family";
+    extraGroups = ["networkmanager"];
   };
 
   users.users.heywoodlh.extraGroups = ["docker"];
 
   home-manager = {
     backupCommand = "${pkgs.trash-cli}/bin/trash-put";
-    users.family = { ... }: {
+    users.family = {...}: {
       home.stateVersion = "25.05";
       heywoodlh.home = {
         llm = {
@@ -286,7 +290,7 @@ in {
       ];
       dconf.settings = {
         "org.gnome.shell" = {
-          enabled-extensions = [ "caffeine@patapon.info" "search-light@icedman.github.com" "just-perfection-desktop@just-perfection" ];
+          enabled-extensions = ["caffeine@patapon.info" "search-light@icedman.github.com" "just-perfection-desktop@just-perfection"];
           favorite-apps = ["firefox.desktop" "ghostty.desktop"];
         };
         "org/gnome/shell/extensions/search-light" = {
@@ -317,8 +321,8 @@ in {
             privateDefault = "duckduckgo";
             engines = {
               "duckduckgo" = {
-                urls = [{ template = "https://safe.duckduckgo.com/?q={searchTerms}"; }];
-                definedAliases = [ "@k" ];
+                urls = [{template = "https://safe.duckduckgo.com/?q={searchTerms}";}];
+                definedAliases = ["@k"];
                 icon = "https://duckduckgo.com/favicon.ico";
                 updateInterval = 24 * 60 * 60 * 1000; # every day
               };
@@ -416,8 +420,8 @@ in {
   services.displayManager.ly.enable = lib.mkForce false;
   services.displayManager.gdm.enable = lib.mkForce true;
 
-  users.extraGroups.lp.members = [ "family" ];
-  users.extraGroups.scanner.members = [ "family" ];
+  users.extraGroups.lp.members = ["family"];
+  users.extraGroups.scanner.members = ["family"];
 
   # Parental controls
   services.malcontent.enable = true;
@@ -434,14 +438,20 @@ in {
         columns = 4;
       };
     };
-    bookmarks = [{
-      Bookmarks = map (bookmark: {
-        "${bookmark.name}" = [{
-          abbr = lib.toUpper (builtins.substring 0 2 bookmark.name);
-          href = bookmark.url;
-        }];
-      }) bookmarks;
-    }];
+    bookmarks = [
+      {
+        Bookmarks =
+          map (bookmark: {
+            "${bookmark.name}" = [
+              {
+                abbr = lib.toUpper (builtins.substring 0 2 bookmark.name);
+                href = bookmark.url;
+              }
+            ];
+          })
+          bookmarks;
+      }
+    ];
   };
 
   # Flatpak for apps
@@ -539,7 +549,8 @@ in {
             100.64.0.0/10
             10.152.183.0/24
           '';
-          squid-allowed-domains = pkgs.writeText "allowed_domains.txt"
+          squid-allowed-domains =
+            pkgs.writeText "allowed_domains.txt"
             (lib.concatMapStrings (domain: "${domain}\n") allowedDomains);
         in [
           "${squid-conf}:/etc/squid/squid.conf"
@@ -569,7 +580,7 @@ in {
 
   heywoodlh = {
     gnome = true;
-    hyprland = lib.mkForce false;
+    niri.enable = lib.mkForce false;
     cosmic = lib.mkForce false;
   };
 

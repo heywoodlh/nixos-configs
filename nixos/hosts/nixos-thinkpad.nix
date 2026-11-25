@@ -3,7 +3,7 @@
 
   security.pam.services.sudo.fprintAuth = true;
   services.fprintd.enable = true;
-  services.fprintd.lid.authSkipLidClose = true;
+  heywoodlh.fprintLid.enable = true;
 
   home-manager.users.heywoodlh.imports = [../../home/roles/kiwix.nix];
 

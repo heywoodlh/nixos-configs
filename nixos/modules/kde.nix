@@ -1,7 +1,11 @@
-{ config, pkgs, lib, plasma-manager, ... }:
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  plasma-manager,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.nixos.kde;
   win11-sddm = pkgs.stdenv.mkDerivation {
     pname = "sddm-theme-win11";
@@ -52,7 +56,7 @@ in {
     # if enabling KDE, assume all other desktops not desired
     heywoodlh = {
       gnome = lib.mkForce false;
-      hyprland = lib.mkForce false;
+      niri.enable = lib.mkForce false;
       cosmic = lib.mkForce false;
     };
 
@@ -70,7 +74,7 @@ in {
     };
 
     home-manager = {
-      users."${cfg.user}" = { ... }: {
+      users."${cfg.user}" = {...}: {
         imports = [
           (plasma-manager + /modules/default.nix)
         ];

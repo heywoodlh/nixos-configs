@@ -115,14 +115,14 @@
       };
     };
 
-    wayland.windowManager.hyprland.extraConfig = ''
-      -- change monitor to high resolution, the last argument is the scale factor
-      hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1 })
-      -- unscale XWayland
-      hl.config({ xwayland = { force_zero_scaling = true } })
-      -- toolkit-specific scale
-      hl.env("GDK_SCALE", "2")
-      hl.env("XCURSOR_SIZE", "24")
+    wayland.windowManager.niri.extraConfig = ''
+      output "eDP-1" {
+        scale 1
+      }
     '';
+    home.sessionVariables = {
+      GDK_SCALE = "2";
+      XCURSOR_SIZE = "24";
+    };
   };
 }

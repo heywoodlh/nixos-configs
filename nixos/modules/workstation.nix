@@ -49,7 +49,7 @@ in {
 
       services.displayManager = {
         gdm.enable = true;
-        defaultSession = "hyprland";
+        defaultSession = "niri";
       };
 
       programs.dconf.enable = true;
@@ -66,7 +66,7 @@ in {
 
       # Desktop environments
       heywoodlh.cosmic = true;
-      heywoodlh.hyprland = true;
+      heywoodlh.niri.enable = true;
 
       # Console
       heywoodlh.console = true;

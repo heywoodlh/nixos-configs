@@ -1,18 +1,20 @@
-{ pkgs, config, lib, ... }:
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with lib;
-with lib.types;
-
-let
+with lib.types; let
   cfg = config.heywoodlh.nixos.sunshine;
-  hyprctl = pkgs.writeShellScriptBin "hyprctl-session" ''
+  niri = pkgs.writeShellScriptBin "niri-session" ''
     : "''${XDG_RUNTIME_DIR:=/run/user/$(${pkgs.coreutils}/bin/id -u)}"
-    if [ -z "$HYPRLAND_INSTANCE_SIGNATURE" ]
+    if [ -z "$WAYLAND_DISPLAY" ]
     then
-      instance=$(${pkgs.coreutils}/bin/ls -1 "$XDG_RUNTIME_DIR/hypr" 2>/dev/null | ${pkgs.coreutils}/bin/head -n1)
-      [ -n "$instance" ] && export HYPRLAND_INSTANCE_SIGNATURE="$instance"
+      socket=$(${pkgs.coreutils}/bin/ls -1 "$XDG_RUNTIME_DIR"/wayland-* 2>/dev/null | ${pkgs.coreutils}/bin/head -n1)
+      [ -n "$socket" ] && export WAYLAND_DISPLAY="''${socket##*/}"
     fi
-    exec ${pkgs.hyprland}/bin/hyprctl "$@"
+    exec ${pkgs.niri}/bin/niri msg "$@"
   '';
 in {
   options.heywoodlh.nixos.sunshine = {
@@ -53,7 +55,7 @@ in {
       "autovt@tty1".enable = false;
     };
 
-    heywoodlh.hyprland = true;
+    heywoodlh.niri.enable = true;
 
     # Add input rules comparable to Steam for Sunshine to work with/without Steam
     services.udev.packages = [
@@ -74,19 +76,20 @@ in {
       source = "${pkgs.conntrack-tools}/bin/conntrack";
       # conntrack needs cap_net_admin to run as a normal user
       capabilities = "cap_net_admin+ep";
-      owner = "root"; group = "root";
+      owner = "root";
+      group = "root";
     };
-    systemd.user.services.sunshine-wake-monitor= lib.mkIf config.services.sunshine.enable {
+    systemd.user.services.sunshine-wake-monitor = lib.mkIf config.services.sunshine.enable {
       description = "Monitor Sunshine TCP connections and wake monitors";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
+      wants = ["network-online.target"];
       serviceConfig = {
         ExecStart = pkgs.writeShellScript "sunshine_wake_monitor" ''
           ${config.security.wrapperDir}/conntrack -E -e new -p tcp --dport ${toString (config.services.sunshine.settings.port - 5)} | \
           while read line; do
             echo "New Sunshine connection detected, waking up the monitors"
-            ${hyprctl}/bin/hyprctl-session dispatch dpms on
+            ${niri}/bin/niri-session action power-on-monitors
             sleep 5
           done
         '';
@@ -96,75 +99,78 @@ in {
 
     services.sunshine = {
       enable = true;
-      # security.wrappers.sunshine (below) needs a real ELF at $out/bin/sunshine --
-      # cudaSupport makes upstream wrap it in a bash script (to set LD_LIBRARY_PATH
-      # for vulkan-loader), which Nix's wrapper tooling refuses to apply
-      # capabilities to. Bake the same lib path into the RPATH instead, so the
-      # binary stays unwrapped.
-      package = (pkgs.sunshine.override {
-        cudaSupport = true;
-        cudaPackages = pkgs.cudaPackages;
-        libva = pkgs.libva;
-      }).overrideAttrs (old: {
-        postFixup = ''
-          ${pkgs.patchelf}/bin/patchelf --set-rpath \
-            "$(${pkgs.patchelf}/bin/patchelf --print-rpath $out/bin/sunshine):${pkgs.lib.makeLibraryPath [ pkgs.vulkan-loader ]}" \
-            $out/bin/sunshine
-        '';
-      });
+      # cudaSupport wraps the binary, which breaks setcap; bake the RPATH instead.
+      package =
+        (pkgs.sunshine.override {
+          cudaSupport = true;
+          cudaPackages = pkgs.cudaPackages;
+          libva = pkgs.libva;
+        }).overrideAttrs (_: {
+          postFixup = ''
+            ${pkgs.patchelf}/bin/patchelf --set-rpath \
+              "$(${pkgs.patchelf}/bin/patchelf --print-rpath $out/bin/sunshine):${pkgs.lib.makeLibraryPath [pkgs.vulkan-loader]}" \
+              $out/bin/sunshine
+          '';
+        });
 
-      settings = cfg.extraConfig // {
-        system_tray = false;
-        back_button_timeout = 2000;
-        origin_web_ui_allowed = "wan";
-      } // lib.optionalAttrs cfg.dynamic {
-        global_prep_cmd = let
-          autoAdjustRes = pkgs.writeShellScript "res.sh" ''
-            output="HDMI-A-1"
-            width="''${SUNSHINE_CLIENT_WIDTH}"
-            height="''${SUNSHINE_CLIENT_HEIGHT}"
-            fps="''${SUNSHINE_CLIENT_FPS}"
+      settings =
+        cfg.extraConfig
+        // {
+          system_tray = false;
+          back_button_timeout = 2000;
+          origin_web_ui_allowed = "wan";
+        }
+        // lib.optionalAttrs cfg.dynamic {
+          global_prep_cmd = let
+            autoAdjustRes = pkgs.writeShellScript "res.sh" ''
+              output="HDMI-A-1"
+              width="''${SUNSHINE_CLIENT_WIDTH}"
+              height="''${SUNSHINE_CLIENT_HEIGHT}"
+              fps="''${SUNSHINE_CLIENT_FPS}"
 
-            if ! ${hyprctl}/bin/hyprctl-session keyword monitor "$output,''${width}x''${height}@''${fps},auto,1" >/tmp/sunshine-res.log 2>&1
-            then
-               msg="$(date) unable to automatically adjust resolution, falling back to 1080 -- requested resolution: ''${width}x''${height}@''${fps}"
-               echo "$msg" | tee -a /tmp/sunshine-res.log
-               ${pkgs.libnotify}/bin/notify-send "Unable to automatically adjust resolution, see /tmp/sunshine-res.log"
-               ${hyprctl}/bin/hyprctl-session keyword monitor "$output,1920x1080@60,auto,1" || true
-            else
-               echo "$(date) successfully adjusted resolution: ''${width}x''${height}@''${fps}" | tee -a /tmp/sunshine-res.log
-            fi
+              if ! ${niri}/bin/niri-session output "$output" mode "''${width}x''${height}@''${fps}" >/tmp/sunshine-res.log 2>&1
+              then
+                 msg="$(date) unable to automatically adjust resolution, falling back to 1080 -- requested resolution: ''${width}x''${height}@''${fps}"
+                 echo "$msg" | tee -a /tmp/sunshine-res.log
+                 ${pkgs.libnotify}/bin/notify-send "Unable to automatically adjust resolution, see /tmp/sunshine-res.log"
+                 ${niri}/bin/niri-session output "$output" mode "1920x1080@60" || true
+              else
+                 echo "$(date) successfully adjusted resolution: ''${width}x''${height}@''${fps}" | tee -a /tmp/sunshine-res.log
+              fi
             '';
-        in builtins.toJSON [
-          {
-            do = "${autoAdjustRes}";
-            undo = "";
-          }
-        ];
-      };
+          in
+            builtins.toJSON [
+              {
+                do = "${autoAdjustRes}";
+                undo = "";
+              }
+            ];
+        };
 
       applications = {
-        apps = [
-          {
-            name = "Desktop";
-            prep-cmd = {
-              do = "${hyprctl}/bin/hyprctl-session dispatch dpms on";
-              undo = [ "" ];
-            };
-            image-path = "desktop.png";
-          }
-        ] ++ lib.optionals (config.programs.steam.enable) [
-          {
-            name = "Steam Big Picture";
-            detached = [ "${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/bigpicture" ];
-            output = "/tmp/steam.txt";
-            prep-cmd = {
-              do = "${hyprctl}/bin/hyprctl-session dispatch dpms on";
-              undo = [ "${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://close/bigpicture" ];
-            };
-            image-path = "steam.png";
-          }
-        ];
+        apps =
+          [
+            {
+              name = "Desktop";
+              prep-cmd = {
+                do = "${niri}/bin/niri-session action power-on-monitors";
+                undo = [""];
+              };
+              image-path = "desktop.png";
+            }
+          ]
+          ++ lib.optionals (config.programs.steam.enable) [
+            {
+              name = "Steam Big Picture";
+              detached = ["${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/bigpicture"];
+              output = "/tmp/steam.txt";
+              prep-cmd = {
+                do = "${niri}/bin/niri-session action power-on-monitors";
+                undo = ["${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://close/bigpicture"];
+              };
+              image-path = "steam.png";
+            }
+          ];
       };
       autoStart = true;
       capSysAdmin = true;
@@ -174,19 +180,21 @@ in {
     security.wrappers.sunshine.capabilities = lib.mkForce "cap_sys_admin+p cap_sys_nice+p";
 
     home-manager = {
-      users."${cfg.user}" = { ... }: {
+      users."${cfg.user}" = {...}: {
         home.file.".config/fish/config.fish".text = ''
           export XDG_RUNTIME_DIR="/run/user/$(id -u)"
           export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
         '';
-        home.packages = with pkgs; [
-          sunshine
-        ] ++ lib.optionals (config.programs.steam.enable) [
-          steamtinkerlaunch
-          wget # winetricks requires GNU wget
-          wineWow64Packages.stable # support both 32-bit and 64-bit applications
-          winetricks
-        ];
+        home.packages = with pkgs;
+          [
+            sunshine
+          ]
+          ++ lib.optionals (config.programs.steam.enable) [
+            steamtinkerlaunch
+            wget # winetricks requires GNU wget
+            wineWow64Packages.stable # support both 32-bit and 64-bit applications
+            winetricks
+          ];
 
         home.activation.fix-sunshine-service = ''
           # services.sunshine installs its unit to /etc/systemd/user (system-wide, not

@@ -7,7 +7,6 @@
     nixpkgs-stable.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-26.05-chilled/0.1";
     nixpkgs-nvidia.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
     nixpkgs-lts.follows = "nixpkgs";
-    nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
     nvidia-patch = {
       url = "github:icewind1991/nvidia-patch-nixos";
       inputs.nixpkgs.follows = "nixpkgs-nvidia";
@@ -292,6 +291,7 @@
       ./home/modules/gnome.nix
       ./home/modules/cosmic.nix
       ./home/modules/guake.nix
+      ./home/modules/niri.nix
       ./home/modules/hyprland.nix
       ./home/modules/hyprland-windows-mode.nix
       ./home/modules/vicinae.nix
@@ -308,17 +308,18 @@
     ];
     allHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
     extHomeModules = [inputs.hermes-agent.homeManagerModules.default];
-    homeModule = {pkgs, ...}: {
+    homeModule = {osClass ? "nixos", ...}: {
       imports =
         commonHomeModules
         ++ extHomeModules
-        ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux (linuxHomeModules ++ [inputs.noctalia.homeModules.default])
-        ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin macosHomeModules;
+        ++ lib.optionals (osClass == "nixos") (linuxHomeModules ++ [inputs.noctalia.homeModules.default])
+        ++ lib.optionals (osClass == "darwin") macosHomeModules;
     };
     myNixOSModules =
       [
         ./nixos/modules/defaults.nix
         ./nixos/modules/gnome.nix
+        ./nixos/modules/niri.nix
         ./nixos/modules/hyprland.nix
         ./nixos/modules/intel-mac.nix
         ./nixos/modules/workstation.nix
@@ -462,7 +463,12 @@
             };
             home-manager = {
               useGlobalPkgs = true;
-              extraSpecialArgs = inputs // {myPkgs = mkMyPkgs system;};
+              extraSpecialArgs =
+                inputs
+                // {
+                  osClass = "darwin";
+                  myPkgs = mkMyPkgs system;
+                };
               users.heywoodlh = {...}: {
                 imports = [homeModule];
                 home.packages = import ./darwin/user-packages.nix {inherit pkgs;};
@@ -488,6 +494,7 @@
         extraSpecialArgs =
           inputs
           // {
+            osClass = "nixos";
             myPkgs = mkMyPkgs system;
           };
         modules = [

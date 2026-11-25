@@ -94,6 +94,7 @@
   services.displayManager.gdm.enable = lib.mkForce false;
   services.xserver.displayManager.lightdm.enable = lib.mkForce false;
   heywoodlh.cosmic = lib.mkForce false;
+  heywoodlh.niri.enable = lib.mkForce false;
   heywoodlh.hyprland = true;
   heywoodlh.nixos.kde.enable = false;
   heywoodlh.nixos.sunshine.enable = false;

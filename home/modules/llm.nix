@@ -420,36 +420,39 @@ in {
 
     programs.opencode = optionalAttrs (cfg.opencode.enable) {
       enable = cfg.opencode.enable;
-      settings = cfg.opencode.extraConf // optionalAttrs (cfg.lmstudio.enable || cfg.opencode.vllm.enable) {
-        provider = {
-          vllm = optionalAttrs (cfg.opencode.vllm.enable) {
-            npm = "@ai-sdk/openai-compatible";
-            name = "${cfg.opencode.vllm.name}";
-            options.baseURL = "http://localhost:${toString cfg.opencode.vllm.port}/v1";
-            models = {
-              "${cfg.opencode.vllm.model.name}" = {
-                name = "${cfg.opencode.vllm.model.alias}";
-                tool_call = true;
-                options.think = false;
-                limit = {
-                  context = cfg.opencode.vllm.model.contextTokens;
-                  output = cfg.opencode.vllm.model.outputTokens;
+      settings = cfg.opencode.extraConf // optionalAttrs (cfg.opencode.vllm.enable || cfg.lmstudio.enable) {
+        provider = (cfg.opencode.extraConf.provider or {})
+          // optionalAttrs (cfg.opencode.vllm.enable) {
+            vllm = {
+              npm = "@ai-sdk/openai-compatible";
+              name = "${cfg.opencode.vllm.name}";
+              options.baseURL = "http://localhost:${toString cfg.opencode.vllm.port}/v1";
+              models = {
+                "${cfg.opencode.vllm.model.name}" = {
+                  name = "${cfg.opencode.vllm.model.alias}";
+                  tool_call = true;
+                  options.think = false;
+                  limit = {
+                    context = cfg.opencode.vllm.model.contextTokens;
+                    output = cfg.opencode.vllm.model.outputTokens;
+                  };
+                };
+              };
+            };
+          }
+          // optionalAttrs (cfg.lmstudio.enable) {
+            lmstudio = {
+              npm = "@ai-sdk/openai-compatible";
+              name = "${cfg.lmstudio.name}";
+              options.baseURL = "http://127.0.0.1:1234/v1";
+              models = {
+                "${cfg.lmstudio.model.alias}" = {
+                  max_tokens = cfg.lmstudio.model.max_tokens;
+                  context_length = cfg.lmstudio.model.context_length;
                 };
               };
             };
           };
-          lmstudio = optionalAttrs (cfg.lmstudio.enable) {
-            npm = "@ai-sdk/openai-compatible";
-            name = "${cfg.lmstudio.name}";
-            options.baseURL = "http://127.0.0.1:1234/v1";
-            models = {
-              "${cfg.lmstudio.model.alias}" = {
-                max_tokens = cfg.lmstudio.model.max_tokens;
-                context_length = cfg.lmstudio.model.context_length;
-              };
-            };
-          };
-        };
       };
     };
 

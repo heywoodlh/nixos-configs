@@ -24,7 +24,6 @@ applications=(
   "grafana"
   "harbor"
   "gods-eye-view"
-  "hashcat"
   "healthchecks"
   "homepage"
   "home-assistant"

@@ -48,6 +48,13 @@ spec:
               protocol: UDP
             - containerPort: 53
               protocol: TCP
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -64,11 +71,11 @@ metadata:
     io.kubernetes.service: lancache-dns
 spec:
   ports:
-    - name: "53"
+    - name: dns-udp
       port: 53
       protocol: UDP
       targetPort: 53
-    - name: 53-tcp
+    - name: dns-tcp
       port: 53
       targetPort: 53
   selector:
@@ -107,7 +114,7 @@ spec:
             - name: CACHE_ROOT
               value: /data/cache
             - name: DNS_BIND_IP
-              value: "@dns_ip@"
+              value: "0.0.0.0"
             - name: LANCACHE_IP
               value: "@cache_ip@"
             - name: TZ
@@ -123,8 +130,11 @@ spec:
             - containerPort: 443
               protocol: TCP
           resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
             limits:
-              cpu: 250m
+              cpu: "2"
               memory: 3Gi
           volumeMounts:
             - mountPath: /data/cache
@@ -136,11 +146,11 @@ spec:
         - name: monolithic-cache
           hostPath:
             path: @cache_hostDir@/cache
-            type: Directory
+            type: DirectoryOrCreate
         - name: monolithic-logs
           hostPath:
             path: @cache_hostDir@/logs
-            type: Directory
+            type: DirectoryOrCreate
       nodeSelector:
         kubernetes.io/hostname: @nodename@
 ---
@@ -158,10 +168,10 @@ metadata:
     io.kubernetes.service: lancache
 spec:
   ports:
-    - name: "80"
+    - name: http
       port: 80
       targetPort: 80
-    - name: "443"
+    - name: https
       port: 443
       targetPort: 443
   selector:

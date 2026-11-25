@@ -1,8 +1,10 @@
-{ config, lib, pkgs, myFlakes, choose-nixpkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.darwin.yabai;
   battpop = pkgs.writeShellScriptBin "battpop.sh" ''
     osascript -e "display notification \"$(system_profiler SPPowerDataType | grep Charging -A1 | head -2 | awk '{$1=$1};1')\""

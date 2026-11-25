@@ -1,14 +1,19 @@
-{ config, pkgs, lib, nur, dark-wallpaper, light-wallpaper, myFlakes, user-icon, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  nur,
+  dark-wallpaper,
+  light-wallpaper,
+  myPkgs,
+  user-icon,
+  ...
+}:
 with lib;
-with lib.types;
-
-let
+with lib.types; let
   cfg = config.heywoodlh.workstation;
-  hyprlandCfg = config.heywoodlh.hyprland;
   lyCfg = config.services.displayManager.ly;
-  system = pkgs.stdenv.hostPlatform.system;
-  shell = "${myFlakes.packages.${system}.tmux}/bin/tmux";
+  shell = "${myPkgs.tmux}/bin/tmux";
   startFbterm = pkgs.writeShellScriptBin "start-fbterm" ''
     eval $(${pkgs.openssh}/bin/ssh-agent)
     export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
@@ -23,7 +28,7 @@ let
     ${fbtermDesktop}
     Type=XSession
     DesktopNames=fbterm
-  '').overrideAttrs (_: { passthru.providedSessions = [ "fbterm" ]; });
+  '').overrideAttrs (_: {passthru.providedSessions = ["fbterm"];});
 in {
   options.heywoodlh.workstation = mkOption {
     default = false;
@@ -35,181 +40,190 @@ in {
     username = config.heywoodlh.defaults.user.name;
     userUid = config.heywoodlh.defaults.user.uid;
     homeDir = config.heywoodlh.defaults.user.homeDir;
-  in mkIf cfg {
-    heywoodlh.defaults = {
-      enable = true;
-      quietBoot = true;
-    };
-
-    services.displayManager = {
-      gdm.enable = true;
-      defaultSession = "hyprland";
-    };
-
-    programs.dconf.enable = true;
-
-    programs.dconf.profiles.gdm.databases = mkIf config.services.fprintd.enable (mkBefore [
-      { settings."org/gnome/login-screen".enable-fingerprint-authentication = false; }
-    ]);
-
-    # Bluetooth, audio, keyring
-    heywoodlh.defaults.bluetooth = true;
-    heywoodlh.defaults.audio = true;
-    heywoodlh.defaults.keyring = true;
-    heywoodlh.defaults.user.icon = "${user-icon}";
-
-    # Desktop environments
-    heywoodlh.cosmic = true;
-    heywoodlh.hyprland = true;
-
-    # Console
-    heywoodlh.console = true;
-    services.greetd.enable = lib.mkForce false;
-    environment.etc."ly/custom-sessions/fbterm.desktop" = {
-      enable = lyCfg.enable;
-      text = ''
-        ${fbtermDesktop}
-        DesktopNames=null
-        Terminal=true
-      '';
-    };
-    services.displayManager.sessionPackages = [ fbtermSessionPkg ];
-
-    # Enable TOR for privacy
-    heywoodlh.nixos.tor.enable = true;
-
-    # Enable the X11 windowing system.
-    services.xserver.enable = true;
-
-    services.power-profiles-daemon.enable = true;
-
-    heywoodlh.nixos.tether = {
-      enable = true;
-      bluetooth = config.heywoodlh.laptop;
-      allowedAddresses = [
-        "100.65.159.82"
-        "fd7a:115c:a1e0:ab12:4843:cd96:6241:9f52"
-      ];
-    };
-
-    networking.firewall = {
-      interfaces.tailscale0.allowedTCPPortRanges = [ { from = 3131; to = 3131;} ];
-    };
-
-    # Desktop packages
-    environment.systemPackages = with pkgs; [
-      busybox
-      lsof
-      gnome-boxes
-    ] ++ optionals stdenv.hostPlatform.isx86_64 [
-      # Ente Auth depends on Flutter's aapt, which is unavailable on aarch64-linux.
-      ente-auth
-    ] ++ [
-      gnome-screenshot
-      ifuse
-      meshtastic
-      usbutils
-      myFlakes.packages.${system}.tmux
-      myFlakes.packages.${system}.helix
-    ];
-
-    programs._1password-gui = {
-      enable = true;
-      # Certain features, including CLI integration and system authentication support,
-      # require enabling PolKit integration on some desktop environments (e.g. Plasma).
-      polkitPolicyOwners = [ "${username}" ];
-    };
-
-    security.polkit = {
-      enable = true;
-      adminIdentities = [
-        "unix-group:wheel"
-      ];
-    };
-
-    # configure keymap in X11
-    services.xserver.xkb = {
-      layout = "us";
-      variant = "";
-    };
-
-    # printers
-    services.printing.enable = true;
-    services.avahi = {
-      enable = true;
-      nssmdns4 = true;
-      openFirewall = true; # For wifi printers
-    };
-    # for scanning documents
-    hardware.sane.enable = true;
-
-    # iphone usb support
-    services.usbmuxd.enable = true;
-
-    # Allow x86 packages to be installed on aarch64
-    # Disabled due to https://github.com/cachix/devenv-nixpkgs/issues/21
-    nixpkgs.config.allowUnsupportedSystem = false;
-
-    networking.firewall = {
-      enable = true;
-      checkReversePath = "loose";
-    };
-
-    fonts.packages = with pkgs.nerd-fonts; [
-      jetbrains-mono
-    ];
-
-    users.extraGroups.vboxusers.members = [ "${username}" ];
-    users.extraGroups.disk.members = [ "${username}" ];
-    users.extraGroups.video.members = [ "${username}" ];
-    users.extraGroups.input.members = [ "${username}" ];
-
-    # Allow ydotoold to access /dev/uinput (needed for ydotool pointer click simulation)
-    services.udev.extraRules = ''
-      KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
-    '';
-
-    users.users.${username} = {
-      packages = with pkgs; [
-        legcord
-      ];
-    };
-
-    # Enable ergodox ez/moonlander keyboard tools
-    hardware.keyboard.zsa.enable = true;
-
-    # Thunderbolt 3
-    services.hardware.bolt.enable = true;
-
-    xdg.portal.enable = true;
-    services.flatpak.enable = true;
-
-    # Use seahorse ssh-agent
-    system.activationScripts.symlink-ssh-agent = {
-      text = ''
-        mkdir -p ${homeDir}/.ssh && chown -R ${username} ${homeDir}/.ssh
-        ln -s /run/user/${builtins.toString userUid}/keyring/ssh ${homeDir}/.ssh/agent.sock &> /dev/null || true
-      '';
-    };
-
-    services.gnome.gnome-settings-daemon.enable = true;
-
-    # Home-manager configs
-    home-manager = {
-      extraSpecialArgs = {
-        inherit nur;
-        inherit light-wallpaper;
-        inherit dark-wallpaper;
+  in
+    mkIf cfg {
+      heywoodlh.defaults = {
+        enable = true;
+        quietBoot = true;
       };
-      users.${username} = { ... }: {
-        imports = [
-          ../../home/desktop.nix # base desktop.nix
-          ../../home/linux/desktop.nix # linux-specific desktop.nix
+
+      services.displayManager = {
+        gdm.enable = true;
+        defaultSession = "hyprland";
+      };
+
+      programs.dconf.enable = true;
+
+      programs.dconf.profiles.gdm.databases = mkIf config.services.fprintd.enable (mkBefore [
+        {settings."org/gnome/login-screen".enable-fingerprint-authentication = false;}
+      ]);
+
+      # Bluetooth, audio, keyring
+      heywoodlh.defaults.bluetooth = true;
+      heywoodlh.defaults.audio = true;
+      heywoodlh.defaults.keyring = true;
+      heywoodlh.defaults.user.icon = "${user-icon}";
+
+      # Desktop environments
+      heywoodlh.cosmic = true;
+      heywoodlh.hyprland = true;
+
+      # Console
+      heywoodlh.console = true;
+      services.greetd.enable = lib.mkForce false;
+      environment.etc."ly/custom-sessions/fbterm.desktop" = {
+        enable = lyCfg.enable;
+        text = ''
+          ${fbtermDesktop}
+          DesktopNames=null
+          Terminal=true
+        '';
+      };
+      services.displayManager.sessionPackages = [fbtermSessionPkg];
+
+      # Enable TOR for privacy
+      heywoodlh.nixos.tor.enable = true;
+
+      # Enable the X11 windowing system.
+      services.xserver.enable = true;
+
+      services.power-profiles-daemon.enable = true;
+
+      heywoodlh.nixos.tether = {
+        enable = true;
+        bluetooth = config.heywoodlh.laptop;
+        allowedAddresses = [
+          "100.65.159.82"
+          "fd7a:115c:a1e0:ab12:4843:cd96:6241:9f52"
         ];
-        heywoodlh.home.onepassword.enable = true;
-        heywoodlh.home.gnome = mkForce config.heywoodlh.gnome;
-        heywoodlh.home.llm.enable = true;
+      };
+
+      networking.firewall = {
+        interfaces.tailscale0.allowedTCPPortRanges = [
+          {
+            from = 3131;
+            to = 3131;
+          }
+        ];
+      };
+
+      # Desktop packages
+      environment.systemPackages = with pkgs;
+        [
+          busybox
+          lsof
+          gnome-boxes
+        ]
+        ++ optionals stdenv.hostPlatform.isx86_64 [
+          # Ente Auth depends on Flutter's aapt, which is unavailable on aarch64-linux.
+          ente-auth
+        ]
+        ++ [
+          gnome-screenshot
+          ifuse
+          meshtastic
+          usbutils
+          myPkgs.tmux
+          myPkgs.helix
+        ];
+
+      programs._1password-gui = {
+        enable = true;
+        # Certain features, including CLI integration and system authentication support,
+        # require enabling PolKit integration on some desktop environments (e.g. Plasma).
+        polkitPolicyOwners = ["${username}"];
+      };
+
+      security.polkit = {
+        enable = true;
+        adminIdentities = [
+          "unix-group:wheel"
+        ];
+      };
+
+      # configure keymap in X11
+      services.xserver.xkb = {
+        layout = "us";
+        variant = "";
+      };
+
+      # printers
+      services.printing.enable = true;
+      services.avahi = {
+        enable = true;
+        nssmdns4 = true;
+        openFirewall = true; # For wifi printers
+      };
+      # for scanning documents
+      hardware.sane.enable = true;
+
+      # iphone usb support
+      services.usbmuxd.enable = true;
+
+      # Allow x86 packages to be installed on aarch64
+      # Disabled due to https://github.com/cachix/devenv-nixpkgs/issues/21
+      nixpkgs.config.allowUnsupportedSystem = false;
+
+      networking.firewall = {
+        enable = true;
+        checkReversePath = "loose";
+      };
+
+      fonts.packages = with pkgs.nerd-fonts; [
+        jetbrains-mono
+      ];
+
+      users.extraGroups.vboxusers.members = ["${username}"];
+      users.extraGroups.disk.members = ["${username}"];
+      users.extraGroups.video.members = ["${username}"];
+      users.extraGroups.input.members = ["${username}"];
+
+      # Allow ydotoold to access /dev/uinput (needed for ydotool pointer click simulation)
+      services.udev.extraRules = ''
+        KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
+      '';
+
+      users.users.${username} = {
+        packages = with pkgs; [
+          legcord
+        ];
+      };
+
+      # Enable ergodox ez/moonlander keyboard tools
+      hardware.keyboard.zsa.enable = true;
+
+      # Thunderbolt 3
+      services.hardware.bolt.enable = true;
+
+      xdg.portal.enable = true;
+      services.flatpak.enable = true;
+
+      # Use seahorse ssh-agent
+      system.activationScripts.symlink-ssh-agent = {
+        text = ''
+          mkdir -p ${homeDir}/.ssh && chown -R ${username} ${homeDir}/.ssh
+          ln -s /run/user/${builtins.toString userUid}/keyring/ssh ${homeDir}/.ssh/agent.sock &> /dev/null || true
+        '';
+      };
+
+      services.gnome.gnome-settings-daemon.enable = true;
+
+      # Home-manager configs
+      home-manager = {
+        extraSpecialArgs = {
+          inherit nur;
+          inherit light-wallpaper;
+          inherit dark-wallpaper;
+        };
+        users.${username} = {...}: {
+          imports = [
+            ../../home/desktop.nix # base desktop.nix
+            ../../home/linux/desktop.nix # linux-specific desktop.nix
+          ];
+          heywoodlh.home.onepassword.enable = true;
+          heywoodlh.home.gnome = mkForce config.heywoodlh.gnome;
+          heywoodlh.home.llm.enable = true;
+        };
       };
     };
-  };
 }

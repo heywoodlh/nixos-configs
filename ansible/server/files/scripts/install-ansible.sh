@@ -4,6 +4,8 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
+ANSIBLE_CORE_VERSION="2.21.*"
+
 # Debian-specific commands
 if [[ -e /etc/debian_version ]]
 then
@@ -17,10 +19,11 @@ then
   fi
 
   dpkg -r ansible || true
-  command -v ansible &>/dev/null || pipx install --include-deps ansible
+  command -v ansible &>/dev/null || pipx install --include-deps "ansible-core==${ANSIBLE_CORE_VERSION}"
 fi
 
 if grep -q 'Arch Linux' /etc/os-release
 then
-  pacman -Sy --noconfirm ansible git curl
+  pacman -Syu --noconfirm --needed python python-pipx git curl
+  command -v ansible &>/dev/null || pipx install --include-deps "ansible-core==${ANSIBLE_CORE_VERSION}"
 fi

@@ -1,6 +1,9 @@
-{ config, pkgs, myFlakes, ... }:
-
-let
+{
+  config,
+  pkgs,
+  myPkgs,
+  ...
+}: let
   system = pkgs.stdenv.hostPlatform.system;
   homeDir = config.home.homeDirectory;
 in {
@@ -11,7 +14,7 @@ in {
       Name=Spotify
       GenericName=music
       Comment=Listen to Spotify
-      Exec=${myFlakes.packages.aarch64-linux.chromium-widevine}/bin/chromium --app=https://open.spotify.com
+      Exec=${myPkgs.chromium-widevine}/bin/chromium --app=https://open.spotify.com
       Terminal=false
       Type=Application
       Keywords=music;

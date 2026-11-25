@@ -1,20 +1,25 @@
-rec {
+{
   description = "heywoodlh nix config";
 
   inputs = {
     nixpkgs.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
     nixpkgs-edge.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-lts.follows = "nixpkgs";
     nixpkgs-stable.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-26.05-chilled/0.1";
     nixpkgs-nvidia.url = "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1";
-    nixpkgs-backports.url = "github:nixos/nixpkgs/release-25.11";
+    nixpkgs-lts.follows = "nixpkgs";
     nixpkgs-pam-lid-fix.url = "github:heywoodlh/nixpkgs/lid-close-fprint-disable";
+    nvidia-patch = {
+      url = "github:icewind1991/nvidia-patch-nixos";
+      inputs.nixpkgs.follows = "nixpkgs-nvidia";
+      inputs.utils.follows = "flake-utils";
+    };
+    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/56c02bc00adcf003215cc4bd996d6efaf4cff188";
     stylix = {
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.systems.follows = "flake-utils/systems";
       inputs.nur.follows = "nur";
       inputs.flake-parts.follows = "flake-parts";
+      inputs.systems.follows = "flake-utils/systems";
     };
     darwin = {
       url = "github:heywoodlh/nix-darwin/heywoodlh";
@@ -24,14 +29,7 @@ rec {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nvidia-patch = {
-      url = "github:icewind1991/nvidia-patch-nixos";
-      inputs.nixpkgs.follows = "nixpkgs-nvidia";
-      inputs.utils.follows = "flake-utils";
-    };
-    # only to sync dependents that use flake-utils
     flake-utils.url = "github:numtide/flake-utils";
-    # only to sync dependents that use flake-parts
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -39,140 +37,41 @@ rec {
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v1.1.0";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.pre-commit.follows = "pre-commit-hooks";
+      inputs.pre-commit.follows = "git-hooks";
       inputs.crane.follows = "crane";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
-    # For dependents of treefmt-nix
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
+    crane.url = "github:ipetkov/crane";
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # For Steam on Apple Silicon
     steam-asahi = {
       url = "github:sm-idk/steam-asahi";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # only to sync dependents that use nix
-    nix = {
-      url = "github:nixos/nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
-      inputs.git-hooks-nix.follows = "pre-commit-hooks";
-    };
-    # for dependents of crane
-    crane.url = "github:ipetkov/crane";
-    # for dependents of helix-src
     helix-src = {
       url = "github:heywoodlh/helix/issue-2719";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "lanzaboote/rust-overlay";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
-    fish-flake = {
-      url = ./flakes/fish;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+    asahi-widevine = {
+      url = "github:AsahiLinux/widevine-installer";
+      flake = false;
     };
-    helix-flake = {
-      url = ./flakes/helix;
-      inputs.nixpkgs.follows = "nixpkgs-stable";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.helix-src.follows = "helix-src";
-    };
-    vim-flake = {
-      url = ./flakes/vim;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    chromium-widevine-flake = {
-      url = ./flakes/chromium-widevine;
-      inputs.nixpkgs.follows = "nixpkgs";
+    lacros = {
+      url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/chromeos-lacros-arm64-squash-zstd-120.0.6098.0";
+      flake = false;
     };
     vicinae-nix = {
       url = "github:vicinaehq/vicinae";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "flake-utils/systems";
-    };
-    gnome-flake = {
-      url = ./flakes/gnome;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.fish-flake.follows = "fish-flake";
-      inputs.vim-flake.follows = "vim-flake";
-      inputs.vicinae-nix.follows = "vicinae-nix";
-    };
-    git-flake = {
-      url = ./flakes/git;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    vscode-flake = {
-      url = ./flakes/vscode;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.fish-flake.follows = "fish-flake";
-    };
-    nushell-flake = {
-      url = ./flakes/nushell;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    op-flake = {
-      url = ./flakes/1password;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    ttyd-flake = {
-      url = ./flakes/ttyd-nerd;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-    myFlakes = {
-      url = ./flakes;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
-      inputs.flake-utils.follows = "flake-utils";
-      inputs.helix-src.follows = "helix-src";
-      inputs.fish-flake.follows = "fish-flake";
-      inputs.helix-flake.follows = "helix-flake";
-      inputs.vim-flake.follows = "vim-flake";
-      inputs.chromium-widevine-flake.follows = "chromium-widevine-flake";
-      inputs.gnome-flake.follows = "gnome-flake";
-      inputs.vicinae-nix.follows = "vicinae-nix";
-      inputs.git-flake.follows = "git-flake";
-      inputs.vscode-flake.follows = "vscode-flake";
-      inputs.nushell-flake.follows = "nushell-flake";
-      inputs.op-flake.follows = "op-flake";
-      inputs.ttyd-flake.follows = "ttyd-flake";
-    };
-    # for dependents of devenv
-    devenv = {
-      url = "github:cachix/devenv";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
-      inputs.nix.follows = "nix";
-      inputs.git-hooks.follows = "pre-commit-hooks";
-      inputs.flake-compat.follows = "nix/flake-compat";
-      inputs.rust-overlay.follows = "lanzaboote/rust-overlay";
-      inputs.nixd.follows = "";
-    };
-    kyle = {
-      url = "git+https://codeberg.org/kylesferrazza/nix-configs";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-      inputs.nix-cachyos-kernel.follows = "nix-cachyos-kernel";
-      inputs.nur.follows = "nur";
-      inputs.teslamate-src.follows = "";
-      inputs.opnix.follows = "";
-      inputs.stylix.follows = "";
-      inputs.doom-d.follows = "";
-      inputs.vscode-server.follows = "";
-      inputs.hermes-agent.follows = "hermes-agent";
-      inputs.systems.follows = "flake-utils/systems";
-      inputs.flake-parts.follows = "flake-parts";
-      inputs.flake-compat.follows = "nix/flake-compat";
-      inputs.rust-overlay.follows = "lanzaboote/rust-overlay";
-      inputs.treefmt-nix.follows = "treefmt-nix";
     };
     user-icon = {
       url = "https://avatar.tangled.sh/1c796c57a7536e989ab09026df5f0fe7870be6217bc8ae642e48fa449de72f59/did:plc:ycnss4fntzi3rjuueb7loq3x?v=bafkreic";
@@ -182,11 +81,6 @@ rec {
       url = "https://github.com/heywoodlh.keys";
       flake = false;
     };
-    osquery-fix-nixpkgs = {
-      url = "github:nixos/nixpkgs/e4235192047a058776b3680f559579bf885881da";
-    };
-    # jovian-nixos requires a specific nixpkgs for its custom packages (mesa, pipewire, etc.)
-    nixpkgs-jovian-nixos.url = "github:NixOS/nixpkgs/56c02bc00adcf003215cc4bd996d6efaf4cff188";
     jovian-nixos = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs-jovian-nixos";
@@ -196,7 +90,10 @@ rec {
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
     };
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     dark-wallpaper = {
       url = ./assets/catppuccin-nix.png;
       flake = false;
@@ -220,57 +117,23 @@ rec {
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-    # only to sync dependents that use pyproject-nix
-    pyproject-nix = {
-      url = "github:nix-community/pyproject.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    # only to sync dependents that use uv2nix
-    uv2nix = {
-      url = "github:pyproject-nix/uv2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.pyproject-nix.follows = "pyproject-nix";
-    };
-    # only to sync dependents that use pre-commit-hooks
-    pre-commit-hooks = {
-      url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "nix/flake-compat";
-    };
     hyprland = {
       url = "github:hyprwm/hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "flake-utils/systems";
-      inputs.pre-commit-hooks.follows = "pre-commit-hooks";
-    };
-    # only for dependents that use nmd
-    nmd = {
-      url = "sourcehut:~rycee/nmd";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    # only for dependents that use nix-formatter-pack
-    nix-formatter-pack = {
-      url = "github:Gerschtli/nix-formatter-pack";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nmd.follows = "nmd";
     };
     nix-cachyos-kernel = {
       url = "github:xddxdd/nix-cachyos-kernel/release";
-      inputs.nixpkgs.follows = "nixpkgs-nvidia"; # assume cachyos-kernel enabled machines are gaming machines
+      inputs.nixpkgs.follows = "nixpkgs-nvidia";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.flake-compat.follows = "nix/flake-compat";
-    };
-    gomod2nix = {
-      url = "github:nix-community/gomod2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.flake-compat.follows = "";
     };
     tangled = {
       url = "git+https://tangled.org/tangled.org/core";
-       inputs.nixpkgs.follows = "nixpkgs";
-       inputs.flake-compat.follows = "devenv/flake-compat";
-       inputs.gomod2nix.follows = "gomod2nix";
-     };
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-compat.follows = "";
+      inputs.gomod2nix.follows = "";
+    };
     spindle-run = {
       url = "git+https://tangled.org/heywoodlh.io/spindle-run";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -286,6 +149,10 @@ rec {
     };
     gh-gitignore = {
       url = "github:github/gitignore";
+      flake = false;
+    };
+    nixtop-source = {
+      url = "git+https://codeberg.org/kylesferrazza/nix-configs?ref=main&rev=289467371d81111509567e9d5199ab0c74f72317";
       flake = false;
     };
     opencode-ssh = {
@@ -317,8 +184,6 @@ rec {
       inputs.nixpkgs.follows = "nixpkgs-edge";
       inputs.home-manager.follows = "home-manager";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.uv2nix.follows = "uv2nix";
-      inputs.pyproject-nix.follows = "pyproject-nix";
     };
     search-tui = {
       url = "github:heywoodlh/search-tui";
@@ -328,9 +193,25 @@ rec {
       url = "github:heywoodlh/nix-llama";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixtop-source = {
-      url = "git+https://codeberg.org/kylesferrazza/nix-configs?ref=main&rev=289467371d81111509567e9d5199ab0c74f72317";
-      flake = false;
+    kyle = {
+      url = "git+https://codeberg.org/kylesferrazza/nix-configs";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+      inputs.nix-cachyos-kernel.follows = "nix-cachyos-kernel";
+      inputs.nur.follows = "nur";
+      inputs.teslamate-src.follows = "";
+      inputs.opnix.follows = "";
+      inputs.stylix.follows = "";
+      inputs.doom-d.follows = "";
+      inputs.vscode-server.follows = "";
+      inputs.hermes-agent.follows = "hermes-agent";
+      inputs.systems.follows = "flake-utils/systems";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.git-hooks.follows = "git-hooks";
+      inputs.tether.follows = "tether";
+      inputs.flake-compat.follows = "";
+      inputs.rust-overlay.follows = "rust-overlay";
+      inputs.treefmt-nix.follows = "";
     };
   };
 
@@ -351,86 +232,36 @@ rec {
     ];
   };
 
-  outputs = inputs@{ self,
-                      nixpkgs,
-                      nixpkgs-edge,
-                      nixpkgs-stable,
-                      nixpkgs-nvidia,
-                      nixpkgs-pam-lid-fix,
-                      myFlakes,
-                      stylix,
-                      kyle,
-                      nixpkgs-backports,
-                      nixpkgs-lts,
-                      darwin,
-                      home-manager,
-                      jovian-nixos,
-                      nur,
-                      flake-utils,
-                      nixos-hardware,
-                      ssh-keys,
-                      user-icon,
-                      osquery-fix-nixpkgs,
-                      dark-wallpaper,
-                      light-wallpaper,
-                      signal-ntfy,
-                      plasma-manager,
-                      cart,
-                      hyprland,
-                      steam-asahi,
-                      lanzaboote,
-                      nix-cachyos-kernel,
-                      spindle-run,
-                      helium,
-                      nixpkgs-jovian-nixos,
-                      nixos-lima,
-                      gh-gitignore,
-                      opencode-ssh,
-                      youtube-htpc,
-                      paseo,
-                      hypr-rdp,
-                      noctalia,
-                      tether,
-                      hermes-agent,
-                      nix-llama,
-                      ... }:
-  flake-utils.lib.eachDefaultSystem (system: let
-    pkgs = import nixpkgs {
-      inherit system;
-      config = {
-        allowUnfree = true;
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    nixpkgs-stable,
+    darwin,
+    home-manager,
+    ...
+  }: let
+    lib = nixpkgs.lib;
+    nixConfig = import ./nix-config.nix;
+    systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
+    forAllSystems = f: lib.genAttrs systems (system: f system);
+    mergedInputs = inputs.kyle.inputs // inputs;
+    mkPkgs = source: system:
+      import source {
+        inherit system;
+        config.allowUnfree = true;
       };
-    };
-    stable-pkgs = import nixpkgs-stable {
-      inherit system;
-      config = {
-        allowUnfree = true;
+    mkMyPkgs = system:
+      import ./pkgs {
+        pkgs = mkPkgs nixpkgs system;
+        inherit lib;
+        inherit (inputs) helix-src asahi-widevine lacros;
+        nixpkgs-stable = nixpkgs-stable;
       };
-    };
-    lib = pkgs.lib;
-    arch = pkgs.stdenv.hostPlatform.uname.processor;
-    darwinSystem = "${arch}-darwin";
-    # Modules for NixOS and Nix-Darwin
     commonModules = [
       ./base/defaults.nix
       ./base/stylix.nix
       ./base/sshd.nix
       ./base/nix-llama.nix
-    ];
-    darwinModules.heywoodlh.darwin = { config, pkgs, ... }: {
-      imports = [
-        ./darwin/modules/defaults.nix
-        ./darwin/modules/sketchybar.nix
-        ./darwin/modules/yabai.nix
-        ./darwin/modules/stage-manager.nix
-        ./darwin/modules/choose-launcher.nix
-        ./darwin/modules/raycast.nix
-        ./darwin/modules/stylix.nix
-        ./darwin/modules/lmstudio.nix
-      ] ++ commonModules;
-    };
-    extHomeModules = [
-      hermes-agent.homeManagerModules.default
     ];
     commonHomeModules = [
       ./home/modules/base.nix
@@ -475,1173 +306,328 @@ rec {
       ./home/modules/nord-terminal.nix
       ./home/modules/darwin-protondrive-link.nix
     ];
-    myHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
-    # Combine all modules, excluding modules not relevant to platform
-    platformHomeModules = if pkgs.stdenv.hostPlatform.isDarwin then
-      commonHomeModules ++ macosHomeModules
-    else
-      commonHomeModules ++ linuxHomeModules ++ [ noctalia.homeModules.default ]
-    ;
-    homeModules.heywoodlh.home = { ... }: {
-      imports = platformHomeModules ++ extHomeModules;
+    allHomeModules = commonHomeModules ++ linuxHomeModules ++ macosHomeModules;
+    extHomeModules = [inputs.hermes-agent.homeManagerModules.default];
+    linuxHomeModule = {...}: {
+      imports = commonHomeModules ++ linuxHomeModules ++ [inputs.noctalia.homeModules.default] ++ extHomeModules;
     };
-    # For docs only (to enumerate _all_ home modules regardless of platform)
-    homeModules.docs = { ... }: {
-      imports = myHomeModules;
+    macosHomeModule = {...}: {
+      imports = commonHomeModules ++ macosHomeModules ++ extHomeModules;
     };
+    myNixOSModules =
+      [
+        ./nixos/modules/defaults.nix
+        ./nixos/modules/gnome.nix
+        ./nixos/modules/hyprland.nix
+        ./nixos/modules/intel-mac.nix
+        ./nixos/modules/workstation.nix
+        ./nixos/modules/console.nix
+        ./nixos/modules/server.nix
+        ./nixos/modules/laptop.nix
+        ./nixos/modules/cosmic.nix
+        ./nixos/modules/vm.nix
+        ./nixos/modules/helix.nix
+        ./nixos/modules/luks.nix
+        ./nixos/modules/backups.nix
+        ./nixos/modules/cloudflared.nix
+        ./nixos/modules/rayhunter.nix
+        ./nixos/modules/stylix.nix
+        ./nixos/modules/sunshine.nix
+        ./nixos/modules/spotifyd.nix
+        ./nixos/modules/spotify-soloist.nix
+        ./nixos/modules/nvidia-patch.nix
+        ./nixos/modules/gaming.nix
+        ./nixos/modules/cachyos-kernel.nix
+        ./nixos/modules/steam-deck.nix
+        ./nixos/modules/vmware-workstation.nix
+        ./nixos/modules/scrutiny.nix
+        ./nixos/modules/remote-desktop.nix
+        ./nixos/modules/kde.nix
+        ./nixos/modules/tor.nix
+        ./nixos/modules/portmaster.nix
+        ./nixos/modules/lancache-dns.nix
+        ./nixos/modules/tether.nix
+        ./nixos/modules/libvirtd.nix
+        ./nixos/modules/tv.nix
+        ./nixos/modules/moonlight.nix
+        ./nixos/modules/sshd.nix
+        ./nixos/modules/asahi.nix
+      ]
+      ++ commonModules;
     extNixOSModules = [
       home-manager.nixosModules.home-manager
-      stylix.nixosModules.stylix
-      kyle.nixosModules.appleSilicon
-      jovian-nixos.nixosModules.default
-      steam-asahi.nixosModules.default
-      tether.nixosModules.default
+      inputs.stylix.nixosModules.stylix
+      inputs.kyle.nixosModules.appleSilicon
+      inputs.jovian-nixos.nixosModules.default
+      inputs.steam-asahi.nixosModules.default
+      inputs.tether.nixosModules.default
     ];
-    myNixOSModules = [
-      ./nixos/modules/defaults.nix
-      ./nixos/modules/gnome.nix
-      ./nixos/modules/hyprland.nix
-      ./nixos/modules/intel-mac.nix
-      ./nixos/modules/workstation.nix
-      ./nixos/modules/console.nix
-      ./nixos/modules/server.nix
-      ./nixos/modules/laptop.nix
-      ./nixos/modules/cosmic.nix
-      ./nixos/modules/vm.nix
-      ./nixos/modules/helix.nix
-      ./nixos/modules/luks.nix
-      ./nixos/modules/backups.nix
-      ./nixos/modules/cloudflared.nix
-      ./nixos/modules/rayhunter.nix
-      ./nixos/modules/stylix.nix
-      ./nixos/modules/sunshine.nix
-      ./nixos/modules/spotifyd.nix
-      ./nixos/modules/spotify-soloist.nix
-      ./nixos/modules/nvidia-patch.nix
-      ./nixos/modules/gaming.nix
-      ./nixos/modules/cachyos-kernel.nix
-      ./nixos/modules/steam-deck.nix
-      ./nixos/modules/vmware-workstation.nix
-      ./nixos/modules/scrutiny.nix
-      ./nixos/modules/remote-desktop.nix
-      ./nixos/modules/kde.nix
-      ./nixos/modules/tor.nix
-      ./nixos/modules/portmaster.nix
-      ./nixos/modules/lancache-dns.nix
-      ./nixos/modules/tether.nix
-      ./nixos/modules/libvirtd.nix
-      ./nixos/modules/tv.nix
-      ./nixos/modules/moonlight.nix
-      ./nixos/modules/sshd.nix
-      ./nixos/modules/asahi.nix
-    ] ++ commonModules;
-    nixosModules.heywoodlh = { config, pkgs, ... }: {
+    darwinModule = {...}: {
+      imports =
+        [
+          ./darwin/modules/defaults.nix
+          ./darwin/modules/sketchybar.nix
+          ./darwin/modules/yabai.nix
+          ./darwin/modules/stage-manager.nix
+          ./darwin/modules/choose-launcher.nix
+          ./darwin/modules/raycast.nix
+          ./darwin/modules/stylix.nix
+          ./darwin/modules/lmstudio.nix
+        ]
+        ++ commonModules;
+    };
+    nixosModule = {...}: {
       imports = myNixOSModules ++ extNixOSModules;
     };
-
-    # for docs on my modules only
-    nixosModules.docs = { config, pkgs, ... }: {
-      imports = myNixOSModules;
-    };
-
-    darwinConfig = machineType: myHostname: extraConf: darwin.lib.darwinSystem {
-      system = "${darwinSystem}";
-      specialArgs = inputs;
-      modules = [
-        darwinModules.heywoodlh.darwin
-        home-manager.darwinModules.home-manager
-        nix-llama.darwinModules.default
-        cart.darwinModules.${system}.cart
-        stylix.darwinModules.stylix
-        ./darwin/roles/base.nix
-        ./darwin/roles/defaults.nix
-        ./darwin/roles/pkgs.nix
-        ./darwin/roles/network.nix
-        extraConf
-        {
-          nix.settings = nixConfig;
-          # Import nur as nixpkgs.overlays
-          nixpkgs.overlays = [
-            nur.overlays.default
-          ];
-
-          heywoodlh = {
-            defaults = {
-              enable = true;
-              user = {
-                uid = 501;
-                homeDir = "/Users/heywoodlh";
-              };
-            };
-            darwin = {
-              lmstudio.enable = true;
-            };
+    mkNixos = name: {
+      system,
+      type ? "workstation",
+      flake ? nixpkgs,
+      bare ? false,
+    }:
+      flake.lib.nixosSystem {
+        inherit system;
+        specialArgs =
+          mergedInputs
+          // {
+            inputs = mergedInputs;
+            inherit name;
+            nixConfig = nixConfig;
+            myPkgs = mkMyPkgs system;
           };
-
-          home-manager = {
-            useGlobalPkgs = true;
-            extraSpecialArgs = inputs;
-            users.heywoodlh = { ... }: {
-              imports = [
-                homeModules.heywoodlh.home
-              ];
-              home.packages = let
-                nixos-switch = pkgs.writeShellScriptBin "nixos-switch" ''
-                  #limactl shell nixos sudo nixos-rebuild boot --accept-flake-config --flake $HOME/opt/nixos-configs#nixos-lima --impure $@ && echo "Rebooting VM..." && limactl shell nixos sudo shutdown -r now
-                  limactl shell nixos nix run "github:nix-community/home-manager" -- switch --flake $HOME/opt/nixos-configs#heywoodlh-lima
-                '';
-                nixos-build = pkgs.writeShellScriptBin "nixos-build" ''
-                  attic-setup
-                  limactl shell nixos mkdir -p /home/heywoodlh.guest/.config/attic
-                  scp -F $HOME/.lima/nixos/ssh.config $HOME/.config/attic/config.toml lima-nixos:/home/heywoodlh.guest/.config/attic/attic.toml
-                  # Desktop
-                  ${pkgs.lima}/bin/limactl shell nixos nixos-rebuild build --accept-flake-config --flake $HOME/opt/nixos-configs#nixos-desktop
-                  ${pkgs.lima}/bin/limactl shell nixos nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
-                  # Server
-                  ${pkgs.lima}/bin/limactl shell nixos nixos-rebuild build --accept-flake-config --flake $HOME/opt/nixos-configs#nixos-server
-                  ${pkgs.lima}/bin/limactl shell nixos nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
-                  # Asahi
-                  ## Kernel
-                  ${pkgs.lima}/bin/limactl shell nixos nix build --accept-flake-config $HOME/opt/nixos-configs#nixosConfigurations.nixos-m1-mac-mini.config.boot.kernelPackages.kernel
-                  ${pkgs.lima}/bin/limactl shell nixos nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
-                  ## Mesa
-                  ${pkgs.lima}/bin/limactl shell nixos nix build --accept-flake-config $HOME/opt/nixos-configs#nixosConfigurations.nixos-m1-mac-mini.config.hardware.opengl.package
-                  ${pkgs.lima}/bin/limactl shell nixos nix run "github:nixos/nixpkgs/nixpkgs-unstable#attic-client" -- push nixos ./result
-                '';
-              in [
-                nixos-build
-                nixos-switch
-              ];
-              heywoodlh.home = {
-                darwin.protondrive = true;
-                onepassword.enable = true;
-              };
-              heywoodlh.home.llm.apfel = true;
-            };
-          };
-
-          networking.hostName = myHostname;
-          networking.computerName = myHostname;
-          system.stateVersion = 6;
-        }
-      ];
-    };
-
-    nixosConfigWith = nixpkgsPkgs: machineType: myHostname: extraConf: nixpkgsPkgs.lib.nixosSystem {
-      inherit system;
-      specialArgs = let
-        mergedInputs = inputs.kyle.inputs // inputs;
-      in mergedInputs // { inputs = mergedInputs; };
-      modules = [
-        nixosModules.heywoodlh
-        home-manager.nixosModules.home-manager
-        nix-llama.nixosModules.default
-        ./nixos/roles/virtualization/multiarch.nix
-        ./nixos/roles/nixos/attic.nix
-        {
-          heywoodlh.defaults = {
-            enable = true;
-            user = {
-              name = "heywoodlh";
-              description = "Spencer Heywood";
-              uid = 1000;
-              homeDir = "/home/heywoodlh";
-            };
-            hostname = myHostname;
-          };
-          home-manager.extraSpecialArgs = inputs;
-          home-manager.sharedModules = [ homeModules.heywoodlh.home ];
-          heywoodlh.stylix.enable = true;
-        }
-        extraConf
-      ] ++ lib.optionals (machineType == "server") [
-        ./nixos/roles/nixos/daily-flake-switch.nix
-        ./nixos/roles/security/sshd-monitor.nix
-        ./nixos/roles/tailscale.nix
-        ./nixos/roles/monitoring/syslog-ng/client.nix
-        ./nixos/roles/monitoring/node-exporter.nix
-        {
-          heywoodlh.server = true;
-          heywoodlh.nixos.scrutiny = {
-            enable = true;
-            port = 3050;
-            ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
-          };
-          nix.settings = {
-            auto-optimise-store = true;
-          } // nixConfig;
-          home-manager.sharedModules = [ ./home/linux/no-desktop.nix ];
-        }
-      ] ++ lib.optionals (machineType == "workstation") [
-        ./nixos/roles/hardware/printers.nix
-        ({ config, lib, ... }: {
-          heywoodlh.workstation = true;
-          heywoodlh.nixos.portmaster.enable = true;
-          heywoodlh.nixos.portmaster.dns = [
-            # Global resolver: NextDNS (profile 93c264) over DoT.
-            "dot://45.90.28.89:853?verify=93c264.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
-            "dot://45.90.30.89:853?verify=93c264.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
-            # Tailscale MagicDNS, restricted to .ts.net names only.
-            "dns://100.100.100.100?name=TailscaleDNS&search=barn-banana.ts.net&search-only"
-          ];
-          # Replicate MagicDNS if Portmaster is enabled
-          networking.search = lib.mkIf (config.heywoodlh.nixos.portmaster.enable && config.services.tailscale.enable) [ "barn-banana.ts.net" ];
-        })
-      ] ++ lib.optionals (machineType == "laptop") [
-        { heywoodlh.laptop = true; }
-      ] ++ lib.optionals (machineType == "vm") [
-        { heywoodlh.vm = true; }
-      ] ++ lib.optionals (machineType == "lima") [
-        nixos-lima.nixosModules.lima
-        (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
-        {
-          heywoodlh = {
-            sshd.enable = true;
-            defaults = {
-              enable = true;
-              # Disable services that should be on host
-              tailscale = false;
-              syncthing = false;
-            };
-          };
-
-          # Lima configuration from https://github.com/nixos-lima/nixos-lima/blob/master/lima.nix
-          services.lima.enable = true;
-          security = {
-            sudo.wheelNeedsPassword = false;
-          };
-          boot.loader = {
-            systemd-boot.enable = lib.mkForce false;
-            efi.canTouchEfiVariables = lib.mkForce false;
-            grub = {
-              device = "nodev";
-              efiSupport = true;
-              efiInstallAsRemovable = true;
-            };
-          };
-          fileSystems."/boot" = {
-            device = lib.mkForce "/dev/vda1";
-            fsType = "vfat";
-          };
-          fileSystems."/" = {
-            device = "/dev/disk/by-label/nixos";
-            autoResize = true;
-            fsType = "ext4";
-            options = [ "noatime" "nodiratime" "discard" ];
-          };
-        }
-      ] ++ lib.optionals (machineType == "console") [
-        { heywoodlh.console = true; }
-      ] ++ lib.optionals (machineType == "tv") [
-        {
-          heywoodlh.nixos.tv.enable = true;
-        }
-      ];
-    };
-    nixosConfig = nixosConfigWith nixpkgs;
-
-    eval = pkgs.lib.evalModules {
-      specialArgs = {
-        inherit pkgs;
-        inherit myFlakes;
-        inherit self;
-        search-tui = inputs.search-tui;
-        nixpkgs-edge = inputs.nixpkgs-edge;
-      };
-      modules = [
-        darwinModules.heywoodlh.darwin { config._module.check = false; }
-        homeModules.docs { config._module.check = false; }
-        nixosModules.docs { config._module.check = false; }
-      ];
-    };
-
-    # https://github.com/NixOS/nixpkgs/issues/293510
-    cleanEval = pkgs.lib.filterAttrsRecursive (n: v: n != "_module") eval;
-
-    optionsDoc = pkgs.nixosOptionsDoc {
-      inherit (cleanEval) options;
-    };
-
-    # shared config among darwin workstations
-    darwinWorkstationConfig = {
-      homebrew = {
-        casks = [
-          "beeper"
-          "legcord"
-          "windows-app"
-          "zoom"
-        ];
-        masApps = {
-          "Screens 5: VNC Remote Desktop" = 1663047912;
-        };
-      };
-    };
-
-    # Base home configuration
-    homeConfig = target: user: homeDir: extraConf: home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      extraSpecialArgs = inputs;
-      modules = [
-        homeModules.heywoodlh.home
-        ./home/linux.nix
-        {
-          home = {
-            username = "${user}";
-            homeDirectory = "${homeDir}";
-          };
-          # Home-Manager specific nixpkgs config
-          nixpkgs.config = {
-            allowUnfree = true;
-            # Allow olm for gomuks until issues are resolved
-            overlays = [
-              nur.overlays.default
-            ];
-          };
-          nix.package = pkgs.nix;
-          fonts.fontconfig.enable = true;
-          programs.home-manager.enable = true;
-          targets.genericLinux.enable = true;
-
-          home.packages = let
-            homeSwitch = pkgs.writeShellScriptBin "home-switch" ''
-              if [[ -d $HOME/opt/nixos-configs ]]
-              then
-                target="$HOME/opt/nixos-configs"
-              else
-                target="git+https://tangled.org/heywoodlh.io/nixos-configs"
-              fi
-              ## OS-specific support (mostly, Ubuntu vs anything else)
-              ## Anything else will use nixpkgs-unstable
-              EXTRA_ARGS=""
-              if ${pkgs.gnugrep}/bin/grep -iq Ubuntu /etc/os-release
-              then
-                version="$(${pkgs.gnugrep}/bin/grep VERSION_ID /etc/os-release | ${pkgs.coreutils}/bin/cut -d'=' -f2 | ${pkgs.coreutils}/bin/tr -d '"')"
-                ## Support for Ubuntu 22
-                if echo "$version" | ${pkgs.gnugrep}/bin/grep -qE '22'
-                then
-                  EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-22.05"
-                fi
-                ## Support for Ubuntu 23
-                if echo "$version" | ${pkgs.gnugrep}/bin/grep -qE '23'
-                then
-                  EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-23.05"
-                fi
-                ## Support for Ubuntu 24-25, TODO support 25 standalone after May 2025
-                if echo "$version" | ${pkgs.gnugrep}/bin/grep -q '24|25'
-                then
-                  EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-24.05"
-                fi
-                ## Support for Ubuntu 24-25, TODO support 25 standalone after May 2025
-                if echo "$version" | ${pkgs.gnugrep}/bin/grep -q '26'
-                then
-                  EXTRA_ARGS="--override-input nixpkgs-lts github:nixos/nixpkgs/nixos-26.05"
-                fi
-              fi
-              ${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes' run "$target#homeConfigurations.${target}.activationPackage" $EXTRA_ARGS --impure $@
-            '';
-          in [
-            homeSwitch
-          ];
-        }
-        extraConf
-      ];
-    };
-    in {
-      formatter = pkgs.alejandra;
-      # custom nix-darwin modules
-      darwinModules.heywoodlh = darwinModules.heywoodlh.darwin;
-
-      # custom nixos modules
-      nixosModules.heywoodlh = nixosModules.heywoodlh;
-
-      # custom home-manager modules
-      homeModules.heywoodlh = homeModules.heywoodlh.home;
-
-      # macos targets
-      packages.darwinConfigurations = {
-        # Invoke darwinConfig like this:
-        # "<hostname>" = darwinConfig "<hardwareType>" "<hostname>" { <extraAttrs> };
-        # hardwareType can currently be "macbook" or "mac-mini"
-        "m4-macbook-air" = darwinConfig "macbook" "m4-macbook-air" {
-          imports = [
-            darwinWorkstationConfig
+        modules =
+          if bare
+          then [./nixos/hosts/${name}.nix]
+          else [
+            nixosModule
+            ./nixos/machine-types/${type}.nix
+            ./nixos/roles/virtualization/multiarch.nix
+            ./nixos/roles/nixos/attic.nix
             {
-              # 24 GiB shared with lima VMs: 64k context at q8_0 KV costs the same
-              # as 32k at f16; smaller RAM prompt cache and no mlock so macOS can
-              # page the weights out under pressure
-              heywoodlh.nix-llama = {
-                enable = false;
-                contextSize = 65536;
-                extraConf.tuning = {
-                  kvCacheType = "q8_0";
-                  promptCacheMiB = 2048;
-                  loadMode = "mmap";
-                  parallel = 1;
+              heywoodlh.defaults = {
+                enable = true;
+                hostname = name;
+                user = {
+                  name = "heywoodlh";
+                  description = "Spencer Heywood";
+                  uid = 1000;
+                  homeDir = "/home/heywoodlh";
                 };
               };
-              cart = {
-                enable = true;
-                user = "heywoodlh";
-                package = cart.packages.${system}.cart;
-                applications = [
-                  {
-                    url = "https://github.com/utmapp/UTM/releases/download/v4.6.4/UTM.dmg";
-                    hash = "aad86726152b15a3e963cf778a0b0dfd8e818736b381aed2699d974a18845427";
-                  }
-                  {
-                    url = "https://github.com/podman-desktop/podman-desktop/releases/download/v1.17.2/podman-desktop-1.17.2-universal.dmg";
-                    hash = "d73c81a859f5792329818893736b28f8dd8a5243cca41c8573ed7c2095f69182";
-                  }
-                ];
-              };
-              homebrew.casks = [
-                "steam"
-              ];
-              home-manager.users.heywoodlh = {
-                imports = [ ./home/roles/kiwix.nix ];
-                heywoodlh.home.lima.nixos.memory = 12;
-              };
+              home-manager.extraSpecialArgs = inputs // {myPkgs = mkMyPkgs system;};
+              home-manager.sharedModules = [linuxHomeModule];
+              heywoodlh.stylix.enable = true;
             }
+            ./nixos/hosts/${name}.nix
           ];
-        };
-        "m1-mac-mini" = darwinConfig "mac-mini" "m1-mac-mini" {
-          imports = [
-            ./darwin/roles/mac-mini.nix
-            darwinWorkstationConfig
-            {
-              heywoodlh.nix-llama.enable = false;
-              heywoodlh.sshd.enable = true;
-              # Firewall needs to be lenient for VNC/SSH
-              networking.applicationFirewall = {
-                enable = lib.mkForce false;
-                blockAllIncoming = lib.mkForce false;
-                enableStealthMode = lib.mkForce false;
-              };
-              cart = {
+      };
+    mkDarwin = name: let
+      system = "aarch64-darwin";
+      pkgs = mkPkgs nixpkgs system;
+    in
+      darwin.lib.darwinSystem {
+        inherit system;
+        specialArgs =
+          mergedInputs
+          // {
+            inputs = mergedInputs;
+            inherit name;
+            myPkgs = mkMyPkgs system;
+          };
+        modules = [
+          darwinModule
+          home-manager.darwinModules.home-manager
+          inputs.nix-llama.darwinModules.default
+          inputs.cart.darwinModules.${system}.cart
+          inputs.stylix.darwinModules.stylix
+          ./darwin/roles/base.nix
+          ./darwin/roles/defaults.nix
+          ./darwin/roles/pkgs.nix
+          ./darwin/roles/network.nix
+          ./darwin/hosts/${name}.nix
+          {
+            nix.settings = nixConfig;
+            nixpkgs.overlays = [inputs.nur.overlays.default];
+            heywoodlh = {
+              defaults = {
                 enable = true;
-                user = "heywoodlh";
-                package = cart.packages.${system}.cart;
-                applications = [
-                  {
-                    url = "https://github.com/utmapp/UTM/releases/download/v4.6.4/UTM.dmg";
-                    hash = "aad86726152b15a3e963cf778a0b0dfd8e818736b381aed2699d974a18845427";
-                  }
-                  {
-                    url = "https://github.com/ibrahimcetin/reins/releases/download/v1.3.0/Reins-macOS.dmg";
-                    hash = "8db9f87297f2b474f81cc07326304a4e4144465b31cfb0713aef4900cbdecb5a";
-                  }
-                ];
+                user = {
+                  uid = 501;
+                  homeDir = "/Users/heywoodlh";
+                };
               };
-              home-manager.users.heywoodlh = {
-                imports = [ ./home/roles/kiwix.nix ];
+              darwin.lmstudio.enable = true;
+            };
+            home-manager = {
+              useGlobalPkgs = true;
+              extraSpecialArgs = inputs // {myPkgs = mkMyPkgs system;};
+              users.heywoodlh = {...}: {
+                imports = [macosHomeModule];
+                home.packages = import ./darwin/user-packages.nix {inherit pkgs;};
                 heywoodlh.home = {
-                  lima.nixos.memory = 12;
-                  t3 = {
-                    enable = true;
-                    address = "100.125.243.118";
-                  };
+                  darwin.protondrive = true;
+                  onepassword.enable = true;
+                  llm.apfel = true;
                 };
               };
-            }
-          ];
-        };
-        "mac-mini" = darwinConfig "mac-mini" "mac-mini" {
-          imports = [
-            ./darwin/roles/mac-mini.nix
-            {
-              homebrew.casks = [
-                "windows-app"
-              ];
-            }
-          ];
-        };
+            };
+            networking.hostName = name;
+            networking.computerName = name;
+            system.stateVersion = 6;
+          }
+        ];
       };
-
-      # nixos targets
-      packages.nixosConfigurations = {
-        homelab = nixosConfig "server" "homelab" {
-          imports = [
-            ./nixos/hosts/homelab/configuration.nix
-          ];
-        };
-
-        nixos-ops = nixosConfig "workstation" "nixos-ops" {
-          imports = [
-            ./nixos/hosts/intel-mac-mini.nix
-          ];
-          swapDevices = [
-            {
-              device = "/swap";
-              size = 8 * 1024;
-            }
-          ];
-          # Ensure to power on in case of power failure
-          system.activationScripts.rebootPowerFailure.text = ''
-            ${pkgs.pciutils}/bin/setpci -s 00:1f.0 0xa4.b=0
-          '';
-
-          security.sudo.extraConfig = ''
-            heywoodlh  ALL=(ALL:ALL)    NOPASSWD:SETENV: ALL
-          '';
-
-          networking.firewall.interfaces.tailscale0.allowedTCPPorts = [
-            8642
-            9119
-            3773
-          ];
-
-          # Disable sleep
-          systemd.targets.sleep.enable = false;
-          systemd.targets.suspend.enable = false;
-          systemd.targets.hibernate.enable = false;
-          systemd.targets.hybrid-sleep.enable = false;
-
-          heywoodlh = {
-            cloudflared = true;
-            sshd.enable = true;
-            intel-mac = true;
-            nixos = {
-              remote-desktop = {
-                enable = true;
-                user = "ops";
-                uid = 1002;
-                address = "100.67.47.0";
-                headless.enable = true;
-              };
-              portmaster.enable = lib.mkForce false;
-              scrutiny = {
-                enable = true;
-                port = 3050;
-                ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
-              };
-            };
+    mkHome = name: let
+      system = "x86_64-linux";
+      pkgs = mkPkgs nixpkgs system;
+    in
+      home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs =
+          inputs
+          // {
+            myPkgs = mkMyPkgs system;
           };
-
-          users.users.ops = {
-            isNormalUser = true;
-            uid = 1002;
-            description = "Ops user";
-            linger = true;
-            extraGroups = [
-              "adbusers"
-              "networkmanager"
-              "libvirtd"
-            ];
-            shell = pkgs.bashInteractive;
-            homeMode = "755";
-            openssh.authorizedKeys.keyFiles = [ ssh-keys.outPath ];
-          };
-
-          home-manager.users.ops = {
-            home.stateVersion = "25.05";
-            systemd.user.enable = true;
-            heywoodlh.home = {
-              paseo = {
-                desktop = true;
-                server = {
-                  enable = true;
-                  address = "100.67.47.0:6767";
-                  webui = true;
-                  hostnames = [
-                    "nixos-ops"
-                    "nixos-ops.barn-banana.ts.net"
-                  ];
-                };
-              };
-              hermes = {
-                enable = true;
-                dashboard = {
-                  enable = true;
-                  address = "100.67.47.0";
-                };
-                remote = {
-                  enable = true;
-                  host = "nixos-ops.barn-banana.ts.net";
-                };
-                model = {
-                  default = "z-ai/glm-5.3-flash";
-                  provider = "OpenRouter";
-                };
-                environmentFiles = [
-                  "/home/ops/.hermes.env"
-                ];
-                extraPlugins = [
-                  (pkgs.runCommand "claude-subscription-directsdk" {} ''
-                    cp -r ${pkgs.fetchFromGitHub {
-                      owner = "NousResearch";
-                      repo = "hermes-official-plugins";
-                      rev = "1e326ddd28ae261821d7714d106fe114999a0bba";
-                      hash = "sha256-9sxRw20aMkbGQXxoa5SEFGDDudwQq3GvGyKL8Yl0I/U=";
-                    }}/claude-subscription-directsdk $out
-                  '')
-                ];
-                settings = {
-                  dashboard.public_url = "https://hermes.heywoodlh.io";
-                };
-              };
-              t3 = {
-                enable = true;
-                address = "100.67.47.0";
-                hermes.enable = true;
-                notifications.ntfy = {
-                  enable = true;
-                  url = "http://ntfy.barn-banana.ts.net/t3";
-                  clickTarget = "ios";
-                };
-              };
-            };
-            home.activation.docker-rootless-context = ''
-              if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
-              then
-                ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/$(id -u)/docker.sock" &> /dev/null || true
-                ${pkgs.docker-client}/bin/docker context use rootless
-              fi
-            '';
-          };
-        };
-
-        nixos-yoga = nixosConfig "laptop" "nixos-yoga" {
-          imports = [
-            nixos-hardware.nixosModules.common-cpu-intel
-            nixos-hardware.nixosModules.common-gpu-intel
-            nixos-hardware.nixosModules.common-pc-laptop
-            nixos-hardware.nixosModules.common-pc-laptop-ssd
-            ./nixos/hosts/yoga-7i-14irl8.nix
-          ];
-          home-manager.users.heywoodlh.imports = [ ./home/roles/kiwix.nix ];
-        };
-
-        nixos-thinkpad = nixosConfig "laptop" "nixos-thinkpad" {
-          imports = [
-            /etc/nixos/hardware-configuration.nix
-          ];
-          home-manager.users.heywoodlh.imports = [ ./home/roles/kiwix.nix ];
-        };
-
-        nixos-framework = nixosConfig "laptop" "nixos-framework" {
-          imports = [
-            nixos-hardware.nixosModules.framework-intel-core-ultra-series1
-            ./nixos/hosts/framework-13.nix
-          ];
-
-          heywoodlh.nixos = {
-            gaming.enable = true;
-            vmware-workstation = true;
-            cachyos-kernel.enable = true;
-            libvirtd.enable = true;
-          };
-
-          home-manager.users.heywoodlh = {
-            wayland.windowManager.hyprland.extraConfig = ''
-              -- change monitor to high resolution, the last argument is the scale factor
-              hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1.6 })
-              -- unscale XWayland
-              hl.config({ xwayland = { force_zero_scaling = true } })
-              -- toolkit-specific scale
-              hl.env("GDK_SCALE", "2")
-              hl.env("XCURSOR_SIZE", "24")
-            '';
-            home.packages = with pkgs; [
-              moonlight-qt
-            ];
-          };
-        };
-
-        nixos-arm64 = nixosConfig "server" "nixos-arm64" {
-          imports = [
-            ./nixos/hosts/nixos-arm64.nix
-          ];
-        };
-
-        nixos-culug = nixosConfig "server" "nixos-culug" {
-          imports = [
-            ./nixos/hosts/culug.nix
-          ];
-
-          users.users.alex = {
-            isNormalUser = true;
-            description = "alex";
-            extraGroups = [
-              "wheel"
-              "adbusers"
-              "networkmanager"
-              "docker"
-            ];
-            shell = pkgs.bashInteractive;
-            homeMode = "755";
-            packages = [
-              home-manager.packages.${system}.home-manager
-            ];
-          };
-
-          users.users.heywoodlh.extraGroups = [
-            "docker"
-          ];
-
-          # Fix display
-          boot.kernelParams = [
-            "fbcon=rotate:1"
-            "video=DSI-1:panel_orientation=right_side_up"
-          ];
-
-          environment.etc."nixos/README.md".text = ''
-            Deploy like so:
-
-            ```
-            sudo nixos-rebuild switch --flake "git+https://tangled.org/heywoodlh.io/nixos-configs#nixos-culug"
-            ```
-            Open a PR if you want updates.
-
-            CULUG services should be defined outside of NixOS with `docker`/`docker-compose` in `/opt/`. Anything that should be publicly exposed should go through Cloudflare Zero Trust.
-          '';
-        };
-
-        # steam-deck uses Jovian's pinned nixpkgs as the primary nixpkgs so its
-        # custom packages (mesa, pipewire, etc.) have their version requirements met.
-        steam-deck = nixosConfigWith nixpkgs-jovian-nixos "workstation" "steam-deck" {
-          imports = [
-            ./nixos/hosts/steam-deck.nix
-          ];
-          heywoodlh.nixos.steam-deck.enable = true;
-          heywoodlh.nixos.lancacheDns.enable = true;
-          hardware.printers.ensurePrinters = lib.mkForce [];
-        };
-
-        nixos-nuc = nixosConfig "workstation" "nixos-nuc" {
-          imports = [
-            ./nixos/hosts/nuc.nix
-          ];
-
-          hardware.graphics = {
-            enable = true;
-            enable32Bit = true;
-          };
-
-          heywoodlh = {
-            cloudflared = true;
-            sshd = {
-              enable = true;
-              duo = true;
-            };
-            nixos.scrutiny = {
-              enable = true;
-              port = 3050;
-              ntfy = "ntfy://ntfy.barn-banana.ts.net/monitoring";
-            };
-          };
-
-          # Disable sleep
-          systemd.targets.sleep.enable = false;
-          systemd.targets.suspend.enable = false;
-          systemd.targets.hibernate.enable = false;
-          systemd.targets.hybrid-sleep.enable = false;
-
-          # Apple Magic keyboard (makes useless globe key ctrl)
-          boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
-
-          networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 3773 ];
-
-          # 8 GiB of RAM cannot feed `max-jobs = auto` (8) x `cores = 0` (8)
-          nix.settings = {
-            max-jobs = 1;
-            cores = 4;
-          };
-
-          # nix-daemon sets Delegate=, so this ceiling covers the build subtree
-          systemd.services.nix-daemon.serviceConfig.MemoryHigh = "3G";
-
-          home-manager.users.heywoodlh = {
-            heywoodlh.home = {
-              paseo = {
-                desktop = true;
-                server = {
-                  enable = true;
-                  address = "100.74.91.97:6767";
-                  hostnames = [
-                    "nixos-nuc"
-                    "nixos-nuc.barn-banana.ts.net"
-                  ];
-                };
-              };
-              t3 = {
-                enable = true;
-                address = "100.74.91.97";
-              };
-            };
-          };
-        };
-
-        nixos-gaming =  nixosConfig "workstation" "nixos-gaming" {
-          imports = [
-            ./nixos/hosts/gaming.nix
-          ];
-          heywoodlh.nixos.lancacheDns.enable = true;
-        };
-
-        nixos-gaming-sarah =  nixosConfig "workstation" "nixos-gaming-sarah" {
-          imports = [
-            ./nixos/hosts/gaming-sarah.nix
-          ];
-          heywoodlh.nixos.lancacheDns.enable = true;
-        };
-
-        nixos-blade = nixosConfig "laptop" "nixos-blade" {
-          imports = [
-            ./nixos/hosts/razer-blade-14.nix
-          ];
-          hardware.openrazer = {
-            enable = true;
-            users = [
-              "heywoodlh"
-            ];
-          };
-
-          heywoodlh.nixos = {
-            nvidia-patch = true;
-            gaming.enable = true;
-            lancacheDns.enable = true;
-            cachyos-kernel.kernel = "linuxPackages-cachyos-bore-zen4";
-          };
-
-          environment.systemPackages = with pkgs; [
-            nvtopPackages.nvidia
-          ];
-          home-manager.users.heywoodlh = {
-            imports = [ ./home/roles/kiwix.nix ];
-            wayland.windowManager.hyprland.extraConfig = ''
-              -- change monitor to high resolution, the last argument is the scale factor
-              hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1.6 })
-              -- unscale XWayland
-              hl.config({ xwayland = { force_zero_scaling = true } })
-              -- toolkit-specific scale
-              hl.env("GDK_SCALE", "2")
-              hl.env("XCURSOR_SIZE", "24")
-            '';
-          };
-        };
-        nixos-m1-mac-mini = nixosConfig "workstation" "nixos-m1-mac-mini" {
-          imports = [
-            ./nixos/hosts/m1-mac-mini.nix
-          ];
-          heywoodlh = {
-            luks = {
-              enable = true;
-              uuid = "22d52b85-5679-4d18-a245-974fab33bf7f";
-              keyfile = {
-                enable = true;
-                uuid = "337C-1416";
-              };
-            };
-            sshd.enable = true;
-            nixos = {
-              gaming.enable = false;
-              moonlight.enable = true;
-            };
-            apple-silicon = {
-              enable = true;
-              cachefile = "kernelcache.release.mac13g";
-              hash = {
-                # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/asahi/kernelcache.release.mac13g)`
-                cache = "sha256-SYR/EaaIDjeGfvhfzlTqgOihXNQQdBgqJbBJbq+wC9g=";
-                # Retrieve with `nix hash convert --hash-algo sha256 $(nix-prefetch-url file:///boot/vendorfw/firmware.cpio)`
-                firmware = "sha256-Q/WI5j9fltdGN5osDzk66iVkWgS9SpD4dqpHLOSeebc=";
-              };
-              # If nixos-rebuild fails with a requireFile error for kernelcache or firmware,
-              # the files need to be manually added to the Nix store before rebuilding:
-              #   nix store add --mode flat --hash-algo sha256 /boot/asahi/kernelcache.release.mac13g
-              #   nix store add --mode flat --hash-algo sha256 /boot/vendorfw/firmware.cpio
-              # If the hashes above no longer match (e.g. after an Asahi update), update them
-              # using the commands in the comments above, then re-run the nix store add commands.
-            };
-          };
-          # Bootloader
-          boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
-
-          # Apple Magic keyboard (makes useless globe key ctrl)
-          boot.kernelParams = [ "hid_apple.swap_fn_leftctrl=1" ];
-
-          # Xbox controller Bluetooth input support for Moonlight
-          boot.kernelModules = [ "hid_microsoft" "uinput" ];
-          services.udev.packages = [
-            (pkgs.writeTextFile {
-              name = "xbox-hidraw-udev-rules";
-              text = ''KERNEL=="hidraw*", TAG+="uaccess"'';
-              destination = "/etc/udev/rules.d/60-xbox-hidraw.rules";
-            })
-          ];
-
-          fileSystems."/mnt/m1-mac-mini" = {
-            device = "/dev/disk/by-uuid/6968-012B";
-            fsType = "exfat";
-            options = [ "rw" "uid=1000" "nofail" ];
-          };
-
-          home-manager.users.heywoodlh = {
-            heywoodlh.home.paseo = {
-              desktop = true;
-              server = {
-                enable = true;
-                address = "100.109.94.126:6767";
-                hostnames = [
-                  "nixos-m1-mac-mini"
-                  "nixos-m1-mac-mini.barn-banana.ts.net"
-                ];
-              };
-            };
-
-            wayland.windowManager.hyprland.extraConfig = ''
-              -- change monitor to high resolution, the last argument is the scale factor
-              hl.monitor({ output = "", mode = "highres", position = "auto", scale = 1 })
-              -- unscale XWayland
-              hl.config({ xwayland = { force_zero_scaling = true } })
-              -- toolkit-specific scale
-              hl.env("GDK_SCALE", "2")
-              hl.env("XCURSOR_SIZE", "24")
-            '';
-          };
-        };
-
-        nixos-usb = nixosConfig "workstation" "nixos-usb" {
-          imports = [
-            ./nixos/hosts/usb.nix
-          ];
-          hardware.enableAllHardware = true;
-          boot.loader.efi.canTouchEfiVariables = pkgs.lib.mkForce false;
-
-          # Enable KDE for interoperability amongst machines
-          heywoodlh = {
-            sshd = {
-              enable = true;
-              tailscale = true;
-            };
-            nixos.tor.enable = true;
-          };
-        };
-
-        family = nixosConfig "workstation" "family" {
-          imports = [
-            ./nixos/hosts/family.nix
-            ./nixos/roles/desktop/family.nix
-            ./nixos/roles/nixos/daily-flake-switch.nix
-            ./nixos/roles/monitoring/osquery.nix
-          ];
-          swapDevices = [{
-            device = "/swap";
-            size = 16 * 1024; # 8GB
-          }];
-          heywoodlh = {
-            sshd.enable = true;
-            nixos.portmaster.dns = [
-              # Global resolver: NextDNS (profile 93c264) over DoT.
-              "dot://45.90.30.0:853?verify=9ad2ce.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
-              "dot://45.90.28.0:853?verify=9ad2ce.dns.nextdns.io&name=NextDNS&blockedif=zeroip"
-              # Tailscale MagicDNS, restricted to .ts.net names only.
-              "dns://100.100.100.100?name=TailscaleDNS&search=barn-banana.ts.net&search-only"
-            ];
-            nixos = {
-              gaming = {
-                enable = false;
-                user = "family";
-              };
-              nvidia-patch = true;
-            };
-          };
-        };
-
-        # generic build for initial setup
-        nixos-init = nixpkgs.lib.nixosSystem {
-          system = "${system}";
-          specialArgs = inputs;
-          modules = [
-            ./nixos/roles/nixos/attic.nix
-            /etc/nixos/hardware-configuration.nix
-            /etc/nixos/configuration.nix
-            {
-              services.openssh.enable = true;
-              users.users = let
-                sshKeys = ssh-keys.outPath;
-              in {
-                heywoodlh.openssh.authorizedKeys.keyFiles = [ sshKeys ];
-                root.openssh.authorizedKeys.keyFiles = [ sshKeys ];
-              };
-
-              programs.neovim = {
-                enable = true;
-                vimAlias = true;
-                viAlias = true;
-              };
-              environment.systemPackages = with pkgs; [
-                git
-                helix
-                msedit
-                nano
-              ];
-              services.tailscale.enable = true;
-              services.syncthing = {
-                enable = true;
-                user = "heywoodlh";
-                dataDir = "/home/heywoodlh/Sync";
-                configDir = "/home/heywoodlh/.config/syncthing";
-              };
-            }
-          ];
-        };
-
-        nixos-iso = nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = inputs;
-          modules = [
-            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
-            ./nixos/roles/nixos/attic.nix
-            {
-              programs.neovim = {
-                enable = true;
-                vimAlias = true;
-                viAlias = true;
-              };
-              environment.systemPackages = with pkgs; [
-                calamares-nixos
-                calamares-nixos-extensions
-                git
-                helix
-                msedit
-                nano
-                nixos-install
-                e2fsprogs
-              ];
-              services.tailscale.enable = true;
-              services.openssh.enable = true;
-              users.users.nixos.openssh.authorizedKeys.keyFiles = [ ssh-keys ];
-              nix.settings.experimental-features = [ "nix-command" "flakes" ];
-            }
-          ];
-        };
-
-
-        # generic build for CI
-        nixos-server = nixosConfig "server" "nixos-server" {
-          imports = [ ./nixos/hosts/nixos-build/server.nix ];
-        };
-
-        # generic build for CI
-        nixos-desktop = nixosConfig "desktop" "nixos-desktop" {
-          imports = [ ./nixos/hosts/nixos-build/desktop.nix ];
-        };
-
-        # Console
-        nixos-console = nixosConfig "console" "nixos-console" {
-          imports = [ /etc/nixos/hardware.nix ];
-          networking.hostName = "nixos-console";
-        };
-
-        # Dev VM for running on workstations
-        nixos-dev = nixosConfig "vm" "nixos-dev" {
-          imports = [
-            /etc/nixos/hardware-configuration.nix
-          ];
-        };
-
-        # VMWare VM for running on workstations
-        nixos-vmware = nixosConfig "vm" "nixos-vmware" {
-          imports = [
-            /etc/nixos/hardware-configuration.nix
-          ];
-          virtualisation.vmware.guest.enable = true;
-          console.earlySetup = true;
-          fileSystems."/shared" = {
-            device = ".host:/";
-            fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse"; # "fuse.${pkgs.open-vm-tools}/bin/vmhgfs-fuse" does not work
-            options = [
-              "allow_other"
-              "auto_unmount"
-              "defaults"
-              "gid=1000"
-              "uid=1000"
-              "umask=0022"
-            ];
-          };
-          home-manager.users.heywoodlh = {
-            home.file.".gitconfig" = {
-              text = ''
-                [safe]
-                directory = "/shared/*";
-              '';
-            };
-          };
-        };
-
-        # Generic UTM VM for running on any Mac
-        nixos-utm = nixosConfig "vm" "nixos-utm" {
-          imports = [
-            /etc/nixos/hardware-configuration.nix
-            (nixpkgs + "/nixos/modules/profiles/qemu-guest.nix")
-          ];
-          services.qemuGuest.enable = true;
-        };
-
-        # Lima NixOS VM
-        nixos-lima = nixosConfig "lima" "nixos-lima" {};
+        modules = [
+          linuxHomeModule
+          ./home/hosts/${name}.nix
+          {
+            nixpkgs.config.allowUnfree = true;
+            nixpkgs.overlays = [inputs.nur.overlays.default];
+            nix.package = pkgs.nix;
+            fonts.fontconfig.enable = true;
+            programs.home-manager.enable = true;
+            targets.genericLinux.enable = true;
+            home.packages = import ./home/packages.nix {inherit pkgs name;};
+          }
+        ];
       };
-      # home-manager targets (non NixOS/MacOS, ideally Arch Linux)
-      packages.homeConfigurations = {
-        heywoodlh = homeConfig "heywoodlh" "heywoodlh" "/home/heywoodlh" {
-          imports = [
-            ./home/desktop.nix # Base desktop config
-            ./home/linux/desktop.nix # Linux-specific desktop config
-          ];
-          heywoodlh.home.onepassword.enable = true;
-          heywoodlh.home.gnome = true;
-          home.packages = [
-            pkgs.nerd-fonts.jetbrains-mono
-          ];
-          home.file."bin/create-docker" = {
-            enable = true;
-            executable = true;
-            text = ''
-              #!/usr/bin/env bash
-              ${pkgs.lima}/bin/limactl list | grep default | grep -q Running || ${pkgs.lima}/bin/limactl start --name=default template://docker # Start/create default lima instance if not running/created
-              ${pkgs.docker-client}/bin/docker context create lima-default --docker "host=unix:///Users/heywoodlh/.lima/default/sock/docker.sock"
-              ${pkgs.docker-client}/bin/docker context use lima-default
-            '';
-          };
-        };
-
-        heywoodlh-server = homeConfig "heywoodlh-server" "heywoodlh" "/home/heywoodlh" {
-          imports = [
-            ./home/linux/no-desktop.nix
-          ];
-          programs.starship.enable = lib.mkForce false;
-        };
-
-        heywoodlh-lima = homeConfig "heywoodlh-lima" "heywoodlh" "/home/heywoodlh.guest" {
-          imports = [
-            ./home/linux/no-desktop.nix
-          ];
-          programs.bash = {
-            enable = true;
-            initExtra = ''
-              [ -z $TMUX ] && { ${self.packages.${system}.tmux}/bin/tmux new-session -A -s main && exit;}
-            '';
-          };
-
-          home.file.".config/fish/config.fish".text = let
-            starship_config = pkgs.writeText "starship.toml" ''
-              [character]
-              success_symbol = ' [❯](bold white)'
-              error_symbol = ' [❯](bold red)'
-
-              [container]
-              disabled = true
-            '';
-          in ''
-            # Custom Starship prompt to remind me I'm in a VM
-            set -gx STARSHIP_CONFIG "${starship_config}"
-            ${pkgs.starship}/bin/starship init fish | source
-          '';
-        };
+  in {
+    nixosConfigurations = lib.mapAttrs mkNixos {
+      homelab = {
+        system = "x86_64-linux";
+        type = "server";
       };
+      family.system = "x86_64-linux";
+      nixos-arm64 = {
+        system = "aarch64-linux";
+        type = "server";
+      };
+      nixos-blade = {
+        system = "x86_64-linux";
+        type = "laptop";
+      };
+      nixos-console = {
+        system = "x86_64-linux";
+        type = "console";
+      };
+      nixos-culug = {
+        system = "x86_64-linux";
+        type = "server";
+      };
+      nixos-desktop.system = "x86_64-linux";
+      nixos-dev = {
+        system = "x86_64-linux";
+        type = "vm";
+      };
+      nixos-framework = {
+        system = "x86_64-linux";
+        type = "laptop";
+      };
+      nixos-gaming.system = "x86_64-linux";
+      nixos-gaming-sarah.system = "x86_64-linux";
+      nixos-init = {
+        system = "x86_64-linux";
+        bare = true;
+      };
+      nixos-iso = {
+        system = "x86_64-linux";
+        bare = true;
+      };
+      nixos-lima = {
+        system = "x86_64-linux";
+        type = "lima";
+      };
+      nixos-m1-mac-mini.system = "aarch64-linux";
+      nixos-nuc.system = "x86_64-linux";
+      nixos-ops.system = "x86_64-linux";
+      nixos-server = {
+        system = "x86_64-linux";
+        type = "server";
+      };
+      nixos-thinkpad = {
+        system = "x86_64-linux";
+        type = "laptop";
+      };
+      nixos-usb.system = "x86_64-linux";
+      nixos-utm = {
+        system = "x86_64-linux";
+        type = "vm";
+      };
+      nixos-vmware = {
+        system = "x86_64-linux";
+        type = "vm";
+      };
+      nixos-yoga = {
+        system = "x86_64-linux";
+        type = "laptop";
+      };
+      steam-deck = {
+        system = "x86_64-linux";
+        flake = inputs.nixpkgs-jovian-nixos;
+      };
+    };
 
-      packages = {
+    darwinConfigurations = lib.mapAttrs (name: _: mkDarwin name) {
+      m1-mac-mini = {};
+      m4-macbook-air = {};
+      mac-mini = {};
+    };
+
+    homeConfigurations = lib.mapAttrs (name: _: mkHome name) {
+      heywoodlh = {};
+      heywoodlh-server = {};
+      heywoodlh-lima = {};
+    };
+
+    nixosModules.heywoodlh = nixosModule;
+    nixosModules.docs = {...}: {imports = myNixOSModules;};
+    darwinModules.heywoodlh.darwin = darwinModule;
+    homeModules.heywoodlh = {
+      home = macosHomeModule;
+      home-linux = linuxHomeModule;
+    };
+
+    packages = forAllSystems (system: let
+      pkgs = mkPkgs nixpkgs system;
+      myPkgs = mkMyPkgs system;
+      eval = pkgs.lib.evalModules {
+        specialArgs = mergedInputs // {
+          inherit pkgs myPkgs;
+          inputs = mergedInputs;
+        };
+        modules = [
+          darwinModule
+          {config._module.check = false;}
+          ({...}: {
+            imports = allHomeModules;
+            config._module.check = false;
+          })
+          ({...}: {
+            imports = myNixOSModules;
+            config._module.check = false;
+          })
+        ];
+      };
+      cleanEval = pkgs.lib.filterAttrsRecursive (n: _v: n != "_module") eval;
+      optionsDoc = pkgs.nixosOptionsDoc {inherit (cleanEval) options;};
+    in
+      myPkgs
+      // {
+        inherit (myPkgs) fish tmux helix op-wrapper vim;
+        tangled-sync = pkgs.callPackage ./pkgs/tangled-sync.nix {};
+        spindle-run = inputs.spindle-run.packages.${system}.spindle-run;
+        iso = self.nixosConfigurations.nixos-iso.config.system.build.isoImage;
         ansible-workstation = pkgs.writeShellScriptBin "ansible-workstation" ''
           export LC_ALL="C.UTF-8"
           export ANSIBLE_INJECT_FACT_VARS=True
@@ -1655,32 +641,37 @@ rec {
           sudo ${pkgs.ansible}/bin/ansible-playbook --connection=local --extra-vars "nixos_configs_root=path:${self}" ${self}/ansible/server/standalone.yml
         '';
         docs = pkgs.runCommand "options-doc.md" {} ''
-          cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/darwin\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/nixos\/modules|g' | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/home\/modules|g' > $out
+          cat ${optionsDoc.optionsCommonMark} | ${pkgs.gnused}/bin/sed -E 's|file://||g' \
+            | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/darwin\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/darwin\/modules|g' \
+            | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/nixos\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/nixos\/modules|g' \
+            | ${pkgs.gnused}/bin/sed -E 's|(\/nix\/store\/[^/]*)\/home\/modules|https:\/\/tangled.org\/heywoodlh.io\/nixos-configs\/blob\/main\/home\/modules|g' > $out
         '';
-        # Applications I want to export and remain consistent with this repo
-        helix = myFlakes.packages.${system}.helix;
-        fish = myFlakes.packages.${system}.fish;
-        tmux = myFlakes.packages.${system}.tmux;
-        op-wrapper = myFlakes.packages.${system}.op-wrapper;
-        tangled-sync = pkgs.callPackage ./pkgs/tangled-sync.nix {};
-        spindle-run = spindle-run.packages.${system}.spindle-run;
-        # iso package is only buildable on Linux
-        iso = self.packages.${system}.nixosConfigurations.nixos-iso.config.system.build.isoImage;
-      };
+      });
 
-      devShell = pkgs.mkShell {
+    formatter = forAllSystems (system: (mkPkgs nixpkgs system).alejandra);
+
+    devShells = forAllSystems (system: let
+      pkgs = mkPkgs nixpkgs system;
+      stable-pkgs = mkPkgs nixpkgs-stable system;
+    in {
+      default = pkgs.mkShell {
         name = "nixos-configs devShell";
         buildInputs = with pkgs; [
           lefthook
-          stable-pkgs.gitleaks # bug in pkgs.gitleaks currently
-          pkgs.strip-ansi
+          stable-pkgs.gitleaks
+          strip-ansi
+          alejandra
+          statix
+          deadnix
+          shellcheck
+          actionlint
+          yamllint
           self.packages.${system}.spindle-run
         ];
         shellHook = ''
           ${(pkgs.callPackage ./pkgs/tangled-sync.nix {})}/bin/tangled-sync.sh
         '';
       };
-
-    }
-  );
+    });
+  };
 }

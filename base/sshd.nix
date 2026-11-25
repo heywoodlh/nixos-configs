@@ -1,13 +1,18 @@
-{ config, pkgs, lib, myFlakes, ssh-keys, nixpkgs-stable, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  myPkgs,
+  ssh-keys,
+  nixpkgs-stable,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.sshd;
   system = stdenv.hostPlatform.system;
   stdenv = pkgs.stdenv;
   username = config.heywoodlh.defaults.user.name;
-  myTmux = myFlakes.packages.${system}.tmux;
+  myTmux = myPkgs.tmux;
   stable-pkgs = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
@@ -40,10 +45,10 @@ in {
 
     users.users = {
       ${username} = {
-        openssh.authorizedKeys.keyFiles = [ ssh-keys.outPath ];
+        openssh.authorizedKeys.keyFiles = [ssh-keys.outPath];
       };
       root = {
-        openssh.authorizedKeys.keyFiles = [ ssh-keys.outPath ];
+        openssh.authorizedKeys.keyFiles = [ssh-keys.outPath];
       };
     };
 

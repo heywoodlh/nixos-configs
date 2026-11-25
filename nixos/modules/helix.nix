@@ -1,11 +1,12 @@
-{ config, pkgs, lib, myFlakes, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  myPkgs,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.helix;
   username = config.heywoodlh.defaults.user.name;
-  system = pkgs.stdenv.hostPlatform.system;
 in {
   options.heywoodlh.helix = mkOption {
     default = false;
@@ -17,7 +18,7 @@ in {
 
   config = mkIf cfg {
     environment.systemPackages = [
-      myFlakes.packages.${system}.helix
+      myPkgs.helix
     ];
     home-manager.users.${username}.heywoodlh.home.helix = {
       enable = true;

@@ -10,6 +10,8 @@ on:
       - base/**
       - pkgs/**
       - assets/**
+      - kubernetes/**
+      - nix-config.nix
       - flake.nix
       - flake.lock
       - .github/workflows/nix-builds.yml
@@ -22,6 +24,8 @@ on:
       - base/**
       - pkgs/**
       - assets/**
+      - kubernetes/**
+      - nix-config.nix
       - flake.nix
       - flake.lock
       - .github/workflows/nix-builds.yml
@@ -50,9 +54,12 @@ jobs:
               - 'home/base.nix'
               - 'home/linux/**'
               - 'home/modules/**'
+              - 'home/hosts/**'
+              - 'nixos/machine-types/**'
               - 'base/**'
               - 'pkgs/**'
               - 'assets/**'
+              - 'nix-config.nix'
               - 'flake.nix'
               - 'flake.lock'
               - '.github/workflows/nix-builds.yml'
@@ -62,9 +69,11 @@ jobs:
               - 'home/desktop.nix'
               - 'home/base.nix'
               - 'home/modules/**'
+              - 'home/hosts/**'
               - 'base/**'
               - 'pkgs/**'
               - 'assets/**'
+              - 'nix-config.nix'
               - 'flake.nix'
               - 'flake.lock'
               - '.github/workflows/nix-builds.yml'

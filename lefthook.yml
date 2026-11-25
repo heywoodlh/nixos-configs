@@ -1,5 +1,20 @@
 pre-commit:
   commands:
+    nix-format:
+      glob: "*.nix"
+      run: alejandra --check {staged_files}
+    nix-statix:
+      glob: "*.nix"
+      run: deadnix --fail {staged_files}
+    shellcheck:
+      glob: "*.sh"
+      run: shellcheck --severity=error {staged_files}
+    actionlint:
+      glob: ".github/workflows/*.{yml,yaml}"
+      run: actionlint {staged_files}
+    yamllint:
+      glob: "*.{yml,yaml}"
+      run: yamllint -c .yamllint.yml {staged_files}
     check-dupe-inputs:
       run: |
         if grep -Riq '_2": {' flake.lock

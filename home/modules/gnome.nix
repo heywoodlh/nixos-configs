@@ -1,17 +1,23 @@
-{ config, lib, pkgs, nixpkgs-stable, nixpkgs-lts, home-manager, myFlakes, light-wallpaper, dark-wallpaper, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  nixpkgs-stable,
+  nixpkgs-lts,
+  myPkgs,
+  dark-wallpaper,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.home.gnome;
   system = pkgs.stdenv.hostPlatform.system;
   gnome-pkgs = nixpkgs-lts.legacyPackages.${system};
-  myGnomeExtensionsInstaller = myFlakes.packages.${system}.gnome-install-extensions;
+  myGnomeExtensionsInstaller = myPkgs.gnome-install-extensions;
   pkgs-stable = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
   };
-  myTmux = myFlakes.packages.${system}.tmux;
+  myTmux = myPkgs.tmux;
   battpop = pkgs.writeShellScript "battpop" ''
     ${pkgs.libnotify}/bin/notify-send $(${pkgs.acpi}/bin/acpi -b | ${pkgs.gnugrep}/bin/grep -Eo [0-9]+%)
   '';
@@ -34,10 +40,26 @@ in {
 
     home.packages = with gnome-pkgs; [
       # Fallback to old name if undefined (i.e. on Ubuntu LTS)
-      (if (builtins.hasAttr "dconf-editor" gnome-pkgs) then gnome-pkgs.dconf-editor else gnome.dconf-editor)
-      (if (builtins.hasAttr "gnome-boxes" gnome-pkgs) then gnome-pkgs.gnome-boxes else gnome.gnome-boxes)
-      (if (builtins.hasAttr "gnome-terminal" gnome-pkgs) then gnome-pkgs.gnome-terminal else gnome.gnome-terminal)
-      (if (builtins.hasAttr "gnome-tweaks" gnome-pkgs) then gnome-pkgs.gnome-tweaks else gnome.gnome-tweaks)
+      (
+        if (builtins.hasAttr "dconf-editor" gnome-pkgs)
+        then gnome-pkgs.dconf-editor
+        else gnome.dconf-editor
+      )
+      (
+        if (builtins.hasAttr "gnome-boxes" gnome-pkgs)
+        then gnome-pkgs.gnome-boxes
+        else gnome.gnome-boxes
+      )
+      (
+        if (builtins.hasAttr "gnome-terminal" gnome-pkgs)
+        then gnome-pkgs.gnome-terminal
+        else gnome.gnome-terminal
+      )
+      (
+        if (builtins.hasAttr "gnome-tweaks" gnome-pkgs)
+        then gnome-pkgs.gnome-tweaks
+        else gnome.gnome-tweaks
+      )
       pkgs.epiphany
       gnome-extensions-cli
       pkgs-stable.gnomeExtensions.pop-shell
@@ -149,14 +171,13 @@ in {
     };
 
     dconf.settings = {
-
       "org/gnome/desktop/background" = {
         color-shading = "solid";
         picture-options = "zoom";
       };
 
       "org/gnome/desktop/input-sources" = {
-        xkb-options = [ "caps:ctrl_shifted_capslock" "altwin:ctrl_win" ];
+        xkb-options = ["caps:ctrl_shifted_capslock" "altwin:ctrl_win"];
       };
 
       "org/gnome/desktop/interface" = {
@@ -186,33 +207,33 @@ in {
       };
 
       "org/gnome/desktop/wm/keybindings" = {
-        activate-window-menu = [ "disabled" ];
-        close = [ "<Super>q" ];
-        maximize = [ "disabled" ];
-        minimize = [ "<Super>comma" ];
-        move-to-monitor-down = [ "disabled" ];
-        move-to-monitor-left = [ "disabled" ];
-        move-to-monitor-right = [ "disabled" ];
-        move-to-monitor-up = [ "disabled" ];
-        move-to-workspace-1 = [ "<Shift><Super>1" ];
-        move-to-workspace-2 = [ "<Shift><Super>2" ];
-        move-to-workspace-3 = [ "<Shift><Super>3" ];
-        move-to-workspace-4 = [ "<Shift><Super>4" ];
-        move-to-workspace-down = [ "disabled" ];
-        move-to-workspace-up = [ "disabled" ];
-        switch-input-source = [ "disabled" ];
-        switch-input-source-backward = [ "disabled" ];
-        switch-to-workspace-1 = [ "<Super>1" ];
-        switch-to-workspace-2 = [ "<Super>2" ];
-        switch-to-workspace-3 = [ "<Super>3" ];
-        switch-to-workspace-4 = [ "<Super>4" ];
-        switch-to-workspace-left = [ "<Control>bracketleft" ];
-        switch-to-workspace-right = [ "<Control>bracketright" ];
-        switch-windows = [ "<Control>Tab" ];
-        switch-windows-backward = [ "<Shift><Control>Tab" ];
-        toggle-maximized = [ "<Super>Up" ];
-        toggle-message-tray = [ "disabled" ];
-        unmaximize = [ "disabled" ];
+        activate-window-menu = ["disabled"];
+        close = ["<Super>q"];
+        maximize = ["disabled"];
+        minimize = ["<Super>comma"];
+        move-to-monitor-down = ["disabled"];
+        move-to-monitor-left = ["disabled"];
+        move-to-monitor-right = ["disabled"];
+        move-to-monitor-up = ["disabled"];
+        move-to-workspace-1 = ["<Shift><Super>1"];
+        move-to-workspace-2 = ["<Shift><Super>2"];
+        move-to-workspace-3 = ["<Shift><Super>3"];
+        move-to-workspace-4 = ["<Shift><Super>4"];
+        move-to-workspace-down = ["disabled"];
+        move-to-workspace-up = ["disabled"];
+        switch-input-source = ["disabled"];
+        switch-input-source-backward = ["disabled"];
+        switch-to-workspace-1 = ["<Super>1"];
+        switch-to-workspace-2 = ["<Super>2"];
+        switch-to-workspace-3 = ["<Super>3"];
+        switch-to-workspace-4 = ["<Super>4"];
+        switch-to-workspace-left = ["<Control>bracketleft"];
+        switch-to-workspace-right = ["<Control>bracketright"];
+        switch-windows = ["<Control>Tab"];
+        switch-windows-backward = ["<Shift><Control>Tab"];
+        toggle-maximized = ["<Super>Up"];
+        toggle-message-tray = ["disabled"];
+        unmaximize = ["disabled"];
       };
 
       "org/gnome/desktop/wm/preferences" = {
@@ -237,9 +258,9 @@ in {
       };
 
       "org/gnome/settings-daemon/plugins/media-keys" = {
-        custom-keybindings = [ "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/" ];
-        logout = [ "<Shift><Super>e" ];
-        play = [ "<Shift><Control>space" ];
+        custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/"];
+        logout = ["<Shift><Super>e"];
+        play = ["<Shift><Control>space"];
         terminal = "disabled";
       };
 
@@ -305,7 +326,7 @@ in {
 
       "org/gnome/shell" = {
         disable-user-extensions = false;
-        disabled-extensions = [ "disabled" "ubuntu-dock@ubuntu.com" ];
+        disabled-extensions = ["disabled" "ubuntu-dock@ubuntu.com"];
         enabled-extensions = [
           "caffeine@patapon.info"
           "gsconnect@andyholmes.github.io"
@@ -318,7 +339,7 @@ in {
           "pip-on-top@rafostar.github.com"
           "pop-shell@system76.com"
         ];
-        favorite-apps = [ "firefox.desktop" ];
+        favorite-apps = ["firefox.desktop"];
         had-bluetooth-devices-setup = true;
         remember-mount-password = false;
         welcome-dialog-last-shown-version = "42.4";
@@ -375,7 +396,7 @@ in {
         switch-to-application-2 = "disabled";
         switch-to-application-3 = "disabled";
         switch-to-application-4 = "disabled";
-        toggle-overview = [ "<Control>k" ];
+        toggle-overview = ["<Control>k"];
       };
 
       "org/gnome/terminal/legacy" = {
@@ -385,7 +406,7 @@ in {
 
       "org/gnome/terminal/legacy/profiles:" = {
         default = "3797f158-f495-4609-995f-286da69c8d86";
-        list = [ "3797f158-f495-4609-995f-286da69c8d86" "3797f158-f495-4609-995f-286da69c8d87" ];
+        list = ["3797f158-f495-4609-995f-286da69c8d86" "3797f158-f495-4609-995f-286da69c8d87"];
       };
 
       "org/gnome/terminal/legacy/profiles:/:3797f158-f495-4609-995f-286da69c8d86" = {
@@ -403,7 +424,7 @@ in {
         highlight-colors-set = true;
         highlight-foreground-color = "rgb(46,52,64)";
         nord-gnome-terminal-version = "0.1.0";
-        palette = [ "#3B4252" "#BF616A" "#A3BE8C" "#EBCB8B" "#81A1C1" "#B48EAD" "#88C0D0" "#E5E9F0" "#4C566A" "#BF616A" "#A3BE8C" "#EBCB8B" "#81A1C1" "#B48EAD" "#8FBCBB" "#ECEFF4" ];
+        palette = ["#3B4252" "#BF616A" "#A3BE8C" "#EBCB8B" "#81A1C1" "#B48EAD" "#88C0D0" "#E5E9F0" "#4C566A" "#BF616A" "#A3BE8C" "#EBCB8B" "#81A1C1" "#B48EAD" "#8FBCBB" "#ECEFF4"];
         scrollbar-policy = "never";
         use-custom-command = true;
         use-system-font = false;
@@ -429,7 +450,7 @@ in {
         highlight-colors-set = true;
         highlight-foreground-color = "rgb(46,52,64)";
         nord-gnome-terminal-version = "0.1.0";
-        palette = [ "#3B4252" "#BF616A" "#A3BE8C" "#EBCB8B" "#81A1C1" "#B48EAD" "#88C0D0" "#E5E9F0" "#4C566A" "#BF616A" "#A3BE8C" "#EBCB8B" "#81A1C1" "#B48EAD" "#8FBCBB" "#ECEFF4" ];
+        palette = ["#3B4252" "#BF616A" "#A3BE8C" "#EBCB8B" "#81A1C1" "#B48EAD" "#88C0D0" "#E5E9F0" "#4C566A" "#BF616A" "#A3BE8C" "#EBCB8B" "#81A1C1" "#B48EAD" "#8FBCBB" "#ECEFF4"];
         scrollbar-policy = "never";
         use-custom-command = true;
         use-system-font = false;

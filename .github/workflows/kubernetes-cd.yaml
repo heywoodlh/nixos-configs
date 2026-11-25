@@ -8,8 +8,8 @@ on:
     branches:
       - main
     paths:
-      - flakes/kube/**
-      - '!flakes/kube/**.md'
+      - kubernetes/**
+      - '!kubernetes/**.md'
       - .github/workflows/kubernetes-cd.yaml
 
 jobs:
@@ -55,7 +55,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           commit_message: "GitHub Action automated Kubernetes update"
-          file_pattern: 'flakes/kube/manifests/*.yaml'
+          file_pattern: 'kubernetes/manifests/*.yaml'
 
       - name: Install kubectl
         if: github.ref == 'refs/heads/main'

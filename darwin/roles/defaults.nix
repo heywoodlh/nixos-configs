@@ -1,10 +1,10 @@
-{ config, pkgs, lib, myFlakes, determinate, ... }:
-
-with lib;
-
-let
-  system = pkgs.stdenv.hostPlatform.system;
-in {
+{
+  pkgs,
+  lib,
+  myPkgs,
+  ...
+}:
+with lib; {
   #package config
   nixpkgs.config.allowUnfree = true;
   # nix configuration
@@ -32,7 +32,7 @@ in {
   ];
 
   environment.systemPackages = [
-    myFlakes.packages.${system}.vim
+    myPkgs.vim
   ];
 
   #system-defaults.nix
@@ -105,7 +105,7 @@ in {
       };
     };
   };
-   # Add flake support
+  # Add flake support
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';

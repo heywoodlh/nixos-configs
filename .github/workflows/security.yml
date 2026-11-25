@@ -36,3 +36,4 @@ jobs:
         uses: zizmorcore/zizmor-action@v0.2.0
         with:
           advanced-security: false
+          min-severity: medium

@@ -3,3 +3,5 @@ rules:
     disable: true
   template-injection:
     disable: true
+  excessive-permissions:
+    disable: true

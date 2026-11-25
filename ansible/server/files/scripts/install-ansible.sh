@@ -27,3 +27,12 @@ then
   pacman -Syu --noconfirm --needed python python-pipx git curl
   command -v ansible &>/dev/null || pipx install --include-deps "ansible-core==${ANSIBLE_CORE_VERSION}"
 fi
+
+# systemd-started containers do not inherit the pipx PATH
+if [[ -x "$HOME/.local/bin/ansible" ]]
+then
+  for bin in ansible ansible-playbook ansible-galaxy ansible-config ansible-doc
+  do
+    ln -sf "$HOME/.local/bin/${bin}" "/usr/local/bin/${bin}"
+  done
+fi

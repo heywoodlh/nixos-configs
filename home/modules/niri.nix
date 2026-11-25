@@ -187,7 +187,7 @@ in {
                   format = "{:%A %-d %B}";
                   center_text = true;
                 });
-              time = lockWidget "clock" 960.0 222.0 300.0 150.0 (lockText
+              time = lockWidget "clock" 960.0 222.0 480.0 150.0 (lockText
                 // {
                   format = "{:%-I:%M}";
                   center_text = true;

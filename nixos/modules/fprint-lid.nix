@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  nixpkgs-pam-lid-fix,
   ...
 }: let
   cfg = config.services.fprintd.lid;
@@ -13,23 +14,10 @@
     true
   '';
 in {
-  options.services.fprintd.lid = {
-    authSkipLidClose = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Skip fingerprint authentication while the laptop lid is closed.
-      '';
-    };
-    path = lib.mkOption {
-      type = lib.types.str;
-      default = "/proc/acpi/button/lid/LID/state";
-      example = "/proc/acpi/button/lid/LID/state";
-      description = ''
-        Path to the lid state file.
-      '';
-    };
-  };
+  imports = [
+    (nixpkgs-pam-lid-fix + "/nixos/modules/services/security/fprintd.nix")
+  ];
+  disabledModules = ["services/security/fprintd.nix"];
 
   config = lib.mkIf cfg.authSkipLidClose {
     security.pam.services.sudo.rules.auth.fprintd-lid = {

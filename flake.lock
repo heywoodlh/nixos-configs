@@ -1503,6 +1503,22 @@
         "url": "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1"
       }
     },
+    "nixpkgs-pam-lid-fix": {
+      "locked": {
+        "lastModified": 1795640030,
+        "narHash": "sha256-C51KXwH5hoHi0isIvc03/hfHfIjYlyYxCgbJzkG4cMA=",
+        "owner": "heywoodlh",
+        "repo": "nixpkgs",
+        "rev": "508b57b1c29055b6d9a7492ab5a68b9a143b4cd0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "heywoodlh",
+        "ref": "lid-close-fprint-disable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-pds": {
       "locked": {
         "lastModified": 1791734076,
@@ -1819,6 +1835,7 @@
           "nixpkgs"
         ],
         "nixpkgs-nvidia": "nixpkgs-nvidia",
+        "nixpkgs-pam-lid-fix": "nixpkgs-pam-lid-fix",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixtop-source": "nixtop-source",
         "noctalia": "noctalia",

@@ -62,6 +62,8 @@ in {
           helix.enable = false;
           # Don't configure aerc (using its own catppuccin-macchiato styleset)
           aerc.enable = false;
+          # Don't configure opencode (using its built-in catppuccin-macchiato theme)
+          opencode.enable = false;
         };
       }
     ];

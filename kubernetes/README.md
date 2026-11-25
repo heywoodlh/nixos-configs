@@ -27,10 +27,12 @@ kubectl create ns argo
 nix build .#argo && kubectl apply -f ./result
 kubectl apply -f ./kubectl/argo-nix-configmap.yaml # delete the argocd-server pod after applying
 
-# ArgoCD apps
+# ArgoCD apps (render.sh populates manifests/; CI publishes it to the gitops branch)
+./render.sh
 kubectl apply -f manifests/apps.yaml
 
-# Intel GPU device plugin (ArgoCD apps not managed by CI/CD)
+# Intel GPU device plugin (applied manually, not managed by ArgoCD)
+./render.sh intel-device-plugin
 kubectl apply -f manifests/intel-device-plugin.yaml
 ```
 

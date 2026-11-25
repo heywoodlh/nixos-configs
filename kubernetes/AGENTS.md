@@ -2,7 +2,8 @@
 
 - `flake.nix`: stores variables for the deployments.
 - `templates`: stores templated Kubernetes manifests.
-- `manifests`: stores rendered Kubernetes manifests.
+- `manifests`: rendered output, gitignored and published to the `gitops`
+  branch by CI. Never commit this directory.
   - `manifests/apps.yaml`: full list of apps that get defined in ArgoCD.
 - `render.sh`: helper script to render manifests. Apps that will get codified
   in ArgoCD should be added to the list of apps in `render.sh`.
@@ -16,8 +17,9 @@
   Every `mkKubeDrv` argument named like a placeholder in the template is
   substituted into the rendered manifest (this is `pkgs.substituteAll`, so an
   argument named `namespace` fills `@namespace@`).
-- Rendered output lands in `manifests/<app>.yaml`; that directory is what the
-  cluster consumes. Never hand-edit `manifests/` — edit the template and
+- Rendered output lands in `manifests/<app>.yaml`. That directory is generated
+  and gitignored on `main`; CI publishes it to the `gitops` branch, which is
+  what ArgoCD consumes. Never hand-edit `manifests/` — edit the template and
   re-render.
 - Images must be pinned to explicit immutable tags (never `latest`). Verify
   the tag exists in the registry manifest (and its architecture matches the
@@ -30,9 +32,9 @@
 - ArgoCD runs in the `argo` namespace and manages every app listed in
   `render.sh`'s `applications` array. For each app it generates an
   `Application` in `manifests/apps.yaml` pointing at this repository
-  (tangled.org mirror) with `path: kubernetes/manifests`, one rendered file
-  per app, and `syncPolicy.automated` with `prune: true` and
-  `selfHeal: true`.
+  (tangled.org mirror) with `targetRevision: gitops`,
+  `path: kubernetes/manifests`, one rendered file per app, and
+  `syncPolicy.automated` with `prune: true` and `selfHeal: true`.
 - This means a merged PR is the deployment mechanism: do not `kubectl apply`
   or patch production workloads imperatively. GitOps is the only path; the
   rendered manifest is authoritative.
@@ -41,9 +43,11 @@
   app manifest and `manifests/apps.yaml` are regenerated.
 - Apps that are not ArgoCD-managed (or single-app updates) render with
   `./render.sh <app-name>`.
-- After rendering, inspect the diff: restore any regenerated files unrelated
-  to your change before committing (the manifest tree is the deployment
-  input, so unrelated churn is not acceptable).
+- After rendering, inspect local output. Generated manifests are not committed
+  to `main`; never add `kubernetes/manifests/` to a commit.
+- `kubernetes-cd.yaml` renders every app, force-pushes the result to the
+  `gitops` branch, then applies `manifests/apps.yaml` to the cluster. The
+  `gitops` branch is mirrored to Tangled by `sync-tangled.yml`.
 
 ## Secrets
 

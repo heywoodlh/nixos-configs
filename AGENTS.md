@@ -31,7 +31,9 @@ Comments should be limited to one line. If multi-line comments are required, sho
   - `home/linux`: more things applied to Linux.
 - `pkgs`: packages that used to live in nested flakes. `pkgs/default.nix`
   assembles the `myPkgs` package set consumed by modules.
-- `kubernetes`: Kubernetes deployment manifests. See `kubernetes/AGENTS.md`.
+- `kubernetes`: Kubernetes templates and deployment variables. Rendered
+  manifests live on the `gitops` branch, not on `main`. See
+  `kubernetes/AGENTS.md`.
 
 ## `flake.nix` policy
 
@@ -114,8 +116,7 @@ Everything is wired in the root `flake.nix`:
 
 ## Checks
 
-- `lint.yml` runs Alejandra, statix, deadnix, shellcheck, actionlint, and
-  yamllint.
+- `lint.yml` runs Alejandra, deadnix, shellcheck, actionlint, and yamllint.
 - `security.yml` runs gitleaks and zizmor.
 - The same fast checks run in lefthook before each local commit.
 

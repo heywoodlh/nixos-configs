@@ -139,6 +139,7 @@ spec:
             memory: 256Mi
       - name: forwarder
         image: "@forwarder_image@"
+        command: ["caddy"]
         args: ["run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
         volumeMounts:
         - name: forwards

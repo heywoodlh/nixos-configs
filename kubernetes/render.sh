@@ -81,7 +81,7 @@ then
     applications=("${1}")
     gen_list=false
 else
-    echo "" > ${root_dir}/manifests/apps.yaml
+    echo "" > "${root_dir}/manifests/apps.yaml"
 fi
 
 for app in "${applications[@]}"
@@ -103,7 +103,7 @@ do
 
     if [[ "${gen_list}" == true ]]
     then
-cat >> ${root_dir}/manifests/apps.yaml << EOL || error="true"
+cat >> "${root_dir}/manifests/apps.yaml" << EOL || error="true"
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -116,7 +116,7 @@ spec:
     namespace: ${destination_namespace}
   source:
     repoURL: https://knot1.tangled.sh/did:plc:ycnss4fntzi3rjuueb7loq3x/nixos-configs
-    targetRevision: HEAD
+    targetRevision: gitops
     path: kubernetes/manifests
     directory:
       include: "${app}.yaml"
@@ -125,13 +125,21 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
 EOL
     fi
-    # Halt and restore if failure encountered
+    # Halt if failure encountered
     if [[ "${error}" == "true" ]]
     then
-      printf "Error processing app \"%s\", halting execution and restoring %s/manifests" "${app}" "${root_dir}"
-      git restore "${root_dir}/manifests"
+      printf "Error processing app \"%s\", halting execution\n" "${app}"
+      rm -f "${root_dir}/manifests/${app}.yaml"
       exit 1
     fi
 done

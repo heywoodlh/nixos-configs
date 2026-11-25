@@ -5,11 +5,6 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixpkgs-old.url = "github:NixOS/nixpkgs/nixos-24.05"; # For deprecated substituteAll function
     flake-utils.url = "github:numtide/flake-utils";
-    fish-flake = {
-      url = ../fish;
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     crowdsec-helm = {
       url = "github:crowdsecurity/helm-charts/crowdsec-0.24.2";
       flake = false;
@@ -32,19 +27,6 @@
         flake-utils.follows = "nixhelm/flake-utils";
         systems.follows = "nixhelm/flake-utils/systems";
       };
-    };
-    tailscale = {
-      url = "github:tailscale/tailscale";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.systems.follows = "flake-utils/systems";
-    };
-    truecharts-helm = {
-      url = "github:truecharts/charts";
-      flake = false;
-    };
-    coredns = {
-      url = "github:coredns/helm";
-      flake = false;
     };
     wazuh = {
       url = "github:wazuh/wazuh-kubernetes/v4.9.0";
@@ -89,7 +71,6 @@
     krew2nix,
     kasmweb,
     harbor-helm,
-    fish-flake,
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -129,15 +110,14 @@
         echo export TS_CLIENT_ID="$TS_CLIENT_ID"
         echo export TS_SECRET="$TS_SECRET"
       '';
-      op-wrapper = fish-flake.packages.${system}.op-wrapper;
       talos-wrapper = pkgs.writeShellScriptBin "talosctl" ''
         mkdir -p ~/tmp/talos
         item="op://kubernetes/h6d3bdi7yx2kvrk64u2lolva74"
 
-        [[ -e ~/tmp/talos/controlplane.yaml ]] || ${op-wrapper}/bin/op read "$item/controlplane.yaml" > ~/tmp/talos/controlplane.yaml
-        [[ -e ~/tmp/talos/talosconfig ]] || ${op-wrapper}/bin/op read "$item/talosconfig" > ~/tmp/talos/talosconfig
-        [[ -e ~/tmp/talos/worker.yaml ]] || ${op-wrapper}/bin/op read "$item/worker.yaml" > ~/tmp/talos/worker.yaml
-        [[ -e ~/tmp/talos/storage.yaml ]] || ${op-wrapper}/bin/op read "$item/storage.yaml" > ~/tmp/talos/storage.yaml
+        [[ -e ~/tmp/talos/controlplane.yaml ]] || ${pkgs._1password-cli}/bin/op read "$item/controlplane.yaml" > ~/tmp/talos/controlplane.yaml
+        [[ -e ~/tmp/talos/talosconfig ]] || ${pkgs._1password-cli}/bin/op read "$item/talosconfig" > ~/tmp/talos/talosconfig
+        [[ -e ~/tmp/talos/worker.yaml ]] || ${pkgs._1password-cli}/bin/op read "$item/worker.yaml" > ~/tmp/talos/worker.yaml
+        [[ -e ~/tmp/talos/storage.yaml ]] || ${pkgs._1password-cli}/bin/op read "$item/storage.yaml" > ~/tmp/talos/storage.yaml
 
         ${pkgs.talosctl}/bin/talosctl --talosconfig ~/tmp/talos/talosconfig $@
       '';

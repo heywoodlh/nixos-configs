@@ -2,14 +2,14 @@ name: sync-main-to-tangled
 
 on:
   push:
-    branches: [main]
+    branches: [main, gitops]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: sync-main-to-tangled
+  group: sync-${{ github.ref_name }}-to-tangled
   cancel-in-progress: false
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       - name: Trust Tangled host key
         run: ssh-keyscan tangled.org >> ~/.ssh/known_hosts
 
-      - name: Push main to Tangled
+      - name: Push branch to Tangled
         run: |
           git remote add tangled git@tangled.org:heywoodlh.io/nixos-configs
-          git push tangled HEAD:refs/heads/main
+          git push --force tangled "HEAD:refs/heads/${GITHUB_REF_NAME}"

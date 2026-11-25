@@ -957,120 +957,6 @@ in {
     light = "none";
   };
 
-  heywoodlh.home.llm.opencode.extraConf.provider = {
-    lumo = {
-      npm = "@ai-sdk/openai-compatible";
-      name = "Lumo";
-      options = {
-        baseURL = "http://lumo.barn-banana.ts.net/v1";
-        apiKey = "{file:${lumoApiKey}}";
-      };
-      models = {
-        lumo = {
-          name = "lumo";
-          tool_call = false;
-          limit = {
-            context = 32768;
-            output = 8192;
-          };
-        };
-        lumo-lite = {
-          name = "lumo-lite";
-          tool_call = false;
-          limit = {
-            context = 32768;
-            output = 8192;
-          };
-        };
-        lumo-max = {
-          name = "lumo-max";
-          tool_call = false;
-          reasoning = true;
-          limit = {
-            context = 32768;
-            output = 8192;
-          };
-        };
-      };
-    };
-  } // optionalAttrs config.heywoodlh.home.llm.enable {
-    lmstudio-remote = {
-      npm = "@ai-sdk/openai-compatible";
-      name = "lmstudio-remote";
-      options.baseURL = "http://llm.barn-banana.ts.net/v1";
-      models."google/gemma-4-e4b" = {
-        name = "google/gemma-4-e4b";
-        reasoning = true;
-        tool_call = true;
-        limit = { context = 32768; output = 8192; };
-      };
-    };
-  } // {
-    # juabsd's Headscale host serves several OpenAI-compatible endpoints under
-    # different paths on port 8017. opencode only reads baseURL from the provider
-    # options, so each model carries its own URL via provider.api; leaving the
-    # provider-level baseURL unset is what makes that per-model URL take effect.
-    "juabsd-ollama" = {
-      npm = "@ai-sdk/openai-compatible";
-      name = "juabsd-ollama";
-      options.apiKey = "{file:${juabsdOllamaApiKey}}";
-      models = {
-        "inkling-2-mini" = {
-          name = "inkling-2-mini";
-          id = "inkling-2-mini:26b-a5b-nvfp4";
-          provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
-          headers.Host = "100.64.0.7";
-          tool_call = true;
-          limit = { context = 32768; output = 8192; };
-        };
-        "gpt-oss-120b" = {
-          name = "gpt-oss-120b";
-          id = "hermes-gpt-oss-120b-64k:latest";
-          provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
-          headers.Host = "100.64.0.7";
-          tool_call = true;
-          limit = { context = 65536; output = 8192; };
-        };
-        "qwen3.5" = {
-          name = "qwen3.5";
-          id = "qwen3.5:9b";
-          provider.api = "http://juabsd.barn-banana.ts.net:8017/qwen35/v1";
-          headers.Host = "100.64.0.7";
-          tool_call = true;
-          limit = { context = 32768; output = 8192; };
-        };
-        "qwen3-6-vision" = {
-          name = "qwen3-6-vision";
-          id = "Qwen/Qwen3.6-35B-A3B";
-          provider.api = "http://juabsd.barn-banana.ts.net:8017/vision/v1";
-          headers.Host = "100.64.0.7";
-          attachment = true;
-          modalities = {
-            input = [ "text" "image" ];
-            output = [ "text" ];
-          };
-          tool_call = true;
-          limit = { context = 32768; output = 8192; };
-        };
-      };
-    };
-    "juabsd-claris" = {
-      npm = "@ai-sdk/openai-compatible";
-      name = "juabsd-claris";
-      options = {
-        baseURL = "http://juabsd.barn-banana.ts.net:49820/v1";
-        apiKey = "{file:${juabsdClarisApiKey}}";
-      };
-      models."qwen-3.6-text-only" = {
-        name = "qwen-3.6-text-only";
-        id = "Qwen/Qwen3.6-35B-A3B";
-        headers.Host = "100.64.0.1";
-        tool_call = true;
-        limit = { context = 32768; output = 8192; };
-      };
-    };
-  };
-
   programs.iamb = {
     enable = true;
     package = edgePkgs.iamb;
@@ -1137,6 +1023,119 @@ in {
     search-tui.enable = true;
     llm = {
       enable = true;
+      opencode.extraConf.provider = {
+        lumo = {
+          npm = "@ai-sdk/openai-compatible";
+          name = "Lumo";
+          options = {
+            baseURL = "http://lumo.barn-banana.ts.net/v1";
+            apiKey = "{file:${lumoApiKey}}";
+          };
+          models = {
+            lumo = {
+              name = "lumo";
+              tool_call = false;
+              limit = {
+                context = 32768;
+                output = 8192;
+              };
+            };
+            lumo-lite = {
+              name = "lumo-lite";
+              tool_call = false;
+              limit = {
+                context = 32768;
+                output = 8192;
+              };
+            };
+            lumo-max = {
+              name = "lumo-max";
+              tool_call = false;
+              reasoning = true;
+              limit = {
+                context = 32768;
+                output = 8192;
+              };
+            };
+          };
+        };
+      } // optionalAttrs config.heywoodlh.home.llm.enable {
+        lmstudio-remote = {
+          npm = "@ai-sdk/openai-compatible";
+          name = "lmstudio-remote";
+          options.baseURL = "http://llm.barn-banana.ts.net/v1";
+          models."google/gemma-4-e4b" = {
+            name = "google/gemma-4-e4b";
+            reasoning = true;
+            tool_call = true;
+            limit = { context = 32768; output = 8192; };
+          };
+        };
+      } // {
+        # juabsd's Headscale host serves several OpenAI-compatible endpoints under
+        # different paths on port 8017. opencode only reads baseURL from the provider
+        # options, so each model carries its own URL via provider.api; leaving the
+        # provider-level baseURL unset is what makes that per-model URL take effect.
+        "juabsd-ollama" = {
+          npm = "@ai-sdk/openai-compatible";
+          name = "juabsd-ollama";
+          options.apiKey = "{file:${juabsdOllamaApiKey}}";
+          models = {
+            "inkling-2-mini" = {
+              name = "inkling-2-mini";
+              id = "inkling-2-mini:26b-a5b-nvfp4";
+              provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
+              headers.Host = "100.64.0.7";
+              tool_call = true;
+              limit = { context = 32768; output = 8192; };
+            };
+            "gpt-oss-120b" = {
+              name = "gpt-oss-120b";
+              id = "hermes-gpt-oss-120b-64k:latest";
+              provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
+              headers.Host = "100.64.0.7";
+              tool_call = true;
+              limit = { context = 65536; output = 8192; };
+            };
+            "qwen3.5" = {
+              name = "qwen3.5";
+              id = "qwen3.5:9b";
+              provider.api = "http://juabsd.barn-banana.ts.net:8017/qwen35/v1";
+              headers.Host = "100.64.0.7";
+              tool_call = true;
+              limit = { context = 32768; output = 8192; };
+            };
+            "qwen3-6-vision" = {
+              name = "qwen3-6-vision";
+              id = "Qwen/Qwen3.6-35B-A3B";
+              provider.api = "http://juabsd.barn-banana.ts.net:8017/vision/v1";
+              headers.Host = "100.64.0.7";
+              attachment = true;
+              modalities = {
+                input = [ "text" "image" ];
+                output = [ "text" ];
+              };
+              tool_call = true;
+              limit = { context = 32768; output = 8192; };
+            };
+          };
+        };
+        "juabsd-claris" = {
+          npm = "@ai-sdk/openai-compatible";
+          name = "juabsd-claris";
+          options = {
+            baseURL = "http://juabsd.barn-banana.ts.net:49820/v1";
+            apiKey = "{file:${juabsdClarisApiKey}}";
+          };
+          models."qwen-3.6-text-only" = {
+            name = "qwen-3.6-text-only";
+            id = "Qwen/Qwen3.6-35B-A3B";
+            headers.Host = "100.64.0.1";
+            tool_call = true;
+            limit = { context = 32768; output = 8192; };
+          };
+        };
+      };
       pi.package = edgePkgs.pi-coding-agent;
       pi.extraConf = {
         homelab = {

@@ -81,6 +81,8 @@ then
     applications=("${1}")
     gen_list=false
 else
+    rm -rf "${root_dir}/manifests"
+    mkdir -p "${root_dir}/manifests"
     echo "" > "${root_dir}/manifests/apps.yaml"
 fi
 

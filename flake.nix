@@ -527,6 +527,7 @@ rec {
       ./nixos/modules/kde.nix
       ./nixos/modules/tor.nix
       ./nixos/modules/portmaster.nix
+      ./nixos/modules/lancache-dns.nix
       ./nixos/modules/tether.nix
       ./nixos/modules/libvirtd.nix
       ./nixos/modules/tv.nix
@@ -1202,6 +1203,7 @@ rec {
             ./nixos/hosts/steam-deck.nix
           ];
           heywoodlh.nixos.steam-deck.enable = true;
+          heywoodlh.nixos.lancacheDns.enable = true;
           hardware.printers.ensurePrinters = lib.mkForce [];
         };
 
@@ -1273,12 +1275,14 @@ rec {
           imports = [
             ./nixos/hosts/gaming.nix
           ];
+          heywoodlh.nixos.lancacheDns.enable = true;
         };
 
         nixos-gaming-sarah =  nixosConfig "workstation" "nixos-gaming-sarah" {
           imports = [
             ./nixos/hosts/gaming-sarah.nix
           ];
+          heywoodlh.nixos.lancacheDns.enable = true;
         };
 
         nixos-blade = nixosConfig "laptop" "nixos-blade" {
@@ -1295,6 +1299,7 @@ rec {
           heywoodlh.nixos = {
             nvidia-patch = true;
             gaming.enable = true;
+            lancacheDns.enable = true;
             cachyos-kernel.kernel = "linuxPackages-cachyos-bore-zen4";
           };
 

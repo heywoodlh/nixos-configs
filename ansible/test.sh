@@ -26,8 +26,8 @@ then
   fi
 fi
 
-echo "Operating systems that will be tested: ${operating_systems[@]}"
-echo "Targets that will be tested: ${targets[@]}"
+echo "Operating systems that will be tested: ${operating_systems[*]}"
+echo "Targets that will be tested: ${targets[*]}"
 for os in "${operating_systems[@]}"
 do
   echo "Testing: ${os}"

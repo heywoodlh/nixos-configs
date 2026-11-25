@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   starship_config = pkgs.writeText "starship.toml" ''
     [character]
     success_symbol = '[❯](bold white)'

@@ -75,7 +75,7 @@ in {
   boot.kernelModules = ["kvm-intel"];
   # PSR1 only: enable_psr=0 keeps the eDP link clocked, suspected 5GHz wifi interference
   boot.kernelParams = ["pcie_aspm.policy=powersupersave" "i915.enable_psr=1"];
-  hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];
+  hardware.graphics.extraPackages = [pkgs.intel-media-driver];
   boot.extraModulePackages = [];
 
   networking.useDHCP = lib.mkDefault true;

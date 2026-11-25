@@ -1,9 +1,11 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.types;
-
-let
+with lib.types; let
   cfg = config.heywoodlh.luks;
 
   # Fixed filename written to the root of the `keyfile` partition. Not
@@ -123,7 +125,7 @@ in {
       type = bool;
     };
     keyfile = mkOption {
-      default = { };
+      default = {};
       description = ''
         Automatic internal-keyfile decryption. See
         `heywoodlh.luks.keyfile.enable` for the full explanation and setup
@@ -154,12 +156,14 @@ in {
           # slots.
           keyFile = mkIf cfg.keyfile.enable "/${keyFileName}:UUID=${cfg.keyfile.uuid}";
           keyFileTimeout = mkIf cfg.keyfile.enable cfg.keyfile.timeout;
-          crypttabExtraOpts = (optionals cfg.fido [
-            "fido2-device=auto"
-            "token-timeout=30"
-          ]) ++ (optionals cfg.tpm2 [
-            "tpm2-device=auto"
-          ]);
+          crypttabExtraOpts =
+            (optionals cfg.fido [
+              "fido2-device=auto"
+              "token-timeout=30"
+            ])
+            ++ (optionals cfg.tpm2 [
+              "tpm2-device=auto"
+            ]);
         };
       };
     };
@@ -170,7 +174,7 @@ in {
     # `keyfile.enable`'s doc above for the one-time manual setup this
     # depends on.
     system.activationScripts.luksKeyfileEnroll = mkIf cfg.keyfile.enable (
-      lib.stringAfter [ "users" ] ''
+      lib.stringAfter ["users"] ''
         set -euo pipefail
 
         luksDevice="/dev/disk/by-uuid/${cfg.uuid}"

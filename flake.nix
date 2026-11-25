@@ -601,10 +601,12 @@
       pkgs = mkPkgs nixpkgs system;
       myPkgs = mkMyPkgs system;
       eval = pkgs.lib.evalModules {
-        specialArgs = mergedInputs // {
-          inherit pkgs myPkgs;
-          inputs = mergedInputs;
-        };
+        specialArgs =
+          mergedInputs
+          // {
+            inherit pkgs myPkgs;
+            inputs = mergedInputs;
+          };
         modules = [
           darwinModule
           {config._module.check = false;}

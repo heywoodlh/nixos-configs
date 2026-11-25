@@ -1,8 +1,11 @@
-{ pkgs, config, lib, vidhanix, ... }:
-
-with lib;
-
-let
+{
+  pkgs,
+  config,
+  lib,
+  vidhanix,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.nixos.gaming;
   system = pkgs.stdenv.hostPlatform.system;
   fexFetcher = pkgs.writeShellScriptBin "fex-fetch.sh" ''
@@ -98,75 +101,77 @@ let
   # decky-loader patches for NixOS compatibility:
   # helpers.py: get_system_pythonpaths() calls bare "python3" with env={}, not found on NixOS
   decky-loader-patched = pkgs.jovianPackages.decky-loader.overrideAttrs (old: {
-    postPatch = (old.postPatch or "") + ''
-      substituteInPlace backend/decky_loader/helpers.py \
-        --replace-fail \
-          '"python3" if is_linux_or_mac else "python"' \
-          '"${pkgs.python3}/bin/python3" if is_linux_or_mac else "python"'
-    '';
+    postPatch =
+      (old.postPatch or "")
+      + ''
+        substituteInPlace backend/decky_loader/helpers.py \
+          --replace-fail \
+            '"python3" if is_linux_or_mac else "python"' \
+            '"${pkgs.python3}/bin/python3" if is_linux_or_mac else "python"'
+      '';
   });
   soulFrameAutoFill = pkgs.writeShellScriptBin "soulframe-autofill.sh" ''
-      PASSFILE="$HOME/.local/share/soulframe.txt"
-      POSFILE="$HOME/.local/share/soulframe-pos.txt"
+    PASSFILE="$HOME/.local/share/soulframe.txt"
+    POSFILE="$HOME/.local/share/soulframe-pos.txt"
 
-      if [[ "$1" == "--setup" ]]; then
-        echo "Find the pixel coordinates of the SoulFrame password field."
-        echo "Tip: run 'spectacle -r' and hover over the field — it shows live coordinates."
-        read -rp "X: " click_x
-        read -rp "Y: " click_y
-        echo "$click_x $click_y" > "$POSFILE"
-        echo "Saved password field position: $click_x $click_y"
-        exit 0
-      fi
+    if [[ "$1" == "--setup" ]]; then
+      echo "Find the pixel coordinates of the SoulFrame password field."
+      echo "Tip: run 'spectacle -r' and hover over the field — it shows live coordinates."
+      read -rp "X: " click_x
+      read -rp "Y: " click_y
+      echo "$click_x $click_y" > "$POSFILE"
+      echo "Saved password field position: $click_x $click_y"
+      exit 0
+    fi
 
-      if [[ ! -e "$PASSFILE" ]]; then
-        echo "$PASSFILE does not exist. Exiting."
-        exit 1
-      fi
-      if [[ ! -e "$POSFILE" ]]; then
-        echo "No position saved. Run: soulframe-autofill.sh --setup"
-        exit 1
-      fi
+    if [[ ! -e "$PASSFILE" ]]; then
+      echo "$PASSFILE does not exist. Exiting."
+      exit 1
+    fi
+    if [[ ! -e "$POSFILE" ]]; then
+      echo "No position saved. Run: soulframe-autofill.sh --setup"
+      exit 1
+    fi
 
-      SF_PASS="$(cat $PASSFILE)"
-      click_x=$(awk '{print $1}' "$POSFILE")
-      click_y=$(awk '{print $2}' "$POSFILE")
+    SF_PASS="$(cat $PASSFILE)"
+    click_x=$(awk '{print $1}' "$POSFILE")
+    click_y=$(awk '{print $2}' "$POSFILE")
 
-      export WAYLAND_DISPLAY=wayland-0
-      TMPIMG=$(mktemp /tmp/sf_check.XXXXXX.png)
-      trap 'rm -f "$TMPIMG"' EXIT
+    export WAYLAND_DISPLAY=wayland-0
+    TMPIMG=$(mktemp /tmp/sf_check.XXXXXX.png)
+    trap 'rm -f "$TMPIMG"' EXIT
 
-      wait_for_login_screen() {
-        while true; do
-          WAYLAND_DISPLAY=wayland-0 ${pkgs.kdePackages.spectacle}/bin/spectacle -b -f -o "$TMPIMG" 2>/dev/null
-          ${pkgs.imagemagick}/bin/magick "$TMPIMG" -gravity SouthEast -crop 35%x35%+0+0 +repage "$TMPIMG" 2>/dev/null
-          if ${pkgs.tesseract}/bin/tesseract "$TMPIMG" stdout 2>/dev/null | grep -qiE "forgot|sign up|signup"; then
-            return 0
-          fi
-          sleep 5
-          echo "$(date) Waiting for login screen..."
-        done
-      }
-
+    wait_for_login_screen() {
       while true; do
-        until pgrep -f "Soulframe.x64.exe" > /dev/null 2>&1; do
-          sleep 2
-          echo "Waiting for SoulFrame to launch..."
-        done
-
-        wait_for_login_screen
-
-        echo "Login screen detected — clicking password field and typing password..."
-        ${pkgs.ydotool}/bin/ydotool mousemove --absolute -x "$click_x" -y "$click_y"
-        ${pkgs.ydotool}/bin/ydotool click 0xC0
-        sleep 0.5
-        ${pkgs.ydotool}/bin/ydotool type --key-delay=50 "$SF_PASS"
-        ${pkgs.ydotool}/bin/ydotool key Return
-
-        echo "Done. Exiting."
-        exit 0
+        WAYLAND_DISPLAY=wayland-0 ${pkgs.kdePackages.spectacle}/bin/spectacle -b -f -o "$TMPIMG" 2>/dev/null
+        ${pkgs.imagemagick}/bin/magick "$TMPIMG" -gravity SouthEast -crop 35%x35%+0+0 +repage "$TMPIMG" 2>/dev/null
+        if ${pkgs.tesseract}/bin/tesseract "$TMPIMG" stdout 2>/dev/null | grep -qiE "forgot|sign up|signup"; then
+          return 0
+        fi
+        sleep 5
+        echo "$(date) Waiting for login screen..."
       done
-    '';
+    }
+
+    while true; do
+      until pgrep -f "Soulframe.x64.exe" > /dev/null 2>&1; do
+        sleep 2
+        echo "Waiting for SoulFrame to launch..."
+      done
+
+      wait_for_login_screen
+
+      echo "Login screen detected — clicking password field and typing password..."
+      ${pkgs.ydotool}/bin/ydotool mousemove --absolute -x "$click_x" -y "$click_y"
+      ${pkgs.ydotool}/bin/ydotool click 0xC0
+      sleep 0.5
+      ${pkgs.ydotool}/bin/ydotool type --key-delay=50 "$SF_PASS"
+      ${pkgs.ydotool}/bin/ydotool key Return
+
+      echo "Done. Exiting."
+      exit 0
+    done
+  '';
 in {
   options.heywoodlh.nixos.gaming = {
     enable = mkOption {
@@ -208,23 +213,25 @@ in {
 
   config = mkIf cfg.enable {
     nixpkgs.overlays = lib.mkAfter [
-      (final: prev: {
-        steam = prev.steam.override { extraArgs = "-dev"; };
+      (_final: prev: {
+        steam = prev.steam.override {extraArgs = "-dev";};
       })
     ];
 
     programs.steam = {
       enable = true;
       # mkDefault so jovian.steam's own package wins on Jovian hosts
-      package = mkDefault (if (system == "aarch64-linux") then
-        vidhanix.packages.${system}.muvm-steam
-      else pkgs.steam);
-      protontricks.enable = (system == "x86_64-linux");
+      package = mkDefault (
+        if (system == "aarch64-linux")
+        then vidhanix.packages.${system}.muvm-steam
+        else pkgs.steam
+      );
+      protontricks.enable = system == "x86_64-linux";
       localNetworkGameTransfers.openFirewall = true;
     };
 
     heywoodlh = mkMerge [
-      { nixos.spotify-soloist.enable = cfg.soloist; }
+      {nixos.spotify-soloist.enable = cfg.soloist;}
       (mkIf cfg.console {
         hyprland = lib.mkForce false;
         server = true;
@@ -268,14 +275,16 @@ in {
       config.default_sched = "scx_lavd";
     };
 
-    environment.sessionVariables = {
-      # Uses the already-loaded ntsync kernel module for Wine sync primitives
-      # instead of esync/fsync; cheaper on the CPU under sync-heavy titles.
-      PROTON_USE_NTSYNC = "1";
-    } // lib.optionalAttrs (system == "x86_64-linux" && config.heywoodlh.nixos.nvidia-patch) {
-      # Required by some titles for DLSS to activate under Proton.
-      PROTON_ENABLE_NVAPI = "1";
-    };
+    environment.sessionVariables =
+      {
+        # Uses the already-loaded ntsync kernel module for Wine sync primitives
+        # instead of esync/fsync; cheaper on the CPU under sync-heavy titles.
+        PROTON_USE_NTSYNC = "1";
+      }
+      // lib.optionalAttrs (system == "x86_64-linux" && config.heywoodlh.nixos.nvidia-patch) {
+        # Required by some titles for DLSS to activate under Proton.
+        PROTON_ENABLE_NVAPI = "1";
+      };
 
     # For performance, try these launch options
     # gamescope --filter nis -W 1920 -H 1080 -r 60 -- %command%
@@ -285,10 +294,10 @@ in {
     };
 
     systemd.services.nvidia_oc = lib.optionalAttrs (pkgs.stdenv.hostPlatform.isx86_64) {
-      enable = (config.networking.hostName == "nixos-gaming");
+      enable = config.networking.hostName == "nixos-gaming";
       description = "NVIDIA Overclocking Service";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
       serviceConfig = {
         # Get max power limit with `nvidia-smi -q | grep 'Max Power Limit'`
         ExecStart = "${pkgs.steam-run}/bin/steam-run ${pkgs.nvidia_oc}/bin/nvidia_oc set --index 0 --power-limit 330000 --freq-offset 300 --mem-offset 1500";
@@ -297,27 +306,31 @@ in {
       };
     };
 
-    environment.systemPackages = with pkgs; [
-      dotnet-sdk # For games needing dotnet
-      protonup-ng
-      mangohud
-      kill-eso-launcher
-      sgdboop
-      wl-clipboard
-      tesseract
-      heroic
-    ] ++ lib.optionals (system == "x86_64-linux") [
-      get-custom-proton
-      umu-launcher
-    ] ++ lib.optionals (system == "aarch64-linux") [
-      fex
-      fuse
-      muvm
-      squashfuse
-      fexFetcher
-    ] ++ lib.optionals (cfg.soulframe) [
-      soulFrameAutoFill
-    ];
+    environment.systemPackages = with pkgs;
+      [
+        dotnet-sdk # For games needing dotnet
+        protonup-ng
+        mangohud
+        kill-eso-launcher
+        sgdboop
+        wl-clipboard
+        tesseract
+        heroic
+      ]
+      ++ lib.optionals (system == "x86_64-linux") [
+        get-custom-proton
+        umu-launcher
+      ]
+      ++ lib.optionals (system == "aarch64-linux") [
+        fex
+        fuse
+        muvm
+        squashfuse
+        fexFetcher
+      ]
+      ++ lib.optionals (cfg.soulframe) [
+        soulFrameAutoFill
+      ];
 
     # FUSE required for FEX (FEX is part of muvm-steam)
     programs.fuse = lib.optionalAttrs (system == "aarch64-linux") {
@@ -345,43 +358,48 @@ in {
       # Recovers CPU throughput on affected microarchitectures at the cost of
       # Spectre/Meltdown-class mitigations; opt-in tradeoff, gated to the
       # dedicated console-like gaming configuration only.
-      kernelParams = lib.mkIf cfg.console [ "mitigations=off" ];
-      kernel.sysctl = {
-        "vm.swappiness" = 150;
-        "vm.vfs_cache_pressure" = 50;
-        "vm.dirty_bytes" = 268435456;
-        "vm.page-cluster" = 0;
-        "vm.dirty_background_bytes" = 67108864;
-        "vm.dirty_writeback_centisecs" = 1500;
-        "kernel.nmi_watchdog" = 0;
-        "kernel.unprivileged_userns_clone" = 1;
-        "kernel.kptr_restrict" = 2;
-        "net.core.netdev_max_backlog" = 4096;
-        "fs.file-max" = 2097152;
-      } // lib.optionalAttrs (system == "x86_64-linux") {
-        # Split-lock detection single-threads the offending process on trap;
-        # several Proton titles hit this constantly and stutter as a result.
-        "kernel.split_lock_mitigate" = 0;
-      } // lib.optionalAttrs (config.heywoodlh.nixos.cachyos-kernel.enable && lib.hasInfix "bore" config.heywoodlh.nixos.cachyos-kernel.kernel) {
-        # Only valid when the selected cachyos kernel package is actually
-        # built with CONFIG_SCHED_BORE (see cachyos-kernel.kernel above).
-        "kernel.sched_bore" = "1";
-      };
+      kernelParams = lib.mkIf cfg.console ["mitigations=off"];
+      kernel.sysctl =
+        {
+          "vm.swappiness" = 150;
+          "vm.vfs_cache_pressure" = 50;
+          "vm.dirty_bytes" = 268435456;
+          "vm.page-cluster" = 0;
+          "vm.dirty_background_bytes" = 67108864;
+          "vm.dirty_writeback_centisecs" = 1500;
+          "kernel.nmi_watchdog" = 0;
+          "kernel.unprivileged_userns_clone" = 1;
+          "kernel.kptr_restrict" = 2;
+          "net.core.netdev_max_backlog" = 4096;
+          "fs.file-max" = 2097152;
+        }
+        // lib.optionalAttrs (system == "x86_64-linux") {
+          # Split-lock detection single-threads the offending process on trap;
+          # several Proton titles hit this constantly and stutter as a result.
+          "kernel.split_lock_mitigate" = 0;
+        }
+        // lib.optionalAttrs (config.heywoodlh.nixos.cachyos-kernel.enable && lib.hasInfix "bore" config.heywoodlh.nixos.cachyos-kernel.kernel) {
+          # Only valid when the selected cachyos kernel package is actually
+          # built with CONFIG_SCHED_BORE (see cachyos-kernel.kernel above).
+          "kernel.sched_bore" = "1";
+        };
       extraModprobeConfig = ''
         blacklist sp5100_tco
       '';
-      kernelModules = [
-        "hid_microsoft" # Xbox One Elite 2 controller driver preferred by Steam
-        "bfq"
-        "ntsync"
-        "uinput"
-      ] ++ lib.optionals (system == "aarch64-linux") [
-        "fuse"
-      ];
+      kernelModules =
+        [
+          "hid_microsoft" # Xbox One Elite 2 controller driver preferred by Steam
+          "bfq"
+          "ntsync"
+          "uinput"
+        ]
+        ++ lib.optionals (system == "aarch64-linux") [
+          "fuse"
+        ];
     };
 
     # Input stuff for automation
-    users.users.${cfg.user}.extraGroups = [ "input" ];
+    users.users.${cfg.user}.extraGroups = ["input"];
 
     services.udev = {
       extraRules = ''
@@ -415,8 +433,8 @@ in {
 
     # Taken from https://github.com/CachyOS/CachyOS-Settings/blob/9c123e743a9b99b4ca1fcacc187ae0f223fcf098/usr/bin/pci-latency
     systemd.services.pci-latency = {
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.pciutils ];
+      wantedBy = ["multi-user.target"];
+      path = [pkgs.pciutils];
       serviceConfig = {
         Type = "oneshot";
         User = "root";
@@ -435,13 +453,13 @@ in {
     };
 
     systemd.services.pci-latency-on-resume = {
-      wantedBy = [ "sleep.target" ];
-      before = [ "sleep.target" ];
+      wantedBy = ["sleep.target"];
+      before = ["sleep.target"];
       serviceConfig.User = "root";
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = "yes";
       unitConfig.StopWhenUnneeded = "yes";
-      path = [ pkgs.coreutils pkgs.systemd ];
+      path = [pkgs.coreutils pkgs.systemd];
       script = "exit 0";
       postStop = ''
         echo "Restarting pci-latency service..."
@@ -465,7 +483,7 @@ in {
       '';
 
       heywoodlh.home = mkMerge [
-        { spotify-soloist.enable = true; }
+        {spotify-soloist.enable = true;}
         (mkIf cfg.console {
           hyprland = lib.mkForce false;
           autostart = [
@@ -480,14 +498,14 @@ in {
       systemd.user.services.ydotoold = {
         Unit = {
           Description = "ydotool daemon";
-          After = [ "graphical-session.target" ];
+          After = ["graphical-session.target"];
         };
         Service = {
           ExecStart = "${pkgs.ydotool}/bin/ydotoold";
           Restart = "always";
         };
         Install = {
-          WantedBy = [ "graphical-session.target" ];
+          WantedBy = ["graphical-session.target"];
         };
       };
     };
@@ -515,9 +533,10 @@ in {
         gawk
         file
       ];
-      extraPythonPackages = pythonPkgs: with pythonPkgs; [
-        click
-      ];
+      extraPythonPackages = pythonPkgs:
+        with pythonPkgs; [
+          click
+        ];
     };
 
     services.pipewire = {

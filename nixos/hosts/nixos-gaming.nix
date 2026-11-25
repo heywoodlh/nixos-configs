@@ -191,8 +191,8 @@ in {
       ];
     };
     home.packages = with pkgs; [
-        #gamma-install
-        ytmdesktop
-      ];
+      #gamma-install
+      ytmdesktop
+    ];
   };
 }

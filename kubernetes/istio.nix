@@ -2,7 +2,6 @@
   pkgs,
   kubelib,
   nixhelm,
-  mkKubeDrv,
 }: let
   base = kubelib.buildHelmChart {
     name = "istio-base";

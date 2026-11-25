@@ -15,9 +15,9 @@
   modsRC = lstToString (map getModRC mods);
   modsPlugins = lib.lists.concatMap getModPlugins mods;
 in
-pkgs.wrapNeovim neovim {
-  vimAlias = true;
-  viAlias = true;
-  neovimRcContent = modsRC;
-  plugins = modsPlugins;
-}
+  pkgs.wrapNeovim neovim {
+    vimAlias = true;
+    viAlias = true;
+    neovimRcContent = modsRC;
+    plugins = modsPlugins;
+  }

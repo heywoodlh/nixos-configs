@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: DeterminateSystems/nix-installer-action@main
         with:
           determinate: true
@@ -52,6 +53,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: ShellCheck
         run: |
           git ls-files -z -- '*.sh' | xargs -0 shellcheck --severity=error
@@ -61,6 +64,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: actionlint
         uses: raven-actions/actionlint@v2
       - name: yamllint

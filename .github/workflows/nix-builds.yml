@@ -43,6 +43,8 @@ jobs:
       darwin: ${{ steps.filter.outputs.darwin == 'true' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -107,6 +109,8 @@ jobs:
               .#nixosConfigurations.nixos-desktop.config.system.build.toplevel
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Login to Tailnet
         if: github.event_name == 'push'
@@ -222,6 +226,8 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Login to Tailnet
         if: github.event_name == 'push'

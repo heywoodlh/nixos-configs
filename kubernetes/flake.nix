@@ -73,7 +73,7 @@
     };
   };
 
-  outputs = inputs @ {
+  outputs = {
     self,
     nixpkgs,
     nixpkgs-old,
@@ -83,9 +83,6 @@
     nixhelm,
     crowdsec-helm,
     envoy-bouncer-helm,
-    tailscale,
-    truecharts-helm,
-    coredns,
     wazuh,
     crossplane,
     elastic-cloud,

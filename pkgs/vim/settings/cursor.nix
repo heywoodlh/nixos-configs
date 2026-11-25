@@ -1,7 +1,4 @@
-{
-  vimPlugins,
-  ...
-}: {
+{vimPlugins, ...}: {
   plugins = with vimPlugins; [vim-visual-multi];
   rc = ''
     " emulate helix keybinds for multi-cursor

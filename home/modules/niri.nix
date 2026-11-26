@@ -189,7 +189,15 @@ in {
 
     home.activation.noctaliaResetLockLayout = lib.hm.dag.entryAfter ["writeBoundary"] ''
       if [ -f "${config.xdg.stateHome}/noctalia/settings.toml" ]; then
-        run ${noctaliaResetLockLayout} "${config.xdg.stateHome}/noctalia/settings.toml" ${if cfg.lockScreen then "keep-lock" else "disable-lock"} ${if cfg.idleScreenOff then "keep-screen-off" else "disable-screen-off"}
+        run ${noctaliaResetLockLayout} "${config.xdg.stateHome}/noctalia/settings.toml" ${
+        if cfg.lockScreen
+        then "keep-lock"
+        else "disable-lock"
+      } ${
+        if cfg.idleScreenOff
+        then "keep-screen-off"
+        else "disable-screen-off"
+      }
       fi
     '';
 
@@ -451,12 +459,19 @@ in {
           keyboard.xkb.options = "caps:super";
           touchpad = {
             tap = {};
+            drag = false;
             natural-scroll = {};
             dwt = {};
           };
         };
         layout = {
-          gaps = 8;
+          gaps = 5;
+          struts = {
+            left = 5;
+            right = 5;
+            top = 5;
+            bottom = 5;
+          };
           center-focused-column = "never";
           preset-column-widths._children = [
             {proportion = 0.33333;}

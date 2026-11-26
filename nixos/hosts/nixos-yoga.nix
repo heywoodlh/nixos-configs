@@ -153,7 +153,7 @@ in {
 
   # Wacom pen reports phantom proximity on this Yoga, moving the pointer to a corner
   services.udev.extraRules = ''
-    ACTION=="add|change", KERNEL=="event[0-9]*", ATTRS{name}=="Wacom HID * Pen stylus", ENV{LIBINPUT_IGNORE_DEVICE}="1"
+    ACTION!="remove", KERNEL=="event[0-9]*", ATTRS{name}=="Wacom HID * Pen*", ENV{LIBINPUT_IGNORE_DEVICE}="1"
   '';
 
   home-manager.users.heywoodlh = {

@@ -30,6 +30,19 @@ in
     networking.networkmanager.settings.main.rc-manager = mkIf cfg.ignoreDhcpDns "unmanaged";
     # Keep the static entry ahead of any stale NetworkManager entry
     networking.resolvconf.extraConfig = mkIf cfg.ignoreDhcpDns "interface_order='static lo lo[0-9]*'";
+    # NM stopped registering, but its old resolvconf key lingers until /run resets
+    systemd.services.resolvconf-drop-networkmanager = mkIf cfg.ignoreDhcpDns {
+      description = "Drop stale NetworkManager DNS entry from resolvconf";
+      wantedBy = ["multi-user.target"];
+      after = ["NetworkManager.service" "resolvconf.service" "network-local-commands.service"];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        ${config.networking.resolvconf.package}/sbin/resolvconf -d NetworkManager || true
+      '';
+    };
     # tailscaled's stub stays the fallback when lancache does not answer
     networking.nameservers = [ cfg.server "100.100.100.100" ];
     networking.search = [ "barn-banana.ts.net" ];

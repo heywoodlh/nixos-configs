@@ -430,7 +430,7 @@ in {
             }
             {
               layer-rule = {
-                match._props.namespace = "^noctalia-bar-.*$";
+                match._props.namespace = "^(noctalia-bar-.*|noctalia-panel-click-shield)$";
                 background-effect.blur = false;
               };
             }

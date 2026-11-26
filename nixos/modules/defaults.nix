@@ -1,18 +1,23 @@
-{ config, pkgs, lib, nixpkgs-stable, myFlakes, nixpkgs-lts, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  nixpkgs-stable,
+  myPkgs,
+  nixpkgs-lts,
+  ...
+}:
 with lib;
-with lib.types;
-
-let
+with lib.types; let
   cfg = config.heywoodlh.defaults;
   system = pkgs.stdenv.hostPlatform.system;
   stable-pkgs = import nixpkgs-stable {
     inherit system;
     config.allowUnfree = true;
   };
-  myHelix = myFlakes.packages.${system}.helix;
-  myTmux = myFlakes.packages.${system}.tmux;
-  myFish = myFlakes.packages.${system}.fish;
+  myHelix = myPkgs.helix;
+  myTmux = myPkgs.tmux;
+  myFish = myPkgs.fish;
 in {
   options.heywoodlh.defaults = {
     quietBoot = mkOption {
@@ -67,335 +72,341 @@ in {
     userDesc = cfg.user.description;
     userUid = cfg.user.uid;
     homeDir = cfg.user.homeDir;
-  in mkIf cfg.enable {
+  in
+    mkIf cfg.enable {
+      networking.hostName = hostname;
 
-    networking.hostName = hostname;
-
-    # Single insecure-package allowlist. This predicate can only be defined
-    # once (functions don't merge across modules), so per-host allowances go
-    # here rather than in individual modules.
-    #   - broadcom-sta: wl wifi module on Intel Macs (heywoodlh.intel-mac)
-    nixpkgs.config.allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
-      "broadcom-sta"
-    ];
-
-    networking.firewall.trustedInterfaces = [
-      "tailscale0"
-    ];
-
-    boot = {
-      tmp.cleanOnBoot = true;
-      supportedFilesystems = [ "ntfs" "exfat" ];
-      loader = {
-        systemd-boot.enable = true;
-        efi.canTouchEfiVariables = true;
-      };
-      # User icon
-      postBootCommands = let
-        mkGdmUserConf = icon: ''
-          [User]
-          Session=
-          XSession=
-          Icon=${icon}
-          SystemAccount=false
-        '';
-      in optionalString (cfg.user.icon != "") "echo -e '${mkGdmUserConf cfg.user.icon}' > /var/lib/AccountsService/users/${username}";
-    } // optionalAttrs (cfg.quietBoot) {
-      kernelParams = [ "quiet" "splash" ];
-      plymouth.enable = true;
-      consoleLogLevel = 0;
-      initrd.verbose = false;
-    };
-
-    # Set your time zone.
-    time.timeZone = "${cfg.timezone}";
-
-    # Networking
-    networking = {
-      networkmanager.enable = cfg.networkmanager;
-    };
-
-    # Disable wait-online service for Network Manager
-    systemd.services.NetworkManager-wait-online.enable = false;
-
-    nix = {
-      extraOptions = ''
-        extra-experimental-features = nix-command flakes pipe-operators
-      '';
-      settings = {
-        auto-optimise-store = true;
-        trusted-users = [
-          "${username}"
+      # Single insecure-package allowlist. This predicate can only be defined
+      # once (functions don't merge across modules), so per-host allowances go
+      # here rather than in individual modules.
+      #   - broadcom-sta: wl wifi module on Intel Macs (heywoodlh.intel-mac)
+      nixpkgs.config.allowInsecurePredicate = pkg:
+        builtins.elem (lib.getName pkg) [
+          "broadcom-sta"
         ];
+
+      networking.firewall.trustedInterfaces = [
+        "tailscale0"
+      ];
+
+      boot =
+        {
+          tmp.cleanOnBoot = true;
+          supportedFilesystems = ["ntfs" "exfat"];
+          loader = {
+            systemd-boot.enable = true;
+            efi.canTouchEfiVariables = true;
+          };
+          # User icon
+          postBootCommands = let
+            mkGdmUserConf = icon: ''
+              [User]
+              Session=
+              XSession=
+              Icon=${icon}
+              SystemAccount=false
+            '';
+          in
+            optionalString (cfg.user.icon != "") "echo -e '${mkGdmUserConf cfg.user.icon}' > /var/lib/AccountsService/users/${username}";
+        }
+        // optionalAttrs (cfg.quietBoot) {
+          kernelParams = ["quiet" "splash"];
+          plymouth.enable = true;
+          consoleLogLevel = 0;
+        };
+
+      # Set your time zone.
+      time.timeZone = "${cfg.timezone}";
+
+      # Networking
+      networking = {
+        networkmanager.enable = cfg.networkmanager;
       };
-    };
 
-    environment.shells = [
-      pkgs.bashInteractive
-    ];
+      # Disable wait-online service for Network Manager
+      systemd.services.NetworkManager-wait-online.enable = false;
 
-    environment.homeBinInPath = true;
-
-    # Ensure every user (not just those with a full PAM/logind session) can
-    # reach their systemd --user instance and session bus. Guarded on the
-    # runtime dir existing so we never point root (or a session-less login)
-    # at a /run/user/<uid> that logind never created.
-    environment.extraInit = ''
-      if [ -d "/run/user/$(id -u)" ]
-      then
-        export XDG_RUNTIME_DIR="/run/user/$(id -u)"
-        export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-      fi
-    '';
-
-    # virtualization
-    virtualisation = {
-      docker.rootless = {
-        package = stable-pkgs.docker;
-        enable = true;
-        setSocketVariable = true;
+      nix = {
+        extraOptions = ''
+          extra-experimental-features = nix-command flakes pipe-operators
+        '';
+        settings = {
+          auto-optimise-store = true;
+          trusted-users = [
+            "${username}"
+          ];
+        };
       };
-    };
 
+      environment.shells = [
+        pkgs.bashInteractive
+      ];
 
-    # Stable, system-wide packages
-    environment.systemPackages = with stable-pkgs; let
-      nixosRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
-        if [[ -d $HOME/opt/nixos-configs ]]
+      environment.homeBinInPath = true;
+
+      # Ensure every user (not just those with a full PAM/logind session) can
+      # reach their systemd --user instance and session bus. Guarded on the
+      # runtime dir existing so we never point root (or a session-less login)
+      # at a /run/user/<uid> that logind never created.
+      environment.extraInit = ''
+        if [ -d "/run/user/$(id -u)" ]
         then
-          target="${homeDir}/opt/nixos-configs"
-        else
-          target="git+https://tangled.org/heywoodlh.io/nixos-configs"
-        fi
-        # Wrapper to use the stable nixos-rebuild
-        sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --accept-flake-config --flake "$target#$(hostname)" ''${@:2}
-      '';
-      myNixosSwitch = pkgs.writeShellScriptBin "nixos-switch" ''
-        ${nixosRebuildWrapper} switch $@
-      '';
-      myNixosBoot = pkgs.writeShellScriptBin "nixos-boot" ''
-        ${nixosRebuildWrapper} boot $@
-      '';
-      myNixosBuild = pkgs.writeShellScriptBin "nixos-build" ''
-        ${nixosRebuildWrapper} build $@
-      '';
-      myNixosSwitchWithFlakes = pkgs.writeShellScriptBin "nixos-switch-with-flakes" ''
-        ${myNixosSwitch}/bin/nixos-switch --override-input myFlakes ${homeDir}/opt/flakes $@
-      '';
-      myNixosListGenerations = pkgs.writeShellScriptBin "nixos-list-generations" ''
-        sudo ${pkgs.nix}/bin/nix-env --list-generations --profile /nix/var/nix/profiles/system
-      '';
-    in [
-      android-tools
-      usbutils
-      gptfdisk
-      myNixosSwitch
-      myNixosSwitchWithFlakes
-      myNixosBoot
-      myNixosBuild
-      myNixosListGenerations
-      myTmux
-      myFish
-      myHelix
-      mosh
-      ntfs3g
-      exfatprogs
-    ];
-
-    # Enable appimage
-    programs.appimage = {
-      enable = true;
-      binfmt = true;
-    };
-
-    # Allow non-free applications to be installed
-    nixpkgs.config.allowUnfree = true;
-
-    i18n.defaultLocale = "en_US.UTF-8";
-
-    # Enable gnupg agent
-    programs.gnupg.agent = {
-      enable = true;
-      pinentryPackage = pkgs.pinentry-curses;
-    };
-
-    programs.nix-index.enable = true;
-    programs.command-not-found.enable = false;
-
-    # Automatically garbage collect
-    nix.gc = {
-      automatic = true;
-      dates = "daily";
-      options = "--delete-older-than 7d";
-    };
-
-    services = {
-      tailscale = {
-        enable = cfg.tailscale;
-        extraSetFlags = [
-          "--accept-routes"
-        ];
-      };
-      gnome.gnome-keyring.enable = cfg.keyring;
-      # iPhone usb support
-      usbmuxd.enable = true;
-      udev.extraRules = ''
-        SUBSYSTEM=="usb", ENV{ID_DEBUG_APPLIANCE}=="android", GROUP="adbusers", MODE="0660"
-      '' + optionalString (cfg.audio) ''
-        KERNEL=="rtc0", GROUP="audio"
-        KERNEL=="hpet", GROUP="audio"
-        DEVPATH=="/devices/virtual/misc/cpu_dma_latency", OWNER="root", GROUP="audio", MODE="0660"
-      '';
-    } // optionalAttrs (cfg.syncthing) {
-      logind.settings.Login.RuntimeDirectorySize = "10G";
-    } // optionalAttrs (cfg.audio) {
-      pulseaudio.enable = false;
-      pipewire = {
-        enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        pulse.enable = true;
-      };
-    };
-
-    # A stalled tailscaled trips its ipnlocal watchdog, and the resulting
-    # ExecStopPost=tailscaled --cleanup takes tailscale0 down with it.
-    systemd.services.tailscaled = mkIf config.services.tailscale.enable {
-      # MemoryMin would be capped to 0 by system.slice; this is self-contained
-      serviceConfig = {
-        MemorySwapMax = 0;
-        ManagedOOMPreference = "avoid";
-        OOMScoreAdjust = -900;
-        CPUWeight = 200;
-        Restart = "always";
-        RestartSec = 5;
-        TimeoutStopSec = 30;
-      };
-      # Never stop retrying, even on a crash loop
-      unitConfig.StartLimitBurst = 0;
-    };
-
-    security = {
-      pki.caCertificateBlacklist = [
-        "Comodo AAA Services root"
-        "emSign ECC Root CA - G3"
-      ];
-      rtkit.enable = cfg.audio;
-      pam.loginLimits = lib.optionals (cfg.audio) [
-        {
-          domain = "@audio";
-          item = "memlock";
-          type = "-";
-          value = "unlimited";
-        }
-        {
-          domain = "@audio";
-          item = "rtprio";
-          type = "-";
-          value = "99";
-        }
-        {
-          domain = "@audio";
-          item = "nofile";
-          type = "soft";
-          value = "99999";
-        }
-        {
-          domain = "@audio";
-          item = "nofile";
-          type = "hard";
-          value = "524288";
-        }
-      ];
-    };
-
-    # Created by programs.adb.enable until it was removed from nixpkgs in
-    # 26.11; still referenced by extraGroups here and in flake.nix.
-    users.groups.adbusers = { };
-
-    users.users.${username} = {
-      isNormalUser = true;
-      description = "${userDesc}";
-      # Keep systemd --user (and /run/user/<uid>) alive without a logind
-      # session. SSH logins don't create one on hosts where sshd runs with
-      # UsePAM no (heywoodlh.sshd.mfa = false), so user services like
-      # syncthing would otherwise be unreachable over SSH.
-      linger = true;
-      extraGroups = [
-        "wheel"
-        "adbusers"
-      ] ++ optionals (cfg.networkmanager) [
-        "networkmanager"
-      ];
-      shell = pkgs.bashInteractive;
-      homeMode = "755";
-    };
-
-    # Home-manager configs
-    home-manager = let
-      base = {
-        home.activation.docker-rootless-context = ''
-          if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
-          then
-            ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/${builtins.toString userUid}/docker.sock" &> /dev/null || true
-            ${pkgs.docker-client}/bin/docker context use rootless
-          fi
-        '';
-        imports = [
-          ../../home/linux.nix
-        ];
-        heywoodlh.home.git.enable = true;
-        nix.settings.trusted-users = [
-          "root"
-          username
-        ];
-      };
-    in {
-      useGlobalPkgs = true;
-      extraSpecialArgs = {
-        inherit myFlakes;
-        inherit nixpkgs-stable;
-        inherit nixpkgs-lts;
-      };
-      backupCommand = "${pkgs.trash-cli}/bin/trash-put";
-      users.${username} = { ... }: base // {
-        heywoodlh.home.syncthing = lib.mkForce cfg.syncthing;
-        home.file.".config/fish/config.fish".text = ''
           export XDG_RUNTIME_DIR="/run/user/$(id -u)"
           export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+        fi
+      '';
+
+      # virtualization
+      virtualisation = {
+        docker.rootless = {
+          package = stable-pkgs.docker;
+          enable = true;
+          setSocketVariable = true;
+        };
+      };
+
+      # Stable, system-wide packages
+      environment.systemPackages = with stable-pkgs; let
+        nixosRebuildWrapper = pkgs.writeShellScript "nixos-rebuild-wrapper" ''
+          if [[ -d $HOME/opt/nixos-configs ]]
+          then
+            target="${homeDir}/opt/nixos-configs"
+          else
+            target="git+https://tangled.org/heywoodlh.io/nixos-configs"
+          fi
+          # Wrapper to use the stable nixos-rebuild
+          sudo ${pkgs.nix}/bin/nix run "github:nixos/nixpkgs/nixpkgs-unstable#nixos-rebuild-ng" -- $1 --accept-flake-config --flake "$target#$(hostname)" ''${@:2}
         '';
+        myNixosSwitch = pkgs.writeShellScriptBin "nixos-switch" ''
+          ${nixosRebuildWrapper} switch $@
+        '';
+        myNixosBoot = pkgs.writeShellScriptBin "nixos-boot" ''
+          ${nixosRebuildWrapper} boot $@
+        '';
+        myNixosBuild = pkgs.writeShellScriptBin "nixos-build" ''
+          ${nixosRebuildWrapper} build $@
+        '';
+        myNixosListGenerations = pkgs.writeShellScriptBin "nixos-list-generations" ''
+          sudo ${pkgs.nix}/bin/nix-env --list-generations --profile /nix/var/nix/profiles/system
+        '';
+      in [
+        android-tools
+        usbutils
+        gptfdisk
+        myNixosSwitch
+        myNixosBoot
+        myNixosBuild
+        myNixosListGenerations
+        myTmux
+        myFish
+        myHelix
+        mosh
+        ntfs3g
+        exfatprogs
+      ];
+
+      # Enable appimage
+      programs.appimage = {
+        enable = true;
+        binfmt = true;
       };
-      users.root = { ... }: base;
-    };
 
-    ## Bluetooth
-    hardware.bluetooth = {
-      enable = cfg.bluetooth;
-      settings = {
-        # Necessary for Airpods
-        General = { ControllerMode = "dual"; } ;
+      # Allow non-free applications to be installed
+      nixpkgs.config.allowUnfree = true;
+
+      i18n.defaultLocale = "en_US.UTF-8";
+
+      # Enable gnupg agent
+      programs.gnupg.agent = {
+        enable = true;
+        pinentryPackage = pkgs.pinentry-curses;
       };
+
+      programs.nix-index.enable = true;
+      programs.command-not-found.enable = false;
+
+      # Automatically garbage collect
+      nix.gc = {
+        automatic = true;
+        dates = "daily";
+        options = "--delete-older-than 7d";
+      };
+
+      services =
+        {
+          tailscale = {
+            enable = cfg.tailscale;
+            extraSetFlags = [
+              "--accept-routes"
+            ];
+          };
+          gnome.gnome-keyring.enable = cfg.keyring;
+          # iPhone usb support
+          usbmuxd.enable = true;
+          udev.extraRules =
+            ''
+              SUBSYSTEM=="usb", ENV{ID_DEBUG_APPLIANCE}=="android", GROUP="adbusers", MODE="0660"
+            ''
+            + optionalString (cfg.audio) ''
+              KERNEL=="rtc0", GROUP="audio"
+              KERNEL=="hpet", GROUP="audio"
+              DEVPATH=="/devices/virtual/misc/cpu_dma_latency", OWNER="root", GROUP="audio", MODE="0660"
+            '';
+        }
+        // optionalAttrs (cfg.syncthing) {
+          logind.settings.Login.RuntimeDirectorySize = "10G";
+        }
+        // optionalAttrs (cfg.audio) {
+          pulseaudio.enable = false;
+          pipewire = {
+            enable = true;
+            alsa.enable = true;
+            alsa.support32Bit = true;
+            pulse.enable = true;
+          };
+        };
+
+      # A stalled tailscaled trips its ipnlocal watchdog, and the resulting
+      # ExecStopPost=tailscaled --cleanup takes tailscale0 down with it.
+      systemd.services.tailscaled = mkIf config.services.tailscale.enable {
+        # MemoryMin would be capped to 0 by system.slice; this is self-contained
+        serviceConfig = {
+          MemorySwapMax = 0;
+          ManagedOOMPreference = "avoid";
+          OOMScoreAdjust = -900;
+          CPUWeight = 200;
+          Restart = "always";
+          RestartSec = 5;
+          TimeoutStopSec = 30;
+        };
+        # Never stop retrying, even on a crash loop
+        unitConfig.StartLimitBurst = 0;
+      };
+
+      security = {
+        pki.caCertificateBlacklist = [
+          "Comodo AAA Services root"
+        ];
+        rtkit.enable = cfg.audio;
+        pam.loginLimits = lib.optionals (cfg.audio) [
+          {
+            domain = "@audio";
+            item = "memlock";
+            type = "-";
+            value = "unlimited";
+          }
+          {
+            domain = "@audio";
+            item = "rtprio";
+            type = "-";
+            value = "99";
+          }
+          {
+            domain = "@audio";
+            item = "nofile";
+            type = "soft";
+            value = "99999";
+          }
+          {
+            domain = "@audio";
+            item = "nofile";
+            type = "hard";
+            value = "524288";
+          }
+        ];
+      };
+
+      # Created by programs.adb.enable until it was removed from nixpkgs in
+      # 26.11; still referenced by extraGroups here and in flake.nix.
+      users.groups.adbusers = {};
+
+      users.users.${username} = {
+        isNormalUser = true;
+        description = "${userDesc}";
+        # Keep systemd --user (and /run/user/<uid>) alive without a logind
+        # session. SSH logins don't create one on hosts where sshd runs with
+        # UsePAM no (heywoodlh.sshd.mfa = false), so user services like
+        # syncthing would otherwise be unreachable over SSH.
+        linger = true;
+        extraGroups =
+          [
+            "wheel"
+            "adbusers"
+          ]
+          ++ optionals (cfg.networkmanager) [
+            "networkmanager"
+          ];
+        shell = pkgs.bashInteractive;
+        homeMode = "755";
+      };
+
+      # Home-manager configs
+      home-manager = let
+        base = {
+          home.activation.docker-rootless-context = ''
+            if ! ${pkgs.docker-client}/bin/docker context ls | grep -iq rootless
+            then
+              ${pkgs.docker-client}/bin/docker context create rootless --docker "host=unix:///run/user/${builtins.toString userUid}/docker.sock" &> /dev/null || true
+              ${pkgs.docker-client}/bin/docker context use rootless
+            fi
+          '';
+          imports = [
+            ../../home/linux.nix
+          ];
+          heywoodlh.home.git.enable = true;
+          nix.settings.trusted-users = [
+            "root"
+            username
+          ];
+        };
+      in {
+        useGlobalPkgs = true;
+        extraSpecialArgs = {
+          inherit myPkgs;
+          inherit nixpkgs-stable;
+          inherit nixpkgs-lts;
+        };
+        backupCommand = "${pkgs.trash-cli}/bin/trash-put";
+        users.${username} = {...}:
+          base
+          // {
+            heywoodlh.home.syncthing = lib.mkForce cfg.syncthing;
+            home.file.".config/fish/config.fish".text = ''
+              export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+              export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+            '';
+          };
+        users.root = {...}: base;
+      };
+
+      ## Bluetooth
+      hardware.bluetooth = {
+        enable = cfg.bluetooth;
+        settings = {
+          # Necessary for Airpods
+          General = {ControllerMode = "dual";};
+        };
+      };
+
+      users.extraGroups.disk.members = ["${username}"];
+      users.extraGroups.video.members = ["${username}"];
+      # render group grants access to /dev/dri/renderD* for VA-API (e.g. hardware
+      # video encoding in hypr-rdp).
+      users.extraGroups.render.members = ["${username}"];
+
+      # Seahorse (Gnome Keyring)
+      programs.seahorse.enable = cfg.keyring;
+
+      # Helix
+      heywoodlh.helix = true;
+
+      # Allow 1Password to use other browsers
+      environment.etc."1password/custom_allowed_browsers".text = lib.mkAfter ''
+        helium
+        librewolf
+      '';
+
+      # NixOS version
+      system.stateVersion = "25.05";
     };
-
-    users.extraGroups.disk.members = [ "${username}" ];
-    users.extraGroups.video.members = [ "${username}" ];
-    # render group grants access to /dev/dri/renderD* for VA-API (e.g. hardware
-    # video encoding in hypr-rdp).
-    users.extraGroups.render.members = [ "${username}" ];
-
-    # Seahorse (Gnome Keyring)
-    programs.seahorse.enable = cfg.keyring;
-
-    # Helix
-    heywoodlh.helix = true;
-
-    # Allow 1Password to use other browsers
-    environment.etc."1password/custom_allowed_browsers".text = lib.mkAfter ''
-      helium
-      librewolf
-    '';
-
-    # NixOS version
-    system.stateVersion = "25.05";
-  };
 }

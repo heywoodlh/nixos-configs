@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Login to Tailnet
         uses: tailscale/github-action@v3
@@ -41,7 +43,5 @@ jobs:
           authToken: '${{ secrets.CACHIX_HEYWOODLH_HELIX }}'
 
       - name: Build Helix
-        working-directory: ./flakes
         run: |
           nix build .#helix --no-write-lock-file --json | jq -r '.[].outputs | to_entries[].value' | cachix push heywoodlh-helix
-          nix build helix#helix --json | jq -r '.[].outputs | to_entries[].value' | cachix push heywoodlh-helix

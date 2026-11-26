@@ -1,0 +1,74 @@
+name: lint
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  nix:
+    name: Nix formatting and lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: true
+      - name: Collect changed Nix files
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git fetch origin "${{ github.base_ref }}"
+            range="origin/${{ github.base_ref }}...HEAD"
+          else
+            range="HEAD~1 HEAD"
+          fi
+          git diff --name-only --diff-filter=ACMR "$range" -- '*.nix' | tee changed-nix.txt
+      - name: Format and lint changed Nix files
+        run: |
+          if [[ ! -s changed-nix.txt ]]; then
+            echo "No Nix files changed"
+            exit 0
+          fi
+          mapfile -t files < changed-nix.txt
+          nix shell nixpkgs#alejandra nixpkgs#deadnix -c bash -c '
+            alejandra --check "$@"
+            deadnix --fail "$@"
+          ' _ "${files[@]}"
+      - name: Parse every Nix file
+        run: |
+          while IFS= read -r -d '' file; do
+            nix-instantiate --parse "$file" > /dev/null
+          done < <(git ls-files -z -- '*.nix')
+
+  shell:
+    name: Shell lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: ShellCheck
+        run: |
+          git ls-files -z -- '*.sh' | xargs -0 shellcheck --severity=error
+
+  workflows:
+    name: Workflow lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: actionlint
+        uses: raven-actions/actionlint@v2
+      - name: yamllint
+        run: |
+          pip install yamllint
+          yamllint -c .yamllint.yml .github

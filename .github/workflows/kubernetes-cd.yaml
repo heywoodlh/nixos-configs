@@ -8,20 +8,24 @@ on:
     branches:
       - main
     paths:
-      - flakes/kube/**
-      - '!flakes/kube/**.md'
+      - kubernetes/**
+      - '!kubernetes/**.md'
       - .github/workflows/kubernetes-cd.yaml
 
 jobs:
   render-manifests:
     name: Check and apply all deployments
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         shell: bash
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Login to Tailnet
         uses: tailscale/github-action@v3
@@ -29,6 +33,13 @@ jobs:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
+
+      - uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.TANGLED_SSH_PRIVATE_KEY }}
+
+      - name: Trust Tangled host key
+        run: ssh-keyscan tangled.org >> ~/.ssh/known_hosts
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
@@ -46,16 +57,23 @@ jobs:
           EOF
 
       - name: Update manifests
-        working-directory: ./flakes
+        working-directory: ./kubernetes
         run: |
-          ./kube/render.sh
+          ./render.sh
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Publish rendered manifests
         if: github.ref == 'refs/heads/main'
-        with:
-          commit_message: "GitHub Action automated Kubernetes update"
-          file_pattern: 'flakes/kube/manifests/*.yaml'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B gitops
+          git add --force kubernetes/manifests
+          git commit -m "chore(kubernetes): render manifests" || true
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/gitops
+          git remote add tangled git@tangled.org:heywoodlh.io/nixos-configs
+          git push --force tangled HEAD:refs/heads/gitops
 
       - name: Install kubectl
         if: github.ref == 'refs/heads/main'
@@ -66,11 +84,11 @@ jobs:
         # op read 'op://Kubernetes/s5dqdxlxnvhvdnq4pbyzg22swa/unprotected-kubeconfig' | base64
       - name: Apply kube manifests
         if: github.ref == 'refs/heads/main'
-        working-directory: ./flakes
+        working-directory: ./kubernetes
         run: |
           install -d -m 700 "$HOME/.kube"
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > "$HOME/.kube/config"
           chmod 600 "$HOME/.kube/config"
-          for file in ./kube/manifests/*.yaml; do
+          for file in ./manifests/*.yaml; do
             kubectl apply -f "$file"
           done

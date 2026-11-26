@@ -1,0 +1,299 @@
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+  ollama_pull = pkgs.writeShellScriptBin "ollama-pull" ''
+    models=("llama3:8b" "llama3.1:8b" "deepseek-coder:6.7b" "mistral:7b" "gemma3:4b" "qwen3:8b")
+    # Pull existing models
+    ${pkgs.ollama}/bin/ollama list | awk '{print $1}' | xargs -I {} ${pkgs.ollama}/bin/ollama pull "{}"
+    for model in "''${models[@]}"
+    do
+      ${pkgs.ollama}/bin/ollama pull "''${model}"
+    done
+  '';
+  fixIntelSymlink = pkgs.writeShellScriptBin "fix-intel-symlink.sh" ''
+    symlink="/dev/dri/by-path/pci-0000:03:00.0-platform-simple-framebuffer.0-card"
+    if [ -L "$symlink" ] && [ ! -e "$symlink" ]
+    then
+      sudo systemctl stop k3s.service
+      echo "Removing broken symlink to GPU"
+      sudo rm "$symlink"
+      sudo systemctl start k3s.service
+    fi
+  '';
+  k3s-health = pkgs.writeShellScriptBin "k3s-health.sh" ''
+    # Script to check if k3s is healthy, reboot after five minutes if not
+    export KUBECONFIG="''${KUBECONFIG:-/etc/rancher/k3s/k3s.yaml}"
+
+    echo "Using KUBECONFIG: $KUBECONFIG"
+
+    MAX_RETRIES=60
+    for (( i=1; i<=MAX_RETRIES; i++ )); do
+        if sudo --preserve-env=KUBECONFIG kubectl get nodes &> /dev/null
+        then
+          echo "Successfully connected to Kubernetes cluster."
+          exit 0
+        fi
+        if [ $i -lt $MAX_RETRIES ]; then
+          echo "Command failed. Retrying in 10 seconds..."
+          sleep 10
+        fi
+    done
+    echo "Failed to connect to cluster after maximum retries (10 minutes reached). Rebooting."
+    sudo shutdown -r now
+  '';
+in {
+  imports = [
+    # Include the results of the hardware scan.
+    ./homelab-hardware.nix
+    ../roles/monitoring/syslog-ng/server.nix
+    ../roles/monitoring/syslog-ng/client.nix
+    ../roles/containers/k3s-server.nix
+    ../roles/monitoring/osquery.nix
+    ../roles/nixos/cache.nix
+    ../roles/home-automation/homebridge.nix
+    ../roles/monitoring/ntfy-signal.nix
+    ../roles/nixos/cache-populator.nix
+    ../roles/media/plex.nix
+    ../roles/media/youtube.nix
+    ../roles/monitoring/iperf.nix
+    ../roles/storage/nfs-media.nix
+    ../roles/remote-access/wol.nix
+  ];
+
+  # Reachable over tailscale0 (a trusted interface); 8080 is taken by nomad's hostPort
+  heywoodlh.nix-llama = {
+    enable = false;
+    host = "0.0.0.0";
+    port = 8090;
+    opencode.enable = false;
+  };
+
+  # Bootloader.
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+  # Enable networking
+  networking.networkmanager.enable = true;
+  networking.hostName = "homelab"; # Define your hostname
+
+  boot.kernelPackages = pkgs.linuxPackages_xanmod_stable;
+
+  # Enable ZFS
+  boot.extraModulePackages = [
+    (pkgs.linuxKernel.packages.linux_xanmod_stable.zfs_unstable.override {
+      enableUnsupportedExperimentalKernel = true;
+    })
+  ];
+  boot.zfs.package = pkgs.zfs_unstable.override {
+    enableUnsupportedExperimentalKernel = true;
+  };
+  boot.supportedFilesystems = ["zfs"];
+  systemd.services.zfs-mount.enable = true;
+  networking.hostId = "fd838b2e"; # Set a unique host ID for ZFS
+
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.problems.handlers.zfs.broken = "warn";
+  # Make sure opengl is enabled
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
+  fileSystems."/media/data-ssd" = {
+    device = "/dev/disk/by-uuid/ad1b8750-51fb-4270-b0c2-739276f30a95";
+    fsType = "ext4";
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /media/data-ssd/harbor 0755 root root -"
+    "d /media/data-ssd/harbor/registry 0750 10000 10000 -"
+    "d /media/data-ssd/harbor/database 0750 999 999 -"
+    "d /media/data-ssd/harbor/redis 0750 999 999 -"
+  ];
+
+  environment.etc."rancher/k3s/registries.yaml".text = ''
+    mirrors:
+      "harbor.barn-banana.ts.net":
+        endpoint:
+          - "http://harbor.barn-banana.ts.net"
+  '';
+
+  # Enable mullvad wireguard
+  networking.wg-quick.interfaces = {
+    mullvad = {
+      address = ["10.73.97.192/32"];
+      privateKeyFile = "/root/wgkey";
+      listenPort = 51820;
+
+      peers = [
+        {
+          publicKey = "sSoow0tFfqSrZIUhFRaGsTvwQsUTe33RA/9PLn93Cno=";
+          allowedIPs = ["10.64.0.1/24"];
+          endpoint = "69.4.234.9:51820";
+          persistentKeepalive = 25;
+        }
+      ];
+    };
+  };
+
+  # Forward port 1080 to tailscale interface to mullvad
+  networking = {
+    nftables.enable = lib.mkForce false;
+    firewall = {
+      enable = true;
+      allowedUDPPorts = [
+        5353 # home-assistant homekit bridge
+        9995
+        8555 # go2rtc udp
+      ];
+      allowedTCPPorts = [
+        80
+        1080
+        443
+        3389
+        5900
+        21063 # home-assistant homekit bridge
+        1984 # go2rtc home-assistant
+        32001 # immich
+        25565 # minecraft bedrock
+        32222 # homebridge eufy security
+      ];
+      extraCommands = "iptables -t nat -A POSTROUTING -d 10.64.0.1 -p tcp -m tcp --dport 1080 -j MASQUERADE";
+    };
+    nat = {
+      enable = true;
+      internalInterfaces = ["mullvad"];
+      externalInterface = "tailscale0";
+      forwardPorts = [
+        {
+          sourcePort = 1080;
+          proto = "tcp";
+          destination = "10.64.0.1:1080";
+        }
+      ];
+    };
+  };
+
+  heywoodlh.defaults.bluetooth = true;
+
+  virtualisation.docker.enable = true;
+  environment.systemPackages = with pkgs; [
+    docker
+    ollama_pull
+    nfdump
+    runc
+    k3s-health
+  ];
+
+  services = {
+    syncthing = {
+      enable = true;
+      user = "heywoodlh";
+      dataDir = "/home/heywoodlh/Sync";
+      configDir = "/home/heywoodlh/.config/syncthing";
+    };
+  };
+  # allow building ARM64 things
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
+
+  services.cron = {
+    enable = true;
+    systemCronJobs = [
+      "0 0 * * *      root    ${ollama_pull}/bin/ollama-pull"
+      "*/5 * * * *    root    ${fixIntelSymlink}/bin/fix-intel-symlink.sh"
+      "*/5 4-6 * * 0  root    ${k3s-health}/bin/k3s-health.sh"
+    ];
+  };
+
+  systemd.timers."k3s-weekly-maintenance" = {
+    wantedBy = ["timers.target"];
+    timerConfig = {
+      OnCalendar = "Sun *-*-* 04:00:00";
+      Unit = "k3s-weekly-maintenance.service";
+      Persistent = true;
+    };
+  };
+
+  systemd.services."k3s-weekly-maintenance" = {
+    description = "Weekly k3s maintenance: stop k3s, clean CNI state, restart k3s";
+    script = ''
+      systemctl stop k3s.service
+      rm -rf /var/lib/cni/networks/cbr0/
+      systemctl start k3s.service
+    '';
+    path = with pkgs; [systemd coreutils];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+  };
+
+  # Resolve too many open files error
+  # https://discourse.nixos.org/t/unable-to-fix-too-many-open-files-error/27094/7
+  # https://askubuntu.com/a/1451118
+  systemd.settings.Manager.DefaultLimitNOFILE = 2048; # defaults to 1024 if unset
+  boot.kernel.sysctl = {
+    "fs.inotify.max_user_instances" = 1024;
+  };
+
+  # Route mullvad through Tailscale
+  services.tailscale.extraSetFlags = lib.mkForce [
+    "--accept-dns"
+    "--stateful-filtering"
+    "--accept-routes=false"
+  ];
+
+  # Hack to enable i915 driver for Intel GPU (for Kubernetes)
+  services.xserver.videoDrivers = [
+    "i915"
+  ];
+
+  # Do not start k3s if media drives fail
+  systemd.services.k3s = let
+    mediaMounts = [
+      "media-data\\x2dssd.mount"
+      "media-home\\x2dmedia-disk1.mount"
+      "media-home\\x2dmedia-disk2.mount"
+      "media-home\\x2dmedia-disk3.mount"
+    ];
+  in {
+    after = mediaMounts;
+    requires = mediaMounts;
+    restartTriggers = [config.environment.etc."rancher/k3s/registries.yaml".source];
+  };
+
+  # Use avahi for home-assistant service discovery
+  services.avahi = {
+    enable = true;
+    settings.reflector.enable-reflector = true;
+    openFirewall = true;
+  };
+
+  # Data_pool including dedicated immich ZFS device/mountpoint
+  # Created with: `sudo zfs create -o canmount=on -o mountpoint=/media/data_pool/immich data_pool/immich`
+  boot.zfs.extraPools = ["data_pool"];
+
+  heywoodlh.backup.server = true;
+  heywoodlh.cloudflared = true;
+  heywoodlh.rayhunter = {
+    enable = false;
+    ntfy = "http://ntfy.barn-banana.ts.net";
+    user = "rayhunter";
+    interface = "enp5s0f0u8";
+    port = 6767;
+  };
+
+  heywoodlh.sshd.mfa = true;
+
+  virtualisation.docker.daemon.settings = {
+    data-root = "/media/data_pool/docker";
+  };
+
+  # NextDNS
+  networking.nameservers = [
+    "45.90.28.89"
+    "45.90.30.89"
+  ];
+}

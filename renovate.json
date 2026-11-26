@@ -7,7 +7,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["flakes/kube\/flake.nix"],
+      "fileMatch": ["kubernetes\/flake.nix"],
       "matchStringsStrategy": "any",
       "matchStrings": [
         "image = \"(?<depName>.*):(?<currentValue>.*)\";",
@@ -18,7 +18,7 @@
     },
     {
       "customType": "regex",
-      "fileMatch": ["flakes/kube\/flake.nix"],
+      "fileMatch": ["kubernetes\/flake.nix"],
       "matchStringsStrategy": "any",
       "matchStrings": [
         "immich = mkKubeDrv \"immich\" rec \\{[\\s\\S]*?version = \"(?<currentValue>[^\"]+)\";",
@@ -43,7 +43,7 @@
     },
     {
       "matchPaths": [
-        "flakes/kube/**"
+        "kubernetes/**"
       ],
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true

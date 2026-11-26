@@ -1,18 +1,20 @@
-{ config, pkgs, lib, myFlakes, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  myPkgs,
+  ...
+}:
 with lib;
-with lib.types;
-
-let
+with lib.types; let
   cfg = config.heywoodlh.console;
-  system = pkgs.stdenv.hostPlatform.system;
   battpop = pkgs.writeShellScriptBin "battpop" ''
     ${pkgs.acpi}/bin/acpi -b | ${pkgs.gnugrep}/bin/grep -Eo [0-9]+%
   '';
   timepop = pkgs.writeShellScriptBin "timepop" ''
     ${pkgs.coreutils}/bin/date "+%T"
   '';
-  shell = "${myFlakes.packages.${system}.tmux}/bin/tmux";
+  shell = "${myPkgs.tmux}/bin/tmux";
   startFbterm = pkgs.writeShellScriptBin "start-fbterm" ''
     eval $(${pkgs.openssh}/bin/ssh-agent)
     export SSH_AUTH_SOCK=$SSH_AUTH_SOCK
@@ -32,9 +34,7 @@ in {
     type = bool;
   };
 
-  config = let
-    username = config.heywoodlh.defaults.user.name;
-  in mkIf cfg {
+  config = mkIf cfg {
     heywoodlh.defaults = {
       enable = true;
       quietBoot = true;
@@ -70,7 +70,7 @@ in {
       wifi
     ];
 
-    home-manager.users.heywoodlh = { ... }: {
+    home-manager.users.heywoodlh = {...}: {
       home.file.".config/fbterm/fbtermrc".text = ''
         font-names=JetBrainsMono Nerd Font
         font-size=14

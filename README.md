@@ -12,7 +12,15 @@ Nix-Darwin configs: [./darwin](./darwin)
 
 Home-Manager configs: [./home](./home)
 
-Standalone flakes: [./flakes](./flakes)
+Shared packages: [./pkgs](./pkgs)
+
+Run bundled tools directly, e.g.:
+
+```
+nix run .#tmux
+nix run .#helix
+nix run .#fish
+```
 
 ## Using custom modules
 
@@ -31,16 +39,12 @@ My custom modules expose a `heywoodlh` configuration parameter. Here's an incomp
 
   outputs = inputs@{ self, nixpkgs, darwin, heywoodlh-configs, ... }: {
 
-    darwinConfigurations = let
-      heywoodlh-darwin-modules = (heywoodlh-configs + "/darwin/modules/default.nix");
-    in {
+    darwinConfigurations = {
       "my-macbook" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = inputs;
         modules = [
-
-          heywoodlh-darwin-modules
-
+          heywoodlh-configs.darwinModules.heywoodlh.darwin
           {
             networking.hostName = "my-macbook";
 

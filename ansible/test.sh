@@ -21,13 +21,13 @@ then
   then
     printf '%s\0' "${targets[@]}" | grep -q -F -x -z -- "$2" && targets=("$2")
   else
-    printf "Invalid target: ${2}"
+    printf "Invalid target: %s\n" "$2"
     exit 3
   fi
 fi
 
-echo "Operating systems that will be tested: ${operating_systems[@]}"
-echo "Targets that will be tested: ${targets[@]}"
+echo "Operating systems that will be tested: ${operating_systems[*]}"
+echo "Targets that will be tested: ${targets[*]}"
 for os in "${operating_systems[@]}"
 do
   echo "Testing: ${os}"

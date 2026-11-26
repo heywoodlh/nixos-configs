@@ -1,8 +1,11 @@
-{ config, pkgs, nixpkgs-stable, home-manager, myFlakes, nur, ts-warp-nixpkgs, hexstrike-ai, ... }:
-
-let
-  system = pkgs.stdenv.hostPlatform.system;
-in {
+{
+  config,
+  pkgs,
+  nixpkgs-stable,
+  myPkgs,
+  nur,
+  ...
+}: {
   # Define user settings
   users.users.heywoodlh = import ../roles/user.nix {
     inherit config;
@@ -15,14 +18,12 @@ in {
   # Home-Manager config
   home-manager = {
     extraSpecialArgs = {
-      inherit myFlakes;
-      inherit ts-warp-nixpkgs;
+      inherit myPkgs;
       inherit nur;
-      inherit hexstrike-ai;
       inherit nixpkgs-stable;
     };
     # Set home-manager configs for heywoodlh
-    users.heywoodlh = { ... }: {
+    users.heywoodlh = {...}: {
       imports = [
         ../../home/darwin.nix
       ];

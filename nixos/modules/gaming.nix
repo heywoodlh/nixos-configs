@@ -484,6 +484,7 @@ in {
       heywoodlh.home = mkMerge [
         {spotify-soloist.enable = true;}
         (mkIf cfg.console {
+          niri.lockScreen = false;
           autostart = [
             {
               name = "Steam";

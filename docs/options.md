@@ -3881,6 +3881,30 @@ true
 
 
 
+## heywoodlh\.home\.niri\.lockScreen
+
+
+
+Enable the Noctalia lock screen, idle auto-lock and lock keybind\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/niri\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/niri.nix)
+
+
+
 ## heywoodlh\.home\.onepassword\.enable
 
 

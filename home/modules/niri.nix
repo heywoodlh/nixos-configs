@@ -75,8 +75,23 @@ with lib; let
     path = sys.argv[1]
     with open(path) as f:
         doc = tomlkit.parse(f.read())
+
+    changed = False
     if "lockscreen_widgets" in doc:
         del doc["lockscreen_widgets"]
+        changed = True
+
+    if len(sys.argv) > 2 and sys.argv[2] == "disable-lock":
+        if "lockscreen" not in doc:
+            doc["lockscreen"] = {}
+        doc["lockscreen"]["enabled"] = False
+        doc["lockscreen"]["lock_before_suspend"] = False
+        behavior = doc.get("idle", {}).get("behavior", {})
+        if "lock" in behavior:
+            behavior["lock"]["enabled"] = False
+        changed = True
+
+    if changed:
         with open(path, "w") as f:
             f.write(tomlkit.dumps(doc))
   '';
@@ -117,7 +132,14 @@ with lib; let
     };
   };
 in {
-  options.heywoodlh.home.niri.enable = mkEnableOption "the Niri desktop environment";
+  options.heywoodlh.home.niri = {
+    enable = mkEnableOption "the Niri desktop environment";
+    lockScreen = mkOption {
+      default = true;
+      description = "Enable the Noctalia lock screen, idle auto-lock and lock keybind.";
+      type = types.bool;
+    };
+  };
 
   config = mkIf cfg.enable {
     heywoodlh.home.onepassword.package = mkDefault pkgs._1password-gui;
@@ -154,7 +176,7 @@ in {
 
     home.activation.noctaliaResetLockLayout = lib.hm.dag.entryAfter ["writeBoundary"] ''
       if [ -f "${config.xdg.stateHome}/noctalia/settings.toml" ]; then
-        run ${noctaliaResetLockLayout} "${config.xdg.stateHome}/noctalia/settings.toml"
+        run ${noctaliaResetLockLayout} "${config.xdg.stateHome}/noctalia/settings.toml" ${if cfg.lockScreen then "keep-lock" else "disable-lock"}
       fi
     '';
 
@@ -178,8 +200,8 @@ in {
         };
         notification.enable_daemon = true;
         lockscreen = {
-          enabled = true;
-          lock_before_suspend = true;
+          enabled = cfg.lockScreen;
+          lock_before_suspend = cfg.lockScreen;
           transition = [];
           blur_intensity = 0.5;
           tint_intensity = 0.1;
@@ -211,7 +233,7 @@ in {
           behavior_order = ["lock" "screen-off"];
           behavior = {
             lock = {
-              enabled = true;
+              enabled = cfg.lockScreen;
               timeout = 900;
               action = "lock";
             };
@@ -436,7 +458,6 @@ in {
             "Super+S" = {spawn-sh = "${noctaliaMsg} panel-toggle control-center";};
             "Super+K" = {spawn-sh = "${noctaliaMsg} panel-toggle control-center";};
             "Super+comma" = {spawn-sh = "${noctaliaMsg} settings-toggle";};
-            "Super+L" = {spawn-sh = "${lockCmd}";};
             "XF86AudioLowerVolume" = {
               _props.allow-when-locked = true;
               spawn-sh = "${noctaliaMsg} volume-down";
@@ -490,6 +511,9 @@ in {
             "Ctrl+Alt+Right" = {move-column-right = {};};
             "Ctrl+Alt+Up" = {move-window-up = {};};
             "Ctrl+Alt+Down" = {move-window-down = {};};
+          }
+          // optionalAttrs cfg.lockScreen {
+            "Super+L" = {spawn-sh = "${lockCmd}";};
           }
           // optionalAttrs onepasswordCfg.enable {
             "Ctrl+Super+S" = {spawn = ["${onepasswordToggle}/bin/1password-toggle.sh"];};

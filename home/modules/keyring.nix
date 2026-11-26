@@ -50,6 +50,8 @@ in {
   };
 
   config = mkIf cfg.autoUnlock {
+    home.packages = [keyringSetup];
+
     systemd.user.services.keyring-setup = {
       Unit = {
         Description = "Set up and unlock the login keyring";

@@ -672,7 +672,8 @@
           src = ./templates/lancache.yaml;
           namespace = "default";
           dns_image = "docker.io/heywoodlh/lancache-dns@sha256:80d62e475b4de8a373950104c766ab727dbca3fbf7d308d875c83ecb9ada7f83";
-          dns_upstream = "10.43.0.10"; # kube-dns, which resolves tailnet names via the bridge
+          # kube-dns resolves tailnet names; public resolvers keep general DNS working when it is down
+          dns_upstream = "10.43.0.10; 1.1.1.1; 1.0.0.1";
           dns_ip = "100.80.187.50";
           cache_ip = "100.64.156.9";
           cache_disk_size = "1000g";

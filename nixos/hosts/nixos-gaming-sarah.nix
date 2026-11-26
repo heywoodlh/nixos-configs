@@ -74,7 +74,7 @@ in {
       dynamic = true;
       extraConfig = {
         sunshine_name = "sarah-linux";
-        capture = "kms";
+        capture = "wlr";
         output_name = "HDMI-A-1";
         encoder = "nvenc";
         nvenc_preset = 1;

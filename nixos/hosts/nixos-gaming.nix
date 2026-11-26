@@ -60,12 +60,13 @@ in {
     # Machine-specific sunshine configuration
     sunshine = {
       # Match the display mode to what the client asks for so the iPad Pro's
-      # 120Hz panel and non-1080p resolutions are not downscaled to 60Hz/1080p
-      # by KMS capture.
+      # 120Hz panel and non-1080p resolutions are not downscaled to 60Hz/1080p.
       dynamic = true;
       extraConfig = {
         sunshine_name = "spencer-linux";
-        capture = "kms";
+        # KMS capture fails on NVIDIA with Sunshine 2026.914; wlr uses niri's
+        # wlr-screencopy protocol and needs no capabilities.
+        capture = "wlr";
         output_name = "HDMI-A-1";
         encoder = "nvenc";
         nvenc_preset = 1;

@@ -83,6 +83,9 @@ in {
           ];
         }
         // optionalAttrs (stdenv.hostPlatform.isLinux) {
+          quick-terminal-position = "top";
+          quick-terminal-size = "97%";
+          quick-terminal-autohide = false;
         }
         // cfg.extraSettings;
     };

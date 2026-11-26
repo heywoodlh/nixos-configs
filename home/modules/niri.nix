@@ -46,13 +46,15 @@ with lib; let
     monitor=$(${niri} msg -j outputs | ${pkgs.jq}/bin/jq -r 'keys[]' | ${dmenu} -p "Monitor")
     [ -n "$monitor" ] && ${niri} msg action focus-monitor "$monitor"
   '';
-  ghosttyToggle = pkgs.writeShellScriptBin "ghostty-toggle.sh" ''
-    id=$(${niri} msg -j windows | ${pkgs.jq}/bin/jq -r '.[] | select(.app_id == "com.mitchellh.ghostty") | .id' | ${pkgs.coreutils}/bin/head -1)
-    if [ -n "$id" ]; then
-      ${niri} msg action focus-window --id "$id"
-    else
-      ${pkgs.ghostty}/bin/ghostty &
+  ghosttyQuickTerminal = pkgs.writeShellScriptBin "ghostty-quick-terminal.sh" ''
+    if ! ${pkgs.systemd}/bin/busctl --user status com.mitchellh.ghostty >/dev/null 2>&1; then
+      ${pkgs.util-linux}/bin/setsid ${pkgs.ghostty}/bin/ghostty --gtk-single-instance=true --initial-window=false --quit-after-last-window-closed=false >/dev/null 2>&1 &
+      for _ in $(${pkgs.coreutils}/bin/seq 1 50); do
+        ${pkgs.systemd}/bin/busctl --user status com.mitchellh.ghostty >/dev/null 2>&1 && break
+        ${pkgs.coreutils}/bin/sleep 0.1
+      done
     fi
+    exec ${pkgs.ghostty}/bin/ghostty +toggle-quick-terminal
   '';
   keybindHelper = pkgs.writeShellScriptBin "keybind-helper.sh" ''
     bind=$(${pkgs.gawk}/bin/awk '/^ *binds \{/,/^ *\}/' "$HOME/.config/niri/config.kdl" \
@@ -180,7 +182,7 @@ in {
         screenrecordKillScript
         battpopScript
         monitorsScript
-        ghosttyToggle
+        ghosttyQuickTerminal
         keybindHelper
       ]
       ++ optionals onepasswordCfg.enable [onepasswordToggle];
@@ -463,7 +465,7 @@ in {
             "Super+O" = {toggle-overview = {};};
             "Super+Q" = {close-window = {};};
             "Ctrl+Alt+T" = {spawn = ["${pkgs.foot}/bin/foot"];};
-            "Ctrl+grave" = {spawn = ["${ghosttyToggle}/bin/ghostty-toggle.sh"];};
+            "Ctrl+grave" = {spawn = ["${ghosttyQuickTerminal}/bin/ghostty-quick-terminal.sh"];};
             "Ctrl+Super+Space" = {spawn = ["${pkgs.emote}/bin/emote"];};
             "Super+Space" = {spawn-sh = "${noctaliaMsg} panel-toggle launcher";};
             "Super+S" = {spawn-sh = "${noctaliaMsg} panel-toggle control-center";};
@@ -514,8 +516,10 @@ in {
             "Ctrl+Shift+2" = {move-column-to-workspace = 2;};
             "Ctrl+Shift+3" = {move-column-to-workspace = 3;};
             "Ctrl+Shift+4" = {move-column-to-workspace = 4;};
-            "Super+bracketleft" = {focus-workspace-up = {};};
-            "Super+bracketright" = {focus-workspace-down = {};};
+            "Super+bracketleft" = {focus-column-left-or-last = {};};
+            "Super+bracketright" = {focus-column-right-or-first = {};};
+            "Super+Page_Up" = {focus-workspace-up = {};};
+            "Super+Page_Down" = {focus-workspace-down = {};};
             "Ctrl+Shift+bracketleft" = {focus-monitor-left = {};};
             "Ctrl+Shift+bracketright" = {focus-monitor-right = {};};
             "Ctrl+Alt+Left" = {move-column-left = {};};

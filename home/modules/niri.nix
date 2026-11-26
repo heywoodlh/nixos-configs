@@ -428,6 +428,12 @@ in {
                 background-effect.blur = true;
               };
             }
+            {
+              layer-rule = {
+                match._props.namespace = "^noctalia-bar-.*$";
+                background-effect.blur = false;
+              };
+            }
           ]
           ++ optionals onepasswordCfg.enable [
             {spawn-at-startup._args = ["${onepasswordCfg.wrapper}/bin/1password-gui-wrapper" "--silent"];}
@@ -438,6 +444,7 @@ in {
         input = {
           keyboard.xkb.options = "caps:super";
           touchpad = {
+            tap = {};
             natural-scroll = {};
             dwt = {};
           };

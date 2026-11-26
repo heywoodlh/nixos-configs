@@ -151,6 +151,11 @@ in {
     package = pkgs.fprintd.override {libfprint = libfprint-egis0576;};
   };
 
+  # Wacom pen reports phantom proximity on this Yoga, moving the pointer to a corner
+  services.udev.extraRules = ''
+    ACTION=="add|change", KERNEL=="event[0-9]*", ATTRS{name}=="Wacom HID * Pen stylus", ENV{LIBINPUT_IGNORE_DEVICE}="1"
+  '';
+
   home-manager.users.heywoodlh = {
     wayland.windowManager.niri.extraConfig = ''
       output "eDP-1" {

@@ -57,7 +57,10 @@ in {
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   heywoodlh.nixos = {
-    lancacheDns.enable = true;
+    lancacheDns = {
+      enable = true;
+      ignoreDhcpDns = true;
+    };
     tor.enable = mkForce false;
     gaming = {
       enable = true;

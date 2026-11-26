@@ -5559,6 +5559,30 @@ true
 
 
 
+## heywoodlh\.nixos\.lancacheDns\.ignoreDhcpDns
+
+
+
+Ignore DHCP-provided DNS so the static nameservers stay authoritative\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+false
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/lancache-dns\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/lancache-dns.nix)
+
+
+
 ## heywoodlh\.nixos\.lancacheDns\.server
 
 

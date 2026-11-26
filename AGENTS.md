@@ -48,7 +48,9 @@ lists) or are unavoidable flake wiring.
 - Every macOS host is one entry in `darwinConfigurations`; the builder imports
   `darwin/hosts/<name>.nix`.
 - Every standalone home-manager target is one entry in
-  `homeConfigurations`; the builder imports `home/hosts/<name>.nix`.
+  `homeConfigurations`; the builder imports `home/hosts/<name>.nix`. It lives
+  under `packages.<system>` so each target builds for its own architecture;
+  `.#homeConfigurations.<name>` still resolves through the package fallback.
 
 ## Custom modules
 
@@ -72,7 +74,7 @@ Everything is wired in the root `flake.nix`:
   `nixos/machine-types/<type>.nix` module, and a small shared defaults block.
 - `mkDarwin` builds a macOS host from `darwin/hosts/<name>.nix` plus
   `darwinModules.heywoodlh.darwin` and the shared `darwin/roles/*` modules.
-- `mkHome` builds a standalone home-manager target from
+- `mkHome system name` builds a standalone home-manager target from
   `home/hosts/<name>.nix` plus `homeModules.heywoodlh.home`. That module
   imports the common, Linux, or macOS module sets based on the target
   platform, so the same `heywoodlh.home` output works everywhere.

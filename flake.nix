@@ -485,8 +485,7 @@
           }
         ];
       };
-    mkHome = name: let
-      system = "x86_64-linux";
+    mkHome = system: name: let
       pkgs = mkPkgs nixpkgs system;
     in
       home-manager.lib.homeManagerConfiguration {
@@ -593,12 +592,6 @@
       mac-mini = {};
     };
 
-    homeConfigurations = lib.mapAttrs (name: _: mkHome name) {
-      heywoodlh = {};
-      heywoodlh-server = {};
-      heywoodlh-lima = {};
-    };
-
     nixosModules.heywoodlh = nixosModule;
     nixosModules.docs = {...}: {imports = myNixOSModules;};
     darwinModules.heywoodlh.darwin = darwinModule;
@@ -633,6 +626,13 @@
       optionsDoc = pkgs.nixosOptionsDoc {inherit (cleanEval) options;};
     in
       myPkgs
+      // lib.optionalAttrs (lib.hasSuffix "linux" system) {
+        homeConfigurations = lib.mapAttrs (name: _: mkHome system name) {
+          heywoodlh = {};
+          heywoodlh-server = {};
+          heywoodlh-lima = {};
+        };
+      }
       // {
         inherit (myPkgs) fish tmux helix op-wrapper vim;
         tangled-sync = pkgs.callPackage ./pkgs/tangled-sync.nix {};

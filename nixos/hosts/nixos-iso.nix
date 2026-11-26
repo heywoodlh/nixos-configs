@@ -18,6 +18,7 @@
   environment.systemPackages = with pkgs; [
     calamares-nixos
     calamares-nixos-extensions
+    disko
     git
     helix
     msedit

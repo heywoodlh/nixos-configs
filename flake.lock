@@ -245,7 +245,6 @@
     "disko": {
       "inputs": {
         "nixpkgs": [
-          "kyle",
           "nixpkgs"
         ]
       },
@@ -971,7 +970,9 @@
     },
     "kyle": {
       "inputs": {
-        "disko": "disko",
+        "disko": [
+          "disko"
+        ],
         "doom-d": [],
         "flake-compat": [],
         "flake-parts": [
@@ -1780,6 +1781,7 @@
         "crane": "crane",
         "dark-wallpaper": "dark-wallpaper",
         "darwin": "darwin",
+        "disko": "disko",
         "flake-parts": "flake-parts",
         "flake-utils": "flake-utils",
         "gh-gitignore": "gh-gitignore",

@@ -93,6 +93,10 @@
       url = "github:NixOS/nixos-hardware/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     dark-wallpaper = {
       url = ./assets/catppuccin-nix.png;
       flake = false;
@@ -208,6 +212,7 @@
       inputs.flake-parts.follows = "flake-parts";
       inputs.git-hooks.follows = "git-hooks";
       inputs.tether.follows = "tether";
+      inputs.disko.follows = "disko";
       inputs.flake-compat.follows = "";
       inputs.rust-overlay.follows = "rust-overlay";
       inputs.treefmt-nix.follows = "";
@@ -578,6 +583,10 @@
       nixos-vmware = {
         system = "x86_64-linux";
         type = "vm";
+      };
+      nixos-xps = {
+        system = "x86_64-linux";
+        type = "laptop";
       };
       nixos-yoga = {
         system = "x86_64-linux";

@@ -464,6 +464,7 @@
             };
             home-manager = {
               useGlobalPkgs = true;
+              backupCommand = "${pkgs.coreutils}/bin/rm -f";
               extraSpecialArgs =
                 inputs
                 // {
@@ -507,6 +508,7 @@
             fonts.fontconfig.enable = true;
             programs.home-manager.enable = true;
             targets.genericLinux.enable = true;
+            home.backupCommand = "${pkgs.coreutils}/bin/rm -f";
             home.packages = import ./home/packages.nix {inherit pkgs name;};
           }
         ];

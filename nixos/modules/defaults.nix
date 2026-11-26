@@ -366,7 +366,7 @@ in {
           inherit nixpkgs-stable;
           inherit nixpkgs-lts;
         };
-        backupCommand = "${pkgs.trash-cli}/bin/trash-put";
+        backupCommand = "${pkgs.coreutils}/bin/rm -f";
         users.${username} = {...}:
           base
           // {

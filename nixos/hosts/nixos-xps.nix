@@ -31,9 +31,24 @@
               name = "cryptroot";
               settings.allowDiscards = true;
               content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/";
+                type = "gpt";
+                partitions = {
+                  root = {
+                    size = "100%";
+                    content = {
+                      type = "filesystem";
+                      format = "ext4";
+                      mountpoint = "/";
+                    };
+                  };
+                  swap = {
+                    size = "8G";
+                    content = {
+                      type = "swap";
+                      discardPolicy = "both";
+                    };
+                  };
+                };
               };
             };
           };
@@ -41,13 +56,6 @@
       };
     };
   };
-
-  swapDevices = [
-    {
-      device = "/swapfile";
-      size = 8192;
-    }
-  ];
 
   boot.initrd.availableKernelModules = [
     "nvme"

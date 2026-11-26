@@ -26,13 +26,13 @@ with lib.types; let
         pkgs.nspr
         pkgs.nss
         pkgs.systemd
-        pkgs.xorg.libX11
-        pkgs.xorg.libxcb
-        pkgs.xorg.libXcomposite
-        pkgs.xorg.libXdamage
-        pkgs.xorg.libXext
-        pkgs.xorg.libXfixes
-        pkgs.xorg.libXrandr
+        pkgs.libx11
+        pkgs.libxcb
+        pkgs.libxcomposite
+        pkgs.libxdamage
+        pkgs.libxext
+        pkgs.libxfixes
+        pkgs.libxrandr
         pkgs.libxkbcommon
       ]
       ++ [pkgs.libgbm pkgs.glibc];

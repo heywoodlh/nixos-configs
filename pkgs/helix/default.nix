@@ -29,6 +29,20 @@
 
   helixPkg = helix-src.packages.${pkgs.stdenv.hostPlatform.system}.helix.override {
     grammarOverlays = [
+      # helix-src's grammars still use deprecated stdenv.isLinux; re-set fixupPhase without it
+      (_final: prev:
+        pkgs.lib.mapAttrs
+        (_: drv:
+          if pkgs.lib.isDerivation drv
+          then drv.overrideAttrs (_: {
+            fixupPhase = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
+              runHook preFixup
+              $STRIP $out/$SHARED_LIB
+              runHook postFixup
+            '';
+          })
+          else drv)
+        prev)
       (_final: prev: {
         perl = prev.perl.overrideAttrs (old: {
           FLAGS = old.FLAGS ++ ["-std=gnu17"];

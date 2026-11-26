@@ -484,6 +484,7 @@ in {
       heywoodlh.home = mkMerge [
         {spotify-soloist.enable = true;}
         (mkIf cfg.console {
+          keyring.autoUnlock = true;
           niri.lockScreen = false;
           niri.idleScreenOff = false;
           autostart = [

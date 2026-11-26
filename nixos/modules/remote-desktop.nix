@@ -294,6 +294,7 @@ in {
 
       home-manager.users.${user} = {
         heywoodlh.home.hyprland = true;
+        heywoodlh.home.keyring.autoUnlock = true;
         wayland.windowManager.hyprland.systemd.enable = false;
         wayland.windowManager.hyprland.extraConfig = ''
           hl.monitor({ output = "${cfg.headless.output}", mode = "preferred", position = "0x0", scale = 1 })

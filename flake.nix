@@ -299,6 +299,7 @@
       ./home/modules/bluetuith.nix
       ./home/modules/kde-windows.nix
       ./home/modules/hypr-rdp.nix
+      ./home/modules/keyring.nix
     ];
     macosHomeModules = [
       ./home/modules/darwin-defaults.nix

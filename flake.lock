@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "actor-typeahead-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1762835797,
+        "narHash": "sha256-heizoWUKDdar6ymfZTnj3ytcEv/L4d4fzSmtr0HlXsQ=",
+        "ref": "refs/heads/main",
+        "rev": "677fe7f743050a4e7f09d4a6f87bbf1325a06f6b",
+        "revCount": 6,
+        "type": "git",
+        "url": "https://tangled.org/@jakelazaroff.com/actor-typeahead"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://tangled.org/@jakelazaroff.com/actor-typeahead"
+      }
+    },
     "aquamarine": {
       "inputs": {
         "hyprutils": [
@@ -256,38 +272,17 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1794750246,
-        "narHash": "sha256-7Yd8fQdT8G1p76nY5thZMAO4/hMyhG9iIL42i8OfbLU=",
+        "lastModified": 1772176312,
+        "narHash": "sha256-Yjo/QCJvY9GUhAzwac/m6Rx3oxvRyEaiT5DQ5o+T6g4=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "03b9a946cbd2777de45d7ba96c29157e1f7db613",
+        "rev": "92d91250c1acd59beabc51208192adc92f31aeb5",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "fenix",
         "type": "github"
-      }
-    },
-    "fetch-tangled": {
-      "inputs": {
-        "nixpkgs": [
-          "tangled",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1779479671,
-        "narHash": "sha256-8PR9nZnK0Fn4gDOikz+3sLdsEJYnKC3gaunBs4N+V9Q=",
-        "ref": "refs/heads/main",
-        "rev": "2e3744d31b990248f277d16a11ef81753b366f0f",
-        "revCount": 22,
-        "type": "git",
-        "url": "https://tangled.org/isabelroses.com/fetch-tangled"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://tangled.org/isabelroses.com/fetch-tangled"
       }
     },
     "firefox-gnome-theme": {
@@ -525,36 +520,28 @@
         "type": "github"
       }
     },
-    "hydrant": {
+    "htmx-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1792544679,
-        "narHash": "sha256-fm0cuIyHjJTSvleJyLbT4E5KugtanuysL/oMOnGhN3I=",
-        "ref": "refs/heads/main",
-        "rev": "0128352f6b73d26e7ffaa5a79446ef556e452617",
-        "revCount": 811,
-        "type": "git",
-        "url": "https://tangled.org/ptr.pet/hydrant"
+        "narHash": "sha256-nm6avZuEBg67SSyyZUhjpXVNstHHgUxrtBHqJgowU08=",
+        "type": "file",
+        "url": "https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"
       },
       "original": {
-        "type": "git",
-        "url": "https://tangled.org/ptr.pet/hydrant"
+        "type": "file",
+        "url": "https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"
       }
     },
-    "hydrant-dev": {
+    "htmx-ws-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1792544679,
-        "narHash": "sha256-fm0cuIyHjJTSvleJyLbT4E5KugtanuysL/oMOnGhN3I=",
-        "ref": "refs/heads/main",
-        "rev": "0128352f6b73d26e7ffaa5a79446ef556e452617",
-        "revCount": 811,
-        "type": "git",
-        "url": "https://tangled.org/ptr.pet/hydrant"
+        "narHash": "sha256-2fg6KyEJoO24q0fQqbz9RMaYNPQrMwpZh29tkSqdqGY=",
+        "type": "file",
+        "url": "https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.2"
       },
       "original": {
-        "type": "git",
-        "url": "https://tangled.org/ptr.pet/hydrant"
+        "type": "file",
+        "url": "https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.2"
       }
     },
     "hypr-rdp": {
@@ -927,6 +914,19 @@
         "type": "github"
       }
     },
+    "inter-fonts-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1731687360,
+        "narHash": "sha256-5vdKKvHAeZi6igrfpbOdhZlDX2/5+UvzlnCQV6DdqoQ=",
+        "type": "tarball",
+        "url": "https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip"
+      }
+    },
     "jovian-nixos": {
       "inputs": {
         "nix-github-actions": "nix-github-actions",
@@ -1124,26 +1124,29 @@
         "type": "github"
       }
     },
-    "microvm": {
-      "inputs": {
-        "nixpkgs": [
-          "tangled",
-          "nixpkgs"
-        ],
-        "spectrum": "spectrum"
-      },
+    "lucide-src": {
+      "flake": false,
       "locked": {
-        "lastModified": 1779970379,
-        "narHash": "sha256-ZHsxoYXXnfJtMVh1/yY+1Eh9hHcPBhE28Qvinauh+BQ=",
-        "owner": "microvm-nix",
-        "repo": "microvm.nix",
-        "rev": "0d49083ba2d7419b22908ac392777c16df9a032e",
-        "type": "github"
+        "lastModified": 1754044466,
+        "narHash": "sha256-+exBR2OToB1iv7ZQI2S4B0lXA/QRvC9n6U99UxGpJGs=",
+        "type": "tarball",
+        "url": "https://github.com/lucide-icons/lucide/releases/download/0.536.0/lucide-icons-0.536.0.zip"
       },
       "original": {
-        "owner": "microvm-nix",
-        "repo": "microvm.nix",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://github.com/lucide-icons/lucide/releases/download/0.536.0/lucide-icons-0.536.0.zip"
+      }
+    },
+    "mermaid-src": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-/YOdECG2V5c3kJ1QfGvhziTT6K/Dx/4mOk2mr3Fs/do=",
+        "type": "file",
+        "url": "https://cdn.jsdelivr.net/npm/mermaid@11.12.3/dist/mermaid.min.js"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://cdn.jsdelivr.net/npm/mermaid@11.12.3/dist/mermaid.min.js"
       }
     },
     "neovim-config": {
@@ -1503,22 +1506,6 @@
         "url": "https://flakehub.com/f/DeterminateSystems/nixpkgs-weekly/0.1"
       }
     },
-    "nixpkgs-pds": {
-      "locked": {
-        "lastModified": 1791734076,
-        "narHash": "sha256-i5qk1kLiit98rRbh1AXmWBNT9QXC/y4l5Wk/u5EdpDQ=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "7fd4004d0511991fff3a0524856a9be09e28c5f0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1794756927,
@@ -1844,11 +1831,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1794699679,
-        "narHash": "sha256-v46dxoiIRQrRDwO/OGb9F2cBEk9aqKQyzLz7wQi9oPY=",
+        "lastModified": 1772094427,
+        "narHash": "sha256-TiVs6OUBJEvajHdJZ5nIq0KognNJooUWuLGPFfQacSw=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "b664fd5c7e7055c9569960f7fe73f21c7d00c9cd",
+        "rev": "56b59a832858329c2f947f9b7bdf1a49da39c981",
         "type": "github"
       },
       "original": {
@@ -1941,22 +1928,6 @@
         "owner": "vicinaehq",
         "repo": "soulver-cpp",
         "type": "github"
-      }
-    },
-    "spectrum": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1778940603,
-        "narHash": "sha256-voSM8dZNlaOWN3kbYFky+FNY6fFQOEw0xF+ZMpZKkCQ=",
-        "ref": "refs/heads/main",
-        "rev": "367dd227f539267eae2b62770b4c17b88ac8c1f1",
-        "revCount": 1265,
-        "type": "git",
-        "url": "https://spectrum-os.org/git/spectrum"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://spectrum-os.org/git/spectrum"
       }
     },
     "spicetify-nix": {
@@ -2201,28 +2172,28 @@
     },
     "tangled": {
       "inputs": {
+        "actor-typeahead-src": "actor-typeahead-src",
         "fenix": "fenix",
-        "fetch-tangled": "fetch-tangled",
         "flake-compat": [],
         "gomod2nix": [],
-        "hydrant": "hydrant",
-        "hydrant-dev": "hydrant-dev",
+        "htmx-src": "htmx-src",
+        "htmx-ws-src": "htmx-ws-src",
         "ibm-plex-mono-src": "ibm-plex-mono-src",
         "indigo": "indigo",
-        "microvm": "microvm",
+        "inter-fonts-src": "inter-fonts-src",
+        "lucide-src": "lucide-src",
+        "mermaid-src": "mermaid-src",
         "nixpkgs": [
           "nixpkgs"
         ],
-        "nixpkgs-pds": "nixpkgs-pds",
-        "sqlite-lib-src": "sqlite-lib-src",
-        "timeless-fonts-src": "timeless-fonts-src"
+        "sqlite-lib-src": "sqlite-lib-src"
       },
       "locked": {
-        "lastModified": 1795626292,
-        "narHash": "sha256-7Z4XFydJYvyug45aWFZ7YAJj9AaHt6g2odbt33BD5VU=",
+        "lastModified": 1779201325,
+        "narHash": "sha256-bqPvfJ7z3HvBxv78cLczeB8N72D7YlxZgpwhhqAO/Ng=",
         "ref": "refs/heads/master",
-        "rev": "1873d474d011a3e903614cade2cd0ec8831e8d13",
-        "revCount": 6767,
+        "rev": "886425c7c3a7734baa848c2f1072f162179ede41",
+        "revCount": 2485,
         "type": "git",
         "url": "https://tangled.org/tangled.org/core"
       },
@@ -2249,19 +2220,6 @@
         "owner": "zackb",
         "repo": "tether",
         "type": "github"
-      }
-    },
-    "timeless-fonts-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791052084,
-        "narHash": "sha256-zYpoDkE/YrICzYaHF4/NSuINczFWB41YymTxaL6KqLY=",
-        "type": "tarball",
-        "url": "https://media.timeless.co/type/Timeless-Type-Family-1.094.zip"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://media.timeless.co/type/Timeless-Type-Family-1.094.zip"
       }
     },
     "tinted-kitty": {

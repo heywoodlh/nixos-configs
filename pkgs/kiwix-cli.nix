@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, aws-lc }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kiwix-cli";
@@ -13,6 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ToFbemelHn4xiboKor+w3Xf2VCkkWtOuXHnchGCaNvA=";
   doCheck = false;
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ aws-lc ];
 
   postInstall = ''
     install -Dm644 man/kiwix-cli.1 $out/share/man/man1/kiwix-cli.1

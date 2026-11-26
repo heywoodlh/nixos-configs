@@ -26,6 +26,10 @@ in
     services.tailscale.extraSetFlags = [ "--accept-dns=false" ];
     # NetworkManager otherwise registers DHCP resolvers ahead of the static entry
     networking.networkmanager.dns = mkIf cfg.ignoreDhcpDns "none";
+    # dns=none alone is not enough: NixOS sets rc-manager=resolvconf, so NM still registers them
+    networking.networkmanager.settings.main.rc-manager = mkIf cfg.ignoreDhcpDns "unmanaged";
+    # Keep the static entry ahead of any stale NetworkManager entry
+    networking.resolvconf.extraConfig = mkIf cfg.ignoreDhcpDns "interface_order='static lo lo[0-9]*'";
     # tailscaled's stub stays the fallback when lancache does not answer
     networking.nameservers = [ cfg.server "100.100.100.100" ];
     networking.search = [ "barn-banana.ts.net" ];

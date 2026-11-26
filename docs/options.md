@@ -710,7 +710,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults.nix)
 
 
 
@@ -942,7 +942,7 @@ User for heywoodlh configuration\.
 submodule
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults.nix)
 
 
 
@@ -966,7 +966,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults.nix)
 
 
 
@@ -990,7 +990,7 @@ absolute path
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults.nix)
 
 
 
@@ -1014,7 +1014,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults.nix)
 
 
 
@@ -1038,7 +1038,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults.nix)
 
 
 
@@ -1062,7 +1062,7 @@ signed integer
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/defaults.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/defaults.nix)
 
 
 
@@ -1680,7 +1680,7 @@ string
 *Default:*
 
 ```nix
-"/nix/store/zc1mjlcy99fbw9gs4a1kgxswlbk9by95-tmux/bin/tmux"
+"/nix/store/hgqk67mrl04v5xpxb314a233w2gnz6j6-tmux/bin/tmux"
 ```
 
 *Declared by:*
@@ -3881,6 +3881,30 @@ true
 
 
 
+## heywoodlh\.home\.niri\.idleScreenOff
+
+
+
+Blank the display after Noctalia’s idle screen-off timeout\.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/niri\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/home/modules/niri.nix)
+
+
+
 ## heywoodlh\.home\.niri\.lockScreen
 
 
@@ -4841,8 +4865,6 @@ false
 
 ## heywoodlh\.luks\.keyfile\.path
 
-
-
 Where that same filesystem is mounted in the running system
 (matching ` uuid `)\. Used by the activation script to read/write the
 keyfile directly, since it’s already mounted there – no separate
@@ -4892,6 +4914,8 @@ signed integer
 
 
 ## heywoodlh\.luks\.keyfile\.uuid
+
+
 
 Filesystem UUID of the partition that stores the keyfile (not the
 LUKS device)\. Must be a partition systemd stage 1 can mount
@@ -5043,7 +5067,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -5067,7 +5091,7 @@ one of “auto”, “none”, “cuda”, “rocm”, “vulkan”, “metal”
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -5091,7 +5115,7 @@ null
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -5115,7 +5139,7 @@ attribute set
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -5139,7 +5163,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -5163,7 +5187,7 @@ null
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -5187,7 +5211,7 @@ true
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -5211,7 +5235,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -5235,7 +5259,7 @@ positive integer, meaning >0
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -5259,7 +5283,7 @@ Port nix-llama listens on\.
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/nix-llama.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/nix-llama.nix)
 
 
 
@@ -6954,7 +6978,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/sshd\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/sshd.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/sshd\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/sshd.nix)
 
 
 
@@ -7050,7 +7074,7 @@ false
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/stylix\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/stylix.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/stylix\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/stylix.nix)
 
 
 
@@ -7074,7 +7098,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/stylix\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/stylix.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/stylix\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/stylix.nix)
 
 
 
@@ -7098,7 +7122,7 @@ string
 ```
 
 *Declared by:*
- - [/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/stylix\.nix](/nix/store/d0r31zdc4bxy8lkzpfsw4jz8pnzngs3z-source/base/stylix.nix)
+ - [/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/stylix\.nix](/nix/store/3rln49mwjmj5x512nw5ch44sxxq2v8vj-source/base/stylix.nix)
 
 
 

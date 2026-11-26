@@ -485,6 +485,7 @@ in {
         {spotify-soloist.enable = true;}
         (mkIf cfg.console {
           niri.lockScreen = false;
+          niri.idleScreenOff = false;
           autostart = [
             {
               name = "Steam";

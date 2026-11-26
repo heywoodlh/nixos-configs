@@ -91,6 +91,12 @@ with lib; let
             behavior["lock"]["enabled"] = False
         changed = True
 
+    if len(sys.argv) > 3 and sys.argv[3] == "disable-screen-off":
+        behavior = doc.get("idle", {}).get("behavior", {})
+        if "screen-off" in behavior:
+            behavior["screen-off"]["enabled"] = False
+        changed = True
+
     if changed:
         with open(path, "w") as f:
             f.write(tomlkit.dumps(doc))
@@ -139,6 +145,11 @@ in {
       description = "Enable the Noctalia lock screen, idle auto-lock and lock keybind.";
       type = types.bool;
     };
+    idleScreenOff = mkOption {
+      default = true;
+      description = "Blank the display after Noctalia's idle screen-off timeout.";
+      type = types.bool;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -176,7 +187,7 @@ in {
 
     home.activation.noctaliaResetLockLayout = lib.hm.dag.entryAfter ["writeBoundary"] ''
       if [ -f "${config.xdg.stateHome}/noctalia/settings.toml" ]; then
-        run ${noctaliaResetLockLayout} "${config.xdg.stateHome}/noctalia/settings.toml" ${if cfg.lockScreen then "keep-lock" else "disable-lock"}
+        run ${noctaliaResetLockLayout} "${config.xdg.stateHome}/noctalia/settings.toml" ${if cfg.lockScreen then "keep-lock" else "disable-lock"} ${if cfg.idleScreenOff then "keep-screen-off" else "disable-screen-off"}
       fi
     '';
 
@@ -238,7 +249,7 @@ in {
               action = "lock";
             };
             screen-off = {
-              enabled = true;
+              enabled = cfg.idleScreenOff;
               timeout = 1200;
               action = "screen_off";
             };

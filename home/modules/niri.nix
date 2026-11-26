@@ -290,6 +290,12 @@ in {
             tooltip = "Control Center";
             actions.left = "panel-toggle control-center";
           };
+          hotkeys = {
+            type = "custom_button";
+            glyph = "keyboard";
+            tooltip = "Show hotkeys";
+            actions.left = "exec niri msg action show-hotkey-overlay";
+          };
           notifications.hide_when_no_unread = true;
           volume.show_label = false;
           network.show_label = false;
@@ -327,7 +333,7 @@ in {
           capsule_padding = 8;
           start = ["launcher" "workspaces"];
           center = [];
-          end = ["group:more" "caffeine" "battery" "network" "clock"];
+          end = ["group:more" "caffeine" "battery" "network" "hotkeys" "clock"];
           capsule_group = [
             {
               id = "more";
@@ -465,6 +471,7 @@ in {
           };
         };
         prefer-no-csd = {};
+        hotkey-overlay.skip-at-startup = {};
         screenshot-path = "~/Pictures/screenshots/%Y-%m-%d-%H%M%S.png";
         binds =
           {

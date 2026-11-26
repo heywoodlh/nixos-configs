@@ -17,7 +17,7 @@ jobs:
     name: Check and apply all deployments
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     defaults:
       run:
         shell: bash
@@ -33,13 +33,6 @@ jobs:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
-
-      - uses: webfactory/ssh-agent@v0.9.1
-        with:
-          ssh-private-key: ${{ secrets.TANGLED_SSH_PRIVATE_KEY }}
-
-      - name: Trust Tangled host key
-        run: ssh-keyscan tangled.org >> ~/.ssh/known_hosts
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
@@ -60,20 +53,6 @@ jobs:
         working-directory: ./kubernetes
         run: |
           ./render.sh
-
-      - name: Publish rendered manifests
-        if: github.ref == 'refs/heads/main'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B gitops
-          git add --force kubernetes/manifests
-          git commit -m "chore(kubernetes): render manifests" || true
-          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/gitops
-          git remote add tangled git@tangled.org:heywoodlh.io/nixos-configs
-          git push --force tangled HEAD:refs/heads/gitops
 
       - name: Install kubectl
         if: github.ref == 'refs/heads/main'

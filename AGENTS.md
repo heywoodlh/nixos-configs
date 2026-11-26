@@ -31,8 +31,8 @@ Comments should be limited to one line. If multi-line comments are required, sho
   - `home/linux`: more things applied to Linux.
 - `pkgs`: packages that used to live in nested flakes. `pkgs/default.nix`
   assembles the `myPkgs` package set consumed by modules.
-- `kubernetes`: Kubernetes templates and deployment variables. Rendered
-  manifests live on the `gitops` branch, not on `main`. See
+- `kubernetes`: Kubernetes templates and deployment variables. CI renders the
+  manifests and applies them directly; nothing is committed to `main`. See
   `kubernetes/AGENTS.md`.
 
 ## `flake.nix` policy

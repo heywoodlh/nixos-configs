@@ -106,17 +106,17 @@ in {
 
   networking = {
     interfaces = {
-      enp4s0 = {
-        wakeOnLan.enable = true;
-      };
+      enp0s31f6.wakeOnLan.enable = true;
+      enp2s0.wakeOnLan.enable = true;
     };
-    firewall = {
-      interfaces.enp2s0.allowedTCPPorts = [47990];
-      allowedUDPPorts = [
-        9
-        5353 # shanocast
-      ];
+    firewall.interfaces = {
+      enp0s31f6.allowedTCPPorts = [47990];
+      enp2s0.allowedTCPPorts = [47990];
     };
+    firewall.allowedUDPPorts = [
+      9
+      5353 # shanocast
+    ];
   };
 
   # Allow mdns for shanocast
@@ -125,6 +125,12 @@ in {
     settings.reflector.enable-reflector = true;
     openFirewall = true;
   };
+
+  # Keep magic-packet wake armed on both NICs after every resume, not just at link creation
+  powerManagement.resumeCommands = ''
+    ${pkgs.ethtool}/bin/ethtool -s enp0s31f6 wol g
+    ${pkgs.ethtool}/bin/ethtool -s enp2s0 wol g
+  '';
 
   home-manager.users.heywoodlh = let
     apple-music = pkgs.writeShellScriptBin "apple-music" ''

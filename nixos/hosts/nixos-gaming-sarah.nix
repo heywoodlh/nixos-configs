@@ -59,6 +59,8 @@ in {
   heywoodlh.nixos = {
     lancacheDns.enable = true;
     tor.enable = mkForce false;
+    # Niri is the console session; KDE remains the default elsewhere
+    kde.enable = mkForce false;
     gaming = {
       enable = true;
       console = true;
@@ -82,6 +84,9 @@ in {
   };
 
   hardware.nvidia.moduleParams.nvidia.NVreg_EnableResizableBar = 1;
+
+  # Wayland session for the TV/gamepad setup
+  heywoodlh.niri.enable = mkForce true;
 
   #boot.loader.systemd-boot.edk2-uefi-shell.enable = true;
   boot.loader.systemd-boot.windows."11".efiDeviceHandle = "HD1i32768a1";
@@ -137,6 +142,23 @@ in {
       autostart = [
         apple-music-desktop
       ];
+    };
+
+    # Suspend on idle is allowed; monitors never power off while the session is awake
+    programs.noctalia.settings.idle = {
+      behavior_order = mkForce ["lock" "suspend"];
+      behavior = {
+        screen-off = {
+          enabled = mkForce false;
+          timeout = mkForce 0;
+          locked_timeout = mkForce 0;
+        };
+        suspend = {
+          enabled = mkForce true;
+          timeout = 1800;
+          action = "lock_and_suspend";
+        };
+      };
     };
   };
 

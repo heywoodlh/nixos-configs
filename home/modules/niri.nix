@@ -68,11 +68,17 @@ with lib; let
       -alpha off -compose CopyOpacity -composite $out
   '';
   noctaliaResetLockLayout = pkgs.writers.writePython3 "noctalia-reset-lock-layout" {libraries = [pkgs.python3Packages.tomlkit];} ''
-    import sys, tomlkit
+    import sys
+
+    import tomlkit
+
     path = sys.argv[1]
-    doc = tomlkit.parse(open(path).read())
-    doc.pop("lockscreen_widgets", None)
-    open(path, "w").write(tomlkit.dumps(doc))
+    with open(path) as f:
+        doc = tomlkit.parse(f.read())
+    if "lockscreen_widgets" in doc:
+        del doc["lockscreen_widgets"]
+        with open(path, "w") as f:
+            f.write(tomlkit.dumps(doc))
   '';
   lockWidget = type: cx: cy: boxWidth: boxHeight: settings: {
     inherit type cx cy settings;

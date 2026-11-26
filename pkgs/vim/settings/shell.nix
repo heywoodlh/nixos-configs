@@ -41,7 +41,7 @@
     ${starship}/bin/starship init fish | source
 
     # Direnv
-    eval (${direnv}/bin/direnv hook fish)
+    ${direnv}/bin/direnv hook fish | source
 
     fish_config theme choose Nord
     set fish_greeting ""

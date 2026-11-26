@@ -107,7 +107,7 @@
     set -gx STARSHIP_CONFIG "${starship_config}"
     ${pkgs.starship}/bin/starship init fish | source
 
-    eval (${pkgs.direnv}/bin/direnv hook fish)
+    ${pkgs.direnv}/bin/direnv hook fish | source
 
     function start-ssh-agent
         if not echo $SSH_AUTH_SOCK | ${pkgs.gnugrep}/bin/grep -q 1password

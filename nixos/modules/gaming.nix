@@ -493,6 +493,23 @@ in {
         })
       ];
 
+      wayland.windowManager.niri.extraConfig = mkIf cfg.console ''
+        window-rule {
+          match app-id="^steam$" title="Big Picture"
+          open-fullscreen true
+        }
+
+        window-rule {
+          match app-id=r#"^steam_app_\d+$"#
+          open-fullscreen true
+        }
+
+        window-rule {
+          match app-id="^gamescope$"
+          open-fullscreen true
+        }
+      '';
+
       systemd.user.services.ydotoold = {
         Unit = {
           Description = "ydotool daemon";

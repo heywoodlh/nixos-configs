@@ -133,6 +133,12 @@ in {
       command = "${apple-music}/bin/apple-music";
     };
   in {
+    wayland.windowManager.niri.extraConfig = ''
+      output "HDMI-A-1" {
+        mode "1920x1080"
+      }
+    '';
+
     heywoodlh.home = {
       applications = [
         apple-music-desktop

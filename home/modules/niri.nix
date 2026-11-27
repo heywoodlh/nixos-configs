@@ -437,6 +437,12 @@ in {
               };
             }
             {
+              window-rule = {
+                match._props."app-id" = "^librewolf$";
+                open-maximized = true;
+              };
+            }
+            {
               layer-rule = {
                 match._props.namespace = "^(noctalia|noctalia-.*)$";
                 background-effect.blur = true;

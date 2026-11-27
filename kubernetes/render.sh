@@ -30,6 +30,7 @@ applications=(
   "http-files"
   "immich"
   "immich-machine-learning"
+  "intel-gpu-plugin"
   "istio"
   "iperf"
   "juabsd-forwarder"

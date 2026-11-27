@@ -624,6 +624,11 @@
           version = "v0.35.0";
           replicas = 1;
         };
+        intel-gpu-plugin = mkKubeDrv "intel-gpu-plugin" rec {
+          src = ./templates/intel-gpu-plugin.yaml;
+          version = "0.35.0";
+          image = "docker.io/intel/intel-gpu-plugin:${version}";
+        };
         iperf = mkKubeDrv "iperf" {
           src = ./templates/iperf3.yaml;
           namespace = "default";

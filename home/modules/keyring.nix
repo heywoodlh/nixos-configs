@@ -72,5 +72,11 @@ in {
       Type=Application
       X-GNOME-Autostart-enabled=true
     '';
+
+    wayland.windowManager.niri.settings._children =
+      mkIf config.heywoodlh.home.niri.enable
+      (mkAfter [
+        {spawn-at-startup._args = ["${pkgs.foot}/bin/foot" "-e" "${keyringSetup}/bin/keyring-setup"];}
+      ]);
   };
 }

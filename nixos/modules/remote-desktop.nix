@@ -1,46 +1,55 @@
-{ config, lib, pkgs, nixtop-source, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  nixtop-source,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.nixos.remote-desktop;
   user = cfg.user;
   homeDir = config.users.users.${user}.home;
   runtimeDir = "/run/user/${toString cfg.uid}";
   hostname = "${config.networking.hostName}.barn-banana.ts.net";
-  headlessService = "${user}-hyprland";
-  headlessTty = "tty${toString cfg.headless.vt}";
-  sessionUnits = [ "display-manager.service" ] ++ optional cfg.headless.enable "${headlessService}.service";
-  selkies = pkgs.callPackage "${nixtop-source}/pkgs/selkies/package.nix" { };
+  headlessService = "${user}-niri";
+  # Selkies' pixelflux creates a virtual Wayland compositor here; niri runs
+  # nested inside it and publishes its own socket on the next index.
+  selkiesDisplay = "wayland-1";
+  niriDisplay = "wayland-2";
+  sessionUnits = ["display-manager.service"] ++ optional cfg.headless.enable "${headlessService}.service";
+  selkies = pkgs.callPackage "${nixtop-source}/pkgs/selkies/package.nix" {};
   wayvnc = pkgs.wayvnc.overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [
-      "${nixtop-source}/nixosModules/containerServices/nixtop/wayvnc-recapture-on-resize.patch"
-    ];
+    patches =
+      (old.patches or [])
+      ++ [
+        "${nixtop-source}/nixosModules/containerServices/nixtop/wayvnc-recapture-on-resize.patch"
+      ];
   });
   vncResize = pkgs.writers.writePython3 "${user}-vnc-resize" {
-    libraries = [ pkgs.python3Packages.aiohttp ];
-    flakeIgnore = [ "E501" ];
+    libraries = [pkgs.python3Packages.aiohttp];
+    flakeIgnore = ["E501"];
   } (builtins.readFile "${nixtop-source}/nixosModules/containerServices/nixtop/vnc-resize.py");
   killWayvnc = pkgs.writeShellScript "${user}-wayvnc-kill" ''
     ${pkgs.procps}/bin/pkill -u ${user} -x wayvnc || true
   '';
-  findSocket =
-    if cfg.headless.enable then ''
-      pid=$(${config.systemd.package}/bin/systemctl show -p MainPID --value ${headlessService}.service)
-      if [ "$pid" != 0 ]; then
-        socket=$(${pkgs.hyprland}/bin/hyprctl instances -j | ${getExe pkgs.jq} -r --argjson pid "$pid" '.[] | select(.pid == $pid) | .wl_socket')
-        if [ -n "$socket" ] && [ -S "$XDG_RUNTIME_DIR/$socket" ]; then
-          WAYLAND_DISPLAY="$socket"
-        fi
+  findSocket = ''
+    for socket in "$XDG_RUNTIME_DIR"/wayland-*; do
+      if [ -S "$socket" ]; then
+        WAYLAND_DISPLAY="''${socket##*/}"
+        break
       fi
-    '' else ''
-      for socket in "$XDG_RUNTIME_DIR"/wayland-*; do
-        if [ -S "$socket" ]; then
-          WAYLAND_DISPLAY="''${socket##*/}"
-          break
-        fi
-      done
-    '';
+    done
+  '';
+  waitForDisplay = display: ''
+    for _ in {1..300}; do
+      [ -S "$XDG_RUNTIME_DIR/${display}" ] && break
+      ${pkgs.coreutils}/bin/sleep 0.1
+    done
+    if [ ! -S "$XDG_RUNTIME_DIR/${display}" ]; then
+      echo "Wayland socket ${display} in $XDG_RUNTIME_DIR never appeared" >&2
+      exit 1
+    fi
+  '';
   waitForDesktop = ''
     WAYLAND_DISPLAY=
     for _ in {1..300}; do
@@ -59,7 +68,7 @@ in {
     enable = mkOption {
       default = false;
       description = ''
-        Stream a user's Hyprland session over VNC and Selkies.
+        Stream a user's Niri session over VNC and Selkies.
         The password is read from `passwordFile`; services are skipped until it exists.
       '';
       type = types.bool;
@@ -68,7 +77,7 @@ in {
       default = config.heywoodlh.defaults.user.name;
       defaultText = literalExpression "config.heywoodlh.defaults.user.name";
       description = ''
-        User whose Hyprland session is streamed.
+        User whose Niri session is streamed.
       '';
       type = types.str;
     };
@@ -119,25 +128,9 @@ in {
       enable = mkOption {
         default = false;
         description = ''
-          Run a headless Hyprland session for the user as a system service instead of relying on a display manager.
+          Run Niri nested in Selkies' virtual Wayland compositor as a system service, without a display manager or physical output.
         '';
         type = types.bool;
-      };
-      output = mkOption {
-        default = "HEADLESS-${toUpper user}";
-        defaultText = literalExpression ''"HEADLESS-''${toUpper config.heywoodlh.nixos.remote-desktop.user}"'';
-        description = ''
-          Name of the headless Hyprland output.
-        '';
-        type = types.str;
-      };
-      vt = mkOption {
-        default = 1;
-        description = ''
-          Virtual terminal the headless session runs on so logind gives it a seat.
-          Its getty is stopped, and no display manager may run on the same seat.
-        '';
-        type = types.ints.between 1 63;
       };
     };
   };
@@ -151,37 +144,48 @@ in {
         }
       ];
 
-      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ cfg.vncPort ];
+      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [cfg.vncPort];
 
       systemd.services = {
         selkies = {
-          description = "Selkies stream of the ${config.networking.hostName} Hyprland session";
-          wantedBy = [ "multi-user.target" ];
-          after = sessionUnits;
-          bindsTo = optional cfg.headless.enable "${headlessService}.service";
+          description = "Selkies stream of the ${config.networking.hostName} Niri session";
+          wantedBy = ["multi-user.target"];
+          after =
+            if cfg.headless.enable
+            then [
+              "home-manager-${user}.service"
+              "user@${toString cfg.uid}.service"
+              "systemd-user-sessions.service"
+              "systemd-logind.service"
+            ]
+            else sessionUnits;
           unitConfig.ConditionPathExists = cfg.passwordFile;
-          environment = {
-            XDG_RUNTIME_DIR = runtimeDir;
-            DBUS_SESSION_BUS_ADDRESS = "unix:path=${runtimeDir}/bus";
-            SELKIES_GAMEPAD_ENABLED = "false";
-            SELKIES_PRINTING_ENABLED = "false";
-            SELKIES_ADDR = "127.0.0.1" + optionalString (cfg.address != "127.0.0.1") ",${cfg.address}";
-            SELKIES_USE_CPU = "true";
-          } // optionalAttrs cfg.cssScaling {
-            SELKIES_USE_CSS_SCALING = "true";
-          };
+          environment =
+            {
+              XDG_RUNTIME_DIR = runtimeDir;
+              DBUS_SESSION_BUS_ADDRESS = "unix:path=${runtimeDir}/bus";
+              SELKIES_GAMEPAD_ENABLED = "false";
+              SELKIES_PRINTING_ENABLED = "false";
+              SELKIES_ADDR = "127.0.0.1" + optionalString (cfg.address != "127.0.0.1") ",${cfg.address}";
+              SELKIES_USE_CPU = "true";
+            }
+            // optionalAttrs cfg.cssScaling {
+              SELKIES_USE_CSS_SCALING = "true";
+            }
+            // optionalAttrs cfg.headless.enable {
+              SELKIES_WAYLAND = "true";
+              SELKIES_WAYLAND_SOCKET_INDEX = "1";
+            };
           serviceConfig = {
             User = user;
             PAMName = "login";
             WorkingDirectory = homeDir;
             LoadCredential = "password:${cfg.passwordFile}";
             ExecStart = pkgs.writeShellScript "${user}-selkies" ''
-              ${waitForDesktop}
+              ${optionalString (!cfg.headless.enable) waitForDesktop}
               SELKIES_BASIC_AUTH_PASSWORD=$(<"$CREDENTIALS_DIRECTORY/password")
               export SELKIES_BASIC_AUTH_PASSWORD
-              exec ${getExe selkies} --port=${toString cfg.selkiesPort} \
-                --wayland=true --wayland-host-display="$WAYLAND_DISPLAY" \
-                --basic-auth-user=${user}
+              exec ${getExe selkies} --port=${toString cfg.selkiesPort} ${optionalString (!cfg.headless.enable) "--wayland=true --wayland-host-display=\"$WAYLAND_DISPLAY\""} --basic-auth-user=${user}
             '';
             Restart = "always";
             RestartSec = "5s";
@@ -189,16 +193,23 @@ in {
         };
 
         wayvnc = {
-          description = "VNC access to the ${config.networking.hostName} Hyprland session";
-          wantedBy = [ "multi-user.target" ];
-          after = sessionUnits;
-          bindsTo = optional cfg.headless.enable "${headlessService}.service";
+          description = "VNC access to the ${config.networking.hostName} Niri session";
+          wantedBy = ["multi-user.target"];
+          after =
+            if cfg.headless.enable
+            then ["home-manager-${user}.service" "user@${toString cfg.uid}.service" "${headlessService}.service"]
+            else sessionUnits;
+          requires = optional cfg.headless.enable "${headlessService}.service";
           unitConfig.ConditionPathExists = cfg.passwordFile;
-          environment = {
-            XDG_RUNTIME_DIR = runtimeDir;
-            SELKIES_PORT = toString cfg.selkiesPort;
-            SELKIES_USER = user;
-          };
+          environment =
+            {
+              XDG_RUNTIME_DIR = runtimeDir;
+              SELKIES_PORT = toString cfg.selkiesPort;
+              SELKIES_USER = user;
+            }
+            // optionalAttrs cfg.headless.enable {
+              WAYLAND_DISPLAY = niriDisplay;
+            };
           serviceConfig = {
             User = user;
             PAMName = "login";
@@ -221,7 +232,11 @@ in {
                 -subj "/CN=${hostname}" \
                 -addext "subjectAltName=DNS:${hostname}" \
                 -keyout "$tlsKey" -out "$cert"
-              ${waitForDesktop}
+              ${
+                if cfg.headless.enable
+                then waitForDisplay niriDisplay
+                else waitForDesktop
+              }
               ${pkgs.coreutils}/bin/cat >"$RUNTIME_DIRECTORY/config" <<EOF
               address=${cfg.address}
               port=${toString cfg.vncPort}
@@ -242,66 +257,50 @@ in {
     }
 
     (mkIf cfg.headless.enable {
-      users.users.${user}.extraGroups = [ "render" "video" ];
+      users.users.${user}.extraGroups = ["render" "video"];
 
-      systemd.targets.getty.wants = mkIf (cfg.headless.vt == 1) (mkForce [ ]);
+      heywoodlh.niri.enable = true;
 
       systemd.services.${headlessService} = {
-        description = "Headless Hyprland session for ${user}";
-        wantedBy = [ "multi-user.target" ];
+        description = "niri session for ${user} inside the Selkies virtual display";
+        wantedBy = ["multi-user.target"];
         after = [
+          "selkies.service"
           "home-manager-${user}.service"
           "user@${toString cfg.uid}.service"
           "systemd-user-sessions.service"
           "systemd-logind.service"
-          "getty@${headlessTty}.service"
         ];
-        wants = [
-          "home-manager-${user}.service"
-          "user@${toString cfg.uid}.service"
-          "systemd-logind.service"
-          "selkies.service"
-          "wayvnc.service"
-        ];
-        conflicts = [ "getty@${headlessTty}.service" ];
+        requires = ["selkies.service"];
         environment = {
           XDG_RUNTIME_DIR = runtimeDir;
           DBUS_SESSION_BUS_ADDRESS = "unix:path=${runtimeDir}/bus";
+          WAYLAND_DISPLAY = selkiesDisplay;
           XDG_SESSION_TYPE = "wayland";
-          XDG_CURRENT_DESKTOP = "Hyprland";
-          XDG_SEAT = "seat0";
-          XDG_VTNR = toString cfg.headless.vt;
-          AQ_NO_KMS_REQUIREMENT = "1";
+          XDG_CURRENT_DESKTOP = "niri";
         };
         serviceConfig = {
           User = user;
           PAMName = "login";
           WorkingDirectory = homeDir;
-          ExecStart = "${pkgs.hyprland}/bin/Hyprland";
-          TTYPath = "/dev/${headlessTty}";
-          TTYReset = true;
-          TTYVHangup = true;
-          TTYVTDisallocate = true;
-          StandardInput = "tty-fail";
-          StandardOutput = "journal";
-          StandardError = "journal";
-          UtmpIdentifier = headlessTty;
-          UtmpMode = "user";
+          ExecStart = pkgs.writeShellScript "${user}-niri" ''
+            for _ in {1..300}; do
+              [ -S "$XDG_RUNTIME_DIR/${selkiesDisplay}" ] && exec ${pkgs.niri}/bin/niri
+              ${pkgs.coreutils}/bin/sleep 0.1
+            done
+            echo "Selkies Wayland socket ${selkiesDisplay} never appeared" >&2
+            exit 1
+          '';
           Restart = "always";
           RestartSec = "5s";
         };
       };
 
       home-manager.users.${user} = {
-        heywoodlh.home.hyprland = true;
+        heywoodlh.home.niri.enable = true;
+        heywoodlh.home.niri.lockScreen = false;
+        heywoodlh.home.niri.idleScreenOff = false;
         heywoodlh.home.keyring.autoUnlock = true;
-        wayland.windowManager.hyprland.systemd.enable = false;
-        wayland.windowManager.hyprland.extraConfig = ''
-          hl.monitor({ output = "${cfg.headless.output}", mode = "preferred", position = "0x0", scale = 1 })
-          hl.on("hyprland.start", function()
-            hl.exec_cmd("${pkgs.hyprland}/bin/hyprctl output create headless ${cfg.headless.output}")
-          end)
-        '';
       };
     })
   ]);

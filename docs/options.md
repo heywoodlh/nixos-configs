@@ -5893,7 +5893,7 @@ string
 
 
 
-Stream a user’s Hyprland session over VNC and Selkies\.
+Stream a user’s Niri session over VNC and Selkies\.
 The password is read from ` passwordFile `; services are skipped until it exists\.
 
 
@@ -5966,7 +5966,7 @@ false
 
 
 
-Run a headless Hyprland session for the user as a system service instead of relying on a display manager\.
+Run Niri nested in Selkies’ virtual Wayland compositor as a system service, without a display manager or physical output\.
 
 
 
@@ -5979,55 +5979,6 @@ boolean
 
 ```nix
 false
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
-
-
-
-## heywoodlh\.nixos\.remote-desktop\.headless\.output
-
-
-
-Name of the headless Hyprland output\.
-
-
-
-*Type:*
-string
-
-
-
-*Default:*
-
-```nix
-"HEADLESS-${toUpper config.heywoodlh.nixos.remote-desktop.user}"
-```
-
-*Declared by:*
- - [https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop\.nix](https://tangled.org/heywoodlh.io/nixos-configs/blob/main/nixos/modules/remote-desktop.nix)
-
-
-
-## heywoodlh\.nixos\.remote-desktop\.headless\.vt
-
-
-
-Virtual terminal the headless session runs on so logind gives it a seat\.
-Its getty is stopped, and no display manager may run on the same seat\.
-
-
-
-*Type:*
-integer between 1 and 63 (both inclusive)
-
-
-
-*Default:*
-
-```nix
-1
 ```
 
 *Declared by:*
@@ -6111,7 +6062,7 @@ config.heywoodlh.defaults.user.uid
 
 
 
-User whose Hyprland session is streamed\.
+User whose Niri session is streamed\.
 
 
 

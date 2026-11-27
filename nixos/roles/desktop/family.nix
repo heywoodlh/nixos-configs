@@ -189,7 +189,7 @@ in {
   users.users.heywoodlh.extraGroups = ["docker"];
 
   home-manager = {
-    backupCommand = "${pkgs.trash-cli}/bin/trash-put";
+    backupCommand = "${pkgs.coreutils}/bin/rm -f";
     users.family = {...}: {
       home.stateVersion = "25.05";
       heywoodlh.home = {

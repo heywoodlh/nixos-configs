@@ -2596,7 +2596,7 @@ true
 
 
 
-Set up the login keyring with a generated passphrase and unlock it at login\.
+Prompt for the login keyring passphrase (generating one when no prompt is available) and unlock it at login\.
 
 
 

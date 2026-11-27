@@ -23,7 +23,22 @@ with lib; let
     if [ ! -s "$pass_file" ]; then
       first_run=true
       umask 077
-      ${pkgs.openssl}/bin/openssl rand -base64 32 | ${pkgs.coreutils}/bin/tr -d '\n' > "$pass_file"
+      passphrase=""
+      if [ -t 0 ]; then
+        read -rsp "Login keyring passphrase: " passphrase || true
+        echo
+      elif [ -n "''${WAYLAND_DISPLAY:-}''${DISPLAY:-}" ]; then
+        passphrase="$(${pkgs.zenity}/bin/zenity --password --title="keyring-setup" --timeout=60 2>/dev/null)" || true
+      fi
+      if [ -z "$passphrase" ]; then
+        if [ -t 0 ] || [ -n "''${WAYLAND_DISPLAY:-}''${DISPLAY:-}" ]; then
+          echo "keyring-setup: no passphrase provided; run keyring-setup again to retry" >&2
+          exit 0
+        fi
+        passphrase="$(${pkgs.openssl}/bin/openssl rand -base64 32 | ${pkgs.coreutils}/bin/tr -d '\n')"
+        echo "keyring-setup: no terminal or display available, generated a passphrase" >&2
+      fi
+      printf '%s' "$passphrase" > "$pass_file"
     fi
     ${pkgs.coreutils}/bin/chmod 600 "$pass_file"
 
@@ -44,7 +59,7 @@ in {
   options.heywoodlh.home.keyring = {
     autoUnlock = mkOption {
       default = false;
-      description = "Set up the login keyring with a generated passphrase and unlock it at login.";
+      description = "Prompt for the login keyring passphrase (generating one when no prompt is available) and unlock it at login.";
       type = types.bool;
     };
   };

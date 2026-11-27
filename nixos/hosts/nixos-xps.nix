@@ -31,26 +31,30 @@
               name = "cryptroot";
               settings.allowDiscards = true;
               content = {
-                type = "gpt";
-                partitions = {
-                  root = {
-                    size = "100%";
-                    content = {
-                      type = "filesystem";
-                      format = "ext4";
-                      mountpoint = "/";
-                    };
-                  };
-                  swap = {
-                    size = "8G";
-                    content = {
-                      type = "swap";
-                      discardPolicy = "both";
-                    };
-                  };
-                };
+                type = "lvm_pv";
+                vg = "pool";
               };
             };
+          };
+        };
+      };
+    };
+    lvm_vg.pool = {
+      type = "lvm_vg";
+      lvs = {
+        swap = {
+          size = "8G";
+          content = {
+            type = "swap";
+            discardPolicy = "both";
+          };
+        };
+        root = {
+          size = "100%";
+          content = {
+            type = "filesystem";
+            format = "ext4";
+            mountpoint = "/";
           };
         };
       };
@@ -78,6 +82,7 @@
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.graphics.extraPackages = [pkgs.intel-media-driver];
 
+  services.lvm.enable = true;
   services.thermald.enable = true;
   services.fwupd.enable = true;
 

@@ -496,7 +496,7 @@ in {
         screenshot-path = "~/Pictures/screenshots/%Y-%m-%d-%H%M%S.png";
         binds =
           {
-            "Super+Return" = {spawn = ["${pkgs.foot}/bin/foot"];};
+            "Super+Return" = {spawn = ["${pkgs.ghostty}/bin/ghostty"];};
             "Super+O" = {toggle-overview = {};};
             "Super+Q" = {close-window = {};};
             "Ctrl+Alt+T" = {spawn = ["${pkgs.foot}/bin/foot"];};

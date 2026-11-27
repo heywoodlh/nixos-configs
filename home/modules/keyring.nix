@@ -51,6 +51,12 @@ with lib; let
 
     ${pkgs.coreutils}/bin/timeout 15 ${pkgs.gnome-keyring}/bin/gnome-keyring-daemon --unlock < "$pass_file" >/dev/null || true
   '';
+  keyringAutostart = pkgs.writeShellScript "keyring-autostart" ''
+    if [ -s "$HOME/.config/keyring/password.txt" ]; then
+      exec ${keyringSetup}/bin/keyring-setup
+    fi
+    exec ${pkgs.foot}/bin/foot -e ${keyringSetup}/bin/keyring-setup
+  '';
 in {
   options.heywoodlh.home.keyring = {
     autoUnlock = mkOption {
@@ -76,7 +82,7 @@ in {
     wayland.windowManager.niri.settings._children =
       mkIf config.heywoodlh.home.niri.enable
       (mkAfter [
-        {spawn-at-startup._args = ["${pkgs.foot}/bin/foot" "-e" "${keyringSetup}/bin/keyring-setup"];}
+        {spawn-at-startup._args = ["${keyringAutostart}"];}
       ]);
   };
 }

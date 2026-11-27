@@ -8,6 +8,8 @@
 with lib; let
   cfg = config.heywoodlh.nixos.gaming;
   system = pkgs.stdenv.hostPlatform.system;
+  protonArch = if system == "aarch64-linux" then "aarch64" else "x86_64";
+  cachyosArch = if system == "aarch64-linux" then "arm64" else "x86_64";
   fexFetcher = pkgs.writeShellScriptBin "fex-fetch.sh" ''
     if [[ ! -e $HOME/.fex-emu/RootFS/Ubuntu_24_04.sqsh ]]
     then
@@ -39,22 +41,25 @@ with lib; let
     if [[ "$target" == "CachyOS/proton-cachyos" ]]
     then
       # https://github.com/CachyOS/proton-cachyos/releases/download/cachyos-10.0-20260324-slr/proton-cachyos-10.0-20260324-slr-x86_64.tar.xz
-      suffix="slr-x86_64.tar.xz"
-      shasum_suffix="slr-x86_64.sha512sum"
+      suffix="slr-${cachyosArch}.tar.xz"
+      shasum_suffix="slr-${cachyosArch}.sha512sum"
     fi
 
     if [[ "$target" == "GloriousEggroll/proton-ge-custom" ]]
     then
-      # https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton10-34/GE-Proton10-34.tar.gz
-      suffix=".tar.gz"
-      shasum_suffix=".sha512sum"
+      # https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton11-14/GE-Proton11-14-x86_64.tar.gz
+      suffix="-${protonArch}.tar.gz"
+      shasum_suffix="-${protonArch}.sha512sum"
     fi
 
     STEAM_DIR="$HOME/.steam/root/compatibilitytools.d"
-    release_tag=$(curl -s https://api.github.com/repos/$target/releases/latest | jq -r '.tag_name')
-    if ls $STEAM_DIR | grep -q "$release_tag"
+    release_json=$(curl -s https://api.github.com/repos/$target/releases/latest)
+    release_tag=$(echo "$release_json" | jq -r '.tag_name')
+    tarball_url=$(echo "$release_json" | grep browser_download_url | cut -d\" -f4 | grep -- "$suffix")
+    tarball_name=$(basename "$tarball_url")
+    if [[ -d "$STEAM_DIR/''${tarball_name%.tar.*}" ]]
     then
-      echo "Latest $target release already downloaded."
+      echo "Latest $target $release_tag already downloaded."
     else
       set -ex
       # make temp working directory
@@ -63,13 +68,11 @@ with lib; let
       cd /tmp/proton-custom
 
       # download tarball
-      tarball_url=$(curl -s https://api.github.com/repos/$target/releases/latest | grep browser_download_url | cut -d\" -f4 | grep $suffix)
-      tarball_name=$(basename $tarball_url)
       curl -# -L $tarball_url -o $tarball_name --no-progress-meter
 
       # download checksum
-      checksum_url=$(curl -s https://api.github.com/repos/$target/releases/latest | grep browser_download_url | cut -d\" -f4 | grep $shasum_suffix)
-      checksum_name=$(basename $checksum_url)
+      checksum_url=$(echo "$release_json" | grep browser_download_url | cut -d\" -f4 | grep -- "$shasum_suffix")
+      checksum_name=$(basename "$checksum_url")
       curl -# -L $checksum_url -o $checksum_name --no-progress-meter
 
       # check tarball with checksum

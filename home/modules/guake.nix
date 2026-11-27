@@ -1,11 +1,13 @@
-{ config, lib, pkgs, myFlakes, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  myPkgs,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.home.guake;
-  system = pkgs.stdenv.hostPlatform.system;
-  myTmux = myFlakes.packages.${system}.tmux;
+  myTmux = myPkgs.tmux;
 in {
   options = {
     heywoodlh.home.guake = mkOption {

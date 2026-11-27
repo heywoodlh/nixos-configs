@@ -32,6 +32,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -39,4 +41,3 @@ jobs:
       - name: Build containers and test
         run: |
           script -e -c "./ansible/test.sh ${{ matrix.os }}"
-

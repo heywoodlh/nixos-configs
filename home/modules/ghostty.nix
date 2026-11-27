@@ -1,8 +1,11 @@
-{ config, lib, pkgs, myFlakes, self, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  self,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.home.ghostty;
   stdenv = pkgs.stdenv;
   system = stdenv.hostPlatform.system;
@@ -25,7 +28,10 @@ in {
         type = types.str;
       };
       fontSize = mkOption {
-        default = if stdenv.hostPlatform.isDarwin then 16 else 14;
+        default =
+          if stdenv.hostPlatform.isDarwin
+          then 16
+          else 14;
         description = ''
           Ghostty font size.
         '';
@@ -51,27 +57,37 @@ in {
   config = mkIf cfg.enable {
     programs.ghostty = {
       enable = true;
-      package = if stdenv.hostPlatform.isDarwin then null else pkgs.ghostty;
-      settings = {
-        command = cfg.command;
-        auto-update = "off";
-        font-size = cfg.fontSize;
-        bell-features = "no-system,no-audio,attention,title,border";
-        background-opacity = 0.95;
-      } // optionalAttrs (stdenv.hostPlatform.isDarwin) {
-        macos-window-shadow = false;
-        initial-window = false;
-        window-decoration = "auto";
-        quick-terminal-space-behavior = "remain";
-        quick-terminal-animation-duration = 0.1;
-        quick-terminal-autohide = false;
-        quick-terminal-position = "center";
-        quick-terminal-size = "99%,97%";
-        keybind = [
-          cfg.quickTerminalKeybind
-        ];
-      } // optionalAttrs (stdenv.hostPlatform.isLinux) {
-      } // cfg.extraSettings;
+      package =
+        if stdenv.hostPlatform.isDarwin
+        then null
+        else pkgs.ghostty;
+      settings =
+        {
+          command = cfg.command;
+          auto-update = "off";
+          font-size = cfg.fontSize;
+          bell-features = "no-system,no-audio,attention,title,border";
+          background-opacity = 0.95;
+        }
+        // optionalAttrs (stdenv.hostPlatform.isDarwin) {
+          macos-window-shadow = false;
+          initial-window = false;
+          window-decoration = "auto";
+          quick-terminal-space-behavior = "remain";
+          quick-terminal-animation-duration = 0.1;
+          quick-terminal-autohide = false;
+          quick-terminal-position = "center";
+          quick-terminal-size = "99%,97%";
+          keybind = [
+            cfg.quickTerminalKeybind
+          ];
+        }
+        // optionalAttrs (stdenv.hostPlatform.isLinux) {
+          quick-terminal-position = "top";
+          quick-terminal-size = "97%";
+          quick-terminal-autohide = false;
+        }
+        // cfg.extraSettings;
     };
   };
 }

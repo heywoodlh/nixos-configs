@@ -1,0 +1,3 @@
+{...}: {
+  heywoodlh.console = true;
+}

@@ -1,14 +1,18 @@
-{ config, lib, pkgs, myFlakes, nixpkgs-edge, nixpkgs-stable, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  myPkgs,
+  nixpkgs-edge,
+  ...
+}:
+with lib; let
   system = pkgs.stdenv.hostPlatform.system;
   stdenv = pkgs.stdenv;
   homeDir = config.home.homeDirectory;
-  myFish = myFlakes.packages.${system}.fish;
+  myFish = myPkgs.fish;
   myVim = pkgs.neovim-unwrapped;
-  myHelix = myFlakes.packages.${system}.helix;
+  myHelix = myPkgs.helix;
   todomanWrapper = pkgs.writeScriptBin "todo" ''
     ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null && ${pkgs.todoman}/bin/todo "$@" | ${pkgs.gnused}/bin/sed 's/⟳//' && ${pkgs.vdirsyncer}/bin/vdirsyncer sync &>/dev/null
   '';
@@ -27,17 +31,15 @@ let
       fi
     fi
   '';
-  newsboat_browser_config = if stdenv.hostPlatform.isDarwin then ''
-    browser "open %u"
-  ''
-  else ''
-    browser "${pkgs.xdg-utils}/bin/xdg-open %u"
-  '';
-  myOpWrapper = myFlakes.packages.${system}.op-wrapper;
-  stablePkgs = import nixpkgs-stable {
-    inherit system;
-    config.allowUnfree = true;
-  };
+  newsboat_browser_config =
+    if stdenv.hostPlatform.isDarwin
+    then ''
+      browser "open %u"
+    ''
+    else ''
+      browser "${pkgs.xdg-utils}/bin/xdg-open %u"
+    '';
+  myOpWrapper = myPkgs.op-wrapper;
   edgePkgs = import nixpkgs-edge {
     inherit system;
     config.allowUnfree = true;
@@ -47,14 +49,14 @@ let
     url = "https://raw.githubusercontent.com/heywoodlh/1password-pass-backup/c938124eff5dddd3aad226a5a5a6ae65441211b7/backup.sh";
     sha256 = "sha256:12cbni566245m513r2w8lng11gzbl148mlnlscwzwbkxhpacwz9d";
   };
-  op-backup-dir = if stdenv.hostPlatform.isDarwin then
-    "${homeDir}/Library/Mobile\\ Documents/com~apple~CloudDocs/password-store"
-  else
-    "${homeDir}/.password-store";
-  op-backup-dir-no-format = if stdenv.hostPlatform.isDarwin then
-    "${homeDir}/Library/Mobile Documents/com~apple~CloudDocs/password-store"
-  else
-    "${homeDir}/.password-store";
+  op-backup-dir =
+    if stdenv.hostPlatform.isDarwin
+    then "${homeDir}/Library/Mobile\\ Documents/com~apple~CloudDocs/password-store"
+    else "${homeDir}/.password-store";
+  op-backup-dir-no-format =
+    if stdenv.hostPlatform.isDarwin
+    then "${homeDir}/Library/Mobile Documents/com~apple~CloudDocs/password-store"
+    else "${homeDir}/.password-store";
   op-backup = pkgs.writeShellScriptBin "op-backup" ''
     bash ${op-backup-script} l.spencer.heywood@protonmail.com ${op-backup-dir}
   '';
@@ -78,18 +80,7 @@ let
   '';
   myPass = pkgs.writeShellScriptBin "pass" ''
     export PASSWORD_STORE_DIR="${op-backup-dir-no-format}"
-    ${pkgs.pass.withExtensions (exts: [ exts.pass-otp ])}/bin/pass $@
-  '';
-  tor-proxychains-conf = pkgs.writeText "proxychains.conf" ''
-    strict_chain
-    proxy_dns
-    quiet_mode
-    remote_dns_subnet 224
-    tcp_read_time_out 15000
-    tcp_connect_time_out 8000
-    localnet 127.0.0.0/255.0.0.0
-    [ProxyList]
-    socks5 tor.barn-banana.ts.net 1080
+    ${pkgs.pass.withExtensions (exts: [exts.pass-otp])}/bin/pass $@
   '';
   duo-key-self-setup = pkgs.writeShellScriptBin "duo-key-setup.sh" ''
     ${op-wrapper} item get 6sgj3s3755opehqifusmxxoehy --fields=unix-secret-key --reveal > /tmp/duo.key
@@ -159,10 +150,18 @@ let
     cp ${docker-compose-txt} "$1"
     [[ -f "$1" ]] && chmod +w "$1"
   '';
-  altDarwin = if system == "aarch64-darwin" then "ssh://heywoodlh@intel-mac-vm x86_64-darwin" else "ssh://heywoodlh@mac-mini aarch64-darwin"; # MacOS builder on opposite arch
-  altLinux = if system == "x86_64-linux" then "ssh://heywoodlh@ubuntu-arm64 aarch64-linux" else "ssh://heywoodlh@homelab x86_64-linux"; # Linux builder on opposite arch
-  altBuilder = if stdenv.hostPlatform.isDarwin then "${altLinux}" else "${altDarwin}";
-  myBuilders = if stdenv.hostPlatform.isDarwin then "ssh://heywoodlh@homelab x86_64-linux ; ssh://builder@linux-builder aarch64-linux ; ${altDarwin}" else "ssh://heywoodlh@mac-mini aarch64-darwin ; ${altLinux}";
+  altDarwin =
+    if system == "aarch64-darwin"
+    then "ssh://heywoodlh@intel-mac-vm x86_64-darwin"
+    else "ssh://heywoodlh@mac-mini aarch64-darwin"; # MacOS builder on opposite arch
+  altLinux =
+    if system == "x86_64-linux"
+    then "ssh://heywoodlh@ubuntu-arm64 aarch64-linux"
+    else "ssh://heywoodlh@homelab x86_64-linux"; # Linux builder on opposite arch
+  myBuilders =
+    if stdenv.hostPlatform.isDarwin
+    then "ssh://heywoodlh@homelab x86_64-linux ; ssh://builder@linux-builder aarch64-linux ; ${altDarwin}"
+    else "ssh://heywoodlh@mac-mini aarch64-darwin ; ${altLinux}";
   builder-pop = pkgs.writeShellScriptBin "builders.sh" ''
     set -ex
     # Shell script to populate SSH host keys
@@ -317,9 +316,9 @@ let
       - `~/opt/nixos-configs`: NixOS, nix-darwin, and home-manager
         configuration for all machines. See `~/opt/nixos-configs/AGENTS.md`
         for its internal layout.
-        - `~/opt/nixos-configs/flakes/kube`: Kubernetes manifests deployed
+        - `~/opt/nixos-configs/kubernetes`: Kubernetes manifests deployed
           via ArgoCD to the homelab cluster. See
-          `~/opt/nixos-configs/flakes/kube/AGENTS.md` for its internal
+          `~/opt/nixos-configs/kubernetes/AGENTS.md` for its internal
           layout.
       - `~/opt/dockerfiles`: Dockerfile collection for custom container
         images.
@@ -463,11 +462,15 @@ let
       ${pkgs.coreutils}/bin/mv "$tmp" "$credentials"
       trap - EXIT
     fi
-    ${if stdenv.hostPlatform.isDarwin then ''
-      /bin/launchctl kickstart -k "gui/$(/usr/bin/id -u)/org.nix-community.home.spotify-soloist"
-    '' else ''
-      ${pkgs.systemd}/bin/systemctl --user restart spotify-soloist.service
-    ''}
+    ${
+      if stdenv.hostPlatform.isDarwin
+      then ''
+        /bin/launchctl kickstart -k "gui/$(/usr/bin/id -u)/org.nix-community.home.spotify-soloist"
+      ''
+      else ''
+        ${pkgs.systemd}/bin/systemctl --user restart spotify-soloist.service
+      ''
+    }
   '';
   iambClearcache = pkgs.writeShellScriptBin "iamb-clearcache" ''
     rm -rf "$HOME/.cache/iamb/profiles/heywoodlh/sqlite"
@@ -475,75 +478,77 @@ let
   '';
 in {
   # Packages I need installed on every system
-  home.packages = (with pkgs; [
-    _1password-cli
-    act
-    attic-client
-    attic-setup
-    bind
-    carbonyl
-    coreutils
-    curl
-    docker-compose-gen
-    dos2unix
-    file
-    findutils
-    fzf
-    gcc
-    gitleaks
-    gnupg
-    gnumake
-    gnused
-    go
-    htop
-    inetutils
-    jq
-    k9s
-    kubectl
-    kubernetes-helm
-    lefthook
-    less
-    libarchive
-    msedit
-    nixd
-    nixfmt
-    nmap
-    openssl
-    pciutils
-    pwgen
-    python3
-    screen
-    spotify-player
-    tcpdump
-    tree
-    unzip
-    vdirsyncer
-    zip
-    git-lfs
-    myFlakes.packages.${system}.tmux
-    myFish # For non-nix use-cases
-    todomanWrapper
-    todoEdit
-    password
-    otp
-    op-backup
-    duo-key-self-setup
-    duo-key-remote-setup
-    builder-pop
-    remote-nix
-    system-fetch
-    nixos-configs-test
-    youtube-dl-mp3
-    myProxychains
-    wake-spencer-gaming-pc
-    wake-sarah-gaming-pc
-    myOpWrapper
-    lumoSetup
-    juabsdSetup
-    tangledSyncWrapper
-    paseoSetup
-    iambClearcache
-  ]) ++ lib.optional config.heywoodlh.home.spotify-soloist.enable soloistWrapper;
+  home.packages =
+    (with pkgs; [
+      _1password-cli
+      act
+      attic-client
+      attic-setup
+      bind
+      carbonyl
+      coreutils
+      curl
+      docker-compose-gen
+      dos2unix
+      file
+      findutils
+      fzf
+      gcc
+      gitleaks
+      gnupg
+      gnumake
+      gnused
+      go
+      htop
+      inetutils
+      jq
+      k9s
+      kubectl
+      kubernetes-helm
+      lefthook
+      less
+      libarchive
+      msedit
+      nixd
+      nixfmt
+      nmap
+      openssl
+      pciutils
+      pwgen
+      python3
+      screen
+      spotify-player
+      tcpdump
+      tree
+      unzip
+      vdirsyncer
+      zip
+      git-lfs
+      myPkgs.tmux
+      myFish # For non-nix use-cases
+      todomanWrapper
+      todoEdit
+      password
+      otp
+      op-backup
+      duo-key-self-setup
+      duo-key-remote-setup
+      builder-pop
+      remote-nix
+      system-fetch
+      nixos-configs-test
+      youtube-dl-mp3
+      myProxychains
+      wake-spencer-gaming-pc
+      wake-sarah-gaming-pc
+      myOpWrapper
+      lumoSetup
+      juabsdSetup
+      tangledSyncWrapper
+      paseoSetup
+      iambClearcache
+    ])
+    ++ lib.optional config.heywoodlh.home.spotify-soloist.enable soloistWrapper;
 
   # Enable password-store
   programs.password-store = {
@@ -640,7 +645,10 @@ in {
 
   programs.newsboat = {
     enable = true;
-    package = if pkgs.stdenv.hostPlatform.isDarwin then null else pkgs.newsboat;
+    package =
+      if pkgs.stdenv.hostPlatform.isDarwin
+      then null
+      else pkgs.newsboat;
     extraConfig = ''
       urls-source "miniflux"
       miniflux-url "http://miniflux"
@@ -693,16 +701,16 @@ in {
       atuinConfigDir = pkgs.stdenv.mkDerivation {
         name = "atuinConfigDir";
         builder = pkgs.bash;
-        args = [ "-c" "${pkgs.coreutils}/bin/mkdir -p $out/atuin; ${pkgs.coreutils}/bin/cp ${atuinConfig} $out/atuin/config.toml;" ];
+        args = ["-c" "${pkgs.coreutils}/bin/mkdir -p $out/atuin; ${pkgs.coreutils}/bin/cp ${atuinConfig} $out/atuin/config.toml;"];
       };
     in ''
       # Ensure nix-profile in PATH
       set -g PATH "$HOME/.nix-profile/bin" $PATH
 
       # Atuin
-      set -g PATH "${stablePkgs.atuin}/bin" $PATH
+      set -g PATH "${edgePkgs.atuin}/bin" $PATH
       set -gx ATUIN_CONFIG_DIR "${atuinConfigDir}/atuin"
-      ${stablePkgs.atuin}/bin/atuin init fish --disable-up-arrow | source
+      ${edgePkgs.atuin}/bin/atuin init fish --disable-up-arrow | source
 
       # Delete invalid session.sh file if exists
       if test -e $HOME/.1password/session.sh
@@ -829,9 +837,18 @@ in {
 
   home.file.".ssh/config".text = let
     # Lazy: assume I'm either on Apple Silicon MacOS or Intel Linux
-    altBuilder = if stdenv.hostPlatform.isLinux then "ubuntu-arm64" else "intel-mac-vm";
-    authSock = if stdenv.hostPlatform.isLinux then "${homeDir}/.ssh/agent.sock" else "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"; # always assume 1password on MacOS
-    builders = if stdenv.hostPlatform.isLinux then "mac-mini intel-mac-vm ${altBuilder}" else "homelab ubuntu-arm64 ${altBuilder}";
+    altBuilder =
+      if stdenv.hostPlatform.isLinux
+      then "ubuntu-arm64"
+      else "intel-mac-vm";
+    authSock =
+      if stdenv.hostPlatform.isLinux
+      then "${homeDir}/.ssh/agent.sock"
+      else "${homeDir}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"; # always assume 1password on MacOS
+    builders =
+      if stdenv.hostPlatform.isLinux
+      then "mac-mini intel-mac-vm ${altBuilder}"
+      else "homelab ubuntu-arm64 ${altBuilder}";
   in ''
     # User-wide SSH config for nix builders
     Host ${builders}
@@ -1023,35 +1040,133 @@ in {
     search-tui.enable = true;
     llm = {
       enable = true;
-      opencode.extraConf.provider = {
-        lumo = {
-          npm = "@ai-sdk/openai-compatible";
-          name = "Lumo";
-          options = {
-            baseURL = "http://lumo.barn-banana.ts.net/v1";
-            apiKey = "{file:${lumoApiKey}}";
+      opencode.extraConf.provider =
+        {
+          lumo = {
+            npm = "@ai-sdk/openai-compatible";
+            name = "Lumo";
+            options = {
+              baseURL = "http://lumo.barn-banana.ts.net/v1";
+              apiKey = "{file:${lumoApiKey}}";
+            };
+            models = {
+              lumo = {
+                name = "lumo";
+                tool_call = false;
+                limit = {
+                  context = 32768;
+                  output = 8192;
+                };
+              };
+              lumo-lite = {
+                name = "lumo-lite";
+                tool_call = false;
+                limit = {
+                  context = 32768;
+                  output = 8192;
+                };
+              };
+              lumo-max = {
+                name = "lumo-max";
+                tool_call = false;
+                reasoning = true;
+                limit = {
+                  context = 32768;
+                  output = 8192;
+                };
+              };
+            };
           };
-          models = {
-            lumo = {
-              name = "lumo";
-              tool_call = false;
-              limit = {
-                context = 32768;
-                output = 8192;
-              };
-            };
-            lumo-lite = {
-              name = "lumo-lite";
-              tool_call = false;
-              limit = {
-                context = 32768;
-                output = 8192;
-              };
-            };
-            lumo-max = {
-              name = "lumo-max";
-              tool_call = false;
+        }
+        // optionalAttrs config.heywoodlh.home.llm.enable {
+          lmstudio-remote = {
+            npm = "@ai-sdk/openai-compatible";
+            name = "lmstudio-remote";
+            options.baseURL = "http://llm.barn-banana.ts.net/v1";
+            models."google/gemma-4-e4b" = {
+              name = "google/gemma-4-e4b";
               reasoning = true;
+              tool_call = true;
+              limit = {
+                context = 32768;
+                output = 8192;
+              };
+            };
+          };
+        }
+        // {
+          # juabsd's Headscale host serves several OpenAI-compatible endpoints under
+          # different paths on port 8017. opencode only reads baseURL from the provider
+          # options, so each model carries its own URL via provider.api; leaving the
+          # provider-level baseURL unset is what makes that per-model URL take effect.
+          "juabsd-ollama" = {
+            npm = "@ai-sdk/openai-compatible";
+            name = "juabsd-ollama";
+            options.apiKey = "{file:${juabsdOllamaApiKey}}";
+            models = {
+              "inkling-2-mini" = {
+                name = "inkling-2-mini";
+                id = "inkling-2-mini:26b-a5b-nvfp4";
+                provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
+                headers.Host = "100.64.0.7";
+                tool_call = true;
+                limit = {
+                  context = 32768;
+                  output = 8192;
+                };
+              };
+              "gpt-oss-120b" = {
+                name = "gpt-oss-120b";
+                id = "hermes-gpt-oss-120b-64k:latest";
+                provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
+                headers.Host = "100.64.0.7";
+                tool_call = true;
+                limit = {
+                  context = 65536;
+                  output = 8192;
+                };
+              };
+              "qwen3.5" = {
+                name = "qwen3.5";
+                id = "qwen3.5:9b";
+                provider.api = "http://juabsd.barn-banana.ts.net:8017/qwen35/v1";
+                headers.Host = "100.64.0.7";
+                tool_call = true;
+                limit = {
+                  context = 32768;
+                  output = 8192;
+                };
+              };
+              "qwen3-6-vision" = {
+                name = "qwen3-6-vision";
+                id = "Qwen/Qwen3.6-35B-A3B";
+                provider.api = "http://juabsd.barn-banana.ts.net:8017/vision/v1";
+                headers.Host = "100.64.0.7";
+                attachment = true;
+                modalities = {
+                  input = ["text" "image"];
+                  output = ["text"];
+                };
+                tool_call = true;
+                limit = {
+                  context = 32768;
+                  output = 8192;
+                };
+              };
+            };
+          };
+          "juabsd-claris" = {
+            npm = "@ai-sdk/openai-compatible";
+            name = "juabsd-claris";
+            options = {
+              baseURL = "http://juabsd.barn-banana.ts.net:49820/v1";
+              apiKey = "{file:${juabsdClarisApiKey}}";
+            };
+            models."qwen-3.6-text-only" = {
+              name = "qwen-3.6-text-only";
+              id = "Qwen/Qwen3.6-35B-A3B";
+              headers.Host = "100.64.0.1";
+              tool_call = true;
               limit = {
                 context = 32768;
                 output = 8192;
@@ -1059,83 +1174,6 @@ in {
             };
           };
         };
-      } // optionalAttrs config.heywoodlh.home.llm.enable {
-        lmstudio-remote = {
-          npm = "@ai-sdk/openai-compatible";
-          name = "lmstudio-remote";
-          options.baseURL = "http://llm.barn-banana.ts.net/v1";
-          models."google/gemma-4-e4b" = {
-            name = "google/gemma-4-e4b";
-            reasoning = true;
-            tool_call = true;
-            limit = { context = 32768; output = 8192; };
-          };
-        };
-      } // {
-        # juabsd's Headscale host serves several OpenAI-compatible endpoints under
-        # different paths on port 8017. opencode only reads baseURL from the provider
-        # options, so each model carries its own URL via provider.api; leaving the
-        # provider-level baseURL unset is what makes that per-model URL take effect.
-        "juabsd-ollama" = {
-          npm = "@ai-sdk/openai-compatible";
-          name = "juabsd-ollama";
-          options.apiKey = "{file:${juabsdOllamaApiKey}}";
-          models = {
-            "inkling-2-mini" = {
-              name = "inkling-2-mini";
-              id = "inkling-2-mini:26b-a5b-nvfp4";
-              provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
-              headers.Host = "100.64.0.7";
-              tool_call = true;
-              limit = { context = 32768; output = 8192; };
-            };
-            "gpt-oss-120b" = {
-              name = "gpt-oss-120b";
-              id = "hermes-gpt-oss-120b-64k:latest";
-              provider.api = "http://juabsd.barn-banana.ts.net:8017/gptoss/v1";
-              headers.Host = "100.64.0.7";
-              tool_call = true;
-              limit = { context = 65536; output = 8192; };
-            };
-            "qwen3.5" = {
-              name = "qwen3.5";
-              id = "qwen3.5:9b";
-              provider.api = "http://juabsd.barn-banana.ts.net:8017/qwen35/v1";
-              headers.Host = "100.64.0.7";
-              tool_call = true;
-              limit = { context = 32768; output = 8192; };
-            };
-            "qwen3-6-vision" = {
-              name = "qwen3-6-vision";
-              id = "Qwen/Qwen3.6-35B-A3B";
-              provider.api = "http://juabsd.barn-banana.ts.net:8017/vision/v1";
-              headers.Host = "100.64.0.7";
-              attachment = true;
-              modalities = {
-                input = [ "text" "image" ];
-                output = [ "text" ];
-              };
-              tool_call = true;
-              limit = { context = 32768; output = 8192; };
-            };
-          };
-        };
-        "juabsd-claris" = {
-          npm = "@ai-sdk/openai-compatible";
-          name = "juabsd-claris";
-          options = {
-            baseURL = "http://juabsd.barn-banana.ts.net:49820/v1";
-            apiKey = "{file:${juabsdClarisApiKey}}";
-          };
-          models."qwen-3.6-text-only" = {
-            name = "qwen-3.6-text-only";
-            id = "Qwen/Qwen3.6-35B-A3B";
-            headers.Host = "100.64.0.1";
-            tool_call = true;
-            limit = { context = 32768; output = 8192; };
-          };
-        };
-      };
       pi.package = edgePkgs.pi-coding-agent;
       pi.extraConf = {
         homelab = {
@@ -1148,7 +1186,7 @@ in {
               id = "google/gemma-4-e4b";
               name = "google/gemma-4-e4b";
               reasoning = true;
-              input = [ "text" ];
+              input = ["text"];
               contextWindow = 32768;
               maxTokens = 8192;
               cost = {

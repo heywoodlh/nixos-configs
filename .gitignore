@@ -4,3 +4,6 @@ custom.nix
 m1-support
 result
 **.bin
+
+# rendered by kubernetes/render.sh; published to the gitops branch
+kubernetes/manifests/*.yaml

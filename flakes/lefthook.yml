@@ -1,5 +1,0 @@
-pre-commit:
-  commands:
-    gitleaks:
-      run: |
-        gitleaks detect --verbose --redact

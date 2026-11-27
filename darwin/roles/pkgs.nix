@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-let
+{pkgs, ...}: let
   darwinRebuildWrapper = pkgs.writeShellScript "darwin-rebuild-wrapper" ''
     if [[ -d $HOME/opt/nixos-configs ]]
     then
@@ -19,16 +17,12 @@ let
   myDarwinBuild = pkgs.writeShellScriptBin "darwin-build" ''
     ${darwinRebuildWrapper} build $@
   '';
-  myDarwinSwitchWithFlakes = pkgs.writeShellScriptBin "darwin-switch-with-flakes" ''
-    ${myDarwinSwitch}/bin/darwin-switch --override-input myFlakes $HOME/opt/flakes $@
-  '';
 in {
   #nix packages
   environment.systemPackages = with pkgs; [
     myDarwinSwitch
     myDarwinBoot
     myDarwinBuild
-    myDarwinSwitchWithFlakes
     tailscale
   ];
 
@@ -53,12 +47,30 @@ in {
       HOMEBREW_NO_UPGRADE_QUIT_CASKS = "1";
     };
     taps = [
-      { name = "amar1729/formulae"; trusted = true; }
-      { name = "colindean/fonts-nonfree"; trusted = true; }
-      { name = "kidonng/malt"; trusted = true; }
-      { name = "aaronraimist/homebrew-tap"; trusted = true; }
-      { name = "aaronraimist/tap"; trusted = true; }
-      { name = "akdev1l/apps"; trusted = true; } # librewolf
+      {
+        name = "amar1729/formulae";
+        trusted = true;
+      }
+      {
+        name = "colindean/fonts-nonfree";
+        trusted = true;
+      }
+      {
+        name = "kidonng/malt";
+        trusted = true;
+      }
+      {
+        name = "aaronraimist/homebrew-tap";
+        trusted = true;
+      }
+      {
+        name = "aaronraimist/tap";
+        trusted = true;
+      }
+      {
+        name = "akdev1l/apps";
+        trusted = true;
+      } # librewolf
     ];
     casks = [
       "1password"

@@ -4,6 +4,8 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
+ANSIBLE_CORE_SPEC="ansible-core>=2.14,<=2.21.99"
+
 # Debian-specific commands
 if [[ -e /etc/debian_version ]]
 then
@@ -17,10 +19,20 @@ then
   fi
 
   dpkg -r ansible || true
-  command -v ansible &>/dev/null || pipx install --include-deps ansible
+  pipx install --force --include-deps "${ANSIBLE_CORE_SPEC}"
 fi
 
 if grep -q 'Arch Linux' /etc/os-release
 then
-  pacman -Sy --noconfirm ansible git curl
+  pacman -Syu --noconfirm --needed python python-pipx git curl
+  pipx install --force --include-deps "${ANSIBLE_CORE_SPEC}"
+fi
+
+# systemd-started containers do not inherit the pipx PATH
+if [[ -x "$HOME/.local/bin/ansible" ]]
+then
+  for bin in ansible ansible-playbook ansible-galaxy ansible-config ansible-doc
+  do
+    ln -sf "$HOME/.local/bin/${bin}" "/usr/local/bin/${bin}"
+  done
 fi

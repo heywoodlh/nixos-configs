@@ -1,13 +1,12 @@
-{ config, lib, pkgs, myFlakes, dark-wallpaper, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  dark-wallpaper,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.home.cosmic;
-  homeDir = config.home.homeDirectory;
-  system = pkgs.stdenv.hostPlatform.system;
-  myTmux = myFlakes.packages.${system}.tmux;
-  myFish = myFlakes.packages.${system}.fish;
 in {
   options = {
     heywoodlh.home.cosmic = mkOption {

@@ -7,9 +7,9 @@ pkgs="trizen"
 set -e
 
 # Output format
-info() { echo -e "\e[34m:: $@\e[0m"; }
-warning() { echo -e "\e[33m:: $@\e[0m"; }
-error() { echo -e "\e[31m:: $@\e[0m"; }
+info() { echo -e "\e[34m:: $*\e[0m"; }
+warning() { echo -e "\e[33m:: $*\e[0m"; }
+error() { echo -e "\e[31m:: $*\e[0m"; }
 
 # Make directory and enter it
 mkcd() { mkdir -p "$1" && cd "$1"; }

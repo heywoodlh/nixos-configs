@@ -1,10 +1,15 @@
-{ config, pkgs, nixpkgs-stable, myFlakes, dark-wallpaper, ... }:
-
-let
+{
+  config,
+  pkgs,
+  nixpkgs-stable,
+  myPkgs,
+  dark-wallpaper,
+  ...
+}: let
   system = pkgs.stdenv.hostPlatform.system;
   snowflake = ../../assets/nixos-snowflake.png;
   captive-portal = pkgs.writeShellScriptBin "captive-portal" ''
-   ${pkgs.xdg-utils}/bin/xdg-open "http://$(${pkgs.iproute2}/bin/ip --oneline route get 1.1.1.1 | ${pkgs.gawk}/bin/awk '{print $3}')"
+    ${pkgs.xdg-utils}/bin/xdg-open "http://$(${pkgs.iproute2}/bin/ip --oneline route get 1.1.1.1 | ${pkgs.gawk}/bin/awk '{print $3}')"
   '';
   pkgs-stable = import nixpkgs-stable {
     inherit system;
@@ -35,34 +40,38 @@ in {
     executable = true;
   };
 
-  home.packages = [
-    pkgs.acpi
-    pkgs.arch-install-scripts
-    pkgs.flatpak
-    pkgs.gnome-screenshot
-    pkgs.guake
-    pkgs.inotify-tools
-    pkgs.jetbrains-mono
-    pkgs.keyutils
-    pkgs.libnotify #(notify-send)
-    pkgs.nixos-install-tools
-    pkgs.remmina
-    pkgs.rofi
-    pkgs.tailscale
-    pkgs.virt-manager
-    pkgs.xclip
-    pkgs.xdotool
-    pkgs.ghostty
-    pkgs.scrcpy
-    pkgs.abiword
-    captive-portal
-  ] ++ pkgs.lib.optionals (system == "x86_64-linux") [
-    pkgs-stable.rustdesk-flutter
-  ] ++ pkgs.lib.optionals (config.heywoodlh.home.onepassword.enable) [
-    config.heywoodlh.home.onepassword.package
-  ] ++ pkgs.lib.optionals (system == "aarch64-linux") [
-    myFlakes.packages.aarch64-linux.chromium-widevine
-  ];
+  home.packages =
+    [
+      pkgs.acpi
+      pkgs.arch-install-scripts
+      pkgs.flatpak
+      pkgs.gnome-screenshot
+      pkgs.guake
+      pkgs.inotify-tools
+      pkgs.jetbrains-mono
+      pkgs.keyutils
+      pkgs.libnotify #(notify-send)
+      pkgs.nixos-install-tools
+      pkgs.remmina
+      pkgs.rofi
+      pkgs.tailscale
+      pkgs.virt-manager
+      pkgs.xclip
+      pkgs.xdotool
+      pkgs.ghostty
+      pkgs.scrcpy
+      pkgs.abiword
+      captive-portal
+    ]
+    ++ pkgs.lib.optionals (system == "x86_64-linux") [
+      pkgs-stable.rustdesk-flutter
+    ]
+    ++ pkgs.lib.optionals (config.heywoodlh.home.onepassword.enable) [
+      config.heywoodlh.home.onepassword.package
+    ]
+    ++ pkgs.lib.optionals (system == "aarch64-linux") [
+      myPkgs.chromium-widevine
+    ];
 
   home.shellAliases = {
     open = "xdg-open";
@@ -98,7 +107,7 @@ in {
       Name=Chromium
       GenericName=browser
       Comment=Chromium browser with Widevine
-      Exec=${myFlakes.packages.aarch64-linux.chromium-widevine}/bin/chromium
+      Exec=${myPkgs.chromium-widevine}/bin/chromium
       Terminal=false
       Type=Application
       Keywords=browser;internet;

@@ -1,8 +1,11 @@
-{ config, pkgs, lib, nixpkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  nixpkgs,
+  ...
+}:
+with lib; let
   cfg = config.heywoodlh.nixos.steam-deck;
 in {
   options.heywoodlh.nixos.steam-deck = {
@@ -25,14 +28,16 @@ in {
   config = mkIf cfg.enable {
     # Overrides for jovian
     nixpkgs.overlays = mkAfter [
-      (final: prev: {
-        _1password-gui = (import nixpkgs {
-          inherit (prev.stdenv.hostPlatform) system;
-          config.allowUnfree = true;
-        })._1password-gui;
+      (_final: prev: {
+        _1password-gui =
+          (import nixpkgs {
+            inherit (prev.stdenv.hostPlatform) system;
+            config.allowUnfree = true;
+          })._1password-gui;
 
         pipewire-jupiter = prev.pipewire-jupiter.overrideAttrs (old: {
-          patches = builtins.filter
+          patches =
+            builtins.filter
             (p: !(lib.hasSuffix "0060-libjack-path.patch" (builtins.toString p)))
             (old.patches or []);
         });
@@ -64,7 +69,7 @@ in {
 
     # Steam Deck uses KDE, not GNOME — disable Stylix's GNOME target to avoid
     # fetching gnome-shell source unnecessarily
-    home-manager.users.${cfg.user} = { ... }: {
+    home-manager.users.${cfg.user} = {...}: {
       stylix.targets.gnome.enable = false;
     };
 
@@ -81,7 +86,7 @@ in {
     };
 
     # No need for extra stuff on Deck
-    heywoodlh.hyprland = mkForce false;
+    heywoodlh.niri.enable = mkForce false;
     heywoodlh.cosmic = mkForce false;
     heywoodlh.nixos.portmaster.enable = lib.mkForce false;
 

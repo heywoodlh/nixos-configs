@@ -29,7 +29,7 @@ ENV ANSIBLE_REMOTE_TMP="/tmp/ansible"
 ENTRYPOINT [ "/docker-entrypoint.sh", "/bin/bash", "/nixos-configs/ansible/entrypoint.sh" ]
 
 # "Unifi" target
-FROM docker.io/heywoodlh/systemd:debian-bookworm AS unifi-test
+FROM docker.io/heywoodlh/systemd:debian-trixie AS unifi-test
 
 COPY ansible/server/files/scripts/install-ansible.sh /install-ansible.sh
 RUN /install-ansible.sh \
@@ -59,7 +59,7 @@ ENTRYPOINT [ "/docker-entrypoint.sh", "/bin/bash", "/nixos-configs/ansible/entry
 FROM docker.io/heywoodlh/systemd:archlinux AS archlinux-test
 
 COPY ansible/server/files/scripts/install-ansible.sh /install-ansible.sh
-RUN pacman -Sy --noconfirm python bash grep && /install-ansible.sh \
+RUN pacman -Syu --noconfirm --needed python bash grep && /install-ansible.sh \
     && mkdir -p /etc/ansible \
     && printf "[defaults]\nlog_path: /ansible.log\n" > /etc/ansible/ansible.cfg
 

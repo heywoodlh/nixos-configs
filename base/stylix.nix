@@ -57,6 +57,14 @@ in {
     # Every home-manager user gets these: root included.
     home-manager.sharedModules = [
       {
+        # OpenCode 2 reads cli.json, not tui.json
+        programs.opencode = {
+          tui = mkForce {};
+          cli.theme = {
+            name = "stylix";
+            mode = "system";
+          };
+        };
         stylix.targets = {
           # Don't configure Helix (using a transparent theme)
           helix.enable = false;

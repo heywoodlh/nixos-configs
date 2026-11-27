@@ -1,0 +1,68 @@
+# Intel GPU device plugin, advertises gpu.intel.com/i915 to kubelet
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: intel-gpu-plugin
+  namespace: kube-system
+  labels:
+    app: intel-gpu-plugin
+spec:
+  selector:
+    matchLabels:
+      app: intel-gpu-plugin
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: intel-gpu-plugin
+    spec:
+      nodeSelector:
+        intel.feature.node.kubernetes.io/gpu: "true"
+      containers:
+      - name: intel-gpu-plugin
+        image: "@image@"
+        args: ["-shared-dev-num=20"]
+        securityContext:
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          requests:
+            cpu: 40m
+            memory: 45Mi
+          limits:
+            cpu: 100m
+            memory: 90Mi
+        volumeMounts:
+        - name: devfs
+          mountPath: /dev/dri
+          readOnly: true
+        - name: sysfsdrm
+          mountPath: /sys/class/drm
+          readOnly: true
+        - name: kubeletsockets
+          mountPath: /var/lib/kubelet/device-plugins
+        - name: cdipath
+          mountPath: /var/run/cdi
+      volumes:
+      - name: devfs
+        hostPath:
+          path: /dev/dri
+      - name: sysfsdrm
+        hostPath:
+          path: /sys/class/drm
+      - name: kubeletsockets
+        hostPath:
+          path: /var/lib/kubelet/device-plugins
+      - name: cdipath
+        hostPath:
+          path: /var/run/cdi
+          type: DirectoryOrCreate

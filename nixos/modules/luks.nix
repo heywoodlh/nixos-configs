@@ -1,9 +1,11 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.types;
-
-let
+with lib.types; let
   cfg = config.heywoodlh.luks;
 
   # Fixed filename written to the root of the `keyfile` partition. Not
@@ -83,13 +85,6 @@ in {
       '';
       type = bool;
     };
-    boot = mkOption {
-      default = "";
-      description = ''
-        Full path of FAT boot device (i.e. /dev/nvme0n1p1).
-      '';
-      type = str;
-    };
     name = mkOption {
       default = "luks";
       description = ''
@@ -104,15 +99,6 @@ in {
         Obtain with `sudo blkid`.
       '';
       type = str;
-    };
-    yubikey = mkOption {
-      default = false;
-      description = ''
-        Enable Yubikey luks single factor decryption.
-        See the following gist for setup example:
-        https://gist.github.com/heywoodlh/4cc0254359b173ba9f9a1ea8f3b2e49f
-      '';
-      type = bool;
     };
     fido = mkOption {
       default = false;
@@ -139,7 +125,7 @@ in {
       type = bool;
     };
     keyfile = mkOption {
-      default = { };
+      default = {};
       description = ''
         Automatic internal-keyfile decryption. See
         `heywoodlh.luks.keyfile.enable` for the full explanation and setup
@@ -150,37 +136,19 @@ in {
   };
 
   config = mkIf cfg.enable {
-    stylix.targets.plymouth.enable = mkIf cfg.yubikey (mkForce false);
-
     boot.initrd = {
-      availableKernelModules = optionals (cfg.yubikey || cfg.keyfile.enable) [
+      availableKernelModules = optionals cfg.keyfile.enable [
         "vfat"
         "nls_cp437"
         "nls_iso8859-1"
       ];
       systemd = optionalAttrs (cfg.fido || cfg.tpm2) {
-        enable = true;
         fido2.enable = cfg.fido;
         tpm2.enable = cfg.tpm2;
       };
       luks = {
-        yubikeySupport = cfg.yubikey;
-        fido2Support = false; # Made obsolete by systemd-cryptenroll
         devices."${cfg.name}" = {
-          fallbackToPassword = cfg.yubikey; # default of boot.initrd.systemd.enable = true
           device = "/dev/disk/by-uuid/${cfg.uuid}";
-          yubikey = optionalAttrs (cfg.yubikey) {
-            slot = 2;
-            twoFactor = false;
-            gracePeriod = 5;
-            keyLength = 64;
-            saltLength = 16;
-            storage = {
-              device = cfg.boot;
-              fsType = "vfat";
-              path = "/crypt-storage/default";
-            };
-          };
           # `${keyFileName}:UUID=keyfile.uuid` tells systemd stage 1 to
           # auto-mount the internal block device with that UUID and read the
           # keyfile from its root. `timeout` bounds how long boot waits for
@@ -188,12 +156,14 @@ in {
           # slots.
           keyFile = mkIf cfg.keyfile.enable "/${keyFileName}:UUID=${cfg.keyfile.uuid}";
           keyFileTimeout = mkIf cfg.keyfile.enable cfg.keyfile.timeout;
-          crypttabExtraOpts = (optionals cfg.fido [
-            "fido2-device=auto"
-            "token-timeout=30"
-          ]) ++ (optionals cfg.tpm2 [
-            "tpm2-device=auto"
-          ]);
+          crypttabExtraOpts =
+            (optionals cfg.fido [
+              "fido2-device=auto"
+              "token-timeout=30"
+            ])
+            ++ (optionals cfg.tpm2 [
+              "tpm2-device=auto"
+            ]);
         };
       };
     };
@@ -204,7 +174,7 @@ in {
     # `keyfile.enable`'s doc above for the one-time manual setup this
     # depends on.
     system.activationScripts.luksKeyfileEnroll = mkIf cfg.keyfile.enable (
-      lib.stringAfter [ "users" ] ''
+      lib.stringAfter ["users"] ''
         set -euo pipefail
 
         luksDevice="/dev/disk/by-uuid/${cfg.uuid}"

@@ -1,0 +1,206 @@
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
+with lib; let
+  arcPhotoBackup = pkgs.writeShellScriptBin "arc-photo-backup.sh" ''
+    set -euo pipefail
+    exec ${pkgs.immich-cli}/bin/immich upload --recursive --no-progress --album-name arc /mnt/ssd0/SteamLibrary/steamapps/compatdata/1808500/pfx/drive_c/users/steamuser/AppData/Local/PioneerGame/Saved/PersistentDownloadDir/Photos
+  '';
+in {
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
+
+  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod"];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = [];
+  boot.extraModulePackages = [];
+
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/2eadbaea-d13c-4899-8126-8b28cef34d78";
+    fsType = "ext4";
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/0B6C-A915";
+    fsType = "vfat";
+    options = ["fmask=0077" "dmask=0077"];
+  };
+
+  swapDevices = [];
+
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = mkDefault true;
+  # networking.interfaces.enp4s0.useDHCP = lib.mkDefault true;
+
+  nixpkgs.hostPlatform = mkDefault "x86_64-linux";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  heywoodlh.nixos = {
+    lancacheDns = {
+      enable = true;
+      ignoreDhcpDns = true;
+    };
+    tor.enable = mkForce false;
+    gaming = {
+      enable = true;
+      console = true;
+      soulframe = true;
+      soloist = true;
+    };
+    libvirtd.enable = false;
+    cachyos-kernel.kernel = mkForce "linuxPackages-cachyos-bore-x86_64-v3";
+    # Machine-specific sunshine configuration
+    sunshine = {
+      # Match the display mode to what the client asks for so the iPad Pro's
+      # 120Hz panel and non-1080p resolutions are not downscaled to 60Hz/1080p.
+      dynamic = true;
+      extraConfig = {
+        sunshine_name = "spencer-linux";
+        capture = "kms";
+        output_name = "HDMI-A-1";
+        encoder = "nvenc";
+        nvenc_preset = 1;
+        csrf_allowed_origins = "https://nixos-gaming.barn-banana.ts.net:47990,https://192.168.1.231:47990,https://sunshine.heywoodlh.io";
+      };
+    };
+  };
+
+  # Requires Above 4G Decoding and Re-Size BAR Support enabled in BIOS.
+  hardware.nvidia.moduleParams.nvidia.NVreg_EnableResizableBar = 1;
+
+  environment.systemPackages = with pkgs; [
+    steam-run
+    clonehero
+    immich-cli
+    arcPhotoBackup
+  ];
+
+  systemd.services.arc-raiders-immich-upload = {
+    description = "Upload ARC Raiders screenshots to Immich";
+    after = ["network-online.target" "mnt-ssd0.mount"];
+    wants = ["network-online.target"];
+    unitConfig.RequiresMountsFor = ["/mnt/ssd0/SteamLibrary"];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "heywoodlh";
+      WorkingDirectory = "/home/heywoodlh";
+      Environment = [
+        "HOME=/home/heywoodlh"
+        "IMMICH_CONFIG_DIR=/home/heywoodlh/.config/immich"
+      ];
+    };
+    script = ''
+      exec ${arcPhotoBackup}/bin/arc-photo-backup.sh
+    '';
+  };
+
+  systemd.timers.arc-raiders-immich-upload = {
+    wantedBy = ["timers.target"];
+    timerConfig = {
+      OnCalendar = "*-*-* 05:00:00 America/Denver";
+      Persistent = true;
+      Unit = "arc-raiders-immich-upload.service";
+    };
+  };
+
+  networking = {
+    interfaces = {
+      enp4s0 = {
+        wakeOnLan.enable = true;
+      };
+    };
+    firewall = {
+      interfaces.enp4s0.allowedTCPPorts = [47990];
+      allowedUDPPorts = [
+        9
+      ];
+    };
+  };
+  fileSystems."/mnt/hdd0" = {
+    device = "/dev/disk/by-uuid/2292D29C92D273AF";
+    fsType = "ntfs3";
+    options = ["rw" "uid=1000" "nofail"];
+  };
+  fileSystems."/mnt/ssd0" = {
+    device = "/dev/disk/by-uuid/8eaf3cfd-1647-4454-9ad0-da35433582dd";
+    fsType = "ext4";
+    options = ["defaults" "noatime" "nofail"];
+  };
+  fileSystems."/mnt/internal" = {
+    device = "/dev/disk/by-uuid/04c84a72-52b7-4de9-b736-a3d79d1ed80f";
+    fsType = "ext4";
+    options = ["defaults" "noatime" "nofail"];
+  };
+
+  # Allow mdns for shanocast
+  services.avahi = {
+    enable = true;
+    settings.reflector.enable-reflector = true;
+    openFirewall = true;
+  };
+
+  systemd.services.ntfsfix-startup = {
+    description = "Fix NTFS dirty bit on /dev/sda1 before mounting";
+    wantedBy = ["mnt-hdd0.mount"];
+    before = ["mnt-hdd0.mount"];
+    path = with pkgs; [ntfsprogs util-linux];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      ntfsfix --clear-dirty /dev/sda1
+    '';
+  };
+
+  home-manager.users.heywoodlh = {
+    wayland.windowManager.niri.extraConfig = ''
+      output "HDMI-A-1" {
+        mode "2560x1440@143.972"
+      }
+    '';
+
+    heywoodlh.home = {
+      llm.lmstudio.enable = false;
+      applications = let
+        jackify = pkgs.writeShellScript "jackify" ''
+          if nix profile list | grep -iq jackify
+          then
+            echo "Jackify already installed!"
+          else
+            notify-send "Downloading Jackify"
+            nix profile add github:keygenesis/Jackify
+          fi
+          if [[ -e $HOME/.nix-profile/bin/jackify ]]
+          then
+            $HOME/.nix-profile/bin/jackify
+          else
+            notify-send "Jackify installation not found."
+            exit 3
+          fi
+        '';
+      in [
+        {
+          name = "Vortex";
+          command = "${pkgs.umu-launcher}/bin/umu-run /mnt/ssd0/proton-apps/vortex/Vortex.exe";
+        }
+        {
+          name = "Jackify";
+          command = "${jackify}";
+        }
+      ];
+    };
+    home.packages = with pkgs; [
+      #gamma-install
+      ytmdesktop
+    ];
+  };
+}

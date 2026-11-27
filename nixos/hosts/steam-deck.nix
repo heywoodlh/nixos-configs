@@ -1,15 +1,19 @@
-{ modulesPath, lib, config, pkgs, ... }:
-with lib;
-
 {
+  modulesPath,
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+with lib; {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "usbhid" "sd_mod" "sdhci_pci" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "usb_storage" "usbhid" "sd_mod" "sdhci_pci"];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = ["kvm-amd"];
+  boot.extraModulePackages = [];
 
   environment.systemPackages = with pkgs; [
     moonlight-qt
@@ -25,7 +29,7 @@ with lib;
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/32B9-2D4B";
     fsType = "vfat";
-    options = [ "fmask=0022" "dmask=0022" ];
+    options = ["fmask=0022" "dmask=0022"];
   };
 
   fileSystems."/mnt/sdcard" = {
@@ -45,4 +49,11 @@ with lib;
 
   nixpkgs.hostPlatform = mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
+
+  heywoodlh = {
+    nixos.steam-deck.enable = true;
+    nixos.lancacheDns.enable = true;
+  };
+
+  hardware.printers.ensurePrinters = lib.mkForce [];
 }

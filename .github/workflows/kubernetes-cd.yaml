@@ -8,20 +8,24 @@ on:
     branches:
       - main
     paths:
-      - flakes/kube/**
-      - '!flakes/kube/**.md'
+      - kubernetes/**
+      - '!kubernetes/**.md'
       - .github/workflows/kubernetes-cd.yaml
 
 jobs:
   render-manifests:
     name: Check and apply all deployments
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         shell: bash
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Login to Tailnet
         uses: tailscale/github-action@v3
@@ -46,16 +50,9 @@ jobs:
           EOF
 
       - name: Update manifests
-        working-directory: ./flakes
+        working-directory: ./kubernetes
         run: |
-          ./kube/render.sh
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        if: github.ref == 'refs/heads/main'
-        with:
-          commit_message: "GitHub Action automated Kubernetes update"
-          file_pattern: 'flakes/kube/manifests/*.yaml'
+          ./render.sh
 
       - name: Install kubectl
         if: github.ref == 'refs/heads/main'
@@ -66,11 +63,11 @@ jobs:
         # op read 'op://Kubernetes/s5dqdxlxnvhvdnq4pbyzg22swa/unprotected-kubeconfig' | base64
       - name: Apply kube manifests
         if: github.ref == 'refs/heads/main'
-        working-directory: ./flakes
+        working-directory: ./kubernetes
         run: |
           install -d -m 700 "$HOME/.kube"
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > "$HOME/.kube/config"
           chmod 600 "$HOME/.kube/config"
-          for file in ./kube/manifests/*.yaml; do
+          for file in ./manifests/*.yaml; do
             kubectl apply -f "$file"
           done

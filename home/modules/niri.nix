@@ -496,10 +496,10 @@ in {
         screenshot-path = "~/Pictures/screenshots/%Y-%m-%d-%H%M%S.png";
         binds =
           {
-            "Super+Return" = {spawn = ["${pkgs.ghostty}/bin/ghostty"];};
+            "Super+Return" = {spawn = ["${pkgs.foot}/bin/foot" "-e" "${pkgs.tmux}/bin/tmux" "new-session"];};
             "Super+O" = {toggle-overview = {};};
             "Super+Q" = {close-window = {};};
-            "Ctrl+Alt+T" = {spawn = ["${pkgs.foot}/bin/foot"];};
+            "Ctrl+Alt+T" = {spawn = ["${pkgs.foot}/bin/foot" "-e" "${pkgs.tmux}/bin/tmux" "new-session"];};
             "Ctrl+grave" = {spawn = ["${ghosttyQuickTerminal}/bin/ghostty-quick-terminal.sh"];};
             "Ctrl+Super+Space" = {spawn = ["${pkgs.emote}/bin/emote"];};
             "Super+Space" = {spawn-sh = "${noctaliaMsg} panel-toggle launcher";};

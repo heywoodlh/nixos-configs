@@ -64,9 +64,7 @@ in {
       dynamic = true;
       extraConfig = {
         sunshine_name = "spencer-linux";
-        # KMS capture fails on NVIDIA with Sunshine 2026.914; wlr uses niri's
-        # wlr-screencopy protocol and needs no capabilities.
-        capture = "wlr";
+        capture = "kms";
         output_name = "HDMI-A-1";
         encoder = "nvenc";
         nvenc_preset = 1;

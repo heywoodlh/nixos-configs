@@ -2,20 +2,12 @@
   pkgs,
   config,
   lib,
+  plasma-manager,
   ...
 }:
 with lib;
 with lib.types; let
   cfg = config.heywoodlh.nixos.sunshine;
-  niri = pkgs.writeShellScriptBin "niri-session" ''
-    : "''${XDG_RUNTIME_DIR:=/run/user/$(${pkgs.coreutils}/bin/id -u)}"
-    if [ -z "$WAYLAND_DISPLAY" ]
-    then
-      socket=$(${pkgs.coreutils}/bin/ls -1 "$XDG_RUNTIME_DIR"/wayland-* 2>/dev/null | ${pkgs.coreutils}/bin/head -n1)
-      [ -n "$socket" ] && export WAYLAND_DISPLAY="''${socket##*/}"
-    fi
-    exec ${pkgs.niri}/bin/niri msg "$@"
-  '';
 in {
   options.heywoodlh.nixos.sunshine = {
     enable = mkOption {
@@ -55,7 +47,7 @@ in {
       "autovt@tty1".enable = false;
     };
 
-    heywoodlh.niri.enable = true;
+    heywoodlh.nixos.kde.enable = true;
 
     # Add input rules comparable to Steam for Sunshine to work with/without Steam
     services.udev.packages = [
@@ -66,6 +58,15 @@ in {
       })
     ];
 
+    # Use KDE autologin
+    services.displayManager = {
+      gdm.enable = lib.mkForce false;
+      defaultSession = lib.mkForce "plasma";
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
+    };
     services.displayManager.autoLogin = {
       enable = true;
       user = cfg.user;
@@ -89,7 +90,7 @@ in {
           ${config.security.wrapperDir}/conntrack -E -e new -p tcp --dport ${toString (config.services.sunshine.settings.port - 5)} | \
           while read line; do
             echo "New Sunshine connection detected, waking up the monitors"
-            ${niri}/bin/niri-session action power-on-monitors
+            ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor -d on
             sleep 5
           done
         '';
@@ -122,18 +123,27 @@ in {
         }
         // lib.optionalAttrs cfg.dynamic {
           global_prep_cmd = let
+            # Dummy HDMI adapters only advertise a fixed EDID mode list, so inject
+            # client resolutions as custom modes before switching to them.
             autoAdjustRes = pkgs.writeShellScript "res.sh" ''
               output="HDMI-A-1"
               width="''${SUNSHINE_CLIENT_WIDTH}"
               height="''${SUNSHINE_CLIENT_HEIGHT}"
               fps="''${SUNSHINE_CLIENT_FPS}"
 
-              if ! ${niri}/bin/niri-session output "$output" mode "''${width}x''${height}@''${fps}" >/tmp/sunshine-res.log 2>&1
+              have_mode="$(${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor -j | ${pkgs.jq}/bin/jq -r --arg o "$output" --argjson w "$width" --argjson h "$height" '.outputs[] | select(.name == $o) | .modes[] | select(.size.width == $w and .size.height == $h) | .id' | head -n1)"
+              if [[ -z "$have_mode" ]]
+              then
+                ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor "output.$output.addCustomMode.$width.$height.$((''${fps%%.*} * 1000)).reduced"
+              fi
+
+              ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor "output.$output.mode.''${width}x''${height}@''${fps}" | grep -q 'not found'
+              if [[ "$?" == 0 ]]
               then
                  msg="$(date) unable to automatically adjust resolution, falling back to 1080 -- requested resolution: ''${width}x''${height}@''${fps}"
                  echo "$msg" | tee -a /tmp/sunshine-res.log
                  ${pkgs.libnotify}/bin/notify-send "Unable to automatically adjust resolution, see /tmp/sunshine-res.log"
-                 ${niri}/bin/niri-session output "$output" mode "1920x1080@60" || true
+                 ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor "output.$output.mode.1920x1080@60" || true
               else
                  echo "$(date) successfully adjusted resolution: ''${width}x''${height}@''${fps}" | tee -a /tmp/sunshine-res.log
               fi
@@ -153,7 +163,7 @@ in {
             {
               name = "Desktop";
               prep-cmd = {
-                do = "${niri}/bin/niri-session action power-on-monitors";
+                do = "QT_QPA_PLATFORM=wayland DISPLAY=:0 ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor --dpms on";
                 undo = [""];
               };
               image-path = "desktop.png";
@@ -165,7 +175,7 @@ in {
               detached = ["${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://open/bigpicture"];
               output = "/tmp/steam.txt";
               prep-cmd = {
-                do = "${niri}/bin/niri-session action power-on-monitors";
+                do = "QT_QPA_PLATFORM=wayland DISPLAY=:0 ${pkgs.kdePackages.libkscreen}/bin/kscreen-doctor --dpms on";
                 undo = ["${pkgs.util-linux}/bin/setsid ${pkgs.steam}/bin/steam steam://close/bigpicture"];
               };
               image-path = "steam.png";
@@ -181,6 +191,13 @@ in {
 
     home-manager = {
       users."${cfg.user}" = {...}: {
+        imports = [
+          (plasma-manager + /modules/default.nix)
+        ];
+        programs.noctalia.enable = lib.mkForce false;
+        programs.plasma = {
+          kscreenlocker.autoLock = false;
+        };
         home.file.".config/fish/config.fish".text = ''
           export XDG_RUNTIME_DIR="/run/user/$(id -u)"
           export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"

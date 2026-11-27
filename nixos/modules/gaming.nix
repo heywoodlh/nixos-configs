@@ -8,8 +8,14 @@
 with lib; let
   cfg = config.heywoodlh.nixos.gaming;
   system = pkgs.stdenv.hostPlatform.system;
-  protonArch = if system == "aarch64-linux" then "aarch64" else "x86_64";
-  cachyosArch = if system == "aarch64-linux" then "arm64" else "x86_64";
+  protonArch =
+    if system == "aarch64-linux"
+    then "aarch64"
+    else "x86_64";
+  cachyosArch =
+    if system == "aarch64-linux"
+    then "arm64"
+    else "x86_64";
   fexFetcher = pkgs.writeShellScriptBin "fex-fetch.sh" ''
     if [[ ! -e $HOME/.fex-emu/RootFS/Ubuntu_24_04.sqsh ]]
     then
@@ -238,6 +244,7 @@ in {
       (mkIf cfg.console {
         server = true;
         nixos = {
+          kde.enable = true;
           sunshine.enable = true;
           nvidia-patch = true;
           portmaster.enable = lib.mkForce false;
@@ -488,8 +495,6 @@ in {
         {spotify-soloist.enable = true;}
         (mkIf cfg.console {
           keyring.autoUnlock = true;
-          niri.lockScreen = false;
-          niri.idleScreenOff = false;
           autostart = [
             {
               name = "Steam";
@@ -498,23 +503,6 @@ in {
           ];
         })
       ];
-
-      wayland.windowManager.niri.extraConfig = mkIf cfg.console ''
-        window-rule {
-          match app-id="^steam$" title="Big Picture"
-          open-fullscreen true
-        }
-
-        window-rule {
-          match app-id=r#"^steam_app_\d+$"#
-          open-fullscreen true
-        }
-
-        window-rule {
-          match app-id="^gamescope$"
-          open-fullscreen true
-        }
-      '';
 
       systemd.user.services.ydotoold = {
         Unit = {

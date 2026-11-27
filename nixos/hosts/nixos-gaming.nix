@@ -164,6 +164,12 @@ in {
   };
 
   home-manager.users.heywoodlh = {
+    wayland.windowManager.niri.extraConfig = ''
+      output "HDMI-A-1" {
+        mode "2560x1440@143.972"
+      }
+    '';
+
     heywoodlh.home = {
       llm.lmstudio.enable = false;
       applications = let
